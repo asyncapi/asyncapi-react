@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 
+import AsyncApi from '../AsyncApi/AsyncApi';
+
+import { mock } from './mock';
+
 class Playground extends Component {
   render() {
-    return <div className="App">Playground</div>;
+    return (
+      <AsyncApi asyncApi={mock} />
+    )
   }
 }
 

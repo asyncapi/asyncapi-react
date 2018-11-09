@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 
 import { Header, H2 } from '../../components';
 
-import { IServersProps } from '../../common';
+import { Server } from '../../common';
 
-class ServersComponent extends Component<IServersProps> {
+export interface AsyncApiProps {
+  servers?: Server[];
+}
+
+class ServersComponent extends Component<AsyncApiProps> {
   render() {
     return (
       <Header>

@@ -1,12 +1,14 @@
+import { Map, PrimitiveType } from './utils';
+
 export type AsyncApi = {
-  asyncApi: AsyncApiVersion;
+  asyncapi: AsyncApiVersion;
   info: Info;
   baseTopic?: BaseTopic;
   servers?: Server[];
   topics?: Map<string, Topic>;
   stream?: Stream;
   events?: Event;
-  components?: Component[];
+  components?: Components;
   security?: SecurityScheme;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
@@ -14,7 +16,9 @@ export type AsyncApi = {
 
 export type AsyncApiVersion = string;
 export type BaseTopic = string;
-export type IExternalSpecification = Map<string, any>;
+export type ExternalSpecification = Map<string, any>;
+export type ReferenceString = string;
+export type OneOf = "oneOf";
 
 export type Info = {
   title: string;
@@ -38,7 +42,7 @@ export type License = {
 
 export type Server = {
   url: string;
-  schema: string;
+  scheme: string;
   schemeVersion?: string;
   description?: string;
   variables?: Map<string, ServerVariable>;
@@ -51,9 +55,9 @@ export type ServerVariable = {
 };
 
 export type Topic = {
-  $ref: string;
-  subscribe: string;
-  publish: string;
+  $ref?: ReferenceString;
+  subscribe?: Reference | Message | Map<OneOf, Array<Message | Reference>>;
+  publish?: Reference | Message | Map<OneOf, Array<Message | Reference>>;
   parameters?: [Parameter | Reference];
 };
 
@@ -64,13 +68,13 @@ export type Parameter = {
 };
 
 export type Reference = {
-  $ref: string;
+  $ref: ReferenceString;
 };
 
 export type Stream = {
   framing: StreamFraming;
-  read?: Message[];
-  write?: Message[];
+  read?: Array<Message | Reference>;
+  write?: Array<Message | Reference>;
 };
 
 export type StreamFraming = {
@@ -79,22 +83,18 @@ export type StreamFraming = {
 };
 
 export type Event = {
-  receive?: Message[];
-  send?: Message[];
+  receive?: Array<Message | Reference>;
+  send?: Array<Message | Reference>;
 };
 
 export type Message = {
+  deprecated?: boolean;
   headers?: Schema;
   payload?: Schema;
   summary?: string;
   description?: string;
-  tags: Tag[];
-  externalDocs: ExternalDocs;
-};
-
-export type Schema = {
-  type: string;
-  required: string[];
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
 };
 
 export type Tag = {
@@ -108,9 +108,9 @@ export type ExternalDocs = {
   description?: string;
 };
 
-export type Component = {
+export type Components = {
   schemas?: Map<string, Schema | Reference>;
-  messages?: Map<string, Schema | Reference>;
+  messages?: Map<string, Message | Reference>;
   securitySchemes?: Map<string, SecurityScheme | Reference>;
   parameters?: Map<string, Parameter | Reference>;
 };
@@ -133,3 +133,28 @@ export type XML = {
 };
 
 export type SecurityRequirement = {};
+
+export type Schema = {
+  $schema?: string;
+  $id?: string;
+  description?: string;
+  allOf?: Schema[];
+  oneOf?: Schema[];
+  anyOf?: Schema[];
+  title?: string;
+  type?: string | string[];
+  definitions?: Map<string, any>;
+  format?: string;
+  items?: Schema | Schema[];
+  minItems?: number;
+  additionalItems?: { anyOf: Schema[]; } | Schema;
+  enum?: PrimitiveType[] | Schema[];
+  default?: PrimitiveType | Object;
+  additionalProperties?: Schema | boolean;
+  required?: string[];
+  propertyOrder?: string[];
+  properties?: Map<string, any>;
+  defaultProperties?: string[];
+  patternProperties?: Map<string, Schema>;
+  typeof?: "function";
+} | Reference;

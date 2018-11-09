@@ -1,17 +1,47 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { IAsyncApiProps } from '../../common';
+import { AsyncApi, Theme, Config, PropsWithDefaults, defaultTheme, defaultConfig } from '../../common';
 
 import InfoComponent from '../Info/Info';
 import ServersComponent from '../Servers/Servers';
 
-class AsyncApiComponent extends Component<IAsyncApiProps> {
-  constructor(props: IAsyncApiProps) {
+export interface AsyncApiProps {
+  asyncApi: AsyncApi;
+  theme?: Theme;
+  config?: Config;
+}
+
+interface AsyncApiDefaultProps {
+  asyncApi: AsyncApi;
+  theme: Theme;
+  config: Config;
+}
+
+const defaultAsyncApi: AsyncApi = {
+  asyncapi: "",
+  info: {
+    title: "AsyncApi example title",
+    version: "1.0.0",
+  }
+}
+
+const defaultProps: AsyncApiDefaultProps = {
+  asyncApi: defaultAsyncApi,
+  theme: defaultTheme,
+  config: defaultConfig,
+}
+
+type Props = PropsWithDefaults<AsyncApiProps, AsyncApiDefaultProps>;
+
+class AsyncApiComponent extends Component<AsyncApiProps> {
+  static defaultProps: AsyncApiDefaultProps = defaultProps;
+
+  constructor(props: AsyncApiProps) {
     super(props);
   }
 
-  showComponent = (
+  private showComponent = (
     showComponent: boolean,
     component: React.ReactNode,
     items?: any,
@@ -22,20 +52,22 @@ class AsyncApiComponent extends Component<IAsyncApiProps> {
   };
 
   public render() {
-    const { asyncApi, theme, config } = this.props;
+    const { asyncApi, theme, config } = this.props as Props;
 
     return (
       <ThemeProvider theme={theme}>
-        {this.showComponent(
-          config.showInfo,
-          <InfoComponent info={asyncApi.info} />,
-          asyncApi.info,
-        )}
-        {this.showComponent(
-          config.showServers,
-          <ServersComponent servers={asyncApi.servers} />,
-          asyncApi.servers,
-        )}
+        <>
+          {this.showComponent(
+            config.show.info,
+            <InfoComponent {...asyncApi.info} />,
+            asyncApi.info,
+          )}
+          {this.showComponent(
+            config.show.servers,
+            <ServersComponent servers={asyncApi.servers} />,
+            asyncApi.servers,
+          )}
+        </>
       </ThemeProvider>
     );
   }
