@@ -13,7 +13,7 @@ class InfoComponent extends Component<InfoProps> {
         <H1>{title}</H1>
         <HeaderParagraph>{description}</HeaderParagraph>
 
-        <H2>Connection details</H2>
+        <H2>Terms of service</H2>
         <HeaderParagraph>
           <HrefHeader href={termsOfService} target="_blank">
             {termsOfService}

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 
 import AsyncApi from '../AsyncApi/AsyncApi';
 
-import { mock } from './mock';
+import { jsonMock, yamlMock } from './mock';
 
 class Playground extends Component {
   render() {
     return (
-      <AsyncApi asyncApi={mock} />
+      <AsyncApi schema={yamlMock} />
     )
   }
 }

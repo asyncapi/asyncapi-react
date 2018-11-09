@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, Theme, Config, PropsWithDefaults, defaultTheme, defaultConfig } from '../../common';
+import { AsyncApi, Theme, Config, PropsWithDefaults, defaultTheme, defaultConfig, parser } from '../../common';
 
 import InfoComponent from '../Info/Info';
 import ServersComponent from '../Servers/Servers';
 
 export interface AsyncApiProps {
-  asyncApi: AsyncApi;
+  schema: JSON | string;
   theme?: Theme;
   config?: Config;
 }
 
+interface AsyncApiState {
+  validatedSchema: AsyncApi;
+  validated: boolean;
+}
+
 interface AsyncApiDefaultProps {
-  asyncApi: AsyncApi;
+  schema: JSON | string;
   theme: Theme;
   config: Config;
 }
@@ -27,18 +32,41 @@ const defaultAsyncApi: AsyncApi = {
 }
 
 const defaultProps: AsyncApiDefaultProps = {
-  asyncApi: defaultAsyncApi,
+  schema: "",
   theme: defaultTheme,
   config: defaultConfig,
 }
 
 type Props = PropsWithDefaults<AsyncApiProps, AsyncApiDefaultProps>;
 
-class AsyncApiComponent extends Component<AsyncApiProps> {
+class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   static defaultProps: AsyncApiDefaultProps = defaultProps;
 
   constructor(props: AsyncApiProps) {
     super(props);
+    this.state = {
+      validatedSchema: defaultAsyncApi,
+      validated: false,
+    }
+  }
+
+  async componentWillMount() {
+    const validatedSchema = await this.validateSchema(this.props.schema);
+    this.setState({ validatedSchema, validated: true });
+  }
+
+  async componentWillReceiveProps(nextProps: Props) {
+    if(nextProps.schema !== this.props.schema) {
+      const validatedSchema = await this.validateSchema(nextProps.schema);
+      this.setState({ validatedSchema });
+    }
+  }
+
+  private validateSchema = async (schema: string | any) => {
+    if (typeof schema !== 'string') {
+      schema = JSON.stringify(schema);
+    }
+    return await parser.parseText(schema)
   }
 
   private showComponent = (
@@ -52,23 +80,28 @@ class AsyncApiComponent extends Component<AsyncApiProps> {
   };
 
   public render() {
-    const { asyncApi, theme, config } = this.props as Props;
+    const { theme, config } = this.props as Props;
+    const { validatedSchema, validated } = this.state;
+
+    console.log(validatedSchema)
 
     return (
-      <ThemeProvider theme={theme}>
-        <>
-          {this.showComponent(
-            config.show.info,
-            <InfoComponent {...asyncApi.info} />,
-            asyncApi.info,
-          )}
-          {this.showComponent(
-            config.show.servers,
-            <ServersComponent servers={asyncApi.servers} />,
-            asyncApi.servers,
-          )}
-        </>
-      </ThemeProvider>
+      validatedSchema && validated ?
+        <ThemeProvider theme={theme}>
+          <>
+            {this.showComponent(
+              config.show.info,
+              <InfoComponent {...validatedSchema.info} />,
+              validatedSchema.info,
+            )}
+            {this.showComponent(
+              config.show.servers,
+              <ServersComponent servers={validatedSchema.servers} />,
+              validatedSchema.servers,
+            )}
+          </>
+        </ThemeProvider>
+      : null
     );
   }
 }

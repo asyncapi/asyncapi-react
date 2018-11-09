@@ -88,7 +88,6 @@ export type Event = {
 };
 
 export type Message = {
-  deprecated?: boolean;
   headers?: Schema;
   payload?: Schema;
   summary?: string;

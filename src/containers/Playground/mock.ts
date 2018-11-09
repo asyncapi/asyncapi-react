@@ -1,4 +1,4 @@
-export const mock = {
+export const jsonMock = {
 	"asyncapi": "1.2.0",
 	"info": {
 		"title": "AsyncAPI Sample",
@@ -130,5 +130,212 @@ export const mock = {
 				}
 			}
 		},
+		"schemas": {
+			"id": {
+				"title": "id",
+				"description": "Resource identifier",
+				"type": "string"
+			},
+			"username": {
+				"title": "username",
+				"description": "User handle",
+				"type": "string"
+			},
+			"datetime": {
+				"title": "datetime",
+				"description": "Date and Time of the message",
+				"type": "string",
+				"format": "date-time"
+			},
+			"MQTTQoSHeader": {
+				"title": "qos",
+				"description": "Quality of Service",
+				"type": "integer",
+				"format": "int32",
+				"default": 1,
+				"enum": [
+					0,
+					2
+				]
+			},
+			"MQTTRetainHeader": {
+				"title": "retainFlag",
+				"description": "This flag determines if the message will be saved by the broker for the specified\ntopic as last known good value. New clients that subscribe to that topic will receive\nthe last retained message on that topic instantly after subscribing. More on retained messages\nand best practices in one of the next posts.\n",
+				"type": "boolean",
+				"default": false
+			},
+			"user": {
+				"type": "object",
+				"required": [
+					"id",
+					"username"
+				],
+				"properties": {
+					"id": {
+						"description": "User Id",
+						"$ref": "#/components/schemas/id"
+					},
+					"full_name": {
+						"description": "User full name",
+						"type": "string"
+					},
+					"username": {
+						"$ref": "#/components/schemas/username"
+					}
+				}
+			},
+			"userCreate": {
+				"type": "object",
+				"required": [
+					"username"
+				],
+				"properties": {
+					"full_name": {
+						"description": "User full name",
+						"type": "string"
+					},
+					"username": {
+						"$ref": "#/components/schemas/username"
+					}
+				}
+			},
+			"signup": {
+				"type": "object",
+				"required": [
+					"method",
+					"datetime"
+				],
+				"properties": {
+					"method": {
+						"description": "Signup method",
+						"type": "string",
+						"enum": [
+							"email",
+							"facebook",
+							"twitter",
+							"github",
+							"google"
+						]
+					},
+					"datetime": {
+						"$ref": "#/components/schemas/datetime"
+					}
+				}
+			}
+		}
 	}
 }
+
+export const yamlMock = `
+asyncapi: "1.0.0"
+info:
+  title: PetStore Events
+  version: "1.0.0"
+  description: |
+    Description of all the EC events
+baseTopic: 'stage.com.sap.hybris.commerce'
+
+topics:
+  petCreated.v1:
+    subscribe:
+      $ref: "#/components/messages/petCreated"
+  petCreated.v2:
+    subscribe:
+      $ref: "#/components/messages/petCreatedV2"
+  petUpdated.v1:
+    subscribe:
+      $ref: "#/components/messages/petUpdated"
+  petDeleted.v1:
+    subscribe:
+      $ref: "#/components/messages/petDeleted"
+
+components:
+  messages:
+    petCreated: 
+      summary: Event containing information about new pet added to the Pet Store.
+      payload:
+        type: object
+        properties:
+          pet:
+            $ref: "#/components/schemas/pet"
+    petCreatedV2: 
+      summary: Event containing information about new pet added to the Pet Store.
+      payload:
+        type: object
+        properties:
+          pet:
+            $ref: "#/components/schemas/newPet"
+    petUpdated:
+      summary: Event containing information about updated pet.
+      payload:
+        type: object
+        properties:
+          pet:
+            $ref: "#/components/schemas/pet"
+    petDeleted:
+      summary: Event containing information about deleted pet.
+      payload:
+        type: object
+        required:
+          - id
+        properties:
+          id:
+            $ref: "#/components/schemas/id"
+
+
+  schemas:
+    id:
+      title: Id
+      description: Resource identifier
+      type: string
+    name:
+      title: Name
+      description: Pet name
+      type: string
+    category:
+      title: Category
+      description: Animal category
+      type: string
+    categoryRestricted:
+      title: Category Restricted
+      description: Category with fixed list of available animal classes
+      type: string
+      enum:
+        - mammal
+        - bird
+        - fish
+    pet:
+      type: object
+      required:
+        - id
+        - name
+      example:
+        id: 4caad296-e0c5-491e-98ac-0ed118f9474e
+        category: mamal
+        name: doggie
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          $ref: "#/components/schemas/name"
+        category:
+          $ref: "#/components/schemas/category"
+    newPet:
+      type: object
+      required:
+        - id
+        - name
+      example:
+        id: 4caad296-e0c5-491e-98ac-0ed118f9474e
+        category: mammal
+        name: doggie
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          $ref: "#/components/schemas/name"
+        category:
+          $ref: "#/components/schemas/categoryRestricted"
+
+    
+`
