@@ -24,4 +24,4 @@ class TableComponent extends React.Component<ITableProps> {
   }
 }
 
-export default TableComponent;
+export { TableComponent as Table };

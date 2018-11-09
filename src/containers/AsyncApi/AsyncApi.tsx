@@ -85,8 +85,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     const { theme, config } = this.props as Props;
     const { validatedSchema, validated } = this.state;
 
-    console.log(validatedSchema)
-
     return (
       validatedSchema && validated ?
         <ThemeProvider theme={theme}>
@@ -99,18 +97,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
               config.show.servers && Boolean(validatedSchema.servers),
               <ServersComponent servers={validatedSchema.servers} />
             )}
-            {this.showComponent(
+            {/* {this.showComponent(
               config.show.topics && Boolean(validatedSchema.topics),
               <TopicsComponent baseTopic={validatedSchema.baseTopic} topics={validatedSchema.topics} />
-            )}
+            )} */}
             {this.showComponent(
               config.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
               <MessagesComponent messages={validatedSchema.components!.messages} />
             )}
-            {this.showComponent(
+            {/* {this.showComponent(
               config.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
               <SchemasComponent schemas={validatedSchema.components!.schemas} />
-            )}
+            )} */}
           </>
         </ThemeProvider>
       : null

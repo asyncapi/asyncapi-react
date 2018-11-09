@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { TableAccesor, TableAccesorReturn } from './types';
-import { ITableRowProps, TableColumn } from './propTypes';
+import { TableAccesor, TableAccesorReturn, TableColumn } from './types';
+import { ITableRowProps } from './propTypes';
 
 import { TableRowWrapper, TableCell } from './styled';
 

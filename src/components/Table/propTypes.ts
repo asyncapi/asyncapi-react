@@ -1,4 +1,4 @@
-import { TableAccesor } from './types';
+import { TableAccesor, TableColumn } from './types';
 
 export interface ITableProps {
   title?: string;
@@ -22,8 +22,3 @@ export interface ITableRowProps {
 }
 
 export interface ITableFooterProps {}
-
-export type TableColumn = {
-  name: string;
-  accesor: TableAccesor;
-};

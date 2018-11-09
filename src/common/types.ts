@@ -152,8 +152,8 @@ export type Schema = {
   additionalProperties?: Schema | boolean;
   required?: string[];
   propertyOrder?: string[];
-  properties?: Map<string, any>;
+  properties?: Map<string, Schema>;
   defaultProperties?: string[];
   patternProperties?: Map<string, Schema>;
   typeof?: "function";
-} | Reference;
+};
