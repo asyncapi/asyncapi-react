@@ -5,6 +5,9 @@ import { AsyncApi, Theme, Config, PropsWithDefaults, defaultTheme, defaultConfig
 
 import InfoComponent from '../Info/Info';
 import ServersComponent from '../Servers/Servers';
+import TopicsComponent from '../Topics/Topics';
+import MessagesComponent from '../Messages/Messages';
+import SchemasComponent from '../Schemas/Schemas';
 
 export interface AsyncApiProps {
   schema: JSON | string;
@@ -66,17 +69,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     if (typeof schema !== 'string') {
       schema = JSON.stringify(schema);
     }
-    return await parser.parseText(schema)
+    return await parser.parse(schema)
   }
 
   private showComponent = (
     showComponent: boolean,
     component: React.ReactNode,
-    items?: any,
   ): React.ReactNode | null => {
     const { config } = this.props;
 
-    return showComponent && typeof items !== undefined ? component : null;
+    return showComponent ? component : null;
   };
 
   public render() {
@@ -90,14 +92,24 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
         <ThemeProvider theme={theme}>
           <>
             {this.showComponent(
-              config.show.info,
-              <InfoComponent {...validatedSchema.info} />,
-              validatedSchema.info,
+              config.show.info && Boolean(validatedSchema.info),
+              <InfoComponent {...validatedSchema.info} />
             )}
             {this.showComponent(
-              config.show.servers,
-              <ServersComponent servers={validatedSchema.servers} />,
-              validatedSchema.servers,
+              config.show.servers && Boolean(validatedSchema.servers),
+              <ServersComponent servers={validatedSchema.servers} />
+            )}
+            {this.showComponent(
+              config.show.topics && Boolean(validatedSchema.topics),
+              <TopicsComponent baseTopic={validatedSchema.baseTopic} topics={validatedSchema.topics} />
+            )}
+            {this.showComponent(
+              config.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
+              <MessagesComponent messages={validatedSchema.components!.messages} />
+            )}
+            {this.showComponent(
+              config.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
+              <SchemasComponent schemas={validatedSchema.components!.schemas} />
             )}
           </>
         </ThemeProvider>

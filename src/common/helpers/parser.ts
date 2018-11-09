@@ -41,7 +41,7 @@ class Parser {
       });
     }
 
-    public parseText = async (content: string): Promise<AsyncApi> => {
+    public parse = async (content: string): Promise<AsyncApi> => {
       const parsedContent = this.parseContent(content);
 
       if (typeof parsedContent !== 'object' || parsedContent === null) {
