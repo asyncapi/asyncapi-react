@@ -1,36 +1,58 @@
 import * as React from 'react';
 
-import { ITableHeaderProps } from './propTypes';
+import { TableColumnName } from './types';
 
 import {
   TableHeaderWrapper,
   TableHeaderTitle,
   TableHeaderColumnsWrapper,
   TableHeaderColumnName,
+  TableHeaderWrapperNested,
+  TableHeaderTitleNested,
+  TableHeaderColumnsWrapperNested,
+  TableHeaderColumnNameNested,
 } from './styled';
 
-class TableHeaderComponent extends React.Component<ITableHeaderProps> {
-  constructor(props: ITableHeaderProps) {
+export interface TableHeaderProps {
+  title?: string;
+  columns: TableColumnName[];
+  nested?: boolean;
+}
+
+export class TableHeader extends React.Component<TableHeaderProps> {
+  constructor(props: TableHeaderProps) {
     super(props);
   }
 
   public render() {
-    const { title, columns } = this.props;
+    const { title, columns, nested } = this.props;
 
     return (
-      <TableHeaderWrapper>
-        {title && <TableHeaderTitle>{title}</TableHeaderTitle>}
-        <TableHeaderColumnsWrapper>
-          {columns &&
-            columns.map((column, index) => (
-              <TableHeaderColumnName key={index}>
-                {column.name}
-              </TableHeaderColumnName>
-            ))}
-        </TableHeaderColumnsWrapper>
-      </TableHeaderWrapper>
+      !nested ? (
+        <TableHeaderWrapper>
+          {title && <TableHeaderTitle><td colSpan={columns.length}>{title}</td></TableHeaderTitle>}
+          <TableHeaderColumnsWrapper>
+            {columns &&
+              columns.map((column, index) => (
+                <TableHeaderColumnName key={index}>
+                  {column}
+                </TableHeaderColumnName>
+              ))}
+          </TableHeaderColumnsWrapper>
+        </TableHeaderWrapper>
+      ) : (
+        <TableHeaderWrapperNested>
+          {title && <TableHeaderTitleNested><td colSpan={columns.length}>{title}</td></TableHeaderTitleNested>}
+          <TableHeaderColumnsWrapperNested>
+            {columns &&
+              columns.map((column, index) => (
+                <TableHeaderColumnNameNested key={index}>
+                  {column}
+                </TableHeaderColumnNameNested>
+              ))}
+          </TableHeaderColumnsWrapperNested>
+        </TableHeaderWrapperNested>
+      ) 
     );
   }
 }
-
-export default TableHeaderComponent;

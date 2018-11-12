@@ -2,20 +2,27 @@ import React, { Component } from 'react';
 
 import { Header, H2 } from '../../components';
 
-import { Map, Schema, Reference } from '../../common';
+import { Map, Schema } from '../../common';
+
+import { Schemas, SchemasHeader } from './styled';
+
+import SchemaComponent from './Schema';
 
 export interface SchemasProps {
-  schemas?: Map<string, Schema | Reference>;
+  schemas?: Map<string, Schema>;
 }
 
 class SchemasComponent extends Component<SchemasProps> {
-  render() {
+  public render() {
     const { schemas } = this.props;
 
     return (
-      <Header>
-        <H2>Schemas</H2>
-      </Header>
+      <Schemas>
+        <SchemasHeader>
+          <H2>Schemas</H2>
+        </SchemasHeader>
+        {Object.keys(schemas!).map(key => <SchemaComponent key={key} name={key} schema={schemas![key]} />)}
+      </Schemas>
     );
   }
 }

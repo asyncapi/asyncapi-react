@@ -8,7 +8,7 @@ class Parser {
 
     constructor() {}
 
-    private parseContent = (content: string) => {
+    private parseContent(content: string) {
         try {
             return JSON.parse(content);
         } catch (e) {
@@ -16,7 +16,7 @@ class Parser {
         }
     };
     
-    private dereference = async (json: JSON): Promise<any>  => {
+    private async dereference(json: JSON): Promise<any> {
       return RefParser.dereference(json, {
         dereference: {
           circular: 'ignore'
@@ -24,7 +24,7 @@ class Parser {
       });
     }
       
-    private bundle = async (json: JSON): Promise<any> => {
+    private async bundle(json: JSON): Promise<any> {
       return RefParser.bundle(json, {
         dereference: {
           circular: 'ignore'
@@ -32,7 +32,7 @@ class Parser {
       });
     }
 
-    private validate = async (json: JSON, schema: string) => {
+    private async validate(json: JSON, schema: string) {
       return new Promise((resolve, reject) => {
         this.validator.validate(json, schema, (err, valid) => {
           if (err) return reject(err);
@@ -41,7 +41,7 @@ class Parser {
       });
     }
 
-    public parse = async (content: string): Promise<AsyncApi> => {
+    public async parse(content: string): Promise<AsyncApi> {
       const parsedContent = this.parseContent(content);
 
       if (typeof parsedContent !== 'object' || parsedContent === null) {

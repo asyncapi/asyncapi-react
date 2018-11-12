@@ -1,11 +1,14 @@
 import * as React from 'react';
 
-import { ICollapseProps } from './propTypes';
-
 import { CodeWrapper, CodeHeader, CodeBody } from './styled';
 
-class CollapseComponent extends React.Component<ICollapseProps> {
-  constructor(props: ICollapseProps) {
+export interface CollapseProps {
+  code: string;
+  language?: string;
+}
+
+class CollapseComponent extends React.Component<CollapseProps> {
+  constructor(props: CollapseProps) {
     super(props);
   }
 

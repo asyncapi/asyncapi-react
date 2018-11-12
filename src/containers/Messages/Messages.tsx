@@ -4,10 +4,12 @@ import { Header, H2 } from '../../components';
 
 import { Map, Message, Reference } from '../../common';
 
+import { Messages, MessagesHeader } from './styled';
+
 import MessageComponent from './Message';
 
 export interface MessagesProps {
-    messages?: Map<string, Message | Reference>;
+  messages?: Map<string, Message>;
 }
 
 class MessagesComponent extends Component<MessagesProps> {
@@ -15,12 +17,12 @@ class MessagesComponent extends Component<MessagesProps> {
     const { messages } = this.props;
 
     return (
-      <>
-        <Header>
+      <Messages>
+        <MessagesHeader>
           <H2>Messages</H2>
-        </Header>
-        {Object.keys(messages!).map(key => <MessageComponent key={key} title={key} message={messages![key] as Message} />)}
-      </>
+        </MessagesHeader>
+        {Object.keys(messages!).map(key => <MessageComponent key={key} title={key} message={messages![key]} hideTags={true} />)}
+      </Messages>
     );
   }
 }

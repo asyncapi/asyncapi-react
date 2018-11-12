@@ -1,6 +1,7 @@
 export interface Config {
   show: {
     info: boolean;
+    security: boolean;
     servers: boolean;
     topics: boolean;
     stream: boolean;
@@ -14,6 +15,7 @@ export const defaultConfig: Config = {
   show: {
     info: true,
     servers: true,
+    security: true,
     topics: true,
     stream: true,
     events: true,

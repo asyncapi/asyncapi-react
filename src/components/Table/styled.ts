@@ -1,82 +1,80 @@
-import styled from 'styled-components';
+import { styled } from '../../common';
 
-export const TableWrapper = styled.div`
-  border-radius: 4px;
-  background-color: #ffffff;
+export const TableWrapper = styled.table`
+  ${props => props.theme.table}
 `;
 
 export const TableHeaderWrapper = styled.thead`
-  width: 100%;
-  background-color: #fff;
-  font-family: '72';
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  ${props => props.theme.tableHeader}
 `;
 
-export const TableHeaderTitle = styled.div`
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #32363a;
-  padding: 14px 20px;
+export const TableHeaderTitle = styled.tr`
+  ${props => props.theme.tableHeaderTitle}
 `;
 
 export const TableHeaderColumnsWrapper = styled.tr`
-  background-color: rgba(243, 244, 245, 0.45);
-  border-top: 1px solid #efeff0;
+  ${props => props.theme.tableHeaderRow}
 `;
 
 export const TableHeaderColumnName = styled.th`
-  padding: 13px 20px;
-  height: 13px;
-  opacity: 0.6;
-  font-size: 11px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #32363a;
-  text-transform: uppercase;
+  ${props => props.theme.tableHeaderCell}
 `;
 
 export const TableBodyWrapper = styled.tbody`
-  width: 100%;
-  background-color: #fff;
-  font-family: '72';
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  min-height: 40px;
-  text-align: center;
-  font-size: 14px;
-  line-height: 40px;
-
-  &:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
+${props => props.theme.tableBody}
 `;
 
-export const TableRowWrapper = styled.tr``;
+export const TableRowWrapper = styled.tr`
+  ${props => props.theme.tableBodyRow}
+`;
 
 export const TableCell = styled.td`
-  font-size: 14px;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.29;
-  letter-spacing: normal;
-  text-align: left;
-  padding: 15px 20px;
-  color: #32363b;
-  color: ${props => props.color};
+  ${props => props.theme.tableBodyCell}
 `;
 
-export const TableFooterWrapper = styled.tfoot``;
+export const TableCellWithNested = styled.td`
+  ${props => props.theme.tableBodyCellWithNested}
+`;
 
-// margin: ${props => props.margin};
+export const TableWrapperNested = styled.table`
+  ${props => props.theme.tableNested}
+`;
 
-// cursor: ${props => (props.pointer ? 'pointer' : 'auto')};
-// font-weight: ${props => (props.fontWeight ? props.fontWeight : 'normal')};
+export const TableHeaderWrapperNested = styled.thead`
+  ${props => props.theme.tableHeaderNested}
+`;
+
+export const TableHeaderTitleNested = styled.tr`
+  ${props => props.theme.tableHeaderTitleNested}
+`;
+
+export const TableHeaderColumnsWrapperNested = styled.tr`
+  ${props => props.theme.tableHeaderRowNested}
+`;
+
+export const TableHeaderColumnNameNested = styled.th`
+  ${props => props.theme.tableHeaderCellNested}
+`;
+
+export const TableBodyWrapperNested = styled.tbody`
+${props => props.theme.tableBodyNested}
+`;
+
+export const TableRowWrapperNested = styled.tr`
+  ${props => props.theme.tableBodyRowNested}
+`;
+
+export const TableCellNested = styled.td`
+  ${props => props.theme.tableBodyCellNested}
+`;
+
+export const TableFooterWrapper = styled.tfoot`
+`;
+
+export const TreeSpace = styled.span`
+  ${props => props.theme.treeSpace}
+`;
+
+export const TreeLeaf = styled.span`
+  ${props => props.theme.treeLeaf}
+`;

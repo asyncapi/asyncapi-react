@@ -14,6 +14,6 @@ export const H5 = styled.h5``;
 
 export const H6 = styled.h6``;
 
-export const HeaderParagraph = styled.p``;
+export const HeaderParagraph = styled.div``;
 
 export const HrefHeader = styled.a``;

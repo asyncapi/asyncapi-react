@@ -1,112 +1,69 @@
 import React, { Component } from 'react';
 const OpenAPISampler = require('openapi-sampler');
 
-import { Header, H2, H3, H4, HeaderParagraph, TableColumn } from '../../components';
+import { Header, H2, H3, H4, Markdown, HeaderParagraph, TableColumn, Tag, DeprecatedBadge } from '../../components';
 
 import { Map, Message, Schema } from '../../common';
 
+import { 
+  Message as MessageWrapper,
+  MessageHeader,
+  MessageHeaders,
+  MessageHeadersHeader,
+  MessagePayload,
+  MessagePayloadHeader,
+  MessageTags,
+  MessageTagsHeader,
+ } from './styled';
+
+import SchemaComponent from '../Schemas/Schema';
+
 export interface MessagesProps {
-  title: string,
+  title?: string,
   message: Message,
+  hideTags?: boolean,
 }
-
-type SchemaWithKey = {
-  key: string,
-  schema: Schema,
-}
-
-const headersColumns: TableColumn[] = [
-  {
-    name: "Name",
-    accesor: (el: SchemaWithKey) => el.key
-  }, {
-    name: "Title",
-    accesor: (el: SchemaWithKey) => el.schema.title
-  }, {
-    name: "Type",
-    accesor: (el: SchemaWithKey) => el.schema.type
-  }, {
-    name: "Format",
-    accesor: (el: SchemaWithKey) => el.schema.format
-  }, {
-    name: "Default",
-    accesor: (el: SchemaWithKey) => el.schema.default
-  }, {
-    name: "Description",
-    accesor: (el: SchemaWithKey) => el.schema.description
-  }, 
-]
-
-const payloadColumns: TableColumn[] = [
-  {
-    name: "Name",
-    accesor: (el: SchemaWithKey) => el
-  }, {
-    name: "Title",
-    accesor: (el: SchemaWithKey) => el.schema.title
-  }, {
-    name: "Type",
-    accesor: (el: SchemaWithKey) => el.schema.type
-  }, {
-    name: "Format",
-    accesor: (el: SchemaWithKey) => el.schema.format
-  }, {
-    name: "Default",
-    accesor: (el: SchemaWithKey) => el.schema.default
-  }, {
-    name: "Description",
-    accesor: (el: SchemaWithKey) => el.schema.description
-  }, 
-]
 
 class MessageComponent extends Component<MessagesProps> {
-  private renderHeaders = (headers: Schema) => {
-    console.log(headers)
-
-  }
-
-  private renderExampleOfHeaders = (headers: Schema) => {
-  }
-
-  private renderPayload = (payload: Schema) => {
-    console.log(payload)
-
-  }
-
-  private renderExampleOfPayload = (payload: Schema) => {
-    const sample = OpenAPISampler.sample(payload)
-    console.log(sample)
-  }
-
   public render() {
-    const { title, message } = this.props;
+    const { title, message, hideTags } = this.props;
 
-    const headers: Schema = message.headers as Message;
-    const payload: Schema = message.payload as Message;
+    const headers = message.headers;
+    const payload = message.payload;
 
     return (
       message ?
-        <>
-          <Header>
-            <H3>{title}</H3>
-            <HeaderParagraph>{message.summary}</HeaderParagraph>
-            <HeaderParagraph>{message.description}</HeaderParagraph>
-          </Header>
-          <section>
-            <Header>
-              <H4>Headers</H4>
-            </Header>
-            {this.renderHeaders(headers)}
-            {this.renderExampleOfHeaders(headers)}
-          </section>
-          <section>
-            <Header>
-              <H4>Payload</H4>
-            </Header>
-            {this.renderPayload(payload)}
-            {this.renderExampleOfPayload(payload)}
-          </section>
-        </>
+        <MessageWrapper>
+          <MessageHeader>
+            {title ? <H3>{title} {message.deprecated ? <DeprecatedBadge>Deprecated</DeprecatedBadge> : null}</H3> : null}
+            {message.summary ? <Markdown>{message.summary}</Markdown> : null}
+            {message.description ? <Markdown>{message.description}</Markdown> : null}
+          </MessageHeader>
+          {headers ?
+            <MessageHeaders>
+              <MessageHeadersHeader>
+                <H4>Headers</H4>
+              </MessageHeadersHeader>
+              <SchemaComponent name="Message Headers" schema={headers} exampleTitle="Example of headers" hideTitle={true} />
+            </MessageHeaders>
+          : null}
+          {payload ?
+            <MessagePayload>
+              <MessagePayloadHeader>
+                <H4>Payload</H4>
+              </MessagePayloadHeader>
+              <SchemaComponent name="Message Payload" schema={payload} exampleTitle="Example of payload" hideTitle={true} />
+            </MessagePayload>
+          : null}
+          {!hideTags && message.tags ?
+            <MessageTags>
+              <MessageTagsHeader>
+                <H4>Tags</H4>
+              </MessageTagsHeader>
+              {message.tags.map(tag => <Tag key={tag.name}>{tag.name}</Tag>)}
+            </MessageTags>
+          : null}
+        </MessageWrapper>
       : null
     );
   }

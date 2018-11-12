@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
 
 import { TableAccesor, TableAccesorReturn, TableColumn } from './types';
-import { ITableRowProps } from './propTypes';
 
-import { TableRowWrapper, TableCell } from './styled';
+import { TableRowWrapper, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
 
-class TableRowComponent extends Component<ITableRowProps> {
-  constructor(props: ITableRowProps) {
+export interface TableRowProps {
+  element: any;
+  accesors?: TableAccesor[];
+  nested?: boolean;
+}
+
+export class TableRow extends Component<TableRowProps> {
+  constructor(props: TableRowProps) {
     super(props);
   }
 
-  private getAccesor(column: TableColumn, element: any): TableAccesorReturn {
-    if (column.accesor instanceof Function) return column.accesor(element);
+  private renderRowByAccesors() {
+    const { accesors, element, nested } = this.props;
 
-    const value = element[column.accesor];
+    return accesors!.map((accesor, index) => (
+      !nested ? (
+        <TableCell key={index}>{this.getAccesor(accesor, element)}</TableCell>
+      ) : (
+        <TableCellNested key={index}>{this.getAccesor(accesor, element)}</TableCellNested>
+      )
+    ))
+  }
+
+  private getAccesor(accesor: TableAccesor, element: any): TableAccesorReturn {
+    if (accesor instanceof Function) return accesor(element);
+
+    const value = element[accesor];
     if (typeof value === 'boolean' || typeof value === 'number')
       return (value as boolean | number).toString();
 
@@ -21,16 +38,14 @@ class TableRowComponent extends Component<ITableRowProps> {
   }
 
   public render() {
-    const { columns, element } = this.props;
+    const { accesors, element, nested } = this.props;
 
-    const renderRow: React.ReactNodeArray | null = element
-      ? columns.map((column, index) => (
-          <TableCell key={index}>{this.getAccesor(column, element)}</TableCell>
-        ))
-      : null;
-
-    return <TableRowWrapper>{renderRow}</TableRowWrapper>;
+    return (
+      !nested ? (
+        <TableRowWrapper>{accesors ? this.renderRowByAccesors() : element}</TableRowWrapper>
+      ) : (
+        <TableRowWrapperNested>{accesors ? this.renderRowByAccesors() : element}</TableRowWrapperNested>
+      )
+    )
   }
 }
-
-export default TableRowComponent;

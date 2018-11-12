@@ -9,13 +9,14 @@ export type AsyncApi = {
   stream?: Stream;
   events?: Event;
   components?: Components;
-  security?: SecurityScheme;
+  security?: Array<SecurityRequirement | SecurityScheme>;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
 };
 
 export type AsyncApiVersion = string;
 export type BaseTopic = string;
+export type DescriptionHTML = string | React.ReactNode;
 export type ExternalSpecification = Map<string, any>;
 export type ReferenceString = string;
 export type OneOf = "oneOf";
@@ -23,7 +24,7 @@ export type OneOf = "oneOf";
 export type Info = {
   title: string;
   version: string;
-  description?: string;
+  description?: DescriptionHTML;
   termsOfService?: string;
   contact?: Contact;
   license?: License;
@@ -44,26 +45,27 @@ export type Server = {
   url: string;
   scheme: string;
   schemeVersion?: string;
-  description?: string;
+  description?: DescriptionHTML;
   variables?: Map<string, ServerVariable>;
 };
 
 export type ServerVariable = {
   enum?: string[];
   default?: string;
-  description?: string;
+  description?: DescriptionHTML;
 };
 
 export type Topic = {
   $ref?: ReferenceString;
-  subscribe?: Reference | Message | Map<OneOf, Array<Message | Reference>>;
-  publish?: Reference | Message | Map<OneOf, Array<Message | Reference>>;
-  parameters?: [Parameter | Reference];
+  deprecated?: boolean;
+  subscribe?: Message | Map<OneOf, Message[]>;
+  publish?: Message | Map<OneOf, Message[]>;
+  parameters?: Parameter[];
 };
 
 export type Parameter = {
   name?: string;
-  description?: string;
+  description?: DescriptionHTML;
   schema: Schema;
 };
 
@@ -73,8 +75,8 @@ export type Reference = {
 
 export type Stream = {
   framing: StreamFraming;
-  read?: Array<Message | Reference>;
-  write?: Array<Message | Reference>;
+  read?: Message[];
+  write?: Message[];
 };
 
 export type StreamFraming = {
@@ -83,15 +85,16 @@ export type StreamFraming = {
 };
 
 export type Event = {
-  receive?: Array<Message | Reference>;
-  send?: Array<Message | Reference>;
+  receive?: Message[];
+  send?: Message[];
 };
 
 export type Message = {
+  deprecated?: boolean;
   headers?: Schema;
   payload?: Schema;
-  summary?: string;
-  description?: string;
+  summary?: DescriptionHTML;
+  description?: DescriptionHTML;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
 };
@@ -108,15 +111,15 @@ export type ExternalDocs = {
 };
 
 export type Components = {
-  schemas?: Map<string, Schema | Reference>;
-  messages?: Map<string, Message | Reference>;
-  securitySchemes?: Map<string, SecurityScheme | Reference>;
-  parameters?: Map<string, Parameter | Reference>;
+  schemas?: Map<string, Schema>;
+  messages?: Map<string, Message>;
+  securitySchemes?: Map<string, SecurityScheme>;
+  parameters?: Map<string, Parameter>;
 };
 
 export type SecurityScheme = {
   type: string;
-  description?: string;
+  description?: DescriptionHTML;
   name: string;
   in: string;
   scheme: string;
@@ -136,7 +139,7 @@ export type SecurityRequirement = {};
 export type Schema = {
   $schema?: string;
   $id?: string;
-  description?: string;
+  description?: DescriptionHTML;
   allOf?: Schema[];
   oneOf?: Schema[];
   anyOf?: Schema[];
@@ -144,16 +147,24 @@ export type Schema = {
   type?: string | string[];
   definitions?: Map<string, any>;
   format?: string;
-  items?: Schema | Schema[];
+  items?: Schema;
   minItems?: number;
   additionalItems?: { anyOf: Schema[]; } | Schema;
   enum?: PrimitiveType[] | Schema[];
   default?: PrimitiveType | Object;
-  additionalProperties?: Schema | boolean;
+  additionalProperties?: Map<string, Schema>;
   required?: string[];
   propertyOrder?: string[];
   properties?: Map<string, Schema>;
   defaultProperties?: string[];
   patternProperties?: Map<string, Schema>;
   typeof?: "function";
+  nullable?: boolean;
+  discriminator?: string;
+  readOnly?: boolean;
+  writeOnly?: boolean;
+  xml?: XML;
+  externalDocs?: ExternalDocs;
+  example?: any;
+  deprecated?: boolean;
 };

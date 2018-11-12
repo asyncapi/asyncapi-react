@@ -1,27 +1,25 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 
-interface ICodeProps {
+import { CodeWrapper, CodeHeader, CodeHeaderH4, PreCode, CodeBody } from './styled';
+
+interface CodeProps {
+  title?: any;
   code: string;
-  language?: string;
 }
 
-import { CodeWrapper, CodeHeader, CodeBody } from './styled';
-
-class CodeComponent extends React.Component<ICodeProps> {
-  constructor(props: ICodeProps) {
+export class CodeComponent extends Component<CodeProps> {
+  constructor(props: CodeProps) {
     super(props);
   }
 
   public render() {
-    const { code, language } = this.props;
+    const { title, code } = this.props;
 
     return (
       <CodeWrapper>
-        <CodeHeader>Code</CodeHeader>
-        <CodeBody>{code}</CodeBody>
+        {title ? <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader> : null}
+        <PreCode><CodeBody>{code}</CodeBody></PreCode>
       </CodeWrapper>
     );
   }
 }
-
-export default CodeComponent;

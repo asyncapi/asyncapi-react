@@ -1,14 +1,20 @@
 import * as React from 'react';
 
-import { ITableProps } from './propTypes';
+import { TableColumn } from './types';
 
-import TableHeader from './TableHeader';
-import TableBody from './TableBody';
+import { TableHeader } from './TableHeader';
+import { TableBody } from './TableBody';
 
 import { TableWrapper } from './styled';
 
-class TableComponent extends React.Component<ITableProps> {
-  constructor(props: ITableProps) {
+export interface TableProps {
+  title?: string;
+  columns: TableColumn[];
+  data: any[];
+}
+
+class TableComponent extends React.Component<TableProps> {
+  constructor(props: TableProps) {
     super(props);
   }
 
@@ -17,8 +23,8 @@ class TableComponent extends React.Component<ITableProps> {
 
     return (
       <TableWrapper>
-        <TableHeader title={title} columns={columns} />
-        <TableBody data={data} columns={columns} />
+        <TableHeader title={title} columns={columns.map(column => column.name)} />
+        <TableBody data={data} accesors={columns.map(column => column.accesor)} />
       </TableWrapper>
     );
   }

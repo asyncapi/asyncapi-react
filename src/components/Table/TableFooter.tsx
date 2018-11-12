@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { ITableFooterProps } from './propTypes';
-
 import { TableFooterWrapper } from './styled';
 
-class TableFooterComponent extends React.Component<ITableFooterProps> {
-  constructor(props: ITableFooterProps) {
+export interface TableFooterProps {}
+
+export class TableFooterComponent extends React.Component<TableFooterProps> {
+  constructor(props: TableFooterProps) {
     super(props);
   }
 
@@ -13,5 +13,3 @@ class TableFooterComponent extends React.Component<ITableFooterProps> {
     return <TableFooterWrapper />;
   }
 }
-
-export default TableFooterComponent;
