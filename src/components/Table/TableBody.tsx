@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { TableAccesor } from './types';
+import { TableAccessor } from './types';
 
 import { TableRow } from './TableRow';
 
@@ -8,7 +8,7 @@ import { TableBodyWrapper } from './styled';
 
 export interface TableBodyProps {
   data: any[];
-  accesors: TableAccesor[];
+  accessors: TableAccessor[];
 }
 
 export class TableBody extends React.Component<TableBodyProps> {
@@ -17,12 +17,12 @@ export class TableBody extends React.Component<TableBodyProps> {
   }
 
   public render() {
-    const { data, accesors } = this.props;
+    const { data, accessors } = this.props;
 
     return (
       <TableBodyWrapper>
         {data.map((element, index) => (
-          <TableRow key={index} accesors={accesors} element={element} />
+          <TableRow key={index} accessors={accessors} element={element} />
         ))}
       </TableBodyWrapper>
     );

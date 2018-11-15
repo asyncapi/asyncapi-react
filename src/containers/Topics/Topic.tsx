@@ -42,7 +42,7 @@ class TopicComponent extends Component<TopicProps> {
     return null;
   }
 
-  private renderSubsribe() {
+  private renderSubscribe() {
     const { topic } = this.props
 
     if (topic.publish) {
@@ -86,11 +86,11 @@ class TopicComponent extends Component<TopicProps> {
         </TopicHeader>
         <ParametersComponent parameters={topic.parameters} />
         <TopicHeaderMessage>
-          <H4>Message</H4>
+          <H4>{oneOf ? "Messages" : "Message"}</H4>
           {oneOf ? <HeaderParagraph>You can send one of the following messages:</HeaderParagraph> : null}
         </TopicHeaderMessage>
         {this.renderPublish()}
-        {this.renderSubsribe()}
+        {this.renderSubscribe()}
       </TopicWrapper>
     );
   }

@@ -1,5 +1,9 @@
 import { styled } from '../../common';
 
+interface TableRowWithNestedProps {
+  open?: boolean
+}
+
 export const TableWrapper = styled.table`
   ${props => props.theme.table}
 `;
@@ -26,6 +30,13 @@ ${props => props.theme.tableBody}
 
 export const TableRowWrapper = styled.tr`
   ${props => props.theme.tableBodyRow}
+`;
+
+export const TableRowWrapperWithNested = styled.tr`
+  ${props => props.theme.tableBodyRowWithNested}
+  > td > div {
+    ${(props: TableRowWithNestedProps) => props.open ? 'max-height: 250px;' : ''}
+  }
 `;
 
 export const TableCell = styled.td`

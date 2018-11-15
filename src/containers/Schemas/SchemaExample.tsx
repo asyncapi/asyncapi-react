@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Header, H4, TableAccesor, TableRow, CodeComponent } from '../../components';
+import { Header, H4, TableRow, CodeComponent, GeneratedBadge } from '../../components';
 
 import { Map, TypeWithKey, Schema } from '../../common';
 
@@ -27,7 +27,7 @@ class SchemaExampleComponent extends Component<SchemaExampleProps> {
     return (
       example ? 
         <SchemaExample>
-          <CodeComponent code={example} title={<>{title ? title : "Example"} {schema.example ? "" : (<em>(generated)</em>)}</>} />
+          <CodeComponent code={example} title={<>{title ? title : "Example"} {schema.example ? "" : (<GeneratedBadge>generated</GeneratedBadge>)}</>} />
         </SchemaExample>
       : null
     );

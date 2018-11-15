@@ -24,7 +24,7 @@ class TableComponent extends React.Component<TableProps> {
     return (
       <TableWrapper>
         <TableHeader title={title} columns={columns.map(column => column.name)} />
-        <TableBody data={data} accesors={columns.map(column => column.accesor)} />
+        <TableBody data={data} accessors={columns.map(column => column.accesor)} />
       </TableWrapper>
     );
   }

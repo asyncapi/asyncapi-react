@@ -15,7 +15,7 @@ class Playground extends Component<{}, PlaygroundState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      schema: yamlMock4
+      schema: yamlMock4 //JSON.stringify(jsonMock)
     }
   }
 

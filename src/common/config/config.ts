@@ -1,15 +1,15 @@
 export interface ConfigInterface {
-    show: {
-      info: boolean;
-      security: boolean;
-      servers: boolean;
-      topics: boolean;
-      stream: boolean;
-      events: boolean;
-      messages: boolean;
-      schemas: boolean;
-    }
+    show: ShowConfig
   }
-  
-  export type PartialConfigInterface = Partial<ConfigInterface>;
+
+interface ShowConfig {
+  info: boolean;
+  security: boolean;
+  servers: boolean;
+  topics: boolean;
+  stream: boolean;
+  events: boolean;
+  messages: boolean;
+  schemas: boolean;
+}
   

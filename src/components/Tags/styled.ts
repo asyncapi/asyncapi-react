@@ -20,6 +20,10 @@ export const RequiredBadge = styled(Badge)`
   ${props => props.theme.requiredBadge}
 `;
 
+export const GeneratedBadge = styled(Badge)`
+  ${props => props.theme.generatedBadge}
+`;
+
 export const Tag = styled.span`
   ${props => props.theme.tag}
 `;

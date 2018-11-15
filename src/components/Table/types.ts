@@ -1,7 +1,7 @@
-export type TableAccesor = Function| string;
-export type TableAccesorReturn = React.ReactNode | string;
+export type TableAccessor = Function| string;
+export type TableAccessorReturn = React.ReactNode | string;
 export type TableColumnName = string;
 export type TableColumn = {
   name: string;
-  accesor: TableAccesor;
+  accesor: TableAccessor;
 };

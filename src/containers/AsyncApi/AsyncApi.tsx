@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, PropsWithDefaults, defaultTheme, defaultConfig, parser, beautifier, ThemeInterface, PartialThemeInterface, ConfigInterface, PartialConfigInterface, SecurityScheme } from '../../common';
+import { AsyncApi, PropsWithDefaults, kymaTheme, defaultConfig, parser, beautifier, ThemeInterface, ConfigInterface, SecurityScheme } from '../../common';
 
 import InfoComponent from '../Info/Info';
 import ServersComponent from '../Servers/Servers';
@@ -14,25 +14,13 @@ import { AsyncApiWrapper } from './styled';
 
 export interface AsyncApiProps {
   schema: string | Object;
-  theme?: PartialThemeInterface;
-  config?: PartialConfigInterface;
+  theme?: Partial<ThemeInterface>;
+  config?: Partial<ConfigInterface>;
 }
 
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
-}
-
-interface AsyncApiDefaultProps {
-  schema: AsyncApi | string;
-  theme: ThemeInterface;
-  config: ConfigInterface;
-}
-
-const defaultProps: AsyncApiDefaultProps = {
-  schema: "",
-  theme: defaultTheme,
-  config: defaultConfig,
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -43,11 +31,7 @@ const defaultAsyncApi: AsyncApi = {
   }
 }
 
-type Props = PropsWithDefaults<AsyncApiProps, AsyncApiDefaultProps>;
-
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
-  static defaultProps: AsyncApiDefaultProps = defaultProps;
-
   constructor(props: AsyncApiProps) {
     super(props);
     this.state = {
@@ -62,7 +46,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     this.setState({ validatedSchema, validated: true });
   }
 
-  async componentWillReceiveProps(nextProps: Props) {
+  async componentWillReceiveProps(nextProps: AsyncApiProps) {
     if(nextProps.schema !== this.props.schema) {
       let validatedSchema = await this.validateSchema(nextProps.schema);
       validatedSchema = this.beautifySchema(validatedSchema)
@@ -89,37 +73,34 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   };
 
   public render() {
-    const { theme, config } = this.props as Props;
+    const { theme, config } = this.props;
     const { validatedSchema, validated } = this.state;
 
-    console.log(validatedSchema)
+    const concatenatedTheme: ThemeInterface = { ...kymaTheme, ...theme };
+    const concatenatedConfig: ConfigInterface = { ...defaultConfig, ...config };
 
     return (
       validatedSchema && validated ?
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={concatenatedTheme}>
           <AsyncApiWrapper>
             {this.showComponent(
-              config.show.info && Boolean(validatedSchema.info),
-              <InfoComponent info={validatedSchema.info} />
+              concatenatedConfig.show.info && Boolean(validatedSchema.info),
+              <InfoComponent info={validatedSchema.info} servers={validatedSchema.servers} showServers={concatenatedConfig.show.servers && Boolean(validatedSchema.servers)} />
             )}
             {this.showComponent(
-              config.show.servers && Boolean(validatedSchema.servers),
-              <ServersComponent servers={validatedSchema.servers} />
-            )}
-            {this.showComponent(
-              config.show.security && Boolean(validatedSchema.security),
+              concatenatedConfig.show.security && Boolean(validatedSchema.security),
               <Security security={validatedSchema.security as SecurityScheme[]} />
             )}
             {this.showComponent(
-              config.show.topics && Boolean(validatedSchema.topics),
+              concatenatedConfig.show.topics && Boolean(validatedSchema.topics),
               <TopicsComponent baseTopic={validatedSchema.baseTopic} topics={validatedSchema.topics} />
             )}
             {this.showComponent(
-              config.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
+              concatenatedConfig.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
               <MessagesComponent messages={validatedSchema.components!.messages} />
             )}
             {this.showComponent(
-              config.show.schemas && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
+              concatenatedConfig.show.schemas && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
               <SchemasComponent schemas={validatedSchema.components!.schemas} />
             )}
           </AsyncApiWrapper>

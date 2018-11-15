@@ -5,7 +5,7 @@ import {
     H4, 
     Markdown, 
     TableColumnName, 
-    TableAccesor, 
+    TableAccessor, 
     TableWrapper, 
     TableHeader, 
     TableBodyWrapper, 
@@ -30,7 +30,7 @@ const serverVariablesColumnsName: TableColumnName[] = [
   "Description",
 ]
 
-const serverVariablesAccesors: TableAccesor[] = [
+const serverVariablesAccessors: TableAccessor[] = [
   (el: ServerVariableWithKey) => el.key,
   (el: ServerVariableWithKey) => el.content.default ? el.content.default : <em>None</em>,
   (el: ServerVariableWithKey) => el.content.enum ? (
@@ -43,23 +43,26 @@ const serverVariablesAccesors: TableAccesor[] = [
 
 export interface SchemaServerProps {
   variables: ServerVariableWithKey[];
+  openAccordion: boolean;
 }
 
 class ServerVariablesComponent extends Component<SchemaServerProps> {
   public render() {
-    const { variables } = this.props;
+    const { variables, openAccordion } = this.props;
 
     const vars = (
       <TableCellWithNested colSpan={3}>
-        <TableWrapperNested>
-          <TableHeader title="URL Variables" columns={serverVariablesColumnsName} nested />
-          <TableBodyWrapperNested>
-            {variables.map(variable => <TableRow key={variable.key} accesors={serverVariablesAccesors} element={variable} nested />)}
-          </TableBodyWrapperNested>
-        </TableWrapperNested>
+        <div>
+          <TableWrapperNested>
+            <TableHeader title="URL Variables" columns={serverVariablesColumnsName} nested />
+            <TableBodyWrapperNested>
+              {variables.map(variable => <TableRow key={variable.key} accessors={serverVariablesAccessors} element={variable} nested />)}
+            </TableBodyWrapperNested>
+          </TableWrapperNested>
+        </div>
       </TableCellWithNested>
     )
-    return <TableRow element={vars} />
+    return <TableRow openAccordion={openAccordion} element={vars} />;
   }
 }
 

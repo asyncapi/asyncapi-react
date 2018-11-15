@@ -1,7 +1,16 @@
 import { styled } from '../../common';
 
+interface ServerExpandIconProps {
+  open?: boolean
+}
+
 export const Servers = styled.div`
   ${props => props.theme.servers}
+`;
+
+export const ServerExpandIcon = styled.span`
+  ${props => props.theme.serverExpandIcon}
+  ${(props: ServerExpandIconProps) => props.open ? 'transform: rotate(90deg);' : ''}
 `;
 
 export const ServersHeader = styled.header`

@@ -4,7 +4,7 @@ export const Schemas = styled.div`
   ${props => props.theme.schemas}
 `;
 
-export const SchemasHeader = styled.div`
+export const SchemasHeader = styled.header`
   ${props => props.theme.schemasHeader}
 `;
 

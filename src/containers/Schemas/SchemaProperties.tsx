@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Header, H4, Markdown, TableAccesor, TableRow, RequiredBadge, TreeSpace, TreeLeaf } from '../../components';
+import { Header, H4, Markdown, TableAccessor, TableRow, RequiredBadge, TreeSpace, TreeLeaf } from '../../components';
 
 import { Map, TypeWithKey, Schema } from '../../common';
 
@@ -11,7 +11,7 @@ type SchemaElement = {
   treeSpace: number,
 }
 
-const schemaPropertiesAccesors: TableAccesor[] = [
+const schemaPropertiesAccesors: TableAccessor[] = [
   (el: SchemaElement) => (
     <>
       {(() => {
@@ -25,7 +25,7 @@ const schemaPropertiesAccesors: TableAccesor[] = [
         return treeSpaces
       })()}
       {el.schema.key}
-      {el.required ? <RequiredBadge>(Reguired)</RequiredBadge> : null}
+      {el.required ? <RequiredBadge>Required</RequiredBadge> : null}
     </>
   ),
   (el: SchemaElement) => el.schema.content.title,
@@ -101,7 +101,7 @@ class SchemaPropertiesComponent extends Component<SchemaPropertiesProps> {
 
     return (
       <>
-        <TableRow accesors={schemaPropertiesAccesors} element={element} />
+        <TableRow accessors={schemaPropertiesAccesors} element={element} />
         {this.renderOf("anyOf", space, properties.anyOf)}
         {this.renderOf("oneOf", space, properties.oneOf)}
         {this.renderProperties(properties, requiredItems, space)}

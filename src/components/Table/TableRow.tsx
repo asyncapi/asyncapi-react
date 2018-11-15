@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import { TableAccesor, TableAccesorReturn, TableColumn } from './types';
+import { TableAccessor, TableAccessorReturn, TableColumn } from './types';
 
-import { TableRowWrapper, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
+import { TableRowWrapper, TableRowWrapperWithNested, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
 
 export interface TableRowProps {
   element: any;
-  accesors?: TableAccesor[];
+  accessors?: TableAccessor[];
   nested?: boolean;
+  openAccordion?: boolean;
 }
 
 export class TableRow extends Component<TableRowProps> {
@@ -15,19 +16,19 @@ export class TableRow extends Component<TableRowProps> {
     super(props);
   }
 
-  private renderRowByAccesors() {
-    const { accesors, element, nested } = this.props;
+  private renderRowByAccessors() {
+    const { accessors, element, nested } = this.props;
 
-    return accesors!.map((accesor, index) => (
+    return accessors!.map((accessor, index) => (
       !nested ? (
-        <TableCell key={index}>{this.getAccesor(accesor, element)}</TableCell>
+        <TableCell key={index}>{this.getAccessor(accessor, element)}</TableCell>
       ) : (
-        <TableCellNested key={index}>{this.getAccesor(accesor, element)}</TableCellNested>
+        <TableCellNested key={index}>{this.getAccessor(accessor, element)}</TableCellNested>
       )
     ))
   }
 
-  private getAccesor(accesor: TableAccesor, element: any): TableAccesorReturn {
+  private getAccessor(accesor: TableAccessor, element: any): TableAccessorReturn {
     if (accesor instanceof Function) return accesor(element);
 
     const value = element[accesor];
@@ -38,13 +39,17 @@ export class TableRow extends Component<TableRowProps> {
   }
 
   public render() {
-    const { accesors, element, nested } = this.props;
+    const { accessors, element, nested, openAccordion } = this.props;
+
+    if ((this.props as Object).hasOwnProperty('openAccordion')) {
+      return <TableRowWrapperWithNested open={openAccordion}>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapperWithNested>
+    }
 
     return (
       !nested ? (
-        <TableRowWrapper>{accesors ? this.renderRowByAccesors() : element}</TableRowWrapper>
+        <TableRowWrapper>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapper>
       ) : (
-        <TableRowWrapperNested>{accesors ? this.renderRowByAccesors() : element}</TableRowWrapperNested>
+        <TableRowWrapperNested>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapperNested>
       )
     )
   }
