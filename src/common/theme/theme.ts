@@ -13,6 +13,7 @@ export interface ThemeInterface {
   h4: styledCss;
   h5: styledCss;
   h6: styledCss;
+  hrefHeader: styledCss;
   markdown: styledCss;
   table: styledCss;
   tableHeader: styledCss;
@@ -63,6 +64,7 @@ export interface ThemeInterface {
   topic: styledCss;
   topicHeader: styledCss;
   topicHeaderBadge: styledCss;
+  topicMessage: styledCss;
   topicHeaderMessage: styledCss;
   parameters: styledCss;
   parametersHeader: styledCss;

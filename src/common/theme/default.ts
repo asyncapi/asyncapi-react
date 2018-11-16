@@ -336,6 +336,9 @@ export const kymaTheme: ThemeInterface = {
   `,
   h6: css`
   `,
+  hrefHeader: css`
+    color: #0b74de;
+  `,
   markdown: css`
     > div {
       > ul {
@@ -664,6 +667,18 @@ export const kymaTheme: ThemeInterface = {
     float: left;
     margin-top: -2px;
     margin-right: 10px;
+  `,
+  topicMessage: css`
+    > div {
+      padding-left: 0;
+
+      &:before {
+        border: none;
+        border-radius: 0;
+        left: 0;
+        top: 0;
+      }
+    }
   `,
   topicHeaderMessage: css`
     color: #32363a;

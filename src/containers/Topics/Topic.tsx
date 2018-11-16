@@ -4,7 +4,7 @@ import { Header, H3, H4, HeaderParagraph, Table, TableColumn, PublishBadge, Subs
 
 import { Map, Topic, Message, Schema } from '../../common';
 
-import { Topic as TopicWrapper, TopicHeader, TopicHeaderBadge, TopicHeaderMessage } from './styled';
+import { Topic as TopicWrapper, TopicHeader, TopicHeaderBadge, TopicMessage, TopicHeaderMessage } from './styled';
 
 import { MessageIndented } from '../Messages/styled';
 
@@ -26,17 +26,17 @@ class TopicComponent extends Component<TopicProps> {
         const subscribes: Message[] = (subscribe as any).oneOf;
 
         return subscribes.map((sub, index) => (
-          <div key={index}>
+          <TopicMessage key={index}>
             <TopicHeaderMessage>
               <H4>Message #{index + 1}</H4>
             </TopicHeaderMessage>
             <MessageIndented>
               <MessageComponent message={sub} />
             </MessageIndented>
-          </div>
+          </TopicMessage>
         ))
       } else {
-        return <MessageComponent message={subscribe as Message} />
+        return <TopicMessage><MessageComponent message={subscribe as Message} /></TopicMessage>
       }
     }
     return null;
@@ -51,17 +51,17 @@ class TopicComponent extends Component<TopicProps> {
         const publishes: Message[] = (publish as any).oneOf;
 
         return publishes.map((pub, index) => (
-          <div key={index}>
+          <TopicMessage key={index}>
             <TopicHeaderMessage>
               <H4>Message #{index + 1}</H4>
             </TopicHeaderMessage>
             <MessageIndented>
               <MessageComponent message={pub} />
             </MessageIndented>
-          </div>
+          </TopicMessage>
         ))
       } else {
-        return <MessageComponent message={publish as Message} />
+        return <TopicMessage><MessageComponent message={publish as Message} /></TopicMessage>
       }
     }
     return null;
