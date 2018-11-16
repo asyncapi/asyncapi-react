@@ -1,4 +1,5 @@
 import { styled } from '../../common'
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 export const CodeWrapper = styled.div`
   ${props => props.theme.codeWrapper}
@@ -10,10 +11,6 @@ export const CodeHeader = styled.header`
 
 export const CodeHeaderH4 = styled.h4``;
 
-export const PreCode = styled.pre`
-  ${props => props.theme.codeContentWrapper}
-`;
-
-export const CodeBody = styled.code`
+export const CodeBody = styled(SyntaxHighlighter)`
   ${props => props.theme.codeContent}
 `;

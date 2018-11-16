@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { CodeWrapper, CodeHeader, CodeHeaderH4, PreCode, CodeBody } from './styled';
+import { CodeWrapper, CodeHeader, CodeHeaderH4, CodeBody } from './styled';
 
 interface CodeProps {
   title?: any;
@@ -18,7 +18,7 @@ export class CodeComponent extends Component<CodeProps> {
     return (
       <CodeWrapper>
         {title ? <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader> : null}
-        <PreCode><CodeBody>{code}</CodeBody></PreCode>
+        <CodeBody language="javascript">{code}</CodeBody>
       </CodeWrapper>
     );
   }

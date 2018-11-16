@@ -558,10 +558,11 @@ export const kymaTheme: ThemeInterface = {
     font-size: 13px;
   `,
   codeContent: css`
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-    padding: 12px 20px;
-    word-break: break-all;
-    display: block;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace !important;
+    margin: 0 !important;
+    padding: 12px 20px !important;
+    background: #fff !important;
+    font-size: 12px !important;
   `,
   info: css`
     margin-top: 24px;
