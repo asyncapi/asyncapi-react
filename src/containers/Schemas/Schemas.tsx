@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H2 } from '../../components';
-
+import { H2 } from '../../components';
 import { Map, Schema } from '../../common';
-
 import { Schemas, SchemasHeader } from './styled';
 
 import SchemaComponent from './Schema';

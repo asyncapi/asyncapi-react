@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H2 } from '../../components';
-
-import { Map, Message, Reference } from '../../common';
-
+import { H2 } from '../../components';
+import { Map, Message } from '../../common';
 import { Messages, MessagesHeader } from './styled';
 
 import MessageComponent from './Message';

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import AsyncApi from '../AsyncApi/AsyncApi';
-import CodeMirror from './CodeMirror';
-
-import { jsonMock, yamlMock, yamlMock2, yamlMock3, yamlMock4 } from './mock';
+import { yamlMock3 } from './mock';
 
 import { PlaygroundWrapper, CodeMirrorWrapper, AsyncApiWrapper } from './styled';
+
+import AsyncApi from '../AsyncApi/AsyncApi';
+import CodeMirror from './CodeMirror';
 
 interface State {
   schema: string,

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H2, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
-
+import { H2, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
 import { Server } from '../../common';
-
 import { Servers, ServersHeader } from './styled';
 
 import ServerComponent from './Server';

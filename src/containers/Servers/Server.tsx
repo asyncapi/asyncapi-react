@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
-import { Header, H4, Markdown, TableAccessor, TableRow } from '../../components';
-
+import { Markdown, TableAccessor, TableRow } from '../../components';
 import { Server } from '../../common';
+import { ServerExpandIcon } from './styled';
 
 import ServerVariablesComponent from './ServerVariables';
-
-import { ServerExpandIcon } from './styled';
 
 type ServerWithVariables = {
   server: Server;

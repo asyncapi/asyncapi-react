@@ -1,12 +1,11 @@
-import { InterpolationValue } from "styled-components";
-import { css } from "./styled-components"
+import { InterpolationValue } from 'styled-components';
 
-type styledCss = string | InterpolationValue[]
+type styledCss = string | InterpolationValue[];
 
 export interface ThemeInterface {
   asyncApiWrapper: styledCss;
   header: styledCss;
-  headerParagraph: styledCss,
+  headerParagraph: styledCss;
   h1: styledCss;
   h2: styledCss;
   h3: styledCss;

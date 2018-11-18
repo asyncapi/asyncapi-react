@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-const OpenAPISampler = require('openapi-sampler');
 
-import { Header, H2, H3, H4, Markdown, HeaderParagraph, TableColumn, Tag, DeprecatedBadge } from '../../components';
-
-import { Map, Message, Schema } from '../../common';
-
+import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
+import { Message } from '../../common';
 import { 
   Message as MessageWrapper,
   MessageHeader,

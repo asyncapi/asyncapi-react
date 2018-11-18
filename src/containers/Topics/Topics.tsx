@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H2 } from '../../components';
-
+import { H2 } from '../../components';
 import { Map, Topic } from '../../common';
-
 import { Topics, TopicsHeader } from './styled';
 
 import TopicComponent from './Topic';
@@ -26,7 +24,7 @@ class TopicsComponent extends Component<Props> {
     const { topics } = this.props;
 
     if (!topics) return null;
-    
+
     return (
       <Topics>
         <TopicsHeader>

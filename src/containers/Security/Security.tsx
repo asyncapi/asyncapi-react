@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H2, Markdown, TableColumnName, TableAccessor, TableWrapper, TableHeader, TableBodyWrapper, TableRow } from '../../components';
-
+import { H2, Markdown, TableColumnName, TableAccessor, TableWrapper, TableHeader, TableBodyWrapper, TableRow } from '../../components';
 import { SecurityScheme } from '../../common';
-
 import { Security as SecurityWrapper, SecurityHeader } from './styled'
 
 const securityColumnsName: TableColumnName[] = [

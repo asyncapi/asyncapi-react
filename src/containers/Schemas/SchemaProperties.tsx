@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H4, Markdown, TableAccessor, TableRow, RequiredBadge, TreeSpace, TreeLeaf } from '../../components';
-
-import { Map, TypeWithKey, Schema } from '../../common';
+import { Markdown, TableAccessor, TableRow, RequiredBadge, TreeSpace, TreeLeaf } from '../../components';
+import { TypeWithKey, Schema } from '../../common';
 
 type SchemaWithKey = TypeWithKey<string, Schema>;
 type SchemaElement = {

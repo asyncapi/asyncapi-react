@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 
 import { 
-    Header,
-    H4, 
     Markdown, 
     TableColumnName, 
     TableAccessor, 
-    TableWrapper, 
-    TableHeader, 
-    TableBodyWrapper, 
+    TableHeader,  
     TableRow, 
-    TableCell,
     TableCellWithNested,
     TableWrapperNested,
-    TableHeaderWrapperNested,
     TableBodyWrapperNested,
 } from '../../components';
 

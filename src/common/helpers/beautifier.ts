@@ -1,25 +1,39 @@
-import { Map, AsyncApi, Schema, Message, Server, Topic, ServerVariable, SecurityScheme, SecurityRequirement } from '../types';
+import {
+  Map,
+  AsyncApi,
+  Schema,
+  Message,
+  Server,
+  Topic,
+  ServerVariable,
+  SecurityRequirement,
+} from '../types';
 
 import renderMarkdown from './renderMarkdown';
 
 class Beautifier {
   beautify(asyncApi: AsyncApi): AsyncApi {
-    asyncApi.info.description = this.renderMd(asyncApi.info.description as string)
+    asyncApi.info.description = this.renderMd(asyncApi.info
+      .description as string);
     if (asyncApi.servers) {
-      asyncApi.servers = this.beautifyServers(asyncApi.servers)
+      asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
     if (asyncApi.security) {
-      asyncApi.security = this.beautifySecurity(asyncApi)
+      asyncApi.security = this.beautifySecurity(asyncApi);
     }
     if (asyncApi.topics) {
-      asyncApi.topics = this.beautifyTopics(asyncApi.topics)
+      asyncApi.topics = this.beautifyTopics(asyncApi.topics);
     }
     if (asyncApi.components) {
       if (asyncApi.components.messages) {
-        asyncApi.components.messages = this.beautifyMessages(asyncApi.components.messages)
+        asyncApi.components.messages = this.beautifyMessages(
+          asyncApi.components.messages,
+        );
       }
       if (asyncApi.components.schemas) {
-        asyncApi.components.schemas = this.beautifySchemas(asyncApi.components.schemas)
+        asyncApi.components.schemas = this.beautifySchemas(
+          asyncApi.components.schemas,
+        );
       }
     }
 
@@ -29,16 +43,16 @@ class Beautifier {
   private resolveAllOf(schema: Schema): Schema {
     if (schema.allOf) {
       const schemas: Schema[] = [];
-      schema.allOf.forEach((s) => {
+      schema.allOf.forEach(s => {
         schemas.push(this.resolveAllOf(s));
       });
-  
+
       return this.resolveAllOf(Object.assign({}, ...schemas));
     }
-  
+
     if (schema.properties) {
       const transformed: Map<string, Schema> = {};
-  
+
       for (const key in schema.properties) {
         if (schema.properties[key].allOf) {
           transformed[key] = this.resolveAllOf(schema.properties[key]);
@@ -46,33 +60,35 @@ class Beautifier {
         }
         transformed[key] = schema.properties[key];
       }
-  
+
       return {
         ...schema,
         properties: transformed,
       };
     }
-  
+
     return schema;
-  };
+  }
 
   private beautifySchema(schema: Schema): Schema {
     if (schema.properties) {
-      const properties = schema.properties
-      let newProperties: Map<string, Schema> = properties
+      const properties = schema.properties;
+      let newProperties: Map<string, Schema> = properties;
 
       for (const key in properties) {
-        let prop = properties[key]
+        let prop = properties[key];
 
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
         if (prop.properties) {
           const propProperties = prop.properties;
-          let newPropProperties: Map<string, Schema> = {}
+          let newPropProperties: Map<string, Schema> = {};
 
           for (const propKey in propProperties) {
-            newPropProperties[propKey] = this.beautifySchema(propProperties[propKey])
+            newPropProperties[propKey] = this.beautifySchema(
+              propProperties[propKey],
+            );
           }
 
           prop.properties = newPropProperties;
@@ -84,32 +100,34 @@ class Beautifier {
     }
 
     if (schema.additionalProperties) {
-      const additionalProperties = schema.additionalProperties
-      let newAdditionalProperties: Map<string, Schema> = additionalProperties
-      
+      const additionalProperties = schema.additionalProperties;
+      let newAdditionalProperties: Map<string, Schema> = additionalProperties;
+
       for (const key in additionalProperties) {
-        let prop = additionalProperties[key]
+        let prop = additionalProperties[key];
 
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
         if (prop.additionalProperties) {
-            const propAdditionalProperties = prop.additionalProperties;
-            let newPropAdditionalProperties: Map<string, Schema> = {}
-  
-            for (const propKey in propAdditionalProperties) {
-              newPropAdditionalProperties[propKey] = this.beautifySchema(propAdditionalProperties[propKey])
-            }
-            prop.properties = newPropAdditionalProperties;
+          const propAdditionalProperties = prop.additionalProperties;
+          let newPropAdditionalProperties: Map<string, Schema> = {};
+
+          for (const propKey in propAdditionalProperties) {
+            newPropAdditionalProperties[propKey] = this.beautifySchema(
+              propAdditionalProperties[propKey],
+            );
+          }
+          prop.properties = newPropAdditionalProperties;
         }
 
         newAdditionalProperties[key] = prop;
       }
-      schema.additionalProperties = newAdditionalProperties
+      schema.additionalProperties = newAdditionalProperties;
     }
 
     return schema;
-  };
+  }
 
   private beautifySchemas(schemas: Map<string, Schema>): Map<string, Schema> {
     let newSchemas: Map<string, Schema> = {};
@@ -118,7 +136,7 @@ class Beautifier {
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
     }
     return newSchemas;
-  };
+  }
 
   private beautifyMessage(message: Message): Message {
     if (message.payload) {
@@ -130,24 +148,26 @@ class Beautifier {
 
     message.summary = this.renderMd(message.summary as string);
     message.description = this.renderMd(message.description as string);
-  
+
     if (message.headers) {
       message.headers = this.beautifySchema(message.headers);
     }
     if (message.payload) {
       message.payload = this.beautifySchema(message.payload);
     }
-  
-    return message;
-  };
 
-  private beautifyMessages(messages: Map<string, Message>): Map<string, Message> {
+    return message;
+  }
+
+  private beautifyMessages(
+    messages: Map<string, Message>,
+  ): Map<string, Message> {
     let newMessages: Map<string, Message> = {};
     for (const key in messages) {
       newMessages[key] = this.beautifyMessage(messages[key]);
     }
     return newMessages;
-  };
+  }
 
   private beautifyServers(servers: Server[]): Server[] {
     return servers.map(server => {
@@ -155,12 +175,13 @@ class Beautifier {
 
       if (server.variables) {
         const variables = server.variables;
-        let newVariables: Map<string, ServerVariable> = variables
+        let newVariables: Map<string, ServerVariable> = variables;
 
         for (const key in variables) {
-          newVariables[key].description = this.renderMd(variables[key].description as string);
+          newVariables[key].description = this.renderMd(variables[key]
+            .description as string);
         }
-        server.variables = newVariables; 
+        server.variables = newVariables;
       }
 
       return server;
@@ -168,16 +189,16 @@ class Beautifier {
   }
 
   private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
-    let newTopics: Map<string, Topic> = {}
+    let newTopics: Map<string, Topic> = {};
     for (const key in topics) {
       let topic = topics[key];
 
       if (topic.publish) {
         if ((topic.publish as any).oneOf) {
-          let messages: Message[] = (topic.publish as any).oneOf
+          let messages: Message[] = (topic.publish as any).oneOf;
           messages = messages.map(message => this.beautifyMessage(message));
 
-          (topic.publish as any).oneOf = messages
+          (topic.publish as any).oneOf = messages;
         } else {
           topic.publish = this.beautifyMessage(topic.publish as Message);
         }
@@ -185,20 +206,20 @@ class Beautifier {
 
       if (topic.subscribe) {
         if ((topic.subscribe as any).oneOf) {
-          let messages: Message[] = (topic.subscribe as any).oneOf
+          let messages: Message[] = (topic.subscribe as any).oneOf;
           messages = messages.map(message => this.beautifyMessage(message));
 
-          (topic.subscribe as any).oneOf = messages
+          (topic.subscribe as any).oneOf = messages;
         } else {
           topic.subscribe = this.beautifyMessage(topic.subscribe as Message);
         }
       }
 
       if (topic.parameters) {
-        topic.parameters = topic.parameters.map(param => { 
-          param.description = this.renderMd(param.description as string); 
-          return param 
-        })
+        topic.parameters = topic.parameters.map(param => {
+          param.description = this.renderMd(param.description as string);
+          return param;
+        });
       }
 
       newTopics[key] = topic;
@@ -212,14 +233,22 @@ class Beautifier {
 
     security!.forEach(sec => {
       const name = Object.keys(sec)[0];
-      if (!components || !components.securitySchemes || !components.securitySchemes[name]) {
-        throw new Error(`Security definition "${name}" is not included in #/components/securitySchemes.`);
+      if (
+        !components ||
+        !components.securitySchemes ||
+        !components.securitySchemes[name]
+      ) {
+        throw new Error(
+          `Security definition "${name}" is not included in #/components/securitySchemes.`,
+        );
       }
 
-      let securityComponent = components.securitySchemes[name]
-      securityComponent.description = this.renderMd(securityComponent.description as string);
+      let securityComponent = components.securitySchemes[name];
+      securityComponent.description = this.renderMd(
+        securityComponent.description as string,
+      );
       securityRequirements.push(securityComponent);
-    })
+    });
 
     return securityRequirements;
   }

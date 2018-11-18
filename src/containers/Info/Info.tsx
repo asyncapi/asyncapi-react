@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Header, H1, H2, HeaderParagraph, HrefHeader, Markdown } from '../../components';
+import { H1, H2, HeaderParagraph, HrefHeader, Markdown } from '../../components';
 
 import { Info, Server } from '../../common';
 

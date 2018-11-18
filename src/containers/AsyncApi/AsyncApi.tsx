@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, PropsWithDefaults, kymaTheme, defaultConfig, parser, beautifier, ThemeInterface, ConfigInterface, SecurityScheme } from '../../common';
+import { AsyncApi, kymaTheme, defaultConfig, parser, beautifier, ThemeInterface, ConfigInterface, SecurityScheme } from '../../common';
 
 import InfoComponent from '../Info/Info';
-import ServersComponent from '../Servers/Servers';
 import Security from '../Security/Security';
 import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';

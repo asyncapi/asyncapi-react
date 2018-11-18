@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import { Header, H4, TableRow, CodeComponent, GeneratedBadge } from '../../components';
-
-import { Map, TypeWithKey, Schema } from '../../common';
-
+import { CodeComponent, GeneratedBadge } from '../../components';
+import { Schema } from '../../common';
 import { SchemaExample } from './styled';
 
 interface Props {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Header, H4, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
+import { H4, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
 
-import { Map, Schema } from '../../common';
+import { Schema } from '../../common';
 
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
 

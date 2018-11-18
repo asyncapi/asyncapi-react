@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-const OpenAPISampler = require('openapi-sampler');
 
-import { Header, H2, H3, H4, HeaderParagraph, TableColumn, Markdown } from '../../components';
-
-import { Map, Parameter, Schema } from '../../common';
-
+import { H4, Markdown } from '../../components';
+import { Parameter } from '../../common';
 import { Parameters, ParametersHeader, Parameter as ParameterWrapper, ParameterHeader } from './styled';
 
 import SchemaComponent from '../Schemas/Schema';

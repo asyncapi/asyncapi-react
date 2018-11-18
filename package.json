@@ -1,6 +1,7 @@
 {
   "name": "asyncapi-react",
   "version": "0.1.0",
+  "private": false,
   "description": "A simple React component for AsynApi Specification.",
   "repository": {
     "type": "git",
@@ -8,7 +9,8 @@
   },
   "author": {
     "name": "Maciej Urbańczyk",
-    "email": "maciej.urbanczyk.95@gmail.com"
+    "email": "maciej.urbanczyk.95@gmail.com",
+    "url": "https://github.com/magicmatatjahu"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -19,6 +21,9 @@
     "asyncapi"
   ],
   "homepage": "https://github.com/kyma-incubator/asyncapi-react",
+  "files": [
+    "build/lib"
+  ],
   "dependencies": {
     "asyncapi": "^2.1.0",
     "codemirror": "^5.41.0",
@@ -35,7 +40,6 @@
     "z-schema": "^3.24.1"
   },
   "scripts": {
-    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:lib": "rm -rf lib && NODE_ENV=production babel -d lib/ src/ --copy-files --ignore __tests__,spec.js,test.js,spec.tsx,test.tsx,__snapshots__",
@@ -65,12 +69,20 @@
     "lint-staged": "^8.0.5",
     "prettier": "^1.15.2",
     "react-scripts": "2.1.0",
+    "tslint": "^5.11.0",
     "typescript": "3.1.4"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "**/*.{css,js,jsx,json,ts,tsx}": [
-      "prettier --write",
-      "git add"
-    ]
+    "linters": {
+      "**/*.{ts,js,json}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
   }
 }

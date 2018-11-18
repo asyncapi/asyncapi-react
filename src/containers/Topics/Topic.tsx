@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
-import { Header, H3, H4, HeaderParagraph, TableColumn, PublishBadge, SubscribeBadge, DeprecatedBadge } from '../../components';
-
-import { Map, Topic, Message, Schema } from '../../common';
-
+import { H3, H4, HeaderParagraph, PublishBadge, SubscribeBadge, DeprecatedBadge } from '../../components';
+import { Topic, Message } from '../../common';
 import { Topic as TopicWrapper, TopicHeader, TopicHeaderBadge, TopicMessage, TopicHeaderMessage } from './styled';
-
 import { MessageIndented } from '../Messages/styled';
 
 import ParametersComponent from './Parameters';

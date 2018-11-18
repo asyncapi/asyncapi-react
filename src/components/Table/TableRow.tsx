@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { TableAccessor, TableAccessorReturn, TableColumn } from './types';
+import { TableAccessor, TableAccessorReturn } from './types';
 
 import { TableRowWrapper, TableRowWrapperWithNested, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
 
