@@ -1,8 +1,7 @@
 {
   "name": "asyncapi-react",
   "version": "0.1.0",
-  "description": "AsyncAPI React component",
-  "private": true,
+  "description": "A simple React component for AsynApi Specification.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
@@ -15,6 +14,10 @@
   "bugs": {
     "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
   },
+  "keywords": [
+    "react",
+    "asyncapi"
+  ],
   "homepage": "https://github.com/kyma-incubator/asyncapi-react",
   "dependencies": {
     "asyncapi": "^2.1.0",
@@ -32,8 +35,11 @@
     "z-schema": "^3.24.1"
   },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:lib": "rm -rf lib && NODE_ENV=production babel -d lib/ src/ --copy-files --ignore __tests__,spec.js,test.js,spec.tsx,test.tsx,__snapshots__",
+    "build:playground": "rm -rf build && NODE_ENV=production babel -d lib/ playground/ --copy-files --ignore __tests__,spec.js,test.js,spec.tsx,test.tsx,__snapshots__",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -54,7 +60,17 @@
     "@types/react-dom": "16.0.9",
     "@types/react-syntax-highlighter": "0.0.8",
     "@types/styled-components": "^4.0.3",
+    "babel-cli": "^6.26.0",
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.5",
+    "prettier": "^1.15.2",
     "react-scripts": "2.1.0",
     "typescript": "3.1.4"
+  },
+  "lint-staged": {
+    "**/*.{css,js,jsx,json,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
