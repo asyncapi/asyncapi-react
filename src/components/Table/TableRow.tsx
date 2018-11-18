@@ -4,18 +4,14 @@ import { TableAccessor, TableAccessorReturn, TableColumn } from './types';
 
 import { TableRowWrapper, TableRowWrapperWithNested, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
 
-export interface TableRowProps {
+export interface Props {
   element: any;
   accessors?: TableAccessor[];
   nested?: boolean;
   openAccordion?: boolean;
 }
 
-export class TableRow extends Component<TableRowProps> {
-  constructor(props: TableRowProps) {
-    super(props);
-  }
-
+export class TableRow extends Component<Props> {
   private renderRowByAccessors() {
     const { accessors, element, nested } = this.props;
 
@@ -28,17 +24,17 @@ export class TableRow extends Component<TableRowProps> {
     ))
   }
 
-  private getAccessor(accesor: TableAccessor, element: any): TableAccessorReturn {
-    if (accesor instanceof Function) return accesor(element);
+  private getAccessor(accessor: TableAccessor, element: any): TableAccessorReturn {
+    if (accessor instanceof Function) return accessor(element);
 
-    const value = element[accesor];
-    if (typeof value === 'boolean' || typeof value === 'number')
+    const value = element[accessor];
+    if (typeof value === 'boolean' || typeof value === 'number') {
       return (value as boolean | number).toString();
-
+    }
     return value;
   }
 
-  public render() {
+  render() {
     const { accessors, element, nested, openAccordion } = this.props;
 
     if ((this.props as Object).hasOwnProperty('openAccordion')) {

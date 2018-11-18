@@ -6,12 +6,12 @@ import { Map, TypeWithKey, Schema } from '../../common';
 
 import { SchemaExample } from './styled';
 
-export interface SchemaExampleProps {
+interface Props {
   title?: string
   schema: Schema; 
 }
 
-class SchemaExampleComponent extends Component<SchemaExampleProps> {
+class SchemaExampleComponent extends Component<Props> {
   private generateExample(schema: Schema) {
     try {
       return require('openapi-sampler').sample(schema)
@@ -20,16 +20,16 @@ class SchemaExampleComponent extends Component<SchemaExampleProps> {
     }
   }
 
-  public render() {
+  render() {
     const { title, schema } = this.props;
     const example = JSON.stringify(schema.example ? schema.example : this.generateExample(schema), null, 2);
 
+    if (!example) return null;
+
     return (
-      example ? 
-        <SchemaExample>
-          <CodeComponent code={example} title={<>{title ? title : "Example"} {schema.example ? "" : (<GeneratedBadge>generated</GeneratedBadge>)}</>} />
-        </SchemaExample>
-      : null
+      <SchemaExample>
+        <CodeComponent code={example} title={<>{title ? title : "Example"} {!schema.example && (<GeneratedBadge>generated</GeneratedBadge>)}</>} />
+      </SchemaExample>
     );
   }
 }

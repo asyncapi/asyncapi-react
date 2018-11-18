@@ -1,11 +1,29 @@
-import { AsyncApi, Schema, Message, Server, Topic, ServerVariable, SecurityScheme, SecurityRequirement } from '../types';
-import { Map } from '../utils';
+import { Map, AsyncApi, Schema, Message, Server, Topic, ServerVariable, SecurityScheme, SecurityRequirement } from '../types';
 
 import renderMarkdown from './renderMarkdown';
 
 class Beautifier {
-  private renderMd(md?: string) {
-    return renderMarkdown(md);
+  beautify(asyncApi: AsyncApi): AsyncApi {
+    asyncApi.info.description = this.renderMd(asyncApi.info.description as string)
+    if (asyncApi.servers) {
+      asyncApi.servers = this.beautifyServers(asyncApi.servers)
+    }
+    if (asyncApi.security) {
+      asyncApi.security = this.beautifySecurity(asyncApi)
+    }
+    if (asyncApi.topics) {
+      asyncApi.topics = this.beautifyTopics(asyncApi.topics)
+    }
+    if (asyncApi.components) {
+      if (asyncApi.components.messages) {
+        asyncApi.components.messages = this.beautifyMessages(asyncApi.components.messages)
+      }
+      if (asyncApi.components.schemas) {
+        asyncApi.components.schemas = this.beautifySchemas(asyncApi.components.schemas)
+      }
+    }
+
+    return asyncApi;
   }
 
   private resolveAllOf(schema: Schema): Schema {
@@ -31,7 +49,7 @@ class Beautifier {
   
       return {
         ...schema,
-        ...{ properties: transformed }
+        properties: transformed,
       };
     }
   
@@ -206,27 +224,8 @@ class Beautifier {
     return securityRequirements;
   }
 
-  public beautify(asyncApi: AsyncApi): AsyncApi {
-    asyncApi.info.description = this.renderMd(asyncApi.info.description as string)
-    if (asyncApi.servers) {
-      asyncApi.servers = this.beautifyServers(asyncApi.servers)
-    }
-    if (asyncApi.security) {
-      asyncApi.security = this.beautifySecurity(asyncApi)
-    }
-    if (asyncApi.topics) {
-      asyncApi.topics = this.beautifyTopics(asyncApi.topics)
-    }
-    if (asyncApi.components) {
-      if (asyncApi.components.messages) {
-        asyncApi.components.messages = this.beautifyMessages(asyncApi.components.messages)
-      }
-      if (asyncApi.components.schemas) {
-        asyncApi.components.schemas = this.beautifySchemas(asyncApi.components.schemas)
-      }
-    }
-
-    return asyncApi;
+  private renderMd(md?: string) {
+    return renderMarkdown(md);
   }
 }
 

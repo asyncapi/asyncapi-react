@@ -13,34 +13,18 @@ import {
   TableHeaderColumnNameNested,
 } from './styled';
 
-export interface TableHeaderProps {
+interface Props {
   title?: string;
   columns: TableColumnName[];
   nested?: boolean;
 }
 
-export class TableHeader extends React.Component<TableHeaderProps> {
-  constructor(props: TableHeaderProps) {
-    super(props);
-  }
-
-  public render() {
+export class TableHeader extends React.Component<Props> {
+  render() {
     const { title, columns, nested } = this.props;
 
-    return (
-      !nested ? (
-        <TableHeaderWrapper>
-          {title && <TableHeaderTitle><td colSpan={columns.length}>{title}</td></TableHeaderTitle>}
-          <TableHeaderColumnsWrapper>
-            {columns &&
-              columns.map((column, index) => (
-                <TableHeaderColumnName key={index}>
-                  {column}
-                </TableHeaderColumnName>
-              ))}
-          </TableHeaderColumnsWrapper>
-        </TableHeaderWrapper>
-      ) : (
+    if (nested) {
+      return (
         <TableHeaderWrapperNested>
           {title && <TableHeaderTitleNested><td colSpan={columns.length}>{title}</td></TableHeaderTitleNested>}
           <TableHeaderColumnsWrapperNested>
@@ -52,7 +36,21 @@ export class TableHeader extends React.Component<TableHeaderProps> {
               ))}
           </TableHeaderColumnsWrapperNested>
         </TableHeaderWrapperNested>
-      ) 
-    );
+      )
+    }
+
+    return (
+      <TableHeaderWrapper>
+        {title && <TableHeaderTitle><td colSpan={columns.length}>{title}</td></TableHeaderTitle>}
+        <TableHeaderColumnsWrapper>
+          {columns &&
+            columns.map((column, index) => (
+              <TableHeaderColumnName key={index}>
+                {column}
+              </TableHeaderColumnName>
+            ))}
+        </TableHeaderColumnsWrapper>
+      </TableHeaderWrapper>
+    )
   }
 }

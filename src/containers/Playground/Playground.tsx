@@ -7,23 +7,20 @@ import { jsonMock, yamlMock, yamlMock2, yamlMock3, yamlMock4 } from './mock';
 
 import { PlaygroundWrapper, CodeMirrorWrapper, AsyncApiWrapper } from './styled';
 
-interface PlaygroundState {
+interface State {
   schema: string,
 }
 
-class Playground extends Component<{}, PlaygroundState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      schema: JSON.stringify(jsonMock)
-    }
+class Playground extends Component<{}, State> {
+  state = {
+    schema: yamlMock3 //JSON.stringify(jsonMock)
   }
 
   private getNewSchema = (schema: string) => {
     this.setState({ schema });
   }
 
-  public render() {
+  render() {
     const { schema } = this.state
 
     return (

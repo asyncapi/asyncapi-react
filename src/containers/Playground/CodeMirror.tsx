@@ -1,33 +1,30 @@
 import React, { Component } from 'react';
-import { UnControlled as CodeMirror, IInstance } from 'react-codemirror2'
+import { UnControlled as CodeMirror, IInstance as CodeMirrorInstance } from 'react-codemirror2'
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
 require('codemirror/mode/yaml/yaml');
 
-interface CodeMirrorProps {
+interface Props {
   schema: string,
   parentCallback(value: string): void;
 }
 
-interface CodeMirrorState {
+interface State {
   schema: string,
 }  
 
-class CodeMirrorComponent extends Component<CodeMirrorProps, CodeMirrorState> {
-  constructor(props: CodeMirrorProps) {
-    super(props);
-    this.state = {
-      schema: props.schema
-    }
+class CodeMirrorComponent extends Component<Props, State> {
+  state = {
+    schema: this.props.schema
   }
 
-  private onChangeValue = (editor: IInstance, data: any, value: string) => {
+  private onChangeValue = (editor: CodeMirrorInstance, data: any, value: string) => {
     this.props.parentCallback(value);
   }
 
-  public render() {
+  render() {
     const { schema } = this.state;
 
     return (

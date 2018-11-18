@@ -16,32 +16,29 @@ type ServerWithVariables = {
 }
 
 const serverAccessors: TableAccessor[] = [
-  (el: ServerWithVariables) => <>{el.serverVariables && typeof el.toggleVariables === 'function' ? <ServerExpandIcon onClick={el.toggleVariables} open={el.openAccordion} /> : null}{el.server.url}</>,
+  (el: ServerWithVariables) => <>{el.serverVariables && typeof el.toggleVariables === 'function' && <ServerExpandIcon onClick={el.toggleVariables} open={el.openAccordion} />}{el.server.url}</>,
   (el: ServerWithVariables) => el.server.scheme,
-  (el: ServerWithVariables) => el.server.description ? <Markdown>{el.server.description}</Markdown> : null,
+  (el: ServerWithVariables) => el.server.description && <Markdown>{el.server.description}</Markdown>,
 ]
 
-export interface ServerProps {
+interface Props {
   server: Server;
 }
 
-export interface ServerState {
+interface State {
   openAccordion: boolean;
 }
 
-class ServerComponent extends Component<ServerProps, ServerState> {
-  constructor(props: ServerProps) {
-    super(props);
-    this.state = {
-      openAccordion: false,
-    }
+class ServerComponent extends Component<Props, State> {
+  state = {
+    openAccordion: false,
   }
 
   private toggle = () => {
     this.setState(prevState => ({ openAccordion: !prevState.openAccordion }));
   };
 
-  public render() {
+  render() {
     const { props: { server }, state: { openAccordion } } = this;
 
     const vars = server.variables ? Object.keys(server.variables).map(key => ({ key: key, content: server.variables![key] })) : []

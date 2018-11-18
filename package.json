@@ -1,9 +1,22 @@
 {
-  "name": "async-api",
+  "name": "asyncapi-react",
   "version": "0.1.0",
+  "description": "AsyncAPI React component",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
+  },
+  "author": {
+    "name": "Maciej Urbańczyk",
+    "email": "maciej.urbanczyk.95@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
+  },
+  "homepage": "https://github.com/kyma-incubator/asyncapi-react",
   "dependencies": {
-    "@types/prismjs": "^1.9.0",
     "asyncapi": "^2.1.0",
     "codemirror": "^5.41.0",
     "dompurify": "^1.0.8",

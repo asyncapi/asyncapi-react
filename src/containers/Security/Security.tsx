@@ -21,31 +21,31 @@ const securityAccesors: TableAccessor[] = [
   (el: SecurityScheme) => el.name,
   (el: SecurityScheme) => el.scheme,
   (el: SecurityScheme) => el.bearerFormat,
-  (el: SecurityScheme) => el.description ? <Markdown>{el.description}</Markdown> : null,
+  (el: SecurityScheme) => el.description && <Markdown>{el.description}</Markdown>,
 ]
 
-export interface SecurityProps {
+interface Props {
   security?: SecurityScheme[];
 }
 
-class SecurityComponent extends Component<SecurityProps> {
+class SecurityComponent extends Component<Props> {
   render() {
     const { security } = this.props;
 
+    if (!security) return null;
+
     return (
-      security ?
-        <SecurityWrapper>
-          <SecurityHeader>
-            <H2>Security</H2>
-          </SecurityHeader>
-          <TableWrapper>
-            <TableHeader columns={securityColumnsName} />
-            <TableBodyWrapper>
-              {security.map(sec => <TableRow key={`${sec.type}${sec.name}`} accessors={securityAccesors} element={sec} />)}
-            </TableBodyWrapper>
-          </TableWrapper>
-        </SecurityWrapper>
-      : null
+      <SecurityWrapper>
+        <SecurityHeader>
+          <H2>Security</H2>
+        </SecurityHeader>
+        <TableWrapper>
+          <TableHeader columns={securityColumnsName} />
+          <TableBodyWrapper>
+            {security.map(sec => <TableRow key={`${sec.type}${sec.name}`} accessors={securityAccesors} element={sec} />)}
+          </TableBodyWrapper>
+        </TableWrapper>
+      </SecurityWrapper>
     );
   }
 }

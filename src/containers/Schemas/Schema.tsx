@@ -18,14 +18,14 @@ const schemaColumnsName: TableColumnName[] = [
   "Description",
 ]
 
-export interface SchemaProps {
+interface Props {
   name: string,
   schema?: Schema;
   exampleTitle?: string,
   hideTitle?: boolean;
 }
 
-class SchemaComponent extends Component<SchemaProps> {
+class SchemaComponent extends Component<Props> {
   private renderSchemaProps(schemaName: string, schema: Schema): React.ReactNode {
     const required = schema.required ? schema.required : [];
 
@@ -41,27 +41,27 @@ class SchemaComponent extends Component<SchemaProps> {
     )
   }
 
-  public render() {
+  render() {
     const { name, schema, exampleTitle, hideTitle } = this.props;
 
+    if (!schema) return null;
+
     return (
-      schema ?
-        <SchemaWrapper>
-          {!hideTitle ?
-            <SchemaHeader>
-              <H4>{name}</H4>
-            </SchemaHeader> 
-          : null}
-          <TableWrapper>
-            <TableHeader columns={schemaColumnsName} />
-            <TableBodyWrapper>
-              {this.renderSchemaProps(name, schema!)}
-            </TableBodyWrapper>
-          </TableWrapper>
-          
-          <SchemaExample title={exampleTitle} schema={schema} />
-        </SchemaWrapper>
-      : null
+      <SchemaWrapper>
+        {!hideTitle &&
+          <SchemaHeader>
+            <H4>{name}</H4>
+          </SchemaHeader> 
+        }
+        <TableWrapper>
+          <TableHeader columns={schemaColumnsName} />
+          <TableBodyWrapper>
+            {this.renderSchemaProps(name, schema!)}
+          </TableBodyWrapper>
+        </TableWrapper>
+        
+        <SchemaExample title={exampleTitle} schema={schema} />
+      </SchemaWrapper>
     );
   }
 }

@@ -6,12 +6,12 @@ import { License } from '../../common';
 
 import { License as LicenseWrapper, LicenseHeader, LicenseList } from './styled';
 
-export interface LicenseProps {
+interface Props {
   license: License;
 }
 
-class LicenseComponent extends Component<LicenseProps> {
-  public render() {
+class LicenseComponent extends Component<Props> {
+  render() {
     const { license: { name, url } } = this.props;
 
     return (
@@ -20,8 +20,8 @@ class LicenseComponent extends Component<LicenseProps> {
           <H2>License</H2>
         </LicenseHeader>
         <LicenseList>
-          {name ? <li><strong>Type</strong>: {name}</li> : null}
-          {url ? <li><strong>Specification</strong>: <HrefHeader href={url} target="_blank">{url}</HrefHeader></li> : null}
+          {name && <li><strong>Type</strong>: {name}</li>}
+          {url && <li><strong>Specification</strong>: <HrefHeader href={url} target="_blank">{url}</HrefHeader></li>}
         </LicenseList>
       </LicenseWrapper>
     );

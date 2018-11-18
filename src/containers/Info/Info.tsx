@@ -10,34 +10,34 @@ import LicenseComponent from './License';
 
 import { Info as InfoWrapper, InfoHeader } from './styled';
 
-export interface InfoProps {
+interface Props {
   info: Info;
   servers?: Server[];
   showServers: boolean;
 }
 
-class InfoComponent extends Component<InfoProps> {
-  public render() {
+class InfoComponent extends Component<Props> {
+  render() {
     const { info: { title, version, description, termsOfService, contact, license }, servers, showServers } = this.props;
 
     return (
       <InfoWrapper>
         <InfoHeader>
           <H1>{title} {version}</H1>
-          {description ? <Markdown>{description}</Markdown> : null}
+          {description && <Markdown>{description}</Markdown>}
 
-          {termsOfService ?
+          {termsOfService &&
             <HeaderParagraph>
               <H2>Terms of service</H2>
               <HrefHeader href={termsOfService} target="_blank">
                 {termsOfService}
               </HrefHeader>
             </HeaderParagraph>
-          : null}
+          }
         </InfoHeader>
-        {contact ? <ContactComponent contact={contact} /> : null}
-        {license ? <LicenseComponent license={license} /> : null}
-        {showServers ? <ServersComponent servers={servers} /> : null}
+        {contact && <ContactComponent contact={contact} />}
+        {license && <LicenseComponent license={license} />}
+        {showServers && <ServersComponent servers={servers} />}
       </InfoWrapper>
     );
   }

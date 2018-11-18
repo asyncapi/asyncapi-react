@@ -38,16 +38,16 @@ const serverVariablesAccessors: TableAccessor[] = [
       {el.content.enum.map(value => <ServerVariablesEnumElement key={value}>{value}</ServerVariablesEnumElement>)}
     </ServerVariablesEnumList>
   ) : "Any",
-  (el: ServerVariableWithKey) => el.content.description ? <Markdown>{el.content.description}</Markdown> : null,
+  (el: ServerVariableWithKey) => el.content.description && <Markdown>{el.content.description}</Markdown>,
 ]
 
-export interface SchemaServerProps {
+interface Props {
   variables: ServerVariableWithKey[];
   openAccordion: boolean;
 }
 
-class ServerVariablesComponent extends Component<SchemaServerProps> {
-  public render() {
+class ServerVariablesComponent extends Component<Props> {
+  render() {
     const { variables, openAccordion } = this.props;
 
     const vars = (

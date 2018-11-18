@@ -8,13 +8,15 @@ import { Schemas, SchemasHeader } from './styled';
 
 import SchemaComponent from './Schema';
 
-export interface SchemasProps {
+interface Props {
   schemas?: Map<string, Schema>;
 }
 
-class SchemasComponent extends Component<SchemasProps> {
-  public render() {
+class SchemasComponent extends Component<Props> {
+  render() {
     const { schemas } = this.props;
+
+    if (!schemas) return null;
 
     return (
       <Schemas>

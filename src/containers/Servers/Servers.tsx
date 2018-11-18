@@ -14,28 +14,28 @@ const serversColumnsName: TableColumnName[] = [
   "Description",
 ]
 
-export interface ServersProps {
+interface Props {
   servers?: Server[];
 }
 
-class ServersComponent extends Component<ServersProps> {
+class ServersComponent extends Component<Props> {
   render() {
     const { servers } = this.props;
 
+    if (!servers) return null;
+
     return (
-      servers ?
-        <Servers>
-          <ServersHeader>
-            <H2>Connection details</H2>
-          </ServersHeader>
-          <TableWrapper>
-            <TableHeader columns={serversColumnsName} />
-            <TableBodyWrapper>
-              {servers.map(server => <ServerComponent key={`${server.url}${server.scheme}`} server={server} />)}
-            </TableBodyWrapper>
-          </TableWrapper>
-        </Servers>
-      : null
+      <Servers>
+        <ServersHeader>
+          <H2>Connection details</H2>
+        </ServersHeader>
+        <TableWrapper>
+          <TableHeader columns={serversColumnsName} />
+          <TableBodyWrapper>
+            {servers.map(server => <ServerComponent key={`${server.url}${server.scheme}`} server={server} />)}
+          </TableBodyWrapper>
+        </TableWrapper>
+      </Servers>
     );
   }
 }

@@ -8,13 +8,15 @@ import { Messages, MessagesHeader } from './styled';
 
 import MessageComponent from './Message';
 
-export interface MessagesProps {
+interface Props {
   messages?: Map<string, Message>;
 }
 
-class MessagesComponent extends Component<MessagesProps> {
-  public render() {
+class MessagesComponent extends Component<Props> {
+  render() {
     const { messages } = this.props;
+
+    if (!messages) return null;
 
     return (
       <Messages>

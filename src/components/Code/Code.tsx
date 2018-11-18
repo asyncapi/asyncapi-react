@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 
 import { CodeWrapper, CodeHeader, CodeHeaderH4, CodeBody } from './styled';
 
-interface CodeProps {
+interface Props {
   title?: any;
   code: string;
 }
 
-export class CodeComponent extends Component<CodeProps> {
-  constructor(props: CodeProps) {
-    super(props);
-  }
-
-  public render() {
+export class CodeComponent extends Component<Props> {
+  render() {
     const { title, code } = this.props;
 
     return (
       <CodeWrapper>
-        {title ? <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader> : null}
+        {title && <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader>}
         <CodeBody language="javascript">{code}</CodeBody>
       </CodeWrapper>
     );

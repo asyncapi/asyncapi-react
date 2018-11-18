@@ -1,4 +1,14 @@
-import { Map, PrimitiveType } from './utils';
+export type PrimitiveType = number | boolean | string | null;
+export type Map<K extends string, V = any> = { [key in K]: V }
+export type PropsWithDefaults<T, D> = T & D;
+export type TypeWithKey<T, V> = { key: T, content: V };
+
+export type AsyncApiVersion = string;
+export type BaseTopic = string;
+export type DescriptionHTML = string | React.ReactNode;
+export type ExternalSpecification = Map<string, any>;
+export type ReferenceString = string;
+export type OneOf = "oneOf";
 
 export type AsyncApi = {
   asyncapi: AsyncApiVersion;
@@ -13,13 +23,6 @@ export type AsyncApi = {
   tags?: Tag[];
   externalDocs?: ExternalDocs;
 };
-
-export type AsyncApiVersion = string;
-export type BaseTopic = string;
-export type DescriptionHTML = string | React.ReactNode;
-export type ExternalSpecification = Map<string, any>;
-export type ReferenceString = string;
-export type OneOf = "oneOf";
 
 export type Info = {
   title: string;
