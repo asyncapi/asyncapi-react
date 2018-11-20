@@ -2,26 +2,24 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "src",
-    "module": "commonjs",
+    "module": "es2015",
     "target": "es5",
     "lib": ["es5", "es6", "dom"],
+    "strict": true,
+    "alwaysStrict": true,
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noEmit": true
+    "noUnusedLocals": true,
+    "declaration": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules", "test", "lib", "dist"]
+  "exclude": ["node_modules"]
 }

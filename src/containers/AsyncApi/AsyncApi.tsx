@@ -92,13 +92,17 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
             concatenatedConfig.show.topics && Boolean(validatedSchema.topics),
             <TopicsComponent baseTopic={validatedSchema.baseTopic} topics={validatedSchema.topics} />
           )}
-          {this.showComponent(
-            concatenatedConfig.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
-            <MessagesComponent messages={validatedSchema.components!.messages} />
-          )}
-          {this.showComponent(
-            concatenatedConfig.show.schemas && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
-            <SchemasComponent schemas={validatedSchema.components!.schemas} />
+          {validatedSchema.components && (
+            <>
+              {this.showComponent(
+                concatenatedConfig.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
+                <MessagesComponent messages={validatedSchema.components!.messages} />
+              )}
+              {this.showComponent(
+                concatenatedConfig.show.schemas && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
+                <SchemasComponent schemas={validatedSchema.components!.schemas} />
+              )}
+            </>
           )}
         </AsyncApiWrapper>
       </ThemeProvider>

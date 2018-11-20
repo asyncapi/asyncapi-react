@@ -2,7 +2,7 @@
   "name": "asyncapi-react",
   "version": "0.1.0",
   "private": false,
-  "description": "A simple React component for AsynApi Specification.",
+  "description": "A simple React component for AsynApi specification.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
@@ -17,6 +17,10 @@
     "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
   },
   "keywords": [
+    "react",
+    "asyncapi"
+  ],
+  "tags": [
     "react",
     "asyncapi"
   ],
@@ -42,9 +46,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:lib": "rm -rf lib && NODE_ENV=production babel -d lib/ src/ --copy-files --ignore __tests__,spec.js,test.js,spec.tsx,test.tsx,__snapshots__",
-    "build:playground": "rm -rf build && NODE_ENV=production babel -d lib/ playground/ --copy-files --ignore __tests__,spec.js,test.js,spec.tsx,test.tsx,__snapshots__",
-    "test": "react-scripts test",
+    "build:lib": "tsc",
+    "test": "jest -i",
+    "test:unit": "jest unit",
+    "test:integration": "jest integration",
+    "test:watch": "jest --watch --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -58,17 +64,24 @@
   ],
   "devDependencies": {
     "@types/dompurify": "0.0.32",
-    "@types/jest": "23.3.9",
+    "@types/enzyme": "^3.1.15",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/jest": "^23.3.9",
     "@types/node": "10.12.1",
     "@types/react": "16.4.18",
     "@types/react-dom": "16.0.9",
     "@types/react-syntax-highlighter": "0.0.8",
     "@types/styled-components": "^4.0.3",
     "babel-cli": "^6.26.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
     "husky": "^1.1.4",
+    "jest": "^23.6.0",
     "lint-staged": "^8.0.5",
     "prettier": "^1.15.2",
     "react-scripts": "2.1.0",
+    "react-test-renderer": "^16.6.3",
+    "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "typescript": "3.1.4"
   },
@@ -84,5 +97,28 @@
         "git add"
       ]
     }
+  },
+  "jest": {
+    "verbose": false,
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "setupFiles": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json"
+    ],
+    "testRegex": "(/test/[^_][a-zA-Z0-9/]*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   }
 }
