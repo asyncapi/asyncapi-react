@@ -5,7 +5,7 @@
   "rules": {
     "arrow-parens": [true, "ban-single-arg-parens"],
     "interface-name": [true, "never-prefix"],
-    "max-line-length": [true, 60],
+    "max-line-length": [true, 50],
     "member-access": [true, "no-public"],
     "no-unused-expression": true,
     "object-literal-sort-keys": false,

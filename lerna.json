@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "packages": ["library", "playground"],
+  "command": {
+    "publish": {
+      "message": "Bump version to %s"
+    }
+  },
+  "changelog": {
+    "labels": {
+      "breaking": ":boom: Breaking Changes",
+      "enhancement": ":rocket: Enhancements",
+      "bug": ":bug: Bug Fixes",
+      "documentation": ":memo: Documentation"
+    }
+  },
+  "lerna": "2.11.0"
+}

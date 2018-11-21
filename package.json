@@ -1,8 +1,5 @@
 {
-  "name": "asyncapi-react",
-  "version": "0.1.0",
-  "private": false,
-  "description": "A simple React component for AsynApi specification.",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
@@ -12,78 +9,21 @@
     "email": "maciej.urbanczyk.95@gmail.com",
     "url": "https://github.com/magicmatatjahu"
   },
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
   },
-  "keywords": [
-    "react",
-    "asyncapi"
-  ],
-  "tags": [
-    "react",
-    "asyncapi"
-  ],
-  "homepage": "https://github.com/kyma-incubator/asyncapi-react",
-  "files": [
-    "build/lib"
-  ],
-  "dependencies": {
-    "asyncapi": "^2.1.0",
-    "codemirror": "^5.41.0",
-    "dompurify": "^1.0.8",
-    "js-yaml": "^3.12.0",
-    "json-schema-ref-parser": "^6.0.2",
-    "markdown-it": "^8.4.2",
-    "openapi-sampler": "^1.0.0-beta.14",
-    "react": "^16.6.0",
-    "react-codemirror2": "^5.1.0",
-    "react-dom": "^16.6.0",
-    "react-syntax-highlighter": "^10.0.1",
-    "styled-components": "^4.0.3",
-    "z-schema": "^3.24.1"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:lib": "tsc",
-    "test": "jest -i",
-    "test:unit": "jest unit",
-    "test:integration": "jest integration",
-    "test:watch": "jest --watch --coverage",
-    "eject": "react-scripts eject"
+    "bootstrap": "lerna bootstrap",
+    "clean": "lerna clean",
+    "playground": "cd playground && npm run start"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
-    "@types/dompurify": "0.0.32",
-    "@types/enzyme": "^3.1.15",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.9",
-    "@types/node": "10.12.1",
-    "@types/react": "16.4.18",
-    "@types/react-dom": "16.0.9",
-    "@types/react-syntax-highlighter": "0.0.8",
-    "@types/styled-components": "^4.0.3",
-    "babel-cli": "^6.26.0",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.7.0",
-    "husky": "^1.1.4",
-    "jest": "^23.6.0",
-    "lint-staged": "^8.0.5",
-    "prettier": "^1.15.2",
-    "react-scripts": "2.1.0",
-    "react-test-renderer": "^16.6.3",
-    "ts-jest": "^23.10.4",
-    "tslint": "^5.11.0",
-    "typescript": "3.1.4"
+    "husky": "^1.1.2",
+    "lerna": "^3.4.3",
+    "lerna-changelog": "^0.8.2",
+    "lint-staged": "^8.0.4",
+    "prettier": "^1.14.3",
+    "tslint": "^5.11.0"
   },
   "husky": {
     "hooks": {
@@ -92,33 +32,10 @@
   },
   "lint-staged": {
     "linters": {
-      "**/*.{ts,js,json}": [
+      "**/*.{ts,tsx,js,jsx,json}": [
         "prettier --write",
         "git add"
       ]
     }
-  },
-  "jest": {
-    "verbose": false,
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "setupFiles": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "coverageReporters": [
-      "text",
-      "lcov",
-      "json"
-    ],
-    "testRegex": "(/test/[^_][a-zA-Z0-9/]*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   }
 }
