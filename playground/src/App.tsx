@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AsyncApi, ThemeInterface, ConfigInterface } from 'asyncapi-react';
 
-import { CodeEditor, FetchSchema, Tabs, Tab, PlaygroundWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
+import { Navigation, CodeEditor, FetchSchema, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
 
 import { yamlMock3, defaultTheme, defaultConfig, parse, stringify } from './common';
 
@@ -38,25 +38,29 @@ class Playground extends Component<{}, State> {
 
     return (
       <PlaygroundWrapper>
-        <CodeEditorsWrapper>
-          <Tabs>
-            <Tab title="Schema" key="Schema">
-              <>
-                <FetchSchema link="" />
-                <CodeEditor key="Schema" code={schema} parentCallback={this.updateSchema} />
-              </>
-            </Tab>
-            <Tab title="Theme" key="Theme">
-              <CodeEditor key="Theme" code={theme} parentCallback={this.updateTheme} />
-            </Tab>
-            <Tab title="Configuration" key="Configuration">
-              <CodeEditor key="Configuration" code={config} parentCallback={this.updateConfig} />
-            </Tab>
-          </Tabs>
-        </CodeEditorsWrapper>
-        <AsyncApiWrapper>
-          <AsyncApi schema={schema} theme={parsedTheme} config={parsedConfig} />
-        </AsyncApiWrapper>
+        {/* <Navigation>
+        </Navigation> */}
+        <ContentWrapper>
+          <CodeEditorsWrapper>
+            <Tabs>
+              <Tab title="Schema" key="Schema">
+                <>
+                  <FetchSchema link="" />
+                  <CodeEditor key="Schema" code={schema} parentCallback={this.updateSchema} />
+                </>
+              </Tab>
+              <Tab title="Theme" key="Theme">
+                <CodeEditor key="Theme" code={theme} parentCallback={this.updateTheme} />
+              </Tab>
+              <Tab title="Configuration" key="Configuration">
+                <CodeEditor key="Configuration" code={config} parentCallback={this.updateConfig} />
+              </Tab>
+            </Tabs>
+          </CodeEditorsWrapper>
+          <AsyncApiWrapper>
+            <AsyncApi schema={schema} theme={parsedTheme} config={parsedConfig} />
+          </AsyncApiWrapper>
+        </ContentWrapper>
       </PlaygroundWrapper>
     )
   }

@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 
 export const PlaygroundWrapper = styled.div`
+`;
+
+export const NavigationWrapper = styled.nav`
+  width: 100%;
+`;
+
+export const ContentWrapper = styled.div`
   width: 100%;
   height: 100vh;
   min-height: 100vh;

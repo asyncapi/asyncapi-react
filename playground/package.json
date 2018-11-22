@@ -6,6 +6,7 @@
   "dependencies": {
     "asyncapi-react": "0.1.0",
     "codemirror": "^5.41.0",
+    "re-resizable": "^4.10.0",
     "react": "^16.6.3",
     "react-codemirror2": "^5.1.0",
     "react-dom": "^16.6.3",
