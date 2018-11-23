@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
+  },
+  "author": {
+    "name": "Maciej Urbańczyk",
+    "email": "maciej.urbanczyk.95@gmail.com",
+    "url": "https://github.com/magicmatatjahu"
+  },
+  "bugs": {
+    "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "clean": "lerna clean",
+    "playground": "cd playground && npm run start"
+  },
+  "devDependencies": {
+    "husky": "^1.1.2",
+    "lerna": "^3.4.3",
+    "lerna-changelog": "^0.8.2",
+    "lint-staged": "^8.0.4",
+    "prettier": "^1.14.3",
+    "tslint": "^5.11.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "**/*.{ts,tsx,js,jsx,json}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
+  }
+}

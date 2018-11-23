@@ -1,0 +1,14 @@
+# dependencies
+/**/node_modules
+
+# testing
+/**/coverage
+
+# production
+/**/lib
+/**/build
+/**/dist
+
+# misc
+.DS_Store
+npm-debug.log*
