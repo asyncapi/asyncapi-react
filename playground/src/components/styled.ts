@@ -113,3 +113,47 @@ export const TabLink = styled.div`
     }
   }
 `;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 20px;
+`;
+
+export const InputField = styled.input`
+  width: 100%;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  outline: none;
+  background: inherit;
+  border: 3px solid #f77669;
+  color: #f77669;
+  border-radius: 6px;
+  transition: 0.2s border, color linear;
+  font-size: 14px;
+
+  &:hover {
+    color: #c3e88d;
+    border-color: #c3e88d;
+  }
+`;
+
+export const Button = styled.button`
+  width: auto;
+  padding: 6px 12px;
+  display: inline-block;
+  background: inherit;
+  border: 3px solid #f77669;
+  color: #f77669;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-left: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: #c3e88d;
+    border-color: #c3e88d;
+  }
+`;

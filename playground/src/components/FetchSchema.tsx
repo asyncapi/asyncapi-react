@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
 
-import { TabLink, TabWrapper } from './styled';
+import { InputWrapper, InputField, Button } from './styled';
 
 interface Props {
   link: string;
 }
 
 class FetchSchema extends Component<Props> {
+  state = {
+    value: "",
+  }
+
   render() {
-   const { link } = this.props;
+    const { value } = this.state;
 
     return (
-      <>dupa</>
+      <InputWrapper>
+        <InputField
+          value={value}
+          placeholder={"dupa"}
+          onChange={(e: any) => this.setState({ value:  e.target.value })}
+        />
+        <Button type="button">Fetch schema</Button>
+      </InputWrapper>
     );
   }
 }

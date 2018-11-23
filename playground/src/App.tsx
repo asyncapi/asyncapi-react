@@ -13,9 +13,9 @@ interface State {
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: JSON.stringify(mock),
+    schema: mock,
     theme: stringify<ThemeInterface>(defaultTheme),
-    config: stringify<ConfigInterface>(defaultConfig),
+    config: defaultConfig,
   }
 
   private updateSchema = (schema: string) => {
@@ -34,6 +34,7 @@ class Playground extends Component<{}, State> {
     const { schema, theme, config } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
+    console.log(config)
     const parsedConfig = parse<ConfigInterface>(config);
 
     return (
@@ -46,7 +47,7 @@ class Playground extends Component<{}, State> {
               <Tab title="Schema" key="Schema">
                 <>
                   <FetchSchema link="" />
-                  <CodeEditor key="Schema" code={schema} parentCallback={this.updateSchema} />
+                  <CodeEditor key="Schema" code={schema} parentCallback={this.updateSchema} mode="text/yaml" />
                 </>
               </Tab>
               <Tab title="Theme" key="Theme">
