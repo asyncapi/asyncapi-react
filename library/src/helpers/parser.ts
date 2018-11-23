@@ -13,6 +13,7 @@ class Parser {
 
     const dereferencedJSON = await this.dereference(parsedContent);
     const bundledJSON = await this.bundle(dereferencedJSON);
+    this.removeNullOrUndefined(bundledJSON);
     const asyncApiSchema = require('asyncapi')[bundledJSON.asyncapi];
 
     const parsed = await this.validate(bundledJSON, asyncApiSchema);
@@ -44,6 +45,16 @@ class Parser {
         circular: 'ignore'
       }
     });
+  }
+
+  private removeNullOrUndefined(json: JSON): void {
+    for (const key in json) {
+      if (json[key] === null || json[key] === undefined) {
+        delete json[key];
+      } else if (typeof json[key] === 'object') {
+        this.removeNullOrUndefined(json[key]);
+      }
+    }
   }
 
   private async validate(json: JSON, schema: string): Promise<JSON> {

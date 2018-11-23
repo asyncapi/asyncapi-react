@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { AsyncApi, ThemeInterface, ConfigInterface } from 'asyncapi-react';
+import AsyncApi, { ThemeInterface, ConfigInterface } from 'asyncapi-react';
 
 import { Navigation, CodeEditor, FetchSchema, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
 
-import { yamlMock3, defaultTheme, defaultConfig, parse, stringify } from './common';
+import { yamlMock3, mock, defaultTheme, defaultConfig, parse, stringify, jsonMock } from './common';
 
 interface State {
   schema: string,
@@ -13,7 +13,7 @@ interface State {
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: yamlMock3, //JSON.stringify(jsonMock)
+    schema: JSON.stringify(mock),
     theme: stringify<ThemeInterface>(defaultTheme),
     config: stringify<ConfigInterface>(defaultConfig),
   }
@@ -31,7 +31,7 @@ class Playground extends Component<{}, State> {
   }
 
   render() {
-    const { schema, theme, config } = this.state
+    const { schema, theme, config } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
     const parsedConfig = parse<ConfigInterface>(config);
