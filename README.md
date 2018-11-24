@@ -1,4 +1,4 @@
-<h1 align="center">A official AsyncApi React Component</h1>
+<h1 align="center">A official AsyncAPI React Component</h1>
 
 ## Table of Contents
 
@@ -9,7 +9,7 @@
 * [Usage](#usage)
 * [Props](#props)
 * [Development](#development)
-* [Troubleshooting](#troubleshooting)
+* [Contributing](#contributing)
 * [License](#license)
 * [Authors](#authors)
 
@@ -56,29 +56,27 @@ The `schema` property is required and contains **AsyncAPI** specification and sh
 
 #### `theme?: Partial<ThemeInterface>`*
 
-The `theme` property is optional and contains styles for specific part of `asyncapi-react` component. For more information about changing styles, please read [this](./docs/theme-modification) document.
+The `theme` property is optional and contains styles for specific part of `AsyncApi` component. For more information about changing styles, please read [this](./docs/theme-modification.md) document.
 
-> **NOTE:** This props is concatenated with the [default theme](./library/src/config/default.ts) if you not pass [`disableDefaultTheme`](./docs/config-modification.md) config as true.
+> **NOTE:** This props is concatenated with the [default theme](./library/src/theme/default.ts) if you not pass [`disableDefaultTheme`](./docs/config-modification.md) config as true.
 
 #### `config?: Partial<ConfigInterface>`*
 
-The `config` property is optional and contains configuration for `asyncapi-react` component. For more information about what options are available, please read [this](./docs/config-modification.md) document.
+The `config` property is optional and contains configuration for `AsyncApi` component. For more information about what options are available, please read [this](./docs/config-modification.md) document.
 
 > **NOTE:** This props is concatenated with the [default configuration](./library/src/config/default.ts)
 
-\* Partial<T\> type means that every field in type T is optional. 
+\* `Partial<T>` type means that every field in type `T` is optional. 
 
 ## Development
 
-For more information about development process - setup development environment, run and write test, following naming and accepted architecture convention of the project, please check [`DEVELOPMENT.md`](DEVELOPMENT.md) document.
+For more information about development process - setup development environment, run and write test, follow naming and accepted architecture convention of the project, please check [`DEVELOPMENT.md`](DEVELOPMENT.md) document.
 
-## Contribute
+## Contributing
 
 If you have a feature request, please add it as an issue or make a pull request by following [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
 
 If you have a bug to report, please reproduce the bug in the app like a [`CodeSandbox`](https://codesandbox.io/) to help us easily isolate it.
-
-## Troubleshooting
 
 ## License
 
