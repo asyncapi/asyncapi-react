@@ -6,7 +6,7 @@ This file describe how `ThemeInterface` look and how apply the new styles for sp
 
 ## Definition
 
-``` typescript
+``` ts
 type styledCss = string | InterpolationValue[];
 
 interface ThemeInterface {
@@ -25,7 +25,7 @@ For complex definition of `ThemeInterface`, please check [this](../library/src/t
 
 [`Styled-components`](https://github.com/styled-components/styled-components) is a awesome library and allows us to think about styles as …components. We use it in our project to give styles to the relevant parts of `AsyncApi` component. Our architecture also allows you to quickly change the default styles for the appropriate class that you would like to change in your project.
 
-> **NOTE:** You can also define that default styles are not supported. More info about that [here](./config-modification.md).
+> **NOTE:** You can also define that default styles are not supported. More info about that [here](./config-modification.md#disabledefaulttheme-boolean).
 
 For example, if you would like to change styles for an element displaying generated examples of schemas, messages and topics, which has such an [architecture](../library/src/components/Code.tsx#L14):
 
@@ -38,7 +38,7 @@ For example, if you would like to change styles for an element displaying genera
 
 you should create an appropriate object:
 
-``` typescript
+``` ts
 const theme = {
   codeWrapper: `...`,
   codeHeader: `...`,

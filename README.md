@@ -1,18 +1,5 @@
 <h1 align="center">A official AsyncAPI React Component</h1>
 
-## Table of Contents
-
-* [Philosophy](#philosophy)
-* [Live Demo](#live-demo)
-* [Install](#install)
-* [Requirements](#requirements)
-* [Usage](#usage)
-* [Props](#props)
-* [Development](#development)
-* [Contributing](#contributing)
-* [License](#license)
-* [Authors](#authors)
-
 ## Philosophy
 
 
@@ -34,8 +21,8 @@ $ npm install --save asyncapi-react
 
 ## Usage
 
-``` tsx
-import * as React from "react";
+``` js
+import React from "react";
 import { render } from "react-dom";
 import AsyncApiComponent from "asyncapi-react";
 

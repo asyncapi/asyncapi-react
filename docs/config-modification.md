@@ -6,7 +6,7 @@ This file describe what options are available in `ConfigInterface`.
 
 ## Definition
 
-``` typescript
+``` ts
 interface ConfigInterface {
     show?: {
         info?: boolean,
@@ -88,7 +88,7 @@ render(<App />, document.getElementById("root"));
 
 In the above examples, after concatenation with the default configuration, the resulting configuration will look like:
 
-``` json
+``` js
 {
     show: {
         info: true,
