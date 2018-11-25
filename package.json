@@ -13,9 +13,13 @@
     "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap && npm run build:lib",
     "clean": "lerna clean",
-    "playground": "cd playground && npm run start"
+    "start": "lerna exec --parallel -- npm run start",
+    "build:lib": "cd library && npm build",
+    "test": "lerna exec -- npm run test",
+    "test:library": "cd library && npm test",
+    "test:playground": "cd playground && npm test"
   },
   "devDependencies": {
     "husky": "^1.1.2",
@@ -31,11 +35,9 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "**/*.{ts,tsx,js,jsx,json}": [
-        "prettier --write",
-        "git add"
-      ]
-    }
+    "**/*.{css,js,jsx,json,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
