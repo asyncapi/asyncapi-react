@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import AsyncApi, { ThemeInterface, ConfigInterface } from 'asyncapi-react';
 
-import { Navigation, CodeEditor, FetchSchema, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
+import { Navigation, CodeEditor, FetchSchema, RefreshIcon, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
 
-import { yamlMock3, mock, defaultTheme, defaultConfig, parse, stringify, jsonMock } from './common';
+import { mock, defaultTheme, defaultConfig, parse, stringify } from './common';
 
 interface State {
   schema: string,
   theme: string,
   config: string,
+  schemaFromEditor: string;
+  themeFromEditor: string;
+  configFromEditor: string;
 }
 
 class Playground extends Component<{}, State> {
@@ -16,45 +19,61 @@ class Playground extends Component<{}, State> {
     schema: mock,
     theme: stringify<ThemeInterface>(defaultTheme),
     config: defaultConfig,
+    schemaFromEditor: mock,
+    themeFromEditor: stringify<ThemeInterface>(defaultTheme),
+    configFromEditor: defaultConfig
   }
 
   private updateSchema = (schema: string) => {
-    this.setState({ schema });
+    this.setState({ schemaFromEditor: schema });
   }
 
   private updateTheme = (theme: string) => {
-    this.setState({ theme });
+    this.setState({ themeFromEditor: theme });
   }
 
   private updateConfig = (config: string) => {
-    this.setState({ config });
+    this.setState({ configFromEditor: config });
+  }
+
+  private refreshState = () => {
+    const { schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
+    this.setState({
+      schema: schemaFromEditor,
+      theme: themeFromEditor,
+      config: configFromEditor
+    });
+  }
+
+  private renderAdditionalHeaderContent = () => {
+    return (
+      <RefreshIcon onClick={this.refreshState}>{"\uE00A"}</RefreshIcon>
+    );
   }
 
   render() {
-    const { schema, theme, config } = this.state;
+    const { schema, theme, config, schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
-    console.log(config)
     const parsedConfig = parse<ConfigInterface>(config);
 
     return (
       <PlaygroundWrapper>
-        {/* <Navigation>
-        </Navigation> */}
+        <Navigation />
         <ContentWrapper>
           <CodeEditorsWrapper>
-            <Tabs>
+            <Tabs additionalHeaderContent={this.renderAdditionalHeaderContent()}>
               <Tab title="Schema" key="Schema">
                 <>
-                  <FetchSchema link="" />
-                  <CodeEditor key="Schema" code={schema} parentCallback={this.updateSchema} mode="text/yaml" />
+                  <FetchSchema parentCallback={this.updateSchema} />
+                  <CodeEditor key="Schema" code={schemaFromEditor} parentCallback={this.updateSchema} mode="text/yaml" />
                 </>
               </Tab>
               <Tab title="Theme" key="Theme">
-                <CodeEditor key="Theme" code={theme} parentCallback={this.updateTheme} />
+                <CodeEditor key="Theme" code={themeFromEditor} parentCallback={this.updateTheme} />
               </Tab>
               <Tab title="Configuration" key="Configuration">
-                <CodeEditor key="Configuration" code={config} parentCallback={this.updateConfig} />
+                <CodeEditor key="Configuration" code={configFromEditor} parentCallback={this.updateConfig} />
               </Tab>
             </Tabs>
           </CodeEditorsWrapper>

@@ -2,26 +2,37 @@ import React, { Component } from 'react';
 
 import { InputWrapper, InputField, Button } from './styled';
 
+import { fetchSchema } from '../common';
+
 interface Props {
+  parentCallback(value: string): void;
+}
+
+interface State {
   link: string;
 }
 
-class FetchSchema extends Component<Props> {
+class FetchSchema extends Component<Props, State> {
   state = {
-    value: "",
+    link: "",
+  }
+
+  private fetchSchemaFromExternalResources = async () => {
+    const { props: { parentCallback }, state: { link } } = this;
+    parentCallback(await fetchSchema(link))
   }
 
   render() {
-    const { value } = this.state;
+    const { link } = this.state;
 
     return (
       <InputWrapper>
         <InputField
-          value={value}
-          placeholder={"dupa"}
-          onChange={(e: any) => this.setState({ value:  e.target.value })}
+          value={link}
+          placeholder="Link for external schema"
+          onChange={(e: any) => this.setState({ link:  e.target.value })}
         />
-        <Button type="button">Fetch schema</Button>
+        <Button type="button" onClick={this.fetchSchemaFromExternalResources}>Fetch schema</Button>
       </InputWrapper>
     );
   }

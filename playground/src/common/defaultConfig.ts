@@ -8,5 +8,6 @@ export const defaultConfig: string = `{
     "events": true,
     "messages": true,
     "schemas": true
-  }
+  },
+  "disableDefaultTheme": false
 }`;
