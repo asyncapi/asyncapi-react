@@ -11,6 +11,7 @@ Github is used to host code, track issues and feature requests, as well as accep
 1. Fork this repository.
 2. Make your changes. Do not forgot about:
    - [naming & architecture convention](../DEVELOPMENT.md#naming--architecture-conventions).
+   - [project structure](./docs/project-structure.md).
    - tests.
    - if you added/removed/updated props/config/theme, update also relevant document for that.
 3. Squash your changes to single commit. Write a concise commit message in imperative mode as described [here](https://chris.beams.io/posts/git-commit/).

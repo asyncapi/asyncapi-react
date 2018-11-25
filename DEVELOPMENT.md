@@ -68,3 +68,7 @@ Below are the rules of the naming functions/components and architecture that we 
 > **NOTE:** The maintainers of the repository reserve the right to change the above rules.
 
 > **NOTE 2:** In the Pull Request you can describe why your code does not apply the above rules (we do not bite :smile:).
+
+## Project structure
+
+During development, please remember about [project structure](./docs/project-structure.md).
