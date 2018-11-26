@@ -10,7 +10,7 @@ Github is used to host code, track issues and feature requests, as well as accep
 
 1. Fork this repository.
 2. Make your changes. Do not forgot about:
-   - [naming & architecture convention](../DEVELOPMENT.md#naming--architecture-conventions).
+   - [naming & architecture convention](./DEVELOPMENT.md#naming--architecture-convention).
    - [project structure](./docs/project-structure.md).
    - tests.
    - if you added/removed/updated props/config/theme, update also relevant document for that.
