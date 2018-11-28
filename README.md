@@ -1,5 +1,9 @@
 <h1 align="center">A official AsyncAPI React Component</h1>
 
+## Overview
+
+A official [React](https://reactjs.org/) component for AsyncAPI specification. It allows to validation and render AsyncAPI specification and use own styles.
+
 ## Philosophy
 
 
