@@ -1,10 +1,12 @@
-# Theme
+# Theme Modification
 
 ## Overview
 
-This file describe how `ThemeInterface` look and how apply the new styles for specific parts of `AsyncApi` component.
+This document describes `ThemeInterface` and explains how you can apply the new styles for specific parts of the AsyncApi component.
 
 ## Definition
+
+See the basic definition of the interface:
 
 ``` ts
 type styledCss = string | InterpolationValue[];
@@ -17,17 +19,18 @@ interface ThemeInterface {
 }
 ```
 
-For complex definition of `ThemeInterface`, please check [this](../library/src/theme/theme.ts#L5) file.
+For more details, check [this](../library/src/theme/theme.ts#L5) file.
 
-> **NOTE:** The `InterpolationValue` type is from [`styled-components`](https://github.com/styled-components/styled-components) library.
+> **NOTE:** The `InterpolationValue` type is taken from the [`styled-components`](https://github.com/styled-components/styled-components) library.
 
 ## How it works
 
-[`Styled-components`](https://github.com/styled-components/styled-components) is a awesome library and allows us to think about styles as …components. We use it in our project to give styles to the relevant parts of `AsyncApi` component. Our architecture also allows you to quickly change the default styles for the appropriate class that you would like to change in your project.
+[`Styled-components`](https://github.com/styled-components/styled-components) is a feature-rich library that allows you to think about styles as components. It is used to provide styles for relevant parts of the AsyncApi component. The component's architecture allows you to quickly modify the default styles for the appropriate class that you want to change in your project.
 
-> **NOTE:** You can also define that default styles are not supported. More info about that [here](./config-modification.md#disabledefaulttheme-boolean).
+> **NOTE:** You can also configure the component not to support the default styles. For more information, see [this](./config-modification.md#definition) document.
 
-For example, if you would like to change styles for an element displaying generated examples of schemas, messages and topics, which has such an [architecture](../library/src/components/Code.tsx#L14):
+For example, if you want to change styles for an element displaying generated examples of schemas, messages, and topics, you should create an appropriate object which has the following [structure](../library/src/components/Code.tsx#L14):
+
 
 ``` tsx
 <CodeWrapper>
@@ -36,7 +39,7 @@ For example, if you would like to change styles for an element displaying genera
 </CodeWrapper>
 ```
 
-you should create an appropriate object:
+See an example of such an object:
 
 ``` ts
 const theme = {
@@ -47,11 +50,13 @@ const theme = {
 }
 ```
 
-The value ​​of the appropriate field in the `ThemeInterface` should be provided as a literal string or by [`css`](https://www.styled-components.com/docs/api#css) function from `styled-components` library.
+Provide the value ​​of the appropriate field in `ThemeInterface` either as a literal string or using the [`css`](https://www.styled-components.com/docs/api#css) function from the `styled-components` library.
 
 ## Examples
 
-#### JavaScript
+See exemplary theme configuration in JavaScript and TypeScript.
+
+### JavaScript
 
 ``` jsx
 import * as React from "react";
@@ -80,7 +85,7 @@ const App = () => (
 render(<App />, document.getElementById("root"));
 ```
 
-#### TypeScript
+### TypeScript
 
 ``` tsx
 import * as React from "react";

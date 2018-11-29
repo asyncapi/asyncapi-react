@@ -1,29 +1,50 @@
-<h1 align="center">A official AsyncAPI React Component</h1>
+# AsyncAPI React Component
 
 ## Overview
 
-A official [React](https://reactjs.org/) component for AsyncAPI specification. It allows to validation and render AsyncAPI specification and use own styles.
+This project is an official [React](https://reactjs.org/) component for AsyncAPI specification. It allows you to validate and render AsyncAPI specification using your own styles.
 
-## Philosophy
+### Project structure
 
+This repository has the following structure:
 
+```
+  ├── docs                        # Directory with project-related documents
+  ├── library                     # Structure of the AsyncApi React component
+  │    ├── src                    # Source code of the AsyncApi React component
+  │    │    ├── components        # Source code of generic components used in the "containers" directory
+  │    │    ├── config            # Configuration of the AsyncApi React component
+  │    │    ├── containers        # Subcomponents for specific parts of the AsyncApi React component
+  │    │    ├── helpers           # Various helper functions
+  │    │    └── theme             # Theme-related files for the AsyncApi React component
+  │    └── test                   # Tests for the AsyncApi React component
+  └── playground                  # Structure of the Playground application for the AsyncApi React component
+       ├── public                 # Fonts, images, and icons used in the Playground application
+       ├── src                    # Source code of the Playground application
+       │    ├── common            # Various helper functions including mocks
+       │    └── components        # Components used in the Playground application
+       └── test                   # Tests for the Playground application
+```
 
-## Live Demo
+## Prerequisites
 
-A [live playground](https://magicmatatjahu.github.io/asyncapi-react/) is hosted on gh-pages.
+Use the following tools to develop the AsyncApi React component:
 
-## Install
+* React (version 16.0.0 or higher)
+* [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0 or higher)
+* TypeScript (version 3.0.0 or higher)
+
+## Installation
+
+Run this command to install the component:
 
 ``` sh
 $ npm install --save asyncapi-react
 ```
 
-## Requirements
-* TypeScript ^3.0.0
-* React ^16.0.0
-* [`styled-components`](https://github.com/styled-components/styled-components) ^4.0.0
-
 ## Usage
+
+Import the component to you project under the desired location:
 
 ``` js
 import React from "react";
@@ -39,40 +60,46 @@ const App = () => (
 render(<App />, document.getElementById("root"));
 ```
 
-## Props
+### Props
 
-#### `schema: string | AsyncApiInterface`
+The list of props for the AsyncApi React component includes:
 
-The `schema` property is required and contains **AsyncAPI** specification and should be one of type: `string` or [`AsyncApiInterface`](./library/src/types.ts#L13). For more information about what it should look like and what contains, please read [this](https://github.com/asyncapi/asyncapi#asyncapi-specification) document.
+- **schema: string | AsyncApiInterface**
 
-#### `theme?: Partial<ThemeInterface>`*
+The `schema` property is required and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
-The `theme` property is optional and contains styles for specific part of `AsyncApi` component. For more information about changing styles, please read [this](./docs/theme-modification.md) document.
+- **theme?: Partial<ThemeInterface>**
 
-> **NOTE:** This props is concatenated with the [default theme](./library/src/theme/default.ts) if you not pass [`disableDefaultTheme`](./docs/config-modification.md) config as true.
+The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/theme-modification.md) document.
 
-#### `config?: Partial<ConfigInterface>`*
+> **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
 
-The `config` property is optional and contains configuration for `AsyncApi` component. For more information about what options are available, please read [this](./docs/config-modification.md) document.
+- **config?: Partial<ConfigInterface>**
 
-> **NOTE:** This props is concatenated with the [default configuration](./library/src/config/default.ts)
+The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/config-modification.md) document.
 
-\* `Partial<T>` type means that every field in type `T` is optional. 
+This property is concatenated with the [default configuration](./library/src/config/default.ts).
+
+> **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
 ## Development
 
-For more information about development process - setup development environment, run and write test, follow naming and accepted architecture convention of the project, please check [`DEVELOPMENT.md`](DEVELOPMENT.md) document.
+For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./development-guide.md).
 
-## Contributing
+## Contribution
 
-If you have a feature request, please add it as an issue or make a pull request by following [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
+If you have a feature request, add it as an issue or propose changes in a pull request (PR). Make sure you follow contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
-If you have a bug to report, please reproduce the bug in the app like a [`CodeSandbox`](https://codesandbox.io/) to help us easily isolate it.
+If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue.
 
 ## License
 
-This project is under a **Apache 2.0** license. For more information, please check [`LICENSE`](LICENSE) file.
+This project is published under the Apache 2.0 license. For more information, see the [`LICENSE`](LICENSE) file.
 
-## Authors
-* Fran Méndez ([@fmvilas](http://twitter.com/fmvilas)) - author of `AsyncAPI` specification
-* Maciej Urbańczyk ([@magicmatatjahu](https://github.com/magicmatatjahu)) - author of `AsyncAPI React` component
+## Credits
+
+<p align="center">
+ <a href="https://github.com/kyma-project/kyma" target="_blank">
+  <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
+ </a>
+</p>
