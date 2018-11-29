@@ -73,4 +73,4 @@ The maintainers of the repository reserve the right to change these rules.
 
 ## Project structure
 
-During the development, remember about updating the [project structure](./README.md/#project-structure).
+If you make any changes in the [project structure](./README.md/#project-structure), remember to update it.
