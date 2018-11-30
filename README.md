@@ -20,7 +20,6 @@ Run this command to start the local server with the Playground application:
 npm run start
 ```
 
-
 ## Usage
 
 > **NOTE:** Use React ^16.0.0. If you want to restyle the component, you must use styled-components ^4.0.0.

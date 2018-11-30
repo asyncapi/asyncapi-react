@@ -28,6 +28,8 @@ This repository has the following structure:
        └── test                   # Tests for the Playground application
 ```
 
+If you make any changes in the [project structure](./README.md/#project-structure), remember to update it.
+
 ## Prerequisites
 
 Use the following tools to develop the AsyncApi React component:
@@ -100,7 +102,3 @@ See the rules for naming functions and components, and the architecture conventi
 The maintainers of the repository reserve the right to change these rules.
 
 > **NOTE:** If your code does not follow the mentioned rules, explain the reason for it in your pull request.
-
-## Project structure
-
-If you make any changes in the [project structure](./README.md/#project-structure), remember to update it.
