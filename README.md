@@ -31,7 +31,7 @@ Run this command to install the component:
 $ npm install --save asyncapi-react
 ```
 
-Add this code to your application to use the component: 
+Add this code to your application to use the component. Make sure to pass stringified AsyncAPI specification into the `schema` property
 
 ``` js
 import React from "react";
