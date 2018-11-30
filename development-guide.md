@@ -34,9 +34,9 @@ If you make any changes in the project structure, remember to update it.
 
 Use the following tools to develop the AsyncApi React component:
 
-* React ^16.0.0
-* [Styled-components](https://github.com/styled-components/styled-components) ^4.0.0
-* TypeScript ^3.0.0
+* React (version 16.0.0 or higher)
+* [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0  or higher)
+* TypeScript (version 3.0.0 or higher)
 
 ## Install dependencies
 

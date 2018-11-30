@@ -22,7 +22,7 @@ npm run start
 
 ## Usage
 
-> **NOTE:** Use React ^16.0.0. If you want to restyle the component, you must use styled-components ^4.0.0.
+> **NOTE:** Use React version 16.0.0 or higher. If you want to restyle the component, you must use styled-components version 4.0.0 or higher.
 
 Run this command to install the component:
 
