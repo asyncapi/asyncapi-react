@@ -8,9 +8,8 @@
     "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
   },
   "author": {
-    "name": "Maciej Urbańczyk",
-    "email": "maciej.urbanczyk.95@gmail.com",
-    "url": "https://github.com/magicmatatjahu"
+    "name": "The Kyma project authors",
+    "url": "http://kyma-project.io"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -31,9 +30,8 @@
     "lib"
   ],
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:lib": "tsc",
+    "start": "tsc --watch",
+    "build": "tsc",
     "test": "jest -i",
     "test:unit": "jest unit",
     "test:integration": "jest integration",
