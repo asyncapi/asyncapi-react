@@ -6,6 +6,36 @@ Read the document to find out how to install dependencies, launch the developmen
 
 > **NOTE:** This repository uses [Lerna](https://github.com/lerna/lerna) for managing local dependencies and better development experience.
 
+### Project structure
+
+This repository has the following structure:
+
+```
+  ├── docs                        # Directory with project-related documents
+  ├── library                     # Source code of the AsyncApi React component
+  │    ├── src                    # Source code of the AsyncApi React component
+  │    │    ├── components        # Source code of generic components used in the "containers" directory
+  │    │    ├── config            # Configuration of the AsyncApi React component
+  │    │    ├── containers        # Subcomponents for specific parts of the AsyncApi React component
+  │    │    ├── helpers           # Various helper functions
+  │    │    └── theme             # Theme-related files for the AsyncApi React component
+  │    └── test                   # Tests for the AsyncApi React component
+  └── playground                  # Source code of the Playground application for the AsyncApi React component
+       ├── public                 # Fonts, images, and icons used in the Playground application
+       ├── src                    # Source code of the Playground application
+       │    ├── common            # Various helper functions including mocks
+       │    └── components        # Components used in the Playground application
+       └── test                   # Tests for the Playground application
+```
+
+## Prerequisites
+
+Use the following tools to develop the AsyncApi React component:
+
+* React ^16.0.0
+* [Styled-components](https://github.com/styled-components/styled-components) ^4.0.0
+* TypeScript ^3.0.0
+
 ## Install dependencies
 
 To install all dependencies for the [Playground](./playground) application and prepare a symlink for the [`library`](./library) package, run these commands:
