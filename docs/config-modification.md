@@ -25,10 +25,12 @@ interface ConfigInterface {
 ```
 
    - **show?: Partial<ShowConfig>**
+
        This field contains configuration responsible for rendering specific parts of the AsyncApi component.
        All fields are set to `true` by default.
 
    - **disableDefaultTheme?: boolean**
+   
       This field informs whether the forwarded [`ThemeInterface`](../library/src/theme/theme.ts#L5) should be concatenated with the [default theme](../library/src/theme/default.ts) or if the AsyncApi component should consider only the forwarded one.
      This field is set to `false` by default.
 

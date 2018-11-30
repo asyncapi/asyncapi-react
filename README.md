@@ -51,14 +51,17 @@ render(<App />, document.getElementById("root"));
 The list of props for the AsyncApi React component includes:
 
    - **schema: string | AsyncApiInterface**
+
      The `schema` property is required and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
    - **theme?: Partial<ThemeInterface>**
+
      The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/theme-modification.md) document.
 
      > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
 
    - **config?: Partial<ConfigInterface>**
+   
      The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/config-modification.md) document.
      This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
