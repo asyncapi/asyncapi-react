@@ -28,7 +28,7 @@ This repository has the following structure:
        └── test                   # Tests for the Playground application
 ```
 
-If you make any changes in the [project structure](./README.md/#project-structure), remember to update it.
+If you make any changes in the project structure, remember to update it.
 
 ## Prerequisites
 
