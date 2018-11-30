@@ -1,29 +1,36 @@
-<h1 align="center">A official AsyncAPI React Component</h1>
+# AsyncAPI React Component
 
 ## Overview
 
-A official [React](https://reactjs.org/) component for AsyncAPI specification. It allows to validation and render AsyncAPI specification and use own styles.
+[React](https://reactjs.org/) component for AsyncAPI specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
 
-## Philosophy
+## Playground
 
+This repository comes in with a Playground application. Test it to see the component in action and play with it before you use it in your application.
 
+Run this command to install all dependencies:
+```
+npm install
+npm run bootstrap
+```
 
-## Live Demo
+Run this command to start the local server with the Playground application:
 
-A [live playground](https://magicmatatjahu.github.io/asyncapi-react/) is hosted on gh-pages.
+```
+npm run start
+```
 
-## Install
+## Usage
+
+> **NOTE:** Use React version 16.0.0 or higher. If you want to restyle the component, you must use styled-components version 4.0.0 or higher.
+
+Run this command to install the component:
 
 ``` sh
 $ npm install --save asyncapi-react
 ```
 
-## Requirements
-* TypeScript ^3.0.0
-* React ^16.0.0
-* [`styled-components`](https://github.com/styled-components/styled-components) ^4.0.0
-
-## Usage
+Add this code to your application to use the component. Make sure to pass stringified AsyncAPI specification into the `schema` property
 
 ``` js
 import React from "react";
@@ -39,40 +46,41 @@ const App = () => (
 render(<App />, document.getElementById("root"));
 ```
 
-## Props
+### Props
 
-#### `schema: string | AsyncApiInterface`
+The list of props for the AsyncApi React component includes:
 
-The `schema` property is required and contains **AsyncAPI** specification and should be one of type: `string` or [`AsyncApiInterface`](./library/src/types.ts#L13). For more information about what it should look like and what contains, please read [this](https://github.com/asyncapi/asyncapi#asyncapi-specification) document.
+   - **schema: string | AsyncApiInterface**
 
-#### `theme?: Partial<ThemeInterface>`*
+     The `schema` property is required and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
-The `theme` property is optional and contains styles for specific part of `AsyncApi` component. For more information about changing styles, please read [this](./docs/theme-modification.md) document.
+   - **theme?: Partial<ThemeInterface>**
 
-> **NOTE:** This props is concatenated with the [default theme](./library/src/theme/default.ts) if you not pass [`disableDefaultTheme`](./docs/config-modification.md) config as true.
+     The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/theme-modification.md) document.
 
-#### `config?: Partial<ConfigInterface>`*
+     > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
 
-The `config` property is optional and contains configuration for `AsyncApi` component. For more information about what options are available, please read [this](./docs/config-modification.md) document.
+   - **config?: Partial<ConfigInterface>**
+   
+     The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/config-modification.md) document.
+     This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
-> **NOTE:** This props is concatenated with the [default configuration](./library/src/config/default.ts)
-
-\* `Partial<T>` type means that every field in type `T` is optional. 
+     > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
 ## Development
 
-For more information about development process - setup development environment, run and write test, follow naming and accepted architecture convention of the project, please check [`DEVELOPMENT.md`](DEVELOPMENT.md) document.
+For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./development-guide.md).
 
-## Contributing
+## Contribution
 
-If you have a feature request, please add it as an issue or make a pull request by following [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
+If you have a feature request, add it as an issue or propose changes in a pull request (PR). Make sure you follow contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
-If you have a bug to report, please reproduce the bug in the app like a [`CodeSandbox`](https://codesandbox.io/) to help us easily isolate it.
+If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue.
 
-## License
+## Credits
 
-This project is under a **Apache 2.0** license. For more information, please check [`LICENSE`](LICENSE) file.
-
-## Authors
-* Fran Méndez ([@fmvilas](http://twitter.com/fmvilas)) - author of `AsyncAPI` specification
-* Maciej Urbańczyk ([@magicmatatjahu](https://github.com/magicmatatjahu)) - author of `AsyncAPI React` component
+<p align="center">
+ <a href="https://github.com/kyma-project/kyma" target="_blank">
+  <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
+ </a>
+</p>
