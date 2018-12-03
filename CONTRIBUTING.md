@@ -11,7 +11,7 @@ The contributing process in this project relies on the [GitHub flow](https://gui
 1. Fork this repository.
 2. Make your changes. Do not forgot about:
    - [Naming and architecture convention](./DEVELOPMENT.md#naming--architecture-convention)
-   - [Project structure](./README.md/#project-structure)
+   - [Project structure](./development-guide.md/#project-structure)
    - Tests
    - Updating relevant documents if you add, remove, update props, configuration, or themes
 3. Squash your changes to a single commit. Write a concise commit message in the imperative mood, as described [here](https://chris.beams.io/posts/git-commit/).
