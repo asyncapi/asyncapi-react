@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Playground app for AsyncApi React Component",
+  "homepage": "https://www.asyncapi.com/asyncapi-react",
   "dependencies": {
     "asyncapi-react": "0.1.0",
     "codemirror": "^5.41.0",
@@ -21,13 +22,16 @@
     "@types/styled-components": "^4.0.3",
     "react-app-rewired": "^1.6.2",
     "react-scripts": "2.1.1",
-    "typescript": "3.1.6"
+    "typescript": "3.1.6",
+    "gh-pages": "^2.0.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "publish:origin": "npm run build && gh-pages -d build -m 'Deploy new version of playground app' -o origin",
+    "publish:upstream": "npm run build && gh-pages -d build -m 'Deploy new version of playground app' -o upstream"
   },
   "eslintConfig": {
     "extends": "react-app"
