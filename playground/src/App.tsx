@@ -3,13 +3,14 @@ import AsyncApi, { ThemeInterface, ConfigInterface } from 'asyncapi-react';
 
 import { Navigation, CodeEditor, FetchSchema, RefreshIcon, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
 
-import { defaultSchema, defaultTheme, defaultConfig, parse, stringify } from './common';
+import { defaultSchema, defaultKymaTheme, defaultConfig, parse, stringify } from './common';
 
 interface State {
   schema: string,
   theme: string,
   config: string,
   schemaFromEditor: string;
+  schemaFromExternalResource: string;
   themeFromEditor: string;
   configFromEditor: string;
 }
@@ -17,15 +18,20 @@ interface State {
 class Playground extends Component<{}, State> {
   state = {
     schema: defaultSchema,
-    theme: stringify<ThemeInterface>(defaultTheme),
+    theme: stringify<ThemeInterface>(defaultKymaTheme),
     config: defaultConfig,
     schemaFromEditor: defaultSchema,
-    themeFromEditor: stringify<ThemeInterface>(defaultTheme),
+    schemaFromExternalResource: '',
+    themeFromEditor: stringify<ThemeInterface>(defaultKymaTheme),
     configFromEditor: defaultConfig
   }
 
   private updateSchema = (schema: string) => {
     this.setState({ schemaFromEditor: schema });
+  }
+
+  private updateSchemaFromExternalResource = (schema: string) => {
+    this.setState({ schemaFromExternalResource: schema });
   }
 
   private updateTheme = (theme: string) => {
@@ -52,7 +58,7 @@ class Playground extends Component<{}, State> {
   }
 
   render() {
-    const { schema, theme, config, schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
+    const { schema, theme, config, schemaFromEditor, schemaFromExternalResource, themeFromEditor, configFromEditor } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
     const parsedConfig = parse<ConfigInterface>(config);
@@ -65,8 +71,8 @@ class Playground extends Component<{}, State> {
             <Tabs additionalHeaderContent={this.renderAdditionalHeaderContent()}>
               <Tab title="Schema" key="Schema">
                 <>
-                  <FetchSchema parentCallback={this.updateSchema} />
-                  <CodeEditor key="Schema" code={schemaFromEditor} parentCallback={this.updateSchema} mode="text/yaml" />
+                  <FetchSchema parentCallback={this.updateSchemaFromExternalResource} />
+                  <CodeEditor key="Schema" code={schemaFromEditor} externalResource={schemaFromExternalResource} parentCallback={this.updateSchema} mode="text/yaml" />
                 </>
               </Tab>
               <Tab title="Theme" key="Theme">

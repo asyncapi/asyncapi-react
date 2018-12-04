@@ -12,6 +12,7 @@ import 'codemirror/mode/javascript/javascript';
 
 interface Props {
   code: string,
+  externalResource?: string,
   mode?: string,
   parentCallback(value: string): void;
 }
@@ -21,6 +22,13 @@ interface State {
 }  
 
 class CodeEditorComponent extends Component<Props, State> {
+  componentDidUpdate(nextProps: Props, nextState: State) {
+    const { externalResource } = this.props;
+    if (nextProps.externalResource !== externalResource) {
+      this.setState({ code: externalResource! })
+    }
+  }
+
   state = {
     code: this.props.code
   }
