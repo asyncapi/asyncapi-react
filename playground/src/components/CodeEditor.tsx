@@ -7,9 +7,13 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
 import 'codemirror/mode/yaml/yaml';
+import 'codemirror/mode/javascript/javascript';
+
 
 interface Props {
   code: string,
+  externalResource?: string,
+  mode?: string,
   parentCallback(value: string): void;
 }
 
@@ -18,6 +22,13 @@ interface State {
 }  
 
 class CodeEditorComponent extends Component<Props, State> {
+  componentDidUpdate(nextProps: Props, nextState: State) {
+    const { externalResource } = this.props;
+    if (nextProps.externalResource !== externalResource) {
+      this.setState({ code: externalResource! })
+    }
+  }
+
   state = {
     code: this.props.code
   }
@@ -27,19 +38,19 @@ class CodeEditorComponent extends Component<Props, State> {
   }
 
   render() {
-    const { code } = this.state;
+    const { props: { mode = "application/json" }, state: { code } } = this;
 
     return (
       <CodeEditorWrapper>
         <CodeMirror
             value={code}
             options={{
-            mode: "text/yaml",
-            lineNumbers: true,
-            lineWrapping: true,
-            theme: 'material',
-            tabSize: 2,
-            indentWithTabs: false,
+              mode: mode,
+              lineNumbers: true,
+              lineWrapping: true,
+              theme: 'material',
+              tabSize: 2,
+              indentWithTabs: false,
             }}
             onChange={this.onChangeValue}
         />

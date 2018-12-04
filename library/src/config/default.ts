@@ -10,5 +10,6 @@ export const defaultConfig: ConfigInterface = {
     events: true,
     messages: true,
     schemas: true,
-  }
+  },
+  disableDefaultTheme: false,
 }

@@ -1,10 +1,12 @@
-# Configuration
+# Configuration Modification
 
 ## Overview
 
-This file describe what options are available in `ConfigInterface`.
+Learn how to use various configuration options available in `ConfigInterface`.
 
 ## Definition
+
+See the definition of the object that you must pass to probs to modify the component configuration:
 
 ``` ts
 interface ConfigInterface {
@@ -18,27 +20,27 @@ interface ConfigInterface {
         messages?: boolean,
         schemas?: boolean
     },
-    disableDefaultTheme?: boolean
+    disableDefaultTheme?: boolean #TODO: Explain the difference between the example and the source code.
 }
 ```
 
-#### `show?: Partial<ShowConfig>`
+   - **show?: Partial<ShowConfig>**
 
-This field contains configuration about what specific parts of the `AsyncApi` component will be displayed.
+       This field contains configuration responsible for rendering specific parts of the AsyncApi component.
+       All fields are set to `true` by default.
 
-By default all fields are true.
+   - **disableDefaultTheme?: boolean**
+   
+      This field informs whether the forwarded [`ThemeInterface`](../library/src/theme/theme.ts#L5) should be concatenated with the [default theme](../library/src/theme/default.ts) or if the AsyncApi component should consider only the forwarded one.
+     This field is set to `false` by default.
 
-#### `disableDefaultTheme?: boolean`
-
-This field informs whether the forwarded [`ThemeInterface`](../library/src/theme/theme.ts#L5) should be concatenated with the [default](../library/src/theme/default.ts), or `AsyncApi` component should consider only the forwarded one.
-
-By default this field is false.
-
-> **NOTE:** By setting this flag to true, remember that you should provide definitions of all styles.
+     > **NOTE:** When you set this flag to `true`, you must provide definitions of all styles.
 
 ## Examples
 
-#### JavaScript
+See exemplary component configuration in JavaScript and TypeScript.
+
+### JavaScript
 
 ``` jsx
 import * as React from "react";
@@ -62,7 +64,7 @@ const App = () => (
 render(<App />, document.getElementById("root"));
 ```
 
-#### TypeScript
+### TypeScript
 
 ``` tsx
 import * as React from "react";

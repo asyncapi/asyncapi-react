@@ -1,5 +1,6 @@
 export interface ConfigInterface {
-  show: ShowConfig
+  show: ShowConfig,
+  disableDefaultTheme: boolean,
 }
 
 interface ShowConfig {

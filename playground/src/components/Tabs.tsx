@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import {
   TabsWrapper,
   TabsHeader,
+  TabsAdditionalHeaderContent,
   TabsContent,
 } from './styled';
 
 import { TabProps } from './Tab';
 
 interface Props {
+  additionalHeaderContent?: React.ReactNode,
   defaultActiveTabIndex?: number,
 }
 
@@ -47,9 +49,11 @@ class Tabs extends Component<Props, State> {
     if (children[this.state.activeTabIndex]) {
       return children[this.state.activeTabIndex].props.children;
     }
+    return null;
   };
 
   render() {
+    const { additionalHeaderContent } = this.props;
     const children = []
       .concat(...this.props.children as any)
       .filter(child => child !== null && child !== undefined);
@@ -58,6 +62,7 @@ class Tabs extends Component<Props, State> {
       <TabsWrapper>
         <TabsHeader>
           {this.renderHeader(children)}
+          <TabsAdditionalHeaderContent>{additionalHeaderContent}</TabsAdditionalHeaderContent>
         </TabsHeader>
         <TabsContent>{this.renderActiveTab(children)}</TabsContent>
       </TabsWrapper>

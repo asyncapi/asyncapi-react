@@ -75,8 +75,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     const { theme, config } = this.props;
     const { validatedSchema, validated } = this.state;
 
-    const concatenatedTheme: ThemeInterface = { ...kymaTheme, ...theme };
-    const concatenatedConfig: ConfigInterface = { ...defaultConfig, ...config };
+    const concatenatedConfig: ConfigInterface = { ...defaultConfig, ...config, show: { ...defaultConfig.show, ...(config && config.show ? config.show : {}), } };
+    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme ? theme as ThemeInterface : { ...kymaTheme, ...theme };
 
     if (!(validatedSchema && validated)) return null;
 
