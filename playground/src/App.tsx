@@ -3,7 +3,7 @@ import AsyncApi, { ThemeInterface, ConfigInterface } from 'asyncapi-react';
 
 import { Navigation, CodeEditor, FetchSchema, RefreshIcon, Tabs, Tab, PlaygroundWrapper, ContentWrapper, CodeEditorsWrapper, AsyncApiWrapper } from './components';
 
-import { mock, defaultTheme, defaultConfig, parse, stringify } from './common';
+import { defaultSchema, defaultTheme, defaultConfig, parse, stringify } from './common';
 
 interface State {
   schema: string,
@@ -16,10 +16,10 @@ interface State {
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: mock,
+    schema: defaultSchema,
     theme: stringify<ThemeInterface>(defaultTheme),
     config: defaultConfig,
-    schemaFromEditor: mock,
+    schemaFromEditor: defaultSchema,
     themeFromEditor: stringify<ThemeInterface>(defaultTheme),
     configFromEditor: defaultConfig
   }
