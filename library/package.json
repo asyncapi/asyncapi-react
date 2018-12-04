@@ -5,7 +5,7 @@
   "description": "A simple React component for AsynApi specification.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyma-incubator/asyncapi-react.git"
+    "url": "git+https://github.com/asyncapi/asyncapi-react"
   },
   "author": {
     "name": "The Kyma project authors",
@@ -13,7 +13,7 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
+    "url": "https://github.com/asyncapi/asyncapi-react/issues"
   },
   "keywords": [
     "react",
@@ -23,7 +23,6 @@
     "react",
     "asyncapi"
   ],
-  "homepage": "https://github.com/kyma-incubator/asyncapi-react",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -47,6 +46,16 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "dependencies": {
+    "z-schema": "^3.24.1",
+    "asyncapi": "^2.1.0",
+    "dompurify": "^1.0.8",
+    "js-yaml": "^3.12.0",
+    "json-schema-ref-parser": "^6.0.2",
+    "markdown-it": "^8.4.2",
+    "openapi-sampler": "^1.0.0-beta.14",
+    "react-syntax-highlighter": "^10.0.1"
+  },
   "devDependencies": {
     "@types/dompurify": "0.0.32",
     "@types/enzyme": "^3.1.15",
@@ -65,14 +74,6 @@
     "react-scripts": "2.1.0",
     "ts-jest": "^23.10.4",
     "styled-components": "^4.0.3",
-    "z-schema": "^3.24.1",
-    "asyncapi": "^2.1.0",
-    "dompurify": "^1.0.8",
-    "js-yaml": "^3.12.0",
-    "json-schema-ref-parser": "^6.0.2",
-    "markdown-it": "^8.4.2",
-    "openapi-sampler": "^1.0.0-beta.14",
-    "react-syntax-highlighter": "^10.0.1",
     "typescript": "3.1.4"
   },
   "peerDependencies": {
