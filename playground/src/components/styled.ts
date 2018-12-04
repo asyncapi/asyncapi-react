@@ -5,28 +5,71 @@ export const PlaygroundWrapper = styled.div`
 
 export const NavigationWrapper = styled.nav`
   width: 100%;
+  line-height: 48px;
+  padding: 0 16px;
+  background-color: #263238;
+  border-bottom: #607d8b 2px solid;
+`;
+
+export const NavigationHeader =  styled.header`
+  display: inline-block;
+`;
+
+export const NavigationHeaderH1 =  styled.h1`
+  color: #fff;
+  margin: 0;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 48px;
+`;
+
+export const NavigationHeaderIcon =  styled.img`
+  height: 34px;
+  max-height: 34px;
+  margin-top: 7px;
+  float: left;
+`;
+
+export const NavigationHeaderAsyncApiText =  styled.span`
+  font-weight: bold;
+  margin-left: 12px;
+`;
+
+export const NavigationHeaderEditorText =  styled.span`
+  font-style: italic;
+  margin-left: 6px;
+`;
+
+export const NavigationLinks = styled.ul`
+  margin: 0 0 0 auto;
+  padding: 0;
+  position: relative;
+  display: inline-block;
+`;
+
+export const NavigationLinksItem = styled.li`
 `;
 
 export const ContentWrapper = styled.div`
   width: 100%;
-  height: 100vh;
-  min-height: 100vh;
+  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   display: flex; 
   justify-content: space-between;
 `;
 
 export const CodeEditorsWrapper =  styled.div`
   width: 40%;
-  height: 100vh;
-  min-height: 100vh;
+  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   overflow: auto;
   background: rgb(38, 50, 56);
 `;
 
 export const AsyncApiWrapper = styled.div`
   width: 60%;
-  height: 100vh;
-  min-height: 100vh;
+  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
   overflow: auto;
 
   > div {
@@ -57,6 +100,25 @@ export const TabsHeader = styled.ul`
   display: flex;
   justify-items: flex-start;
   flex-flow: row nowrap;
+`;
+
+export const TabsAdditionalHeaderContent = styled.li`
+  margin: 0 0 0 auto;
+  position: relative;
+  display: inline-block;
+  padding: 19px 15px;
+`;
+
+export const RefreshIcon = styled.div`
+  font-family: "SAP-Icons";
+  font-weight: 700;
+  color: #f77669;
+  transition: 0.2s color linear;
+  cursor: pointer;
+
+  &:hover {
+    color: #c3e88d;
+  }
 `;
 
 export const TabsContent = styled.div`
@@ -99,7 +161,6 @@ export const TabLink = styled.div`
 
   &:hover {
     color: #c3e88d;
-    cursor: pointer;
 
     &:after {
       content: '';
@@ -111,5 +172,50 @@ export const TabLink = styled.div`
       border-radius: 2px;
       background-color: #c3e88d;
     }
+  }
+`;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  margin-bottom: 20px;
+`;
+
+export const InputField = styled.input`
+  width: 100%;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  outline: none;
+  background: inherit;
+  border: 3px solid #f77669;
+  color: #f77669;
+  border-radius: 6px;
+  transition: 0.2s border, color linear;
+  font-size: 14px;
+
+  &:hover {
+    color: #c3e88d;
+    border-color: #c3e88d;
+  }
+`;
+
+export const Button = styled.button`
+  width: auto;
+  padding: 6px 12px;
+  display: inline-block;
+  background: inherit;
+  border: 3px solid #f77669;
+  color: #f77669;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-left: 12px;
+  white-space: nowrap;
+  transition: 0.2s border, color linear;
+  cursor: pointer;
+
+  &:hover {
+    color: #c3e88d;
+    border-color: #c3e88d;
   }
 `;
