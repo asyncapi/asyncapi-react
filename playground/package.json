@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Playground app for AsyncApi React Component",
-  "homepage": "https://asyncapi.github.io/asyncapi-react",
+  "homepage": "https://www.asyncapi.com/asyncapi-react",
   "dependencies": {
     "asyncapi-react": "0.1.0",
     "codemirror": "^5.41.0",
