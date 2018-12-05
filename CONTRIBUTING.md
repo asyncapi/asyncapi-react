@@ -18,4 +18,6 @@ The contributing process in this project relies on the [GitHub flow](https://gui
 4. Rebase your changes to the latest `master` branch.
 5. Create a pull request.
 
+> **NOTE:** When you add content to the `asyncapi-react` repository, follow the guidelines from the `kyma-project` organization.
+
 Pull requests are very welcome. However, if you want to add a new feature, use GitHub issues to discuss your ideas first.
