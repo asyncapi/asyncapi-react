@@ -8,7 +8,7 @@ A [React](https://reactjs.org/) component for AsyncAPI specification. It allows 
 
 This repository comes in with a [Playground application](https://www.asyncapi.com/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
 
-You can also run the Playground locally by following [this](development-guide.md#install-dependencies) instruction from our development guide.
+You can also run the Playground application locally by following [this](development-guide.md#install-dependencies) instruction from the development guide.
 
 ## Usage
 
