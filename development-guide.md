@@ -11,6 +11,7 @@ Read the document to find out how to install dependencies, launch the developmen
 This repository has the following structure:
 
 ```
+  ├── .github                     # Pull request and issue templates
   ├── docs                        # Directory with project-related documents
   ├── library                     # Source code of the AsyncApi React component
   │    ├── src                    # Source code of the AsyncApi React component
