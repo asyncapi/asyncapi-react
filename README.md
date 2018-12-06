@@ -6,19 +6,9 @@ A [React](https://reactjs.org/) component for AsyncAPI specification. It allows 
 
 ## Playground
 
-This repository comes in with a Playground application. Test it to see the component in action and play with it before you use it in your application.
+This repository comes in with a [Playground application](https://www.asyncapi.com/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
 
-Run this command to install all dependencies:
-```
-npm install
-npm run bootstrap
-```
-
-Run this command to start the local server with the Playground application:
-
-```
-npm run start
-```
+You can also run the Playground application locally by following [this](development-guide.md#install-dependencies) instruction from the development guide.
 
 ## Usage
 
@@ -80,7 +70,7 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 ## Credits
 
 <p align="center">
- <a href="https://github.com/kyma-project/kyma" target="_blank">
+ <a href="https://kyma-project.io/" target="_blank">
   <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
  </a>
 </p>
