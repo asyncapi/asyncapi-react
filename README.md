@@ -12,7 +12,7 @@ You can also run the Playground application locally by following [this](developm
 
 ## Usage
 
-> **NOTE:** Use **React** version 16.0.0 or higher and **styled-components** version 4.0.0 or higher.
+> **NOTE:** Use React version 16.0.0 or higher and styled-components version 4.0.0 or higher.
 
 Run this command to install the component:
 
