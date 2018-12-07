@@ -17,7 +17,7 @@ You can also run the Playground application locally by following [this](developm
 Run this command to install the component:
 
 ``` sh
-$ npm install --save asyncapi-react
+$ npm install --save @kyma-project/asyncapi-react
 ```
 
 Add this code to your application to use the component. Make sure to pass stringified AsyncAPI specification into the `schema` property
@@ -25,7 +25,7 @@ Add this code to your application to use the component. Make sure to pass string
 ``` js
 import React from "react";
 import { render } from "react-dom";
-import AsyncApiComponent from "asyncapi-react";
+import AsyncApiComponent from "@kyma-project/asyncapi-react";
 
 import { schema } from "./mock";
 
