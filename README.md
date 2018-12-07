@@ -12,7 +12,7 @@ You can also run the Playground application locally by following [this](developm
 
 ## Usage
 
-> **NOTE:** Use **React** version 16.0.0 or higher **styled-components** version 4.0.0 or higher.
+> **NOTE:** Use **React** version 16.0.0 or higher and **styled-components** version 4.0.0 or higher.
 
 Run this command to install the component:
 
@@ -20,7 +20,7 @@ Run this command to install the component:
 $ npm install --save @kyma-project/asyncapi-react
 ```
 
-Check out this simple sandbox application that uses **asyncapi-react** component:
+Check out this simple sandbox application that uses the **asyncapi-react** component:
 
 [![Edit 5vz8l9zlmn](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/5vz8l9zlmn)
 
