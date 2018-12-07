@@ -13,7 +13,11 @@ export class CodeComponent extends Component<Props> {
 
     return (
       <CodeWrapper>
-        {title && <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader>}
+        {title && (
+          <CodeHeader>
+            <CodeHeaderH4>{title}</CodeHeaderH4>
+          </CodeHeader>
+        )}
         <CodeBody language="javascript">{code}</CodeBody>
       </CodeWrapper>
     );

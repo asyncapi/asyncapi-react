@@ -1,6 +1,6 @@
-import { InterpolationValue } from 'styled-components';
+import { FlattenInterpolation } from 'styled-components';
 
-type styledCss = string | InterpolationValue[];
+type styledCss = string | FlattenInterpolation<string>;
 
 export interface ThemeInterface {
   asyncApiWrapper: styledCss;

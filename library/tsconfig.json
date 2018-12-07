@@ -2,12 +2,8 @@
   "compilerOptions": {
     "outDir": "./lib",
     "module": "esnext",
-    "target": "es6",
-    "lib": [
-      "es5",
-      "es6",
-      "dom"
-    ],
+    "target": "es5",
+    "lib": ["es5", "es6", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
@@ -27,13 +23,8 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "declaration": true,
+    "declaration": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "test",
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "test"]
 }

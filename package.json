@@ -12,10 +12,9 @@
     "url": "https://github.com/kyma-incubator/asyncapi-react/issues"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap && npm run build:lib",
+    "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
-    "build:lib": "cd library && npm build",
     "test": "lerna exec -- npm run test",
     "test:library": "cd library && npm test",
     "test:playground": "cd playground && npm test"

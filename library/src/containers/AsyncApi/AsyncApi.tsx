@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import { AsyncApi, SecurityScheme } from '../../types';
-import { ThemeInterface, kymaTheme } from '../../theme';
+import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { parser, beautifier } from '../../helpers';
 
@@ -26,29 +26,29 @@ interface AsyncApiState {
 }
 
 const defaultAsyncApi: AsyncApi = {
-  asyncapi: "",
+  asyncapi: '',
   info: {
-    title: "AsyncApi example title",
-    version: "1.0.0",
-  }
-}
+    title: 'AsyncApi example title',
+    version: '1.0.0',
+  },
+};
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   state = {
     validatedSchema: defaultAsyncApi,
     validated: false,
-  }
+  };
 
   async componentWillMount() {
     let validatedSchema = await this.validateSchema(this.props.schema);
-    validatedSchema = this.beautifySchema(validatedSchema)
+    validatedSchema = this.beautifySchema(validatedSchema);
     this.setState({ validatedSchema, validated: true });
   }
 
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
-    if(nextProps.schema !== this.props.schema) {
+    if (nextProps.schema !== this.props.schema) {
       let validatedSchema = await this.validateSchema(nextProps.schema);
-      validatedSchema = this.beautifySchema(validatedSchema)
+      validatedSchema = this.beautifySchema(validatedSchema);
       this.setState({ validatedSchema });
     }
   }
@@ -57,7 +57,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     if (typeof schema !== 'string') {
       schema = JSON.stringify(schema);
     }
-    return await parser.parse(schema)
+    return await parser.parse(schema);
   }
 
   private beautifySchema(schema: AsyncApi): AsyncApi {
@@ -69,14 +69,23 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     component: React.ReactNode,
   ): React.ReactNode | null {
     return showComponent ? component : null;
-  };
+  }
 
   render() {
     const { theme, config } = this.props;
     const { validatedSchema, validated } = this.state;
 
-    const concatenatedConfig: ConfigInterface = { ...defaultConfig, ...config, show: { ...defaultConfig.show, ...(config && config.show ? config.show : {}), } };
-    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme ? theme as ThemeInterface : { ...kymaTheme, ...theme };
+    const concatenatedConfig: ConfigInterface = {
+      ...defaultConfig,
+      ...config,
+      show: {
+        ...defaultConfig.show,
+        ...(config && config.show ? config.show : {}),
+      },
+    };
+    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
+      ? (theme as ThemeInterface)
+      : { ...defaultTheme, ...theme };
 
     if (!(validatedSchema && validated)) return null;
 
@@ -85,25 +94,46 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
         <AsyncApiWrapper>
           {this.showComponent(
             concatenatedConfig.show.info && Boolean(validatedSchema.info),
-            <InfoComponent info={validatedSchema.info} servers={validatedSchema.servers} showServers={concatenatedConfig.show.servers && Boolean(validatedSchema.servers)} />
+            <InfoComponent
+              info={validatedSchema.info}
+              servers={validatedSchema.servers}
+              showServers={
+                concatenatedConfig.show.servers &&
+                Boolean(validatedSchema.servers)
+              }
+            />,
           )}
           {this.showComponent(
-            concatenatedConfig.show.security && Boolean(validatedSchema.security),
-            <Security security={validatedSchema.security as SecurityScheme[]} />
+            concatenatedConfig.show.security &&
+              Boolean(validatedSchema.security),
+            <Security
+              security={validatedSchema.security as SecurityScheme[]}
+            />,
           )}
           {this.showComponent(
             concatenatedConfig.show.topics && Boolean(validatedSchema.topics),
-            <TopicsComponent baseTopic={validatedSchema.baseTopic} topics={validatedSchema.topics} />
+            <TopicsComponent
+              baseTopic={validatedSchema.baseTopic}
+              topics={validatedSchema.topics}
+            />,
           )}
           {validatedSchema.components && (
             <>
               {this.showComponent(
-                concatenatedConfig.show.messages && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.messages),
-                <MessagesComponent messages={validatedSchema.components!.messages} />
+                concatenatedConfig.show.messages &&
+                  Boolean(validatedSchema.components) &&
+                  Boolean(validatedSchema.components!.messages),
+                <MessagesComponent
+                  messages={validatedSchema.components!.messages}
+                />,
               )}
               {this.showComponent(
-                concatenatedConfig.show.schemas && Boolean(validatedSchema.components) && Boolean(validatedSchema.components!.schemas),
-                <SchemasComponent schemas={validatedSchema.components!.schemas} />
+                concatenatedConfig.show.schemas &&
+                  Boolean(validatedSchema.components) &&
+                  Boolean(validatedSchema.components!.schemas),
+                <SchemasComponent
+                  schemas={validatedSchema.components!.schemas}
+                />,
               )}
             </>
           )}
