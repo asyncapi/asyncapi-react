@@ -12,29 +12,17 @@ You can also run the Playground application locally by following [this](developm
 
 ## Usage
 
-> **NOTE:** Use React version 16.0.0 or higher. If you want to restyle the component, you must use styled-components version 4.0.0 or higher.
+> **NOTE:** Use React version 16.0.0 or higher and styled-components version 4.0.0 or higher.
 
 Run this command to install the component:
 
 ``` sh
-$ npm install --save asyncapi-react
+$ npm install --save @kyma-project/asyncapi-react
 ```
 
-Add this code to your application to use the component. Make sure to pass stringified AsyncAPI specification into the `schema` property
+Check out this simple sandbox application that uses the asyncapi-react component:
 
-``` js
-import React from "react";
-import { render } from "react-dom";
-import AsyncApiComponent from "asyncapi-react";
-
-import { schema } from "./mock";
-
-const App = () => (
-  <AsyncApiComponent schema={schema} />
-);
-
-render(<App />, document.getElementById("root"));
-```
+[![Edit 5vz8l9zlmn](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/5vz8l9zlmn)
 
 ### Props
 
@@ -63,9 +51,10 @@ For information on how to set up a development environment, write and run tests,
 
 ## Contribution
 
-If you have a feature request, add it as an issue or propose changes in a pull request (PR). Make sure you follow contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
+If you have a feature request, add it as an issue or propose changes in a pull request (PR).
+If you create a feature request, use the dedicated **Feature request** issue template. When you create a PR, follow the contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
-If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue.
+If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
 
 ## Credits
 

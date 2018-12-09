@@ -5,7 +5,7 @@
   "description": "Playground app for AsyncApi React Component",
   "homepage": "https://www.asyncapi.com/asyncapi-react",
   "dependencies": {
-    "asyncapi-react": "0.1.0",
+    "@kyma-project/asyncapi-react": "0.1.0",
     "codemirror": "^5.41.0",
     "re-resizable": "^4.10.0",
     "react": "^16.6.3",

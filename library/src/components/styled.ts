@@ -1,5 +1,4 @@
-import { styled } from '../theme'
-import SyntaxHighlighter from 'react-syntax-highlighter';
+import { styled } from '../theme';
 
 // Code Component
 export const CodeWrapper = styled.div`
@@ -12,7 +11,7 @@ export const CodeHeader = styled.header`
 
 export const CodeHeaderH4 = styled.h4``;
 
-export const CodeBody = styled(SyntaxHighlighter)`
+export const CodeBody = styled.pre`
   ${props => props.theme.codeContent}
 `;
 
@@ -60,7 +59,7 @@ export const HrefHeader = styled.a`
 
 // Tale Components
 interface TableRowWithNestedProps {
-  open?: boolean
+  open?: boolean;
 }
 
 export const TableWrapper = styled.table`
@@ -84,7 +83,7 @@ export const TableHeaderColumnName = styled.th`
 `;
 
 export const TableBodyWrapper = styled.tbody`
-${props => props.theme.tableBody}
+  ${props => props.theme.tableBody}
 `;
 
 export const TableRowWrapper = styled.tr`
@@ -94,7 +93,8 @@ export const TableRowWrapper = styled.tr`
 export const TableRowWrapperWithNested = styled.tr`
   ${props => props.theme.tableBodyRowWithNested}
   > td > div {
-    ${(props: TableRowWithNestedProps) => props.open ? 'max-height: 250px;' : ''}
+    ${(props: TableRowWithNestedProps) =>
+      props.open ? 'max-height: 250px;' : ''}
   }
 `;
 
@@ -127,7 +127,7 @@ export const TableHeaderColumnNameNested = styled.th`
 `;
 
 export const TableBodyWrapperNested = styled.tbody`
-${props => props.theme.tableBodyNested}
+  ${props => props.theme.tableBodyNested}
 `;
 
 export const TableRowWrapperNested = styled.tr`
@@ -138,8 +138,7 @@ export const TableCellNested = styled.td`
   ${props => props.theme.tableBodyCellNested}
 `;
 
-export const TableFooterWrapper = styled.tfoot`
-`;
+export const TableFooterWrapper = styled.tfoot``;
 
 export const TreeSpace = styled.span`
   ${props => props.theme.treeSpace}
