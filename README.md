@@ -56,6 +56,54 @@ If you create a feature request, use the dedicated **Feature request** issue tem
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
 
+## Releasing
+
+1. Generate the changelog using the lerna-changelog tool. Run the following command to generate changelog content for pull requests that have been merged since the time when the last git tag was created:
+
+    ```
+    npm run changelog
+    ```
+
+    You can also generate changelog content corresponding to pull requests that were merged in between particular git tags:
+
+    ```
+    npm run changelog -- --from=v0.1.1 --to=v0.1.2
+    ```
+
+    The lerna-changelog tool detects changes based on PR labels and maps them to sections as per the configuration in the package.json file.
+
+    ```
+      "changelog": {
+        "labels": {
+          "breaking": ":boom: Breaking Changes",
+          "enhancement": ":rocket: Enhancements",
+          "bug": ":bug: Fixed",
+          "area/library": ":zap: Library",
+          "area/playground": ":video_game: Playground app",
+          "area/documentation": ":memo: Documentation"
+        }
+        ...
+      }
+    ```
+
+2. Generated code should look like this:
+```
+## Unreleased (2018-12-13)
+
+#### :bug: Fixed
+* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
+
+#### :zap: Library
+* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
+
+#### Committers: 1
+- Paweł Kosiec ([@pkosiec](https://github.com/pkosiec))
+```
+
+3. Go to github to [create new release](https://github.com/asyncapi/asyncapi-react/releases) and paste generated code (without committers section) as a description. 
+
+Make sure you change `## Unreleased ({date})` or `## {tag} ({date})` to `## Released ({date})`. 
+
 ## Credits
 
 <p align="center">

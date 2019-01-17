@@ -13,6 +13,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "changelog": "lerna-changelog",
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "lerna exec -- npm run test",
