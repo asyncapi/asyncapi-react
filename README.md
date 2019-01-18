@@ -58,19 +58,19 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 
 ## Releasing
 
-1. Generate the changelog using the lerna-changelog tool. Run the following command to generate changelog content for pull requests that have been merged since the time when the last git tag was created:
+1. Generate the changelog using the [`lerna-changelog`](https://github.com/lerna/lerna-changelog) tool. Run the following command to generate the changelog content for PRs merged after creating the last Git tag:
 
     ```
     npm run changelog
     ```
 
-    You can also generate changelog content corresponding to pull requests that were merged in between particular git tags:
+    You can also generate the changelog content corresponding to PRs merged in-between particular Git tags:
 
     ```
     npm run changelog -- --from=v0.1.1 --to=v0.1.2
     ```
 
-    The lerna-changelog tool detects changes based on PR labels and maps them to sections as per the configuration in the package.json file.
+    The `lerna-changelog` tool detects changes based on PR labels and maps them to sections as per the configuration in the `package.json` file.
 
     ```
       "changelog": {
@@ -86,7 +86,7 @@ If you have a bug to report, reproduce it in an online code editor. For example,
       }
     ```
 
-2. Generated code should look like this:
+2. The generated code should look as follows:
 ```
 ## Unreleased (2018-12-13)
 
@@ -100,7 +100,7 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 - Paweł Kosiec ([@pkosiec](https://github.com/pkosiec))
 ```
 
-3. Go to github to [create new release](https://github.com/asyncapi/asyncapi-react/releases) and paste generated code (without committers section) as a description. 
+3. Go to GitHub to [create a new release](https://github.com/asyncapi/asyncapi-react/releases) and paste the generated code as a description. Do not include the **Committers** section.
 
 Make sure you change `## Unreleased ({date})` or `## {tag} ({date})` to `## Released ({date})`. 
 
