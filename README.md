@@ -58,6 +58,8 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 
 ## Releasing
 
+Follow these steps to create a changelog for the new release.
+
 1. Generate the changelog using the [`lerna-changelog`](https://github.com/lerna/lerna-changelog) tool. Run the following command to generate the changelog content for PRs merged after creating the last Git tag:
 
     ```
