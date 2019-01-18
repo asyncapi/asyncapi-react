@@ -11,6 +11,7 @@
 
 # misc
 .DS_Store
+.changelog
 npm-debug.log*
 lerna-debug.log*
 /**/*.tgz
