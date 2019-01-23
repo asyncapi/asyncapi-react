@@ -24,7 +24,7 @@ export interface AsyncApiProps {
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
-  error: Error;
+  error: Error | undefined;
 }
 
 const defaultAsyncApi: AsyncApi = {

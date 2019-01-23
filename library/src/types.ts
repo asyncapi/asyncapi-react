@@ -2,6 +2,7 @@ export type PrimitiveType = number | boolean | string | null;
 export type Map<K extends string, V = any> = { [key in K]: V };
 export type PropsWithDefaults<T, D> = T & D;
 export type TypeWithKey<T, V> = { key: T; content: V };
+export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
 export type AsyncApiVersion = string;
 export type BaseTopic = string;
