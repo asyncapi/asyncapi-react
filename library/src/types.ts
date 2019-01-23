@@ -1,14 +1,14 @@
 export type PrimitiveType = number | boolean | string | null;
-export type Map<K extends string, V = any> = { [key in K]: V }
+export type Map<K extends string, V = any> = { [key in K]: V };
 export type PropsWithDefaults<T, D> = T & D;
-export type TypeWithKey<T, V> = { key: T, content: V };
+export type TypeWithKey<T, V> = { key: T; content: V };
 
 export type AsyncApiVersion = string;
 export type BaseTopic = string;
 export type DescriptionHTML = string | React.ReactNode;
 export type ExternalSpecification = Map<string, any>;
 export type ReferenceString = string;
-export type OneOf = "oneOf";
+export type OneOf = 'oneOf';
 
 export type AsyncApi = {
   asyncapi: AsyncApiVersion;
@@ -102,6 +102,10 @@ export type Message = {
   externalDocs?: ExternalDocs;
 };
 
+export type Error = {
+  message?: String;
+};
+
 export type Tag = {
   name: string;
   description?: string;
@@ -152,7 +156,7 @@ export type Schema = {
   format?: string;
   items?: Schema;
   minItems?: number;
-  additionalItems?: { anyOf: Schema[]; } | Schema;
+  additionalItems?: { anyOf: Schema[] } | Schema;
   enum?: PrimitiveType[] | Schema[];
   default?: PrimitiveType | Object;
   additionalProperties?: Map<string, Schema>;
@@ -161,7 +165,7 @@ export type Schema = {
   properties?: Map<string, Schema>;
   defaultProperties?: string[];
   patternProperties?: Map<string, Schema>;
-  typeof?: "function";
+  typeof?: 'function';
   nullable?: boolean;
   discriminator?: string;
   readOnly?: boolean;

@@ -9,5 +9,6 @@ export const defaultConfig: string = `{
     "messages": true,
     "schemas": true
   },
+  "showErrors": true,
   "disableDefaultTheme": false
 }`;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, SecurityScheme } from '../../types';
+import { AsyncApi, Error, SecurityScheme } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { parser, beautifier } from '../../helpers';
@@ -11,6 +11,7 @@ import Security from '../Security/Security';
 import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';
+import ErrorComponent from '../Error/Error';
 
 import { AsyncApiWrapper } from './styled';
 
@@ -23,6 +24,7 @@ export interface AsyncApiProps {
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
+  error: Error;
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -37,19 +39,28 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   state = {
     validatedSchema: defaultAsyncApi,
     validated: false,
+    error: undefined,
   };
 
   async componentWillMount() {
-    let validatedSchema = await this.validateSchema(this.props.schema);
-    validatedSchema = this.beautifySchema(validatedSchema);
-    this.setState({ validatedSchema, validated: true });
+    try {
+      let validatedSchema = await this.validateSchema(this.props.schema);
+      validatedSchema = this.beautifySchema(validatedSchema);
+      this.setState({ validatedSchema, validated: true });
+    } catch (e) {
+      this.setState({ error: e });
+    }
   }
 
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
     if (nextProps.schema !== this.props.schema) {
-      let validatedSchema = await this.validateSchema(nextProps.schema);
-      validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema });
+      try {
+        let validatedSchema = await this.validateSchema(nextProps.schema);
+        validatedSchema = this.beautifySchema(validatedSchema);
+        this.setState({ validatedSchema, error: undefined });
+      } catch (e) {
+        this.setState({ error: e });
+      }
     }
   }
 
@@ -73,8 +84,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   render() {
     const { theme, config } = this.props;
-    const { validatedSchema, validated } = this.state;
-
+    const { validatedSchema, validated, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,
@@ -83,6 +93,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
         ...(config && config.show ? config.show : {}),
       },
     };
+
     const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
       ? (theme as ThemeInterface)
       : { ...defaultTheme, ...theme };
@@ -92,6 +103,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>
+          {this.showComponent(
+            concatenatedConfig.showErrors && Boolean(error),
+            <ErrorComponent error={error} />,
+          )}
           {this.showComponent(
             concatenatedConfig.show.info && Boolean(validatedSchema.info),
             <InfoComponent
