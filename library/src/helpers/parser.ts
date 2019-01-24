@@ -64,8 +64,9 @@ class Parser {
   private async validate(json: JSON, schema: string): Promise<JSON> {
     return new Promise<JSON>((resolve, reject) => {
       this.validator.validate(json, schema, err => {
-        if (Array.isArray(err) && err.length === 1)
+        if (Array.isArray(err) && err.length === 1) {
           return reject(err[0].message || err[0]);
+        }
         if (err) return reject(err);
         return resolve(json);
       });

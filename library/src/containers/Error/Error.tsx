@@ -8,7 +8,6 @@ import {
 } from './styled';
 
 import { Error as ErrorType } from '../../types';
-// import { H1 } from '../../components';
 
 interface Props {
   error?: ErrorType;
