@@ -103,10 +103,6 @@ export type Message = {
   externalDocs?: ExternalDocs;
 };
 
-export type Error = {
-  message?: String;
-};
-
 export type Tag = {
   name: string;
   description?: string;

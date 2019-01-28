@@ -1,33 +1,41 @@
 import React, { Component } from 'react';
 import {
-  Error,
+  ErrorWrapper,
   ErrorHeader,
   ErrorContent,
   ErrorCode,
   ErrorPre,
 } from './styled';
 
-import { Error as ErrorType } from '../../types';
-
 interface Props {
-  error?: ErrorType;
+  error?: Error | Error[];
 }
 
 class ErrorComponent extends Component<Props> {
+  private renderErrors(error: Error | Error[]): React.ReactNode {
+    if (Array.isArray(error)) {
+      return error.map((singleError: Error, index: number) => (
+        <ErrorCode key={index}>
+          {(singleError && singleError.message) || singleError}
+        </ErrorCode>
+      ));
+    }
+
+    return <ErrorCode>{(error && error.message) || error}</ErrorCode>;
+  }
+
   render() {
     const { error } = this.props;
 
     if (!error) return null;
 
     return (
-      <Error>
+      <ErrorWrapper>
         <ErrorHeader>There are errors in your document:</ErrorHeader>
         <ErrorContent>
-          <ErrorPre>
-            <ErrorCode>{(error && error.message) || error}</ErrorCode>
-          </ErrorPre>
+          <ErrorPre>{this.renderErrors(error)}</ErrorPre>
         </ErrorContent>
-      </Error>
+      </ErrorWrapper>
     );
   }
 }

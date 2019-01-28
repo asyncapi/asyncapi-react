@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, Error, SecurityScheme } from '../../types';
+import { AsyncApi, SecurityScheme } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { parser, beautifier } from '../../helpers';
@@ -24,7 +24,7 @@ export interface AsyncApiProps {
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
-  error: Error | undefined;
+  error?: Error | Error[];
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -42,25 +42,23 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     error: undefined,
   };
 
-  async componentWillMount() {
+  private async prepareSchema(schema: string | Object) {
     try {
-      let validatedSchema = await this.validateSchema(this.props.schema);
+      let validatedSchema = await this.validateSchema(schema);
       validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema, validated: true });
+      this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
       this.setState({ error: e });
     }
   }
 
+  async componentWillMount() {
+    this.prepareSchema(this.props.schema);
+  }
+
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
     if (nextProps.schema !== this.props.schema) {
-      try {
-        let validatedSchema = await this.validateSchema(nextProps.schema);
-        validatedSchema = this.beautifySchema(validatedSchema);
-        this.setState({ validatedSchema, error: undefined });
-      } catch (e) {
-        this.setState({ error: e });
-      }
+      this.prepareSchema(nextProps.schema);
     }
   }
 

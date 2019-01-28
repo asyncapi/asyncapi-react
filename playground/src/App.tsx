@@ -79,15 +79,15 @@ class Playground extends Component<{}, State> {
   render() {
     const {
       schema,
-      theme,
-      config,
+      theme = stringify<ThemeInterface>(defaultTheme),
+      config = defaultConfig,
       schemaFromEditor,
       schemaFromExternalResource,
       themeFromEditor,
       configFromEditor,
     } = this.state;
 
-    const parsedTheme = theme ? parse<ThemeInterface>(theme) : defaultTheme;
+    const parsedTheme = parse<ThemeInterface>(theme);
     const parsedConfig = config
       ? parse<ConfigInterface>(config)
       : parse<ConfigInterface>(defaultConfig);
