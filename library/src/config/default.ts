@@ -11,5 +11,6 @@ export const defaultConfig: ConfigInterface = {
     messages: true,
     schemas: true,
   },
+  showErrors: false,
   disableDefaultTheme: false,
-}
+};

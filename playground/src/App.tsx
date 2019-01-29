@@ -19,7 +19,8 @@ import {
 
 import {
   defaultSchema,
-  defaultKymaTheme,
+  defaultTheme,
+  sampleTheme,
   defaultConfig,
   parse,
   stringify,
@@ -38,11 +39,11 @@ interface State {
 class Playground extends Component<{}, State> {
   state = {
     schema: defaultSchema,
-    theme: stringify<ThemeInterface>(defaultKymaTheme),
+    theme: stringify<ThemeInterface>(sampleTheme),
     config: defaultConfig,
     schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
-    themeFromEditor: stringify<ThemeInterface>(defaultKymaTheme),
+    themeFromEditor: stringify<ThemeInterface>(sampleTheme),
     configFromEditor: defaultConfig,
   };
 
@@ -78,8 +79,8 @@ class Playground extends Component<{}, State> {
   render() {
     const {
       schema,
-      theme,
-      config,
+      theme = stringify<ThemeInterface>(defaultTheme),
+      config = defaultConfig,
       schemaFromEditor,
       schemaFromExternalResource,
       themeFromEditor,
@@ -87,7 +88,9 @@ class Playground extends Component<{}, State> {
     } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
-    const parsedConfig = parse<ConfigInterface>(config);
+    const parsedConfig = config
+      ? parse<ConfigInterface>(config)
+      : parse<ConfigInterface>(defaultConfig);
 
     return (
       <PlaygroundWrapper>
