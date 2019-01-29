@@ -27,11 +27,7 @@ class Parser {
     try {
       return JSON.parse(content);
     } catch (e) {
-      try {
-        return require('js-yaml').safeLoad(content);
-      } catch (er) {
-        throw new Error(er.message || er);
-      }
+      return require('js-yaml').safeLoad(content);
     }
   }
 
