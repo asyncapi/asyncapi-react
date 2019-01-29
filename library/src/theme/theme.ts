@@ -87,4 +87,9 @@ export interface ThemeInterface {
   schemaExample?: styledCss;
   security?: styledCss;
   securityHeader?: styledCss;
+  errorWrapper?: styledCss;
+  errorHeader?: styledCss;
+  errorContent?: styledCss;
+  errorCode?: styledCss;
+  errorPre?: styledCss;
 }

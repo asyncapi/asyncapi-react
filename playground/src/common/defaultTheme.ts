@@ -604,6 +604,44 @@ export const defaultTheme: ThemeInterface = {
       margin: 0 0 24px 0;
     }
   `,
+  errorWrapper: css`
+    background-color: #ffffff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 12px 20px 0 rgba(0, 0, 0, 0.1);
+    border-left: 6px solid #f44336;
+    border-radius: 4px;
+    color: #32363a;
+    font-family: 72;
+    font-size: 13px;
+  `,
+  errorHeader: css`
+    padding: 12px 20px;
+    box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
+    font-weight: bold;
+    position: relative;
+    :after {
+      content: '\uE0B1';
+      color: #f44336;
+      position: absolute;
+      display: block;
+      top: 12px;
+      right: 14px;
+      box-sizing: border-box;
+      font-family: SAP-Icons;
+    }
+  `,
+  errorContent: css`
+    padding: 12px 20px;
+    font-weight: normal;
+  `,
+  errorCode: css`
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: monospace;
+    display: block;
+  `,
+  errorPre: css`
+    margin: 0;
+  `,
 };
 
 export const oldTheme: ThemeInterface = {
@@ -918,5 +956,43 @@ export const oldTheme: ThemeInterface = {
   security: css``,
   securityHeader: css`
     font-size: 20px;
+  `,
+  errorWrapper: css`
+    background-color: #ffffff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 12px 20px 0 rgba(0, 0, 0, 0.1);
+    border-left: 6px solid #f44336;
+    border-radius: 4px;
+    color: #32363a;
+    font-family: 72;
+    font-size: 13px;
+  `,
+  errorHeader: css`
+    padding: 12px 20px;
+    box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
+    font-weight: bold;
+    position: relative;
+    :after {
+      content: '\uE0B1';
+      color: #f44336;
+      position: absolute;
+      display: block;
+      top: 12px;
+      right: 14px;
+      box-sizing: border-box;
+      font-family: SAP-Icons;
+    }
+  `,
+  errorContent: css`
+    padding: 12px 20px;
+    font-weight: normal;
+  `,
+  errorCode: css`
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: monospace;
+    display: block;
+  `,
+  errorPre: css`
+    margin: 0;
   `,
 };
