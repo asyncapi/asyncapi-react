@@ -19,7 +19,7 @@ interface ThemeInterface {
 }
 ```
 
-For more details, check [this](../library/src/theme/theme.ts#L5) file.
+For more details, check [this](../../library/src/theme/theme.ts) file.
 
 > **NOTE:** The `InterpolationValue` type is taken from the [`styled-components`](https://github.com/styled-components/styled-components) library.
 
@@ -29,7 +29,7 @@ For more details, check [this](../library/src/theme/theme.ts#L5) file.
 
 > **NOTE:** You can also configure the component not to support the default styles. For more information, see [this](./config-modification.md#definition) document.
 
-For example, if you want to change styles for an element displaying generated examples of schemas, messages, and topics, you should create an appropriate object which has the following [structure](../library/src/components/Code.tsx#L14):
+For example, if you want to change styles for an element displaying generated examples of schemas, messages, and topics, you should create an appropriate object which has the following [structure](../../library/src/components/Code.tsx#L14):
 
 
 ``` tsx

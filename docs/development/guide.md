@@ -41,7 +41,7 @@ Use the following tools to develop the AsyncApi React component:
 
 ## Install dependencies
 
-To install all dependencies for the [Playground](./playground) application and prepare a symlink for the [`library`](./library) package, run these commands:
+To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run these commands:
 
 ``` sh
 $ npm install
@@ -65,7 +65,7 @@ You can access the live development server at [localhost:3000](http://localhost:
 
 ## Tests
 
-To launch tests for the [`playground`](./playground) and [`library`](./library) packages, run this command:
+To launch tests for the [`playground`](../../playground) and [`library`](../../library) packages, run this command:
 
 ``` sh
 $ npm test
