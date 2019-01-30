@@ -11,6 +11,7 @@ import Security from '../Security/Security';
 import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';
+import ErrorComponent from '../Error/Error';
 
 import { AsyncApiWrapper } from './styled';
 
@@ -23,6 +24,7 @@ export interface AsyncApiProps {
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
+  error?: Error | Error[];
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -37,19 +39,26 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   state = {
     validatedSchema: defaultAsyncApi,
     validated: false,
+    error: undefined,
   };
 
+  private async prepareSchema(schema: string | Object) {
+    try {
+      let validatedSchema = await this.validateSchema(schema);
+      validatedSchema = this.beautifySchema(validatedSchema);
+      this.setState({ validatedSchema, validated: true, error: undefined });
+    } catch (e) {
+      this.setState({ error: e });
+    }
+  }
+
   async componentWillMount() {
-    let validatedSchema = await this.validateSchema(this.props.schema);
-    validatedSchema = this.beautifySchema(validatedSchema);
-    this.setState({ validatedSchema, validated: true });
+    this.prepareSchema(this.props.schema);
   }
 
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
     if (nextProps.schema !== this.props.schema) {
-      let validatedSchema = await this.validateSchema(nextProps.schema);
-      validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema });
+      this.prepareSchema(nextProps.schema);
     }
   }
 
@@ -73,8 +82,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   render() {
     const { theme, config } = this.props;
-    const { validatedSchema, validated } = this.state;
-
+    const { validatedSchema, validated, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,
@@ -83,6 +91,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
         ...(config && config.show ? config.show : {}),
       },
     };
+
     const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
       ? (theme as ThemeInterface)
       : { ...defaultTheme, ...theme };
@@ -92,6 +101,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>
+          {this.showComponent(
+            concatenatedConfig.showErrors && Boolean(error),
+            <ErrorComponent error={error} />,
+          )}
           {this.showComponent(
             concatenatedConfig.show.info && Boolean(validatedSchema.info),
             <InfoComponent

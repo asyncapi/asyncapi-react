@@ -1,6 +1,7 @@
 export interface ConfigInterface {
-  show: ShowConfig,
-  disableDefaultTheme: boolean,
+  show: ShowConfig;
+  disableDefaultTheme: boolean;
+  showErrors: boolean;
 }
 
 interface ShowConfig {
@@ -13,4 +14,3 @@ interface ShowConfig {
   messages: boolean;
   schemas: boolean;
 }
-  

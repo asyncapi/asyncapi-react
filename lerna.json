@@ -7,12 +7,16 @@
     }
   },
   "changelog": {
+    "repo": "asyncapi/asyncapi-react",
     "labels": {
       "breaking": ":boom: Breaking Changes",
       "enhancement": ":rocket: Enhancements",
-      "bug": ":bug: Bug Fixes",
-      "documentation": ":memo: Documentation"
-    }
+      "bug": ":bug: Fixed",
+      "area/library": ":zap: Library",
+      "area/playground": ":video_game: Playground app",
+      "area/documentation": ":memo: Documentation"
+    },
+    "cacheDir": ".changelog"
   },
   "lerna": "2.11.0"
 }

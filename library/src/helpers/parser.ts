@@ -29,21 +29,21 @@ class Parser {
     } catch (e) {
       return require('js-yaml').safeLoad(content);
     }
-  };
-    
+  }
+
   private async dereference(json: JSON): Promise<any> {
     return RefParser.dereference(json, {
       dereference: {
-        circular: 'ignore'
-      }
+        circular: 'ignore',
+      },
     });
   }
-      
+
   private async bundle(json: JSON): Promise<any> {
     return RefParser.bundle(json, {
       dereference: {
-        circular: 'ignore'
-      }
+        circular: 'ignore',
+      },
     });
   }
 
@@ -59,7 +59,7 @@ class Parser {
 
   private async validate(json: JSON, schema: string): Promise<JSON> {
     return new Promise<JSON>((resolve, reject) => {
-      this.validator.validate(json, schema, (err) => {
+      this.validator.validate(json, schema, err => {
         if (err) return reject(err);
         return resolve(json);
       });

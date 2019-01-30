@@ -56,6 +56,56 @@ If you create a feature request, use the dedicated **Feature request** issue tem
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
 
+## Releasing
+
+Follow these steps to create a changelog for the new release.
+
+1. Generate the changelog using the [`lerna-changelog`](https://github.com/lerna/lerna-changelog) tool. Run the following command to generate the changelog content for PRs merged after creating the last Git tag:
+
+    ```
+    npm run changelog
+    ```
+
+    You can also generate the changelog content corresponding to PRs merged in-between particular Git tags:
+
+    ```
+    npm run changelog -- --from=v0.1.1 --to=v0.1.2
+    ```
+
+    The `lerna-changelog` tool detects changes based on PR labels and maps them to sections as per the configuration in the `package.json` file.
+
+    ```
+      "changelog": {
+        "labels": {
+          "breaking": ":boom: Breaking Changes",
+          "enhancement": ":rocket: Enhancements",
+          "bug": ":bug: Fixed",
+          "area/library": ":zap: Library",
+          "area/playground": ":video_game: Playground app",
+          "area/documentation": ":memo: Documentation"
+        }
+        ...
+      }
+    ```
+
+2. The generated code should look as follows:
+```
+## Unreleased (2018-12-13)
+
+#### :bug: Fixed
+* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
+
+#### :zap: Library
+* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
+
+#### Committers: 1
+- Paweł Kosiec ([@pkosiec](https://github.com/pkosiec))
+```
+
+3. Go to GitHub to [create a new release](https://github.com/asyncapi/asyncapi-react/releases) and paste the generated code as a description. Do not include the **Committers** section.
+
+Make sure you change `## Unreleased ({date})` or `## {tag} ({date})` to `## Released ({date})`. 
+
 ## Credits
 
 <p align="center">

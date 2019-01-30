@@ -1,11 +1,11 @@
 {
   "name": "playground",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Playground app for AsyncApi React Component",
   "homepage": "https://www.asyncapi.com/asyncapi-react",
   "dependencies": {
-    "@kyma-project/asyncapi-react": "0.1.0",
+    "@kyma-project/asyncapi-react": "0.2.0",
     "codemirror": "^5.41.0",
     "re-resizable": "^4.10.0",
     "react": "^16.6.3",
