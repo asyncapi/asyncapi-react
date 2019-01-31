@@ -3,6 +3,10 @@ export interface FetchingSchemaInterface {
   requestOptions?: RequestInit;
 }
 
+export function isFetchingSchemaInterface(schema: any) {
+  return (<FetchingSchemaInterface>schema).url !== undefined;
+}
+
 const defaultRequestOptions: RequestInit = {
   method: 'GET',
 };

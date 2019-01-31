@@ -8,8 +8,8 @@ import {
   parser,
   beautifier,
   FetchingSchemaInterface,
+  isFetchingSchemaInterface,
   fetchSchema,
-  stringify,
 } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
@@ -22,8 +22,7 @@ import ErrorComponent from '../Error/Error';
 import { AsyncApiWrapper } from './styled';
 
 export interface AsyncApiProps {
-  schema?: string | Object;
-  urlSchema?: FetchingSchemaInterface;
+  schema: string | Object | FetchingSchemaInterface;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
 }
@@ -49,6 +48,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     error: undefined,
   };
 
+  async componentWillMount() {
+    this.updateSchema(this.props.schema);
+  }
+
+  async componentWillReceiveProps(nextProps: AsyncApiProps) {
+    const { schema } = nextProps;
+
+    if (schema !== this.props.schema) {
+      this.updateSchema(schema);
+    }
+  }
+
+  private async updateSchema(
+    schema: string | Object | FetchingSchemaInterface,
+  ) {
+    if (isFetchingSchemaInterface(schema)) {
+      schema = await fetchSchema(schema as FetchingSchemaInterface);
+    }
+    this.prepareSchema(schema);
+  }
+
   private async prepareSchema(schema: string | Object) {
     try {
       let validatedSchema = await this.validateSchema(schema);
@@ -56,32 +76,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
       this.setState({ error: e });
-    }
-  }
-
-  async componentWillMount() {
-    const { schema, urlSchema } = this.props;
-
-    if (schema) {
-      await this.prepareSchema(schema);
-    } else if (urlSchema) {
-      await this.prepareSchema(await fetchSchema(urlSchema));
-    }
-  }
-
-  async componentWillReceiveProps(nextProps: AsyncApiProps) {
-    const { schema, urlSchema } = nextProps;
-
-    if (schema && schema !== this.props.schema) {
-      await this.prepareSchema(schema);
-    } else if (urlSchema) {
-      const stringifiedUrlSchema = stringify(urlSchema);
-      if (
-        stringifiedUrlSchema &&
-        stringifiedUrlSchema !== stringify(this.props.urlSchema)
-      ) {
-        await this.prepareSchema(await fetchSchema(urlSchema));
-      }
     }
   }
 
@@ -120,8 +114,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       : { ...defaultTheme, ...theme };
 
     if (!(validatedSchema && validated)) return null;
-
-    console.log(validatedSchema);
 
     return (
       <ThemeProvider theme={concatenatedTheme}>
