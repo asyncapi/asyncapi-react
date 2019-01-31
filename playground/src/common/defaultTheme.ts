@@ -606,11 +606,10 @@ export const defaultTheme: ThemeInterface = {
   `,
   errorWrapper: css`
     background-color: #ffffff;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 12px 20px 0 rgba(0, 0, 0, 0.1);
     border-left: 6px solid #f44336;
     border-radius: 4px;
     color: #32363a;
-    font-family: 72;
+    font-family: '72';
     font-size: 13px;
   `,
   errorHeader: css`
@@ -963,7 +962,7 @@ export const oldTheme: ThemeInterface = {
     border-left: 6px solid #f44336;
     border-radius: 4px;
     color: #32363a;
-    font-family: 72;
+    font-family: '72';
     font-size: 13px;
   `,
   errorHeader: css`
