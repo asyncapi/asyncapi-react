@@ -28,9 +28,13 @@ Check out this simple sandbox application that uses the asyncapi-react component
 
 The list of props for the AsyncApi React component includes:
 
-   - **schema: string | AsyncApiInterface**
+   - **schema?: string | AsyncApiInterface**
 
-     The `schema` property is required and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+     The `schema` property is optional and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+
+   - **urlSchema?: FetchingSchemaInterface**
+
+     The `urlSchema` property is optional and contains url (required field) and requestOptions (optional field) for fetching schema from external resource.
 
    - **theme?: Partial<ThemeInterface\>**
 
@@ -44,6 +48,8 @@ The list of props for the AsyncApi React component includes:
      This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
      > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
+
+   > **NOTE:** You must pass `schema` or `urlSchema` to component for correct work of component.
 
 ## Development
 
