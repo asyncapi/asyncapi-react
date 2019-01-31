@@ -4,7 +4,13 @@ import { ThemeProvider } from 'styled-components';
 import { AsyncApi, SecurityScheme } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { parser, beautifier } from '../../helpers';
+import {
+  parser,
+  beautifier,
+  FetchingSchemaInterface,
+  fetchSchema,
+  stringify,
+} from '../../helpers';
 
 import InfoComponent from '../Info/Info';
 import Security from '../Security/Security';
@@ -16,7 +22,8 @@ import ErrorComponent from '../Error/Error';
 import { AsyncApiWrapper } from './styled';
 
 export interface AsyncApiProps {
-  schema: string | Object;
+  schema?: string | Object;
+  urlSchema?: FetchingSchemaInterface;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
 }
@@ -53,12 +60,28 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   }
 
   async componentWillMount() {
-    this.prepareSchema(this.props.schema);
+    const { schema, urlSchema } = this.props;
+
+    if (schema) {
+      await this.prepareSchema(schema);
+    } else if (urlSchema) {
+      await this.prepareSchema(await fetchSchema(urlSchema));
+    }
   }
 
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
-    if (nextProps.schema !== this.props.schema) {
-      this.prepareSchema(nextProps.schema);
+    const { schema, urlSchema } = nextProps;
+
+    if (schema && schema !== this.props.schema) {
+      await this.prepareSchema(schema);
+    } else if (urlSchema) {
+      const stringifiedUrlSchema = stringify(urlSchema);
+      if (
+        stringifiedUrlSchema &&
+        stringifiedUrlSchema !== stringify(this.props.urlSchema)
+      ) {
+        await this.prepareSchema(await fetchSchema(urlSchema));
+      }
     }
   }
 
@@ -97,6 +120,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       : { ...defaultTheme, ...theme };
 
     if (!(validatedSchema && validated)) return null;
+
+    console.log(validatedSchema);
 
     return (
       <ThemeProvider theme={concatenatedTheme}>

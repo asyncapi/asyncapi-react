@@ -17,15 +17,3 @@ export const stringify = <T extends {}>(content?: T): string => {
     return '';
   }
 };
-
-export const fetchSchema = async (link: string): Promise<any> => {
-  const requestOptions = {
-    method: 'GET',
-  };
-
-  return fetch(link, requestOptions).then(handleResponse);
-};
-
-function handleResponse(response: any) {
-  return response.text().then((data: string) => data);
-}
