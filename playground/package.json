@@ -5,6 +5,10 @@
   "description": "Playground app for AsyncApi React Component",
   "homepage": "https://www.asyncapi.com/asyncapi-react",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.14",
+    "@fortawesome/free-brands-svg-icons": "^5.7.1",
+    "@fortawesome/free-solid-svg-icons": "^5.7.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "@kyma-project/asyncapi-react": "0.2.0",
     "codemirror": "^5.41.0",
     "re-resizable": "^4.10.0",
