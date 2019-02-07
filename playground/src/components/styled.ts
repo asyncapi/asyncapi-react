@@ -1,21 +1,24 @@
 import styled from 'styled-components';
 
-export const PlaygroundWrapper = styled.div`
-`;
+export const PlaygroundWrapper = styled.div``;
 
 export const NavigationWrapper = styled.nav`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   width: 100%;
   line-height: 48px;
-  padding: 0 16px;
+  padding: 0;
   background-color: #263238;
   border-bottom: #607d8b 2px solid;
 `;
 
-export const NavigationHeader =  styled.header`
+export const NavigationHeader = styled.header`
+  margin-left: 16px;
   display: inline-block;
 `;
 
-export const NavigationHeaderH1 =  styled.h1`
+export const NavigationHeaderH1 = styled.h1`
   color: #fff;
   margin: 0;
   font-weight: bold;
@@ -23,42 +26,62 @@ export const NavigationHeaderH1 =  styled.h1`
   line-height: 48px;
 `;
 
-export const NavigationHeaderIcon =  styled.img`
+export const NavigationHeaderIcon = styled.img`
   height: 34px;
   max-height: 34px;
   margin-top: 7px;
   float: left;
 `;
 
-export const NavigationHeaderAsyncApiText =  styled.span`
+export const NavigationHeaderAsyncApiText = styled.span`
   font-weight: bold;
   margin-left: 12px;
 `;
 
-export const NavigationHeaderEditorText =  styled.span`
+export const NavigationHeaderEditorText = styled.span`
   font-style: italic;
   margin-left: 6px;
 `;
 
 export const NavigationLinks = styled.ul`
-  margin: 0 0 0 auto;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  margin: 0 16px 0 0;
   padding: 0;
   position: relative;
-  display: inline-block;
+  list-style-type: none;
 `;
 
 export const NavigationLinksItem = styled.li`
+  display: inline-block;
+  margin-left: 12px;
+
+  > a {
+    font-family: 'SAP-Icons';
+    font-weight: 700;
+    color: #f77669;
+    transition: 0.2s color linear;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: #c3e88d;
+    }
+  }
 `;
+
+export const NavigationLink = styled.a``;
 
 export const ContentWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 50px);
   min-height: calc(100vh - 50px);
-  display: flex; 
+  display: flex;
   justify-content: space-between;
 `;
 
-export const CodeEditorsWrapper =  styled.div`
+export const CodeEditorsWrapper = styled.div`
   width: 40%;
   height: calc(100vh - 50px);
   min-height: calc(100vh - 50px);
@@ -110,7 +133,7 @@ export const TabsAdditionalHeaderContent = styled.li`
 `;
 
 export const RefreshIcon = styled.div`
-  font-family: "SAP-Icons";
+  font-family: 'SAP-Icons';
   font-weight: 700;
   color: #f77669;
   transition: 0.2s color linear;
