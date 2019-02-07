@@ -2,36 +2,38 @@
 
 ## Overview
 
-Read the document to find out how to release new version of library and/or playground, and create release notes.
+Read the document to find out how to:
+- Release a new version of the library or playground
+- Create release notes
 
-## Publish library
+## Publish the library
 
-To publish new version of library, please run following commands:
+To publish a new version of the library, run the following commands:
 
 ```
 $ npm version {version_kind} -m "Upgrade to %s for reasons: {reason}"
 ```
-where:
-- `{version_kind}` - version of release (available [https://docs.npmjs.com/cli/version.html#synopsis](versions)).
-- `{reason}` - short description of incoming changes in release.
+The script uses these parameters:
+- `{version_kind}` is a version of the release. See the available [versions](https://docs.npmjs.com/cli/version.html#synopsis).
+- `{reason}` is a short description of the incoming changes in the release.
 
-**NOTE:** If you have problem with publishing, please contact with administration of repository.
+**NOTE:** If you have any publishing issues, contact the repository administrators.
 
-## Publish playground app
+## Publish the playground application
 
-[Playground application](https://www.asyncapi.com/asyncapi-react/) is hosted on [GitHub Pages](https://pages.github.com/). To publish new version of playground application run following command at [playground](../../playground) directory:
+The [playground application](https://www.asyncapi.com/asyncapi-react/) is hosted on [GitHub Pages](https://pages.github.com/). To publish its new version, run the following command in the [playground](../../playground) directory:
 
 ```
 $ npm run publish:upstream
 ```
 
-You can also publish playground app at yours github profile by command:
+You can also publish the playground app with your GitHub profile using this command:
 
 ```
 $ npm run publish:origin
 ```
 
-**NOTE:** If you have problem with publishing, please contact with administration of repository.
+**NOTE:** If you have any publishing issues, contact the repository administrators.
 
 ## Release notes
 
@@ -65,7 +67,7 @@ Follow these steps to create a changelog for the new release.
       }
     ```
 
-    **NOTE:** `{pre-version}` and `{post-version}` have a following form: `MAJOR.MINOR.PATCH`.
+    **NOTE:** Both `{pre-version}` and `{post-version}` follow the `MAJOR.MINOR.PATCH` format.
 
 2. The generated code should look as follows:
 ```

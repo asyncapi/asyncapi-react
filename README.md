@@ -51,7 +51,7 @@ For information on how to set up a development environment, write and run tests,
 
 ## Releasing
 
-For information on how to release new version of library and/or playground app, and create changelog, please read [Releasing](./docs/development/releasing.md) document.
+For information on how to release a new version of the library or the playground application, or details on creating a changelog file, read the [Releasing](./docs/development/releasing.md) document.
 
 ## Contribution
 

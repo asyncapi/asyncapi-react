@@ -38,7 +38,7 @@ interface ConfigInterface {
 
   - **showErrors?: boolean**
 
-    This field turns on or off displaying validation and/or parsing errors on the top of component.
+    This field turns on or off the option displaying validation or parsing errors that show at the top of the component.
     This field is set to `false` by default.
 
 ## Examples
@@ -95,7 +95,7 @@ const App = () => (
 render(<App />, document.getElementById("root"));
 ```
 
-In the above examples, after concatenation with the default configuration, the resulting configuration will look like:
+In the above examples, after concatenation with the default configuration, the resulting configuration looks as follows:
 
 ``` js
 {
