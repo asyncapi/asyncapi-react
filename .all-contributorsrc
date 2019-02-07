@@ -20,6 +20,17 @@
         "ideas",
         "maintenance"
       ]
+    },
+    {
+      "login": "derberg",
+      "name": "Lukasz Gornicki",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6995927?v=4",
+      "profile": "http://resume.github.io/?derberg",
+      "contributions": [
+        "doc",
+        "example",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7
