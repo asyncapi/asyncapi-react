@@ -28,26 +28,30 @@ Check out this simple sandbox application that uses the asyncapi-react component
 
 The list of props for the AsyncApi React component includes:
 
-   - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
+  - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
-     The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+    The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
-   - **theme?: Partial<ThemeInterface\>**
+  - **theme?: Partial<ThemeInterface\>**
 
-     The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/theme-modification.md) document.
+    The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/configuration/theme-modification.md) document.
 
-     > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
+    > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/configuration/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
 
-   - **config?: Partial<ConfigInterface\>**
+  - **config?: Partial<ConfigInterface\>**
 
-     The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/config-modification.md) document.
-     This property is concatenated with the [default configuration](./library/src/config/default.ts).
+    The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
+    This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
-     > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
+    > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
 ## Development
 
-For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./development-guide.md).
+For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./docs/development/guide.md).
+
+## Releasing
+
+For information on how to release a new version of the library or the playground application, or details on creating a changelog file, read the [Releasing](./docs/development/releasing.md) document.
 
 ## Contribution
 
@@ -55,56 +59,6 @@ If you have a feature request, add it as an issue or propose changes in a pull r
 If you create a feature request, use the dedicated **Feature request** issue template. When you create a PR, follow the contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
-
-## Releasing
-
-Follow these steps to create a changelog for the new release.
-
-1. Generate the changelog using the [`lerna-changelog`](https://github.com/lerna/lerna-changelog) tool. Run the following command to generate the changelog content for PRs merged after creating the last Git tag:
-
-    ```
-    npm run changelog
-    ```
-
-    You can also generate the changelog content corresponding to PRs merged in-between particular Git tags:
-
-    ```
-    npm run changelog -- --from=v0.1.1 --to=v0.1.2
-    ```
-
-    The `lerna-changelog` tool detects changes based on PR labels and maps them to sections as per the configuration in the `package.json` file.
-
-    ```
-      "changelog": {
-        "labels": {
-          "breaking": ":boom: Breaking Changes",
-          "enhancement": ":rocket: Enhancements",
-          "bug": ":bug: Fixed",
-          "area/library": ":zap: Library",
-          "area/playground": ":video_game: Playground app",
-          "area/documentation": ":memo: Documentation"
-        }
-        ...
-      }
-    ```
-
-2. The generated code should look as follows:
-```
-## Unreleased (2018-12-13)
-
-#### :bug: Fixed
-* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
-
-#### :zap: Library
-* [#24](https://github.com/asyncapi/asyncapi-react/pull/24) Downgrade required peer dependency version ([@pkosiec](https://github.com/pkosiec))
-
-#### Committers: 1
-- Paweł Kosiec ([@pkosiec](https://github.com/pkosiec))
-```
-
-3. Go to GitHub to [create a new release](https://github.com/asyncapi/asyncapi-react/releases) and paste the generated code as a description. Do not include the **Committers** section.
-
-Make sure you change `## Unreleased ({date})` or `## {tag} ({date})` to `## Released ({date})`. 
 
 ## Credits
 
