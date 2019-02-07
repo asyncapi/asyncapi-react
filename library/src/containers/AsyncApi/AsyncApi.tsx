@@ -4,7 +4,13 @@ import { ThemeProvider } from 'styled-components';
 import { AsyncApi, SecurityScheme } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { parser, beautifier } from '../../helpers';
+import {
+  parser,
+  beautifier,
+  FetchingSchemaInterface,
+  isFetchingSchemaInterface,
+  fetchSchema,
+} from '../../helpers';
 
 import InfoComponent from '../Info/Info';
 import Security from '../Security/Security';
@@ -16,7 +22,7 @@ import ErrorComponent from '../Error/Error';
 import { AsyncApiWrapper } from './styled';
 
 export interface AsyncApiProps {
-  schema: string | Object;
+  schema: string | Object | FetchingSchemaInterface;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
 }
@@ -42,6 +48,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     error: undefined,
   };
 
+  async componentWillMount() {
+    this.updateSchema(this.props.schema);
+  }
+
+  async componentWillReceiveProps(nextProps: AsyncApiProps) {
+    const { schema } = nextProps;
+
+    if (schema !== this.props.schema) {
+      this.updateSchema(schema);
+    }
+  }
+
+  private async updateSchema(
+    schema: string | Object | FetchingSchemaInterface,
+  ) {
+    if (isFetchingSchemaInterface(schema)) {
+      schema = await fetchSchema(schema as FetchingSchemaInterface);
+    }
+    this.prepareSchema(schema);
+  }
+
   private async prepareSchema(schema: string | Object) {
     try {
       let validatedSchema = await this.validateSchema(schema);
@@ -49,16 +76,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
       this.setState({ error: e });
-    }
-  }
-
-  async componentWillMount() {
-    this.prepareSchema(this.props.schema);
-  }
-
-  async componentWillReceiveProps(nextProps: AsyncApiProps) {
-    if (nextProps.schema !== this.props.schema) {
-      this.prepareSchema(nextProps.schema);
     }
   }
 
