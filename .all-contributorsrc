@@ -20,6 +20,17 @@
         "ideas",
         "maintenance"
       ]
+    },
+    {
+      "login": "kazydek",
+      "name": "Karolina Zydek",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/40655785?v=4",
+      "profile": "https://github.com/kazydek",
+      "contributions": [
+        "doc",
+        "review",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7
