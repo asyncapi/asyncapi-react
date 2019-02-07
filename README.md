@@ -30,7 +30,7 @@ The list of props for the AsyncApi React component includes:
 
    - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
-     The `schema` property is required and contains AsyncAPI specification. It should be one of the `string` or [`AsyncApiInterface`](./library/src/types.ts#L13) type or [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object for fetching schema from external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+     The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
    - **theme?: Partial<ThemeInterface\>**
 
