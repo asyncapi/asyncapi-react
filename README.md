@@ -1,4 +1,5 @@
 # AsyncAPI React Component
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
 
@@ -67,3 +68,15 @@ If you have a bug to report, reproduce it in an online code editor. For example,
   <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
  </a>
 </p>
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/20404945?v=4" width="100px;" alt="Maciej Urbańczyk"/><br /><sub><b>Maciej Urbańczyk</b></sub>](https://github.com/magicmatatjahu)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Code") [📖](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Documentation") [🤔](#ideas-magicmatatjahu "Ideas, Planning, & Feedback") [🚧](#maintenance-magicmatatjahu "Maintenance") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
