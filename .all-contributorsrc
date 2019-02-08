@@ -31,6 +31,16 @@
         "review",
         "maintenance"
       ]
+    },
+    {
+      "login": "akucharska",
+      "name": "Agata",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20790348?v=4",
+      "profile": "https://github.com/akucharska",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7
