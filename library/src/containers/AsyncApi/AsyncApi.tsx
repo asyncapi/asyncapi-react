@@ -5,7 +5,7 @@ import { AsyncApi, SecurityScheme } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import {
-  parser,
+  // parser,
   beautifier,
   FetchingSchemaInterface,
   isFetchingSchemaInterface,
@@ -20,6 +20,11 @@ import SchemasComponent from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
 
 import { AsyncApiWrapper } from './styled';
+
+// import parser from 'asyncapi-parser';
+const index = require('asyncapi-parser');
+
+console.log(index.parser);
 
 export interface AsyncApiProps {
   schema: string | Object | FetchingSchemaInterface;
@@ -37,7 +42,7 @@ const defaultAsyncApi: AsyncApi = {
   asyncapi: '',
   info: {
     title: 'AsyncApi example title',
-    version: '1.0.0',
+    version: '2.0.0',
   },
 };
 
@@ -71,19 +76,23 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   private async prepareSchema(schema: string | Object) {
     try {
+      // console.log(schema);
       let validatedSchema = await this.validateSchema(schema);
+      // console.log(validatedSchema);
       validatedSchema = this.beautifySchema(validatedSchema);
       this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
+      console.log(e);
       this.setState({ error: e });
     }
   }
 
   private async validateSchema(schema: string | any) {
-    if (typeof schema !== 'string') {
-      schema = JSON.stringify(schema);
-    }
-    return await parser.parse(schema);
+    // if (typeof schema !== 'string') {
+    //   schema = JSON.stringify(schema);
+    // }
+    return await index.parse(schema);
+    // return await parser.parse(schema);
   }
 
   private beautifySchema(schema: AsyncApi): AsyncApi {
