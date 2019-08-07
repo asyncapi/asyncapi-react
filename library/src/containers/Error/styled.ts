@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-
+import { styled } from '../../theme';
 export const ErrorWrapper = styled.div`
   ${props => props.theme.errorWrapper}
 `;

@@ -1,6 +1,4 @@
-import { FlattenInterpolation } from 'styled-components';
-
-type styledCss = string | FlattenInterpolation<string>;
+type styledCss = any;
 
 export interface ThemeInterface {
   asyncApiWrapper?: styledCss;
