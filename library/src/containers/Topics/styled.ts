@@ -22,7 +22,7 @@ export const TopicHeaderBadge = styled.div`
 
 export const TopicMessage = styled.section`
   ${props => props.theme.topicMessage}
-`
+`;
 
 export const TopicHeaderMessage = styled.header`
   ${props => props.theme.topicHeaderMessage}

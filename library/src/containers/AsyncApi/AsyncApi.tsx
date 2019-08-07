@@ -60,6 +60,78 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     }
   }
 
+  render() {
+    const { theme, config } = this.props;
+    const { validatedSchema, validated, error } = this.state;
+    const concatenatedConfig: ConfigInterface = {
+      ...defaultConfig,
+      ...config,
+      show: {
+        ...defaultConfig.show,
+        ...(config && config.show ? config.show : {}),
+      },
+    };
+
+    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
+      ? (theme as ThemeInterface)
+      : { ...defaultTheme, ...theme };
+
+    if (!(validatedSchema && validated)) {
+      return null;
+    }
+
+    return (
+      <ThemeProvider theme={concatenatedTheme}>
+        <AsyncApiWrapper>
+          {concatenatedConfig.showErrors && Boolean(error) && (
+            <ErrorComponent error={error} />
+          )}
+          {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
+            <InfoComponent
+              info={validatedSchema.info}
+              servers={validatedSchema.servers}
+              showServers={
+                concatenatedConfig.show.servers &&
+                Boolean(validatedSchema.servers)
+              }
+            />
+          )}
+          {concatenatedConfig.show.security &&
+            Boolean(validatedSchema.security) && (
+              <Security
+                security={validatedSchema.security as SecurityScheme[]}
+              />
+            )}
+          {concatenatedConfig.show.topics &&
+            Boolean(validatedSchema.topics) && (
+              <TopicsComponent
+                baseTopic={validatedSchema.baseTopic}
+                topics={validatedSchema.topics}
+              />
+            )}
+          {validatedSchema.components && (
+            <>
+              {concatenatedConfig.show.messages &&
+                Boolean(validatedSchema.components) &&
+                Boolean(validatedSchema.components.messages) && (
+                  <MessagesComponent
+                    messages={validatedSchema.components!.messages}
+                  />
+                )}
+              {concatenatedConfig.show.schemas &&
+                Boolean(validatedSchema.components) &&
+                Boolean(validatedSchema.components.schemas) && (
+                  <SchemasComponent
+                    schemas={validatedSchema.components.schemas}
+                  />
+                )}
+            </>
+          )}
+        </AsyncApiWrapper>
+      </ThemeProvider>
+    );
+  }
+
   private async updateSchema(
     schema: string | Object | FetchingSchemaInterface,
   ) {
@@ -88,88 +160,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   private beautifySchema(schema: AsyncApi): AsyncApi {
     return beautifier.beautify(schema);
-  }
-
-  private showComponent(
-    showComponent: boolean,
-    component: React.ReactNode,
-  ): React.ReactNode | null {
-    return showComponent ? component : null;
-  }
-
-  render() {
-    const { theme, config } = this.props;
-    const { validatedSchema, validated, error } = this.state;
-    const concatenatedConfig: ConfigInterface = {
-      ...defaultConfig,
-      ...config,
-      show: {
-        ...defaultConfig.show,
-        ...(config && config.show ? config.show : {}),
-      },
-    };
-
-    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
-      ? (theme as ThemeInterface)
-      : { ...defaultTheme, ...theme };
-
-    if (!(validatedSchema && validated)) return null;
-
-    return (
-      <ThemeProvider theme={concatenatedTheme}>
-        <AsyncApiWrapper>
-          {this.showComponent(
-            concatenatedConfig.showErrors && Boolean(error),
-            <ErrorComponent error={error} />,
-          )}
-          {this.showComponent(
-            concatenatedConfig.show.info && Boolean(validatedSchema.info),
-            <InfoComponent
-              info={validatedSchema.info}
-              servers={validatedSchema.servers}
-              showServers={
-                concatenatedConfig.show.servers &&
-                Boolean(validatedSchema.servers)
-              }
-            />,
-          )}
-          {this.showComponent(
-            concatenatedConfig.show.security &&
-              Boolean(validatedSchema.security),
-            <Security
-              security={validatedSchema.security as SecurityScheme[]}
-            />,
-          )}
-          {this.showComponent(
-            concatenatedConfig.show.topics && Boolean(validatedSchema.topics),
-            <TopicsComponent
-              baseTopic={validatedSchema.baseTopic}
-              topics={validatedSchema.topics}
-            />,
-          )}
-          {validatedSchema.components && (
-            <>
-              {this.showComponent(
-                concatenatedConfig.show.messages &&
-                  Boolean(validatedSchema.components) &&
-                  Boolean(validatedSchema.components!.messages),
-                <MessagesComponent
-                  messages={validatedSchema.components!.messages}
-                />,
-              )}
-              {this.showComponent(
-                concatenatedConfig.show.schemas &&
-                  Boolean(validatedSchema.components) &&
-                  Boolean(validatedSchema.components!.schemas),
-                <SchemasComponent
-                  schemas={validatedSchema.components!.schemas}
-                />,
-              )}
-            </>
-          )}
-        </AsyncApiWrapper>
-      </ThemeProvider>
-    );
   }
 }
 

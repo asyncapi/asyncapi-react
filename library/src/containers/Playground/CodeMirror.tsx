@@ -13,7 +13,7 @@
 
 // interface State {
 //   schema: string,
-// }  
+// }
 
 // class CodeMirrorComponent extends Component<Props, State> {
 //   state = {

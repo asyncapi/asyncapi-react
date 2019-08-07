@@ -1,7 +1,10 @@
 export type PrimitiveType = number | boolean | string | null;
 export type Map<K extends string, V = any> = { [key in K]: V };
 export type PropsWithDefaults<T, D> = T & D;
-export type TypeWithKey<T, V> = { key: T; content: V };
+export interface TypeWithKey<T, V> {
+  key: T;
+  content: V;
+}
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
 export type AsyncApiVersion = string;
@@ -11,7 +14,7 @@ export type ExternalSpecification = Map<string, any>;
 export type ReferenceString = string;
 export type OneOf = 'oneOf';
 
-export type AsyncApi = {
+export interface AsyncApi {
   asyncapi: AsyncApiVersion;
   info: Info;
   baseTopic?: BaseTopic;
@@ -23,77 +26,77 @@ export type AsyncApi = {
   security?: Array<SecurityRequirement | SecurityScheme>;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
-};
+}
 
-export type Info = {
+export interface Info {
   title: string;
   version: string;
   description?: DescriptionHTML;
   termsOfService?: string;
   contact?: Contact;
   license?: License;
-};
+}
 
-export type Contact = {
+export interface Contact {
   name?: string;
   url?: string;
   email?: string;
-};
+}
 
-export type License = {
+export interface License {
   name: string;
   url?: string;
-};
+}
 
-export type Server = {
+export interface Server {
   url: string;
   scheme: string;
   schemeVersion?: string;
   description?: DescriptionHTML;
   variables?: Map<string, ServerVariable>;
-};
+}
 
-export type ServerVariable = {
+export interface ServerVariable {
   enum?: string[];
   default?: string;
   description?: DescriptionHTML;
-};
+}
 
-export type Topic = {
+export interface Topic {
   $ref?: ReferenceString;
   deprecated?: boolean;
   subscribe?: Message | Map<OneOf, Message[]>;
   publish?: Message | Map<OneOf, Message[]>;
   parameters?: Parameter[];
-};
+}
 
-export type Parameter = {
+export interface Parameter {
   name?: string;
   description?: DescriptionHTML;
   schema: Schema;
-};
+}
 
-export type Reference = {
+export interface Reference {
   $ref: ReferenceString;
-};
+}
 
-export type Stream = {
+export interface Stream {
   framing: StreamFraming;
   read?: Message[];
   write?: Message[];
-};
+}
 
-export type StreamFraming = {
+export interface StreamFraming {
   type: string;
   delimiter?: string;
-};
+}
 
-export type Event = {
+export interface Event {
   receive?: Message[];
   send?: Message[];
-};
+}
 
-export type Message = {
+export interface Message {
   deprecated?: boolean;
   headers?: Schema;
   payload?: Schema;
@@ -101,46 +104,46 @@ export type Message = {
   description?: DescriptionHTML;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
-};
+}
 
-export type Tag = {
+export interface Tag {
   name: string;
   description?: string;
   externalDocs?: ExternalDocs;
-};
+}
 
-export type ExternalDocs = {
+export interface ExternalDocs {
   url: string;
   description?: string;
-};
+}
 
-export type Components = {
+export interface Components {
   schemas?: Map<string, Schema>;
   messages?: Map<string, Message>;
   securitySchemes?: Map<string, SecurityScheme>;
   parameters?: Map<string, Parameter>;
-};
+}
 
-export type SecurityScheme = {
+export interface SecurityScheme {
   type: string;
   description?: DescriptionHTML;
   name: string;
   in: string;
   scheme: string;
   bearerFormat?: string;
-};
+}
 
-export type XML = {
+export interface XML {
   name?: string;
   namespace?: string;
   prefix?: string;
   attribute?: boolean;
   wrapped?: boolean;
-};
+}
 
-export type SecurityRequirement = {};
+export interface SecurityRequirement {}
 
-export type Schema = {
+export interface Schema {
   $schema?: string;
   $id?: string;
   description?: DescriptionHTML;
@@ -171,4 +174,4 @@ export type Schema = {
   externalDocs?: ExternalDocs;
   example?: any;
   deprecated?: boolean;
-};
+}

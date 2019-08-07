@@ -4,6 +4,7 @@ import RefParser from 'json-schema-ref-parser';
 import { AsyncApi } from '../types';
 
 class Parser {
+  private validator = new ZSchema({});
   async parse(content: string): Promise<AsyncApi> {
     const parsedContent = this.parseContent(content);
 
@@ -20,8 +21,6 @@ class Parser {
 
     return JSON.parse(JSON.stringify(parsed)) as AsyncApi;
   }
-
-  private validator = new ZSchema({});
 
   private parseContent(content: string) {
     try {
@@ -60,7 +59,9 @@ class Parser {
   private async validate(json: JSON, schema: string): Promise<JSON> {
     return new Promise<JSON>((resolve, reject) => {
       this.validator.validate(json, schema, err => {
-        if (err) return reject(err);
+        if (err) {
+          return reject(err);
+        }
         return resolve(json);
       });
     });

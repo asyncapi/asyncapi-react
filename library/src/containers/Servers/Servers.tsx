@@ -4,14 +4,16 @@ import { Server } from '../../types';
 
 import ServerComponent from './Server';
 
-import { H2, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
+import {
+  H2,
+  TableColumnName,
+  TableWrapper,
+  TableHeader,
+  TableBodyWrapper,
+} from '../../components';
 import { Servers, ServersHeader } from './styled';
 
-const serversColumnsName: TableColumnName[] = [
-  "URL",
-  "Scheme",
-  "Description",
-]
+const serversColumnsName: TableColumnName[] = ['URL', 'Scheme', 'Description'];
 
 interface Props {
   servers?: Server[];
@@ -21,7 +23,9 @@ class ServersComponent extends Component<Props> {
   render() {
     const { servers } = this.props;
 
-    if (!servers) return null;
+    if (!servers) {
+      return null;
+    }
 
     return (
       <Servers>
@@ -31,7 +35,12 @@ class ServersComponent extends Component<Props> {
         <TableWrapper>
           <TableHeader columns={serversColumnsName} />
           <TableBodyWrapper>
-            {servers.map(server => <ServerComponent key={`${server.url}${server.scheme}`} server={server} />)}
+            {servers.map(server => (
+              <ServerComponent
+                key={`${server.url}${server.scheme}`}
+                server={server}
+              />
+            ))}
           </TableBodyWrapper>
         </TableWrapper>
       </Servers>

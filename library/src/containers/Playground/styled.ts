@@ -4,7 +4,7 @@ export const PlaygroundWrapper = styled.div`
   width: 100%;
   height: 100vh;
   min-height: 100vh;
-  display: flex; 
+  display: flex;
   justify-content: space-between;
 `;
 

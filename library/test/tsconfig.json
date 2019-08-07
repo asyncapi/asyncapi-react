@@ -4,11 +4,7 @@
     "rootDir": "src",
     "module": "esnext",
     "target": "es5",
-    "lib": [
-      "es5",
-      "es6",
-      "dom"
-    ],
+    "lib": ["es5", "es6", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "preserve",
@@ -25,7 +21,7 @@
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
     "noEmit": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"]
 }

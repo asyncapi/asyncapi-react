@@ -73,17 +73,17 @@ class Beautifier {
   private beautifySchema(schema: Schema): Schema {
     if (schema.properties) {
       const properties = schema.properties;
-      let newProperties: Map<string, Schema> = properties;
+      const newProperties: Map<string, Schema> = properties;
 
       for (const key in properties) {
-        let prop = properties[key];
+        const prop = properties[key];
 
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
         if (prop.properties) {
           const propProperties = prop.properties;
-          let newPropProperties: Map<string, Schema> = {};
+          const newPropProperties: Map<string, Schema> = {};
 
           for (const propKey in propProperties) {
             newPropProperties[propKey] = this.beautifySchema(
@@ -101,17 +101,17 @@ class Beautifier {
 
     if (schema.additionalProperties) {
       const additionalProperties = schema.additionalProperties;
-      let newAdditionalProperties: Map<string, Schema> = additionalProperties;
+      const newAdditionalProperties: Map<string, Schema> = additionalProperties;
 
       for (const key in additionalProperties) {
-        let prop = additionalProperties[key];
+        const prop = additionalProperties[key];
 
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
         if (prop.additionalProperties) {
           const propAdditionalProperties = prop.additionalProperties;
-          let newPropAdditionalProperties: Map<string, Schema> = {};
+          const newPropAdditionalProperties: Map<string, Schema> = {};
 
           for (const propKey in propAdditionalProperties) {
             newPropAdditionalProperties[propKey] = this.beautifySchema(
@@ -130,7 +130,7 @@ class Beautifier {
   }
 
   private beautifySchemas(schemas: Map<string, Schema>): Map<string, Schema> {
-    let newSchemas: Map<string, Schema> = {};
+    const newSchemas: Map<string, Schema> = {};
     for (const key in schemas) {
       newSchemas[key] = this.resolveAllOf(schemas[key]);
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
@@ -162,7 +162,7 @@ class Beautifier {
   private beautifyMessages(
     messages: Map<string, Message>,
   ): Map<string, Message> {
-    let newMessages: Map<string, Message> = {};
+    const newMessages: Map<string, Message> = {};
     for (const key in messages) {
       newMessages[key] = this.beautifyMessage(messages[key]);
     }
@@ -175,7 +175,7 @@ class Beautifier {
 
       if (server.variables) {
         const variables = server.variables;
-        let newVariables: Map<string, ServerVariable> = variables;
+        const newVariables: Map<string, ServerVariable> = variables;
 
         for (const key in variables) {
           newVariables[key].description = this.renderMd(variables[key]
@@ -189,9 +189,9 @@ class Beautifier {
   }
 
   private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
-    let newTopics: Map<string, Topic> = {};
+    const newTopics: Map<string, Topic> = {};
     for (const key in topics) {
-      let topic = topics[key];
+      const topic = topics[key];
 
       if (topic.publish) {
         if ((topic.publish as any).oneOf) {
@@ -229,7 +229,7 @@ class Beautifier {
 
   private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
     const { components, security } = asyncApi;
-    let securityRequirements: SecurityRequirement[] = [];
+    const securityRequirements: SecurityRequirement[] = [];
 
     security!.forEach(sec => {
       const name = Object.keys(sec)[0];
@@ -243,7 +243,7 @@ class Beautifier {
         );
       }
 
-      let securityComponent = components.securitySchemes[name];
+      const securityComponent = components.securitySchemes[name];
       securityComponent.description = this.renderMd(
         securityComponent.description as string,
       );

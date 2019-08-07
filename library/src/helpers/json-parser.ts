@@ -1,5 +1,7 @@
 export const parse = <T extends {}>(str?: string): T => {
-  if (!str) return {} as T;
+  if (!str) {
+    return {} as T;
+  }
 
   try {
     return JSON.parse(str) as T;
@@ -9,7 +11,9 @@ export const parse = <T extends {}>(str?: string): T => {
 };
 
 export const stringify = <T extends {}>(content?: T): string => {
-  if (!content) return '';
+  if (!content) {
+    return '';
+  }
 
   try {
     return JSON.stringify(content);

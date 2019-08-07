@@ -5,7 +5,7 @@ import { Message } from '../../types';
 import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
 import SchemaComponent from '../Schemas/Schema';
 
-import { 
+import {
   Message as MessageWrapper,
   MessageHeader,
   MessageHeaders,
@@ -14,12 +14,12 @@ import {
   MessagePayloadHeader,
   MessageTags,
   MessageTagsHeader,
- } from './styled';
+} from './styled';
 
 interface Props {
-  title?: string,
-  message: Message,
-  hideTags?: boolean,
+  title?: string;
+  message: Message;
+  hideTags?: boolean;
 }
 
 class MessageComponent extends Component<Props> {
@@ -29,39 +29,60 @@ class MessageComponent extends Component<Props> {
     const headers = message.headers;
     const payload = message.payload;
 
-    if (!message) return null;
+    if (!message) {
+      return null;
+    }
 
     return (
       <MessageWrapper>
         <MessageHeader>
-          {title && <H3>{title} {message.deprecated && <DeprecatedBadge>Deprecated</DeprecatedBadge>}</H3>}
+          {title && (
+            <H3>
+              {title}{' '}
+              {message.deprecated && (
+                <DeprecatedBadge>Deprecated</DeprecatedBadge>
+              )}
+            </H3>
+          )}
           {message.summary && <Markdown>{message.summary}</Markdown>}
           {message.description && <Markdown>{message.description}</Markdown>}
         </MessageHeader>
-        {headers &&
+        {headers && (
           <MessageHeaders>
             <MessageHeadersHeader>
               <H4>Headers</H4>
             </MessageHeadersHeader>
-            <SchemaComponent name="Message Headers" schema={headers} exampleTitle="Example of headers" hideTitle={true} />
+            <SchemaComponent
+              name="Message Headers"
+              schema={headers}
+              exampleTitle="Example of headers"
+              hideTitle={true}
+            />
           </MessageHeaders>
-        }
-        {payload &&
+        )}
+        {payload && (
           <MessagePayload>
             <MessagePayloadHeader>
               <H4>Payload</H4>
             </MessagePayloadHeader>
-            <SchemaComponent name="Message Payload" schema={payload} exampleTitle="Example of payload" hideTitle={true} />
+            <SchemaComponent
+              name="Message Payload"
+              schema={payload}
+              exampleTitle="Example of payload"
+              hideTitle={true}
+            />
           </MessagePayload>
-        }
-        {!hideTags && message.tags &&
+        )}
+        {!hideTags && message.tags && (
           <MessageTags>
             <MessageTagsHeader>
               <H4>Tags</H4>
             </MessageTagsHeader>
-            {message.tags.map(tag => <Tag key={tag.name}>{tag.name}</Tag>)}
+            {message.tags.map(tag => (
+              <Tag key={tag.name}>{tag.name}</Tag>
+            ))}
           </MessageTags>
-        }
+        )}
       </MessageWrapper>
     );
   }

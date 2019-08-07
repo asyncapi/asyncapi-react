@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 
 import { SecurityScheme } from '../../types';
 
-import { H2, Markdown, TableColumnName, TableAccessor, TableWrapper, TableHeader, TableBodyWrapper, TableRow } from '../../components';
-import { Security as SecurityWrapper, SecurityHeader } from './styled'
+import {
+  H2,
+  Markdown,
+  TableColumnName,
+  TableAccessor,
+  TableWrapper,
+  TableHeader,
+  TableBodyWrapper,
+  TableRow,
+} from '../../components';
+import { Security as SecurityWrapper, SecurityHeader } from './styled';
 
 const securityColumnsName: TableColumnName[] = [
-  "Type",
-  "In",
-  "Name",
-  "Scheme",
-  "Format",
-  "Description",
-]
+  'Type',
+  'In',
+  'Name',
+  'Scheme',
+  'Format',
+  'Description',
+];
 
 const securityAccesors: TableAccessor[] = [
   (el: SecurityScheme) => el.type,
@@ -20,8 +29,9 @@ const securityAccesors: TableAccessor[] = [
   (el: SecurityScheme) => el.name,
   (el: SecurityScheme) => el.scheme,
   (el: SecurityScheme) => el.bearerFormat,
-  (el: SecurityScheme) => el.description && <Markdown>{el.description}</Markdown>,
-]
+  (el: SecurityScheme) =>
+    el.description && <Markdown>{el.description}</Markdown>,
+];
 
 interface Props {
   security?: SecurityScheme[];
@@ -31,7 +41,9 @@ class SecurityComponent extends Component<Props> {
   render() {
     const { security } = this.props;
 
-    if (!security) return null;
+    if (!security) {
+      return null;
+    }
 
     return (
       <SecurityWrapper>
@@ -41,7 +53,13 @@ class SecurityComponent extends Component<Props> {
         <TableWrapper>
           <TableHeader columns={securityColumnsName} />
           <TableBodyWrapper>
-            {security.map(sec => <TableRow key={`${sec.type}${sec.name}`} accessors={securityAccesors} element={sec} />)}
+            {security.map(sec => (
+              <TableRow
+                key={`${sec.type}${sec.name}`}
+                accessors={securityAccesors}
+                element={sec}
+              />
+            ))}
           </TableBodyWrapper>
         </TableWrapper>
       </SecurityWrapper>

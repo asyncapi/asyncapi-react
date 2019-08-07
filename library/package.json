@@ -41,6 +41,8 @@
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",
+    "lint-check": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose && prettier --config ./.prettierrc --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-fix": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose --fix; prettier --config ./.prettierrc --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "test": "jest -i",
     "test:unit": "jest unit",
     "test:integration": "jest integration",
@@ -85,6 +87,10 @@
     "react-scripts": "2.1.0",
     "styled-components": "^4.0.3",
     "ts-jest": "^23.10.4",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0",
+    "tslint-react-hooks": "^2.2.1",
     "typescript": "3.1.4"
   },
   "peerDependencies": {
