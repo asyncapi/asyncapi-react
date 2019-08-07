@@ -20,7 +20,6 @@ interface Props {
   servers?: Server[];
   showServers: boolean;
 }
-
 class InfoComponent extends Component<Props> {
   render() {
     const {
@@ -36,7 +35,6 @@ class InfoComponent extends Component<Props> {
             {title} {version}
           </H1>
           {description && <Markdown>{description}</Markdown>}
-
           {termsOfService && (
             <HeaderParagraph>
               <H2>Terms of service</H2>

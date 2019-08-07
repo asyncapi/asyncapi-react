@@ -56,6 +56,7 @@ class ServerComponent extends Component<Props, State> {
           content: server.variables![key],
         }))
       : [];
+
     const serverWithVariables: ServerWithVariables = {
       server,
       serverVariables: vars.length > 0,
