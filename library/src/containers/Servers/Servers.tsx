@@ -27,8 +27,6 @@ class ServersComponent extends Component<Props> {
       return null;
     }
 
-    console.log(servers);
-
     return (
       <Servers>
         <ServersHeader>

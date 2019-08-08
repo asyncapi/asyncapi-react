@@ -1,10 +1,11 @@
-import ZSchema from 'z-schema';
 import RefParser from 'json-schema-ref-parser';
+import Ajv from 'ajv';
 
 import { AsyncApi } from '../types';
 
 class Parser {
-  private validator = new ZSchema({});
+  private validator = this.createValidator();
+
   async parse(content: string): Promise<AsyncApi> {
     const parsedContent = this.parseContent(content);
 
@@ -17,9 +18,15 @@ class Parser {
     this.removeNullOrUndefined(bundledJSON);
     const asyncApiSchema = require('asyncapi')[bundledJSON.asyncapi];
 
-    const parsed = await this.validate(bundledJSON, asyncApiSchema);
+    let parsed;
+    try {
+      await this.validate(bundledJSON, asyncApiSchema);
+      parsed = bundledJSON;
+    } catch (err) {
+      console.error(err);
+    }
 
-    return JSON.parse(JSON.stringify(parsed)) as AsyncApi;
+    return JSON.parse(JSON.stringify(parsed || {})) as AsyncApi;
   }
 
   private parseContent(content: string) {
@@ -56,15 +63,15 @@ class Parser {
     }
   }
 
-  private async validate(json: JSON, schema: string): Promise<JSON> {
-    return new Promise<JSON>((resolve, reject) => {
-      this.validator.validate(json, schema, err => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(json);
-      });
-    });
+  private createValidator() {
+    const validator = new Ajv({ schemaId: 'auto' });
+    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+    return validator;
+  }
+  private validate(json: JSON, schema: {}): void {
+    const validate = this.validator.compile(schema);
+    const valid = validate(json);
+    if (!valid) console.error(validate.errors);
   }
 }
 
