@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Info, Server } from '../../types';
+import { Info, Servers } from '../../types';
 
 import ServersComponent from '../Servers/Servers';
 import ContactComponent from './Contact';
@@ -17,7 +17,7 @@ import { Info as InfoWrapper, InfoHeader } from './styled';
 
 interface Props {
   info: Info;
-  servers?: Server[];
+  servers?: Servers;
   showServers: boolean;
 }
 class InfoComponent extends Component<Props> {
