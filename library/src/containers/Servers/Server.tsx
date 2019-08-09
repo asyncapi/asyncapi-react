@@ -26,7 +26,7 @@ const serverAccessors: TableAccessor[] = [
       {el.server.url}
     </>
   ),
-  (el: ServerWithVariables) => el.server.scheme,
+  (el: ServerWithVariables) => el.server.protocol,
   (el: ServerWithVariables) =>
     el.server.description && <Markdown>{el.server.description}</Markdown>,
 ];

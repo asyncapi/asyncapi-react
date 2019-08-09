@@ -16,9 +16,13 @@ class Parser {
     const dereferencedJSON = await this.dereference(parsedContent);
     const bundledJSON = await this.bundle(dereferencedJSON);
     this.removeNullOrUndefined(bundledJSON);
-    const asyncApiSchema = require('asyncapi')[bundledJSON.asyncapi];
+
+    const asyncApiSchema = require('asyncapi')[
+      bundledJSON.asyncapi === '2.0.0-rc1' ? 'unstable' : bundledJSON.asyncapi
+    ];
 
     let parsed;
+    console.log(asyncApiSchema);
     try {
       await this.validate(bundledJSON, asyncApiSchema);
       parsed = bundledJSON;
@@ -68,6 +72,7 @@ class Parser {
     validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
     return validator;
   }
+
   private validate(json: JSON, schema: {}): void {
     const validate = this.validator.compile(schema);
     const valid = validate(json);

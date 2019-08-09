@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Server } from '../../types';
+import { Servers } from '../../types';
 
 import ServerComponent from './Server';
 
@@ -11,41 +11,40 @@ import {
   TableHeader,
   TableBodyWrapper,
 } from '../../components';
-import { Servers, ServersHeader } from './styled';
+import { Servers as StyledServers, ServersHeader } from './styled';
 
 const serversColumnsName: TableColumnName[] = ['URL', 'Scheme', 'Description'];
 
 interface Props {
-  servers?: Server[];
+  servers?: Servers;
 }
 
-class ServersComponent extends Component<Props> {
-  render() {
-    const { servers } = this.props;
+const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
+  if (!servers) {
+    return null;
+  }
 
-    if (!servers) {
-      return null;
-    }
-
-    return (
-      <Servers>
-        <ServersHeader>
-          <H2>Connection details</H2>
-        </ServersHeader>
-        <TableWrapper>
-          <TableHeader columns={serversColumnsName} />
-          <TableBodyWrapper>
-            {servers.map(server => (
+  return (
+    <StyledServers>
+      <ServersHeader>
+        <H2>Connection details</H2>
+      </ServersHeader>
+      <TableWrapper>
+        <TableHeader columns={serversColumnsName} />
+        <TableBodyWrapper>
+          {Object.keys(servers).map(stage => {
+            const server = servers[stage];
+            return (
               <ServerComponent
-                key={`${server.url}${server.scheme}`}
+                key={`${server.url}${server.protocol}`}
                 server={server}
               />
-            ))}
-          </TableBodyWrapper>
-        </TableWrapper>
-      </Servers>
-    );
-  }
-}
+            );
+          })}
+        </TableBodyWrapper>
+      </TableWrapper>
+    </StyledServers>
+  );
+};
 
 export default ServersComponent;

@@ -3,7 +3,7 @@ import {
   AsyncApi,
   Schema,
   Message,
-  Server,
+  Servers,
   Topic,
   ServerVariable,
   SecurityRequirement,
@@ -169,8 +169,11 @@ class Beautifier {
     return newMessages;
   }
 
-  private beautifyServers(servers: Server[]): Server[] {
-    return servers.map(server => {
+  private beautifyServers(servers: Servers): Servers {
+    const copiedServers = JSON.parse(JSON.stringify(servers)) as Servers;
+
+    Object.keys(copiedServers).forEach(stage => {
+      const server = copiedServers[stage];
       server.description = this.renderMd(server.description as string);
 
       if (server.variables) {
@@ -183,9 +186,9 @@ class Beautifier {
         }
         server.variables = newVariables;
       }
-
-      return server;
     });
+
+    return copiedServers;
   }
 
   private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
