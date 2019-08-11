@@ -29,6 +29,7 @@ export interface AsyncApiProps {
   schema: string | Object | FetchingSchemaInterface;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
+  onError(value: Object): void;
 }
 
 interface AsyncApiState {
@@ -75,13 +76,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   private async prepareSchema(schema: string | Object) {
     try {
-      // console.log(schema);
       let validatedSchema = await this.validateSchema(schema);
-      // console.log(validatedSchema);
+      // console.log('validatedSchema', validatedSchema);
       validatedSchema = this.beautifySchema(validatedSchema);
       this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
-      console.log(e);
+      // console.log('E:', e);
+      this.props.onError(e);
       this.setState({ error: e });
     }
   }

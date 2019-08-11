@@ -22,17 +22,17 @@ class Beautifier {
     if (asyncApi.security) {
       asyncApi.security = this.beautifySecurity(asyncApi);
     }
-    if (asyncApi.topics) {
-      asyncApi.topics = this.beautifyTopics(asyncApi.topics);
-    }
+    // if (asyncApi.topics) {
+    //   asyncApi.topics = this.beautifyTopics(asyncApi.topics);
+    // }
     if (asyncApi.channels) {
       asyncApi.channels = this.beautifyChannels(asyncApi.channels);
     }
     if (asyncApi.components) {
       if (asyncApi.components.messages) {
-        asyncApi.components.messages = this.beautifyMessages(
-          asyncApi.components.messages,
-        );
+        // asyncApi.components.messages = this.beautifyMessages(
+        //   asyncApi.components.messages,
+        // );
       }
       if (asyncApi.components.schemas) {
         asyncApi.components.schemas = this.beautifySchemas(
@@ -151,11 +151,12 @@ class Beautifier {
     }
 
     console.log('summary:', message.summary);
-    if (message.summary) {
-      message.summary = this.renderMd(message.summary as string);
+    // if (message.summary) {
+    //   message.summary = this.renderMd(message.summary as string);
+    // }
+    if (message.description) {
+      message.description = this.renderMd(message.description as string);
     }
-    
-    // message.description = this.renderMd(message.description as string);
 
     if (message.headers) {
       message.headers = this.beautifySchema(message.headers);
@@ -167,15 +168,16 @@ class Beautifier {
     return message;
   }
 
-  private beautifyMessages(
-    messages: Map<string, Message>,
-  ): Map<string, Message> {
-    let newMessages: Map<string, Message> = {};
-    for (const key in messages) {
-      newMessages[key] = this.beautifyMessage(messages[key]);
-    }
-    return newMessages;
-  }
+  // private beautifyMessages(
+  //   messages: Map<string, Message>,
+  // ): Map<string, Message> {
+  //   console.log('messages', messages);
+  //   let newMessages: Map<string, Message> = {};
+  //   for (const key in messages) {
+  //     newMessages[key] = this.beautifyMessage(messages[key]);
+  //   }
+  //   return newMessages;
+  // }
 
   private beautifyServers(servers: Server[]): Server[] {
     return servers.map(server => {
@@ -214,14 +216,16 @@ class Beautifier {
         }
       }
 
-      if (channel.subscribe) {
-        if ((channel.subscribe as any).oneOf) {
-          let messages: Message[] = (channel.subscribe as any).oneOf;
+      const subscribe: any = channel.subscribe;
+      if (subscribe) {
+        if ((subscribe as any).oneOf) {
+          let messages: Message[] = (subscribe as any).oneOf;
           messages = messages.map(message => this.beautifyMessage(message));
 
-          (channel.subscribe as any).oneOf = messages;
+          (subscribe as any).oneOf = messages;
         } else {
-          channel.subscribe = this.beautifyMessage(channel.subscribe as Message);
+          const message = subscribe.message;
+          subscribe.subscribe = this.beautifyMessage(message);
         }
       }
 
@@ -237,44 +241,44 @@ class Beautifier {
     return newChannels;
   }
 
-  private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
-    let newTopics: Map<string, Topic> = {};
-    for (const key in topics) {
-      let topic = topics[key];
+  // private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
+  //   let newTopics: Map<string, Topic> = {};
+  //   for (const key in topics) {
+  //     let topic = topics[key];
 
-      if (topic.publish) {
-        if ((topic.publish as any).oneOf) {
-          let messages: Message[] = (topic.publish as any).oneOf;
-          messages = messages.map(message => this.beautifyMessage(message));
+  //     if (topic.publish) {
+  //       if ((topic.publish as any).oneOf) {
+  //         let messages: Message[] = (topic.publish as any).oneOf;
+  //         messages = messages.map(message => this.beautifyMessage(message));
 
-          (topic.publish as any).oneOf = messages;
-        } else {
-          topic.publish = this.beautifyMessage(topic.publish as Message);
-        }
-      }
+  //         (topic.publish as any).oneOf = messages;
+  //       } else {
+  //         topic.publish = this.beautifyMessage(topic.publish as Message);
+  //       }
+  //     }
 
-      if (topic.subscribe) {
-        if ((topic.subscribe as any).oneOf) {
-          let messages: Message[] = (topic.subscribe as any).oneOf;
-          messages = messages.map(message => this.beautifyMessage(message));
+  //     if (topic.subscribe) {
+  //       if ((topic.subscribe as any).oneOf) {
+  //         let messages: Message[] = (topic.subscribe as any).oneOf;
+  //         messages = messages.map(message => this.beautifyMessage(message));
 
-          (topic.subscribe as any).oneOf = messages;
-        } else {
-          topic.subscribe = this.beautifyMessage(topic.subscribe as Message);
-        }
-      }
+  //         (topic.subscribe as any).oneOf = messages;
+  //       } else {
+  //         topic.subscribe = this.beautifyMessage(topic.subscribe as Message);
+  //       }
+  //     }
 
-      if (topic.parameters) {
-        topic.parameters = topic.parameters.map(param => {
-          param.description = this.renderMd(param.description as string);
-          return param;
-        });
-      }
+  //     if (topic.parameters) {
+  //       topic.parameters = topic.parameters.map(param => {
+  //         param.description = this.renderMd(param.description as string);
+  //         return param;
+  //       });
+  //     }
 
-      newTopics[key] = topic;
-    }
-    return newTopics;
-  }
+  //     newTopics[key] = topic;
+  //   }
+  //   return newTopics;
+  // }
 
   private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
     const { components, security } = asyncApi;
