@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Map, Topic } from '../../types';
+import { Map, Topic, Channel } from '../../types';
 
-import TopicComponent from './Topic';
+import { ChannelComponent } from './Topic';
 
 import { H2 } from '../../components';
 import { Topics, TopicsHeader } from './styled';
@@ -11,9 +11,10 @@ interface Props {
   baseTopic?: string,
   "x-topic-separator"?: string;
   topics?: Map<string, Topic>;
+  channels?: Map<string, Channel>;
 }
 
-class TopicsComponent extends Component<Props> {
+export class ChannelsComponent extends Component<Props> {
   private extractTopicName(topicName: string) {
     const separator = this.props['x-topic-separator'] || '.';
     const baseTopic = this.props.baseTopic ? this.props.baseTopic.trim() : "";
@@ -22,19 +23,44 @@ class TopicsComponent extends Component<Props> {
   }
 
   render() {
-    const { topics } = this.props;
+    const { channels } = this.props;
 
-    if (!topics) return null;
+    if (!channels) return null;
 
     return (
       <Topics>
         <TopicsHeader>
-          <H2>Topics</H2>
+          <H2>Channels</H2>
         </TopicsHeader>
-        {Object.keys(topics!).map(key => <TopicComponent key={key} title={this.extractTopicName(key)} topic={topics![key]} />)}
+        {Object.keys(channels!).map(key => <ChannelComponent key={key} title={this.extractTopicName(key)} channel={channels![key]} />)}
       </Topics>
     );
   }
 }
 
-export default TopicsComponent;
+
+// class TopicsComponent extends Component<Props> {
+//   private extractTopicName(topicName: string) {
+//     const separator = this.props['x-topic-separator'] || '.';
+//     const baseTopic = this.props.baseTopic ? this.props.baseTopic.trim() : "";
+
+//     return baseTopic.length ? `${baseTopic}${separator}${topicName}` : topicName;
+//   }
+
+//   render() {
+//     const { topics } = this.props;
+
+//     if (!topics) return null;
+
+//     return (
+//       <Topics>
+//         <TopicsHeader>
+//           <H2>Topics</H2>
+//         </TopicsHeader>
+//         {Object.keys(topics!).map(key => <TopicComponent key={key} title={this.extractTopicName(key)} topic={topics![key]} />)}
+//       </Topics>
+//     );
+//   }
+// }
+
+// export default TopicsComponent;

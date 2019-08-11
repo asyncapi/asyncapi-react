@@ -14,7 +14,8 @@ import {
 
 import InfoComponent from '../Info/Info';
 import Security from '../Security/Security';
-import TopicsComponent from '../Topics/Topics';
+import { ChannelsComponent } from '../Topics/Topics';
+
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
@@ -23,8 +24,6 @@ import { AsyncApiWrapper } from './styled';
 
 // import parser from 'asyncapi-parser';
 const index = require('asyncapi-parser');
-
-console.log(index.parser);
 
 export interface AsyncApiProps {
   schema: string | Object | FetchingSchemaInterface;
@@ -149,11 +148,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
               security={validatedSchema.security as SecurityScheme[]}
             />,
           )}
-          {this.showComponent(
+          {/* {this.showComponent(
             concatenatedConfig.show.topics && Boolean(validatedSchema.topics),
             <TopicsComponent
               baseTopic={validatedSchema.baseTopic}
               topics={validatedSchema.topics}
+            />,
+          )} */}
+          {this.showComponent(
+            concatenatedConfig.show.topics && Boolean(validatedSchema.channels),
+            <ChannelsComponent
+              baseTopic={validatedSchema.baseTopic}
+              channels={validatedSchema.channels}
             />,
           )}
           {validatedSchema.components && (

@@ -5,6 +5,7 @@ import {
   Message,
   Server,
   Topic,
+  Channel,
   ServerVariable,
   SecurityRequirement,
 } from '../types';
@@ -23,6 +24,9 @@ class Beautifier {
     }
     if (asyncApi.topics) {
       asyncApi.topics = this.beautifyTopics(asyncApi.topics);
+    }
+    if (asyncApi.channels) {
+      asyncApi.channels = this.beautifyChannels(asyncApi.channels);
     }
     if (asyncApi.components) {
       if (asyncApi.components.messages) {
@@ -146,8 +150,12 @@ class Beautifier {
       message.headers = this.resolveAllOf(message.headers);
     }
 
-    message.summary = this.renderMd(message.summary as string);
-    message.description = this.renderMd(message.description as string);
+    console.log('summary:', message.summary);
+    if (message.summary) {
+      message.summary = this.renderMd(message.summary as string);
+    }
+    
+    // message.description = this.renderMd(message.description as string);
 
     if (message.headers) {
       message.headers = this.beautifySchema(message.headers);
@@ -186,6 +194,47 @@ class Beautifier {
 
       return server;
     });
+  }
+
+  private beautifyChannels(channels: Map<string, Channel>): Map<string, Channel> {
+    let newChannels: Map<string, Channel> = {};
+    for (const key in channels) {
+      let channel = channels[key];
+
+      const publish: any = channel.publish;
+      if (publish) {
+        if ((publish as any).oneOf) {
+          let messages: Message[] = (publish as any).oneOf;
+          messages = messages.map(message => this.beautifyMessage(message));
+
+          (channel.publish as any).oneOf = messages;
+        } else {
+          const message = publish.message;
+          publish.message = this.beautifyMessage(message);
+        }
+      }
+
+      if (channel.subscribe) {
+        if ((channel.subscribe as any).oneOf) {
+          let messages: Message[] = (channel.subscribe as any).oneOf;
+          messages = messages.map(message => this.beautifyMessage(message));
+
+          (channel.subscribe as any).oneOf = messages;
+        } else {
+          channel.subscribe = this.beautifyMessage(channel.subscribe as Message);
+        }
+      }
+
+      if (channel.parameters) {
+        channel.parameters = channel.parameters.map(param => {
+          param.description = this.renderMd(param.description as string);
+          return param;
+        });
+      }
+
+      newChannels[key] = channel;
+    }
+    return newChannels;
   }
 
   private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {

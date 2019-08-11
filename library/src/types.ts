@@ -17,6 +17,7 @@ export type AsyncApi = {
   baseTopic?: BaseTopic;
   servers?: Server[];
   topics?: Map<string, Topic>;
+  channels?: Map<string, Channel>;
   stream?: Stream;
   events?: Event;
   components?: Components;
@@ -66,6 +67,23 @@ export type Topic = {
   publish?: Message | Map<OneOf, Message[]>;
   parameters?: Parameter[];
 };
+
+export type Channel = {
+  $ref?: ReferenceString;
+  subscribe?: Operation | Map<OneOf, Operation[]>;
+  publish?: Operation | Map<OneOf, Operation[]>;
+  parameters?: Parameter[];
+};
+
+export type Operation = {
+  operationId?: string;
+  summary?: DescriptionHTML;
+  description?: DescriptionHTML;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  message: Message;
+};
+
 
 export type Parameter = {
   name?: string;
