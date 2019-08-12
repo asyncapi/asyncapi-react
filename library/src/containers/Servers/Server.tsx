@@ -9,6 +9,7 @@ import { ServerExpandIcon } from './styled';
 
 interface ServerWithVariables {
   server: Server;
+  stage: string;
   serverVariables: boolean;
   openAccordion: boolean;
   toggleVariables: (event: any) => void;
@@ -26,6 +27,7 @@ const serverAccessors: TableAccessor[] = [
       {el.server.url}
     </>
   ),
+  (el: ServerWithVariables) => el.stage,
   (el: ServerWithVariables) => el.server.protocol,
   (el: ServerWithVariables) =>
     el.server.description && <Markdown>{el.server.description}</Markdown>,
@@ -33,6 +35,7 @@ const serverAccessors: TableAccessor[] = [
 
 interface Props {
   server: Server;
+  stage: string;
 }
 
 interface State {
@@ -46,7 +49,7 @@ class ServerComponent extends Component<Props, State> {
 
   render() {
     const {
-      props: { server },
+      props: { server, stage },
       state: { openAccordion },
     } = this;
 
@@ -58,6 +61,7 @@ class ServerComponent extends Component<Props, State> {
       : [];
 
     const serverWithVariables: ServerWithVariables = {
+      stage,
       server,
       serverVariables: vars.length > 0,
       openAccordion,

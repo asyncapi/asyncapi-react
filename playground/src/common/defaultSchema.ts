@@ -1,5 +1,6 @@
 export const defaultSchema = `
-asyncapi: '1.1.0'
+
+asyncapi: '2.0.0-rc1'
 info:
   title: Streetlights API
   version: '1.0.0'
@@ -17,8 +18,9 @@ info:
 baseTopic: smartylighting.streetlights.1.0
 
 servers:
-  - url: api.streetlights.smartylighting.com:{port}
-    scheme: mqtt
+  production:
+    url: api.streetlights.smartylighting.com:{port}
+    protocol: mqtt
     description: Test broker
     variables:
       port:
@@ -27,6 +29,32 @@ servers:
         enum:
           - '1883'
           - '8883'
+    security:
+      - apiKey: []
+      - supportedOauthFlows:
+        - streetlights:on
+        - streetlights:off
+        - streetlights:dim
+      - openIdConnectWellKnown: []
+  stage:
+    url: api.streetlights.smartylighting.com:{port}
+    protocol: mqtt
+    description: Test broker
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 8883.
+        default: '1883'
+        enum:
+          - '1883'
+          - '8883'
+    security:
+      - apiKey: []
+      - supportedOauthFlows:
+        - streetlights:on
+        - streetlights:off
+        - streetlights:dim
+      - openIdConnectWellKnown: []      
+
 
 security:
   - apiKey: []
@@ -109,4 +137,5 @@ components:
       type: apiKey
       in: user
       description: Provide your API key as the user and leave the password empty.
+
 `;

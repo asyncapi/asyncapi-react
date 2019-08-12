@@ -22,7 +22,7 @@ class Parser {
     ];
 
     let parsed;
-    console.log(asyncApiSchema);
+
     try {
       await this.validate(bundledJSON, asyncApiSchema);
       parsed = bundledJSON;
@@ -69,7 +69,7 @@ class Parser {
 
   private createValidator() {
     const validator = new Ajv({ schemaId: 'auto' });
-    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
+    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json')); //remind me to remove this line during review!
     return validator;
   }
 

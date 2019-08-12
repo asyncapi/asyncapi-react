@@ -13,7 +13,12 @@ import {
 } from '../../components';
 import { Servers as StyledServers, ServersHeader } from './styled';
 
-const serversColumnsName: TableColumnName[] = ['URL', 'Scheme', 'Description'];
+const serversColumnsName: TableColumnName[] = [
+  'URL',
+  'Stage',
+  'Protocol',
+  'Description',
+];
 
 interface Props {
   servers?: Servers;
@@ -36,8 +41,9 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
             const server = servers[stage];
             return (
               <ServerComponent
-                key={`${server.url}${server.protocol}`}
+                key={`${server.url}${server.protocol}${stage}`}
                 server={server}
+                stage={stage}
               />
             );
           })}

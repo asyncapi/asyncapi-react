@@ -8,6 +8,8 @@ export interface TypeWithKey<T, V> {
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
 export type AsyncApiVersion = string;
+export type UniqueID = string;
+export type DefaultContentType = string;
 export type BaseTopic = string;
 export type DescriptionHTML = string | React.ReactNode;
 export type ExternalSpecification = Map<string, any>;
@@ -16,18 +18,29 @@ export type OneOf = 'oneOf';
 
 export interface AsyncApi {
   asyncapi: AsyncApiVersion;
+  id?: UniqueID;
   info: Info;
-  baseTopic?: BaseTopic;
-  servers?: Server[];
+  servers?: Servers;
+  defaultContentType?: DefaultContentType;
+  channels?: Channels;
+  components?: Components;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  // below - deprecated
   topics?: Map<string, Topic>;
   stream?: Stream;
   events?: Event;
-  components?: Components;
   security?: Array<SecurityRequirement | SecurityScheme>;
-  tags?: Tag[];
-  externalDocs?: ExternalDocs;
+  baseTopic?: BaseTopic; //get rid of it
 }
 
+export interface Channels {
+  [key: string]: ChannelItem;
+}
+export interface ChannelItem {
+  descripiton: DescriptionHTML;
+  parameters: Parameter;
+}
 export interface Info {
   title: string;
   version: string;
@@ -48,18 +61,28 @@ export interface License {
   url?: string;
 }
 
+export interface Servers {
+  [k: string]: Server; // done
+}
+
 export interface Server {
   url: string;
-  scheme: string;
-  schemeVersion?: string;
+  protocol: string;
+  protocolVersion?: string;
   description?: DescriptionHTML;
-  variables?: Map<string, ServerVariable>;
+  variables?: ServerVariables;
+  security?: SecurityRequirement[]; //needs to be implemented
+}
+
+export interface ServerVariables {
+  [k: string]: ServerVariable;
 }
 
 export interface ServerVariable {
   enum?: string[];
   default?: string;
   description?: DescriptionHTML;
+  examples?: string[]; //needs to be implemented
 }
 
 export interface Topic {
@@ -71,9 +94,10 @@ export interface Topic {
 }
 
 export interface Parameter {
-  name?: string;
+  location?: string;
   description?: DescriptionHTML;
   schema: Schema;
+  name: string; //delet later
 }
 
 export interface Reference {
@@ -107,12 +131,14 @@ export interface Message {
 }
 
 export interface Tag {
+  // do not have to change
   name: string;
   description?: string;
   externalDocs?: ExternalDocs;
 }
 
 export interface ExternalDocs {
+  // do not have to change
   url: string;
   description?: string;
 }
@@ -141,7 +167,9 @@ export interface XML {
   wrapped?: boolean;
 }
 
-export interface SecurityRequirement {}
+export interface SecurityRequirement {
+  // [key: string]: string[]; // TODO: obsluz mnie :D
+}
 
 export interface Schema {
   $schema?: string;
