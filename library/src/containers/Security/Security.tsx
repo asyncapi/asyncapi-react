@@ -1,5 +1,3 @@
-// TODO: change its name later to Security
-
 import React, { FunctionComponent } from 'react';
 import { StageSecurity } from './StageSecurity';
 import { Servers } from '../../types';

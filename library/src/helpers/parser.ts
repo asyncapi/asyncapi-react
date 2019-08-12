@@ -23,7 +23,6 @@ class Parser {
     ];
 
     let parsed;
-    console.log(asyncApiSchema);
 
     try {
       await this.validate(bundledJSON, asyncApiSchema);

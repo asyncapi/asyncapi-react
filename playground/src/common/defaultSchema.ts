@@ -16,6 +16,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
 
+        
 servers:
   production:
     url: api.streetlights.smartylighting.com:{port}
@@ -54,83 +55,145 @@ servers:
         - streetlights:dim
       - openIdConnectWellKnown: []      
 
-topics:
-  event.{streetlightId}.lighting.measured:
+defaultContentType: application/json
+
+channels:
+  /rooms/{roomId}/{resource}:
     parameters:
-      - name: streetlightId
-        description: The ID of the streetlight.
+      roomId:
+        description: Id of the Gitter room.
         schema:
           type: string
-    publish:
-      $ref: '#/components/messages/lightMeasured'
-
-  action.{streetlightId}.turn.on:
-    subscribe:
-      $ref: '#/components/messages/turnOnOff'
-
-  action.{streetlightId}.turn.off:
-    subscribe:
-      $ref: '#/components/messages/turnOnOff'
-
-  action.{streetlightId}.dim:
-    subscribe:
-      $ref: '#/components/messages/dimLight'
-
-components:
-  messages:
-    lightMeasured:
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      payload:
-        $ref: "#/components/schemas/lightMeasuredPayload"
-    turnOnOff:
-      summary: Command a particular streetlight to turn the lights on or off.
-      payload:
-        $ref: "#/components/schemas/turnOnOffPayload"
-    dimLight:
-      summary: Command a particular streetlight to dim the lights.
-      payload:
-        $ref: "#/components/schemas/dimLightPayload"
-
-  schemas:
-    lightMeasuredPayload:
-      type: object
-      properties:
-        lumens:
-          type: integer
-          minimum: 0
-          description: Light intensity measured in lumens.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    turnOnOffPayload:
-      type: object
-      properties:
-        command:
+          examples:
+            - 53307860c3599d1de448e19d
+      resource:
+        description: The resource to consume.
+        schema:
           type: string
           enum:
-            - on
-            - off
-          description: Whether to turn on or off the light.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    dimLightPayload:
-      type: object
-      properties:
-        percentage:
-          type: integer
-          description: Percentage to which the light should be dimmed to.
-          minimum: 0
-          maximum: 100
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    sentAt:
-      type: string
-      format: date-time
-      description: Date and time when the message was sent.
+            - chatMessages
+            - events
+    subscribe:
+      protocolInfo:
+        http:
+          response:
+            headers:
+              'Transfer-Encoding': 'chunked'
+              Trailer: '\r\n'
+      message:
+        oneOf:
+          - $ref: '#/components/messages/chatMessage'
+          - $ref: '#/components/messages/heartbeat'
 
+components:
   securitySchemes:
-    apiKey:
-      type: apiKey
-      in: user
-      description: Provide your API key as the user and leave the password empty.
+    httpBearerToken:
+      type: http
+      scheme: bearer
+  messages:
+    chatMessage:
+      schemaFormat: 'application/schema+yaml;version=draft-07'
+      summary: >-
+        A message represents an individual chat message sent to a room.
+        They are a sub-resource of a room.
+      payload:
+        type: object
+        properties:
+          id:
+            type: string
+            description: ID of the message.
+          text:
+            type: string
+            description: Original message in plain-text/markdown.
+          html:
+            type: string
+            description: HTML formatted message.
+          sent:
+            type: string
+            format: date-time
+            description: ISO formatted date of the message.
+          fromUser:
+            type: object
+            description: User that sent the message.
+            properties:
+              id:
+                type: string
+                description: Gitter User ID.
+              username:
+                type: string
+                description: Gitter/GitHub username.
+              displayName:
+                type: string
+                description: Gitter/GitHub user real name.
+              url:
+                type: string
+                description: Path to the user on Gitter.
+              avatarUrl:
+                type: string
+                format: uri
+                description: User avatar URI.
+              avatarUrlSmall:
+                type: string
+                format: uri
+                description: User avatar URI (small).
+              avatarUrlMedium:
+                type: string
+                format: uri
+                description: User avatar URI (medium).
+              v:
+                type: number
+                description: Version.
+              gv:
+                type: string
+                description: Stands for "Gravatar version" and is used for cache busting.
+          unread:
+            type: boolean
+            description: Boolean that indicates if the current user has read the message.
+          readBy:
+            type: number
+            description: Number of users that have read the message.
+          urls:
+            type: array
+            description: List of URLs present in the message.
+            items:
+              type: string
+              format: uri
+          mentions:
+            type: array
+            description: List of @Mentions in the message.
+            items:
+              type: object
+              properties:
+                screenName:
+                  type: string
+                userId:
+                  type: string
+                userIds:
+                  type: array
+                  items:
+                    type: string
+          issues:
+            type: array
+            description: 'List of #Issues referenced in the message.'
+            items:
+              type: object
+              properties:
+                number:
+                  type: string
+          meta:
+            type: array
+            description: Metadata. This is currently not used for anything.
+            items: {}
+          v:
+            type: number
+            description: Version.
+          gv:
+            type: string
+            description: Stands for "Gravatar version" and is used for cache busting.
 
-`;
+    heartbeat:
+      schemaFormat: 'application/schema+yaml;version=draft-07'
+      summary: Its purpose is to keep the connection alive.
+      payload:
+        type: string
+        enum: ["\r\n"]`;

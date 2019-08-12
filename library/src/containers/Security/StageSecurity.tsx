@@ -17,14 +17,13 @@ export const StageSecurity: FunctionComponent<Props> = ({
   return (
     <div>
       <h3>{stage}</h3>
-
       {security.map(arg => (
-        <div>
+        <div key={Object.keys(arg)[0]}>
           <StyledSecRequirement>
             {Object.keys(arg)[0] + ' '}
           </StyledSecRequirement>
           {arg[Object.keys(arg)[0]].map(elem => (
-            <p>{elem}</p>
+            <p key={elem}>{elem}</p>
           ))}
         </div>
       ))}

@@ -38,7 +38,7 @@ export interface Channels {
 }
 export interface ChannelItem {
   parameters?: Parameters;
-  descripiton?: DescriptionHTML;
+  description?: DescriptionHTML;
   publish?: Operation;
   subscribe?: Operation;
   deprecated?: boolean;
@@ -46,7 +46,7 @@ export interface ChannelItem {
 }
 
 export interface Operation {
-  traits?: any;
+  traits?: any; //todo
   summary?: string;
   description?: string;
   tags?: Tag[];
@@ -117,9 +117,8 @@ export interface Topic {
 
 export interface Parameter {
   description?: DescriptionHTML;
-  schema: Schema;
-  name: string; //delet later
-  location?: string; //handle later
+  schema?: Schema;
+  location?: string;
 }
 
 export interface Reference {

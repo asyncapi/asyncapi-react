@@ -21,6 +21,7 @@ import InfoComponent from '../Info/Info';
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
+import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
 
@@ -100,6 +101,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
               }
             />
           )}
+          {// concatenatedConfig.show.channels &&
+          !!validatedSchema.channels && (
+            <Channels channels={validatedSchema.channels} />
+          )}
+
           {/* {concatenatedConfig.show.security &&
             Boolean(validatedSchema.security) && (
               <Security
@@ -151,6 +157,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       validatedSchema = this.beautifySchema(validatedSchema);
       this.setState({ validatedSchema, validated: true, error: undefined });
     } catch (e) {
+      console.error(e);
       this.setState({ error: e });
     }
   }

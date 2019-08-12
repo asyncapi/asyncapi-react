@@ -1,49 +1,49 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
 
-import { Map, Topic } from '../../types';
+// import { Map, Topic } from '../../types';
 
-import TopicComponent from './Topic';
+// import TopicComponent from './Topic';
 
-import { H2 } from '../../components';
-import { Topics, TopicsHeader } from './styled';
+// import { H2 } from '../../components';
+// import { Topics, TopicsHeader } from './styled';
 
-interface Props {
-  baseTopic?: string;
-  'x-topic-separator'?: string;
-  topics?: Map<string, Topic>;
-}
+// interface Props {
+//   baseTopic?: string;
+//   'x-topic-separator'?: string;
+//   topics?: Map<string, Topic>;
+// }
 
-class TopicsComponent extends Component<Props> {
-  render() {
-    const { topics } = this.props;
+// class TopicsComponent extends Component<Props> {
+//   render() {
+//     const { topics } = this.props;
 
-    if (!topics) {
-      return null;
-    }
+//     if (!topics) {
+//       return null;
+//     }
 
-    return (
-      <Topics>
-        <TopicsHeader>
-          <H2>Topics</H2>
-        </TopicsHeader>
-        {Object.keys(topics!).map(key => (
-          <TopicComponent
-            key={key}
-            title={this.extractTopicName(key)}
-            topic={topics![key]}
-          />
-        ))}
-      </Topics>
-    );
-  }
-  private extractTopicName(topicName: string) {
-    const separator = this.props['x-topic-separator'] || '.';
-    const baseTopic = this.props.baseTopic ? this.props.baseTopic.trim() : '';
+//     return (
+//       <Topics>
+//         <TopicsHeader>
+//           <H2>Topics</H2>
+//         </TopicsHeader>
+//         {Object.keys(topics!).map(key => (
+//           <TopicComponent
+//             key={key}
+//             title={this.extractTopicName(key)}
+//             topic={topics![key]}
+//           />
+//         ))}
+//       </Topics>
+//     );
+//   }
+//   private extractTopicName(topicName: string) {
+//     const separator = this.props['x-topic-separator'] || '.';
+//     const baseTopic = this.props.baseTopic ? this.props.baseTopic.trim() : '';
 
-    return baseTopic.length
-      ? `${baseTopic}${separator}${topicName}`
-      : topicName;
-  }
-}
+//     return baseTopic.length
+//       ? `${baseTopic}${separator}${topicName}`
+//       : topicName;
+//   }
+// }
 
-export default TopicsComponent;
+// export default TopicsComponent;
