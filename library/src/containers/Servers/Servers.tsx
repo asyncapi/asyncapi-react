@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Servers } from '../../types';
-
+import { Security } from '../Security/Security';
 import ServerComponent from './Server';
 
 import {
@@ -49,6 +49,10 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
           })}
         </TableBodyWrapper>
       </TableWrapper>
+      <ServersHeader>
+        <H2>Security</H2>
+      </ServersHeader>
+      <Security servers={servers} />
     </StyledServers>
   );
 };

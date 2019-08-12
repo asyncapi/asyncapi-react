@@ -19,9 +19,11 @@ class Parser {
 
     const asyncApiSchema = require('asyncapi')[
       bundledJSON.asyncapi === '2.0.0-rc1' ? 'unstable' : bundledJSON.asyncapi
+      // for now, coz there's old stuff in rc1
     ];
 
     let parsed;
+    console.log(asyncApiSchema);
 
     try {
       await this.validate(bundledJSON, asyncApiSchema);

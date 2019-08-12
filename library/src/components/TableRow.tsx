@@ -43,8 +43,6 @@ export class TableRow extends Component<Props> {
   private renderRowByAccessors() {
     const { accessors, element, nested } = this.props;
 
-    console.log('element', element);
-
     return accessors!.map((accessor, index) =>
       !nested ? (
         <TableCell key={index}>{this.getAccessor(accessor, element)}</TableCell>
@@ -60,10 +58,6 @@ export class TableRow extends Component<Props> {
     accessor: TableAccessor,
     element: any,
   ): TableAccessorReturn {
-    // console.group();
-    // console.log(element);
-    // console.groupEnd();
-
     if (accessor instanceof Function) {
       return accessor(element);
     }

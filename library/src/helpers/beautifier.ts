@@ -6,7 +6,7 @@ import {
   Servers,
   Topic,
   ServerVariable,
-  SecurityRequirement,
+  // SecurityRequirement,
 } from '../types';
 
 import renderMarkdown from './renderMarkdown';
@@ -18,9 +18,9 @@ class Beautifier {
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
-    if (asyncApi.security) {
-      asyncApi.security = this.beautifySecurity(asyncApi);
-    }
+    // if (asyncApi.security) {
+    //   asyncApi.security = this.beautifySecurity(asyncApi);
+    // }
     if (asyncApi.topics) {
       asyncApi.topics = this.beautifyTopics(asyncApi.topics);
     }
@@ -230,31 +230,31 @@ class Beautifier {
     return newTopics;
   }
 
-  private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
-    const { components, security } = asyncApi;
-    const securityRequirements: SecurityRequirement[] = [];
+  // private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
+  //   const { components, security } = asyncApi;
+  //   const securityRequirements: SecurityRequirement[] = [];
 
-    security!.forEach(sec => {
-      const name = Object.keys(sec)[0];
-      if (
-        !components ||
-        !components.securitySchemes ||
-        !components.securitySchemes[name]
-      ) {
-        throw new Error(
-          `Security definition "${name}" is not included in #/components/securitySchemes.`,
-        );
-      }
+  //   security!.forEach(sec => {
+  //     const name = Object.keys(sec)[0];
+  //     if (
+  //       !components ||
+  //       !components.securitySchemes ||
+  //       !components.securitySchemes[name]
+  //     ) {
+  //       throw new Error(
+  //         `Security definition "${name}" is not included in #/components/securitySchemes.`,
+  //       );
+  //     }
 
-      const securityComponent = components.securitySchemes[name];
-      securityComponent.description = this.renderMd(
-        securityComponent.description as string,
-      );
-      securityRequirements.push(securityComponent);
-    });
+  //     const securityComponent = components.securitySchemes[name];
+  //     securityComponent.description = this.renderMd(
+  //       securityComponent.description as string,
+  //     );
+  //     securityRequirements.push(securityComponent);
+  //   });
 
-    return securityRequirements;
-  }
+  //   return securityRequirements;
+  // }
 
   private renderMd(md?: string) {
     return renderMarkdown(md);

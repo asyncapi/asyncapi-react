@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi, SecurityScheme } from '../../types';
+import {
+  AsyncApi,
+  // SecurityScheme
+} from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import {
@@ -13,8 +16,8 @@ import {
 } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
-import Security from '../Security/Security';
-import TopicsComponent from '../Topics/Topics';
+// import Security from '../Security/Security';
+// import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
@@ -39,6 +42,7 @@ const defaultAsyncApi: AsyncApi = {
     title: 'AsyncApi example title',
     version: '1.0.0',
   },
+  channels: {},
 };
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
@@ -96,19 +100,19 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
               }
             />
           )}
-          {concatenatedConfig.show.security &&
+          {/* {concatenatedConfig.show.security &&
             Boolean(validatedSchema.security) && (
               <Security
                 security={validatedSchema.security as SecurityScheme[]}
               />
-            )}
-          {concatenatedConfig.show.topics &&
+            )} */}
+          {/* {concatenatedConfig.show.topics &&
             Boolean(validatedSchema.topics) && (
               <TopicsComponent
                 baseTopic={validatedSchema.baseTopic}
                 topics={validatedSchema.topics}
               />
-            )}
+            )} */}
           {validatedSchema.components && (
             <>
               {concatenatedConfig.show.messages &&

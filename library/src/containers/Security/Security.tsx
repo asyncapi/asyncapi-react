@@ -1,70 +1,27 @@
-import React, { Component } from 'react';
+// TODO: change its name later to Security
 
-import { SecurityScheme } from '../../types';
-
-import {
-  H2,
-  Markdown,
-  TableColumnName,
-  TableAccessor,
-  TableWrapper,
-  TableHeader,
-  TableBodyWrapper,
-  TableRow,
-} from '../../components';
-import { Security as SecurityWrapper, SecurityHeader } from './styled';
-
-const securityColumnsName: TableColumnName[] = [
-  'Type',
-  'In',
-  'Name',
-  'Scheme',
-  'Format',
-  'Description',
-];
-
-const securityAccesors: TableAccessor[] = [
-  (el: SecurityScheme) => el.type,
-  (el: SecurityScheme) => el.in,
-  (el: SecurityScheme) => el.name,
-  (el: SecurityScheme) => el.scheme,
-  (el: SecurityScheme) => el.bearerFormat,
-  (el: SecurityScheme) =>
-    el.description && <Markdown>{el.description}</Markdown>,
-];
-
+import React, { FunctionComponent } from 'react';
+import { StageSecurity } from './StageSecurity';
+import { Servers } from '../../types';
 interface Props {
-  security?: SecurityScheme[];
+  servers: Servers;
 }
 
-class SecurityComponent extends Component<Props> {
-  render() {
-    const { security } = this.props;
+export const Security: FunctionComponent<Props> = ({ servers }) => {
+  const security = Object.keys(servers).map(key => ({
+    stage: key,
+    security: servers[key].security,
+  }));
 
-    if (!security) {
-      return null;
-    }
-
-    return (
-      <SecurityWrapper>
-        <SecurityHeader>
-          <H2>Security</H2>
-        </SecurityHeader>
-        <TableWrapper>
-          <TableHeader columns={securityColumnsName} />
-          <TableBodyWrapper>
-            {security.map(sec => (
-              <TableRow
-                key={`${sec.type}${sec.name}`}
-                accessors={securityAccesors}
-                element={sec}
-              />
-            ))}
-          </TableBodyWrapper>
-        </TableWrapper>
-      </SecurityWrapper>
-    );
-  }
-}
-
-export default SecurityComponent;
+  return (
+    <div>
+      {security.map(elem => (
+        <StageSecurity
+          security={elem.security}
+          stage={elem.stage}
+          key={elem.stage}
+        />
+      ))}
+    </div>
+  );
+};

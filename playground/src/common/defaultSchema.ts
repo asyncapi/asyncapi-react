@@ -15,7 +15,6 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-baseTopic: smartylighting.streetlights.1.0
 
 servers:
   production:
@@ -54,10 +53,6 @@ servers:
         - streetlights:off
         - streetlights:dim
       - openIdConnectWellKnown: []      
-
-
-security:
-  - apiKey: []
 
 topics:
   event.{streetlightId}.lighting.measured:

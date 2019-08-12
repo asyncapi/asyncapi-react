@@ -18,11 +18,11 @@ export type OneOf = 'oneOf';
 
 export interface AsyncApi {
   asyncapi: AsyncApiVersion;
-  id?: UniqueID;
+  channels: Channels;
   info: Info;
+  id?: UniqueID;
   servers?: Servers;
   defaultContentType?: DefaultContentType;
-  channels?: Channels;
   components?: Components;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
@@ -30,17 +30,39 @@ export interface AsyncApi {
   topics?: Map<string, Topic>;
   stream?: Stream;
   events?: Event;
-  security?: Array<SecurityRequirement | SecurityScheme>;
-  baseTopic?: BaseTopic; //get rid of it
+  // security?: Array<SecurityRequirement | SecurityScheme>;
 }
 
 export interface Channels {
   [key: string]: ChannelItem;
 }
 export interface ChannelItem {
-  descripiton: DescriptionHTML;
-  parameters: Parameter;
+  parameters?: Parameters;
+  descripiton?: DescriptionHTML;
+  publish?: Operation;
+  subscribe?: Operation;
+  deprecated?: boolean;
+  protocolInfo?: ProtocolInfo;
 }
+
+export interface Operation {
+  traits?: any;
+  summary?: string;
+  description?: string;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  operationId?: string;
+  protoolInfo?: ProtocolInfo;
+  message?: Message;
+}
+export interface ProtocolInfo {
+  [key: string]: any; //done
+}
+
+export interface Parameters {
+  [key: string]: Parameter; //done
+}
+
 export interface Info {
   title: string;
   version: string;
@@ -94,10 +116,10 @@ export interface Topic {
 }
 
 export interface Parameter {
-  location?: string;
   description?: DescriptionHTML;
   schema: Schema;
   name: string; //delet later
+  location?: string; //handle later
 }
 
 export interface Reference {
@@ -168,7 +190,7 @@ export interface XML {
 }
 
 export interface SecurityRequirement {
-  // [key: string]: string[]; // TODO: obsluz mnie :D
+  [key: string]: string[];
 }
 
 export interface Schema {
