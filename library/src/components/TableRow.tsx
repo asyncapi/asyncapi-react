@@ -25,25 +25,34 @@ export class TableRow extends Component<Props> {
     if (!!openAccordion) {
       return (
         <TableRowWrapperWithNested open={openAccordion}>
-          {accessors ? this.renderRowByAccessors() : element}
+          {accessors
+            ? this.renderRowByAccessors(accessors, element, !!nested)
+            : element}
         </TableRowWrapperWithNested>
       );
     }
 
     return !nested ? (
       <TableRowWrapper>
-        {accessors ? this.renderRowByAccessors() : element}
+        {accessors
+          ? this.renderRowByAccessors(accessors, element, !!nested)
+          : element}
       </TableRowWrapper>
     ) : (
       <TableRowWrapperNested>
-        {accessors ? this.renderRowByAccessors() : element}
+        {accessors
+          ? this.renderRowByAccessors(accessors, element, !!nested)
+          : element}
       </TableRowWrapperNested>
     );
   }
-  private renderRowByAccessors() {
-    const { accessors, element, nested } = this.props;
 
-    return accessors!.map((accessor, index) =>
+  private renderRowByAccessors(
+    accessors: TableAccessor[],
+    element: any,
+    nested: boolean,
+  ) {
+    return accessors.map((accessor, index) =>
       !nested ? (
         <TableCell key={index}>{this.getAccessor(accessor, element)}</TableCell>
       ) : (

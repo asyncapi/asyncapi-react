@@ -17,8 +17,4 @@ export const fetchSchema = async ({
   url,
   requestOptions = defaultRequestOptions,
 }: FetchingSchemaInterface): Promise<string> =>
-  fetch(url, requestOptions).then(handleResponse);
-
-function handleResponse(response: any): string {
-  return response.text();
-}
+  fetch(url, requestOptions).then(data => data.text());
