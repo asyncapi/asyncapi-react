@@ -13,7 +13,6 @@ import {
   TableBodyWrapper,
 } from '../../components';
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
-import console = require('console');
 
 const schemaColumnsName: TableColumnName[] = [
   'Name',
