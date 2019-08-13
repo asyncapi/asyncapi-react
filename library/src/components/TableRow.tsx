@@ -22,7 +22,7 @@ export class TableRow extends Component<Props> {
   render() {
     const { accessors, element, nested, openAccordion } = this.props;
 
-    if (!!openAccordion) {
+    if (this.props.hasOwnProperty('openAccordion')) {
       return (
         <TableRowWrapperWithNested open={openAccordion}>
           {accessors
