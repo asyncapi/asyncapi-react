@@ -50,6 +50,7 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
         </TableBodyWrapper>
       </TableWrapper>
       <ServersHeader>
+        {/* todo: discuess whether to put this shit to separate component */}
         <H2>Security</H2>
       </ServersHeader>
       <Security servers={servers} />

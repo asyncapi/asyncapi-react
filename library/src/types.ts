@@ -259,7 +259,7 @@ export interface Schema {
   enum?: any[];
   deprecated?: boolean;
   type?: SchemaType;
-  items?: Schema /*| Schema[];*/;
+  items?: Schema /*| Schema[];*/; // todo: end this
   discriminator?: string;
   readOnly?: boolean;
   xml?: XML;

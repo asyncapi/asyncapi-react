@@ -46,7 +46,7 @@ export const TopicHeaderMessage = styled.header`
   ${props => props.theme.topicHeaderMessage}
 `;
 
-export const Parameters = styled.div`
+export const StyledParameters = styled.div`
   ${props => props.theme.parameters}
 `;
 
@@ -54,7 +54,7 @@ export const ParametersHeader = styled.header`
   ${props => props.theme.parametersHeader}
 `;
 
-export const Parameter = styled.div`
+export const StyledParameter = styled.div`
   ${props => props.theme.parameter}
 `;
 

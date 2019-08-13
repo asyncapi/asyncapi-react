@@ -26,7 +26,6 @@ interface Props {
 }
 
 export const Channel: FunctionComponent<Props> = ({ name, data }) => {
-  console.log(data);
   // return (
   //   <StyledChannel>
   //     <ChannelHeader>

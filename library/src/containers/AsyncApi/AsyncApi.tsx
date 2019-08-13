@@ -85,6 +85,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       return null;
     }
 
+    console.log(validatedSchema);
+
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>

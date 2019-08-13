@@ -13,6 +13,7 @@ import {
   TableBodyWrapper,
 } from '../../components';
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
+import console = require('console');
 
 const schemaColumnsName: TableColumnName[] = [
   'Name',
@@ -38,6 +39,8 @@ export class SchemaComponent extends Component<Props> {
       return null;
     }
 
+    console.log(schema);
+
     return (
       <SchemaWrapper>
         {!hideTitle && (
@@ -62,7 +65,7 @@ export class SchemaComponent extends Component<Props> {
   ): React.ReactNode {
     if (schema.properties) {
       const properties = schema.properties;
-
+      console.log('here');
       return Object.keys(properties).map(key => (
         <SchemaProperties
           key={key}

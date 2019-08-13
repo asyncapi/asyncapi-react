@@ -1,107 +1,157 @@
 export const defaultSchema = `
 asyncapi: '2.0.0-rc1'
+id: 'urn:com:gitter:streaming:api'
 info:
-  title: Correlation ID Example
+  title: Gitter Streaming API
   version: '1.0.0'
-  description: A cut of the Streetlights API to test Correlation ID
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
 
 servers:
   production:
-    url: api.streetlights.smartylighting.com:{port}
-    protocol: mqtt
-    description: Test broker
-    variables:
-      port:
-        description: Secure connection (TLS) is available through port 8883.
-        default: '1883'
-        enum:
-          - '1883'
-          - '8883'
+    url: https://stream.gitter.im/v1
+    protocol: https
+    protocolVersion: '1.1'
     security:
-      - apiKey: []
-      - supportedOauthFlows:
-        - streetlights:on
-        - streetlights:off
-        - streetlights:dim
-      - openIdConnectWellKnown: []
-
-defaultContentType: application/json
+      - httpBearerToken: []
 
 channels:
-  smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
+  /rooms/{roomId}/{resource}:
     parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
+      roomId:
+        description: This is some annoying af description.
+        location: XDDDD
+        schema:
+          type: string
+          examples:
+            - 53307860c3599d1de448e19d
+      resource:
+        description: The resource to consume.
+        schema:
+          type: string
+          enum:
+            - chatMessages
+            - events
     subscribe:
-      summary: Receive information about environmental lighting conditions of a particular streetlight.
-      operationId: receiveLightMeasurement
+      protocolInfo:
+        http:
+          response:
+            headers:
+              'Transfer-Encoding': 'chunked'
+              Trailer: '\r\n'
       message:
-        $ref: '#/components/messages/lightMeasured'
-
-  smartylighting/streetlights/1/0/action/{streetlightId}/dim:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: dimLight
-      message:
-        $ref: '#/components/messages/dimLight'
+        oneOf:
+          - $ref: '#/components/messages/chatMessage'
+          - $ref: '#/components/messages/heartbeat'
 
 components:
+  securitySchemes:
+    httpBearerToken:
+      type: http
+      scheme: bearer
   messages:
-    lightMeasured:
-      name: lightMeasured
-      title: Light measured
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      correlationId:
-        location: "$message.header#/MQMD/CorrelId"
-      contentType: application/json
+    chatMessage:
+      schemaFormat: 'application/schema+yaml;version=draft-07'
+      summary: >-
+        A message represents an individual chat message sent to a room.
+        They are a sub-resource of a room.
       payload:
-        $ref: "#/components/schemas/lightMeasuredPayload"
-    dimLight:
-      name: dimLight
-      title: Dim light
-      summary: Command a particular streetlight to dim the lights.
-      correlationId:
-        $ref: "#/components/correlationIds/sentAtCorrelator"
+        type: object
+        properties:
+          id:
+            type: string
+            description: ID of the message.
+          text:
+            type: string
+            description: Original message in plain-text/markdown.
+          html:
+            type: string
+            description: HTML formatted message.
+          sent:
+            type: string
+            format: date-time
+            description: ISO formatted date of the message.
+          fromUser:
+            type: object
+            description: User that sent the message.
+            properties:
+              id:
+                type: string
+                description: Gitter User ID.
+              username:
+                type: string
+                description: Gitter/GitHub username.
+              displayName:
+                type: string
+                description: Gitter/GitHub user real name.
+              url:
+                type: string
+                description: Path to the user on Gitter.
+              avatarUrl:
+                type: string
+                format: uri
+                description: User avatar URI.
+              avatarUrlSmall:
+                type: string
+                format: uri
+                description: User avatar URI (small).
+              avatarUrlMedium:
+                type: string
+                format: uri
+                description: User avatar URI (medium).
+              v:
+                type: number
+                description: Version.
+              gv:
+                type: string
+                description: Stands for "Gravatar version" and is used for cache busting.
+          unread:
+            type: boolean
+            description: Boolean that indicates if the current user has read the message.
+          readBy:
+            type: number
+            description: Number of users that have read the message.
+          urls:
+            type: array
+            description: List of URLs present in the message.
+            items:
+              type: string
+              format: uri
+          mentions:
+            type: array
+            description: List of @Mentions in the message.
+            items:
+              type: object
+              properties:
+                screenName:
+                  type: string
+                userId:
+                  type: string
+                userIds:
+                  type: array
+                  items:
+                    type: string
+          issues:
+            type: array
+            description: 'List of #Issues referenced in the message.'
+            items:
+              type: object
+              properties:
+                number:
+                  type: string
+          meta:
+            type: array
+            description: Metadata. This is currently not used for anything.
+            items: {}
+          v:
+            type: number
+            description: Version.
+          gv:
+            type: string
+            description: Stands for "Gravatar version" and is used for cache busting.
+
+    heartbeat:
+      schemaFormat: 'application/schema+yaml;version=draft-07'
+      summary: Its purpose is to keep the connection alive.
       payload:
-        $ref: "#/components/schemas/dimLightPayload"
-
-  schemas:
-    lightMeasuredPayload:
-      type: object
-      properties:
-        lumens:
-          type: integer
-          minimum: 0
-          description: Light intensity measured in lumens.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    dimLightPayload:
-      type: object
-      properties:
-        percentage:
-          type: integer
-          description: Percentage to which the light should be dimmed to.
-          minimum: 0
-          maximum: 100
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    sentAt:
-      type: string
-      format: date-time
-      description: Date and time when the message was sent.
-
-  parameters:
-    streetlightId:
-      description: The ID of the streetlight.
-      schema:
         type: string
-
-  correlationIds:
-    sentAtCorrelator:
-      description: Data from message payload used as correlation ID
-      location: $message.payload#/sentAt`;
+        enum: ["\r\n"]
+`;
