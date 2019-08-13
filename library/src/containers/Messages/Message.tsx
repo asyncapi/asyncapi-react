@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Message } from '../../types';
 
 import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
-import SchemaComponent from '../Schemas/Schema';
+import { SchemaComponent } from '../Schemas/Schema';
 
 import {
   Message as MessageWrapper,

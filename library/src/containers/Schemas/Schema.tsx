@@ -30,7 +30,7 @@ interface Props {
   hideTitle?: boolean;
 }
 
-class SchemaComponent extends Component<Props> {
+export class SchemaComponent extends Component<Props> {
   render() {
     const { name, schema, exampleTitle, hideTitle } = this.props;
 
@@ -48,7 +48,7 @@ class SchemaComponent extends Component<Props> {
         <TableWrapper>
           <TableHeader columns={schemaColumnsName} />
           <TableBodyWrapper>
-            {this.renderSchemaProps(name, schema!)}
+            {this.renderSchemaProps(name, schema)}
           </TableBodyWrapper>
         </TableWrapper>
 
@@ -60,8 +60,6 @@ class SchemaComponent extends Component<Props> {
     schemaName: string,
     schema: Schema,
   ): React.ReactNode {
-    const required = schema.required ? schema.required : [];
-
     if (schema.properties) {
       const properties = schema.properties;
 
@@ -70,20 +68,12 @@ class SchemaComponent extends Component<Props> {
           key={key}
           name={key}
           properties={properties[key]}
-          required={required.some((r: string) => r === key)}
           treeSpace={0}
         />
       ));
     }
     return (
-      <SchemaProperties
-        name={schemaName}
-        properties={schema}
-        required={required.some((r: string) => r === schemaName)}
-        treeSpace={0}
-      />
+      <SchemaProperties name={schemaName} properties={schema} treeSpace={0} />
     );
   }
 }
-
-export default SchemaComponent;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Map, Message } from '../../types';
+import { Message } from '../../types';
 
 import MessageComponent from './Message';
 
@@ -8,7 +8,7 @@ import { H2 } from '../../components';
 import { Messages, MessagesHeader } from './styled';
 
 interface Props {
-  messages?: Map<string, Message>;
+  messages?: Record<string, Message>;
 }
 
 class MessagesComponent extends Component<Props> {

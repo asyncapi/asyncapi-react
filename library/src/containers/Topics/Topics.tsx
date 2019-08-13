@@ -10,7 +10,7 @@
 // interface Props {
 //   baseTopic?: string;
 //   'x-topic-separator'?: string;
-//   topics?: Map<string, Topic>;
+//   topics?: Record<string, Topic>;
 // }
 
 // class TopicsComponent extends Component<Props> {

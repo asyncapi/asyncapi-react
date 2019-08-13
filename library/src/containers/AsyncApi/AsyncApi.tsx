@@ -19,7 +19,7 @@ import InfoComponent from '../Info/Info';
 // import Security from '../Security/Security';
 // import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';
-import SchemasComponent from '../Schemas/Schemas';
+import { SchemasComponent } from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
 import { Channels } from '../Channels/Channels';
 
@@ -81,7 +81,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       ? (theme as ThemeInterface)
       : { ...defaultTheme, ...theme };
 
-    if (!(validatedSchema && validated)) {
+    if (!(Object.keys(validatedSchema).length && validated)) {
       return null;
     }
 
@@ -125,7 +125,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
                 Boolean(validatedSchema.components) &&
                 Boolean(validatedSchema.components.messages) && (
                   <MessagesComponent
-                    messages={validatedSchema.components!.messages}
+                    messages={validatedSchema.components.messages}
                   />
                 )}
               {concatenatedConfig.show.schemas &&

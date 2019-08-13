@@ -7,6 +7,9 @@ interface Props {
 }
 
 export const Parameters: FunctionComponent<Props> = ({ params }) => {
+  if (!params) {
+    return null;
+  }
   const paramList = Object.keys(params).map(elem => ({
     name: elem,
     param: params[elem],

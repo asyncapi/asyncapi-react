@@ -6,7 +6,6 @@ import {
   Markdown,
   TableAccessor,
   TableRow,
-  RequiredBadge,
   TreeSpace,
   TreeLeaf,
 } from '../../components';
@@ -14,7 +13,6 @@ import {
 type SchemaWithKey = TypeWithKey<string, Schema>;
 interface SchemaElement {
   schema: SchemaWithKey;
-  required: boolean;
   treeSpace: number;
 }
 
@@ -32,7 +30,6 @@ const schemaPropertiesAccesors: TableAccessor[] = [
         return treeSpaces;
       })()}
       {el.schema.key}
-      {el.required && <RequiredBadge>Required</RequiredBadge>}
     </>
   ),
   (el: SchemaElement) => el.schema.content.title,
@@ -56,25 +53,21 @@ const schemaPropertiesAccesors: TableAccessor[] = [
 
 interface Props {
   name: string;
-  required: boolean;
+
   properties: Schema;
   treeSpace: number;
 }
 
 class SchemaPropertiesComponent extends Component<Props> {
   render() {
-    const { name, properties, required, treeSpace } = this.props;
+    const { name, properties, treeSpace } = this.props;
 
-    const requiredItems = properties.required
-      ? properties.required
-      : ([] as string[]);
     const space = treeSpace + 1;
     const element: SchemaElement = {
       schema: {
         key: name,
         content: properties,
       },
-      required,
       treeSpace,
     };
 
@@ -83,7 +76,7 @@ class SchemaPropertiesComponent extends Component<Props> {
         <TableRow accessors={schemaPropertiesAccesors} element={element} />
         {this.renderOf('anyOf', space, properties.anyOf)}
         {this.renderOf('oneOf', space, properties.oneOf)}
-        {this.renderProperties(properties, requiredItems, space)}
+        {this.renderProperties(properties, space)}
         {this.renderItems(properties, space)}
       </>
     );
@@ -98,7 +91,6 @@ class SchemaPropertiesComponent extends Component<Props> {
     }
 
     return schemas.map((schema, index) => {
-      const required = schema.required ? schema.required : ([] as string[]);
       const id = index.toString();
 
       return (
@@ -106,18 +98,13 @@ class SchemaPropertiesComponent extends Component<Props> {
           key={index}
           name={id}
           properties={schema}
-          required={required.some(r => r === id)}
           treeSpace={treeSpace}
         />
       );
     });
   }
 
-  private renderProperties(
-    schema: Schema,
-    required: string[],
-    treeSpace: number,
-  ): React.ReactNode {
+  private renderProperties(schema: Schema, treeSpace: number): React.ReactNode {
     const properties = schema.properties;
 
     if (!properties) {
@@ -129,7 +116,6 @@ class SchemaPropertiesComponent extends Component<Props> {
         key={key}
         name={key}
         properties={properties[key]}
-        required={required.some(r => r === key)}
         treeSpace={treeSpace}
       />
     ));
@@ -143,10 +129,7 @@ class SchemaPropertiesComponent extends Component<Props> {
       return null;
     }
 
-    const required = (schema.items!.required
-      ? schema.items!.required
-      : []) as string[];
-    return this.renderProperties(schema.items!, required, treeSpace);
+    return this.renderProperties(schema.items as Schema, treeSpace);
   }
 }
 

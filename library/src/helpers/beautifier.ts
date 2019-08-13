@@ -1,5 +1,4 @@
 import {
-  Map,
   AsyncApi,
   Schema,
   Message,
@@ -51,7 +50,7 @@ class Beautifier {
     }
 
     if (schema.properties) {
-      const transformed: Map<string, Schema> = {};
+      const transformed: Record<string, Schema> = {};
 
       for (const key in schema.properties) {
         if (schema.properties[key].allOf) {
@@ -73,7 +72,7 @@ class Beautifier {
   private beautifySchema(schema: Schema): Schema {
     if (schema.properties) {
       const properties = schema.properties;
-      const newProperties: Map<string, Schema> = properties;
+      const newProperties: Record<string, Schema> = properties;
 
       for (const key in properties) {
         const prop = properties[key];
@@ -83,7 +82,7 @@ class Beautifier {
         }
         if (prop.properties) {
           const propProperties = prop.properties;
-          const newPropProperties: Map<string, Schema> = {};
+          const newPropProperties: Record<string, Schema> = {};
 
           for (const propKey in propProperties) {
             newPropProperties[propKey] = this.beautifySchema(
@@ -101,7 +100,10 @@ class Beautifier {
 
     if (schema.additionalProperties) {
       const additionalProperties = schema.additionalProperties;
-      const newAdditionalProperties: Map<string, Schema> = additionalProperties;
+      const newAdditionalProperties: Record<
+        string,
+        Schema
+      > = additionalProperties;
 
       for (const key in additionalProperties) {
         const prop = additionalProperties[key];
@@ -111,7 +113,7 @@ class Beautifier {
         }
         if (prop.additionalProperties) {
           const propAdditionalProperties = prop.additionalProperties;
-          const newPropAdditionalProperties: Map<string, Schema> = {};
+          const newPropAdditionalProperties: Record<string, Schema> = {};
 
           for (const propKey in propAdditionalProperties) {
             newPropAdditionalProperties[propKey] = this.beautifySchema(
@@ -129,8 +131,10 @@ class Beautifier {
     return schema;
   }
 
-  private beautifySchemas(schemas: Map<string, Schema>): Map<string, Schema> {
-    const newSchemas: Map<string, Schema> = {};
+  private beautifySchemas(
+    schemas: Record<string, Schema>,
+  ): Record<string, Schema> {
+    const newSchemas: Record<string, Schema> = {};
     for (const key in schemas) {
       newSchemas[key] = this.resolveAllOf(schemas[key]);
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
@@ -160,9 +164,9 @@ class Beautifier {
   }
 
   private beautifyMessages(
-    messages: Map<string, Message>,
-  ): Map<string, Message> {
-    const newMessages: Map<string, Message> = {};
+    messages: Record<string, Message>,
+  ): Record<string, Message> {
+    const newMessages: Record<string, Message> = {};
     for (const key in messages) {
       newMessages[key] = this.beautifyMessage(messages[key]);
     }
@@ -178,7 +182,7 @@ class Beautifier {
 
       if (server.variables) {
         const variables = server.variables;
-        const newVariables: Map<string, ServerVariable> = variables;
+        const newVariables: Record<string, ServerVariable> = variables;
 
         for (const key in variables) {
           newVariables[key].description = this.renderMd(variables[key]
@@ -191,8 +195,8 @@ class Beautifier {
     return copiedServers;
   }
 
-  private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
-    const newTopics: Map<string, Topic> = {};
+  private beautifyTopics(topics: Record<string, Topic>): Record<string, Topic> {
+    const newTopics: Record<string, Topic> = {};
     for (const key in topics) {
       const topic = topics[key];
 

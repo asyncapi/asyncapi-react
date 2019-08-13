@@ -1,6 +1,6 @@
 export type PrimitiveType = number | boolean | string | null;
-export type Map<K extends string, V = any> = { [key in K]: V };
 export type PropsWithDefaults<T, D> = T & D;
+
 export interface TypeWithKey<T, V> {
   key: T;
   content: V;
@@ -12,10 +12,17 @@ export type UniqueID = string;
 export type DefaultContentType = string;
 export type BaseTopic = string;
 export type DescriptionHTML = string | React.ReactNode;
-export type ExternalSpecification = Map<string, any>;
+export type ExternalSpecification = Record<string, any>;
 export type ReferenceString = string;
 export type OneOf = 'oneOf';
-
+export type SchemaType =
+  | 'array'
+  | 'boolean'
+  | 'integer'
+  | 'null'
+  | 'number'
+  | 'object'
+  | 'string';
 export interface AsyncApi {
   asyncapi: AsyncApiVersion;
   channels: Channels;
@@ -27,7 +34,7 @@ export interface AsyncApi {
   tags?: Tag[];
   externalDocs?: ExternalDocs;
   // below - deprecated
-  topics?: Map<string, Topic>;
+  topics?: Record<string, Topic>;
   stream?: Stream;
   events?: Event;
   // security?: Array<SecurityRequirement | SecurityScheme>;
@@ -45,14 +52,25 @@ export interface ChannelItem {
   protocolInfo?: ProtocolInfo;
 }
 
-export interface Operation {
-  traits?: any; //todo
+export interface OperationTrait {
   summary?: string;
-  description?: string;
+  description?: DescriptionHTML;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
   operationId?: string;
-  protoolInfo?: ProtocolInfo;
+  protocolInfo?: any;
+}
+
+export type TraitType = OperationTrait | [OperationTrait, any];
+
+export interface Operation {
+  traits?: TraitType[];
+  summary?: string;
+  description?: DescriptionHTML;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  operationId?: string;
+  protocolInfo?: ProtocolInfo;
   message?: Message;
 }
 export interface ProtocolInfo {
@@ -93,7 +111,7 @@ export interface Server {
   protocolVersion?: string;
   description?: DescriptionHTML;
   variables?: ServerVariables;
-  security?: SecurityRequirement[]; //needs to be implemented
+  security?: SecurityRequirement[]; // discuss whether to extract it or keep it in same category
 }
 
 export interface ServerVariables {
@@ -110,12 +128,13 @@ export interface ServerVariable {
 export interface Topic {
   $ref?: ReferenceString;
   deprecated?: boolean;
-  subscribe?: Message | Map<OneOf, Message[]>;
-  publish?: Message | Map<OneOf, Message[]>;
+  subscribe?: Message | Record<OneOf, Message[]>;
+  publish?: Message | Record<OneOf, Message[]>;
   parameters?: Parameter[];
 }
 
 export interface Parameter {
+  //done
   description?: DescriptionHTML;
   schema?: Schema;
   location?: string;
@@ -153,6 +172,7 @@ export interface Message {
 
 export interface Tag {
   // do not have to change
+
   name: string;
   description?: string;
   externalDocs?: ExternalDocs;
@@ -161,14 +181,38 @@ export interface Tag {
 export interface ExternalDocs {
   // do not have to change
   url: string;
+  description?: DescriptionHTML;
+}
+
+export interface CorrelationId {
   description?: string;
+  location: string;
+}
+
+export interface MessageTraits {
+  schemaFormat?: string;
+  contentType?: string;
+  headers?: Schema;
+  correlationId?: CorrelationId;
+  tags?: Tag[];
+  summary?: string;
+  name?: string;
+  title?: string;
+  description?: DescriptionHTML;
+  externalDocs?: ExternalDocs;
+  deprecated?: boolean;
+  examples?: any[];
+  protocolInfo?: Record<string, any>;
 }
 
 export interface Components {
-  schemas?: Map<string, Schema>;
-  messages?: Map<string, Message>;
-  securitySchemes?: Map<string, SecurityScheme>;
-  parameters?: Map<string, Parameter>;
+  schemas?: Record<string, Schema>;
+  messages?: Record<string, Message>;
+  securitySchemes?: Record<string, SecurityScheme>;
+  parameters?: Record<string, Parameter>;
+  correlationIds?: CorrelationId;
+  operationTraits?: Record<string, OperationTrait>;
+  messageTraits?: Record<string, MessageTraits>;
 }
 
 export interface SecurityScheme {
@@ -193,34 +237,53 @@ export interface SecurityRequirement {
 }
 
 export interface Schema {
-  $schema?: string;
-  $id?: string;
-  description?: DescriptionHTML;
-  allOf?: Schema[];
-  oneOf?: Schema[];
-  anyOf?: Schema[];
-  title?: string;
-  type?: string | string[];
-  definitions?: Map<string, any>;
-  format?: string;
-  items?: Schema;
-  minItems?: number;
-  additionalItems?: { anyOf: Schema[] } | Schema;
-  enum?: PrimitiveType[] | Schema[];
-  default?: PrimitiveType | Object;
-  additionalProperties?: Map<string, Schema>;
-  required?: string[];
-  propertyOrder?: string[];
-  properties?: Map<string, Schema>;
-  defaultProperties?: string[];
-  patternProperties?: Map<string, Schema>;
-  typeof?: 'function';
   nullable?: boolean;
+  format?: string;
+  title?: string;
+  description?: DescriptionHTML;
+  default?: PrimitiveType | Object;
+  multipleOf?: number;
+  maximum?: number;
+  exclusiveMaximum?: boolean;
+  minimum?: number;
+  exclusiveMinimum?: boolean;
+  maxLength?: number;
+  minLength?: number;
+  pattern?: RegExp | string;
+  maxItems?: number;
+  minItems?: number;
+  uniqueItems?: boolean;
+  maxProperties?: number;
+  minProperties?: number;
+  required?: string[];
+  enum?: any[];
+  deprecated?: boolean;
+  type?: SchemaType;
+  items?: Schema /*| Schema[];*/;
   discriminator?: string;
   readOnly?: boolean;
-  writeOnly?: boolean;
   xml?: XML;
   externalDocs?: ExternalDocs;
   example?: any;
-  deprecated?: boolean;
+  examples?: any[];
+  allOf?: Schema[];
+  oneOf?: Schema[];
+  anyOf?: Schema[];
+  not?: Schema;
+  properties?: Record<string, Schema>;
+
+  //old field
+
+  $schema?: string;
+  $id?: string;
+
+  definitions?: Record<string, any>;
+
+  additionalItems?: { anyOf: Schema[] } | Schema;
+
+  additionalProperties?: Record<string, Schema>;
+
+  propertyOrder?: string[];
+
+  defaultProperties?: string[];
 }
