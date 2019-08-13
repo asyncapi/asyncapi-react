@@ -74,11 +74,11 @@ export interface Operation {
   message?: Message;
 }
 export interface ProtocolInfo {
-  [key: string]: any; //done
+  [key: string]: any; // done
 }
 
 export interface Parameters {
-  [key: string]: Parameter; //done
+  [key: string]: Parameter; // done
 }
 
 export interface Info {
@@ -122,7 +122,7 @@ export interface ServerVariable {
   enum?: string[];
   default?: string;
   description?: DescriptionHTML;
-  examples?: string[]; //needs to be implemented
+  examples?: string[]; // needs to be implemented
 }
 
 export interface Topic {
@@ -134,7 +134,7 @@ export interface Topic {
 }
 
 export interface Parameter {
-  //done
+  // done
   description?: DescriptionHTML;
   schema?: Schema;
   location?: string;
@@ -241,7 +241,7 @@ export interface Schema {
   format?: string;
   title?: string;
   description?: DescriptionHTML;
-  default?: PrimitiveType | Object;
+  default?: PrimitiveType | {};
   multipleOf?: number;
   maximum?: number;
   exclusiveMaximum?: boolean;
@@ -272,7 +272,7 @@ export interface Schema {
   not?: Schema;
   properties?: Record<string, Schema>;
 
-  //old field
+  // old field
 
   $schema?: string;
   $id?: string;

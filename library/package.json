@@ -42,7 +42,7 @@
     "start": "tsc --watch",
     "build": "tsc",
     "lint-check": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose && prettier --config ./.prettierrc --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "lint-fix": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose --fix; prettier --config ./.prettierrc --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-fix": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose --fix; prettier --config ./.prettierrc --write './src/**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "eject": "react-scripts eject",
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
@@ -61,6 +61,7 @@
   "devDependencies": {
     "@types/ajv": "^1.0.0",
     "@types/dompurify": "0.0.32",
+    "@types/markdown-it": "0.0.8",
     "@types/node": "10.12.1",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",

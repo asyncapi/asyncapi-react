@@ -3,7 +3,9 @@ export interface FetchingSchemaInterface {
   requestOptions?: RequestInit;
 }
 
-export function isFetchingSchemaInterface(schema: any) {
+export function isFetchingSchemaInterface(
+  schema: FetchingSchemaInterface | string,
+): schema is FetchingSchemaInterface {
   return (schema as FetchingSchemaInterface).url !== undefined;
 }
 
@@ -14,9 +16,9 @@ const defaultRequestOptions: RequestInit = {
 export const fetchSchema = async ({
   url,
   requestOptions = defaultRequestOptions,
-}: FetchingSchemaInterface): Promise<any> =>
+}: FetchingSchemaInterface): Promise<string> =>
   fetch(url, requestOptions).then(handleResponse);
 
-function handleResponse(response: any) {
-  return response.text().then((data: string) => data);
+function handleResponse(response: any): string {
+  return response.text();
 }

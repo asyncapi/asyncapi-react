@@ -1,6 +1,6 @@
 import { styled } from '../../theme';
 
-//just so that it looks nice while I develop
+// just so that it looks nice while I develop
 
 export const StyledChannels = styled.div`
   ${props => props.theme.messages}

@@ -1,6 +1,8 @@
 import React from 'react';
 import DOMPurify from 'dompurify';
-const markdownIt = require('markdown-it')();
+import MarkdownIt from 'markdown-it';
+
+const markdownIt = new MarkdownIt();
 
 function renderMd(md?: string) {
   const html = markdownIt.render(md || '');

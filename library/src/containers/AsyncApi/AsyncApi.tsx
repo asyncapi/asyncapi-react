@@ -26,7 +26,7 @@ import { Channels } from '../Channels/Channels';
 import { AsyncApiWrapper } from './styled';
 
 export interface AsyncApiProps {
-  schema: string | Object | FetchingSchemaInterface;
+  schema: string | FetchingSchemaInterface;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
 }
@@ -142,16 +142,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     );
   }
 
-  private async updateSchema(
-    schema: string | Object | FetchingSchemaInterface,
-  ) {
+  private async updateSchema(schema: string | FetchingSchemaInterface) {
     if (isFetchingSchemaInterface(schema)) {
-      schema = await fetchSchema(schema as FetchingSchemaInterface);
+      schema = await fetchSchema(schema);
     }
     this.prepareSchema(schema);
   }
 
-  private async prepareSchema(schema: string | Object) {
+  private async prepareSchema(schema: string) {
     try {
       let validatedSchema = await this.validateSchema(schema);
       validatedSchema = this.beautifySchema(validatedSchema);

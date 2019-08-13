@@ -70,14 +70,16 @@ class Parser {
 
   private createValidator() {
     const validator = new Ajv({ schemaId: 'auto' });
-    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json')); //remind me to remove this line during review!
+    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json')); // remind me to remove this line during review!
     return validator;
   }
 
   private validate(json: JSON, schema: {}): void {
     const validate = this.validator.compile(schema);
     const valid = validate(json);
-    if (!valid) console.error(validate.errors);
+    if (!valid) {
+      console.error(validate.errors);
+    }
   }
 }
 

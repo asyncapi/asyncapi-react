@@ -10,31 +10,29 @@ interface Props {
   param: ParamType;
 }
 
-export const Parameter: FunctionComponent<Props> = ({ param, name }) => {
-  return (
-    <StyledDiv>
-      * - <span>{name}</span>
-      {param.description && (
-        <>
-          <h4>Description:</h4>
-          <Markdown>{param.description}</Markdown>
-        </>
-      )}
-      {param.location && (
-        <>
-          <h4>Description:</h4>
-          {param.location}
-        </>
-      )}
-      {param.schema && (
-        <>
-          <h4>Schema</h4>
-          <SchemaComponent schema={param.schema} name={name} />
-        </>
-      )}
-    </StyledDiv>
-  );
-};
+export const Parameter: FunctionComponent<Props> = ({ param, name }) => (
+  <StyledDiv>
+    * - <span>{name}</span>
+    {param.description && (
+      <>
+        <h4>Description:</h4>
+        <Markdown>{param.description}</Markdown>
+      </>
+    )}
+    {param.location && (
+      <>
+        <h4>Description:</h4>
+        {param.location}
+      </>
+    )}
+    {param.schema && (
+      <>
+        <h4>Schema</h4>
+        <SchemaComponent schema={param.schema} name={name} />
+      </>
+    )}
+  </StyledDiv>
+);
 
 const StyledDiv = styled.section`
   padding: 10px;

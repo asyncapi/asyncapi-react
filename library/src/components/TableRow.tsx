@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export type TableAccessor = Function | string;
+export type TableAccessor = ((arg: any) => any) | string;
 export type TableAccessorReturn = React.ReactNode | string;
 
 import {
@@ -22,7 +22,7 @@ export class TableRow extends Component<Props> {
   render() {
     const { accessors, element, nested, openAccordion } = this.props;
 
-    if ((this.props as Object).hasOwnProperty('openAccordion')) {
+    if (!!openAccordion) {
       return (
         <TableRowWrapperWithNested open={openAccordion}>
           {accessors ? this.renderRowByAccessors() : element}

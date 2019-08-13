@@ -52,7 +52,7 @@ class Beautifier {
     if (schema.properties) {
       const transformed: Record<string, Schema> = {};
 
-      for (const key in schema.properties) {
+      for (const key of Object.keys(schema.properties)) {
         if (schema.properties[key].allOf) {
           transformed[key] = this.resolveAllOf(schema.properties[key]);
           continue;
@@ -60,10 +60,7 @@ class Beautifier {
         transformed[key] = schema.properties[key];
       }
 
-      return {
-        ...schema,
-        properties: transformed,
-      };
+      return { ...schema, properties: transformed };
     }
 
     return schema;
@@ -74,7 +71,7 @@ class Beautifier {
       const properties = schema.properties;
       const newProperties: Record<string, Schema> = properties;
 
-      for (const key in properties) {
+      for (const key of Object.keys(properties)) {
         const prop = properties[key];
 
         if (prop.description) {
@@ -84,7 +81,7 @@ class Beautifier {
           const propProperties = prop.properties;
           const newPropProperties: Record<string, Schema> = {};
 
-          for (const propKey in propProperties) {
+          for (const propKey of Object.keys(propProperties)) {
             newPropProperties[propKey] = this.beautifySchema(
               propProperties[propKey],
             );
@@ -105,7 +102,7 @@ class Beautifier {
         Schema
       > = additionalProperties;
 
-      for (const key in additionalProperties) {
+      for (const key of Object.keys(additionalProperties)) {
         const prop = additionalProperties[key];
 
         if (prop.description) {
@@ -115,7 +112,7 @@ class Beautifier {
           const propAdditionalProperties = prop.additionalProperties;
           const newPropAdditionalProperties: Record<string, Schema> = {};
 
-          for (const propKey in propAdditionalProperties) {
+          for (const propKey of Object.keys(propAdditionalProperties)) {
             newPropAdditionalProperties[propKey] = this.beautifySchema(
               propAdditionalProperties[propKey],
             );
@@ -135,7 +132,7 @@ class Beautifier {
     schemas: Record<string, Schema>,
   ): Record<string, Schema> {
     const newSchemas: Record<string, Schema> = {};
-    for (const key in schemas) {
+    for (const key of Object.keys(schemas)) {
       newSchemas[key] = this.resolveAllOf(schemas[key]);
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
     }
@@ -167,7 +164,7 @@ class Beautifier {
     messages: Record<string, Message>,
   ): Record<string, Message> {
     const newMessages: Record<string, Message> = {};
-    for (const key in messages) {
+    for (const key of Object.keys(messages)) {
       newMessages[key] = this.beautifyMessage(messages[key]);
     }
     return newMessages;
@@ -184,7 +181,7 @@ class Beautifier {
         const variables = server.variables;
         const newVariables: Record<string, ServerVariable> = variables;
 
-        for (const key in variables) {
+        for (const key of Object.keys(variables)) {
           newVariables[key].description = this.renderMd(variables[key]
             .description as string);
         }
@@ -197,7 +194,7 @@ class Beautifier {
 
   private beautifyTopics(topics: Record<string, Topic>): Record<string, Topic> {
     const newTopics: Record<string, Topic> = {};
-    for (const key in topics) {
+    for (const key of Object.keys(topics)) {
       const topic = topics[key];
 
       if (topic.publish) {
