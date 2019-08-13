@@ -19,7 +19,6 @@ interface Props {
 export class ChannelComponent extends Component<Props> {
   private renderPublish() {
     const { channel } = this.props;
-    console.log('Channel', channel);
     if (!channel.publish) return null;
 
     const publish: any = channel.publish;
@@ -47,9 +46,10 @@ export class ChannelComponent extends Component<Props> {
 
     if (!channel.subscribe) return null;
 
-    const subscribe = channel.subscribe
+    const subscribe: any = channel.subscribe
     if (!(subscribe as any).oneOf) {
-      return <TopicMessage><MessageComponent message={subscribe as Message} /></TopicMessage>
+      const message: Message = subscribe.message;
+      return <TopicMessage><MessageComponent message={message} /></TopicMessage>
     } else {
       const subscribes: Message[] = (subscribe as any).oneOf;
 

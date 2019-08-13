@@ -4,7 +4,6 @@ import {
   Schema,
   Message,
   Server,
-  Topic,
   Channel,
   ServerVariable,
   SecurityRequirement,
@@ -150,7 +149,7 @@ class Beautifier {
       message.headers = this.resolveAllOf(message.headers);
     }
 
-    console.log('summary:', message.summary);
+    // console.log('summary:', message.summary);
     // if (message.summary) {
     //   message.summary = this.renderMd(message.summary as string);
     // }
