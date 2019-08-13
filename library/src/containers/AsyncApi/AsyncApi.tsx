@@ -23,7 +23,7 @@ import ErrorComponent from '../Error/Error';
 import { AsyncApiWrapper } from './styled';
 
 // import parser from 'asyncapi-parser';
-const index = require('asyncapi-parser');
+const parser = require('asyncapi-parser');
 
 export interface AsyncApiProps {
   schema: string | Object | FetchingSchemaInterface;
@@ -68,7 +68,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   private async updateSchema(
     schema: string | Object | FetchingSchemaInterface,
   ) {
-    if (isFetchingSchemaInterface(schema)) {
+    if (schema && isFetchingSchemaInterface(schema)) {
       schema = await fetchSchema(schema as FetchingSchemaInterface);
     }
     this.prepareSchema(schema);
@@ -88,10 +88,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   }
 
   private async validateSchema(schema: string | any) {
+    if (!schema) {
+      throw Error('Empty AsyncAPI Document'); 
+    }
     // if (typeof schema !== 'string') {
     //   schema = JSON.stringify(schema);
     // }
-    return await index.parse(schema);
+    return await parser.parse(schema);
     // return await parser.parse(schema);
   }
 
