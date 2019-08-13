@@ -14,7 +14,7 @@ import {
 
 import InfoComponent from '../Info/Info';
 import Security from '../Security/Security';
-import { ChannelsComponent } from '../Topics/Topics';
+import { ChannelsComponent } from '../Channels/Channels';
 
 import MessagesComponent from '../Messages/Messages';
 import SchemasComponent from '../Schemas/Schemas';

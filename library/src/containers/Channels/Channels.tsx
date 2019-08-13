@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Map, Topic, Channel } from '../../types';
 
-import { ChannelComponent } from './Topic';
+import { ChannelComponent } from './Channel';
 
 import { H2 } from '../../components';
 import { Topics, TopicsHeader } from './styled';
