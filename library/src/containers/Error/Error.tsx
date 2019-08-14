@@ -12,9 +12,6 @@ interface Props {
   error?: ErrorObject | ErrorObject[];
 }
 
-// TODO: handle more errors, see whether
-
-// TODO: refactor
 class ErrorComponent extends Component<Props> {
   render() {
     const { error } = this.props;
@@ -36,27 +33,33 @@ class ErrorComponent extends Component<Props> {
   }
   private renderErrors(error: ErrorObject | ErrorObject[]): React.ReactNode {
     if (Array.isArray(error)) {
-      return error.map((singleError: ErrorObject, index: number) => (
-        <ErrorCode key={index}>{this.formatErrors(singleError)}</ErrorCode>
-      ));
+      return error
+        .map((singleError: ErrorObject, index: number) => {
+          const formattedError = this.formatErrors(singleError);
+
+          if (!formattedError) {
+            return null;
+          }
+          return <ErrorCode key={index}>{formattedError}</ErrorCode>;
+        })
+        .filter(Boolean);
     }
 
-    return <ErrorCode>{(error && error.message) || error}</ErrorCode>;
+    return null;
   }
 
-  private formatErrors: (
-    err: ErrorObject,
-  ) => string | undefined = singleError => {
-    const data =
-      singleError &&
-      singleError.message &&
-      `${singleError.dataPath} ${
-        singleError.message
-      }: ${(singleError.params as any).allowedValues ||
-        (singleError.params as any).additionalProperty ||
-        (singleError.params as any).missingProperty}`;
+  private formatErrors = (singleError: ErrorObject): string | null => {
+    if (!singleError) {
+      return null;
+    }
 
-    return data;
+    const message = singleError.message;
+    const dataPath = singleError.dataPath;
+    const params = singleError.params as any;
+
+    const info = Object.values(params)[0];
+
+    return `${dataPath} ${message}: ${info}`;
   };
 }
 

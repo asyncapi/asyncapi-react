@@ -78,8 +78,12 @@ class Parser {
   }
 
   private createValidator() {
-    const validator = new Ajv({ schemaId: 'auto', allErrors: true });
-    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json')); // remind me to remove this line during review!
+    const validator = new Ajv({
+      schemaId: 'auto',
+      allErrors: true,
+      jsonPointers: true,
+    });
+    validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
     return validator;
   }
 
