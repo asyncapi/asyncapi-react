@@ -1,12 +1,17 @@
 import RefParser from 'json-schema-ref-parser';
-import Ajv from 'ajv';
+import Ajv, { ErrorObject } from 'ajv';
 
 import { AsyncApi } from '../types';
+
+interface ParserReturn {
+  data: AsyncApi;
+  error?: ErrorObject[] | null;
+}
 
 class Parser {
   private validator = this.createValidator();
 
-  async parse(content: string): Promise<AsyncApi> {
+  async parse(content: string): Promise<ParserReturn> {
     const parsedContent = this.parseContent(content);
 
     if (typeof parsedContent !== 'object' || parsedContent === null) {
@@ -23,15 +28,18 @@ class Parser {
     ];
 
     let parsed;
-
+    let err = undefined;
     try {
-      await this.validate(bundledJSON, asyncApiSchema);
+      err = await this.validate(bundledJSON, asyncApiSchema);
       parsed = bundledJSON;
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
 
-    return JSON.parse(JSON.stringify(parsed || {})) as AsyncApi;
+    return {
+      data: JSON.parse(JSON.stringify(parsed || {})) as AsyncApi,
+      error: err,
+    };
   }
 
   private parseContent(content: string) {
@@ -74,12 +82,13 @@ class Parser {
     return validator;
   }
 
-  private validate(json: JSON, schema: {}): void {
+  private validate(json: JSON, schema: {}): ErrorObject[] | null | undefined {
     const validate = this.validator.compile(schema);
     const valid = validate(json);
     if (!valid) {
-      console.error(validate.errors);
+      return validate.errors;
     }
+    return;
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
+import { ErrorObject } from 'ajv';
 
 import {
   AsyncApi,
@@ -16,7 +17,7 @@ import {
 } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
-// import Security from '../Security/Security';
+import { OldSecurityComponent } from '../Security/oldSec';
 // import TopicsComponent from '../Topics/Topics';
 import MessagesComponent from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
@@ -34,7 +35,7 @@ export interface AsyncApiProps {
 interface AsyncApiState {
   validatedSchema: AsyncApi;
   validated: boolean;
-  error?: Error | Error[];
+  error?: ErrorObject[] | null;
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -85,7 +86,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       return null;
     }
 
-    console.log(validatedSchema);
+    console.log(error);
 
     return (
       <ThemeProvider theme={concatenatedTheme}>
@@ -108,12 +109,17 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
             <Channels channels={validatedSchema.channels} />
           )}
 
-          {/* {concatenatedConfig.show.security &&
-            Boolean(validatedSchema.security) && (
-              <Security
-                security={validatedSchema.security as SecurityScheme[]}
+          {concatenatedConfig.show.security &&
+            validatedSchema.components &&
+            validatedSchema.components.securitySchemes && (
+              <OldSecurityComponent
+                security={Object.keys(
+                  validatedSchema.components.securitySchemes,
+                ).map(
+                  elem => validatedSchema!.components!.securitySchemes![elem],
+                )}
               />
-            )} */}
+            )}
           {/* {concatenatedConfig.show.topics &&
             Boolean(validatedSchema.topics) && (
               <TopicsComponent
@@ -153,12 +159,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   private async prepareSchema(schema: string) {
     try {
-      let validatedSchema = await this.validateSchema(schema);
+      let { data: validatedSchema, error } = await this.validateSchema(schema);
       validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema, validated: true, error: undefined });
+      this.setState({ validatedSchema, validated: true, error: error });
     } catch (e) {
       console.error(e);
-      this.setState({ error: e });
     }
   }
 

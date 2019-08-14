@@ -6,9 +6,10 @@ import {
   ErrorCode,
   ErrorPre,
 } from './styled';
+import { ErrorObject, EnumParams } from 'ajv';
 
 interface Props {
-  error?: Error | Error[];
+  error?: ErrorObject | ErrorObject[];
 }
 
 class ErrorComponent extends Component<Props> {
@@ -28,11 +29,16 @@ class ErrorComponent extends Component<Props> {
       </ErrorWrapper>
     );
   }
-  private renderErrors(error: Error | Error[]): React.ReactNode {
+  private renderErrors(error: ErrorObject | ErrorObject[]): React.ReactNode {
     if (Array.isArray(error)) {
-      return error.map((singleError: Error, index: number) => (
+      return error.map((singleError: ErrorObject, index: number) => (
         <ErrorCode key={index}>
-          {(singleError && singleError.message) || singleError}
+          {(singleError &&
+            singleError.message &&
+            `${singleError.dataPath} ${singleError.message}: ${
+              (singleError.params as EnumParams).allowedValues
+            }`) ||
+            singleError}
         </ErrorCode>
       ));
     }

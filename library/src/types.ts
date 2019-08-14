@@ -217,11 +217,11 @@ export interface Components {
 
 export interface SecurityScheme {
   type: string;
-  description?: DescriptionHTML;
-  name: string;
   in: string;
+  name: string;
   scheme: string;
   bearerFormat?: string;
+  description?: DescriptionHTML;
 }
 
 export interface XML {
