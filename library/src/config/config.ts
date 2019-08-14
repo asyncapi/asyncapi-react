@@ -8,6 +8,7 @@ interface ShowConfig {
   info: boolean;
   security: boolean;
   servers: boolean;
+  channels: boolean;
   topics: boolean;
   stream: boolean;
   events: boolean;

@@ -18,10 +18,11 @@ import {
 
 import InfoComponent from '../Info/Info';
 import { OldSecurityComponent } from '../Security/oldSec';
-// import TopicsComponent from '../Topics/Topics';
+
 import MessagesComponent from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
+import { ErrorBoundary } from '../Error/ErrorBoundary';
 import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
@@ -86,67 +87,67 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       return null;
     }
 
-    console.log(error);
-
     return (
-      <ThemeProvider theme={concatenatedTheme}>
-        <AsyncApiWrapper>
-          {concatenatedConfig.showErrors && Boolean(error) && (
-            <ErrorComponent error={error} />
-          )}
-          {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
-            <InfoComponent
-              info={validatedSchema.info}
-              servers={validatedSchema.servers}
-              showServers={
-                concatenatedConfig.show.servers &&
-                Boolean(validatedSchema.servers)
-              }
-            />
-          )}
-          {// concatenatedConfig.show.channels &&
-          !!validatedSchema.channels && (
-            <Channels channels={validatedSchema.channels} />
-          )}
-
-          {concatenatedConfig.show.security &&
-            validatedSchema.components &&
-            validatedSchema.components.securitySchemes && (
-              <OldSecurityComponent
-                security={Object.keys(
-                  validatedSchema.components.securitySchemes,
-                ).map(
-                  elem => validatedSchema!.components!.securitySchemes![elem],
-                )}
+      <ErrorBoundary>
+        <ThemeProvider theme={concatenatedTheme}>
+          <AsyncApiWrapper>
+            {concatenatedConfig.showErrors && Boolean(error) && (
+              <ErrorComponent error={error} />
+            )}
+            {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
+              <InfoComponent
+                info={validatedSchema.info}
+                servers={validatedSchema.servers}
+                showServers={
+                  concatenatedConfig.show.servers &&
+                  Boolean(validatedSchema.servers)
+                }
               />
             )}
-          {/* {concatenatedConfig.show.topics &&
+            {concatenatedConfig.show.security &&
+              validatedSchema.components &&
+              validatedSchema.components.securitySchemes && (
+                <OldSecurityComponent
+                  security={Object.keys(
+                    validatedSchema.components.securitySchemes,
+                  ).map(
+                    elem => validatedSchema!.components!.securitySchemes![elem],
+                  )}
+                />
+              )}
+
+            {concatenatedConfig.show.channels && !!validatedSchema.channels && (
+              <Channels channels={validatedSchema.channels} />
+            )}
+
+            {/* {concatenatedConfig.show.topics &&
             Boolean(validatedSchema.topics) && (
               <TopicsComponent
                 baseTopic={validatedSchema.baseTopic}
                 topics={validatedSchema.topics}
               />
             )} */}
-          {validatedSchema.components && (
-            <>
-              {concatenatedConfig.show.messages &&
-                Boolean(validatedSchema.components) &&
-                Boolean(validatedSchema.components.messages) && (
-                  <MessagesComponent
-                    messages={validatedSchema.components.messages}
-                  />
-                )}
-              {concatenatedConfig.show.schemas &&
-                Boolean(validatedSchema.components) &&
-                Boolean(validatedSchema.components.schemas) && (
-                  <SchemasComponent
-                    schemas={validatedSchema.components.schemas}
-                  />
-                )}
-            </>
-          )}
-        </AsyncApiWrapper>
-      </ThemeProvider>
+            {validatedSchema.components && (
+              <>
+                {concatenatedConfig.show.messages &&
+                  Boolean(validatedSchema.components) &&
+                  Boolean(validatedSchema.components.messages) && (
+                    <MessagesComponent
+                      messages={validatedSchema.components.messages}
+                    />
+                  )}
+                {concatenatedConfig.show.schemas &&
+                  Boolean(validatedSchema.components) &&
+                  Boolean(validatedSchema.components.schemas) && (
+                    <SchemasComponent
+                      schemas={validatedSchema.components.schemas}
+                    />
+                  )}
+              </>
+            )}
+          </AsyncApiWrapper>
+        </ThemeProvider>
+      </ErrorBoundary>
     );
   }
 

@@ -25,6 +25,7 @@ class Parser {
     const asyncApiSchema = require('asyncapi')[
       bundledJSON.asyncapi === '2.0.0-rc1' ? 'unstable' : bundledJSON.asyncapi
       // for now, coz there's old stuff in rc1
+      // todo: delete this after discusion
     ];
 
     let parsed;
@@ -77,7 +78,7 @@ class Parser {
   }
 
   private createValidator() {
-    const validator = new Ajv({ schemaId: 'auto' });
+    const validator = new Ajv({ schemaId: 'auto', allErrors: true });
     validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json')); // remind me to remove this line during review!
     return validator;
   }

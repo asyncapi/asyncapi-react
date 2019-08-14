@@ -10,6 +10,7 @@ export const defaultConfig: ConfigInterface = {
     events: true,
     messages: true,
     schemas: true,
+    channels: true,
   },
   showErrors: false,
   disableDefaultTheme: false,
