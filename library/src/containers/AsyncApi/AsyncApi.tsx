@@ -22,7 +22,7 @@ import { OldSecurityComponent } from '../Security/oldSec';
 import MessagesComponent from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
 import ErrorComponent from '../Error/Error';
-import { ErrorBoundary } from '../Error/ErrorBoundary';
+
 import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
@@ -43,7 +43,7 @@ const defaultAsyncApi: AsyncApi = {
   asyncapi: '',
   info: {
     title: 'AsyncApi example title',
-    version: '1.0.0',
+    version: '2.0.0',
   },
   channels: {},
 };
@@ -166,11 +166,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     }
   }
 
-  private async validateSchema(schema: string | any) {
-    if (typeof schema !== 'string') {
-      schema = JSON.stringify(schema);
+  private async validateSchema(schema: string) {
+    if (!schema) {
+      // todo: handle it instead of throwing
+      throw Error('Empty AsyncAPI Document');
     }
-    return await parser.parse(schema);
+    let properSchema = schema;
+    if (typeof schema !== 'string') {
+      properSchema = JSON.stringify(properSchema);
+    }
+    return await parser.parse(properSchema);
   }
 
   private beautifySchema(schema: AsyncApi): AsyncApi {
@@ -178,10 +183,4 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   }
 }
 
-const AsyncApiErrorBoundary: React.FunctionComponent<any> = props => (
-  <ErrorBoundary>
-    <AsyncApiComponent {...props} />
-  </ErrorBoundary>
-);
-
-export default AsyncApiErrorBoundary;
+export default AsyncApiComponent;
