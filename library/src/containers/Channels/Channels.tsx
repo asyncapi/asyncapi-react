@@ -19,7 +19,7 @@ export const Channels: FunctionComponent<Props> = ({ channels }) => {
         <H2>Channels</H2>
       </ChannelsHeader>
       {channelList.map(elem => (
-        <Channel name={elem.name} data={elem.data} key={elem.name} />
+        <Channel name={elem.name} channel={elem.data} key={elem.name} />
       ))}
     </StyledChannels>
   );

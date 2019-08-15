@@ -24,7 +24,7 @@ class MessagesComponent extends Component<Props> {
         <MessagesHeader>
           <H2>Messages</H2>
         </MessagesHeader>
-        {Object.keys(messages!).map(key => (
+        {Object.keys(messages).map(key => (
           <MessageComponent
             key={key}
             title={key}

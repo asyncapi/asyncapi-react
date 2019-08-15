@@ -28,7 +28,6 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
   if (!servers) {
     return null;
   }
-  // console.log(servers);
 
   return (
     <StyledServers>

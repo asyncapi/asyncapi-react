@@ -73,6 +73,7 @@ export interface Operation {
   protocolInfo?: ProtocolInfo;
   message?: Message;
 }
+
 export interface ProtocolInfo {
   [key: string]: any; // done
 }
@@ -160,14 +161,28 @@ export interface Event {
   send?: Message[];
 }
 
-export interface Message {
-  deprecated?: boolean;
+export type Message = RawMessage | Record<OneOf, RawMessage[]>;
+
+export function isRawMessage(message: Message): message is RawMessage {
+  return !(message as any).oneOf;
+}
+
+export interface RawMessage {
+  schemaFormat?: string;
+  contentType?: string;
   headers?: Schema;
-  payload?: Schema;
-  summary?: DescriptionHTML;
-  description?: DescriptionHTML;
+  payload?: any;
+  correlationId?: CorrelationId;
   tags?: Tag[];
+  summary?: DescriptionHTML;
+  name?: string;
+  title?: string;
+  description?: DescriptionHTML;
   externalDocs?: ExternalDocs;
+  deprecated?: boolean;
+  examples?: any[];
+  protocolInfo?: any;
+  traits: MessageTrait | [MessageTrait, any];
 }
 
 export interface Tag {
@@ -189,7 +204,7 @@ export interface CorrelationId {
   location: string;
 }
 
-export interface MessageTraits {
+export interface MessageTrait {
   schemaFormat?: string;
   contentType?: string;
   headers?: Schema;
@@ -212,7 +227,7 @@ export interface Components {
   parameters?: Record<string, Parameter>;
   correlationIds?: CorrelationId;
   operationTraits?: Record<string, OperationTrait>;
-  messageTraits?: Record<string, MessageTraits>;
+  messageTraits?: Record<string, MessageTrait>;
 }
 
 export interface SecurityScheme {
@@ -236,6 +251,8 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
+// as https://github.com/asyncapi/asyncapi/pull/256/files is merged now we have to rethink how to visualize schema
+// this thing is now deprecated
 export interface Schema {
   nullable?: boolean;
   format?: string;

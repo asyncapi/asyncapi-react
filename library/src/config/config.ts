@@ -9,9 +9,6 @@ interface ShowConfig {
   security: boolean;
   servers: boolean;
   channels: boolean;
-  topics: boolean;
-  stream: boolean;
-  events: boolean;
   messages: boolean;
   schemas: boolean;
 }

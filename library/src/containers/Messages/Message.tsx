@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Message } from '../../types';
+import { Message, isRawMessage } from '../../types';
 
 import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
@@ -25,6 +25,12 @@ interface Props {
 class MessageComponent extends Component<Props> {
   render() {
     const { title, message, hideTags } = this.props;
+
+    if (!isRawMessage(message)) {
+      // todo: handle if message is Record<OneOf, RawMessage[]>
+
+      return null;
+    }
 
     const headers = message.headers;
     const payload = message.payload;

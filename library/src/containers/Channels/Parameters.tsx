@@ -3,7 +3,7 @@ import { Parameters as ParamsType } from '../../types';
 import { Parameter } from './Parameter';
 import { H3 } from '../../components/';
 interface Props {
-  params: ParamsType;
+  params?: ParamsType;
 }
 
 export const Parameters: FunctionComponent<Props> = ({ params }) => {

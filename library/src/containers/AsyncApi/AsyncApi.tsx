@@ -88,66 +88,64 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     }
 
     return (
-      <ErrorBoundary>
-        <ThemeProvider theme={concatenatedTheme}>
-          <AsyncApiWrapper>
-            {concatenatedConfig.showErrors && Boolean(error) && (
-              <ErrorComponent error={error} />
-            )}
-            {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
-              <InfoComponent
-                info={validatedSchema.info}
-                servers={validatedSchema.servers}
-                showServers={
-                  concatenatedConfig.show.servers &&
-                  Boolean(validatedSchema.servers)
-                }
+      <ThemeProvider theme={concatenatedTheme}>
+        <AsyncApiWrapper>
+          {concatenatedConfig.showErrors && Boolean(error) && (
+            <ErrorComponent error={error} />
+          )}
+          {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
+            <InfoComponent
+              info={validatedSchema.info}
+              servers={validatedSchema.servers}
+              showServers={
+                concatenatedConfig.show.servers &&
+                Boolean(validatedSchema.servers)
+              }
+            />
+          )}
+          {concatenatedConfig.show.security &&
+            validatedSchema.components &&
+            validatedSchema.components.securitySchemes && (
+              <OldSecurityComponent
+                security={Object.keys(
+                  validatedSchema.components.securitySchemes,
+                ).map(
+                  elem => validatedSchema!.components!.securitySchemes![elem],
+                )}
               />
             )}
-            {concatenatedConfig.show.security &&
-              validatedSchema.components &&
-              validatedSchema.components.securitySchemes && (
-                <OldSecurityComponent
-                  security={Object.keys(
-                    validatedSchema.components.securitySchemes,
-                  ).map(
-                    elem => validatedSchema!.components!.securitySchemes![elem],
-                  )}
-                />
-              )}
 
-            {concatenatedConfig.show.channels && !!validatedSchema.channels && (
-              <Channels channels={validatedSchema.channels} />
-            )}
+          {concatenatedConfig.show.channels && !!validatedSchema.channels && (
+            <Channels channels={validatedSchema.channels} />
+          )}
 
-            {/* {concatenatedConfig.show.topics &&
+          {/* {concatenatedConfig.show.topics &&
             Boolean(validatedSchema.topics) && (
               <TopicsComponent
                 baseTopic={validatedSchema.baseTopic}
                 topics={validatedSchema.topics}
               />
             )} */}
-            {validatedSchema.components && (
-              <>
-                {concatenatedConfig.show.messages &&
-                  Boolean(validatedSchema.components) &&
-                  Boolean(validatedSchema.components.messages) && (
-                    <MessagesComponent
-                      messages={validatedSchema.components.messages}
-                    />
-                  )}
-                {concatenatedConfig.show.schemas &&
-                  Boolean(validatedSchema.components) &&
-                  Boolean(validatedSchema.components.schemas) && (
-                    <SchemasComponent
-                      schemas={validatedSchema.components.schemas}
-                    />
-                  )}
-              </>
-            )}
-          </AsyncApiWrapper>
-        </ThemeProvider>
-      </ErrorBoundary>
+          {validatedSchema.components && (
+            <>
+              {concatenatedConfig.show.messages &&
+                Boolean(validatedSchema.components) &&
+                Boolean(validatedSchema.components.messages) && (
+                  <MessagesComponent
+                    messages={validatedSchema.components.messages}
+                  />
+                )}
+              {concatenatedConfig.show.schemas &&
+                Boolean(validatedSchema.components) &&
+                Boolean(validatedSchema.components.schemas) && (
+                  <SchemasComponent
+                    schemas={validatedSchema.components.schemas}
+                  />
+                )}
+            </>
+          )}
+        </AsyncApiWrapper>
+      </ThemeProvider>
     );
   }
 
@@ -180,4 +178,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   }
 }
 
-export default AsyncApiComponent;
+const AsyncApiErrorBoundary: React.FunctionComponent<any> = props => (
+  <ErrorBoundary>
+    <AsyncApiComponent {...props} />
+  </ErrorBoundary>
+);
+
+export default AsyncApiErrorBoundary;

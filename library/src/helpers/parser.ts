@@ -81,7 +81,6 @@ class Parser {
     const validator = new Ajv({
       schemaId: 'auto',
       allErrors: true,
-      jsonPointers: true,
     });
     validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-04.json'));
     return validator;

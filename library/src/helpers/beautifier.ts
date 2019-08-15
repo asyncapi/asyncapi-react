@@ -5,6 +5,7 @@ import {
   Servers,
   Topic,
   ServerVariable,
+  isRawMessage,
   // SecurityRequirement,
 } from '../types';
 
@@ -17,9 +18,7 @@ class Beautifier {
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
-    // if (asyncApi.security) {
-    //   asyncApi.security = this.beautifySecurity(asyncApi);
-    // }
+
     if (asyncApi.topics) {
       asyncApi.topics = this.beautifyTopics(asyncApi.topics);
     }
@@ -140,6 +139,13 @@ class Beautifier {
   }
 
   private beautifyMessage(message: Message): Message {
+    if (!isRawMessage(message)) {
+      const beautified = {
+        oneOf: message.oneOf.map(this.beautifyMessage),
+      } as Message;
+
+      return beautified;
+    }
     if (message.payload) {
       message.payload = this.resolveAllOf(message.payload);
     }
