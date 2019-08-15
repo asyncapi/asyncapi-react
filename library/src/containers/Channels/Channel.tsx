@@ -86,7 +86,9 @@ interface OperationProps {
 }
 
 const Subscribe: FunctionComponent<OperationProps> = ({ channel }) => {
-  if (!channel.subscribe) return null;
+  if (!channel.subscribe) {
+    return null;
+  }
 
   const subscribe: any = channel.subscribe;
   if (!(subscribe as any).oneOf) {
@@ -119,7 +121,9 @@ const Subscribe: FunctionComponent<OperationProps> = ({ channel }) => {
 };
 
 const Publish: FunctionComponent<OperationProps> = ({ channel }) => {
-  if (!channel.publish) return null;
+  if (!channel.publish) {
+    return null;
+  }
 
   const publish: any = channel.publish;
   if (!(publish as any).oneOf) {

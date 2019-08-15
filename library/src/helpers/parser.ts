@@ -29,7 +29,7 @@ class Parser {
     ];
 
     let parsed;
-    let err = undefined;
+    let err;
     try {
       err = await this.validate(bundledJSON, asyncApiSchema);
       parsed = bundledJSON;

@@ -16,24 +16,22 @@ interface Props {
   param: ParamType;
 }
 
-export const Parameter: FunctionComponent<Props> = ({ param, name }) => {
-  return (
-    <StyledParameters>
-      <ParametersHeader>
-        <H4>Channel Parameters</H4>
-      </ParametersHeader>
-      <ParameterWrapper>
-        {param.description ? (
-          <ParameterHeader>
-            {param.description && <Markdown>{param.description}</Markdown>}
-          </ParameterHeader>
-        ) : null}
-        {param.location && <H4>Location: {param.location}</H4>}
-        <SchemaComponent name={name} schema={param.schema} hideTitle={true} />
-      </ParameterWrapper>
-    </StyledParameters>
-  );
-};
+export const Parameter: FunctionComponent<Props> = ({ param, name }) => (
+  <StyledParameters>
+    <ParametersHeader>
+      <H4>Channel Parameters</H4>
+    </ParametersHeader>
+    <ParameterWrapper>
+      {param.description ? (
+        <ParameterHeader>
+          {param.description && <Markdown>{param.description}</Markdown>}
+        </ParameterHeader>
+      ) : null}
+      {param.location && <H4>Location: {param.location}</H4>}
+      <SchemaComponent name={name} schema={param.schema} hideTitle={true} />
+    </ParameterWrapper>
+  </StyledParameters>
+);
 //   {param.description && (
 //     <>
 //       <h4>Description:</h4>

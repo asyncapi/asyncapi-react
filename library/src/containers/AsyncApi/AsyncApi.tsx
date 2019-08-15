@@ -160,7 +160,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     try {
       let { data: validatedSchema, error } = await this.validateSchema(schema);
       validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema, validated: true, error: error });
+      this.setState({ validatedSchema, validated: true, error });
     } catch (e) {
       console.error(e);
     }
