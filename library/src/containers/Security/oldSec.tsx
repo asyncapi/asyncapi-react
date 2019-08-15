@@ -41,7 +41,9 @@ export class OldSecurityComponent extends Component<Props> {
   render() {
     const { security } = this.props;
 
-    if (!security) return null;
+    if (!security) {
+      return null;
+    }
 
     return (
       <SecurityWrapper>
