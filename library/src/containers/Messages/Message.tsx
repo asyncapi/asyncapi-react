@@ -29,7 +29,17 @@ class MessageComponent extends Component<Props> {
     if (!isRawMessage(message)) {
       // todo: handle if message is Record<OneOf, RawMessage[]>
 
-      return null;
+      // return null;
+
+      return (
+        <>
+          {message.oneOf.map((elem, index) => (
+            <div style={{ border: '1px solid red' }}>
+              <MessageComponent message={elem} key={index} />
+            </div>
+          ))}
+        </>
+      );
     }
 
     const headers = message.headers;

@@ -182,7 +182,7 @@ export interface RawMessage {
   deprecated?: boolean;
   examples?: any[];
   protocolInfo?: any;
-  traits: MessageTrait | [MessageTrait, any];
+  traits?: MessageTrait | [MessageTrait, any];
 }
 
 export interface Tag {
