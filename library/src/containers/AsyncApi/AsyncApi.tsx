@@ -118,14 +118,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
           {concatenatedConfig.show.channels && !!validatedSchema.channels && (
             <Channels channels={validatedSchema.channels} />
           )}
-
-          {/* {concatenatedConfig.show.topics &&
-            Boolean(validatedSchema.topics) && (
-              <TopicsComponent
-                baseTopic={validatedSchema.baseTopic}
-                topics={validatedSchema.topics}
-              />
-            )} */}
           {validatedSchema.components && (
             <>
               {concatenatedConfig.show.messages &&

@@ -6,6 +6,9 @@ import {
   Topic,
   ServerVariable,
   isRawMessage,
+  Channels,
+  Parameters,
+  Operation,
   // SecurityRequirement,
 } from '../types';
 
@@ -18,6 +21,8 @@ class Beautifier {
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
+
+    asyncApi.channels = this.beautifyChannels(asyncApi.channels);
 
     if (asyncApi.topics) {
       asyncApi.topics = this.beautifyTopics(asyncApi.topics);
@@ -196,6 +201,62 @@ class Beautifier {
     });
 
     return copiedServers;
+  }
+
+  private beautifyOperation(operation: Operation): Operation {
+    if (!operation.message) {
+      return operation;
+    }
+
+    if (!isRawMessage(operation.message)) {
+      let messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
+      messages.map(arg => this.beautifyMessage(arg));
+      return { ...operation, message: { oneOf: messages } };
+    }
+
+    return { ...operation, message: this.beautifyMessage(operation.message) };
+  }
+
+  private beautifyChannels(channels: Channels): Channels {
+    const newChannels: Channels = {};
+    for (const key of Object.keys(channels)) {
+      newChannels[key] = {};
+
+      const channel = channels[key];
+
+      const publish = channel.publish;
+      if (publish) {
+        newChannels[key].publish = this.beautifyOperation(publish);
+      }
+
+      const subscribe = channel.subscribe;
+
+      if (subscribe) {
+        newChannels[key].subscribe = this.beautifyOperation(subscribe);
+      }
+
+      if (channel.parameters) {
+        newChannels[key].parameters = this.beautifyParameters(
+          channel.parameters,
+        );
+      }
+
+      newChannels[key] = channel;
+    }
+    return newChannels;
+  }
+
+  private beautifyParameters(params: Parameters): Parameters {
+    const newParams: Parameters = {};
+    Object.keys(params).map(key => {
+      const prop = params[key];
+      if (prop.description) {
+        prop.description = this.renderMd(prop.description as string);
+      }
+
+      newParams[key] = prop;
+    });
+    return newParams;
   }
 
   private beautifyTopics(topics: Record<string, Topic>): Record<string, Topic> {

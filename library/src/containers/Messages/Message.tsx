@@ -24,19 +24,13 @@ interface Props {
 
 class MessageComponent extends Component<Props> {
   render() {
-    const { title, message, hideTags } = this.props;
+    const { title = 'asd', message, hideTags } = this.props;
 
     if (!isRawMessage(message)) {
-      // todo: handle if message is Record<OneOf, RawMessage[]>
-
-      // return null;
-
       return (
         <>
           {message.oneOf.map((elem, index) => (
-            <div style={{ border: '1px solid red' }}>
-              <MessageComponent message={elem} key={index} />
-            </div>
+            <MessageComponent message={elem} key={index} />
           ))}
         </>
       );

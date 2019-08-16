@@ -5,8 +5,7 @@ import { Parameter as ParamType } from '../../types';
 
 import { SchemaComponent } from '../Schemas/Schema';
 import {
-  StyledParameters,
-  ParametersHeader,
+  StyledParameter,
   StyledParameter as ParameterWrapper,
   ParameterHeader,
 } from './styled';
@@ -16,11 +15,8 @@ interface Props {
   param: ParamType;
 }
 
-export const Parameter: FunctionComponent<Props> = ({ param, name }) => (
-  <StyledParameters>
-    <ParametersHeader>
-      <H4>Channel Parameters</H4>
-    </ParametersHeader>
+export const Parameter: FunctionComponent<Props> = ({ param, name = '' }) => (
+  <StyledParameter>
     <ParameterWrapper>
       {param.description ? (
         <ParameterHeader>
@@ -30,7 +26,7 @@ export const Parameter: FunctionComponent<Props> = ({ param, name }) => (
       {param.location && <H4>Location: {param.location}</H4>}
       <SchemaComponent name={name} schema={param.schema} hideTitle={true} />
     </ParameterWrapper>
-  </StyledParameters>
+  </StyledParameter>
 );
 //   {param.description && (
 //     <>

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 // import { StyledChannel, ChannelHeader } from './styled';
-import MessageComponent from '../Messages/Message';
-import { ChannelItem, Message } from '../../types';
+import { Operation } from './Operation';
+import { ChannelItem, isRawMessage } from '../../types';
 import { Parameters as ParametersComponent } from './Parameters';
 import {
   H3,
@@ -9,15 +9,14 @@ import {
   PublishBadge,
   SubscribeBadge,
   HeaderParagraph,
+  DeprecatedBadge,
 } from '../../components';
 import {
   Topic as TopicWrapper,
   TopicHeader,
   TopicHeaderBadge,
-  TopicMessage,
   TopicHeaderMessage,
 } from './styled';
-import { MessageIndented } from '../Messages/styled';
 
 interface Props {
   name: string;
@@ -25,16 +24,28 @@ interface Props {
 }
 
 export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
-  const oneOf: boolean =
-    (channel.publish && (channel.publish as any).oneOf) ||
-    ((channel.subscribe && (channel.subscribe as any).oneOf) as boolean);
+  const oneOfPublish =
+    channel.publish &&
+    channel.publish.message &&
+    channel.publish.message &&
+    !isRawMessage(channel.publish.message);
+
+  const oneOfSubscribe =
+    channel.subscribe &&
+    channel.subscribe.message &&
+    channel.subscribe.message &&
+    !isRawMessage(channel.subscribe.message);
+
+  const oneOf = Boolean(oneOfPublish || oneOfSubscribe);
 
   return (
     <TopicWrapper>
       <TopicHeader>
         <H3>
           <TopicHeaderBadge>
-            {/* {channel.deprecated && <DeprecatedBadge>Deprecated</DeprecatedBadge>} */}
+            {channel.deprecated && (
+              <DeprecatedBadge>Deprecated</DeprecatedBadge>
+            )}
             {channel.publish && <PublishBadge>Publish</PublishBadge>}
             {channel.subscribe && <SubscribeBadge>Subscribe</SubscribeBadge>}
           </TopicHeaderBadge>
@@ -50,8 +61,8 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
           </HeaderParagraph>
         )}
       </TopicHeaderMessage>
-      <Publish channel={channel} />
-      <Subscribe channel={channel} />
+      <Operation operation={channel.subscribe} />
+      <Operation operation={channel.publish} />
     </TopicWrapper>
   );
 
@@ -79,75 +90,4 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
   //   {this.renderPublish()}
   //   {this.renderSubscribe()} */}
   // </TopicWrapper>);
-};
-
-interface OperationProps {
-  channel: ChannelItem;
-}
-
-const Subscribe: FunctionComponent<OperationProps> = ({ channel }) => {
-  if (!channel.subscribe) {
-    return null;
-  }
-
-  const subscribe: any = channel.subscribe;
-  if (!(subscribe as any).oneOf) {
-    const message: Message = subscribe.message;
-    return (
-      <TopicMessage>
-        <MessageComponent message={message} />
-      </TopicMessage>
-    );
-  }
-  const subscribes: Message[] = (subscribe as any).oneOf;
-
-  return (
-    <>
-      {subscribes.map((sub, index) => (
-        <TopicMessage key={index}>
-          <TopicHeaderMessage>
-            <H4>Message #{index + 1}</H4>
-          </TopicHeaderMessage>
-          <MessageIndented>
-            <MessageComponent message={sub} />
-          </MessageIndented>
-        </TopicMessage>
-      ))}
-    </>
-  );
-
-  // console.log(channel);
-  // return <div>dsfsd</div>;
-};
-
-const Publish: FunctionComponent<OperationProps> = ({ channel }) => {
-  if (!channel.publish) {
-    return null;
-  }
-
-  const publish: any = channel.publish;
-  if (!(publish as any).oneOf) {
-    const message: Message = publish.message;
-    return (
-      <TopicMessage>
-        <MessageComponent message={message} />
-      </TopicMessage>
-    );
-  }
-  const publishes: Message[] = (publish as any).oneOf;
-
-  return (
-    <>
-      {publishes.map((pub, index) => (
-        <TopicMessage key={index}>
-          <TopicHeaderMessage>
-            <H4>Message #{index + 1}</H4>
-          </TopicHeaderMessage>
-          <MessageIndented>
-            <MessageComponent message={pub} />
-          </MessageIndented>
-        </TopicMessage>
-      ))}
-    </>
-  );
 };
