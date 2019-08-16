@@ -177,7 +177,7 @@ export interface RawMessage {
   schemaFormat?: string;
   contentType?: string;
   headers?: Schema;
-  payload?: any | Record<OneOf, any[]>;
+  payload?: Schema | Record<OneOf, Schema[]>; //payload is Schema, not any https://github.com/asyncapi/parser-js/blob/master/lib/models/message.js#L35
   correlationId?: CorrelationId;
   tags?: Tag[];
   summary?: DescriptionHTML;

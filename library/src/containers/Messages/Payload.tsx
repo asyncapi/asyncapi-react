@@ -15,8 +15,9 @@ export const PayloadComponent: FunctionComponent<PayloadProps> = ({
   if (isOneOfPayload(payload)) {
     return (
       <>
-        <H4>Possible Payloads</H4>
-        {payload.oneOf.map((elem: any, index: number) => (
+        {/* todo: that text needs to be discussed */}
+        <H4>One of those payloads:</H4>
+        {payload.oneOf.map((elem, index: number) => (
           <PayloadComponent payload={elem} key={index} />
         ))}
       </>

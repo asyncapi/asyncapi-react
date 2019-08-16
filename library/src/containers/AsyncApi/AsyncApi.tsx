@@ -173,3 +173,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 }
 
 export default AsyncApiComponent;
+
+// to fix:
+// https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/next/not.yml
+// https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/next/anyof.yml
+// security component
