@@ -4,14 +4,13 @@ import { Message, isRawMessage } from '../../types';
 
 import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
+import { PayloadComponent } from './Payload';
 
 import {
   Message as MessageWrapper,
   MessageHeader,
   MessageHeaders,
   MessageHeadersHeader,
-  MessagePayload,
-  MessagePayloadHeader,
   MessageTags,
   MessageTagsHeader,
 } from './styled';
@@ -25,6 +24,9 @@ interface Props {
 class MessageComponent extends Component<Props> {
   render() {
     const { title, message, hideTags } = this.props;
+    if (!message) {
+      return null;
+    }
 
     if (!isRawMessage(message)) {
       return (
@@ -39,10 +41,6 @@ class MessageComponent extends Component<Props> {
     const headers = message.headers;
     const payload = message.payload;
 
-    if (!message) {
-      return null;
-    }
-
     return (
       <MessageWrapper>
         <MessageHeader>
@@ -53,9 +51,7 @@ class MessageComponent extends Component<Props> {
                 <DeprecatedBadge>Deprecated</DeprecatedBadge>
               )}
             </H3>
-          ) : (
-            <H4>Message</H4>
-          )}
+          ) : null}
           {message.summary && <Markdown>{message.summary}</Markdown>}
           {message.description && <Markdown>{message.description}</Markdown>}
         </MessageHeader>
@@ -72,19 +68,7 @@ class MessageComponent extends Component<Props> {
             />
           </MessageHeaders>
         )}
-        {payload && (
-          <MessagePayload>
-            <MessagePayloadHeader>
-              <H4>Payload</H4>
-            </MessagePayloadHeader>
-            <SchemaComponent
-              name="Message Payload"
-              schema={payload}
-              exampleTitle="Example of payload"
-              hideTitle={true}
-            />
-          </MessagePayload>
-        )}
+        {payload && <PayloadComponent payload={payload}> </PayloadComponent>}
         {!hideTags && message.tags && (
           <MessageTags>
             <MessageTagsHeader>

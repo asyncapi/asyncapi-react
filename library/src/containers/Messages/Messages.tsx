@@ -19,6 +19,8 @@ class MessagesComponent extends Component<Props> {
       return null;
     }
 
+    // console.log(messages);
+
     return (
       <Messages>
         <MessagesHeader>

@@ -145,21 +145,21 @@ export interface Reference {
   $ref: ReferenceString;
 }
 
-export interface Stream {
-  framing: StreamFraming;
-  read?: Message[];
-  write?: Message[];
-}
+// export interface Stream {
+//   framing: StreamFraming;
+//   read?: Message[];
+//   write?: Message[];
+// }
 
-export interface StreamFraming {
-  type: string;
-  delimiter?: string;
-}
+// export interface StreamFraming {
+//   type: string;
+//   delimiter?: string;
+// }
 
-export interface Event {
-  receive?: Message[];
-  send?: Message[];
-}
+// export interface Event {
+//   receive?: Message[];
+//   send?: Message[];
+// }
 
 export type Message = RawMessage | Record<OneOf, RawMessage[]>;
 
@@ -167,11 +167,17 @@ export function isRawMessage(message: Message): message is RawMessage {
   return !(message as any).oneOf;
 }
 
+export function isOneOfPayload(
+  payload: any | Record<OneOf, any>,
+): payload is Record<OneOf, any> {
+  return (payload as Record<OneOf, any>).oneOf !== undefined;
+}
+
 export interface RawMessage {
   schemaFormat?: string;
   contentType?: string;
   headers?: Schema;
-  payload?: any;
+  payload?: any | Record<OneOf, any[]>;
   correlationId?: CorrelationId;
   tags?: Tag[];
   summary?: DescriptionHTML;
