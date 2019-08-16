@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { ErrorObject } from 'ajv';
 
-import {
-  AsyncApi,
-  // SecurityScheme
-} from '../../types';
+import { AsyncApi } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import {
@@ -55,7 +52,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     error: undefined,
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     this.updateSchema(this.props.schema);
   }
 
@@ -75,7 +72,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       ...config,
       show: {
         ...defaultConfig.show,
-        ...(config && config.show ? config.show : {}),
+        ...(!!config && config.show),
       },
     };
 

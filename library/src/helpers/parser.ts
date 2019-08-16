@@ -1,5 +1,6 @@
 import RefParser from 'json-schema-ref-parser';
 import Ajv, { ErrorObject } from 'ajv';
+import asyncApiParser from 'asyncapi-parser';
 
 import { AsyncApi } from '../types';
 
@@ -13,6 +14,8 @@ class Parser {
 
   async parse(content: string): Promise<ParserReturn> {
     const parsedContent = this.parseContent(content);
+
+    console.log(asyncApiParser.parse(content));
 
     if (typeof parsedContent !== 'object' || parsedContent === null) {
       throw new Error('Invalid YAML content.');
