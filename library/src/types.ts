@@ -34,9 +34,9 @@ export interface AsyncApi {
   tags?: Tag[];
   externalDocs?: ExternalDocs;
   // below - deprecated
-  topics?: Record<string, Topic>;
-  stream?: Stream;
-  events?: Event;
+  // topics?: Record<string, Topic>;
+  // stream?: Stream;
+  // events?: Event;
   // security?: Array<SecurityRequirement | SecurityScheme>;
 }
 

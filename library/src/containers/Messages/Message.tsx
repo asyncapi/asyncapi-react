@@ -24,7 +24,7 @@ interface Props {
 
 class MessageComponent extends Component<Props> {
   render() {
-    const { title = 'asd', message, hideTags } = this.props;
+    const { title, message, hideTags } = this.props;
 
     if (!isRawMessage(message)) {
       return (
@@ -46,13 +46,15 @@ class MessageComponent extends Component<Props> {
     return (
       <MessageWrapper>
         <MessageHeader>
-          {title && (
+          {title ? (
             <H3>
               {title}{' '}
               {message.deprecated && (
                 <DeprecatedBadge>Deprecated</DeprecatedBadge>
               )}
             </H3>
+          ) : (
+            <H4>Message</H4>
           )}
           {message.summary && <Markdown>{message.summary}</Markdown>}
           {message.description && <Markdown>{message.description}</Markdown>}

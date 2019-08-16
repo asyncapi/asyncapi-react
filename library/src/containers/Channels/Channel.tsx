@@ -65,29 +65,4 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
       <Operation operation={channel.publish} />
     </TopicWrapper>
   );
-
-  // return (
-  // <TopicWrapper>
-  //   <TopicHeader>
-  //     <H3>
-  //       <TopicHeaderBadge>
-  //         {channel.deprecated && (
-  //           <DeprecatedBadge>Deprecated</DeprecatedBadge>
-  //         )}
-  //         {channel.publish && <PublishBadge>Publish</PublishBadge>}
-  //         {channel.subscribe && <SubscribeBadge>Subscribe</SubscribeBadge>}
-  //       </TopicHeaderBadge>
-  //       {name}
-  //     </H3>
-  //   </TopicHeader>
-  //   {channel.parameters && <Parameters params={channel.parameters} />}
-  //   {/* <TopicHeaderMessage>
-  //     <H4>{oneOf ? 'Messages' : 'Message'}</H4>
-  //     {oneOf && <HeaderParagraph>
-  //         You can send one of the following messages:
-  //       </HeaderParagraph>}
-  //   </TopicHeaderMessage>
-  //   {this.renderPublish()}
-  //   {this.renderSubscribe()} */}
-  // </TopicWrapper>);
 };
