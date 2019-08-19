@@ -1,3 +1,4 @@
+import merge from 'merge';
 import {
   AsyncApi,
   Schema,
@@ -44,8 +45,8 @@ class Beautifier {
       schema.allOf.forEach(s => {
         schemas.push(this.resolveAllOf(s));
       });
-      // todo fix those types here and make sure it actually works
-      return this.resolveAllOf(Object.assign({}, ...schemas));
+
+      return merge.recursive(...schemas);
     }
 
     if (schema.properties) {

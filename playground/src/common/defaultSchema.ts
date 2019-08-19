@@ -26,6 +26,7 @@ components:
         oneOf: # oneOf in payload schema
           - $ref: "#/components/schemas/objectWithKey"
           - $ref: "#/components/schemas/objectWithKey2"
+          - $ref: "#/components/schemas/objectWithKey3"
     testMessage1:
       payload:
         $ref: "#/components/schemas/objectWithKey"
@@ -38,6 +39,7 @@ components:
       allOf:
           - $ref: "#/components/schemas/objectWithKey"
           - $ref: "#/components/schemas/objectWithKey2"
+          - $ref: "#/components/schemas/objectWithKey3"
     objectWithKey:
       type: object
       properties:
@@ -47,4 +49,9 @@ components:
       type: object
       properties:
         key2:
-          type: string`;
+          type: string
+    objectWithKey3:
+      type: object
+      properties:
+        XD:
+          type: number`;
