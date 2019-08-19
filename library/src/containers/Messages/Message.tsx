@@ -68,7 +68,7 @@ class MessageComponent extends Component<Props> {
             />
           </MessageHeaders>
         )}
-        {payload && <PayloadComponent payload={payload}> </PayloadComponent>}
+        {payload && <PayloadComponent payload={payload} />}
         {!hideTags && message.tags && (
           <MessageTags>
             <MessageTagsHeader>

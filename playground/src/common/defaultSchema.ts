@@ -1,68 +1,50 @@
 export const defaultSchema = `asyncapi: '2.0.0-rc1'
-id: 'urn:rpc:example:server'
-defaultContentType: application/json
-
 info:
-  title: RPC Server Example
-  description: This example demonstrates how to define an RPC server.
+  title: OneOf example
   version: '1.0.0'
 
-servers:
-  production:
-    url: rabbitmq.example.org
-    protocol: amqp
-
 channels:
-  '{queue}':
-    parameters:
-      queue:
-        schema:
-          type: string
-          pattern: '^amq\\.gen\\-.+$'
-    protocolInfo:
-      amqp-0-9-1:
-        channelIsQueue: true
-        queue:
-          randomName: true
-          exclusive: true
+  test:
     publish:
-      operationId: sendSumResult
-      protocolInfo:
-        amqp-0-9-1:
-          ack: true
       message:
-        correlationId:
-          location: $message.header#/correlation_id
-        payload:
-          type: object
-          properties:
-            result:
-              type: number
-              examples:
-                - 7
+        $ref: '#/components/messages/testMessages'
 
-  rpc_queue:
-    protocolInfo:
-      amqp-0-9-1:
-        channelIsQueue: true
-        queue:
-          durable: false
+  test2:
     subscribe:
-      operationId: sum
       message:
-        protocolInfo:
-          amqp-0-9-1:
-            properties:
-              reply_to:
-                type: string
-        correlationId:
-          location: $message.header#/correlation_id
-        payload:
-          type: object
-          properties:
-            numbers:
-              type: array
-              items:
-                type: number
-              examples:
-                - [4,3]`;
+        # Use oneOf here if different messages are published on test2 topic.
+        oneOf:
+          - payload:
+              $ref: "#/components/schemas/objectWithKey"
+          - payload:
+              $ref: "#/components/schemas/objectWithKey2"
+
+components:
+  messages:
+    testMessages:
+      payload:
+        oneOf: # oneOf in payload schema
+          - $ref: "#/components/schemas/objectWithKey"
+          - $ref: "#/components/schemas/objectWithKey2"
+    testMessage1:
+      payload:
+        $ref: "#/components/schemas/objectWithKey"
+    testMessage2:
+      payload:
+        $ref: "#/components/schemas/objectWithKey2"
+
+  schemas:
+    custom: 
+      allOf:
+          - $ref: "#/components/schemas/objectWithKey"
+          - $ref: "#/components/schemas/objectWithKey2"
+    objectWithKey:
+      type: object
+      properties:
+        key:
+          type: string
+    objectWithKey2:
+      type: object
+      properties:
+        key2:
+          type: string`;

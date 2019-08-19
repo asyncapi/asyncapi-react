@@ -6,7 +6,6 @@ import {
 } from 'asyncapi-parser';
 
 import { AsyncApi, ParserReturn, FetchingSchemaInterface } from '../types';
-import console = require('console');
 
 // ask tws about this error msg
 const UNSUPPORTED_SCHEMA_VERSION =

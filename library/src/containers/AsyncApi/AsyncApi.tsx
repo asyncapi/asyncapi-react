@@ -145,13 +145,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
       const beautifiedSchema = this.beautifySchema(data);
 
-      this.setState({ validatedSchema: beautifiedSchema, error: error });
+      this.setState({ validatedSchema: beautifiedSchema, error });
     } else {
       const { data, error } = await parser.parse(schema);
 
       const beautifiedSchema = this.beautifySchema(data);
 
-      this.setState({ validatedSchema: beautifiedSchema, error: error });
+      this.setState({ validatedSchema: beautifiedSchema, error });
     }
   }
 

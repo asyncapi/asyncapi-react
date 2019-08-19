@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   ErrorWrapper,
   ErrorHeader,
@@ -15,61 +15,59 @@ interface Props {
   error: ParserError;
 }
 
-class ErrorComponent extends Component<Props> {
-  render() {
-    const { error } = this.props;
+const ErrorComponent: FunctionComponent<Props> = ({ error }) => {
+  const [visible, setVisible] = useState(true);
 
-    if (!error) {
-      return null;
-    }
-
-    const { message, validationError } = error;
-
-    return (
-      <ErrorWrapper>
-        {/* <ErrorHeader>There are errors in your document:</ErrorHeader> TODO: discuss -> I would just show line 32, and delete this one */}
-        <ErrorHeader>Error: {message}</ErrorHeader>
-        {!!validationError && (
-          <ErrorContent>
-            <ErrorPre>{this.renderErrors(validationError)}</ErrorPre>
-          </ErrorContent>
-        )}
-      </ErrorWrapper>
-    );
+  if (!error) {
+    return null;
   }
 
-  renderErrors(error: ValidationError): React.ReactNode {
-    if (!error) {
-      return null;
-    }
+  const { message, validationError } = error;
 
-    return error
-      .map((singleError: ErrorObject, index: number) => {
-        const formattedError = this.formatErrors(singleError);
+  return (
+    <ErrorWrapper>
+      <button onClick={() => setVisible(!visible)}>STYLE ME</button>
+      <ErrorHeader>Error: {message}</ErrorHeader>
+      {!!validationError && visible && (
+        <ErrorContent>
+          <ErrorPre>{renderErrors(validationError)}</ErrorPre>
+        </ErrorContent>
+      )}
+    </ErrorWrapper>
+  );
+};
 
-        if (!formattedError) {
-          return null;
-        }
-        return <ErrorCode key={index}>{formattedError}</ErrorCode>;
-      })
-      .filter(Boolean);
+function renderErrors(error: ValidationError): React.ReactNode {
+  if (!error) {
+    return null;
   }
 
-  formatErrors = (singleError: ErrorObject): string | null => {
-    if (!singleError) {
-      return null;
-    }
+  return error
+    .map((singleError: ErrorObject, index: number) => {
+      const formattedError = formatErrors(singleError);
 
-    const message = singleError.message;
-    const dataPath = singleError.dataPath;
-    const params = singleError.params as any;
-
-    const info = Object.values(params)[0];
-
-    return `${dataPath} ${message}${
-      singleError.keyword === 'type' ? '' : `: ${info}`
-    }`;
-  };
+      if (!formattedError) {
+        return null;
+      }
+      return <ErrorCode key={index}>{formattedError}</ErrorCode>;
+    })
+    .filter(Boolean);
 }
+
+const formatErrors = (singleError: ErrorObject): string | null => {
+  if (!singleError) {
+    return null;
+  }
+
+  const message = singleError.message;
+  const dataPath = singleError.dataPath;
+  const params = singleError.params as any;
+
+  const info = Object.values(params)[0];
+
+  return `${dataPath} ${message}${
+    singleError.keyword === 'type' ? '' : `: ${info}`
+  }`;
+};
 
 export default ErrorComponent;

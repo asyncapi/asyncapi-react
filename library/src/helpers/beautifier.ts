@@ -44,7 +44,7 @@ class Beautifier {
       schema.allOf.forEach(s => {
         schemas.push(this.resolveAllOf(s));
       });
-      // todo fix those types here
+      // todo fix those types here and make sure it actually works
       return this.resolveAllOf(Object.assign({}, ...schemas));
     }
 
@@ -208,7 +208,7 @@ class Beautifier {
     }
 
     if (!isRawMessage(operation.message)) {
-      let messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
+      const messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
       messages.map(arg => this.beautifyMessage(arg));
       return { ...operation, message: { oneOf: messages } };
     }
@@ -257,45 +257,6 @@ class Beautifier {
     });
     return newParams;
   }
-
-  // private beautifyTopics(topics: Record<string, Topic>): Record<string, Topic> {
-  //   const newTopics: Record<string, Topic> = {};
-  //   for (const key of Object.keys(topics)) {
-  //     const topic = topics[key];
-
-  //     if (topic.publish) {
-  //       if ((topic.publish as any).oneOf) {
-  //         let messages: Message[] = (topic.publish as any).oneOf;
-  //         messages = messages.map(message => this.beautifyMessage(message));
-
-  //         (topic.publish as any).oneOf = messages;
-  //       } else {
-  //         topic.publish = this.beautifyMessage(topic.publish as Message);
-  //       }
-  //     }
-
-  //     if (topic.subscribe) {
-  //       if ((topic.subscribe as any).oneOf) {
-  //         let messages: Message[] = (topic.subscribe as any).oneOf;
-  //         messages = messages.map(message => this.beautifyMessage(message));
-
-  //         (topic.subscribe as any).oneOf = messages;
-  //       } else {
-  //         topic.subscribe = this.beautifyMessage(topic.subscribe as Message);
-  //       }
-  //     }
-
-  //     if (topic.parameters) {
-  //       topic.parameters = topic.parameters.map(param => {
-  //         param.description = this.renderMd(param.description as string);
-  //         return param;
-  //       });
-  //     }
-
-  //     newTopics[key] = topic;
-  //   }
-  //   return newTopics;
-  // }
 
   // private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
   //   const { components, security } = asyncApi;
