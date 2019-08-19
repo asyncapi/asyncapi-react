@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import { RawMessage, isOneOfPayload } from '../../types';
+import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
 
 import { H4 } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
@@ -23,6 +23,19 @@ export const PayloadComponent: FunctionComponent<PayloadProps> = ({
       </>
     );
   }
+
+  if (isAnyOfPayload(payload)) {
+    return (
+      <>
+        {/* todo: that text needs to be discussed */}
+        <H4>Any of those payloads:</H4>
+        {payload.anyOf.map((elem, index: number) => (
+          <PayloadComponent payload={elem} key={index} />
+        ))}
+      </>
+    );
+  }
+
   return (
     <MessagePayload>
       <MessagePayloadHeader>

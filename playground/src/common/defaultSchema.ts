@@ -1,210 +1,33 @@
 export const defaultSchema = `asyncapi: '2.0.0-rc1'
-id: 'urn:com:smartylighting:streetlights:server'
 info:
-  title: Streetlights API
+  title: AnyOf example
   version: '1.0.0'
-  description: |
-    The Smartylighting Streetlights API allows you to remotely manage the city lights.
 
-    ### Check out its awesome features:
-
-    * Turn a specific streetlight on/off 🌃
-    * Dim a specific streetlight 😎
-    * Receive real-time information about environmental lighting conditions 📈
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
-
-servers:
-  production:
-    url: api.streetlights.smartylighting.com:{port}
-    protocol: mqtt
-    description: Test broker
-    variables:
-      port:
-        description: Secure connection (TLS) is available through port 8883.
-        default: '1883'
-        enum:
-          - '1883'
-          - '8883'
-    security:
-      - apiKey: []
-      - supportedOauthFlows:
-        - streetlights:on
-        - streetlights:off
-        - streetlights:dim
-      - openIdConnectWellKnown: []
-
-defaultContentType: application/json
+id: "asd"
 
 channels:
-  smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
-    description: The topic on which measured values may be produced and consumed.
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    subscribe:
-      summary: Receive information about environmental lighting conditions of a particular streetlight.
-      operationId: receiveLightMeasurement
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/lightMeasured'
-
-  smartylighting/streetlights/1/0/action/{streetlightId}/turn/on:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
+  test:
     publish:
-      operationId: turnOn
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
       message:
-        $ref: '#/components/messages/turnOnOff'
-
-  smartylighting/streetlights/1/0/action/{streetlightId}/turn/off:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: turnOff
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/turnOnOff'
-
-  smartylighting/streetlights/1/0/action/{streetlightId}/dim:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: dimLight
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/dimLight'
+        $ref: '#/components/messages/testMessages'
 
 components:
   messages:
-    lightMeasured:
-      name: lightMeasured
-      title: Light measured
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      contentType: application/json
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
+    testMessages:
       payload:
-        $ref: "#/components/schemas/lightMeasuredPayload"
-    turnOnOff:
-      name: turnOnOff
-      title: Turn on/off
-      summary: Command a particular streetlight to turn the lights on or off.
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
-      payload:
-        $ref: "#/components/schemas/turnOnOffPayload"
-    dimLight:
-      name: dimLight
-      title: Dim light
-      summary: Command a particular streetlight to dim the lights.
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
-      payload:
-        $ref: "#/components/schemas/dimLightPayload"
+        anyOf: # anyOf in payload schema
+          - $ref: "#/components/schemas/objectWithKey"
+          - $ref: "#/components/schemas/objectWithKey2"
 
   schemas:
-    lightMeasuredPayload:
+    objectWithKey:
       type: object
       properties:
-        lumens:
-          type: integer
-          minimum: 0
-          description: Light intensity measured in lumens.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    turnOnOffPayload:
-      type: object
-      properties:
-        command:
+        key:
           type: string
-          enum:
-            - on
-            - off
-          description: Whether to turn on or off the light.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    dimLightPayload:
+    objectWithKey2:
       type: object
       properties:
-        percentage:
-          type: integer
-          description: Percentage to which the light should be dimmed to.
-          minimum: 0
-          maximum: 100
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    sentAt:
-      type: string
-      format: date-time
-      description: Date and time when the message was sent.
-
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: user
-      description: Provide your API key as the user and leave the password empty.
-    supportedOauthFlows:
-      type: oauth2
-      description: Flows to support OAuth 2.0
-      flows:
-        implicit:
-          authorizationUrl: 'https://authserver.example/auth'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        password:
-          tokenUrl: 'https://authserver.example/token'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        clientCredentials:
-          tokenUrl: 'https://authserver.example/token'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        authorizationCode:
-          authorizationUrl: 'https://authserver.example/auth'
-          tokenUrl: 'https://authserver.example/token'
-          refreshUrl: 'https://authserver.example/refresh'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-    openIdConnectWellKnown:
-      type: openIdConnect
-      openIdConnectUrl: 'https://authserver.example/.well-known'
-
-  parameters:
-    streetlightId:
-      description: The ID of the streetlight.
-      schema:
-        type: string
-
-  messageTraits:
-    commonHeaders:
-      headers:
-        type: object
-        properties:
-          my-app-header:
-            type: integer
-            minimum: 0
-            maximum: 100
-  
-  operationTraits:
-    kafka:
-      protocolInfo:
-        kafka:
-          applicationId: my-app-id`;
+        key2:
+          type: string
+`;

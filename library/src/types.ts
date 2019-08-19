@@ -15,6 +15,7 @@ export type DescriptionHTML = string | React.ReactNode;
 export type ExternalSpecification = Record<string, any>;
 export type ReferenceString = string;
 export type OneOf = 'oneOf';
+export type AnyOf = 'anyOf';
 export type SchemaType =
   | 'array'
   | 'boolean'
@@ -33,11 +34,6 @@ export interface AsyncApi {
   components?: Components;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
-  // below - deprecated
-  // topics?: Record<string, Topic>;
-  // stream?: Stream;
-  // events?: Event;
-  // security?: Array<SecurityRequirement | SecurityScheme>;
 }
 
 export interface Channels {
@@ -75,11 +71,11 @@ export interface Operation {
 }
 
 export interface ProtocolInfo {
-  [key: string]: any; // done
+  [key: string]: any;
 }
 
 export interface Parameters {
-  [key: string]: Parameter; // done
+  [key: string]: Parameter;
 }
 
 export interface Info {
@@ -103,7 +99,7 @@ export interface License {
 }
 
 export interface Servers {
-  [k: string]: Server; // done
+  [k: string]: Server;
 }
 
 export interface Server {
@@ -123,7 +119,7 @@ export interface ServerVariable {
   enum?: string[];
   default?: string;
   description?: DescriptionHTML;
-  examples?: string[]; // needs to be implemented
+  examples?: string[];
 }
 
 export interface Topic {
@@ -135,7 +131,6 @@ export interface Topic {
 }
 
 export interface Parameter {
-  // done
   description?: DescriptionHTML;
   schema?: Schema;
   location?: string;
@@ -145,22 +140,6 @@ export interface Reference {
   $ref: ReferenceString;
 }
 
-// export interface Stream {
-//   framing: StreamFraming;
-//   read?: Message[];
-//   write?: Message[];
-// }
-
-// export interface StreamFraming {
-//   type: string;
-//   delimiter?: string;
-// }
-
-// export interface Event {
-//   receive?: Message[];
-//   send?: Message[];
-// }
-
 export type Message = RawMessage | Record<OneOf, RawMessage[]>;
 
 export function isRawMessage(message: Message): message is RawMessage {
@@ -168,16 +147,22 @@ export function isRawMessage(message: Message): message is RawMessage {
 }
 
 export function isOneOfPayload(
-  payload: any | Record<OneOf, any>,
+  payload: RawMessage['payload'],
 ): payload is Record<OneOf, any> {
-  return (payload as Record<OneOf, any>).oneOf !== undefined;
+  return !!payload && (payload as Record<OneOf, any>).oneOf !== undefined;
+}
+
+export function isAnyOfPayload(
+  payload: RawMessage['payload'],
+): payload is Record<AnyOf, any> {
+  return !!payload && (payload as Record<AnyOf, any>).anyOf !== undefined;
 }
 
 export interface RawMessage {
   schemaFormat?: string;
   contentType?: string;
   headers?: Schema;
-  payload?: Schema | Record<OneOf, Schema[]>; //payload is Schema, not any https://github.com/asyncapi/parser-js/blob/master/lib/models/message.js#L35
+  payload?: Schema | Record<OneOf, Schema[]> | Record<AnyOf, Schema[]>; //payload is Schema, not any https://github.com/asyncapi/parser-js/blob/master/lib/models/message.js#L35
   correlationId?: CorrelationId;
   tags?: Tag[];
   summary?: DescriptionHTML;
@@ -295,18 +280,18 @@ export interface Schema {
   not?: Schema;
   properties?: Record<string, Schema>;
 
-  // old field
-
-  $schema?: string;
-  $id?: string;
-
-  definitions?: Record<string, any>;
-
-  additionalItems?: { anyOf: Schema[] } | Schema;
-
   additionalProperties?: Record<string, Schema>;
 
-  propertyOrder?: string[];
+  // old field
 
-  defaultProperties?: string[];
+  // $schema?: string;
+  // $id?: string;
+
+  // definitions?: Record<string, any>;
+
+  // additionalItems?: { anyOf: Schema[] } | Schema;
+
+  // propertyOrder?: string[];
+
+  // defaultProperties?: string[];
 }

@@ -1,5 +1,5 @@
-import { ThemeInterface } from '@kyma-project/asyncapi-react';
-import { css } from 'styled-components';
+import { ThemeInterface } from "@kyma-project/asyncapi-react";
+import { css } from "styled-components";
 
 export const sampleTheme: ThemeInterface = {
   hrefHeader: css`
@@ -29,7 +29,7 @@ export const sampleTheme: ThemeInterface = {
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       border: 3px solid #f77669;
       border-radius: 100%;
@@ -58,12 +58,12 @@ export const sampleTheme: ThemeInterface = {
       font-size: 15px;
       margin: 0 0 8px 0;
     }
-  `,
+  `
 };
 
 export const defaultTheme: ThemeInterface = {
   asyncApiWrapper: css`
-    font-family: '72';
+    font-family: "72";
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
@@ -217,7 +217,7 @@ export const defaultTheme: ThemeInterface = {
     width: 25px;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: -15px;
       width: 13px;
@@ -300,7 +300,7 @@ export const defaultTheme: ThemeInterface = {
     font-size: 13px;
   `,
   codeContent: css`
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace !important;
     margin: 0 !important;
     padding: 12px 20px !important;
@@ -316,6 +316,7 @@ export const defaultTheme: ThemeInterface = {
   infoHeader: css`
     > h1 {
       margin-top: 0;
+      margin-bottom: 0;
     }
   `,
   contact: css`
@@ -351,7 +352,7 @@ export const defaultTheme: ThemeInterface = {
     cursor: pointer;
 
     &:before {
-      content: '\uE066';
+      content: "\uE066";
       font-family: SAP-icons;
       position: absolute;
       color: #0071d4;
@@ -384,7 +385,7 @@ export const defaultTheme: ThemeInterface = {
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       border: 3px solid #0071d4;
       border-radius: 100%;
@@ -443,7 +444,7 @@ export const defaultTheme: ThemeInterface = {
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       border: 3px solid #0071d4;
       border-radius: 100%;
@@ -492,7 +493,7 @@ export const defaultTheme: ThemeInterface = {
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       border: 3px solid #0071d4;
       border-radius: 100%;
@@ -569,7 +570,7 @@ export const defaultTheme: ThemeInterface = {
     position: relative;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       border: 3px solid #0071d4;
       border-radius: 100%;
@@ -609,7 +610,7 @@ export const defaultTheme: ThemeInterface = {
     border-left: 6px solid #f44336;
     border-radius: 4px;
     color: #32363a;
-    font-family: '72';
+    font-family: "72";
     font-size: 13px;
   `,
   errorHeader: css`
@@ -618,7 +619,7 @@ export const defaultTheme: ThemeInterface = {
     font-weight: bold;
     position: relative;
     :after {
-      content: '\uE0B1';
+      content: "\uE0B1";
       color: #f44336;
       position: absolute;
       display: block;
@@ -640,7 +641,7 @@ export const defaultTheme: ThemeInterface = {
   `,
   errorPre: css`
     margin: 0;
-  `,
+  `
 };
 
 export const oldTheme: ThemeInterface = {
@@ -767,7 +768,7 @@ export const oldTheme: ThemeInterface = {
     width: 25px;
 
     &:before {
-      content: ' ';
+      content: " ";
       position: absolute;
       top: -15px;
       width: 10px;
@@ -845,7 +846,7 @@ export const oldTheme: ThemeInterface = {
     display: block;
   `,
   codeContent: css`
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
       monospace;
     padding: 3px 5px;
     margin-top: 0px;
@@ -962,7 +963,7 @@ export const oldTheme: ThemeInterface = {
     border-left: 6px solid #f44336;
     border-radius: 4px;
     color: #32363a;
-    font-family: '72';
+    font-family: "72";
     font-size: 13px;
   `,
   errorHeader: css`
@@ -971,7 +972,7 @@ export const oldTheme: ThemeInterface = {
     font-weight: bold;
     position: relative;
     :after {
-      content: '\uE0B1';
+      content: "\uE0B1";
       color: #f44336;
       position: absolute;
       display: block;
@@ -993,5 +994,5 @@ export const oldTheme: ThemeInterface = {
   `,
   errorPre: css`
     margin: 0;
-  `,
+  `
 };

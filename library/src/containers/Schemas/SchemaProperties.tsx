@@ -45,6 +45,7 @@ const schemaPropertiesAccesors: TableAccessor[] = [
   ),
   (el: SchemaElement) => el.schema.content.format,
   (el: SchemaElement) => el.schema.content.default,
+
   (el: SchemaElement) =>
     el.schema.content.description && (
       <Markdown>{el.schema.content.description}</Markdown>
@@ -53,7 +54,6 @@ const schemaPropertiesAccesors: TableAccessor[] = [
 
 interface Props {
   name: string;
-
   properties: Schema;
   treeSpace: number;
 }
