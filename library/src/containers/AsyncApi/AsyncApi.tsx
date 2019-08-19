@@ -81,12 +81,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       : { ...defaultTheme, ...theme };
 
     if (!validatedSchema || !Object.keys(validatedSchema).length) {
+      if (!error) {
+        return null;
+      }
       return (
         <ThemeProvider theme={concatenatedTheme}>
           <AsyncApiWrapper>
-            {concatenatedConfig.showErrors && !!error && (
-              <ErrorComponent error={error} />
-            )}
+            {concatenatedConfig.showErrors && <ErrorComponent error={error} />}
           </AsyncApiWrapper>
         </ThemeProvider>
       );
