@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { ErrorObject } from 'ajv';
 
 import { AsyncApi } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
@@ -11,6 +10,7 @@ import {
   FetchingSchemaInterface,
   isFetchingSchemaInterface,
   ParserReturn,
+  ParserError,
 } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
@@ -34,7 +34,7 @@ type AsyncApiDoc = ParserReturn['data'];
 
 interface AsyncApiState {
   validatedSchema: AsyncApiDoc;
-  error?: ErrorObject[] | null;
+  error?: ParserError;
 }
 
 const defaultAsyncApi: AsyncApi = {
@@ -84,7 +84,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       return (
         <ThemeProvider theme={concatenatedTheme}>
           <AsyncApiWrapper>
-            {concatenatedConfig.showErrors && Boolean(error) && (
+            {concatenatedConfig.showErrors && !!error && (
               <ErrorComponent error={error} />
             )}
           </AsyncApiWrapper>
@@ -95,7 +95,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>
-          {concatenatedConfig.showErrors && Boolean(error) && (
+          {concatenatedConfig.showErrors && !!error && (
             <ErrorComponent error={error} />
           )}
           {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
@@ -149,18 +149,17 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   private async parseSchema(schema: string | FetchingSchemaInterface) {
     if (isFetchingSchemaInterface(schema)) {
       const { data, error } = await parser.parseFromUrl(schema);
+
       const beautifiedSchema = this.beautifySchema(data);
 
       this.setState({ validatedSchema: beautifiedSchema, error: error });
-      return;
+    } else {
+      const { data, error } = await parser.parse(schema);
+
+      const beautifiedSchema = this.beautifySchema(data);
+
+      this.setState({ validatedSchema: beautifiedSchema, error: error });
     }
-
-    const { data, error } = await parser.parse(schema);
-
-    const beautifiedSchema = this.beautifySchema(data);
-
-    this.setState({ validatedSchema: beautifiedSchema, error: error });
-    return;
   }
 
   private beautifySchema(schema: AsyncApiDoc): AsyncApiDoc {

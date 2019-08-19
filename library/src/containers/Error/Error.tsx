@@ -7,9 +7,13 @@ import {
   ErrorPre,
 } from './styled';
 import { ErrorObject } from 'ajv';
-import { ParserReturn } from '../../../src/helpers/parser';
+import { ParserError } from '../../../src/helpers/parser';
 
-type Props = Pick<ParserReturn, 'error'>;
+type ValidationError = ParserError['validationError'];
+
+interface Props {
+  error: ParserError;
+}
 
 class ErrorComponent extends Component<Props> {
   render() {
@@ -19,33 +23,39 @@ class ErrorComponent extends Component<Props> {
       return null;
     }
 
+    const { message, validationError } = error;
+
     return (
       <ErrorWrapper>
-        <ErrorHeader>There are errors in your document:</ErrorHeader>
-        <ErrorContent>
-          <ErrorPre>{this.renderErrors(error)}</ErrorPre>
-        </ErrorContent>
+        {/* <ErrorHeader>There are errors in your document:</ErrorHeader> TODO: discuss -> I would just show line 32, and delete this one */}
+        <ErrorHeader>Error: {message}</ErrorHeader>
+        {!!validationError && (
+          <ErrorContent>
+            <ErrorPre>{this.renderErrors(validationError)}</ErrorPre>
+          </ErrorContent>
+        )}
       </ErrorWrapper>
     );
   }
-  private renderErrors(error: ErrorObject | ErrorObject[]): React.ReactNode {
-    if (Array.isArray(error)) {
-      return error
-        .map((singleError: ErrorObject, index: number) => {
-          const formattedError = this.formatErrors(singleError);
 
-          if (!formattedError) {
-            return null;
-          }
-          return <ErrorCode key={index}>{formattedError}</ErrorCode>;
-        })
-        .filter(Boolean);
+  renderErrors(error: ValidationError): React.ReactNode {
+    if (!error) {
+      return null;
     }
 
-    return null;
+    return error
+      .map((singleError: ErrorObject, index: number) => {
+        const formattedError = this.formatErrors(singleError);
+
+        if (!formattedError) {
+          return null;
+        }
+        return <ErrorCode key={index}>{formattedError}</ErrorCode>;
+      })
+      .filter(Boolean);
   }
 
-  private formatErrors = (singleError: ErrorObject): string | null => {
+  formatErrors = (singleError: ErrorObject): string | null => {
     if (!singleError) {
       return null;
     }
