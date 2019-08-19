@@ -10,7 +10,7 @@ import {
   beautifier,
   FetchingSchemaInterface,
   isFetchingSchemaInterface,
-  fetchSchema,
+  ParserReturn,
 } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
@@ -30,9 +30,10 @@ export interface AsyncApiProps {
   config?: Partial<ConfigInterface>;
 }
 
+type AsyncApiDoc = ParserReturn['data'];
+
 interface AsyncApiState {
-  validatedSchema: AsyncApi;
-  validated: boolean;
+  validatedSchema: AsyncApiDoc;
   error?: ErrorObject[] | null;
 }
 
@@ -46,27 +47,26 @@ const defaultAsyncApi: AsyncApi = {
 };
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
-  state = {
+  state: AsyncApiState = {
     validatedSchema: defaultAsyncApi,
-    validated: false,
     error: undefined,
   };
 
   async componentDidMount() {
-    this.updateSchema(this.props.schema);
+    this.parseSchema(this.props.schema);
   }
 
   async componentWillReceiveProps(nextProps: AsyncApiProps) {
     const { schema } = nextProps;
 
     if (schema !== this.props.schema) {
-      this.updateSchema(schema);
+      this.parseSchema(schema);
     }
   }
 
   render() {
     const { theme, config } = this.props;
-    const { validatedSchema, validated, error } = this.state;
+    const { validatedSchema, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,
@@ -80,8 +80,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       ? (theme as ThemeInterface)
       : { ...defaultTheme, ...theme };
 
-    if (!(Object.keys(validatedSchema).length && validated)) {
-      return null;
+    if (!validatedSchema || !Object.keys(validatedSchema).length) {
+      return (
+        <ThemeProvider theme={concatenatedTheme}>
+          <AsyncApiWrapper>
+            {concatenatedConfig.showErrors && Boolean(error) && (
+              <ErrorComponent error={error} />
+            )}
+          </AsyncApiWrapper>
+        </ThemeProvider>
+      );
     }
 
     return (
@@ -138,36 +146,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     );
   }
 
-  private async updateSchema(schema: string | FetchingSchemaInterface) {
+  private async parseSchema(schema: string | FetchingSchemaInterface) {
     if (isFetchingSchemaInterface(schema)) {
-      schema = await fetchSchema(schema);
+      const { data, error } = await parser.parseFromUrl(schema);
+      const beautifiedSchema = this.beautifySchema(data);
+
+      this.setState({ validatedSchema: beautifiedSchema, error: error });
+      return;
     }
-    this.prepareSchema(schema);
+
+    const { data, error } = await parser.parse(schema);
+
+    const beautifiedSchema = this.beautifySchema(data);
+
+    this.setState({ validatedSchema: beautifiedSchema, error: error });
+    return;
   }
 
-  private async prepareSchema(schema: string) {
-    try {
-      let { data: validatedSchema, error } = await this.validateSchema(schema);
-      validatedSchema = this.beautifySchema(validatedSchema);
-      this.setState({ validatedSchema, validated: true, error });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  private async validateSchema(schema: string) {
+  private beautifySchema(schema: AsyncApiDoc): AsyncApiDoc {
     if (!schema) {
-      // todo: handle it instead of throwing
-      throw Error('Empty AsyncAPI Document');
+      return null;
     }
-    let properSchema = schema;
-    if (typeof schema !== 'string') {
-      properSchema = JSON.stringify(properSchema);
-    }
-    return await parser.parse(properSchema);
-  }
-
-  private beautifySchema(schema: AsyncApi): AsyncApi {
     return beautifier.beautify(schema);
   }
 }

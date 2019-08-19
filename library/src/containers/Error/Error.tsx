@@ -7,10 +7,9 @@ import {
   ErrorPre,
 } from './styled';
 import { ErrorObject } from 'ajv';
+import { ParserReturn } from '../../../src/helpers/parser';
 
-interface Props {
-  error?: ErrorObject | ErrorObject[];
-}
+type Props = Pick<ParserReturn, 'error'>;
 
 class ErrorComponent extends Component<Props> {
   render() {
@@ -19,8 +18,6 @@ class ErrorComponent extends Component<Props> {
     if (!error) {
       return null;
     }
-
-    console.error(error);
 
     return (
       <ErrorWrapper>
@@ -59,7 +56,9 @@ class ErrorComponent extends Component<Props> {
 
     const info = Object.values(params)[0];
 
-    return `${dataPath} ${message}: ${info}`;
+    return `${dataPath} ${message}${
+      singleError.keyword === 'type' ? '' : `: ${info}`
+    }`;
   };
 }
 

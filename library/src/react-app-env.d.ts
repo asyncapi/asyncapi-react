@@ -1,1 +1,1 @@
-/// <reference types="react-scripts" />
+declare module 'asyncapi-parser';

@@ -152,9 +152,13 @@ class Beautifier {
     if (message.headers) {
       message.headers = this.resolveAllOf(message.headers);
     }
+    if (message.summary) {
+      message.summary = this.renderMd(message.summary as string);
+    }
 
-    message.summary = this.renderMd(message.summary as string);
-    message.description = this.renderMd(message.description as string);
+    if (message.description) {
+      message.description = this.renderMd(message.description as string);
+    }
 
     if (message.headers) {
       message.headers = this.beautifySchema(message.headers);
@@ -177,7 +181,7 @@ class Beautifier {
   }
 
   private beautifyServers(servers: Servers): Servers {
-    const copiedServers = JSON.parse(JSON.stringify(servers)) as Servers;
+    const copiedServers = JSON.parse(JSON.stringify(servers || {})) as Servers;
 
     Object.keys(copiedServers).forEach(stage => {
       const server = copiedServers[stage];

@@ -9,12 +9,6 @@ export function isFetchingSchemaInterface(
   return (schema as FetchingSchemaInterface).url !== undefined;
 }
 
-const defaultRequestOptions: RequestInit = {
+export const defaultRequestOptions: RequestInit = {
   method: 'GET',
 };
-
-export const fetchSchema = async ({
-  url,
-  requestOptions = defaultRequestOptions,
-}: FetchingSchemaInterface): Promise<string> =>
-  fetch(url, requestOptions).then(data => data.text());
