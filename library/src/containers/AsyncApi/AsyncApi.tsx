@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { AsyncApi } from '../../types';
+import {
+  AsyncApi,
+  isFetchingSchemaInterface,
+  NullableAsyncApi,
+  ParserError,
+  AsyncApiProps,
+  PropsSchema,
+} from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
-import {
-  parser,
-  beautifier,
-  FetchingSchemaInterface,
-  isFetchingSchemaInterface,
-  ParserReturn,
-  ParserError,
-} from '../../helpers';
+import { parser, beautifier } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
 import { OldSecurityComponent } from '../Security/oldSec';
@@ -24,16 +24,8 @@ import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
 
-export interface AsyncApiProps {
-  schema: string | FetchingSchemaInterface;
-  theme?: Partial<ThemeInterface>;
-  config?: Partial<ConfigInterface>;
-}
-
-type AsyncApiDoc = ParserReturn['data'];
-
 interface AsyncApiState {
-  validatedSchema: AsyncApiDoc;
+  validatedSchema: NullableAsyncApi;
   error?: ParserError;
 }
 
@@ -147,7 +139,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     );
   }
 
-  private async parseSchema(schema: string | FetchingSchemaInterface) {
+  private async parseSchema(schema: PropsSchema) {
     if (isFetchingSchemaInterface(schema)) {
       const { data, error } = await parser.parseFromUrl(schema);
 
@@ -163,7 +155,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     }
   }
 
-  private beautifySchema(schema: AsyncApiDoc): AsyncApiDoc {
+  private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
     if (!schema) {
       return null;
     }
@@ -172,8 +164,3 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 }
 
 export default AsyncApiComponent;
-
-// to fix:
-// https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/next/not.yml
-// https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/next/anyof.yml
-// security component

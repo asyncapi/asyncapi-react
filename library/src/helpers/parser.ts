@@ -1,20 +1,16 @@
-import { FetchingSchemaInterface, defaultRequestOptions } from './fetchSchema';
-import { ErrorObject } from 'ajv';
-import { parse, parseUrl } from 'asyncapi-parser';
+import {
+  parse,
+  parseUrl,
+  ParserErrorUnsupportedVersion,
+} from 'asyncapi-parser';
 
-import { AsyncApi } from '../types';
+import { AsyncApi, ParserReturn, FetchingSchemaInterface } from '../types';
 
 const UNSUPPORTED_SCHEMA_VERSION = 'AsyncAPI version is missing or unsupported';
 
-export interface ParserError {
-  message: string;
-  validationError?: ErrorObject[] | null;
-}
-
-export interface ParserReturn {
-  data: AsyncApi | null;
-  error?: ParserError;
-}
+const defaultRequestOptions: RequestInit = {
+  method: 'GET',
+};
 
 class Parser {
   async parse(content: string): Promise<ParserReturn> {

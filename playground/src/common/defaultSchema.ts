@@ -1,9 +1,8 @@
-export const defaultSchema = `asyncapi: '2.0.0-rc1'
+export const defaultSchema = `
+asyncapi: '2.0.0-rc1'
 info:
-  title: AnyOf example
+  title: Not example
   version: '1.0.0'
-
-id: "asd"
 
 channels:
   test:
@@ -15,19 +14,12 @@ components:
   messages:
     testMessages:
       payload:
-        anyOf: # anyOf in payload schema
-          - $ref: "#/components/schemas/objectWithKey"
-          - $ref: "#/components/schemas/objectWithKey2"
+        $ref: "#/components/schemas/testSchema"
 
   schemas:
-    objectWithKey:
+    testSchema:
       type: object
       properties:
         key:
-          type: string
-    objectWithKey2:
-      type: object
-      properties:
-        key2:
-          type: string
-`;
+          not:
+            type: integer`;

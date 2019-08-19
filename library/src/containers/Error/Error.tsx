@@ -7,7 +7,7 @@ import {
   ErrorPre,
 } from './styled';
 import { ErrorObject } from 'ajv';
-import { ParserError } from '../../../src/helpers/parser';
+import { ParserError } from '../../types';
 
 type ValidationError = ParserError['validationError'];
 

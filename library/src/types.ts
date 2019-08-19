@@ -1,3 +1,6 @@
+import { ErrorObject } from 'ajv';
+import { ConfigInterface } from './config';
+import { ThemeInterface } from './theme';
 export type PrimitiveType = number | boolean | string | null;
 export type PropsWithDefaults<T, D> = T & D;
 
@@ -294,4 +297,40 @@ export interface Schema {
   // propertyOrder?: string[];
 
   // defaultProperties?: string[];
+}
+
+export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
+
+export interface AsyncApiProps {
+  schema: PropsSchema;
+  theme?: Partial<ThemeInterface>;
+  config?: Partial<ConfigInterface>;
+}
+
+export type NullableAsyncApi = AsyncApi | null;
+
+export interface AsyncApiState {
+  validatedSchema: NullableAsyncApi;
+  error?: ParserError;
+}
+
+export function isFetchingSchemaInterface(
+  schema: PropsSchema,
+): schema is FetchingSchemaInterface {
+  return (schema as FetchingSchemaInterface).url !== undefined;
+}
+
+export interface FetchingSchemaInterface {
+  url: string;
+  requestOptions?: RequestInit;
+}
+
+export interface ParserError {
+  message: string;
+  validationError?: ErrorObject[] | null;
+}
+
+export interface ParserReturn {
+  data: NullableAsyncApi;
+  error?: ParserError;
 }
