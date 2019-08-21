@@ -52,6 +52,20 @@ const schemaPropertiesAccesors: TableAccessor[] = [
     ),
 ];
 
+export const handleNotProperty = (prop: Schema): Schema => {
+  if (prop.not) {
+    const arrayOfChangedObjects = Object.keys(prop).map(elem => {
+      if (elem === 'not') {
+        return { properties: { [elem]: prop[elem] } };
+      }
+      return prop[elem];
+    });
+
+    return merge.recursive(...arrayOfChangedObjects);
+  }
+  return prop;
+};
+
 interface Props {
   name: string;
   properties: Schema;
@@ -62,7 +76,7 @@ class SchemaPropertiesComponent extends Component<Props> {
   render() {
     const { name, properties, treeSpace } = this.props;
 
-    const alteredProperties = this.handleNotProperty(properties);
+    const alteredProperties = handleNotProperty(properties);
 
     const space = treeSpace + 1;
     const element: SchemaElement = {
@@ -82,20 +96,6 @@ class SchemaPropertiesComponent extends Component<Props> {
         {this.renderItems(alteredProperties, space)}
       </>
     );
-  }
-
-  private handleNotProperty(prop: Schema) {
-    if (prop.not) {
-      const arrayOfChangedObjects = Object.keys(prop).map(elem => {
-        if (elem === 'not') {
-          return { properties: { [elem]: prop[elem] } };
-        }
-        return prop[elem];
-      });
-
-      return merge.recursive(...arrayOfChangedObjects);
-    }
-    return prop;
   }
 
   private renderOf(
