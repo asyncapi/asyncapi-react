@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import merge from 'merge';
 import { TypeWithKey, Schema } from '../../types';
 
 import {
@@ -62,11 +62,13 @@ class SchemaPropertiesComponent extends Component<Props> {
   render() {
     const { name, properties, treeSpace } = this.props;
 
+    const alteredProperties = this.handleNotProperty(properties);
+
     const space = treeSpace + 1;
     const element: SchemaElement = {
       schema: {
         key: name,
-        content: properties,
+        content: alteredProperties,
       },
       treeSpace,
     };
@@ -74,13 +76,28 @@ class SchemaPropertiesComponent extends Component<Props> {
     return (
       <>
         <TableRow accessors={schemaPropertiesAccesors} element={element} />
-        {this.renderOf('anyOf', space, properties.anyOf)}
-        {this.renderOf('oneOf', space, properties.oneOf)}
-        {this.renderProperties(properties, space)}
-        {this.renderItems(properties, space)}
+        {this.renderOf('anyOf', space, alteredProperties.anyOf)}
+        {this.renderOf('oneOf', space, alteredProperties.oneOf)}
+        {this.renderProperties(alteredProperties, space)}
+        {this.renderItems(alteredProperties, space)}
       </>
     );
   }
+
+  private handleNotProperty(prop: Schema) {
+    if (prop.not) {
+      const arrayOfChangedObjects = Object.keys(prop).map(elem => {
+        if (elem === 'not') {
+          return { properties: { [elem]: prop[elem] } };
+        }
+        return prop[elem];
+      });
+
+      return merge.recursive(...arrayOfChangedObjects);
+    }
+    return prop;
+  }
+
   private renderOf(
     type: string,
     treeSpace: number,

@@ -14,6 +14,27 @@ import {
 } from '../../components';
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
 
+export const searchForNestedObject = (
+  object: any,
+  key: string,
+  predicate: (key: string, data: string) => boolean,
+): Record<string, any> | null => {
+  if (object.hasOwnProperty(key) && predicate(key, object[key]) === true)
+    return object;
+
+  for (let i = 0; i < Object.keys(object).length; i++) {
+    if (typeof object[Object.keys(object)[i]] === 'object') {
+      let o = searchForNestedObject(
+        object[Object.keys(object)[i]],
+        key,
+        predicate,
+      );
+      if (o != null) return o;
+    }
+  }
+  return null;
+};
+
 const schemaColumnsName: TableColumnName[] = [
   'Name',
   'Title',
@@ -37,6 +58,7 @@ export class SchemaComponent extends Component<Props> {
     if (!schema) {
       return null;
     }
+    const hasNotField = searchForNestedObject(schema, 'not', (k, v) => true);
 
     return (
       <SchemaWrapper>
@@ -51,8 +73,8 @@ export class SchemaComponent extends Component<Props> {
             {this.renderSchemaProps(name, schema)}
           </TableBodyWrapper>
         </TableWrapper>
-
-        <SchemaExample title={exampleTitle} schema={schema} />
+        {/* we need to disable this component if schema has "not" field anywhere in it */}
+        {!hasNotField && <SchemaExample title={exampleTitle} schema={schema} />}
       </SchemaWrapper>
     );
   }

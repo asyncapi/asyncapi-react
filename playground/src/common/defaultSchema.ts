@@ -1,6 +1,6 @@
 export const defaultSchema = `asyncapi: '2.0.0-rc1'
 info:
-  title: OneOf example
+  title: Not example
   version: '1.0.0'
 
 channels:
@@ -9,49 +9,16 @@ channels:
       message:
         $ref: '#/components/messages/testMessages'
 
-  test2:
-    subscribe:
-      message:
-        # Use oneOf here if different messages are published on test2 topic.
-        oneOf:
-          - payload:
-              $ref: "#/components/schemas/objectWithKey"
-          - payload:
-              $ref: "#/components/schemas/objectWithKey2"
-
 components:
   messages:
     testMessages:
       payload:
-        oneOf: # oneOf in payload schema
-          - $ref: "#/components/schemas/objectWithKey"
-          - $ref: "#/components/schemas/objectWithKey2"
-          - $ref: "#/components/schemas/objectWithKey3"
-    testMessage1:
-      payload:
-        $ref: "#/components/schemas/objectWithKey"
-    testMessage2:
-      payload:
-        $ref: "#/components/schemas/objectWithKey2"
+        $ref: "#/components/schemas/testSchema"
 
   schemas:
-    custom: 
-      allOf:
-          - $ref: "#/components/schemas/objectWithKey"
-          - $ref: "#/components/schemas/objectWithKey2"
-          - $ref: "#/components/schemas/objectWithKey3"
-    objectWithKey:
+    testSchema:
       type: object
       properties:
         key:
-          type: string
-    objectWithKey2:
-      type: object
-      properties:
-        key2:
-          type: string
-    objectWithKey3:
-      type: object
-      properties:
-        XD:
-          type: number`;
+          not:
+            type: integer`;
