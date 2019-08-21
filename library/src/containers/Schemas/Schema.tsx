@@ -15,21 +15,24 @@ import {
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
 
 export const searchForNestedObject = (
-  object: any,
+  object: Record<string, any>,
   key: string,
   predicate: (key: string, data: string) => boolean,
 ): Record<string, any> | null => {
-  if (object.hasOwnProperty(key) && predicate(key, object[key]) === true)
+  if (object.hasOwnProperty(key) && predicate(key, object[key]) === true) {
     return object;
-
+  }
+  // tslint:disable-next-line:prefer-for-of
   for (let i = 0; i < Object.keys(object).length; i++) {
     if (typeof object[Object.keys(object)[i]] === 'object') {
-      let o = searchForNestedObject(
+      const o = searchForNestedObject(
         object[Object.keys(object)[i]],
         key,
         predicate,
       );
-      if (o != null) return o;
+      if (o !== null) {
+        return o;
+      }
     }
   }
   return null;
