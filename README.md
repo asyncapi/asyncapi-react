@@ -1,4 +1,5 @@
 # AsyncAPI React Component
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
 
@@ -8,7 +9,7 @@ A [React](https://reactjs.org/) component for AsyncAPI specification. It allows 
 
 This repository comes in with a [Playground application](https://www.asyncapi.com/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
 
-You can also run the Playground application locally by following [this](development-guide.md#install-dependencies) instruction from the development guide.
+You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
 
 ## Usage
 
@@ -67,3 +68,15 @@ If you have a bug to report, reproduce it in an online code editor. For example,
   <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
  </a>
 </p>
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/20404945?v=4" width="100px;" alt="Maciej Urbańczyk"/><br /><sub><b>Maciej Urbańczyk</b></sub>](https://github.com/magicmatatjahu)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Code") [📖](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Documentation") [🤔](#ideas-magicmatatjahu "Ideas, Planning, & Feedback") [🚧](#maintenance-magicmatatjahu "Maintenance") | [<img src="https://avatars0.githubusercontent.com/u/40655785?v=4" width="100px;" alt="Karolina Zydek"/><br /><sub><b>Karolina Zydek</b></sub>](https://github.com/kazydek)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=kazydek "Documentation") [👀](#review-kazydek "Reviewed Pull Requests") [🚧](#maintenance-kazydek "Maintenance") | [<img src="https://avatars3.githubusercontent.com/u/20790348?v=4" width="100px;" alt="Agata"/><br /><sub><b>Agata</b></sub>](https://github.com/akucharska)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=akucharska "Code") [🚧](#maintenance-akucharska "Maintenance") | [<img src="https://avatars1.githubusercontent.com/u/6995927?v=4" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub>](http://resume.github.io/?derberg)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=derberg "Documentation") [💡](#example-derberg "Examples") [🤔](#ideas-derberg "Ideas, Planning, & Feedback") |
+| :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
