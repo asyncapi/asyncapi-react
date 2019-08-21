@@ -53,7 +53,7 @@ class ServerVariablesComponent extends Component<Props> {
     const { variables, openAccordion } = this.props;
 
     const vars = (
-      <TableCellWithNested colSpan={3}>
+      <TableCellWithNested colSpan={4}>
         <div>
           <TableWrapperNested>
             <TableHeader

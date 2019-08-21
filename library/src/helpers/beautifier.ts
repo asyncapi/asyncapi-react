@@ -15,13 +15,16 @@ import renderMarkdown from './renderMarkdown';
 
 class Beautifier {
   beautify(asyncApi: AsyncApi): AsyncApi {
-    asyncApi.info.description = this.renderMd(asyncApi.info
-      .description as string);
+    if (asyncApi.info && asyncApi.info.description) {
+      asyncApi.info.description = this.renderMd(asyncApi.info
+        .description as string);
+    }
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
-
-    asyncApi.channels = this.beautifyChannels(asyncApi.channels);
+    if (asyncApi.channels) {
+      asyncApi.channels = this.beautifyChannels(asyncApi.channels);
+    }
 
     if (asyncApi.components) {
       if (asyncApi.components.messages) {

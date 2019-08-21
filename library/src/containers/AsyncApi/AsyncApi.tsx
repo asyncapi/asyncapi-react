@@ -14,7 +14,7 @@ import { ConfigInterface, defaultConfig } from '../../config';
 import { parser, beautifier } from '../../helpers';
 
 import InfoComponent from '../Info/Info';
-import { OldSecurityComponent } from '../Security/oldSec';
+import { SecurityComponent } from '../Security/Security';
 
 import MessagesComponent from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
@@ -85,6 +85,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       );
     }
 
+    // todo: handle defaultContentType field here
+
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>
@@ -104,11 +106,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
           {concatenatedConfig.show.security &&
             validatedSchema.components &&
             validatedSchema.components.securitySchemes && (
-              <OldSecurityComponent
+              <SecurityComponent
                 security={Object.keys(
                   validatedSchema.components.securitySchemes,
                 ).map(
-                  elem => validatedSchema!.components!.securitySchemes![elem],
+                  elem =>
+                    validatedSchema.components &&
+                    validatedSchema.components.securitySchemes &&
+                    validatedSchema.components.securitySchemes[elem],
                 )}
               />
             )}

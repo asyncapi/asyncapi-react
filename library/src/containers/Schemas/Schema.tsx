@@ -19,6 +19,9 @@ export const searchForNestedObject = (
   key: string,
   predicate: (key: string, data: string) => boolean,
 ): Record<string, any> | null => {
+  if (!object) {
+    return null;
+  }
   if (object.hasOwnProperty(key) && predicate(key, object[key]) === true) {
     return object;
   }
