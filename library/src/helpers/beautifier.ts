@@ -55,12 +55,12 @@ class Beautifier {
     if (schema.properties) {
       const transformed: Record<string, Schema> = {};
 
-      for (const key of Object.keys(schema.properties)) {
-        if (schema.properties[key].allOf) {
-          transformed[key] = this.resolveAllOf(schema.properties[key]);
+      for (const [key, property] of Object.entries(schema.properties)) {
+        if (property.allOf) {
+          transformed[key] = this.resolveAllOf(property);
           continue;
         }
-        transformed[key] = schema.properties[key];
+        transformed[key] = property;
       }
 
       return { ...schema, properties: transformed };
@@ -74,9 +74,7 @@ class Beautifier {
       const properties = schema.properties;
       const newProperties: Record<string, Schema> = properties;
 
-      for (const key of Object.keys(properties)) {
-        const prop = properties[key];
-
+      for (const [key, prop] of Object.entries(properties)) {
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
@@ -84,10 +82,8 @@ class Beautifier {
           const propProperties = prop.properties;
           const newPropProperties: Record<string, Schema> = {};
 
-          for (const propKey of Object.keys(propProperties)) {
-            newPropProperties[propKey] = this.beautifySchema(
-              propProperties[propKey],
-            );
+          for (const [propKey, propValue] of Object.entries(propProperties)) {
+            newPropProperties[propKey] = this.beautifySchema(propValue);
           }
 
           prop.properties = newPropProperties;
@@ -105,9 +101,7 @@ class Beautifier {
         Schema
       > = additionalProperties;
 
-      for (const key of Object.keys(additionalProperties)) {
-        const prop = additionalProperties[key];
-
+      for (const [key, prop] of Object.entries(additionalProperties)) {
         if (prop.description) {
           prop.description = this.renderMd(prop.description as string);
         }
@@ -115,9 +109,11 @@ class Beautifier {
           const propAdditionalProperties = prop.additionalProperties;
           const newPropAdditionalProperties: Record<string, Schema> = {};
 
-          for (const propKey of Object.keys(propAdditionalProperties)) {
+          for (const [propKey, propValue] of Object.entries(
+            propAdditionalProperties,
+          )) {
             newPropAdditionalProperties[propKey] = this.beautifySchema(
-              propAdditionalProperties[propKey],
+              propValue,
             );
           }
           prop.properties = newPropAdditionalProperties;
@@ -135,8 +131,8 @@ class Beautifier {
     schemas: Record<string, Schema>,
   ): Record<string, Schema> {
     const newSchemas: Record<string, Schema> = {};
-    for (const key of Object.keys(schemas)) {
-      newSchemas[key] = this.resolveAllOf(schemas[key]);
+    for (const [key, schema] of Object.entries(schemas)) {
+      newSchemas[key] = this.resolveAllOf(schema);
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
     }
     return newSchemas;
@@ -178,8 +174,8 @@ class Beautifier {
     messages: Record<string, Message>,
   ): Record<string, Message> {
     const newMessages: Record<string, Message> = {};
-    for (const key of Object.keys(messages)) {
-      newMessages[key] = this.beautifyMessage(messages[key]);
+    for (const [key, message] of Object.entries(messages)) {
+      newMessages[key] = this.beautifyMessage(message);
     }
     return newMessages;
   }
@@ -187,17 +183,17 @@ class Beautifier {
   private beautifyServers(servers: Servers): Servers {
     const copiedServers = JSON.parse(JSON.stringify(servers || {})) as Servers;
 
-    Object.keys(copiedServers).forEach(stage => {
-      const server = copiedServers[stage];
+    Object.entries(copiedServers).forEach(([_, server]) => {
       server.description = this.renderMd(server.description as string);
 
       if (server.variables) {
         const variables = server.variables;
         const newVariables: Record<string, ServerVariable> = variables;
 
-        for (const key of Object.keys(variables)) {
-          newVariables[key].description = this.renderMd(variables[key]
-            .description as string);
+        for (const [key, variable] of Object.entries(variables)) {
+          newVariables[key].description = this.renderMd(
+            variable.description as string,
+          );
         }
         server.variables = newVariables;
       }
@@ -222,10 +218,8 @@ class Beautifier {
 
   private beautifyChannels(channels: Channels): Channels {
     const newChannels: Channels = {};
-    for (const key of Object.keys(channels)) {
+    for (const [key, channel] of Object.entries(channels)) {
       newChannels[key] = {};
-
-      const channel = channels[key];
 
       const publish = channel.publish;
       if (publish) {
@@ -251,8 +245,7 @@ class Beautifier {
 
   private beautifyParameters(params: Parameters): Parameters {
     const newParams: Parameters = {};
-    Object.keys(params).map(key => {
-      const prop = params[key];
+    Object.entries(params).map(([key, prop]) => {
       if (prop.description) {
         prop.description = this.renderMd(prop.description as string);
       }
@@ -261,32 +254,6 @@ class Beautifier {
     });
     return newParams;
   }
-
-  // private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
-  //   const { components, security } = asyncApi;
-  //   const securityRequirements: SecurityRequirement[] = [];
-
-  //   security!.forEach(sec => {
-  //     const name = Object.keys(sec)[0];
-  //     if (
-  //       !components ||
-  //       !components.securitySchemes ||
-  //       !components.securitySchemes[name]
-  //     ) {
-  //       throw new Error(
-  //         `Security definition "${name}" is not included in #/components/securitySchemes.`,
-  //       );
-  //     }
-
-  //     const securityComponent = components.securitySchemes[name];
-  //     securityComponent.description = this.renderMd(
-  //       securityComponent.description as string,
-  //     );
-  //     securityRequirements.push(securityComponent);
-  //   });
-
-  //   return securityRequirements;
-  // }
 
   private renderMd(md?: string) {
     return renderMarkdown(md);

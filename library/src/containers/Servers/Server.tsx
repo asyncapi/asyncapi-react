@@ -54,9 +54,9 @@ class ServerComponent extends Component<Props, State> {
     } = this;
 
     const vars = server.variables
-      ? Object.keys(server.variables).map(key => ({
+      ? Object.entries(server.variables).map(([key, variable]) => ({
           key,
-          content: server.variables![key],
+          content: variable,
         }))
       : [];
 

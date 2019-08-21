@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Schema } from '../../types';
-
+import { generateExample } from '../../helpers/generateExampleSchema';
 import { CodeComponent, GeneratedBadge } from '../../components';
 import { SchemaExample } from './styled';
 
@@ -14,7 +14,7 @@ class SchemaExampleComponent extends Component<Props> {
   render() {
     const { title, schema } = this.props;
     const example = JSON.stringify(
-      schema.example ? schema.example : this.generateExample(schema),
+      schema.example ? schema.example : generateExample(schema),
       null,
       2,
     );
@@ -36,13 +36,6 @@ class SchemaExampleComponent extends Component<Props> {
         />
       </SchemaExample>
     );
-  }
-  private generateExample(schema: Schema) {
-    try {
-      return require('openapi-sampler').sample(schema);
-    } catch (e) {
-      return;
-    }
   }
 }
 

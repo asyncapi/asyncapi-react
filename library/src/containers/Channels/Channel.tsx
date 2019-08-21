@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-// import { StyledChannel, ChannelHeader } from './styled';
 import { Operation } from './Operation';
 import { ChannelItem, isRawMessage } from '../../types';
 import { Parameters as ParametersComponent } from './Parameters';
@@ -27,12 +26,10 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
   const oneOfPublish =
     channel.publish &&
     channel.publish.message &&
-    channel.publish.message &&
     !isRawMessage(channel.publish.message);
 
   const oneOfSubscribe =
     channel.subscribe &&
-    channel.subscribe.message &&
     channel.subscribe.message &&
     !isRawMessage(channel.subscribe.message);
 

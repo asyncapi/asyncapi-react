@@ -33,7 +33,11 @@ class LicenseComponent extends Component<Props> {
           {url && (
             <li>
               <strong>Specification</strong>:{' '}
-              <HrefHeader href={url} target="_blank">
+              <HrefHeader
+                href={url}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
                 {url}
               </HrefHeader>
             </li>

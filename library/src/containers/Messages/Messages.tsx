@@ -24,11 +24,11 @@ class MessagesComponent extends Component<Props> {
         <MessagesHeader>
           <H2>Messages</H2>
         </MessagesHeader>
-        {Object.keys(messages).map(key => (
+        {Object.entries(messages).map(([key, message]) => (
           <MessageComponent
             key={key}
             title={key}
-            message={messages![key]}
+            message={message}
             hideTags={true}
           />
         ))}

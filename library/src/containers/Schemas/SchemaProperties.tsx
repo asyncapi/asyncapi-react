@@ -54,11 +54,11 @@ const schemaPropertiesAccesors: TableAccessor[] = [
 
 export const handleNotProperty = (prop: Schema): Schema => {
   if (prop.not) {
-    const arrayOfChangedObjects = Object.keys(prop).map(elem => {
-      if (elem === 'not') {
-        return { properties: { [elem]: prop[elem] } };
+    const arrayOfChangedObjects = Object.entries(prop).map(([key, val]) => {
+      if (key === 'not') {
+        return { properties: { [key]: val } };
       }
-      return prop[elem];
+      return prop[key];
     });
 
     return merge.recursive(...arrayOfChangedObjects);
@@ -128,11 +128,11 @@ class SchemaPropertiesComponent extends Component<Props> {
       return null;
     }
 
-    return Object.keys(properties).map(key => (
+    return Object.entries(properties).map(([key, prop]) => (
       <SchemaPropertiesComponent
         key={key}
         name={key}
-        properties={properties[key]}
+        properties={prop}
         treeSpace={treeSpace}
       />
     ));

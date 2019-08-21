@@ -37,11 +37,11 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
       <TableWrapper>
         <TableHeader columns={serversColumnsName} />
         <TableBodyWrapper>
-          {Object.keys(servers).map(stage => {
-            const server = servers[stage];
+          {Object.entries(servers).map(([stage, server]) => {
+            const { url, protocol } = server;
             return (
               <ServerComponent
-                key={`${server.url}${server.protocol}${stage}`}
+                key={`${url}${protocol}${stage}`}
                 server={server}
                 stage={stage}
               />

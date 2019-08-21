@@ -21,8 +21,8 @@ export const SchemasComponent: FunctionComponent<Props> = ({ schemas }) => {
       <SchemasHeader>
         <H2>Schemas</H2>
       </SchemasHeader>
-      {Object.keys(schemas).map(key => (
-        <SchemaComponent key={key} name={key} schema={schemas[key]} />
+      {Object.entries(schemas).map(([key, schema]) => (
+        <SchemaComponent key={key} name={key} schema={schema} />
       ))}
     </Schemas>
   );

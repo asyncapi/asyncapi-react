@@ -4,8 +4,9 @@ import {
   SecurityScheme,
   Components as ComponentsType,
   Servers as ServersType,
+  ExcludeNullable,
 } from '../../types';
-
+import renderMd from '../../helpers/renderMarkdown';
 import {
   H2,
   Markdown,
@@ -40,10 +41,8 @@ const securityAccesors: TableAccessor[] = [
   (el: SecuritySchemeWithStages) => el.scheme,
   (el: SecuritySchemeWithStages) => el.bearerFormat,
   (el: SecuritySchemeWithStages) =>
-    el.description && <Markdown>{el.description}</Markdown>,
+    el.description && <Markdown>{renderMd(el.description)}</Markdown>,
 ];
-
-type ExcludeNullable<T> = Exclude<T, null | undefined>;
 
 interface Props {
   securitySchemes: ExcludeNullable<ComponentsType['securitySchemes']>;

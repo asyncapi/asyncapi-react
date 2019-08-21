@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
-export type TableAccessor = ((arg: any) => any) | string;
 export type TableAccessorReturn = React.ReactNode;
+export type TableAccessor =
+  | ((arg: Record<string, any>) => TableAccessorReturn)
+  | string;
 
 import {
   TableRowWrapper,
@@ -22,34 +24,28 @@ export class TableRow extends Component<Props> {
   render() {
     const { accessors, element, nested, openAccordion } = this.props;
 
+    const content = accessors
+      ? this.renderRowByAccessors(accessors, element, !!nested)
+      : element;
+
     if (this.props.hasOwnProperty('openAccordion')) {
       return (
         <TableRowWrapperWithNested open={openAccordion}>
-          {accessors
-            ? this.renderRowByAccessors(accessors, element, !!nested)
-            : element}
+          {content}
         </TableRowWrapperWithNested>
       );
     }
 
     return !nested ? (
-      <TableRowWrapper>
-        {accessors
-          ? this.renderRowByAccessors(accessors, element, !!nested)
-          : element}
-      </TableRowWrapper>
+      <TableRowWrapper>{content}</TableRowWrapper>
     ) : (
-      <TableRowWrapperNested>
-        {accessors
-          ? this.renderRowByAccessors(accessors, element, !!nested)
-          : element}
-      </TableRowWrapperNested>
+      <TableRowWrapperNested>{content}</TableRowWrapperNested>
     );
   }
 
   private renderRowByAccessors(
     accessors: TableAccessor[],
-    element: any,
+    element: Record<string, any>,
     nested: boolean,
   ) {
     return accessors.map((accessor, index) =>
@@ -65,7 +61,7 @@ export class TableRow extends Component<Props> {
 
   private getAccessor(
     accessor: TableAccessor,
-    element: any,
+    element: Record<string, any>,
   ): TableAccessorReturn {
     if (accessor instanceof Function) {
       return accessor(element);
@@ -73,7 +69,7 @@ export class TableRow extends Component<Props> {
 
     const value = element[accessor];
     if (typeof value === 'boolean' || typeof value === 'number') {
-      return (value as boolean | number).toString();
+      return value.toString();
     }
     return value;
   }

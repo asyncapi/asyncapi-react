@@ -15,99 +15,19 @@ interface Props {
   param: ParamType;
 }
 
-export const Parameter: FunctionComponent<Props> = ({ param, name = '' }) => (
+export const Parameter: FunctionComponent<Props> = ({
+  param: { description, location, schema },
+  name = '',
+}) => (
   <StyledParameter>
     <ParameterWrapper>
-      {param.description ? (
+      {description ? (
         <ParameterHeader>
-          {param.description && <Markdown>{param.description}</Markdown>}
+          {description && <Markdown>{description}</Markdown>}
         </ParameterHeader>
       ) : null}
-      {param.location && <H4>Location: {param.location}</H4>}
-      <SchemaComponent name={name} schema={param.schema} hideTitle={true} />
+      {location && <H4>Location: {location}</H4>}
+      <SchemaComponent name={name} schema={schema} hideTitle={true} />
     </ParameterWrapper>
   </StyledParameter>
 );
-//   {param.description && (
-//     <>
-//       <h4>Description:</h4>
-//       <Markdown>{param.description}</Markdown>
-//     </>
-//   )}
-//   {param.location && (
-//     <>
-//       <h4>Description:</h4>
-//       {param.location}
-//     </>
-//   )}
-//   {param.schema && (
-//     <>
-//       <h4>Schema</h4>
-//       <SchemaComponent schema={param.schema} name={name} />
-//     </>
-//   )}
-// </StyledDiv>
-
-// const StyledDiv = styled.section`
-//   padding: 10px;
-//   border-bottom: 1px solid gray;
-// `;
-
-// import React, { Component } from 'react';
-
-// import { Parameter } from '../../types';
-
-// import { SchemaComponent } from '../Schemas/Schema';
-
-// import { H4, Markdown } from '../../components';
-// import {
-//   Parameters,
-//   ParametersHeader,
-//   Parameter as ParameterWrapper,
-//   ParameterHeader,
-// } from './styled';
-
-// interface Props {
-//   parameters?: Parameter[];
-//   hideTitle?: boolean;
-// }
-
-// class ParametersComponent extends Component<Props> {
-//   render() {
-//     const { parameters, hideTitle } = this.props;
-
-//     if (!parameters) {
-//       return null;
-//     }
-
-//     return (
-//       <Parameters>
-//         {!hideTitle && (
-//           <ParametersHeader>
-//             <H4>Topic Parameters</H4>
-//           </ParametersHeader>
-//         )}
-//         {this.renderParameters()}
-//       </Parameters>
-//     );
-//   }
-//   private renderParameters() {
-//     const { parameters } = this.props;
-
-//     return parameters!.map((param, index) => (
-//       <ParameterWrapper key={index}>
-//         {param.name || param.description ? (
-//           <ParameterHeader>
-//             {param.name && <H4>{param.name}</H4>}
-//             {param.description && <Markdown>{param.description}</Markdown>}
-//           </ParameterHeader>
-//         ) : null}
-//         <SchemaComponent
-//           name={param.name ? param.name : ''}
-//           schema={param.schema}
-//           hideTitle={true}
-//         />
-//       </ParameterWrapper>
-//     ));
-//   }
-// }

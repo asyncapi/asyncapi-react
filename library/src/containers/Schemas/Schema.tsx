@@ -15,24 +15,22 @@ import {
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
 
 export const searchForNestedObject = (
-  object: Record<string, any>,
+  input: Record<string, any>,
   key: string,
-  predicate: (key: string, data: string) => boolean,
 ): Record<string, any> | null => {
-  if (!object) {
+  if (!input) {
     return null;
   }
-  if (object.hasOwnProperty(key) && predicate(key, object[key]) === true) {
-    return object;
+  if (input.hasOwnProperty(key)) {
+    return input;
   }
+
   // tslint:disable-next-line:prefer-for-of
-  for (let i = 0; i < Object.keys(object).length; i++) {
-    if (typeof object[Object.keys(object)[i]] === 'object') {
-      const o = searchForNestedObject(
-        object[Object.keys(object)[i]],
-        key,
-        predicate,
-      );
+  for (let i = 0; i < Object.keys(input).length; i++) {
+    const nextInputObject = input[Object.keys(input)[i]];
+
+    if (typeof nextInputObject === 'object') {
+      const o = searchForNestedObject(nextInputObject, key);
       if (o !== null) {
         return o;
       }
@@ -64,7 +62,7 @@ export class SchemaComponent extends Component<Props> {
     if (!schema) {
       return null;
     }
-    const hasNotField = searchForNestedObject(schema, 'not', (k, v) => true);
+    const hasNotField = searchForNestedObject(schema, 'not');
 
     return (
       <SchemaWrapper>
@@ -88,20 +86,16 @@ export class SchemaComponent extends Component<Props> {
     schemaName: string,
     schema: Schema,
   ): React.ReactNode {
-    if (schema.properties) {
-      const properties = schema.properties;
-
-      return Object.keys(properties).map(key => (
-        <SchemaProperties
-          key={key}
-          name={key}
-          properties={properties[key]}
-          treeSpace={0}
-        />
-      ));
+    if (!schema.properties) {
+      return (
+        <SchemaProperties name={schemaName} properties={schema} treeSpace={0} />
+      );
     }
-    return (
-      <SchemaProperties name={schemaName} properties={schema} treeSpace={0} />
-    );
+
+    const properties = schema.properties;
+
+    return Object.entries(properties).map(([key, prop]) => (
+      <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
+    ));
   }
 }

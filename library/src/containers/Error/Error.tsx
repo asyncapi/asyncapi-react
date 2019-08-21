@@ -59,15 +59,11 @@ const formatErrors = (singleError: ErrorObject): string | null => {
     return null;
   }
 
-  const message = singleError.message;
-  const dataPath = singleError.dataPath;
-  const params = singleError.params as any;
+  const { message, dataPath, params, keyword } = singleError;
 
   const info = Object.values(params)[0];
 
-  return `${dataPath} ${message}${
-    singleError.keyword === 'type' ? '' : `: ${info}`
-  }`;
+  return `${dataPath} ${message}${keyword === 'type' ? '' : `: ${info}`}`;
 };
 
 export default ErrorComponent;

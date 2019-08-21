@@ -40,7 +40,6 @@ class Parser {
   }
 
   handleError = (err: any): ParserReturn => {
-    console.error(err);
     if (
       err instanceof ParserErrorUnsupportedVersion ||
       err instanceof ParserErrorNoJS
@@ -57,8 +56,6 @@ class Parser {
         error: { message: UNSUPPORTED_SCHEMA_VERSION },
       };
     }
-
-    console.error(err.errors);
 
     return {
       data: err.parsedJSON || null,

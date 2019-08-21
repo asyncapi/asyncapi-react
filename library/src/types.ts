@@ -111,7 +111,7 @@ export interface Server {
   protocolVersion?: string;
   description?: DescriptionHTML;
   variables?: ServerVariables;
-  security?: SecurityRequirement[]; // discuss whether to extract it or keep it in same category
+  security?: SecurityRequirement[];
 }
 
 export interface ServerVariables {
@@ -180,15 +180,12 @@ export interface RawMessage {
 }
 
 export interface Tag {
-  // do not have to change
-
   name: string;
   description?: string;
   externalDocs?: ExternalDocs;
 }
 
 export interface ExternalDocs {
-  // do not have to change
   url: string;
   description?: DescriptionHTML;
 }
@@ -245,8 +242,6 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
-// as https://github.com/asyncapi/asyncapi/pull/256/files is merged now we have to rethink how to visualize schema
-// this thing is now deprecated
 export interface Schema {
   nullable?: boolean;
   format?: string;
@@ -334,3 +329,5 @@ export interface ParserReturn {
   data: NullableAsyncApi;
   error?: ParserError;
 }
+
+export type ExcludeNullable<T> = Exclude<T, null | undefined>;

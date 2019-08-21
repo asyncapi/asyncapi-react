@@ -93,13 +93,12 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
           {concatenatedConfig.showErrors && !!error && (
             <ErrorComponent error={error} />
           )}
-          {concatenatedConfig.show.info && Boolean(validatedSchema.info) && (
+          {concatenatedConfig.show.info && validatedSchema.info && (
             <InfoComponent
               info={validatedSchema.info}
               servers={validatedSchema.servers}
               showServers={
-                concatenatedConfig.show.servers &&
-                Boolean(validatedSchema.servers)
+                concatenatedConfig.show.servers && !!validatedSchema.servers
               }
             />
           )}
@@ -119,15 +118,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
           {validatedSchema.components && (
             <>
               {concatenatedConfig.show.messages &&
-                Boolean(validatedSchema.components) &&
-                Boolean(validatedSchema.components.messages) && (
+                validatedSchema.components &&
+                validatedSchema.components.messages && (
                   <MessagesComponent
                     messages={validatedSchema.components.messages}
                   />
                 )}
               {concatenatedConfig.show.schemas &&
-                Boolean(validatedSchema.components) &&
-                Boolean(validatedSchema.components.schemas) && (
+                validatedSchema.components &&
+                validatedSchema.components.schemas && (
                   <SchemasComponent
                     schemas={validatedSchema.components.schemas}
                   />

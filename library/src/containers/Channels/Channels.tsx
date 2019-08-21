@@ -7,20 +7,13 @@ interface Props {
   channels: ChannelsType;
 }
 
-export const Channels: FunctionComponent<Props> = ({ channels }) => {
-  const channelList = Object.keys(channels).map(key => ({
-    name: key,
-    data: channels[key],
-  }));
-
-  return (
-    <StyledChannels>
-      <ChannelsHeader>
-        <H2>Channels</H2>
-      </ChannelsHeader>
-      {channelList.map(elem => (
-        <Channel name={elem.name} channel={elem.data} key={elem.name} />
-      ))}
-    </StyledChannels>
-  );
-};
+export const Channels: FunctionComponent<Props> = ({ channels }) => (
+  <StyledChannels>
+    <ChannelsHeader>
+      <H2>Channels</H2>
+    </ChannelsHeader>
+    {Object.entries(channels).map(([name, channel]) => (
+      <Channel name={name} channel={channel} key={name} />
+    ))}
+  </StyledChannels>
+);
