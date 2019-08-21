@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export type TableAccessor = ((arg: any) => any) | string;
-export type TableAccessorReturn = React.ReactNode | string;
+export type TableAccessorReturn = React.ReactNode;
 
 import {
   TableRowWrapper,

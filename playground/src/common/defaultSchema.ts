@@ -28,12 +28,40 @@ servers:
           - '1883'
           - '8883'
     security:
-      - apiKey: []
       - supportedOauthFlows:
         - streetlights:on
         - streetlights:off
         - streetlights:dim
       - openIdConnectWellKnown: []
+  test:
+    url: api.streetlights.smartylighting.com:{port}
+    protocol: mqtt
+    description: Test broker
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 8883.
+        default: '1883'
+        enum:
+          - '1883'
+          - '8880'
+    security:
+      - apiKey: 
+        - customApiKey
+      - supportedOauthFlows:
+        - streetlights:on
+        - something
+  noSecurityTest:
+    url: api.streetlights.smartylighting.com:{port}
+    protocol: mqtt
+    description: Test broker
+    variables:
+      port:
+        description: Secure connection (TLS) is available through port 8883.
+        default: '1883'
+        enum:
+          - '1883'
+          - '8880'  
+
 
 defaultContentType: application/json
 

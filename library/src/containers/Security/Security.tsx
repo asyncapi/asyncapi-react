@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
-import { SecurityScheme } from '../../types';
+import {
+  SecurityScheme,
+  Components as ComponentsType,
+  Servers as ServersType,
+} from '../../types';
 
 import {
   H2,
@@ -16,6 +20,7 @@ import { Security as SecurityWrapper, SecurityHeader } from './styled';
 
 const securityColumnsName: TableColumnName[] = [
   'Type',
+  'Stages',
   'In',
   'Name',
   'Scheme',
@@ -23,27 +28,31 @@ const securityColumnsName: TableColumnName[] = [
   'Description',
 ];
 
+interface SecuritySchemeWithStages extends SecurityScheme {
+  stages: string[];
+}
+
 const securityAccesors: TableAccessor[] = [
-  (el: SecurityScheme) => el.type,
-  (el: SecurityScheme) => el.in,
-  (el: SecurityScheme) => el.name,
-  (el: SecurityScheme) => el.scheme,
-  (el: SecurityScheme) => el.bearerFormat,
-  (el: SecurityScheme) =>
+  (el: SecuritySchemeWithStages) => el.type,
+  (el: SecuritySchemeWithStages) => el.stages.join(', '),
+  (el: SecuritySchemeWithStages) => el.in,
+  (el: SecuritySchemeWithStages) => el.name,
+  (el: SecuritySchemeWithStages) => el.scheme,
+  (el: SecuritySchemeWithStages) => el.bearerFormat,
+  (el: SecuritySchemeWithStages) =>
     el.description && <Markdown>{el.description}</Markdown>,
 ];
 
+type ExcludeNullable<T> = Exclude<T, null | undefined>;
+
 interface Props {
-  security?: Array<SecurityScheme | undefined>;
+  securitySchemes: ExcludeNullable<ComponentsType['securitySchemes']>;
+  servers: ServersType;
 }
 
 export class SecurityComponent extends Component<Props> {
   render() {
-    const { security } = this.props;
-
-    if (!security) {
-      return null;
-    }
+    const alteredSecuritySchemes = addStageToSecurity(this.props);
 
     return (
       <SecurityWrapper>
@@ -53,10 +62,10 @@ export class SecurityComponent extends Component<Props> {
         <TableWrapper>
           <TableHeader columns={securityColumnsName} />
           <TableBodyWrapper>
-            {security.map(sec =>
+            {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
               !sec ? null : (
                 <TableRow
-                  key={`${sec.type}${sec.name}`}
+                  key={stage}
                   accessors={securityAccesors}
                   element={sec}
                 />
@@ -68,3 +77,30 @@ export class SecurityComponent extends Component<Props> {
     );
   }
 }
+
+export const addStageToSecurity: (
+  arg: Props,
+) => Record<string, SecuritySchemeWithStages> = ({
+  servers,
+  securitySchemes,
+}) => {
+  const copiedSecSchemes = JSON.parse(JSON.stringify(securitySchemes));
+
+  Object.keys(copiedSecSchemes).map(securitySchemesKey => {
+    Object.entries(servers)
+      .filter(([_, serv]) => !!serv.security)
+      .forEach(([stage, server]) => {
+        server.security &&
+          server.security.forEach(element => {
+            if (element[securitySchemesKey]) {
+              if (!Array.isArray(copiedSecSchemes[securitySchemesKey].stages)) {
+                copiedSecSchemes[securitySchemesKey].stages = [];
+              }
+              copiedSecSchemes[securitySchemesKey].stages.push(stage);
+            }
+          });
+      });
+  });
+
+  return copiedSecSchemes;
+};

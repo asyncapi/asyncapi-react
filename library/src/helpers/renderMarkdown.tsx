@@ -4,7 +4,7 @@ import MarkdownIt from 'markdown-it';
 
 const markdownIt = new MarkdownIt();
 
-function renderMd(md?: string | ReactNode) {
+function renderMd(md?: ReactNode) {
   if (typeof md !== 'string') {
     return md;
   }

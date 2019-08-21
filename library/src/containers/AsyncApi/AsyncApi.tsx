@@ -38,6 +38,8 @@ const defaultAsyncApi: AsyncApi = {
   channels: {},
 };
 
+// todo: add ability to forward options to parser and dereferencer
+
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
   state: AsyncApiState = {
     validatedSchema: defaultAsyncApi,
@@ -85,8 +87,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       );
     }
 
-    // todo: handle defaultContentType field here
-
     return (
       <ThemeProvider theme={concatenatedTheme}>
         <AsyncApiWrapper>
@@ -104,17 +104,12 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
             />
           )}
           {concatenatedConfig.show.security &&
+            validatedSchema.servers &&
             validatedSchema.components &&
             validatedSchema.components.securitySchemes && (
               <SecurityComponent
-                security={Object.keys(
-                  validatedSchema.components.securitySchemes,
-                ).map(
-                  elem =>
-                    validatedSchema.components &&
-                    validatedSchema.components.securitySchemes &&
-                    validatedSchema.components.securitySchemes[elem],
-                )}
+                securitySchemes={validatedSchema.components.securitySchemes}
+                servers={validatedSchema.servers}
               />
             )}
 
