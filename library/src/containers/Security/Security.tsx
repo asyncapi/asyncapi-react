@@ -6,7 +6,7 @@ import {
   Servers as ServersType,
   ExcludeNullable,
 } from '../../types';
-import renderMd from '../../helpers/renderMarkdown';
+import { renderMd } from '../../helpers/renderMarkdown';
 import {
   H2,
   Markdown,

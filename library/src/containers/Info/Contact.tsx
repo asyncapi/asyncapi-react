@@ -13,7 +13,7 @@ interface Props {
   contact: Contact;
 }
 
-class ContactComponent extends Component<Props> {
+export class ContactComponent extends Component<Props> {
   render() {
     const {
       contact: { name, url, email },
@@ -49,5 +49,3 @@ class ContactComponent extends Component<Props> {
     );
   }
 }
-
-export default ContactComponent;

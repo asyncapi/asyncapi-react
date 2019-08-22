@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { Info, Servers } from '../../types';
 
-import ServersComponent from '../Servers/Servers';
-import ContactComponent from './Contact';
-import LicenseComponent from './License';
+import { ServersComponent } from '../Servers/Servers';
+import { ContactComponent } from './Contact';
+import { LicenseComponent } from './License';
 
 import {
   H1,
@@ -20,7 +20,7 @@ interface Props {
   servers?: Servers;
   showServers: boolean;
 }
-class InfoComponent extends Component<Props> {
+export class InfoComponent extends Component<Props> {
   render() {
     const {
       info: { title, version, description, termsOfService, contact, license },
@@ -51,5 +51,3 @@ class InfoComponent extends Component<Props> {
     );
   }
 }
-
-export default InfoComponent;

@@ -10,7 +10,7 @@ interface Props {
   schema: Schema;
 }
 
-class SchemaExampleComponent extends Component<Props> {
+export class SchemaExampleComponent extends Component<Props> {
   render() {
     const { title, schema } = this.props;
     const example = JSON.stringify(
@@ -38,5 +38,3 @@ class SchemaExampleComponent extends Component<Props> {
     );
   }
 }
-
-export default SchemaExampleComponent;

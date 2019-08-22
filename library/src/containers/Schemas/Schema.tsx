@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import { Schema } from '../../types';
 
-import SchemaProperties from './SchemaProperties';
-import SchemaExample from './SchemaExample';
+import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
+import { SchemaExampleComponent } from './SchemaExample';
 
 import {
   H4,
@@ -78,7 +78,9 @@ export class SchemaComponent extends Component<Props> {
           </TableBodyWrapper>
         </TableWrapper>
         {/* we need to disable this component if schema has "not" field anywhere in it */}
-        {!hasNotField && <SchemaExample title={exampleTitle} schema={schema} />}
+        {!hasNotField && (
+          <SchemaExampleComponent title={exampleTitle} schema={schema} />
+        )}
       </SchemaWrapper>
     );
   }

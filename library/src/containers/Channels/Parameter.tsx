@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-// import styled from 'styled-components';
 import { H4, Markdown } from '../../components';
 import { Parameter as ParamType } from '../../types';
 

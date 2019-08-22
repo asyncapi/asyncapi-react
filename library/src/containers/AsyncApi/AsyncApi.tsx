@@ -13,12 +13,12 @@ import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { parser, beautifier } from '../../helpers';
 
-import InfoComponent from '../Info/Info';
+import { InfoComponent } from '../Info/Info';
 import { SecurityComponent } from '../Security/Security';
 
-import MessagesComponent from '../Messages/Messages';
+import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
-import ErrorComponent from '../Error/Error';
+import { ErrorComponent } from '../Error/Error';
 
 import { Channels } from '../Channels/Channels';
 
@@ -140,18 +140,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
 
   private async parseSchema(schema: PropsSchema) {
     if (isFetchingSchemaInterface(schema)) {
+      /* tslint:disable: no-shadowed-variable */
+
+      // there's clearly a return statement in this code block so I don't why this triggers */
+
       const { data, error } = await parser.parseFromUrl(schema);
 
       const beautifiedSchema = this.beautifySchema(data);
 
-      this.setState({ validatedSchema: beautifiedSchema, error });
-    } else {
-      const { data, error } = await parser.parse(schema);
-
-      const beautifiedSchema = this.beautifySchema(data);
-
-      this.setState({ validatedSchema: beautifiedSchema, error });
+      this.setState({
+        validatedSchema: beautifiedSchema,
+        error,
+      });
+      return;
+      /* tslint:enable: no-shadowed-variable */
     }
+
+    const { data, error } = await parser.parse(schema);
+
+    const beautifiedSchema = this.beautifySchema(data);
+
+    this.setState({ validatedSchema: beautifiedSchema, error });
   }
 
   private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {

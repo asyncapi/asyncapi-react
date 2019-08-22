@@ -48,7 +48,7 @@ interface Props {
   openAccordion: boolean;
 }
 
-class ServerVariablesComponent extends Component<Props> {
+export class ServerVariablesComponent extends Component<Props> {
   render() {
     const { variables, openAccordion } = this.props;
 
@@ -78,5 +78,3 @@ class ServerVariablesComponent extends Component<Props> {
     return <TableRow openAccordion={openAccordion} element={vars} />;
   }
 }
-
-export default ServerVariablesComponent;

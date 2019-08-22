@@ -21,7 +21,7 @@ interface Props {
   hideTags?: boolean;
 }
 
-class MessageComponent extends Component<Props> {
+export class MessageComponent extends Component<Props> {
   render() {
     const { title, message, hideTags } = this.props;
     if (!message) {
@@ -83,5 +83,3 @@ class MessageComponent extends Component<Props> {
     );
   }
 }
-
-export default MessageComponent;

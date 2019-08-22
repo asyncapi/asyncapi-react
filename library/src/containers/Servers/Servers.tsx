@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Servers } from '../../types';
 
-import ServerComponent from './Server';
+import { ServerComponent } from './Server';
 
 import {
   H2,
@@ -24,7 +24,9 @@ interface Props {
   servers?: Servers;
 }
 
-const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
+export const ServersComponent: React.FunctionComponent<Props> = ({
+  servers,
+}) => {
   if (!servers) {
     return null;
   }
@@ -52,5 +54,3 @@ const ServersComponent: React.FunctionComponent<Props> = ({ servers }) => {
     </StyledServers>
   );
 };
-
-export default ServersComponent;

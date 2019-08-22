@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Message } from '../../types';
 
-import MessageComponent from './Message';
+import { MessageComponent } from './Message';
 
 import { H2 } from '../../components';
 import { Messages, MessagesHeader } from './styled';
@@ -11,7 +11,7 @@ interface Props {
   messages?: Record<string, Message>;
 }
 
-class MessagesComponent extends Component<Props> {
+export class MessagesComponent extends Component<Props> {
   render() {
     const { messages } = this.props;
 
@@ -36,5 +36,3 @@ class MessagesComponent extends Component<Props> {
     );
   }
 }
-
-export default MessagesComponent;

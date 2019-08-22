@@ -72,7 +72,7 @@ interface Props {
   treeSpace: number;
 }
 
-class SchemaPropertiesComponent extends Component<Props> {
+export class SchemaPropertiesComponent extends Component<Props> {
   render() {
     const { name, properties, treeSpace } = this.props;
 
@@ -149,5 +149,3 @@ class SchemaPropertiesComponent extends Component<Props> {
     return this.renderProperties(schema.items as Schema, treeSpace);
   }
 }
-
-export default SchemaPropertiesComponent;

@@ -11,13 +11,12 @@ import {
   Operation,
 } from '../types';
 
-import renderMarkdown from './renderMarkdown';
+import { renderMd } from './renderMarkdown';
 
 class Beautifier {
   beautify(asyncApi: AsyncApi): AsyncApi {
     if (asyncApi.info && asyncApi.info.description) {
-      asyncApi.info.description = this.renderMd(asyncApi.info
-        .description as string);
+      asyncApi.info.description = renderMd(asyncApi.info.description as string);
     }
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
@@ -76,7 +75,7 @@ class Beautifier {
 
       for (const [key, prop] of Object.entries(properties)) {
         if (prop.description) {
-          prop.description = this.renderMd(prop.description as string);
+          prop.description = renderMd(prop.description as string);
         }
         if (prop.properties) {
           const propProperties = prop.properties;
@@ -103,7 +102,7 @@ class Beautifier {
 
       for (const [key, prop] of Object.entries(additionalProperties)) {
         if (prop.description) {
-          prop.description = this.renderMd(prop.description as string);
+          prop.description = renderMd(prop.description as string);
         }
         if (prop.additionalProperties) {
           const propAdditionalProperties = prop.additionalProperties;
@@ -153,11 +152,11 @@ class Beautifier {
       message.headers = this.resolveAllOf(message.headers);
     }
     if (message.summary) {
-      message.summary = this.renderMd(message.summary as string);
+      message.summary = renderMd(message.summary as string);
     }
 
     if (message.description) {
-      message.description = this.renderMd(message.description as string);
+      message.description = renderMd(message.description as string);
     }
 
     if (message.headers) {
@@ -184,14 +183,14 @@ class Beautifier {
     const copiedServers = JSON.parse(JSON.stringify(servers || {})) as Servers;
 
     Object.entries(copiedServers).forEach(([_, server]) => {
-      server.description = this.renderMd(server.description as string);
+      server.description = renderMd(server.description as string);
 
       if (server.variables) {
         const variables = server.variables;
         const newVariables: Record<string, ServerVariable> = variables;
 
         for (const [key, variable] of Object.entries(variables)) {
-          newVariables[key].description = this.renderMd(
+          newVariables[key].description = renderMd(
             variable.description as string,
           );
         }
@@ -247,16 +246,12 @@ class Beautifier {
     const newParams: Parameters = {};
     Object.entries(params).map(([key, prop]) => {
       if (prop.description) {
-        prop.description = this.renderMd(prop.description as string);
+        prop.description = renderMd(prop.description as string);
       }
 
       newParams[key] = prop;
     });
     return newParams;
-  }
-
-  private renderMd(md?: string) {
-    return renderMarkdown(md);
   }
 }
 

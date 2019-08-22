@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Server } from '../../types';
 
-import ServerVariablesComponent from './ServerVariables';
+import { ServerVariablesComponent } from './ServerVariables';
 
 import { Markdown, TableAccessor, TableRow } from '../../components';
 import { ServerExpandIcon } from './styled';
@@ -42,7 +42,7 @@ interface State {
   openAccordion: boolean;
 }
 
-class ServerComponent extends Component<Props, State> {
+export class ServerComponent extends Component<Props, State> {
   state = {
     openAccordion: false,
   };
@@ -83,5 +83,3 @@ class ServerComponent extends Component<Props, State> {
     this.setState(prevState => ({ openAccordion: !prevState.openAccordion }));
   };
 }
-
-export default ServerComponent;

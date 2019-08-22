@@ -13,7 +13,7 @@ interface Props {
   license: License;
 }
 
-class LicenseComponent extends Component<Props> {
+export class LicenseComponent extends Component<Props> {
   render() {
     const {
       license: { name, url },
@@ -47,5 +47,3 @@ class LicenseComponent extends Component<Props> {
     );
   }
 }
-
-export default LicenseComponent;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import MessageComponent from '../Messages/Message';
+import { MessageComponent } from '../Messages/Message';
 import { Operation as OperationType } from '../../types';
 
 import { TopicMessage } from './styled';

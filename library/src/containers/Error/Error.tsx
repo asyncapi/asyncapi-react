@@ -15,7 +15,7 @@ interface Props {
   error: ParserError;
 }
 
-const ErrorComponent: FunctionComponent<Props> = ({ error }) => {
+export const ErrorComponent: FunctionComponent<Props> = ({ error }) => {
   const [visible, setVisible] = useState(true);
 
   if (!error) {
@@ -65,5 +65,3 @@ const formatErrors = (singleError: ErrorObject): string | null => {
 
   return `${dataPath} ${message}${keyword === 'type' ? '' : `: ${info}`}`;
 };
-
-export default ErrorComponent;
