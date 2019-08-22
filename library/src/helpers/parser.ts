@@ -16,7 +16,7 @@ type ParserOptions = AsyncApiProps['parserOptions'];
 
 // ask tws about this error
 const UNSUPPORTED_SCHEMA_VERSION =
-  'AsyncAPI version is unsupported. Use version 2.0 or higher';
+  'AsyncAPI version is unsupported, use version 2.0 or higher';
 
 class Parser {
   async parse(
@@ -50,7 +50,10 @@ class Parser {
       );
 
       if (!this.isCorrectSchemaVersion(data.asyncapi)) {
-        return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };
+        return {
+          data: null,
+          error: { message: UNSUPPORTED_SCHEMA_VERSION },
+        };
       }
 
       return { data };

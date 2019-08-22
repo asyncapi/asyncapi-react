@@ -39,8 +39,8 @@
     "./LICENSE"
   ],
   "scripts": {
-    "start": "tsc -p tsconfig.json --watch",
-    "build": "tsc -p tsconfig.json",
+    "start": "tsc --watch",
+    "build": "tsc",
     "test": "jest --detectOpenHandles",
     "lint-check": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose && prettier --config ./.prettierrc --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose --fix; prettier --config ./.prettierrc --write './src/**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
