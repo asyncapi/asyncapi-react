@@ -54,11 +54,7 @@ function renderErrors(error: ValidationError): React.ReactNode {
     .filter(Boolean);
 }
 
-const formatErrors = (singleError: ErrorObject): string | null => {
-  if (!singleError) {
-    return null;
-  }
-
+export const formatErrors = (singleError: ErrorObject): string | null => {
   const { message, dataPath, params, keyword } = singleError;
 
   const info = Object.values(params)[0];
