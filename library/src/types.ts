@@ -3,7 +3,7 @@ import { ConfigInterface } from './config';
 import { ThemeInterface } from './theme';
 export type PrimitiveType = number | boolean | string | null;
 export type PropsWithDefaults<T, D> = T & D;
-
+export type ExcludeNullable<T> = Exclude<T, null | undefined>;
 export interface TypeWithKey<T, V> {
   key: T;
   content: V;
@@ -329,5 +329,3 @@ export interface ParserReturn {
   data: NullableAsyncApi;
   error?: ParserError;
 }
-
-export type ExcludeNullable<T> = Exclude<T, null | undefined>;

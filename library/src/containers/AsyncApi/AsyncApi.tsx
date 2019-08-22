@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, FunctionComponent } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import {
@@ -79,70 +79,65 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
         return null;
       }
       return (
-        <ThemeProvider theme={concatenatedTheme}>
-          <AsyncApiWrapper>
-            {concatenatedConfig.showErrors && <ErrorComponent error={error} />}
-          </AsyncApiWrapper>
-        </ThemeProvider>
+        <Wrapper theme={concatenatedTheme}>
+          {concatenatedConfig.showErrors && <ErrorComponent error={error} />}
+        </Wrapper>
       );
     }
 
     return (
-      <ThemeProvider theme={concatenatedTheme}>
-        <AsyncApiWrapper>
-          {concatenatedConfig.showErrors && !!error && (
-            <ErrorComponent error={error} />
-          )}
-          {concatenatedConfig.show.info && validatedSchema.info && (
-            <InfoComponent
-              info={validatedSchema.info}
+      <Wrapper theme={concatenatedTheme}>
+        {concatenatedConfig.showErrors && !!error && (
+          <ErrorComponent error={error} />
+        )}
+        {concatenatedConfig.show.info && validatedSchema.info && (
+          <InfoComponent
+            info={validatedSchema.info}
+            servers={validatedSchema.servers}
+            showServers={
+              concatenatedConfig.show.servers && !!validatedSchema.servers
+            }
+          />
+        )}
+        {concatenatedConfig.show.security &&
+          validatedSchema.servers &&
+          validatedSchema.components &&
+          validatedSchema.components.securitySchemes && (
+            <SecurityComponent
+              securitySchemes={validatedSchema.components.securitySchemes}
               servers={validatedSchema.servers}
-              showServers={
-                concatenatedConfig.show.servers && !!validatedSchema.servers
-              }
             />
           )}
-          {concatenatedConfig.show.security &&
-            validatedSchema.servers &&
-            validatedSchema.components &&
-            validatedSchema.components.securitySchemes && (
-              <SecurityComponent
-                securitySchemes={validatedSchema.components.securitySchemes}
-                servers={validatedSchema.servers}
-              />
-            )}
 
-          {concatenatedConfig.show.channels && !!validatedSchema.channels && (
-            <Channels channels={validatedSchema.channels} />
-          )}
-          {validatedSchema.components && (
-            <>
-              {concatenatedConfig.show.messages &&
-                validatedSchema.components &&
-                validatedSchema.components.messages && (
-                  <MessagesComponent
-                    messages={validatedSchema.components.messages}
-                  />
-                )}
-              {concatenatedConfig.show.schemas &&
-                validatedSchema.components &&
-                validatedSchema.components.schemas && (
-                  <SchemasComponent
-                    schemas={validatedSchema.components.schemas}
-                  />
-                )}
-            </>
-          )}
-        </AsyncApiWrapper>
-      </ThemeProvider>
+        {concatenatedConfig.show.channels && !!validatedSchema.channels && (
+          <Channels channels={validatedSchema.channels} />
+        )}
+        {validatedSchema.components && (
+          <>
+            {concatenatedConfig.show.messages &&
+              validatedSchema.components &&
+              validatedSchema.components.messages && (
+                <MessagesComponent
+                  messages={validatedSchema.components.messages}
+                />
+              )}
+            {concatenatedConfig.show.schemas &&
+              validatedSchema.components &&
+              validatedSchema.components.schemas && (
+                <SchemasComponent
+                  schemas={validatedSchema.components.schemas}
+                />
+              )}
+          </>
+        )}
+      </Wrapper>
     );
   }
 
   private async parseSchema(schema: PropsSchema) {
     if (isFetchingSchemaInterface(schema)) {
-      /* tslint:disable: no-shadowed-variable */
-
-      // there's clearly a return statement in this code block so I don't why this triggers */
+      /* tslint:disable: no-shadowed-variable 
+      there's clearly a return statement in this code block so I don't why this triggers */
 
       const { data, error } = await parser.parseFromUrl(schema);
 
@@ -170,5 +165,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     return beautifier.beautify(schema);
   }
 }
+
+interface WrapperProps {
+  theme: ThemeInterface;
+}
+
+const Wrapper: FunctionComponent<WrapperProps> = ({ children, theme }) => (
+  <ThemeProvider theme={theme}>
+    <AsyncApiWrapper>{children}</AsyncApiWrapper>
+  </ThemeProvider>
+);
 
 export default AsyncApiComponent;

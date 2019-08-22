@@ -21,7 +21,7 @@ import { Security as SecurityWrapper, SecurityHeader } from './styled';
 
 const securityColumnsName: TableColumnName[] = [
   'Type',
-  'Stages',
+  'Stage',
   'In',
   'Name',
   'Scheme',
