@@ -1,17 +1,26 @@
 import { parser } from './parser';
-import { ParserError } from '../types';
+
 import invalidDoc from '../testAssets/async.json';
 
 describe('parser', () => {
-  const hasErrors = (error: ParserError) => expect(error).not.toBeNull();
   describe('parse', () => {
-    it.each`
+    const errors = ['Invalid', undefined];
+
+    test.each`
       doc              | errorCheck
-      ${invalidDoc[0]} | ${hasErrors}
-      ${invalidDoc[1]} | ${hasErrors}
-    `('should ...', data => {
-      parser.parse(data.doc).then(result => {
-        expect(result.error).not.toBeNull();
+      ${invalidDoc[0]} | ${errors[0]}
+      ${invalidDoc[1]} | ${errors[1]}
+    `('should not return errors for data from async.json', async ({ doc }) => {
+      await parser.parse(doc).then(result => {
+        expect(result.error).toBeFalsy();
+        expect(result.data).toBeTruthy();
+      });
+    });
+
+    test.each(invalidDoc.map(el => [el]))('%# test', async data => {
+      await parser.parse(data).then(result => {
+        // expect(result.error).toBeFalsy();
+        expect(result.data).toBeTruthy();
       });
     });
   });

@@ -20,7 +20,7 @@ const UNSUPPORTED_SCHEMA_VERSION =
 
 class Parser {
   async parse(
-    content: string,
+    content: string | any,
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
