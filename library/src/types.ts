@@ -296,10 +296,19 @@ export interface Schema {
 
 export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
 
+export interface ParserOptions {
+  path?: string;
+  parse?: Record<string, any>;
+  resolve?: Record<string, any>;
+  dereference?: Record<string, any>;
+  applyTraits?: boolean;
+}
+
 export interface AsyncApiProps {
   schema: PropsSchema;
   theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
+  parserOptions?: Partial<ParserOptions>;
 }
 
 export type NullableAsyncApi = AsyncApi | null;

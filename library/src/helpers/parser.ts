@@ -1,20 +1,33 @@
 import {
-  parse,
-  parseFromUrl as parseUrl,
+  parse as AsyncAPIParse,
+  parseFromUrl as AsyncAPIParseFromUrl,
   ParserErrorUnsupportedVersion,
   ParserErrorNoJS,
 } from 'asyncapi-parser';
 
-import { AsyncApi, ParserReturn, FetchingSchemaInterface } from '../types';
+import {
+  AsyncApi,
+  ParserReturn,
+  FetchingSchemaInterface,
+  AsyncApiProps,
+} from '../types';
+
+type ParserOptions = AsyncApiProps['parserOptions'];
 
 // ask tws about this error msg
 const UNSUPPORTED_SCHEMA_VERSION =
   'AsyncAPI version is unsupported. Use version 2.0 or higher';
 
 class Parser {
-  async parse(content: string): Promise<ParserReturn> {
+  async parse(
+    content: string,
+    parserOptions?: ParserOptions,
+  ): Promise<ParserReturn> {
     try {
-      const { _json }: { _json: AsyncApi } = await parse(content);
+      const { _json }: { _json: AsyncApi } = await AsyncAPIParse(
+        content,
+        parserOptions,
+      );
 
       if (!this.isCorrectSchemaVersion(_json.asyncapi)) {
         return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };
@@ -25,9 +38,16 @@ class Parser {
     }
   }
 
-  async parseFromUrl(arg: FetchingSchemaInterface): Promise<ParserReturn> {
+  async parseFromUrl(
+    arg: FetchingSchemaInterface,
+    parserOptions?: ParserOptions,
+  ): Promise<ParserReturn> {
     try {
-      const data: AsyncApi = await parseUrl(arg.url, arg.requestOptions);
+      const data: AsyncApi = await AsyncAPIParseFromUrl(
+        arg.url,
+        arg.requestOptions,
+        parserOptions,
+      );
 
       if (!this.isCorrectSchemaVersion(data.asyncapi)) {
         return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };

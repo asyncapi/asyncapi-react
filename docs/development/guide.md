@@ -11,6 +11,7 @@ Read the document to find out how to install dependencies, launch the developmen
 This repository has the following structure:
 
 <!-- markdownlint-disable MD040 -->
+<!-- remember to update docs after removing styled components, like `theme` folder here -->
 
 ```
   ├── .github                     # Pull request and issue templates
@@ -38,9 +39,9 @@ If you make any changes in the project structure, remember to update it.
 
 Use the following tools to develop the AsyncApi React component:
 
-- React (version 16.0.0 or higher)
+- React (version 16.8.0 or higher)
 - [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0 or higher)
-- TypeScript (version 3.0.0 or higher)
+- TypeScript (version 3.5.0 or higher)
 
 ## Install dependencies
 
@@ -69,7 +70,7 @@ You can access the live development server at [localhost:3000](http://localhost:
 
 ## Tests
 
-To launch tests for the [`playground`](../../playground) and [`library`](../../library) packages, run this command:
+To launch tests for the [`library`](../../library) package, run this command:
 
 ```sh
 npm test

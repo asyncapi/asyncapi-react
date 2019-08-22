@@ -134,12 +134,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     );
   }
 
-  private async parseSchema(schema: PropsSchema) {
+  private async parseSchema(
+    schema: PropsSchema,
+    parserOptions?: AsyncApiProps['parserOptions'],
+  ) {
     if (isFetchingSchemaInterface(schema)) {
       /* tslint:disable: no-shadowed-variable 
       there's clearly a return statement in this code block so I don't why this triggers */
 
-      const { data, error } = await parser.parseFromUrl(schema);
+      const { data, error } = await parser.parseFromUrl(schema, parserOptions);
 
       const beautifiedSchema = this.beautifySchema(data);
 
@@ -151,7 +154,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       /* tslint:enable: no-shadowed-variable */
     }
 
-    const { data, error } = await parser.parse(schema);
+    const { data, error } = await parser.parse(schema, parserOptions);
 
     const beautifiedSchema = this.beautifySchema(data);
 
