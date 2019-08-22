@@ -300,7 +300,7 @@ export interface ParserOptions {
   path?: string;
   parse?: Record<string, any>;
   resolve?: Record<string, any>;
-  dereference?: Record<string, any>;
+  dereference?: boolean;
   applyTraits?: boolean;
 }
 
