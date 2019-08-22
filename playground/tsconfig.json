@@ -23,6 +23,7 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
+    "declaration": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true
