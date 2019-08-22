@@ -1,112 +1,70 @@
 export const defaultSchema = `
-asyncapi: '1.1.0'
+asyncapi: '2.0.0-rc1'
+id: 'urn:rpc:example:server'
+defaultContentType: application/json
+
 info:
-  title: Streetlights API
+  title: RPC Server Example
+  description: This example demonstrates how to define an RPC server.
   version: '1.0.0'
-  description: |
-    The Smartylighting Streetlights API allows you to remotely manage the city lights.
-
-    ### Check out its awesome features:
-
-    * Turn a specific streetlight on/off 🌃
-    * Dim a specific streetlight 😎
-    * Receive real-time information about environmental lighting conditions 📈
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
-baseTopic: smartylighting.streetlights.1.0
 
 servers:
-  - url: api.streetlights.smartylighting.com:{port}
-    scheme: mqtt
-    description: Test broker
-    variables:
-      port:
-        description: Secure connection (TLS) is available through port 8883.
-        default: '1883'
-        enum:
-          - '1883'
-          - '8883'
+  - url: rabbitmq.example.org
+    protocol: amqp
 
-security:
-  - apiKey: []
-
-topics:
-  event.{streetlightId}.lighting.measured:
+channels:
+  '{queue}':
     parameters:
-      - name: streetlightId
-        description: The ID of the streetlight.
+      - name: queue
         schema:
           type: string
+          pattern: '^amq\\.gen\\-.+$'
+    protocolInfo:
+      amqp-0-9-1:
+        channelIsQueue: true
+        queue:
+          randomName: true
+          exclusive: true
     publish:
-      $ref: '#/components/messages/lightMeasured'
+      operationId: sendSumResult
+      protocolInfo:
+        amqp-0-9-1:
+          ack: true
+      message:
+        correlationId:
+          location: $message.header#/correlation_id
+        payload:
+          type: object
+          properties:
+            result:
+              type: number
+              examples:
+                - 7
 
-  action.{streetlightId}.turn.on:
+  rpc_queue:
+    protocolInfo:
+      amqp-0-9-1:
+        channelIsQueue: true
+        queue:
+          durable: false
     subscribe:
-      $ref: '#/components/messages/turnOnOff'
+      operationId: sum
+      message:
+        protocolInfo:
+          amqp-0-9-1:
+            properties:
+              reply_to:
+                type: string
+        correlationId:
+          location: $message.header#/correlation_id
+        payload:
+          type: object
+          properties:
+            numbers:
+              type: array
+              items:
+                type: number
+              examples:
+                - [4,3]
 
-  action.{streetlightId}.turn.off:
-    subscribe:
-      $ref: '#/components/messages/turnOnOff'
-
-  action.{streetlightId}.dim:
-    subscribe:
-      $ref: '#/components/messages/dimLight'
-
-components:
-  messages:
-    lightMeasured:
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      payload:
-        $ref: "#/components/schemas/lightMeasuredPayload"
-    turnOnOff:
-      summary: Command a particular streetlight to turn the lights on or off.
-      payload:
-        $ref: "#/components/schemas/turnOnOffPayload"
-    dimLight:
-      summary: Command a particular streetlight to dim the lights.
-      payload:
-        $ref: "#/components/schemas/dimLightPayload"
-
-  schemas:
-    lightMeasuredPayload:
-      type: object
-      properties:
-        lumens:
-          type: integer
-          minimum: 0
-          description: Light intensity measured in lumens.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    turnOnOffPayload:
-      type: object
-      properties:
-        command:
-          type: string
-          enum:
-            - on
-            - off
-          description: Whether to turn on or off the light.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    dimLightPayload:
-      type: object
-      properties:
-        percentage:
-          type: integer
-          description: Percentage to which the light should be dimmed to.
-          minimum: 0
-          maximum: 100
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-    sentAt:
-      type: string
-      format: date-time
-      description: Date and time when the message was sent.
-
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: user
-      description: Provide your API key as the user and leave the password empty.
 `;

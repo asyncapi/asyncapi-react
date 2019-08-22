@@ -1,6 +1,6 @@
-import { parser } from './parser';
-import { ParserError } from '../types';
-import invalidDoc from '../../testAssets/async.json';
+import { parser } from '../src/helpers/parser';
+import { ParserError } from '../src/types';
+import invalidDoc from './testAssets/async.json';
 
 describe('parser', () => {
   const hasErrors = (error: ParserError) => expect(error).not.toBeNull();

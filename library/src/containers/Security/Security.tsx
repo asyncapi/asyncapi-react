@@ -35,7 +35,7 @@ interface SecuritySchemeWithStages extends SecurityScheme {
 
 const securityAccesors: TableAccessor[] = [
   (el: SecuritySchemeWithStages) => el.type,
-  (el: SecuritySchemeWithStages) => el.stages.join(', '),
+  (el: SecuritySchemeWithStages) => el.stages && el.stages.join(', '),
   (el: SecuritySchemeWithStages) => el.in,
   (el: SecuritySchemeWithStages) => el.name,
   (el: SecuritySchemeWithStages) => el.scheme,
@@ -51,7 +51,12 @@ interface Props {
 
 export class SecurityComponent extends Component<Props> {
   render() {
-    const alteredSecuritySchemes = addStageToSecurity(this.props);
+    const { servers, securitySchemes } = this.props;
+
+    console.log(this.props.servers);
+    const alteredSecuritySchemes = !Array.isArray(servers)
+      ? addStageToSecurity(this.props)
+      : securitySchemes;
 
     return (
       <SecurityWrapper>
