@@ -14,7 +14,7 @@ import {
 
 type ParserOptions = AsyncApiProps['parserOptions'];
 
-// ask tws about this error msg
+// ask tws about this error
 const UNSUPPORTED_SCHEMA_VERSION =
   'AsyncAPI version is unsupported. Use version 2.0 or higher';
 

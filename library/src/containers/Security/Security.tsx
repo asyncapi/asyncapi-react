@@ -51,12 +51,7 @@ interface Props {
 
 export class SecurityComponent extends Component<Props> {
   render() {
-    const { servers, securitySchemes } = this.props;
-
-    console.log(this.props.servers);
-    const alteredSecuritySchemes = !Array.isArray(servers)
-      ? addStageToSecurity(this.props)
-      : securitySchemes;
+    const alteredSecuritySchemes = addStageToSecurity(this.props);
 
     return (
       <SecurityWrapper>

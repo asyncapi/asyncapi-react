@@ -38,7 +38,11 @@ export class InfoComponent extends Component<Props> {
           {termsOfService && (
             <HeaderParagraph>
               <H2>Terms of service</H2>
-              <HrefHeader href={termsOfService} target="_blank">
+              <HrefHeader
+                href={termsOfService}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
                 {termsOfService}
               </HrefHeader>
             </HeaderParagraph>
