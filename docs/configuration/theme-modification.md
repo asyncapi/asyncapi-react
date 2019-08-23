@@ -1,3 +1,5 @@
+<!-- modificate this doc after migration to css files-->
+
 # Theme Modification
 
 ## Overview
@@ -8,7 +10,7 @@ This document describes `ThemeInterface` and explains how you can apply the new 
 
 See the basic definition of the interface:
 
-``` ts
+```ts
 type styledCss = string | InterpolationValue[];
 
 interface ThemeInterface {
@@ -31,23 +33,26 @@ For more details, check [this](../../library/src/theme/theme.ts) file.
 
 For example, if you want to change styles for an element displaying generated examples of schemas, messages, and topics, you should create an appropriate object which has the following [structure](../../library/src/components/Code.tsx#L14):
 
-
-``` tsx
+```tsx
 <CodeWrapper>
-  {title && <CodeHeader><CodeHeaderH4>{title}</CodeHeaderH4></CodeHeader>}
+  {title && (
+    <CodeHeader>
+      <CodeHeaderH4>{title}</CodeHeaderH4>
+    </CodeHeader>
+  )}
   <CodeBody language="javascript">{code}</CodeBody>
 </CodeWrapper>
 ```
 
 See an example of such an object:
 
-``` ts
+```ts
 const theme = {
   codeWrapper: `...`,
   codeHeader: `...`,
   codeHeaderH4: `...`,
   codeBody: `...`
-}
+};
 ```
 
 Provide the value ​​of the appropriate field in `ThemeInterface` either as a literal string or using the [`css`](https://www.styled-components.com/docs/api#css) function from the `styled-components` library.
@@ -58,7 +63,7 @@ See exemplary theme configuration in JavaScript and TypeScript.
 
 ### JavaScript
 
-``` jsx
+```jsx
 import * as React from "react";
 import { render } from "react-dom";
 import AsyncApiComponent from "asyncapi-react";
@@ -76,18 +81,16 @@ const theme = {
     color: #000;
     text-align: center;
   `
-}
+};
 
-const App = () => (
-  <AsyncApiComponent schema={schema} theme={theme} />
-);
+const App = () => <AsyncApiComponent schema={schema} theme={theme} />;
 
 render(<App />, document.getElementById("root"));
 ```
 
 ### TypeScript
 
-``` tsx
+```tsx
 import * as React from "react";
 import { render } from "react-dom";
 import AsyncApiComponent, { ThemeInterface } from "asyncapi-react";
@@ -105,11 +108,9 @@ const theme: Partial<ThemeInterface> = {
     color: #000;
     text-align: center;
   `
-}
+};
 
-const App = () => (
-  <AsyncApiComponent schema={schema} theme={theme} />
-);
+const App = () => <AsyncApiComponent schema={schema} theme={theme} />;
 
 render(<App />, document.getElementById("root"));
 ```
