@@ -6,6 +6,7 @@ import { H4 } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
 
 import { MessagePayload, MessagePayloadHeader } from './styled';
+import { ONE_OF_PAYLOADS_TEXT, ANY_OF_PAYLOADS_TEXT } from '../../constants';
 
 type PayloadProps = Required<Pick<RawMessage, 'payload'>>;
 
@@ -15,8 +16,7 @@ export const PayloadComponent: FunctionComponent<PayloadProps> = ({
   if (isOneOfPayload(payload)) {
     return (
       <>
-        {/* todo: that text needs to be discussed */}
-        <H4>One of those payloads:</H4>
+        <H4>{ONE_OF_PAYLOADS_TEXT}</H4>
         {payload.oneOf.map((elem, index: number) => (
           <PayloadComponent payload={elem} key={index} />
         ))}
@@ -27,8 +27,7 @@ export const PayloadComponent: FunctionComponent<PayloadProps> = ({
   if (isAnyOfPayload(payload)) {
     return (
       <>
-        {/* todo: that text needs to be discussed */}
-        <H4>Any of those payloads:</H4>
+        <H4>{ANY_OF_PAYLOADS_TEXT}</H4>
         {payload.anyOf.map((elem, index: number) => (
           <PayloadComponent payload={elem} key={index} />
         ))}

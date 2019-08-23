@@ -4,7 +4,7 @@ import { Schema } from '../../types';
 import { generateExample } from '../../helpers/generateExampleSchema';
 import { CodeComponent, GeneratedBadge } from '../../components';
 import { SchemaExample } from './styled';
-
+import { GENERATED_BADGE } from '../../constants';
 interface Props {
   title?: string;
   schema: Schema;
@@ -30,7 +30,9 @@ export class SchemaExampleComponent extends Component<Props> {
           title={
             <>
               {title ? title : 'Example'}{' '}
-              {!schema.example && <GeneratedBadge>generated</GeneratedBadge>}
+              {!schema.example && (
+                <GeneratedBadge>{GENERATED_BADGE}</GeneratedBadge>
+              )}
             </>
           }
         />

@@ -12,7 +12,7 @@ import {
   TableBodyWrapper,
 } from '../../components';
 import { Servers as StyledServers, ServersHeader } from './styled';
-
+import { CONNECTION_DETAILS } from '../../constants';
 const serversColumnsName: TableColumnName[] = [
   'URL',
   'Stage',
@@ -34,7 +34,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
   return (
     <StyledServers>
       <ServersHeader>
-        <H2>Connection details</H2>
+        <H2>{CONNECTION_DETAILS}</H2>
       </ServersHeader>
       <TableWrapper>
         <TableHeader columns={serversColumnsName} />

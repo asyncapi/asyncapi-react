@@ -5,7 +5,7 @@ import { Info, Servers } from '../../types';
 import { ServersComponent } from '../Servers/Servers';
 import { ContactComponent } from './Contact';
 import { LicenseComponent } from './License';
-
+import { TERMS_OF_SERVICE } from '../../constants';
 import {
   H1,
   H2,
@@ -37,7 +37,7 @@ export class InfoComponent extends Component<Props> {
           {description && <Markdown>{description}</Markdown>}
           {termsOfService && (
             <HeaderParagraph>
-              <H2>Terms of service</H2>
+              <H2>{TERMS_OF_SERVICE}</H2>
               <HrefHeader
                 href={termsOfService}
                 target="_blank"

@@ -10,6 +10,8 @@ import {
   HeaderParagraph,
   DeprecatedBadge,
 } from '../../components';
+
+import { ONE_OF_FOLLOWING_MESSAGES } from '../../constants';
 import {
   Topic as TopicWrapper,
   TopicHeader,
@@ -53,9 +55,7 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
       <TopicHeaderMessage>
         <H4>{oneOf ? 'Messages' : 'Message'}</H4>
         {oneOf && (
-          <HeaderParagraph>
-            You can send one of the following messages:
-          </HeaderParagraph>
+          <HeaderParagraph>{ONE_OF_FOLLOWING_MESSAGES}</HeaderParagraph>
         )}
       </TopicHeaderMessage>
       <Operation operation={channel.subscribe} />

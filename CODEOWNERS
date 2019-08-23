@@ -9,3 +9,6 @@
 
 # All .md files
 *.md @kazydek @mmitoraj
+
+# Text constants file
+library/src/constants.ts @kazydek @mmitoraj
