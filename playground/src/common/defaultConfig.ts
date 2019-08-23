@@ -3,11 +3,9 @@ export const defaultConfig: string = `{
     "info": true,
     "servers": true,
     "security": true,
-    "topics": true,
-    "stream": true,
-    "events": true,
     "messages": true,
-    "schemas": true
+    "schemas": true,
+    "channels": true,
   },
   "showErrors": true,
   "disableDefaultTheme": false

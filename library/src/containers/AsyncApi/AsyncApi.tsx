@@ -50,8 +50,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
     this.parseSchema(this.props.schema, this.props.parserOptions);
   }
 
-  async componentWillReceiveProps(nextProps: AsyncApiProps) {
-    const { schema } = nextProps;
+  async componentDidUpdate(prevProps: AsyncApiProps) {
+    const { schema } = prevProps;
 
     if (schema !== this.props.schema) {
       this.parseSchema(this.props.schema, this.props.parserOptions);
