@@ -4,7 +4,6 @@ import { ServerVariable, TypeWithKey } from '../../types';
 
 import {
   Markdown,
-  TableColumnName,
   TableAccessor,
   TableHeader,
   TableRow,
@@ -13,20 +12,19 @@ import {
   TableBodyWrapperNested,
 } from '../../components';
 import { ServerVariablesEnumList, ServerVariablesEnumElement } from './styled';
+import {
+  URL_VARIABLES_TEXT,
+  NONE_TEXT,
+  ANY_TEXT,
+  SERVER_COLUMN_NAMES,
+} from '../../constants';
 
 type ServerVariableWithKey = TypeWithKey<string, ServerVariable>;
-
-const serverVariablesColumnsName: TableColumnName[] = [
-  'Name',
-  'Default value',
-  'Possible values',
-  'Description',
-];
 
 const serverVariablesAccessors: TableAccessor[] = [
   (el: ServerVariableWithKey) => el.key,
   (el: ServerVariableWithKey) =>
-    el.content.default ? el.content.default : <em>None</em>,
+    el.content.default ? el.content.default : <em>{NONE_TEXT}</em>,
   (el: ServerVariableWithKey) =>
     el.content.enum ? (
       <ServerVariablesEnumList>
@@ -37,7 +35,7 @@ const serverVariablesAccessors: TableAccessor[] = [
         ))}
       </ServerVariablesEnumList>
     ) : (
-      'Any'
+      { ANY_TEXT }
     ),
   (el: ServerVariableWithKey) =>
     el.content.description && <Markdown>{el.content.description}</Markdown>,
@@ -57,8 +55,8 @@ export class ServerVariablesComponent extends Component<Props> {
         <div>
           <TableWrapperNested>
             <TableHeader
-              title="URL Variables"
-              columns={serverVariablesColumnsName}
+              title={URL_VARIABLES_TEXT}
+              columns={SERVER_COLUMN_NAMES}
               nested={true}
             />
             <TableBodyWrapperNested>

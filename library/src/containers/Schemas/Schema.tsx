@@ -7,12 +7,12 @@ import { SchemaExampleComponent } from './SchemaExample';
 
 import {
   H4,
-  TableColumnName,
   TableWrapper,
   TableHeader,
   TableBodyWrapper,
 } from '../../components';
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
+import { SCHEMA_COLUMN_NAMES } from '../../constants';
 
 export const searchForNestedObject = (
   input: Record<string, any>,
@@ -39,15 +39,6 @@ export const searchForNestedObject = (
   return null;
 };
 
-const schemaColumnsName: TableColumnName[] = [
-  'Name',
-  'Title',
-  'Type',
-  'Format',
-  'Default',
-  'Description',
-];
-
 interface Props {
   name: string;
   schema?: Schema;
@@ -72,7 +63,7 @@ export class SchemaComponent extends Component<Props> {
           </SchemaHeader>
         )}
         <TableWrapper>
-          <TableHeader columns={schemaColumnsName} />
+          <TableHeader columns={SCHEMA_COLUMN_NAMES} />
           <TableBodyWrapper>
             {this.renderSchemaProps(name, schema)}
           </TableBodyWrapper>

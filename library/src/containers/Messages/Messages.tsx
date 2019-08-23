@@ -6,6 +6,7 @@ import { MessageComponent } from './Message';
 
 import { H2 } from '../../components';
 import { Messages, MessagesHeader } from './styled';
+import { MESSAGES } from '../../constants';
 
 interface Props {
   messages?: Record<string, Message>;
@@ -22,7 +23,7 @@ export class MessagesComponent extends Component<Props> {
     return (
       <Messages>
         <MessagesHeader>
-          <H2>Messages</H2>
+          <H2>{MESSAGES}</H2>
         </MessagesHeader>
         {Object.entries(messages).map(([key, message]) => (
           <MessageComponent

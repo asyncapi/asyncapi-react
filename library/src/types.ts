@@ -338,3 +338,5 @@ export interface ParserReturn {
   data: NullableAsyncApi;
   error?: ParserError;
 }
+
+export type TableColumnName = string;

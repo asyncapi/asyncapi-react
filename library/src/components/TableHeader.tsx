@@ -1,8 +1,9 @@
 import * as React from 'react';
 
+import { TableColumnName } from '../types';
+
 import { TableAccessor } from './TableRow';
 
-export type TableColumnName = string;
 export interface TableColumn {
   name: string;
   accessor: TableAccessor;

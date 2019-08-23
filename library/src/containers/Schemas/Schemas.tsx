@@ -6,6 +6,7 @@ import { SchemaComponent } from './Schema';
 
 import { H2 } from '../../components';
 import { Schemas, SchemasHeader } from './styled';
+import { SCHEMAS_TEXT } from '../../constants';
 
 interface Props {
   schemas?: Record<string, Schema>;
@@ -19,7 +20,7 @@ export const SchemasComponent: FunctionComponent<Props> = ({ schemas }) => {
   return (
     <Schemas>
       <SchemasHeader>
-        <H2>Schemas</H2>
+        <H2>{SCHEMAS_TEXT}</H2>
       </SchemasHeader>
       {Object.entries(schemas).map(([key, schema]) => (
         <SchemaComponent key={key} name={key} schema={schema} />

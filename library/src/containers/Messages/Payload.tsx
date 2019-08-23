@@ -6,7 +6,13 @@ import { H4 } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
 
 import { MessagePayload, MessagePayloadHeader } from './styled';
-import { ONE_OF_PAYLOADS_TEXT, ANY_OF_PAYLOADS_TEXT } from '../../constants';
+import {
+  ONE_OF_PAYLOADS_TEXT,
+  ANY_OF_PAYLOADS_TEXT,
+  PAYLOAD_TEXT,
+  MESSAGE_PAYLOAD_TEXT,
+  PAYLOAD_EXAMPLE_TEXT,
+} from '../../constants';
 
 type PayloadProps = Required<Pick<RawMessage, 'payload'>>;
 
@@ -38,12 +44,12 @@ export const PayloadComponent: FunctionComponent<PayloadProps> = ({
   return (
     <MessagePayload>
       <MessagePayloadHeader>
-        <H4>Payload</H4>
+        <H4>{PAYLOAD_TEXT}</H4>
       </MessagePayloadHeader>
       <SchemaComponent
-        name="Message Payload"
+        name={MESSAGE_PAYLOAD_TEXT}
         schema={payload}
-        exampleTitle="Example of payload"
+        exampleTitle={PAYLOAD_EXAMPLE_TEXT}
         hideTitle={true}
       />
     </MessagePayload>

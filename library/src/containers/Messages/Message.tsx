@@ -14,6 +14,13 @@ import {
   MessageTags,
   MessageTagsHeader,
 } from './styled';
+import {
+  DEPRECATED_BADGE as DEPRECATED_BADGE_TEXT,
+  HEADERS,
+  MESSAGE_HEADERS,
+  HEADERS_EXAMPLE,
+  TAGS_TEXT,
+} from '../../constants';
 
 interface Props {
   title?: string;
@@ -48,7 +55,7 @@ export class MessageComponent extends Component<Props> {
             <H3>
               {title}{' '}
               {message.deprecated && (
-                <DeprecatedBadge>Deprecated</DeprecatedBadge>
+                <DeprecatedBadge>{DEPRECATED_BADGE_TEXT}</DeprecatedBadge>
               )}
             </H3>
           ) : null}
@@ -58,12 +65,12 @@ export class MessageComponent extends Component<Props> {
         {headers && (
           <MessageHeaders>
             <MessageHeadersHeader>
-              <H4>Headers</H4>
+              <H4>{HEADERS}</H4>
             </MessageHeadersHeader>
             <SchemaComponent
-              name="Message Headers"
+              name={MESSAGE_HEADERS}
               schema={headers}
-              exampleTitle="Example of headers"
+              exampleTitle={HEADERS_EXAMPLE}
               hideTitle={true}
             />
           </MessageHeaders>
@@ -72,7 +79,7 @@ export class MessageComponent extends Component<Props> {
         {!hideTags && message.tags && (
           <MessageTags>
             <MessageTagsHeader>
-              <H4>Tags</H4>
+              <H4>{TAGS_TEXT}</H4>
             </MessageTagsHeader>
             {message.tags.map(tag => (
               <Tag key={tag.name}>{tag.name}</Tag>

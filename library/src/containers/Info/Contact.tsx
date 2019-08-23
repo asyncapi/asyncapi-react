@@ -8,6 +8,7 @@ import {
   ContactHeader,
   ContactList,
 } from './styled';
+import { CONTACT, NAME, URL, EMAIL } from '../../constants';
 
 interface Props {
   contact: Contact;
@@ -22,17 +23,17 @@ export class ContactComponent extends Component<Props> {
     return (
       <ContactWrapper>
         <ContactHeader>
-          <H2>Contact</H2>
+          <H2>{CONTACT}</H2>
         </ContactHeader>
         <ContactList>
           {name && (
             <li>
-              <strong>Name</strong>: {name}
+              <strong>{NAME}</strong>: {name}
             </li>
           )}
           {url && (
             <li>
-              <strong>Url</strong>:{' '}
+              <strong>{URL}</strong>:{' '}
               <HrefHeader href={url} target="_blank">
                 {url}
               </HrefHeader>
@@ -40,7 +41,7 @@ export class ContactComponent extends Component<Props> {
           )}
           {email && (
             <li>
-              <strong>Email</strong>:{' '}
+              <strong>{EMAIL}</strong>:{' '}
               <HrefHeader href={`mailto:${email}`}>{email}</HrefHeader>
             </li>
           )}

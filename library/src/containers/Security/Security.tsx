@@ -10,7 +10,6 @@ import { renderMd } from '../../helpers/renderMarkdown';
 import {
   H2,
   Markdown,
-  TableColumnName,
   TableAccessor,
   TableWrapper,
   TableHeader,
@@ -18,16 +17,7 @@ import {
   TableRow,
 } from '../../components';
 import { Security as SecurityWrapper, SecurityHeader } from './styled';
-
-const securityColumnsName: TableColumnName[] = [
-  'Type',
-  'Stage',
-  'In',
-  'Name',
-  'Scheme',
-  'Format',
-  'Description',
-];
+import { SECURITY_TEXT, SECURITY_COLUMNS_NAMES } from '../../constants';
 
 interface SecuritySchemeWithStages extends SecurityScheme {
   stages: string[];
@@ -56,10 +46,10 @@ export class SecurityComponent extends Component<Props> {
     return (
       <SecurityWrapper>
         <SecurityHeader>
-          <H2>Security</H2>
+          <H2>{SECURITY_TEXT}</H2>
         </SecurityHeader>
         <TableWrapper>
-          <TableHeader columns={securityColumnsName} />
+          <TableHeader columns={SECURITY_COLUMNS_NAMES} />
           <TableBodyWrapper>
             {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
               !sec ? null : (

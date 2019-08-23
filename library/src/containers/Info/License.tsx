@@ -8,6 +8,7 @@ import {
   LicenseHeader,
   LicenseList,
 } from './styled';
+import { LICENSE, TYPE, SPECIFICATION } from '../../constants';
 
 interface Props {
   license: License;
@@ -22,17 +23,17 @@ export class LicenseComponent extends Component<Props> {
     return (
       <LicenseWrapper>
         <LicenseHeader>
-          <H2>License</H2>
+          <H2>{LICENSE}</H2>
         </LicenseHeader>
         <LicenseList>
           {name && (
             <li>
-              <strong>Type</strong>: {name}
+              <strong>{TYPE}</strong>: {name}
             </li>
           )}
           {url && (
             <li>
-              <strong>Specification</strong>:{' '}
+              <strong>{SPECIFICATION}</strong>:{' '}
               <HrefHeader
                 href={url}
                 target="_blank"

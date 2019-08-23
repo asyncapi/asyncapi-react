@@ -11,7 +11,14 @@ import {
   DeprecatedBadge,
 } from '../../components';
 
-import { ONE_OF_FOLLOWING_MESSAGES } from '../../constants';
+import {
+  ONE_OF_FOLLOWING_MESSAGES,
+  DEPRECATED_BADGE,
+  PUBLISH,
+  SUBSCRIBE,
+  MESSAGE,
+  MESSAGES,
+} from '../../constants';
 import {
   Topic as TopicWrapper,
   TopicHeader,
@@ -43,17 +50,17 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
         <H3>
           <TopicHeaderBadge>
             {channel.deprecated && (
-              <DeprecatedBadge>Deprecated</DeprecatedBadge>
+              <DeprecatedBadge>{DEPRECATED_BADGE}</DeprecatedBadge>
             )}
-            {channel.publish && <PublishBadge>Publish</PublishBadge>}
-            {channel.subscribe && <SubscribeBadge>Subscribe</SubscribeBadge>}
+            {channel.publish && <PublishBadge>{PUBLISH}</PublishBadge>}
+            {channel.subscribe && <SubscribeBadge>{SUBSCRIBE}</SubscribeBadge>}
           </TopicHeaderBadge>
           {name}
         </H3>
       </TopicHeader>
       <ParametersComponent params={channel.parameters} />
       <TopicHeaderMessage>
-        <H4>{oneOf ? 'Messages' : 'Message'}</H4>
+        <H4>{oneOf ? MESSAGES : MESSAGE}</H4>
         {oneOf && (
           <HeaderParagraph>{ONE_OF_FOLLOWING_MESSAGES}</HeaderParagraph>
         )}
