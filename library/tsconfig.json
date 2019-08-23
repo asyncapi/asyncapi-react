@@ -3,7 +3,7 @@
     "outDir": "./lib",
     "module": "esnext",
     "target": "es5",
-    "lib": ["es5", "es6", "dom"],
+    "lib": ["es5", "es6", "dom", "es2017", "es2019"],
     "sourceMap": true,
     "allowJs": false,
     "jsx": "react",
@@ -22,8 +22,9 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true
   },
   "include": ["src"],
-  "exclude": ["node_modules", "test"]
+  "exclude": ["node_modules"]
 }

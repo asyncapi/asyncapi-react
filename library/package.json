@@ -41,76 +41,42 @@
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",
-    "test": "jest -i",
-    "test:unit": "jest unit",
-    "test:integration": "jest integration",
-    "test:watch": "jest --watch --coverage",
+    "test": "jest --detectOpenHandles",
+    "testWatch": "jest --detectOpenHandles --watch",
+    "lint-check": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose && prettier --config ./.prettierrc --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-fix": "tslint -c ./tslint.json --project ./tsconfig.json --format verbose --fix; prettier --config ./.prettierrc --write './src/**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "eject": "react-scripts eject",
-    "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "dependencies": {
-    "asyncapi": "^2.1.0",
+    "asyncapi-parser": "^0.7.0",
     "dompurify": "^1.0.8",
-    "js-yaml": "^3.12.0",
-    "json-schema-ref-parser": "^6.0.2",
     "markdown-it": "^8.4.2",
-    "openapi-sampler": "^1.0.0-beta.14",
-    "z-schema": "^3.24.1"
+    "merge": "^1.2.1",
+    "openapi-sampler": "^1.0.0-beta.14"
   },
   "devDependencies": {
     "@types/dompurify": "0.0.32",
-    "@types/enzyme": "^3.1.15",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.9",
+    "@types/jest": "^24.0.18",
+    "@types/markdown-it": "0.0.8",
     "@types/node": "10.12.1",
-    "@types/react": "16.4.18",
-    "@types/react-dom": "16.0.9",
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.8.5",
     "@types/styled-components": "^4.0.3",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.7.0",
-    "jest": "^23.6.0",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
-    "react-scripts": "2.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "styled-components": "^4.0.3",
-    "ts-jest": "^23.10.4",
-    "typescript": "3.1.4"
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0",
+    "tslint-react-hooks": "^2.2.1",
+    "typescript": "^3.5.3"
   },
   "peerDependencies": {
     "styled-components": ">= 3.4.0"
-  },
-  "jest": {
-    "verbose": false,
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "setupFiles": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "coverageReporters": [
-      "text",
-      "lcov",
-      "json"
-    ],
-    "testRegex": "(/test/[^_][a-zA-Z0-9/]*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   }
 }

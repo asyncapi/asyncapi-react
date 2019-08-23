@@ -1,10 +1,13 @@
-import React from 'react';
-import DOMPurify from 'dompurify'
-const markdownIt = require('markdown-it')();
+import React, { ReactNode } from 'react';
+import DOMPurify from 'dompurify';
+import MarkdownIt from 'markdown-it';
 
-function renderMd(md?: string) {
+const markdownIt = new MarkdownIt();
+
+export function renderMd(md?: ReactNode) {
+  if (typeof md !== 'string') {
+    return md;
+  }
   const html = markdownIt.render(md || '');
-  return <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(html)}} />
+  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />;
 }
-
-export default renderMd;

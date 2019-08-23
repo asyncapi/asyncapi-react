@@ -40,7 +40,7 @@ export const H3 = styled.h3`
 export const H4 = styled.h4`
   ${props => props.theme.h4}
 `;
-
+H4.displayName = 'StyledH4';
 export const H5 = styled.h5`
   ${props => props.theme.h5}
 `;

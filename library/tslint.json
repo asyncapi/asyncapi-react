@@ -1,0 +1,42 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-react-hooks",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "member-access": [true, "no-public"],
+    "no-console": [true, "log", "info"],
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "unified-signatures": false,
+    "curly": true,
+    "jsx-no-lambda": false,
+    "prefer-const": true,
+    "arrow-return-shorthand": [true, "multiline"],
+    "no-duplicate-super": true,
+    "no-duplicate-imports": true,
+    "no-duplicate-switch-case": true,
+    "no-duplicate-variable": true,
+    "no-var-keyword": true,
+    "triple-equals": true,
+    "use-isnan": true,
+    "no-debugger": true,
+    "radix": true,
+    "react-hooks-nesting": "error"
+  },
+  "jsRules": {},
+  "linterOptions": {
+    "exclude": ["*/node_modules/**/*"]
+  },
+  "ban-types": [
+    true,
+    ["Object", "Use {} instead."],
+    ["String"],
+    ["Function", "Use more precise type"]
+  ]
+}

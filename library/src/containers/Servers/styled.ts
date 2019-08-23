@@ -1,7 +1,7 @@
 import { styled } from '../../theme';
 
 interface ServerExpandIconProps {
-  open?: boolean
+  open?: boolean;
 }
 
 export const Servers = styled.div`
@@ -10,7 +10,8 @@ export const Servers = styled.div`
 
 export const ServerExpandIcon = styled.span`
   ${props => props.theme.serverExpandIcon}
-  ${(props: ServerExpandIconProps) => props.open ? 'transform: rotate(90deg);' : ''}
+  ${(props: ServerExpandIconProps) =>
+    props.open ? 'transform: rotate(90deg);' : ''}
 `;
 
 export const ServersHeader = styled.header`

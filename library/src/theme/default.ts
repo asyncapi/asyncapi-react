@@ -255,7 +255,8 @@ export const defaultTheme: ThemeInterface = {
   `,
   infoHeader: css`
     > h1 {
-      margin-top: 0;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
   `,
   contact: css`

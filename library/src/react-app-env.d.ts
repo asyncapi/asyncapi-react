@@ -1,1 +1,3 @@
-/// <reference types="react-scripts" />
+declare module 'asyncapi-parser';
+declare module 'merge';
+declare module 'openapi-sampler';

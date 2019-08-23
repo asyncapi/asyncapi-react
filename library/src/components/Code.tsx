@@ -18,7 +18,7 @@ export class CodeComponent extends Component<Props> {
             <CodeHeaderH4>{title}</CodeHeaderH4>
           </CodeHeader>
         )}
-        <CodeBody language="javascript">{code}</CodeBody>
+        <CodeBody>{code}</CodeBody>
       </CodeWrapper>
     );
   }

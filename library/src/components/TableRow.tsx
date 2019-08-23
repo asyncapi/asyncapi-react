@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 
-export type TableAccessor = Function| string;
-export type TableAccessorReturn = React.ReactNode | string;
+export type TableAccessorReturn = React.ReactNode;
+export type TableAccessor =
+  | ((arg: Record<string, any>) => TableAccessorReturn)
+  | string;
 
-import { TableRowWrapper, TableRowWrapperWithNested, TableCell, TableRowWrapperNested, TableCellNested } from './styled';
+import {
+  TableRowWrapper,
+  TableRowWrapperWithNested,
+  TableCell,
+  TableRowWrapperNested,
+  TableCellNested,
+} from './styled';
 
 export interface Props {
   element: any;
@@ -13,41 +21,56 @@ export interface Props {
 }
 
 export class TableRow extends Component<Props> {
-  private renderRowByAccessors() {
-    const { accessors, element, nested } = this.props;
-
-    return accessors!.map((accessor, index) => (
-      !nested ? (
-        <TableCell key={index}>{this.getAccessor(accessor, element)}</TableCell>
-      ) : (
-        <TableCellNested key={index}>{this.getAccessor(accessor, element)}</TableCellNested>
-      )
-    ))
-  }
-
-  private getAccessor(accessor: TableAccessor, element: any): TableAccessorReturn {
-    if (accessor instanceof Function) return accessor(element);
-
-    const value = element[accessor];
-    if (typeof value === 'boolean' || typeof value === 'number') {
-      return (value as boolean | number).toString();
-    }
-    return value;
-  }
-
   render() {
     const { accessors, element, nested, openAccordion } = this.props;
 
-    if ((this.props as Object).hasOwnProperty('openAccordion')) {
-      return <TableRowWrapperWithNested open={openAccordion}>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapperWithNested>
+    const content = accessors
+      ? this.renderRowByAccessors(accessors, element, !!nested)
+      : element;
+
+    if (this.props.hasOwnProperty('openAccordion')) {
+      return (
+        <TableRowWrapperWithNested open={openAccordion}>
+          {content}
+        </TableRowWrapperWithNested>
+      );
     }
 
-    return (
+    return !nested ? (
+      <TableRowWrapper>{content}</TableRowWrapper>
+    ) : (
+      <TableRowWrapperNested>{content}</TableRowWrapperNested>
+    );
+  }
+
+  private renderRowByAccessors(
+    accessors: TableAccessor[],
+    element: Record<string, any>,
+    nested: boolean,
+  ) {
+    return accessors.map((accessor, index) =>
       !nested ? (
-        <TableRowWrapper>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapper>
+        <TableCell key={index}>{this.getAccessor(accessor, element)}</TableCell>
       ) : (
-        <TableRowWrapperNested>{accessors ? this.renderRowByAccessors() : element}</TableRowWrapperNested>
-      )
-    )
+        <TableCellNested key={index}>
+          {this.getAccessor(accessor, element)}
+        </TableCellNested>
+      ),
+    );
+  }
+
+  private getAccessor(
+    accessor: TableAccessor,
+    element: Record<string, any>,
+  ): TableAccessorReturn {
+    if (accessor instanceof Function) {
+      return accessor(element);
+    }
+
+    const value = element[accessor];
+    if (typeof value === 'boolean' || typeof value === 'number') {
+      return value.toString();
+    }
+    return value;
   }
 }
