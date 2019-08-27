@@ -1,16 +1,19 @@
 import { ErrorObject } from 'ajv';
 import { ConfigInterface } from './config';
 import { ThemeInterface } from './theme';
+
+// Helpers
 export type PrimitiveType = number | boolean | string | null;
 export type PropsWithDefaults<T, D> = T & D;
 export type ExcludeNullable<T> = Exclude<T, null | undefined>;
-export interface TypeWithKey<T, V> {
-  key: T;
-  content: V;
+export interface TypeWithKey<TKey, TContent> {
+  key: TKey;
+  content: TContent;
 }
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
-export type AsyncApiVersion = string;
+// Types
+export type AsyncAPIVersion = string;
 export type UniqueID = string;
 export type DefaultContentType = string;
 export type BaseTopic = string;
@@ -27,10 +30,12 @@ export type SchemaType =
   | 'number'
   | 'object'
   | 'string';
-export interface AsyncApi {
-  asyncapi: AsyncApiVersion;
-  channels: Channels;
+
+// AsyncAPI types
+export interface AsyncAPI {
+  asyncapi: AsyncAPIVersion;
   info: Info;
+  channels: Channels;
   id?: UniqueID;
   servers?: Servers;
   defaultContentType?: DefaultContentType;
@@ -151,14 +156,14 @@ export function isRawMessage(message: Message): message is RawMessage {
 
 export function isOneOfPayload(
   payload: RawMessage['payload'],
-): payload is Record<OneOf, any> {
-  return !!payload && (payload as Record<OneOf, any>).oneOf !== undefined;
+): payload is Record<OneOf, Schema[]> {
+  return !!payload && (payload as Record<OneOf, Schema[]>).oneOf !== undefined;
 }
 
 export function isAnyOfPayload(
   payload: RawMessage['payload'],
-): payload is Record<AnyOf, any> {
-  return !!payload && (payload as Record<AnyOf, any>).anyOf !== undefined;
+): payload is Record<AnyOf, Schema[]> {
+  return !!payload && (payload as Record<AnyOf, Schema[]>).anyOf !== undefined;
 }
 
 export interface RawMessage {
@@ -311,7 +316,7 @@ export interface AsyncApiProps {
   parserOptions?: Partial<ParserOptions>;
 }
 
-export type NullableAsyncApi = AsyncApi | null;
+export type NullableAsyncApi = AsyncAPI | null;
 
 export interface AsyncApiState {
   validatedSchema: NullableAsyncApi;

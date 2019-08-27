@@ -1,6 +1,6 @@
 import merge from 'merge';
 import {
-  AsyncApi,
+  AsyncAPI,
   Schema,
   Message,
   Servers,
@@ -14,7 +14,7 @@ import {
 import { renderMd } from './renderMarkdown';
 
 class Beautifier {
-  beautify(asyncApi: AsyncApi): AsyncApi {
+  beautify(asyncApi: AsyncAPI): AsyncAPI {
     if (asyncApi.info && asyncApi.info.description) {
       asyncApi.info.description = renderMd(asyncApi.info.description as string);
     }

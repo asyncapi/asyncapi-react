@@ -14,13 +14,8 @@ interface State {
 
 class FetchSchema extends Component<Props, State> {
   state = {
-    link: "",
-  }
-
-  private fetchSchemaFromExternalResources = async () => {
-    const { props: { parentCallback }, state: { link } } = this;
-    parentCallback(await fetchSchema(link))
-  }
+    link: '',
+  };
 
   render() {
     const { link } = this.state;
@@ -32,10 +27,20 @@ class FetchSchema extends Component<Props, State> {
           placeholder="Link for external schema"
           onChange={(e: any) => this.setState({ link: e.target.value })}
         />
-        <Button type="button" onClick={this.fetchSchemaFromExternalResources}>Fetch schema</Button>
+        <Button type="button" onClick={this.fetchSchemaFromExternalResources}>
+          Fetch schema
+        </Button>
       </InputWrapper>
     );
   }
+
+  private fetchSchemaFromExternalResources = async () => {
+    const {
+      props: { parentCallback },
+      state: { link },
+    } = this;
+    parentCallback(await fetchSchema(link));
+  };
 }
 
 export default FetchSchema;

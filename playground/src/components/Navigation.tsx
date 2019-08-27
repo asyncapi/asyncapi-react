@@ -54,7 +54,7 @@ const NavigationComponent: React.StatelessComponent = () => {
       </NavigationHeader>
       <NavigationLinks>
         {iconsData.map(icon => (
-          <IconComponent {...icon} />
+          <IconComponent {...icon} key={icon.key} />
         ))}
       </NavigationLinks>
     </NavigationWrapper>

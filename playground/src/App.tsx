@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import AsyncApi, {
   ThemeInterface,
-  ConfigInterface
-} from "@kyma-project/asyncapi-react";
+  ConfigInterface,
+} from '@kyma-project/asyncapi-react';
 
 import {
   Navigation,
@@ -14,8 +14,8 @@ import {
   PlaygroundWrapper,
   ContentWrapper,
   CodeEditorsWrapper,
-  AsyncApiWrapper
-} from "./components";
+  AsyncApiWrapper,
+} from './components';
 
 import {
   defaultSchema,
@@ -23,8 +23,8 @@ import {
   sampleTheme,
   defaultConfig,
   parse,
-  stringify
-} from "./common";
+  stringify,
+} from './common';
 
 interface State {
   schema: string;
@@ -42,38 +42,9 @@ class Playground extends Component<{}, State> {
     theme: stringify<ThemeInterface>(sampleTheme),
     config: defaultConfig,
     schemaFromEditor: defaultSchema,
-    schemaFromExternalResource: "",
+    schemaFromExternalResource: '',
     themeFromEditor: stringify<ThemeInterface>(sampleTheme),
-    configFromEditor: defaultConfig
-  };
-
-  private updateSchema = (schema: string) => {
-    this.setState({ schemaFromEditor: schema });
-  };
-
-  private updateSchemaFromExternalResource = (schema: string) => {
-    this.setState({ schemaFromExternalResource: schema });
-  };
-
-  private updateTheme = (theme: string) => {
-    this.setState({ themeFromEditor: theme });
-  };
-
-  private updateConfig = (config: string) => {
-    this.setState({ configFromEditor: config });
-  };
-
-  private refreshState = () => {
-    const { schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
-    this.setState({
-      schema: schemaFromEditor,
-      theme: themeFromEditor,
-      config: configFromEditor
-    });
-  };
-
-  private renderAdditionalHeaderContent = () => {
-    return <RefreshIcon onClick={this.refreshState}>{"\uE00A"}</RefreshIcon>;
+    configFromEditor: defaultConfig,
   };
 
   render() {
@@ -84,7 +55,7 @@ class Playground extends Component<{}, State> {
       schemaFromEditor,
       schemaFromExternalResource,
       themeFromEditor,
-      configFromEditor
+      configFromEditor,
     } = this.state;
 
     const parsedTheme = parse<ThemeInterface>(theme);
@@ -141,6 +112,35 @@ class Playground extends Component<{}, State> {
       </PlaygroundWrapper>
     );
   }
+
+  private updateSchema = (schema: string) => {
+    this.setState({ schemaFromEditor: schema });
+  };
+
+  private updateSchemaFromExternalResource = (schema: string) => {
+    this.setState({ schemaFromExternalResource: schema });
+  };
+
+  private updateTheme = (theme: string) => {
+    this.setState({ themeFromEditor: theme });
+  };
+
+  private updateConfig = (config: string) => {
+    this.setState({ configFromEditor: config });
+  };
+
+  private refreshState = () => {
+    const { schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
+    this.setState({
+      schema: schemaFromEditor,
+      theme: themeFromEditor,
+      config: configFromEditor,
+    });
+  };
+
+  private renderAdditionalHeaderContent = () => (
+    <RefreshIcon onClick={this.refreshState}>{'\uE00A'}</RefreshIcon>
+  );
 }
 
 export default Playground;

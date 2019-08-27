@@ -1,0 +1,17 @@
+# dependencies
+/**/node_modules
+
+# testing
+/**/coverage
+
+# production
+/**/lib
+/**/build
+/**/dist
+
+# misc
+.DS_Store
+.changelog
+npm-debug.log*
+lerna-debug.log*
+/**/*.tgz

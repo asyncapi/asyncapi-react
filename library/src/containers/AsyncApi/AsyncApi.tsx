@@ -2,7 +2,7 @@ import React, { Component, FunctionComponent } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import {
-  AsyncApi,
+  AsyncAPI,
   isFetchingSchemaInterface,
   NullableAsyncApi,
   ParserError,
@@ -24,12 +24,12 @@ import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
 
-interface AsyncApiState {
+interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
   error?: ParserError;
 }
 
-const defaultAsyncApi: AsyncApi = {
+const defaultAsyncApi: AsyncAPI = {
   asyncapi: '',
   info: {
     title: 'AsyncApi example title',
@@ -40,8 +40,8 @@ const defaultAsyncApi: AsyncApi = {
 
 // todo: add ability to forward options to parser and dereferencer
 
-class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
-  state: AsyncApiState = {
+class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+  state: AsyncAPIState = {
     validatedSchema: defaultAsyncApi,
     error: undefined,
   };
@@ -85,6 +85,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
       );
     }
 
+    if (!concatenatedConfig.show) {
+      return null;
+    }
+
     return (
       <Wrapper theme={concatenatedTheme}>
         {concatenatedConfig.showErrors && !!error && (
@@ -94,9 +98,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncApiState> {
           <InfoComponent
             info={validatedSchema.info}
             servers={validatedSchema.servers}
-            showServers={
-              concatenatedConfig.show.servers && !!validatedSchema.servers
-            }
+            showServers={Boolean(
+              concatenatedConfig.show.servers && !!validatedSchema.servers,
+            )}
           />
         )}
         {concatenatedConfig.show.security &&

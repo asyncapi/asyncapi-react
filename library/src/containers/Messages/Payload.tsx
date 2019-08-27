@@ -1,11 +1,8 @@
-import React, { FunctionComponent } from 'react';
-
-import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
+import React from 'react';
 
 import { H4 } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
-
-import { MessagePayload, MessagePayloadHeader } from './styled';
+import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
 import {
   ONE_OF_PAYLOADS_TEXT,
   ANY_OF_PAYLOADS_TEXT,
@@ -14,9 +11,11 @@ import {
   PAYLOAD_EXAMPLE_TEXT,
 } from '../../constants';
 
+import { MessagePayload, MessagePayloadHeader } from './styled';
+
 type PayloadProps = Required<Pick<RawMessage, 'payload'>>;
 
-export const PayloadComponent: FunctionComponent<PayloadProps> = ({
+export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
   payload,
 }) => {
   if (isOneOfPayload(payload)) {
