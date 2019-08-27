@@ -1,174 +1,342 @@
+import { ErrorObject } from 'ajv';
+import { ConfigInterface } from './config';
+import { ThemeInterface } from './theme';
 export type PrimitiveType = number | boolean | string | null;
-export type Map<K extends string, V = any> = { [key in K]: V };
 export type PropsWithDefaults<T, D> = T & D;
-export type TypeWithKey<T, V> = { key: T; content: V };
+export type ExcludeNullable<T> = Exclude<T, null | undefined>;
+export interface TypeWithKey<T, V> {
+  key: T;
+  content: V;
+}
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
 export type AsyncApiVersion = string;
+export type UniqueID = string;
+export type DefaultContentType = string;
 export type BaseTopic = string;
 export type DescriptionHTML = string | React.ReactNode;
-export type ExternalSpecification = Map<string, any>;
+export type ExternalSpecification = Record<string, any>;
 export type ReferenceString = string;
 export type OneOf = 'oneOf';
-
-export type AsyncApi = {
+export type AnyOf = 'anyOf';
+export type SchemaType =
+  | 'array'
+  | 'boolean'
+  | 'integer'
+  | 'null'
+  | 'number'
+  | 'object'
+  | 'string';
+export interface AsyncApi {
   asyncapi: AsyncApiVersion;
+  channels: Channels;
   info: Info;
-  baseTopic?: BaseTopic;
-  servers?: Server[];
-  topics?: Map<string, Topic>;
-  stream?: Stream;
-  events?: Event;
+  id?: UniqueID;
+  servers?: Servers;
+  defaultContentType?: DefaultContentType;
   components?: Components;
-  security?: Array<SecurityRequirement | SecurityScheme>;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
-};
+}
 
-export type Info = {
+export interface Channels {
+  [key: string]: ChannelItem;
+}
+export interface ChannelItem {
+  parameters?: Parameters;
+  description?: DescriptionHTML;
+  publish?: Operation;
+  subscribe?: Operation;
+  deprecated?: boolean;
+  protocolInfo?: ProtocolInfo;
+}
+
+export interface OperationTrait {
+  summary?: string;
+  description?: DescriptionHTML;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  operationId?: string;
+  protocolInfo?: any;
+}
+
+export type TraitType = OperationTrait | [OperationTrait, any];
+
+export interface Operation {
+  traits?: TraitType[];
+  summary?: string;
+  description?: DescriptionHTML;
+  tags?: Tag[];
+  externalDocs?: ExternalDocs;
+  operationId?: string;
+  protocolInfo?: ProtocolInfo;
+  message?: Message;
+}
+
+export interface ProtocolInfo {
+  [key: string]: any;
+}
+
+export interface Parameters {
+  [key: string]: Parameter;
+}
+
+export interface Info {
   title: string;
   version: string;
   description?: DescriptionHTML;
   termsOfService?: string;
   contact?: Contact;
   license?: License;
-};
+}
 
-export type Contact = {
+export interface Contact {
   name?: string;
   url?: string;
   email?: string;
-};
+}
 
-export type License = {
+export interface License {
   name: string;
   url?: string;
-};
+}
 
-export type Server = {
+export interface Servers {
+  [k: string]: Server;
+}
+
+export interface Server {
   url: string;
-  scheme: string;
-  schemeVersion?: string;
+  protocol: string;
+  protocolVersion?: string;
   description?: DescriptionHTML;
-  variables?: Map<string, ServerVariable>;
-};
+  variables?: ServerVariables;
+  security?: SecurityRequirement[];
+}
 
-export type ServerVariable = {
+export interface ServerVariables {
+  [k: string]: ServerVariable;
+}
+
+export interface ServerVariable {
   enum?: string[];
   default?: string;
   description?: DescriptionHTML;
-};
+  examples?: string[];
+}
 
-export type Topic = {
+export interface Topic {
   $ref?: ReferenceString;
   deprecated?: boolean;
-  subscribe?: Message | Map<OneOf, Message[]>;
-  publish?: Message | Map<OneOf, Message[]>;
+  subscribe?: Message | Record<OneOf, Message[]>;
+  publish?: Message | Record<OneOf, Message[]>;
   parameters?: Parameter[];
-};
+}
 
-export type Parameter = {
-  name?: string;
+export interface Parameter {
   description?: DescriptionHTML;
-  schema: Schema;
-};
+  schema?: Schema;
+  location?: string;
+}
 
-export type Reference = {
+export interface Reference {
   $ref: ReferenceString;
-};
+}
 
-export type Stream = {
-  framing: StreamFraming;
-  read?: Message[];
-  write?: Message[];
-};
+export type Message = RawMessage | Record<OneOf, RawMessage[]>;
 
-export type StreamFraming = {
-  type: string;
-  delimiter?: string;
-};
+export function isRawMessage(message: Message): message is RawMessage {
+  return !(message as any).oneOf;
+}
 
-export type Event = {
-  receive?: Message[];
-  send?: Message[];
-};
+export function isOneOfPayload(
+  payload: RawMessage['payload'],
+): payload is Record<OneOf, any> {
+  return !!payload && (payload as Record<OneOf, any>).oneOf !== undefined;
+}
 
-export type Message = {
-  deprecated?: boolean;
+export function isAnyOfPayload(
+  payload: RawMessage['payload'],
+): payload is Record<AnyOf, any> {
+  return !!payload && (payload as Record<AnyOf, any>).anyOf !== undefined;
+}
+
+export interface RawMessage {
+  schemaFormat?: string;
+  contentType?: string;
   headers?: Schema;
-  payload?: Schema;
-  summary?: DescriptionHTML;
-  description?: DescriptionHTML;
+  payload?: Schema | Record<OneOf, Schema[]> | Record<AnyOf, Schema[]>; // payload is Schema, not any https://github.com/asyncapi/parser-js/blob/master/lib/models/message.js#L35
+  correlationId?: CorrelationId;
   tags?: Tag[];
-  externalDocs?: ExternalDocs;
-};
-
-export type Tag = {
-  name: string;
-  description?: string;
-  externalDocs?: ExternalDocs;
-};
-
-export type ExternalDocs = {
-  url: string;
-  description?: string;
-};
-
-export type Components = {
-  schemas?: Map<string, Schema>;
-  messages?: Map<string, Message>;
-  securitySchemes?: Map<string, SecurityScheme>;
-  parameters?: Map<string, Parameter>;
-};
-
-export type SecurityScheme = {
-  type: string;
+  summary?: DescriptionHTML;
+  name?: string;
+  title?: string;
   description?: DescriptionHTML;
+  externalDocs?: ExternalDocs;
+  deprecated?: boolean;
+  examples?: any[];
+  protocolInfo?: any;
+  traits?: MessageTrait | [MessageTrait, any];
+}
+
+export interface Tag {
   name: string;
+  description?: string;
+  externalDocs?: ExternalDocs;
+}
+
+export interface ExternalDocs {
+  url: string;
+  description?: DescriptionHTML;
+}
+
+export interface CorrelationId {
+  description?: string;
+  location: string;
+}
+
+export interface MessageTrait {
+  schemaFormat?: string;
+  contentType?: string;
+  headers?: Schema;
+  correlationId?: CorrelationId;
+  tags?: Tag[];
+  summary?: string;
+  name?: string;
+  title?: string;
+  description?: DescriptionHTML;
+  externalDocs?: ExternalDocs;
+  deprecated?: boolean;
+  examples?: any[];
+  protocolInfo?: Record<string, any>;
+}
+
+export interface Components {
+  schemas?: Record<string, Schema>;
+  messages?: Record<string, Message>;
+  securitySchemes?: Record<string, SecurityScheme>;
+  parameters?: Record<string, Parameter>;
+  correlationIds?: CorrelationId;
+  operationTraits?: Record<string, OperationTrait>;
+  messageTraits?: Record<string, MessageTrait>;
+}
+
+export interface SecurityScheme {
+  type: string;
   in: string;
+  name: string;
   scheme: string;
   bearerFormat?: string;
-};
+  description?: DescriptionHTML;
+}
 
-export type XML = {
+export interface XML {
   name?: string;
   namespace?: string;
   prefix?: string;
   attribute?: boolean;
   wrapped?: boolean;
-};
+}
 
-export type SecurityRequirement = {};
+export interface SecurityRequirement {
+  [key: string]: string[];
+}
 
-export type Schema = {
-  $schema?: string;
-  $id?: string;
-  description?: DescriptionHTML;
-  allOf?: Schema[];
-  oneOf?: Schema[];
-  anyOf?: Schema[];
-  title?: string;
-  type?: string | string[];
-  definitions?: Map<string, any>;
-  format?: string;
-  items?: Schema;
-  minItems?: number;
-  additionalItems?: { anyOf: Schema[] } | Schema;
-  enum?: PrimitiveType[] | Schema[];
-  default?: PrimitiveType | Object;
-  additionalProperties?: Map<string, Schema>;
-  required?: string[];
-  propertyOrder?: string[];
-  properties?: Map<string, Schema>;
-  defaultProperties?: string[];
-  patternProperties?: Map<string, Schema>;
-  typeof?: 'function';
+export interface Schema {
   nullable?: boolean;
+  format?: string;
+  title?: string;
+  description?: DescriptionHTML;
+  default?: PrimitiveType | {};
+  multipleOf?: number;
+  maximum?: number;
+  exclusiveMaximum?: boolean;
+  minimum?: number;
+  exclusiveMinimum?: boolean;
+  maxLength?: number;
+  minLength?: number;
+  pattern?: RegExp | string;
+  maxItems?: number;
+  minItems?: number;
+  uniqueItems?: boolean;
+  maxProperties?: number;
+  minProperties?: number;
+  required?: string[];
+  enum?: any[];
+  deprecated?: boolean;
+  type?: SchemaType;
+  items?: Schema /*| Schema[];*/; // todo: end this
   discriminator?: string;
   readOnly?: boolean;
-  writeOnly?: boolean;
   xml?: XML;
   externalDocs?: ExternalDocs;
   example?: any;
-  deprecated?: boolean;
-};
+  examples?: any[];
+  allOf?: Schema[];
+  oneOf?: Schema[];
+  anyOf?: Schema[];
+  not?: Schema;
+  properties?: Record<string, Schema>;
+
+  additionalProperties?: Record<string, Schema>;
+
+  // old field
+
+  // $schema?: string;
+  // $id?: string;
+
+  // definitions?: Record<string, any>;
+
+  // additionalItems?: { anyOf: Schema[] } | Schema;
+
+  // propertyOrder?: string[];
+
+  // defaultProperties?: string[];
+}
+
+export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
+
+export interface ParserOptions {
+  path?: string;
+  parse?: Record<string, any>;
+  resolve?: Record<string, any>;
+  dereference?: boolean;
+  applyTraits?: boolean;
+}
+
+export interface AsyncApiProps {
+  schema: PropsSchema;
+  theme?: Partial<ThemeInterface>;
+  config?: Partial<ConfigInterface>;
+  parserOptions?: Partial<ParserOptions>;
+}
+
+export type NullableAsyncApi = AsyncApi | null;
+
+export interface AsyncApiState {
+  validatedSchema: NullableAsyncApi;
+  error?: ParserError;
+}
+
+export function isFetchingSchemaInterface(
+  schema: PropsSchema,
+): schema is FetchingSchemaInterface {
+  return (schema as FetchingSchemaInterface).url !== undefined;
+}
+
+export interface FetchingSchemaInterface {
+  url: string;
+  requestOptions?: RequestInit;
+}
+
+export interface ParserError {
+  message: string;
+  validationError?: ErrorObject[] | null;
+}
+
+export interface ParserReturn {
+  data: NullableAsyncApi;
+  error?: ParserError;
+}
+
+export type TableColumnName = string;

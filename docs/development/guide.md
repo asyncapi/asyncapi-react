@@ -10,6 +10,9 @@ Read the document to find out how to install dependencies, launch the developmen
 
 This repository has the following structure:
 
+<!-- markdownlint-disable MD040 -->
+<!-- remember to update docs after removing styled components, like `theme` folder here -->
+
 ```
   ├── .github                     # Pull request and issue templates
   ├── docs                        # Directory with project-related documents
@@ -23,11 +26,12 @@ This repository has the following structure:
   │    └── test                   # Tests for the AsyncApi React component
   └── playground                  # Source code of the Playground application for the AsyncApi React component
        ├── public                 # Fonts, images, and icons used in the Playground application
-       ├── src                    # Source code of the Playground application
-       │    ├── common            # Various helper functions including mocks
-       │    └── components        # Components used in the Playground application
-       └── test                   # Tests for the Playground application
+       └── src                    # Source code of the Playground application
+            ├── common            # Various helper functions including mocks
+            └── components        # Components used in the Playground application
 ```
+
+<!-- markdownlint-enable MD040 -->
 
 If you make any changes in the project structure, remember to update it.
 
@@ -35,46 +39,47 @@ If you make any changes in the project structure, remember to update it.
 
 Use the following tools to develop the AsyncApi React component:
 
-* React (version 16.0.0 or higher)
-* [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0  or higher)
-* TypeScript (version 3.0.0 or higher)
+- React (version 16.8.0 or higher)
+- [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0 or higher)
+- TypeScript (version 3.5.0 or higher)
 
 ## Install dependencies
 
 To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run these commands:
 
-``` sh
-$ npm install
-$ npm run bootstrap
+```sh
+npm install
+npm run bootstrap
 ```
 
 If you want to clear dependencies and remove a symlink, run this command:
-``` sh
- $ npm run clean
+
+```sh
+npm run clean
 ```
 
 ## Launch a development environment
 
 Launch the development server with the hot reloading functionality that allows any change in files in the `playground/src` and `library/src` folders to be immediately visible in the browser. Use this command:
 
-``` sh
-$ npm start
+```sh
+npm start
 ```
 
 You can access the live development server at [localhost:3000](http://localhost:3000/).
 
 ## Tests
 
-To launch tests for the [`playground`](../../playground) and [`library`](../../library) packages, run this command:
+To launch tests for the [`library`](../../library) package, run this command:
 
-``` sh
-$ npm test
+```sh
+npm test
 ```
 
 If you only want to run tests for a specific part of the repository, use:
 
-``` sh
-$ npm run test:{PART}
+```sh
+npm run test:{PART}
 ```
 
 In this command `{PART}` must be either `playground` or `library`.
@@ -83,22 +88,22 @@ In this command `{PART}` must be either `playground` or `library`.
 
 See the rules for naming functions and components, and the architecture convention to use in the `playground` and `library` projects:
 
-* Uses two-space indentation.
-* Follow the camel case convention for variables and functions. Type the words in lower case and only capitalize the first letter in each word.
-* Do not use an underbar sign (`_`) as the first or last character of a name, even for private variables or functions.
-* Do not use a dollar sign (`$`) or a backslash (`\`) in any place.
-* Capitalize global constants. Separate words with an underbar sign (`_`).
-* Each line should contain no more than one statement.
-* Always put the opening brace in the same line as the previous statement.
-* Avoid using the ternary operator (`statement ? true : false`). Use the guard (`&&`) instead.
-* Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `AsyncApiInterface`, `ConfigInterface`, and `ThemeInterface`.
-* Do not use public statements before any properties and methods of classes.
-* Always capitalize the first letter in the name of the new React component.
-* Use one definition of the React component per one file.
-* Use `export default` for stateless or stateful components. Use `export const` for styled components.
-* Use `Props` and `State` names for props and state types for components. Always keep their definitions above the component definition.
-* Create new styled components in `styled.ts` files.
-* Create generic components that are used in multiple places in the `components` directory. It does not apply to the Playground application.
+- Uses two-space indentation.
+- Follow the camel case convention for variables and functions. Type the words in lower case and only capitalize the first letter in each word.
+- Do not use an underbar sign (`_`) as the first or last character of a name, even for private variables or functions.
+- Do not use a dollar sign (`$`) or a backslash (`\`) in any place.
+- Capitalize global constants. Separate words with an underbar sign (`_`).
+- Each line should contain no more than one statement.
+- Always put the opening brace in the same line as the previous statement.
+- Avoid using the ternary operator (`statement ? true : false`). Use the guard (`&&`) instead.
+- Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `AsyncApiInterface`, `ConfigInterface`, and `ThemeInterface`.
+- Do not use public statements before any properties and methods of classes.
+- Always capitalize the first letter in the name of the new React component.
+- Use one definition of the React component per one file.
+- Use `export const` for all components.
+- Use `Props` and `State` names for props and state types for components. Always keep their definitions above the component definition.
+- Create new styled components in `styled.ts` files.
+- Create generic components that are used in multiple places in the `components` directory. It does not apply to the Playground application.
 
 The maintainers of the repository reserve the right to change these rules.
 

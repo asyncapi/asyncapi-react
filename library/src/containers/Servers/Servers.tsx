@@ -1,42 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Server } from '../../types';
+import { Servers } from '../../types';
 
-import ServerComponent from './Server';
+import { ServerComponent } from './Server';
 
-import { H2, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
-import { Servers, ServersHeader } from './styled';
-
-const serversColumnsName: TableColumnName[] = [
-  "URL",
-  "Scheme",
-  "Description",
-]
+import {
+  H2,
+  TableWrapper,
+  TableHeader,
+  TableBodyWrapper,
+} from '../../components';
+import { Servers as StyledServers, ServersHeader } from './styled';
+import { CONNECTION_DETAILS, SERVER_COLUMN_NAMES } from '../../constants';
 
 interface Props {
-  servers?: Server[];
+  servers?: Servers;
 }
 
-class ServersComponent extends Component<Props> {
-  render() {
-    const { servers } = this.props;
-
-    if (!servers) return null;
-
-    return (
-      <Servers>
-        <ServersHeader>
-          <H2>Connection details</H2>
-        </ServersHeader>
-        <TableWrapper>
-          <TableHeader columns={serversColumnsName} />
-          <TableBodyWrapper>
-            {servers.map(server => <ServerComponent key={`${server.url}${server.scheme}`} server={server} />)}
-          </TableBodyWrapper>
-        </TableWrapper>
-      </Servers>
-    );
+export const ServersComponent: React.FunctionComponent<Props> = ({
+  servers,
+}) => {
+  if (!servers) {
+    return null;
   }
-}
 
-export default ServersComponent;
+  return (
+    <StyledServers>
+      <ServersHeader>
+        <H2>{CONNECTION_DETAILS}</H2>
+      </ServersHeader>
+      <TableWrapper>
+        <TableHeader columns={SERVER_COLUMN_NAMES} />
+        <TableBodyWrapper>
+          {Object.entries(servers).map(([stage, server]) => {
+            const { url, protocol } = server;
+            return (
+              <ServerComponent
+                key={`${url}${protocol}${stage}`}
+                server={server}
+                stage={stage}
+              />
+            );
+          })}
+        </TableBodyWrapper>
+      </TableWrapper>
+    </StyledServers>
+  );
+};

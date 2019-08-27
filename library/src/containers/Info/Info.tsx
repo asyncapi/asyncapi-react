@@ -1,38 +1,52 @@
 import React, { Component } from 'react';
 
-import { Info, Server } from '../../types';
+import { Info, Servers } from '../../types';
 
-import ServersComponent from '../Servers/Servers';
-import ContactComponent from './Contact';
-import LicenseComponent from './License';
-
-import { H1, H2, HeaderParagraph, HrefHeader, Markdown } from '../../components';
+import { ServersComponent } from '../Servers/Servers';
+import { ContactComponent } from './Contact';
+import { LicenseComponent } from './License';
+import { TERMS_OF_SERVICE } from '../../constants';
+import {
+  H1,
+  H2,
+  HeaderParagraph,
+  HrefHeader,
+  Markdown,
+} from '../../components';
 import { Info as InfoWrapper, InfoHeader } from './styled';
 
 interface Props {
   info: Info;
-  servers?: Server[];
+  servers?: Servers;
   showServers: boolean;
 }
-
-class InfoComponent extends Component<Props> {
+export class InfoComponent extends Component<Props> {
   render() {
-    const { info: { title, version, description, termsOfService, contact, license }, servers, showServers } = this.props;
+    const {
+      info: { title, version, description, termsOfService, contact, license },
+      servers,
+      showServers,
+    } = this.props;
 
     return (
       <InfoWrapper>
         <InfoHeader>
-          <H1>{title} {version}</H1>
+          <H1>
+            {title} {version}
+          </H1>
           {description && <Markdown>{description}</Markdown>}
-
-          {termsOfService &&
+          {termsOfService && (
             <HeaderParagraph>
-              <H2>Terms of service</H2>
-              <HrefHeader href={termsOfService} target="_blank">
+              <H2>{TERMS_OF_SERVICE}</H2>
+              <HrefHeader
+                href={termsOfService}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
                 {termsOfService}
               </HrefHeader>
             </HeaderParagraph>
-          }
+          )}
         </InfoHeader>
         {contact && <ContactComponent contact={contact} />}
         {license && <LicenseComponent license={license} />}
@@ -41,5 +55,3 @@ class InfoComponent extends Component<Props> {
     );
   }
 }
-
-export default InfoComponent;

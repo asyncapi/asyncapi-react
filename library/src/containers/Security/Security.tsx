@@ -1,47 +1,65 @@
 import React, { Component } from 'react';
 
-import { SecurityScheme } from '../../types';
+import {
+  SecurityScheme,
+  Components as ComponentsType,
+  Servers as ServersType,
+  ExcludeNullable,
+} from '../../types';
+import { renderMd } from '../../helpers/renderMarkdown';
+import {
+  H2,
+  Markdown,
+  TableAccessor,
+  TableWrapper,
+  TableHeader,
+  TableBodyWrapper,
+  TableRow,
+} from '../../components';
+import { Security as SecurityWrapper, SecurityHeader } from './styled';
+import { SECURITY_TEXT, SECURITY_COLUMNS_NAMES } from '../../constants';
 
-import { H2, Markdown, TableColumnName, TableAccessor, TableWrapper, TableHeader, TableBodyWrapper, TableRow } from '../../components';
-import { Security as SecurityWrapper, SecurityHeader } from './styled'
-
-const securityColumnsName: TableColumnName[] = [
-  "Type",
-  "In",
-  "Name",
-  "Scheme",
-  "Format",
-  "Description",
-]
-
-const securityAccesors: TableAccessor[] = [
-  (el: SecurityScheme) => el.type,
-  (el: SecurityScheme) => el.in,
-  (el: SecurityScheme) => el.name,
-  (el: SecurityScheme) => el.scheme,
-  (el: SecurityScheme) => el.bearerFormat,
-  (el: SecurityScheme) => el.description && <Markdown>{el.description}</Markdown>,
-]
-
-interface Props {
-  security?: SecurityScheme[];
+interface SecuritySchemeWithStages extends SecurityScheme {
+  stages: string[];
 }
 
-class SecurityComponent extends Component<Props> {
-  render() {
-    const { security } = this.props;
+const securityAccesors: TableAccessor[] = [
+  (el: SecuritySchemeWithStages) => el.type,
+  (el: SecuritySchemeWithStages) => el.stages && el.stages.join(', '),
+  (el: SecuritySchemeWithStages) => el.in,
+  (el: SecuritySchemeWithStages) => el.name,
+  (el: SecuritySchemeWithStages) => el.scheme,
+  (el: SecuritySchemeWithStages) => el.bearerFormat,
+  (el: SecuritySchemeWithStages) =>
+    el.description && <Markdown>{renderMd(el.description)}</Markdown>,
+];
 
-    if (!security) return null;
+interface Props {
+  securitySchemes: ExcludeNullable<ComponentsType['securitySchemes']>;
+  servers: ServersType;
+}
+
+export class SecurityComponent extends Component<Props> {
+  render() {
+    const alteredSecuritySchemes = addStageToSecurity(this.props);
 
     return (
       <SecurityWrapper>
         <SecurityHeader>
-          <H2>Security</H2>
+          <H2>{SECURITY_TEXT}</H2>
         </SecurityHeader>
         <TableWrapper>
-          <TableHeader columns={securityColumnsName} />
+          <TableHeader columns={SECURITY_COLUMNS_NAMES} />
           <TableBodyWrapper>
-            {security.map(sec => <TableRow key={`${sec.type}${sec.name}`} accessors={securityAccesors} element={sec} />)}
+            {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
+              !sec ? null : (
+                <TableRow
+                  key={stage}
+                  accessors={securityAccesors}
+                  element={sec}
+                />
+              ),
+            )}
           </TableBodyWrapper>
         </TableWrapper>
       </SecurityWrapper>
@@ -49,4 +67,29 @@ class SecurityComponent extends Component<Props> {
   }
 }
 
-export default SecurityComponent;
+export const addStageToSecurity: (
+  arg: Props,
+) => Record<string, SecuritySchemeWithStages> = ({
+  servers,
+  securitySchemes,
+}) => {
+  const copiedSecSchemes = JSON.parse(JSON.stringify(securitySchemes));
+
+  Object.keys(copiedSecSchemes).map(securitySchemesKey => {
+    Object.entries(servers)
+      .filter(([_, serv]) => !!serv.security)
+      .forEach(([stage, server]) => {
+        server.security &&
+          server.security.forEach(element => {
+            if (element[securitySchemesKey]) {
+              if (!Array.isArray(copiedSecSchemes[securitySchemesKey].stages)) {
+                copiedSecSchemes[securitySchemesKey].stages = [];
+              }
+              copiedSecSchemes[securitySchemesKey].stages.push(stage);
+            }
+          });
+      });
+  });
+
+  return copiedSecSchemes;
+};

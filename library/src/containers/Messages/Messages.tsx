@@ -1,31 +1,39 @@
 import React, { Component } from 'react';
 
-import { Map, Message } from '../../types';
+import { Message } from '../../types';
 
-import MessageComponent from './Message';
+import { MessageComponent } from './Message';
 
 import { H2 } from '../../components';
 import { Messages, MessagesHeader } from './styled';
+import { MESSAGES } from '../../constants';
 
 interface Props {
-  messages?: Map<string, Message>;
+  messages?: Record<string, Message>;
 }
 
-class MessagesComponent extends Component<Props> {
+export class MessagesComponent extends Component<Props> {
   render() {
     const { messages } = this.props;
 
-    if (!messages) return null;
+    if (!messages) {
+      return null;
+    }
 
     return (
       <Messages>
         <MessagesHeader>
-          <H2>Messages</H2>
+          <H2>{MESSAGES}</H2>
         </MessagesHeader>
-        {Object.keys(messages!).map(key => <MessageComponent key={key} title={key} message={messages![key]} hideTags={true} />)}
+        {Object.entries(messages).map(([key, message]) => (
+          <MessageComponent
+            key={key}
+            title={key}
+            message={message}
+            hideTags={true}
+          />
+        ))}
       </Messages>
     );
   }
 }
-
-export default MessagesComponent;

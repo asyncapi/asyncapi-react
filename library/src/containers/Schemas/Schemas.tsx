@@ -1,31 +1,30 @@
-import React, { Component } from 'react';
+import React, { FunctionComponent } from 'react';
 
-import { Map, Schema } from '../../types';
+import { Schema } from '../../types';
 
-import SchemaComponent from './Schema';
+import { SchemaComponent } from './Schema';
 
 import { H2 } from '../../components';
 import { Schemas, SchemasHeader } from './styled';
+import { SCHEMAS_TEXT } from '../../constants';
 
 interface Props {
-  schemas?: Map<string, Schema>;
+  schemas?: Record<string, Schema>;
 }
 
-class SchemasComponent extends Component<Props> {
-  render() {
-    const { schemas } = this.props;
-
-    if (!schemas) return null;
-
-    return (
-      <Schemas>
-        <SchemasHeader>
-          <H2>Schemas</H2>
-        </SchemasHeader>
-        {Object.keys(schemas!).map(key => <SchemaComponent key={key} name={key} schema={schemas![key]} />)}
-      </Schemas>
-    );
+export const SchemasComponent: FunctionComponent<Props> = ({ schemas }) => {
+  if (!schemas) {
+    return null;
   }
-}
 
-export default SchemasComponent;
+  return (
+    <Schemas>
+      <SchemasHeader>
+        <H2>{SCHEMAS_TEXT}</H2>
+      </SchemasHeader>
+      {Object.entries(schemas).map(([key, schema]) => (
+        <SchemaComponent key={key} name={key} schema={schema} />
+      ))}
+    </Schemas>
+  );
+};

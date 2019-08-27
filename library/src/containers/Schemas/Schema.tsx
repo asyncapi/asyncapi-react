@@ -2,67 +2,93 @@ import React, { Component } from 'react';
 
 import { Schema } from '../../types';
 
-import SchemaProperties from './SchemaProperties';
-import SchemaExample from './SchemaExample';
+import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
+import { SchemaExampleComponent } from './SchemaExample';
 
-import { H4, TableColumnName, TableWrapper, TableHeader, TableBodyWrapper } from '../../components';
+import {
+  H4,
+  TableWrapper,
+  TableHeader,
+  TableBodyWrapper,
+} from '../../components';
 import { Schema as SchemaWrapper, SchemaHeader } from './styled';
+import { SCHEMA_COLUMN_NAMES } from '../../constants';
 
-const schemaColumnsName: TableColumnName[] = [
-  "Name",
-  "Title",
-  "Type",
-  "Format",
-  "Default",
-  "Description",
-]
+export const searchForNestedObject = (
+  input: Record<string, any>,
+  key: string,
+): Record<string, any> | null => {
+  if (!input) {
+    return null;
+  }
+  if (input.hasOwnProperty(key)) {
+    return input;
+  }
+
+  // tslint:disable-next-line:prefer-for-of
+  for (let i = 0; i < Object.keys(input).length; i++) {
+    const nextInputObject = input[Object.keys(input)[i]];
+
+    if (typeof nextInputObject === 'object') {
+      const o = searchForNestedObject(nextInputObject, key);
+      if (o !== null) {
+        return o;
+      }
+    }
+  }
+  return null;
+};
 
 interface Props {
-  name: string,
+  name: string;
   schema?: Schema;
-  exampleTitle?: string,
+  exampleTitle?: string;
   hideTitle?: boolean;
 }
 
-class SchemaComponent extends Component<Props> {
-  private renderSchemaProps(schemaName: string, schema: Schema): React.ReactNode {
-    const required = schema.required ? schema.required : [];
-
-    if (schema.properties) {
-      const properties = schema.properties;
-
-      return Object.keys(properties).map(key => {
-        return <SchemaProperties key={key} name={key} properties={properties[key]} required={required.some((r: string) => r === key)} treeSpace={0} />
-      })
-    }
-    return (
-      <SchemaProperties name={schemaName} properties={schema} required={required.some((r: string) => r === schemaName)} treeSpace={0} />
-    )
-  }
-
+export class SchemaComponent extends Component<Props> {
   render() {
     const { name, schema, exampleTitle, hideTitle } = this.props;
 
-    if (!schema) return null;
+    if (!schema) {
+      return null;
+    }
+    const hasNotField = searchForNestedObject(schema, 'not');
 
     return (
       <SchemaWrapper>
-        {!hideTitle &&
+        {!hideTitle && (
           <SchemaHeader>
             <H4>{name}</H4>
-          </SchemaHeader> 
-        }
+          </SchemaHeader>
+        )}
         <TableWrapper>
-          <TableHeader columns={schemaColumnsName} />
+          <TableHeader columns={SCHEMA_COLUMN_NAMES} />
           <TableBodyWrapper>
-            {this.renderSchemaProps(name, schema!)}
+            {this.renderSchemaProps(name, schema)}
           </TableBodyWrapper>
         </TableWrapper>
-        
-        <SchemaExample title={exampleTitle} schema={schema} />
+        {/* we need to disable this component if schema has "not" field anywhere in it */}
+        {!hasNotField && (
+          <SchemaExampleComponent title={exampleTitle} schema={schema} />
+        )}
       </SchemaWrapper>
     );
   }
-}
+  private renderSchemaProps(
+    schemaName: string,
+    schema: Schema,
+  ): React.ReactNode {
+    if (!schema.properties) {
+      return (
+        <SchemaProperties name={schemaName} properties={schema} treeSpace={0} />
+      );
+    }
 
-export default SchemaComponent;
+    const properties = schema.properties;
+
+    return Object.entries(properties).map(([key, prop]) => (
+      <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
+    ));
+  }
+}

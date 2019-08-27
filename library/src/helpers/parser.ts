@@ -1,70 +1,91 @@
-import ZSchema from 'z-schema';
-import RefParser from 'json-schema-ref-parser';
+import {
+  parse as AsyncAPIParse,
+  parseFromUrl as AsyncAPIParseFromUrl,
+  ParserErrorUnsupportedVersion,
+  ParserErrorNoJS,
+} from 'asyncapi-parser';
 
-import { AsyncApi } from '../types';
+import {
+  AsyncApi,
+  ParserReturn,
+  FetchingSchemaInterface,
+  AsyncApiProps,
+} from '../types';
+
+type ParserOptions = AsyncApiProps['parserOptions'];
+
+import { UNSUPPORTED_SCHEMA_VERSION } from '../constants';
 
 class Parser {
-  async parse(content: string): Promise<AsyncApi> {
-    const parsedContent = this.parseContent(content);
-
-    if (typeof parsedContent !== 'object' || parsedContent === null) {
-      throw new Error('Invalid YAML content.');
-    }
-
-    const dereferencedJSON = await this.dereference(parsedContent);
-    const bundledJSON = await this.bundle(dereferencedJSON);
-    this.removeNullOrUndefined(bundledJSON);
-    const asyncApiSchema = require('asyncapi')[bundledJSON.asyncapi];
-
-    const parsed = await this.validate(bundledJSON, asyncApiSchema);
-
-    return JSON.parse(JSON.stringify(parsed)) as AsyncApi;
-  }
-
-  private validator = new ZSchema({});
-
-  private parseContent(content: string) {
+  async parse(
+    content: string | any,
+    parserOptions?: ParserOptions,
+  ): Promise<ParserReturn> {
     try {
-      return JSON.parse(content);
-    } catch (e) {
-      return require('js-yaml').safeLoad(content);
-    }
-  }
+      const { _json }: { _json: AsyncApi } = await AsyncAPIParse(
+        content,
+        parserOptions,
+      );
 
-  private async dereference(json: JSON): Promise<any> {
-    return RefParser.dereference(json, {
-      dereference: {
-        circular: 'ignore',
-      },
-    });
-  }
-
-  private async bundle(json: JSON): Promise<any> {
-    return RefParser.bundle(json, {
-      dereference: {
-        circular: 'ignore',
-      },
-    });
-  }
-
-  private removeNullOrUndefined(json: JSON): void {
-    for (const key in json) {
-      if (json[key] === null || json[key] === undefined) {
-        delete json[key];
-      } else if (typeof json[key] === 'object') {
-        this.removeNullOrUndefined(json[key]);
+      if (!this.isCorrectSchemaVersion(_json.asyncapi)) {
+        return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };
       }
+      return { data: _json as AsyncApi };
+    } catch (err) {
+      return this.handleError(err);
     }
   }
 
-  private async validate(json: JSON, schema: string): Promise<JSON> {
-    return new Promise<JSON>((resolve, reject) => {
-      this.validator.validate(json, schema, err => {
-        if (err) return reject(err);
-        return resolve(json);
-      });
-    });
+  async parseFromUrl(
+    arg: FetchingSchemaInterface,
+    parserOptions?: ParserOptions,
+  ): Promise<ParserReturn> {
+    try {
+      const data: AsyncApi = await AsyncAPIParseFromUrl(
+        arg.url,
+        arg.requestOptions,
+        parserOptions,
+      );
+
+      if (!this.isCorrectSchemaVersion(data.asyncapi)) {
+        return {
+          data: null,
+          error: { message: UNSUPPORTED_SCHEMA_VERSION },
+        };
+      }
+
+      return { data };
+    } catch (err) {
+      return this.handleError(err);
+    }
   }
+
+  handleError = (err: any): ParserReturn => {
+    if (
+      err instanceof ParserErrorUnsupportedVersion ||
+      err instanceof ParserErrorNoJS
+    ) {
+      return { data: null, error: { message: err.message } };
+    }
+
+    if (
+      err.parsedJSON &&
+      !this.isCorrectSchemaVersion(err.parsedJSON.asyncapi)
+    ) {
+      return {
+        data: null,
+        error: { message: UNSUPPORTED_SCHEMA_VERSION },
+      };
+    }
+
+    return {
+      data: err.parsedJSON || null,
+      error: { message: err.message, validationError: err.errors },
+    };
+  };
+
+  isCorrectSchemaVersion = (version: string): boolean =>
+    !version.startsWith('1');
 }
 
 export const parser = new Parser();

@@ -1,29 +1,30 @@
+import merge from 'merge';
 import {
-  Map,
   AsyncApi,
   Schema,
   Message,
-  Server,
-  Topic,
+  Servers,
   ServerVariable,
-  SecurityRequirement,
+  isRawMessage,
+  Channels,
+  Parameters,
+  Operation,
 } from '../types';
 
-import renderMarkdown from './renderMarkdown';
+import { renderMd } from './renderMarkdown';
 
 class Beautifier {
   beautify(asyncApi: AsyncApi): AsyncApi {
-    asyncApi.info.description = this.renderMd(asyncApi.info
-      .description as string);
+    if (asyncApi.info && asyncApi.info.description) {
+      asyncApi.info.description = renderMd(asyncApi.info.description as string);
+    }
     if (asyncApi.servers) {
       asyncApi.servers = this.beautifyServers(asyncApi.servers);
     }
-    if (asyncApi.security) {
-      asyncApi.security = this.beautifySecurity(asyncApi);
+    if (asyncApi.channels) {
+      asyncApi.channels = this.beautifyChannels(asyncApi.channels);
     }
-    if (asyncApi.topics) {
-      asyncApi.topics = this.beautifyTopics(asyncApi.topics);
-    }
+
     if (asyncApi.components) {
       if (asyncApi.components.messages) {
         asyncApi.components.messages = this.beautifyMessages(
@@ -47,24 +48,21 @@ class Beautifier {
         schemas.push(this.resolveAllOf(s));
       });
 
-      return this.resolveAllOf(Object.assign({}, ...schemas));
+      return merge.recursive(...schemas);
     }
 
     if (schema.properties) {
-      const transformed: Map<string, Schema> = {};
+      const transformed: Record<string, Schema> = {};
 
-      for (const key in schema.properties) {
-        if (schema.properties[key].allOf) {
-          transformed[key] = this.resolveAllOf(schema.properties[key]);
+      for (const [key, property] of Object.entries(schema.properties)) {
+        if (property.allOf) {
+          transformed[key] = this.resolveAllOf(property);
           continue;
         }
-        transformed[key] = schema.properties[key];
+        transformed[key] = property;
       }
 
-      return {
-        ...schema,
-        properties: transformed,
-      };
+      return { ...schema, properties: transformed };
     }
 
     return schema;
@@ -73,22 +71,18 @@ class Beautifier {
   private beautifySchema(schema: Schema): Schema {
     if (schema.properties) {
       const properties = schema.properties;
-      let newProperties: Map<string, Schema> = properties;
+      const newProperties: Record<string, Schema> = properties;
 
-      for (const key in properties) {
-        let prop = properties[key];
-
+      for (const [key, prop] of Object.entries(properties)) {
         if (prop.description) {
-          prop.description = this.renderMd(prop.description as string);
+          prop.description = renderMd(prop.description as string);
         }
         if (prop.properties) {
           const propProperties = prop.properties;
-          let newPropProperties: Map<string, Schema> = {};
+          const newPropProperties: Record<string, Schema> = {};
 
-          for (const propKey in propProperties) {
-            newPropProperties[propKey] = this.beautifySchema(
-              propProperties[propKey],
-            );
+          for (const [propKey, propValue] of Object.entries(propProperties)) {
+            newPropProperties[propKey] = this.beautifySchema(propValue);
           }
 
           prop.properties = newPropProperties;
@@ -101,21 +95,24 @@ class Beautifier {
 
     if (schema.additionalProperties) {
       const additionalProperties = schema.additionalProperties;
-      let newAdditionalProperties: Map<string, Schema> = additionalProperties;
+      const newAdditionalProperties: Record<
+        string,
+        Schema
+      > = additionalProperties;
 
-      for (const key in additionalProperties) {
-        let prop = additionalProperties[key];
-
+      for (const [key, prop] of Object.entries(additionalProperties)) {
         if (prop.description) {
-          prop.description = this.renderMd(prop.description as string);
+          prop.description = renderMd(prop.description as string);
         }
         if (prop.additionalProperties) {
           const propAdditionalProperties = prop.additionalProperties;
-          let newPropAdditionalProperties: Map<string, Schema> = {};
+          const newPropAdditionalProperties: Record<string, Schema> = {};
 
-          for (const propKey in propAdditionalProperties) {
+          for (const [propKey, propValue] of Object.entries(
+            propAdditionalProperties,
+          )) {
             newPropAdditionalProperties[propKey] = this.beautifySchema(
-              propAdditionalProperties[propKey],
+              propValue,
             );
           }
           prop.properties = newPropAdditionalProperties;
@@ -129,25 +126,38 @@ class Beautifier {
     return schema;
   }
 
-  private beautifySchemas(schemas: Map<string, Schema>): Map<string, Schema> {
-    let newSchemas: Map<string, Schema> = {};
-    for (const key in schemas) {
-      newSchemas[key] = this.resolveAllOf(schemas[key]);
+  private beautifySchemas(
+    schemas: Record<string, Schema>,
+  ): Record<string, Schema> {
+    const newSchemas: Record<string, Schema> = {};
+    for (const [key, schema] of Object.entries(schemas)) {
+      newSchemas[key] = this.resolveAllOf(schema);
       newSchemas[key] = this.beautifySchema(newSchemas[key]);
     }
     return newSchemas;
   }
 
   private beautifyMessage(message: Message): Message {
+    if (!isRawMessage(message)) {
+      const beautified = {
+        oneOf: message.oneOf.map(this.beautifyMessage),
+      } as Message;
+
+      return beautified;
+    }
     if (message.payload) {
       message.payload = this.resolveAllOf(message.payload);
     }
     if (message.headers) {
       message.headers = this.resolveAllOf(message.headers);
     }
+    if (message.summary) {
+      message.summary = renderMd(message.summary as string);
+    }
 
-    message.summary = this.renderMd(message.summary as string);
-    message.description = this.renderMd(message.description as string);
+    if (message.description) {
+      message.description = renderMd(message.description as string);
+    }
 
     if (message.headers) {
       message.headers = this.beautifySchema(message.headers);
@@ -160,101 +170,88 @@ class Beautifier {
   }
 
   private beautifyMessages(
-    messages: Map<string, Message>,
-  ): Map<string, Message> {
-    let newMessages: Map<string, Message> = {};
-    for (const key in messages) {
-      newMessages[key] = this.beautifyMessage(messages[key]);
+    messages: Record<string, Message>,
+  ): Record<string, Message> {
+    const newMessages: Record<string, Message> = {};
+    for (const [key, message] of Object.entries(messages)) {
+      newMessages[key] = this.beautifyMessage(message);
     }
     return newMessages;
   }
 
-  private beautifyServers(servers: Server[]): Server[] {
-    return servers.map(server => {
-      server.description = this.renderMd(server.description as string);
+  private beautifyServers(servers: Servers): Servers {
+    const copiedServers = JSON.parse(JSON.stringify(servers || {})) as Servers;
+
+    Object.entries(copiedServers).forEach(([_, server]) => {
+      server.description = renderMd(server.description as string);
 
       if (server.variables) {
         const variables = server.variables;
-        let newVariables: Map<string, ServerVariable> = variables;
+        const newVariables: Record<string, ServerVariable> = variables;
 
-        for (const key in variables) {
-          newVariables[key].description = this.renderMd(variables[key]
-            .description as string);
+        for (const [key, variable] of Object.entries(variables)) {
+          newVariables[key].description = renderMd(
+            variable.description as string,
+          );
         }
         server.variables = newVariables;
       }
-
-      return server;
     });
+
+    return copiedServers;
   }
 
-  private beautifyTopics(topics: Map<string, Topic>): Map<string, Topic> {
-    let newTopics: Map<string, Topic> = {};
-    for (const key in topics) {
-      let topic = topics[key];
-
-      if (topic.publish) {
-        if ((topic.publish as any).oneOf) {
-          let messages: Message[] = (topic.publish as any).oneOf;
-          messages = messages.map(message => this.beautifyMessage(message));
-
-          (topic.publish as any).oneOf = messages;
-        } else {
-          topic.publish = this.beautifyMessage(topic.publish as Message);
-        }
-      }
-
-      if (topic.subscribe) {
-        if ((topic.subscribe as any).oneOf) {
-          let messages: Message[] = (topic.subscribe as any).oneOf;
-          messages = messages.map(message => this.beautifyMessage(message));
-
-          (topic.subscribe as any).oneOf = messages;
-        } else {
-          topic.subscribe = this.beautifyMessage(topic.subscribe as Message);
-        }
-      }
-
-      if (topic.parameters) {
-        topic.parameters = topic.parameters.map(param => {
-          param.description = this.renderMd(param.description as string);
-          return param;
-        });
-      }
-
-      newTopics[key] = topic;
+  private beautifyOperation(operation: Operation): Operation {
+    if (!operation.message) {
+      return operation;
     }
-    return newTopics;
+
+    if (!isRawMessage(operation.message)) {
+      const messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
+      messages.map(arg => this.beautifyMessage(arg));
+      return { ...operation, message: { oneOf: messages } };
+    }
+
+    return { ...operation, message: this.beautifyMessage(operation.message) };
   }
 
-  private beautifySecurity(asyncApi: AsyncApi): SecurityRequirement[] {
-    const { components, security } = asyncApi;
-    let securityRequirements: SecurityRequirement[] = [];
+  private beautifyChannels(channels: Channels): Channels {
+    const newChannels: Channels = {};
+    for (const [key, channel] of Object.entries(channels)) {
+      newChannels[key] = {};
 
-    security!.forEach(sec => {
-      const name = Object.keys(sec)[0];
-      if (
-        !components ||
-        !components.securitySchemes ||
-        !components.securitySchemes[name]
-      ) {
-        throw new Error(
-          `Security definition "${name}" is not included in #/components/securitySchemes.`,
+      const publish = channel.publish;
+      if (publish) {
+        newChannels[key].publish = this.beautifyOperation(publish);
+      }
+
+      const subscribe = channel.subscribe;
+
+      if (subscribe) {
+        newChannels[key].subscribe = this.beautifyOperation(subscribe);
+      }
+
+      if (channel.parameters) {
+        newChannels[key].parameters = this.beautifyParameters(
+          channel.parameters,
         );
       }
 
-      let securityComponent = components.securitySchemes[name];
-      securityComponent.description = this.renderMd(
-        securityComponent.description as string,
-      );
-      securityRequirements.push(securityComponent);
-    });
-
-    return securityRequirements;
+      newChannels[key] = channel;
+    }
+    return newChannels;
   }
 
-  private renderMd(md?: string) {
-    return renderMarkdown(md);
+  private beautifyParameters(params: Parameters): Parameters {
+    const newParams: Parameters = {};
+    Object.entries(params).map(([key, prop]) => {
+      if (prop.description) {
+        prop.description = renderMd(prop.description as string);
+      }
+
+      newParams[key] = prop;
+    });
+    return newParams;
   }
 }
 

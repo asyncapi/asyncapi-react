@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   ErrorWrapper,
   ErrorHeader,
@@ -6,38 +6,58 @@ import {
   ErrorCode,
   ErrorPre,
 } from './styled';
+import { ErrorObject } from 'ajv';
+import { ParserError } from '../../types';
+
+type ValidationError = ParserError['validationError'];
 
 interface Props {
-  error?: Error | Error[];
+  error: ParserError;
 }
 
-class ErrorComponent extends Component<Props> {
-  private renderErrors(error: Error | Error[]): React.ReactNode {
-    if (Array.isArray(error)) {
-      return error.map((singleError: Error, index: number) => (
-        <ErrorCode key={index}>
-          {(singleError && singleError.message) || singleError}
-        </ErrorCode>
-      ));
-    }
+export const ErrorComponent: FunctionComponent<Props> = ({ error }) => {
+  const [visible, setVisible] = useState(true);
 
-    return <ErrorCode>{(error && error.message) || error}</ErrorCode>;
+  if (!error) {
+    return null;
   }
 
-  render() {
-    const { error } = this.props;
+  const { message, validationError } = error;
 
-    if (!error) return null;
-
-    return (
-      <ErrorWrapper>
-        <ErrorHeader>There are errors in your document:</ErrorHeader>
+  return (
+    <ErrorWrapper>
+      <button onClick={() => setVisible(!visible)}>STYLE ME</button>
+      <ErrorHeader>Error: {message}</ErrorHeader>
+      {!!validationError && visible && (
         <ErrorContent>
-          <ErrorPre>{this.renderErrors(error)}</ErrorPre>
+          <ErrorPre>{renderErrors(validationError)}</ErrorPre>
         </ErrorContent>
-      </ErrorWrapper>
-    );
+      )}
+    </ErrorWrapper>
+  );
+};
+
+function renderErrors(error: ValidationError): React.ReactNode {
+  if (!error) {
+    return null;
   }
+
+  return error
+    .map((singleError: ErrorObject, index: number) => {
+      const formattedError = formatErrors(singleError);
+
+      if (!formattedError) {
+        return null;
+      }
+      return <ErrorCode key={index}>{formattedError}</ErrorCode>;
+    })
+    .filter(Boolean);
 }
 
-export default ErrorComponent;
+export const formatErrors = (singleError: ErrorObject): string => {
+  const { message, dataPath, params, keyword } = singleError;
+
+  const info = Object.values(params)[0];
+
+  return `${dataPath} ${message}${keyword === 'type' ? '' : `: ${info}`}`;
+};

@@ -1,5 +1,23 @@
 import { styled } from '../../theme';
 
+// just so that it looks nice while I develop
+
+export const StyledChannels = styled.div`
+  ${props => props.theme.messages}
+`;
+
+export const StyledChannel = styled.div`
+  ${props => props.theme.schema}
+`;
+
+export const ChannelsHeader = styled.header`
+  ${props => props.theme.schemasHeader}
+`;
+
+export const ChannelHeader = styled.header`
+  ${props => props.theme.schemaHeader}
+`;
+
 export const Topics = styled.div`
   ${props => props.theme.topics}
 `;
@@ -22,13 +40,13 @@ export const TopicHeaderBadge = styled.div`
 
 export const TopicMessage = styled.section`
   ${props => props.theme.topicMessage}
-`
+`;
 
 export const TopicHeaderMessage = styled.header`
   ${props => props.theme.topicHeaderMessage}
 `;
 
-export const Parameters = styled.div`
+export const StyledParameters = styled.div`
   ${props => props.theme.parameters}
 `;
 
@@ -36,7 +54,7 @@ export const ParametersHeader = styled.header`
   ${props => props.theme.parametersHeader}
 `;
 
-export const Parameter = styled.div`
+export const StyledParameter = styled.div`
   ${props => props.theme.parameter}
 `;
 

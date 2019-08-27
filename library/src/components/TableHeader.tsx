@@ -1,12 +1,13 @@
 import * as React from 'react';
 
+import { TableColumnName } from '../types';
+
 import { TableAccessor } from './TableRow';
 
-export type TableColumnName = string;
-export type TableColumn = {
+export interface TableColumn {
   name: string;
   accessor: TableAccessor;
-};
+}
 
 import {
   TableHeaderWrapper,
@@ -32,7 +33,11 @@ export class TableHeader extends React.Component<Props> {
     if (nested) {
       return (
         <TableHeaderWrapperNested>
-          {title && <TableHeaderTitleNested><td colSpan={columns.length}>{title}</td></TableHeaderTitleNested>}
+          {title && (
+            <TableHeaderTitleNested>
+              <td colSpan={columns.length}>{title}</td>
+            </TableHeaderTitleNested>
+          )}
           <TableHeaderColumnsWrapperNested>
             {columns &&
               columns.map((column, index) => (
@@ -42,12 +47,16 @@ export class TableHeader extends React.Component<Props> {
               ))}
           </TableHeaderColumnsWrapperNested>
         </TableHeaderWrapperNested>
-      )
+      );
     }
 
     return (
       <TableHeaderWrapper>
-        {title && <TableHeaderTitle><td colSpan={columns.length}>{title}</td></TableHeaderTitle>}
+        {title && (
+          <TableHeaderTitle>
+            <td colSpan={columns.length}>{title}</td>
+          </TableHeaderTitle>
+        )}
         <TableHeaderColumnsWrapper>
           {columns &&
             columns.map((column, index) => (
@@ -57,6 +66,6 @@ export class TableHeader extends React.Component<Props> {
             ))}
         </TableHeaderColumnsWrapper>
       </TableHeaderWrapper>
-    )
+    );
   }
 }

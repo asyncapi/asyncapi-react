@@ -15,18 +15,14 @@
     "bootstrap": "lerna bootstrap",
     "changelog": "lerna-changelog",
     "clean": "lerna clean",
-    "start": "lerna exec --parallel -- npm run start",
-    "test": "lerna exec -- npm run test",
-    "test:library": "cd library && npm test",
-    "test:playground": "cd playground && npm test"
+    "start": "lerna exec --parallel -- npm run start"
   },
   "devDependencies": {
     "husky": "^1.1.2",
     "lerna": "^3.4.3",
     "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.0.4",
-    "prettier": "^1.14.3",
-    "tslint": "^5.11.0"
+    "prettier": "^1.14.3"
   },
   "husky": {
     "hooks": {

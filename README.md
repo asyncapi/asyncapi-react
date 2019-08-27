@@ -1,4 +1,5 @@
 # AsyncAPI React Component
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
@@ -17,8 +18,8 @@ You can also run the Playground application locally by following [this](./docs/d
 
 Run this command to install the component:
 
-``` sh
-$ npm install --save @kyma-project/asyncapi-react
+```sh
+npm install --save @kyma-project/asyncapi-react
 ```
 
 Check out this simple sandbox application that uses the asyncapi-react component:
@@ -29,22 +30,22 @@ Check out this simple sandbox application that uses the asyncapi-react component
 
 The list of props for the AsyncApi React component includes:
 
-  - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
+- **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
-    The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
-  - **theme?: Partial<ThemeInterface\>**
+- **theme?: Partial<ThemeInterface\>**
 
-    The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/configuration/theme-modification.md) document.
+  The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/configuration/theme-modification.md) document.
 
-    > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/configuration/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
+  > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/configuration/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
 
-  - **config?: Partial<ConfigInterface\>**
+- **config?: Partial<ConfigInterface\>**
 
-    The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
-    This property is concatenated with the [default configuration](./library/src/config/default.ts).
+  The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
+  This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
-    > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
+  > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
 ## Development
 
@@ -77,6 +78,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
 <!-- prettier-ignore -->
 | [<img src="https://avatars2.githubusercontent.com/u/20404945?v=4" width="100px;" alt="Maciej Urbańczyk"/><br /><sub><b>Maciej Urbańczyk</b></sub>](https://github.com/magicmatatjahu)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Code") [📖](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Documentation") [🤔](#ideas-magicmatatjahu "Ideas, Planning, & Feedback") [🚧](#maintenance-magicmatatjahu "Maintenance") | [<img src="https://avatars0.githubusercontent.com/u/40655785?v=4" width="100px;" alt="Karolina Zydek"/><br /><sub><b>Karolina Zydek</b></sub>](https://github.com/kazydek)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=kazydek "Documentation") [👀](#review-kazydek "Reviewed Pull Requests") [🚧](#maintenance-kazydek "Maintenance") | [<img src="https://avatars3.githubusercontent.com/u/20790348?v=4" width="100px;" alt="Agata"/><br /><sub><b>Agata</b></sub>](https://github.com/akucharska)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=akucharska "Code") [🚧](#maintenance-akucharska "Maintenance") | [<img src="https://avatars1.githubusercontent.com/u/6995927?v=4" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub>](http://resume.github.io/?derberg)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=derberg "Documentation") [💡](#example-derberg "Examples") [🤔](#ideas-derberg "Ideas, Planning, & Feedback") |
 | :---: | :---: | :---: | :---: |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

@@ -12,9 +12,9 @@
     "@kyma-project/asyncapi-react": "0.2.0",
     "codemirror": "^5.41.0",
     "re-resizable": "^4.10.0",
-    "react": "^16.6.3",
+    "react": "^16.8.6",
     "react-codemirror2": "^5.1.0",
-    "react-dom": "^16.6.3",
+    "react-dom": "^16.8.6",
     "styled-components": "^4.0.3"
   },
   "devDependencies": {
