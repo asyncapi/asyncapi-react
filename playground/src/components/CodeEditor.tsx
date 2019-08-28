@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { UnControlled as CodeMirror, IInstance as CodeMirrorInstance } from 'react-codemirror2'
+import * as codemirror from 'codemirror';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 
 import { CodeEditorWrapper } from './styled';
 
@@ -9,54 +10,59 @@ import 'codemirror/theme/material.css';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/javascript/javascript';
 
-
 interface Props {
-  code: string,
-  externalResource?: string,
-  mode?: string,
+  code: string;
+  externalResource?: string;
+  mode?: string;
   parentCallback(value: string): void;
 }
 
 interface State {
-  code: string,
-}  
+  code: string;
+}
 
 class CodeEditorComponent extends Component<Props, State> {
+  state = {
+    code: this.props.code,
+  };
   componentDidUpdate(nextProps: Props, nextState: State) {
     const { externalResource } = this.props;
     if (nextProps.externalResource !== externalResource) {
-      this.setState({ code: externalResource! })
+      this.setState({ code: externalResource! });
     }
   }
 
-  state = {
-    code: this.props.code
-  }
-
-  private onChangeValue = (editor: CodeMirrorInstance, data: any, value: string) => {
-    this.props.parentCallback(value);
-  }
-
   render() {
-    const { props: { mode = "application/json" }, state: { code } } = this;
+    const {
+      props: { mode = 'application/json' },
+      state: { code },
+    } = this;
 
     return (
       <CodeEditorWrapper>
         <CodeMirror
-            value={code}
-            options={{
-              mode: mode,
-              lineNumbers: true,
-              lineWrapping: true,
-              theme: 'material',
-              tabSize: 2,
-              indentWithTabs: false,
-            }}
-            onChange={this.onChangeValue}
+          value={code}
+          options={{
+            mode,
+            lineNumbers: true,
+            lineWrapping: true,
+            theme: 'material',
+            tabSize: 2,
+            indentWithTabs: false,
+          }}
+          onChange={this.onChangeValue}
         />
       </CodeEditorWrapper>
-    )
+    );
   }
+
+  private onChangeValue = (
+    editor: codemirror.Editor,
+    data: codemirror.EditorChange,
+    value: string,
+  ): void => {
+    this.props.parentCallback(value);
+  };
 }
 
 export default CodeEditorComponent;

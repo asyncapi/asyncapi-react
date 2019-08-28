@@ -144,7 +144,11 @@ export const RefreshIcon = styled.div`
   }
 `;
 
-export const TabsContent = styled.div`
+interface TabsContentProps {
+  margin?: string;
+}
+
+export const TabsContent = styled.div<TabsContentProps>`
   margin: ${props => (props.margin ? props.margin : '20px')};
   font-size: 14px;
   color: #515559;
@@ -153,7 +157,11 @@ export const TabsContent = styled.div`
 
 export const TabWrapper = styled.li``;
 
-export const TabLink = styled.div`
+interface TabLinkProps {
+  active?: boolean;
+}
+
+export const TabLink = styled.div<TabLinkProps>`
   display: flex;
   align-items: center;
   margin: 0 15px;
