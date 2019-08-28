@@ -1,6 +1,4 @@
 import {
-  parse as AsyncAPIParse,
-  parseFromUrl as AsyncAPIParseFromUrl,
   ParserErrorUnsupportedVersion,
   ParserErrorNoJS,
 } from 'asyncapi-parser';
@@ -12,25 +10,38 @@ import {
   AsyncApiProps,
 } from '../types';
 
-type ParserOptions = AsyncApiProps['parserOptions'];
-
 import { UNSUPPORTED_SCHEMA_VERSION } from '../constants';
 
-class Parser {
+type ParserOptions = AsyncApiProps['parserOptions'];
+
+type ParseDocument = (
+  content: string | any,
+  parserOptions?: ParserOptions,
+) => Promise<AsyncAPI>;
+
+type ParseDocumentFromURL = (
+  url: string,
+  requestOptions?: RequestInit,
+  parserOptions?: ParserOptions,
+) => Promise<AsyncAPI>;
+
+export default class Parser {
+  private parseDocument: ParseDocument;
+  private parseDocumentFromURL: ParseDocumentFromURL;
+
+  constructor(parse: ParseDocument, parseURL: ParseDocumentFromURL) {
+    this.parseDocument = parse;
+    this.parseDocumentFromURL = parseURL;
+  }
+
   async parse(
     content: string | any,
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const { _json }: { _json: AsyncAPI } = await AsyncAPIParse(
-        content,
-        parserOptions,
-      );
+      const data: AsyncAPI = await this.parseDocument(content, parserOptions);
+      return { data };
 
-      if (!this.isCorrectSchemaVersion(_json.asyncapi)) {
-        return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };
-      }
-      return { data: _json as AsyncAPI };
     } catch (err) {
       return this.handleError(err);
     }
@@ -41,19 +52,11 @@ class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncAPI = await AsyncAPIParseFromUrl(
+      const data: AsyncAPI = await this.parseDocumentFromURL(
         arg.url,
         arg.requestOptions,
         parserOptions,
       );
-
-      if (!this.isCorrectSchemaVersion(data.asyncapi)) {
-        return {
-          data: null,
-          error: { message: UNSUPPORTED_SCHEMA_VERSION },
-        };
-      }
-
       return { data };
     } catch (err) {
       return this.handleError(err);
@@ -68,10 +71,7 @@ class Parser {
       return { data: null, error: { message: err.message } };
     }
 
-    if (
-      err.parsedJSON &&
-      !this.isCorrectSchemaVersion(err.parsedJSON.asyncapi)
-    ) {
+    if (err.parsedJSON && err.parsedJSON.asyncapi.startsWith('1')) {
       return {
         data: null,
         error: { message: UNSUPPORTED_SCHEMA_VERSION },
@@ -83,9 +83,4 @@ class Parser {
       error: { message: err.message, validationError: err.errors },
     };
   };
-
-  isCorrectSchemaVersion = (version: string): boolean =>
-    !version.startsWith('1');
 }
-
-export const parser = new Parser();

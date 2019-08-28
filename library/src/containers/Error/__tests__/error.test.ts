@@ -1,4 +1,4 @@
-import { formatErrors } from './Error';
+import { formatErrors } from '../Error';
 import { ErrorObject } from 'ajv';
 
 // first argument, expected result
