@@ -6,7 +6,7 @@ import {
 } from 'asyncapi-parser';
 
 import {
-  AsyncApi,
+  AsyncAPI,
   ParserReturn,
   FetchingSchemaInterface,
   AsyncApiProps,
@@ -22,7 +22,7 @@ class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const { _json }: { _json: AsyncApi } = await AsyncAPIParse(
+      const { _json }: { _json: AsyncAPI } = await AsyncAPIParse(
         content,
         parserOptions,
       );
@@ -30,7 +30,7 @@ class Parser {
       if (!this.isCorrectSchemaVersion(_json.asyncapi)) {
         return { data: null, error: { message: UNSUPPORTED_SCHEMA_VERSION } };
       }
-      return { data: _json as AsyncApi };
+      return { data: _json as AsyncAPI };
     } catch (err) {
       return this.handleError(err);
     }
@@ -41,7 +41,7 @@ class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncApi = await AsyncAPIParseFromUrl(
+      const data: AsyncAPI = await AsyncAPIParseFromUrl(
         arg.url,
         arg.requestOptions,
         parserOptions,

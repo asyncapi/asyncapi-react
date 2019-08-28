@@ -10,20 +10,22 @@ import {
 import { TabProps } from './Tab';
 
 interface Props {
-  additionalHeaderContent?: React.ReactNode,
-  defaultActiveTabIndex?: number,
+  additionalHeaderContent?: React.ReactNode;
+  defaultActiveTabIndex?: number;
 }
 
 interface State {
-  activeTabIndex: number,
-}  
+  activeTabIndex: number;
+}
 
 class Tabs extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      activeTabIndex: this.props.defaultActiveTabIndex ? this.props.defaultActiveTabIndex : 0,
-    }
+      activeTabIndex: this.props.defaultActiveTabIndex
+        ? this.props.defaultActiveTabIndex
+        : 0,
+    };
   }
 
   handleTabClick = (tabIndex: number) => {
@@ -32,9 +34,9 @@ class Tabs extends Component<Props, State> {
     });
   };
 
-  renderHeader = (children: React.ReactElement<TabProps>[]) => {
-    return React.Children.map(children, (child, index) => {
-      const c = child as React.ReactElement<TabProps>
+  renderHeader = (children: Array<React.ReactElement<TabProps>>) =>
+    React.Children.map(children, (child, index) => {
+      const c = child as React.ReactElement<TabProps>;
       return React.cloneElement(c, {
         title: c.props.title,
         parentCallback: this.handleTabClick,
@@ -42,10 +44,8 @@ class Tabs extends Component<Props, State> {
         isActive: index === this.state.activeTabIndex,
       });
     });
-  };
 
-
-  renderActiveTab = (children: React.ReactElement<TabProps>[]) => {
+  renderActiveTab = (children: Array<React.ReactElement<TabProps>>) => {
     if (children[this.state.activeTabIndex]) {
       return children[this.state.activeTabIndex].props.children;
     }
@@ -55,14 +55,16 @@ class Tabs extends Component<Props, State> {
   render() {
     const { additionalHeaderContent } = this.props;
     const children = []
-      .concat(...this.props.children as any)
+      .concat(...(this.props.children as any))
       .filter(child => child !== null && child !== undefined);
 
     return (
       <TabsWrapper>
         <TabsHeader>
           {this.renderHeader(children)}
-          <TabsAdditionalHeaderContent>{additionalHeaderContent}</TabsAdditionalHeaderContent>
+          <TabsAdditionalHeaderContent>
+            {additionalHeaderContent}
+          </TabsAdditionalHeaderContent>
         </TabsHeader>
         <TabsContent>{this.renderActiveTab(children)}</TabsContent>
       </TabsWrapper>
