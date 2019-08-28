@@ -26,12 +26,12 @@ type ParseDocumentFromURL = (
 ) => Promise<AsyncAPI>;
 
 export default class Parser {
-  private parseDocument: ParseDocument;
-  private parseDocumentFromURL: ParseDocumentFromURL;
+  private parseSchema: ParseDocument;
+  private parseSchemaFromURL: ParseDocumentFromURL;
 
   constructor(parse: ParseDocument, parseURL: ParseDocumentFromURL) {
-    this.parseDocument = parse;
-    this.parseDocumentFromURL = parseURL;
+    this.parseSchema = parse;
+    this.parseSchemaFromURL = parseURL;
   }
 
   async parse(
@@ -39,9 +39,8 @@ export default class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncAPI = await this.parseDocument(content, parserOptions);
+      const data: AsyncAPI = await this.parseSchema(content, parserOptions);
       return { data };
-
     } catch (err) {
       return this.handleError(err);
     }
@@ -52,7 +51,7 @@ export default class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncAPI = await this.parseDocumentFromURL(
+      const data: AsyncAPI = await this.parseSchemaFromURL(
         arg.url,
         arg.requestOptions,
         parserOptions,
