@@ -40,9 +40,6 @@
       "**/*.{ts,tsx,js,jsx,json,html,css,yaml}": [
         "prettier --write",
         "git add"
-      ],
-      "**/*.md": [
-        "markdownlint"
       ]
     },
     "ignore": [
