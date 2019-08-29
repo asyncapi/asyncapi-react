@@ -1,37 +1,19 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
+
 import { Operation } from './Operation';
 import { ChannelItem, isRawMessage } from '../../types';
 import { Parameters as ParametersComponent } from './Parameters';
-import {
-  H3,
-  H4,
-  PublishBadge,
-  SubscribeBadge,
-  HeaderParagraph,
-  DeprecatedBadge,
-} from '../../components';
 
-import {
-  ONE_OF_FOLLOWING_MESSAGES,
-  DEPRECATED_BADGE,
-  PUBLISH,
-  SUBSCRIBE,
-  MESSAGE,
-  MESSAGES,
-} from '../../constants';
-import {
-  Topic as TopicWrapper,
-  TopicHeader,
-  TopicHeaderBadge,
-  TopicHeaderMessage,
-} from './styled';
+import { Badge, BadgeType } from '../../components';
+import { bemClasses } from '../../helpers';
+import { ONE_OF_FOLLOWING_MESSAGES, MESSAGE, MESSAGES } from '../../constants';
 
 interface Props {
   name: string;
   channel: ChannelItem;
 }
 
-export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
+export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
   const oneOfPublish =
     channel.publish &&
     channel.publish.message &&
@@ -45,28 +27,38 @@ export const Channel: FunctionComponent<Props> = ({ name, channel }) => {
   const oneOf = Boolean(oneOfPublish || oneOfSubscribe);
 
   return (
-    <TopicWrapper>
-      <TopicHeader>
-        <H3>
-          <TopicHeaderBadge>
-            {channel.deprecated && (
-              <DeprecatedBadge>{DEPRECATED_BADGE}</DeprecatedBadge>
-            )}
-            {channel.publish && <PublishBadge>{PUBLISH}</PublishBadge>}
-            {channel.subscribe && <SubscribeBadge>{SUBSCRIBE}</SubscribeBadge>}
-          </TopicHeaderBadge>
-          {name}
-        </H3>
-      </TopicHeader>
-      <ParametersComponent params={channel.parameters} />
-      <TopicHeaderMessage>
-        <H4>{oneOf ? MESSAGES : MESSAGE}</H4>
-        {oneOf && (
-          <HeaderParagraph>{ONE_OF_FOLLOWING_MESSAGES}</HeaderParagraph>
-        )}
-      </TopicHeaderMessage>
-      <Operation operation={channel.subscribe} />
-      <Operation operation={channel.publish} />
-    </TopicWrapper>
+    <div className={bemClasses.element(`channel`)}>
+      <header className={bemClasses.element(`channel-header`)}>
+        <h3>
+          <div className={bemClasses.element(`channel-badges`)}>
+            {channel.deprecated && <Badge type={BadgeType.DEPRECATED} />}
+            {channel.publish && <Badge type={BadgeType.PUBLISH} />}
+            {channel.subscribe && <Badge type={BadgeType.SUBSCRIBE} />}
+          </div>
+          <span className={bemClasses.element(`channel-title`)}>{name}</span>
+        </h3>
+      </header>
+      <div className={bemClasses.element(`channel-operations`)}>
+        <ParametersComponent parameters={channel.parameters} />
+      </div>
+      <div className={bemClasses.element(`channel-operations`)}>
+        <div className={bemClasses.element(`channel-header`)}>
+          <h4>{oneOf ? MESSAGES : MESSAGE}</h4>
+          {oneOf && (
+            <p className={bemClasses.element(`channel-header-paragraph`)}>
+              {ONE_OF_FOLLOWING_MESSAGES}
+            </p>
+          )}
+        </div>
+        <ul className={bemClasses.element(`channel-operations`)}>
+          <li className={bemClasses.element(`channel-operations-subscribe`)}>
+            <Operation operation={channel.subscribe} />
+          </li>
+          <li className={bemClasses.element(`channel-operations-publish`)}>
+            <Operation operation={channel.publish} />
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };

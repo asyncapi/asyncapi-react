@@ -1,30 +1,34 @@
-import React, { FunctionComponent } from 'react';
-
-import { Schema } from '../../types';
+import React from 'react';
 
 import { SchemaComponent } from './Schema';
 
-import { H2 } from '../../components';
-import { Schemas, SchemasHeader } from './styled';
+import { bemClasses } from '../../helpers';
 import { SCHEMAS_TEXT } from '../../constants';
+import { Schema } from '../../types';
 
 interface Props {
   schemas?: Record<string, Schema>;
 }
 
-export const SchemasComponent: FunctionComponent<Props> = ({ schemas }) => {
+export const SchemasComponent: React.FunctionComponent<Props> = ({
+  schemas,
+}) => {
   if (!schemas) {
     return null;
   }
 
   return (
-    <Schemas>
-      <SchemasHeader>
-        <H2>{SCHEMAS_TEXT}</H2>
-      </SchemasHeader>
-      {Object.entries(schemas).map(([key, schema]) => (
-        <SchemaComponent key={key} name={key} schema={schema} />
-      ))}
-    </Schemas>
+    <div className={bemClasses.element(`schemas`)}>
+      <header className={bemClasses.element(`schemas-header`)}>
+        <h2>{SCHEMAS_TEXT}</h2>
+      </header>
+      <ul className={bemClasses.element(`schemas-list`)}>
+        {Object.entries(schemas).map(([key, schema]) => (
+          <li key={key} className={bemClasses.element(`schemas-list-item`)}>
+            <SchemaComponent name={key} schema={schema} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

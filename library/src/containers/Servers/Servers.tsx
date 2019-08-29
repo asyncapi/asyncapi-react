@@ -1,16 +1,10 @@
 import React from 'react';
 
-import { Servers } from '../../types';
-
 import { ServerComponent } from './Server';
 
-import {
-  H2,
-  TableWrapper,
-  TableHeader,
-  TableBodyWrapper,
-} from '../../components';
-import { Servers as StyledServers, ServersHeader } from './styled';
+import { bemClasses } from '../../helpers';
+import { Servers } from '../../types';
+import { Table } from '../../components';
 import { CONNECTION_DETAILS, SERVER_COLUMN_NAMES } from '../../constants';
 
 interface Props {
@@ -25,25 +19,26 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <StyledServers>
-      <ServersHeader>
-        <H2>{CONNECTION_DETAILS}</H2>
-      </ServersHeader>
-      <TableWrapper>
-        <TableHeader columns={SERVER_COLUMN_NAMES} />
-        <TableBodyWrapper>
-          {Object.entries(servers).map(([stage, server]) => {
-            const { url, protocol } = server;
-            return (
-              <ServerComponent
-                key={`${url}${protocol}${stage}`}
-                server={server}
-                stage={stage}
-              />
-            );
-          })}
-        </TableBodyWrapper>
-      </TableWrapper>
-    </StyledServers>
+    <div className={bemClasses.element(`servers`)}>
+      <header className={bemClasses.element(`servers-header`)}>
+        <h2>{CONNECTION_DETAILS}</h2>
+      </header>
+      <Table
+        header={{
+          columns: SERVER_COLUMN_NAMES,
+        }}
+      >
+        {Object.entries(servers).map(([stage, server]) => {
+          const { url, protocol } = server;
+          return (
+            <ServerComponent
+              key={`${url}${protocol}${stage}`}
+              server={server}
+              stage={stage}
+            />
+          );
+        })}
+      </Table>
+    </div>
   );
 };

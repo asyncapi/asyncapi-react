@@ -15,11 +15,6 @@ export const CodeBody = styled.pre`
   ${props => props.theme.codeContent}
 `;
 
-// Markdown Component
-export const Markdown = styled.div`
-  ${props => props.theme.markdown}
-`;
-
 // Headers Components
 export const Header = styled.header`
   ${props => props.theme.header}
@@ -139,40 +134,3 @@ export const TableCellNested = styled.td`
 `;
 
 export const TableFooterWrapper = styled.tfoot``;
-
-export const TreeSpace = styled.span`
-  ${props => props.theme.treeSpace}
-`;
-
-export const TreeLeaf = styled.span`
-  ${props => props.theme.treeLeaf}
-`;
-
-// Tags and Badges components
-export const Badge = styled.span`
-  ${props => props.theme.badge}
-`;
-
-export const PublishBadge = styled(Badge)`
-  ${props => props.theme.publishBadge}
-`;
-
-export const SubscribeBadge = styled(Badge)`
-  ${props => props.theme.subscribeBadge}
-`;
-
-export const DeprecatedBadge = styled(Badge)`
-  ${props => props.theme.deprecatedBadge}
-`;
-
-export const RequiredBadge = styled(Badge)`
-  ${props => props.theme.requiredBadge}
-`;
-
-export const GeneratedBadge = styled(Badge)`
-  ${props => props.theme.generatedBadge}
-`;
-
-export const Tag = styled.span`
-  ${props => props.theme.tag}
-`;

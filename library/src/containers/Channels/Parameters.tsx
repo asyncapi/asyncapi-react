@@ -1,26 +1,32 @@
-import React, { FunctionComponent } from 'react';
-import { Parameters as ParamsType } from '../../types';
+import React from 'react';
+
 import { Parameter } from './Parameter';
-import { H3 } from '../../components/';
-import { StyledParameters, ParameterHeader } from './styled';
+
+import { bemClasses } from '../../helpers';
+import { Parameters as ParametersType } from '../../types';
+import { CHANNEL_PARAMETERS } from '../../constants';
 
 interface Props {
-  params?: ParamsType;
+  parameters?: ParametersType;
 }
 
-export const Parameters: FunctionComponent<Props> = ({ params }) => {
-  if (!params) {
+export const Parameters: React.FunctionComponent<Props> = ({ parameters }) => {
+  if (!parameters) {
     return null;
   }
 
   return (
-    <StyledParameters>
-      <ParameterHeader>
-        <H3>Channel Parameters</H3>
-      </ParameterHeader>
-      {Object.entries(params).map(([name, param]) => (
-        <Parameter key={name} param={param} name={name} />
-      ))}
-    </StyledParameters>
+    <div className={bemClasses.element(`parameters`)}>
+      <header className={bemClasses.element(`parameters-header`)}>
+        <h3>{CHANNEL_PARAMETERS}</h3>
+      </header>
+      <ul className={bemClasses.element(`parameters-list`)}>
+        {Object.entries(parameters).map(([name, param]) => (
+          <li key={name} className={bemClasses.element(`parameters-list-item`)}>
+            <Parameter param={param} name={name} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
+import { bemClasses } from '../../helpers';
 import { ServerVariable, TypeWithKey } from '../../types';
-
 import {
   Markdown,
+  Table,
+  TableRowProps,
   TableAccessor,
-  TableHeader,
   TableRow,
-  TableCellWithNested,
-  TableWrapperNested,
-  TableBodyWrapperNested,
 } from '../../components';
-import { ServerVariablesEnumList, ServerVariablesEnumElement } from './styled';
 import {
   URL_VARIABLES_TEXT,
   NONE_TEXT,
@@ -27,15 +24,18 @@ const serverVariablesAccessors: TableAccessor[] = [
     el.content.default ? el.content.default : <em>{NONE_TEXT}</em>,
   (el: ServerVariableWithKey) =>
     el.content.enum ? (
-      <ServerVariablesEnumList>
+      <ul className={bemClasses.element(`server-variables-enum-list`)}>
         {el.content.enum.map(value => (
-          <ServerVariablesEnumElement key={value}>
+          <li
+            className={bemClasses.element(`server-variables-enum-list-item`)}
+            key={value}
+          >
             {value}
-          </ServerVariablesEnumElement>
+          </li>
         ))}
-      </ServerVariablesEnumList>
+      </ul>
     ) : (
-      { ANY_TEXT }
+      <em>{ANY_TEXT}</em>
     ),
   (el: ServerVariableWithKey) =>
     el.content.description && <Markdown>{el.content.description}</Markdown>,
@@ -46,33 +46,37 @@ interface Props {
   openAccordion: boolean;
 }
 
-export class ServerVariablesComponent extends Component<Props> {
-  render() {
-    const { variables, openAccordion } = this.props;
+export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
+  variables,
+  openAccordion,
+}) => {
+  const rows = variables.map(
+    variable =>
+      ({
+        key: variable.key,
+        accessors: serverVariablesAccessors,
+        element: variable,
+      } as TableRowProps),
+  );
 
-    const vars = (
-      <TableCellWithNested colSpan={4}>
-        <div>
-          <TableWrapperNested>
-            <TableHeader
-              title={URL_VARIABLES_TEXT}
-              columns={SERVER_COLUMN_NAMES}
-              nested={true}
-            />
-            <TableBodyWrapperNested>
-              {variables.map(variable => (
-                <TableRow
-                  key={variable.key}
-                  accessors={serverVariablesAccessors}
-                  element={variable}
-                  nested={true}
-                />
-              ))}
-            </TableBodyWrapperNested>
-          </TableWrapperNested>
-        </div>
-      </TableCellWithNested>
-    );
-    return <TableRow openAccordion={openAccordion} element={vars} />;
-  }
-}
+  const className = `${bemClasses.element(`table-cell`)} ${bemClasses.modifier(
+    `nested`,
+    `table-cell`,
+  )}`;
+  const element = (
+    <td className={className} colSpan={4}>
+      <div className={bemClasses.element(`server-variables`)}>
+        <Table
+          header={{
+            title: URL_VARIABLES_TEXT,
+            columns: SERVER_COLUMN_NAMES,
+          }}
+          rows={rows}
+          nested={true}
+        />
+      </div>
+    </td>
+  );
+
+  return <TableRow openAccordion={openAccordion} element={element} />;
+};

@@ -42,8 +42,6 @@ const defaultAsyncApi: AsyncAPI = {
   channels: {},
 };
 
-// todo: add ability to forward options to parser and dereferencer
-
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     validatedSchema: defaultAsyncApi,
@@ -73,6 +71,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...(!!config && config.show),
       },
     };
+    bemClasses.setPrefix(concatenatedConfig.prefixClassName);
 
     const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
       ? (theme as ThemeInterface)
@@ -147,26 +146,19 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     parserOptions?: AsyncApiProps['parserOptions'],
   ) {
     if (isFetchingSchemaInterface(schema)) {
-      /* tslint:disable: no-shadowed-variable 
-      there's clearly a return statement in this code block so I don't why this triggers */
-
-      const { data, error } = await parser.parseFromUrl(schema, parserOptions);
-
-      const beautifiedSchema = this.beautifySchema(data);
-
+      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
       this.setState({
-        validatedSchema: beautifiedSchema,
-        error,
+        validatedSchema: this.beautifySchema(parsedFromUrl.data),
+        error: parsedFromUrl.error,
       });
       return;
-      /* tslint:enable: no-shadowed-variable */
     }
 
-    const { data, error } = await parser.parse(schema, parserOptions);
-
-    const beautifiedSchema = this.beautifySchema(data);
-
-    this.setState({ validatedSchema: beautifiedSchema, error });
+    const parsed = await parser.parse(schema, parserOptions);
+    this.setState({
+      validatedSchema: this.beautifySchema(parsed.data),
+      error: parsed.error,
+    });
   }
 
   private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {

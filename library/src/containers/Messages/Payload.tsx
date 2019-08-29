@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { H4 } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
+
+import { bemClasses } from '../../helpers';
 import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
 import {
   ONE_OF_PAYLOADS_TEXT,
@@ -11,8 +12,6 @@ import {
   PAYLOAD_EXAMPLE_TEXT,
 } from '../../constants';
 
-import { MessagePayload, MessagePayloadHeader } from './styled';
-
 type PayloadProps = Required<Pick<RawMessage, 'payload'>>;
 
 export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
@@ -21,7 +20,7 @@ export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
   if (isOneOfPayload(payload)) {
     return (
       <>
-        <H4>{ONE_OF_PAYLOADS_TEXT}</H4>
+        <h4>{ONE_OF_PAYLOADS_TEXT}</h4>
         {payload.oneOf.map((elem, index: number) => (
           <PayloadComponent payload={elem} key={index} />
         ))}
@@ -32,7 +31,7 @@ export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
   if (isAnyOfPayload(payload)) {
     return (
       <>
-        <H4>{ANY_OF_PAYLOADS_TEXT}</H4>
+        <h4>{ANY_OF_PAYLOADS_TEXT}</h4>
         {payload.anyOf.map((elem, index: number) => (
           <PayloadComponent payload={elem} key={index} />
         ))}
@@ -41,16 +40,18 @@ export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
   }
 
   return (
-    <MessagePayload>
-      <MessagePayloadHeader>
-        <H4>{PAYLOAD_TEXT}</H4>
-      </MessagePayloadHeader>
-      <SchemaComponent
-        name={MESSAGE_PAYLOAD_TEXT}
-        schema={payload}
-        exampleTitle={PAYLOAD_EXAMPLE_TEXT}
-        hideTitle={true}
-      />
-    </MessagePayload>
+    <div className={bemClasses.element(`payload`)}>
+      <header className={bemClasses.element(`payload-header`)}>
+        <h4>{PAYLOAD_TEXT}</h4>
+      </header>
+      <div className={bemClasses.element(`payload-schema`)}>
+        <SchemaComponent
+          name={MESSAGE_PAYLOAD_TEXT}
+          schema={payload}
+          exampleTitle={PAYLOAD_EXAMPLE_TEXT}
+          hideTitle={true}
+        />
+      </div>
+    </div>
   );
 };

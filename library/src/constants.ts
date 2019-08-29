@@ -16,17 +16,22 @@ export const NAME = 'Name';
 export const URL = 'Url';
 export const EMAIL = 'Email';
 export const LICENSE = 'License';
+export const LOCATION = 'Location';
 export const TYPE = 'Type';
 export const SPECIFICATION = 'Specification';
-export const DEPRECATED_BADGE = 'Deprecated';
+
+export const DEPRECATED = 'Deprecated';
 export const PUBLISH = 'Publish';
 export const SUBSCRIBE = 'Subscribe';
+export const REQUIRED = 'Required';
+export const GENERATED = 'Generated';
 
 export const MESSAGES = 'Messages';
 export const SCHEMAS_TEXT = 'Schemas';
 export const MESSAGE = 'Message';
 
 export const CHANNELS = 'Channels';
+export const CHANNEL_PARAMETERS = 'Channel Parameters';
 export const HEADERS = 'Headers';
 export const MESSAGE_HEADERS = 'Message Headers';
 export const HEADERS_EXAMPLE = 'Example of headers';
@@ -34,9 +39,12 @@ export const TAGS_TEXT = 'Tags';
 export const PAYLOAD_TEXT = 'Payload';
 export const MESSAGE_PAYLOAD_TEXT = 'Message Payload';
 export const PAYLOAD_EXAMPLE_TEXT = 'Example of payload';
+export const SCHEMA_EXAMPLE_TEXT = 'Example';
 
 export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';
+export const ERROR = 'Error';
+export const EXPAND_ERROR_BUTTON = 'Expand';
 
 export const SECURITY_TEXT = 'Security';
 

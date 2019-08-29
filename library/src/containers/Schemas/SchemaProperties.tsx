@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import merge from 'merge';
-import { TypeWithKey, Schema } from '../../types';
 
+import { TypeWithKey, Schema } from '../../types';
 import {
   Markdown,
   TableAccessor,
@@ -16,7 +16,7 @@ interface SchemaElement {
   treeSpace: number;
 }
 
-const schemaPropertiesAccesors: TableAccessor[] = [
+const schemaPropertiesAccessors: TableAccessor[] = [
   (el: SchemaElement) => (
     <>
       {(() => {
@@ -45,14 +45,13 @@ const schemaPropertiesAccesors: TableAccessor[] = [
   ),
   (el: SchemaElement) => el.schema.content.format,
   (el: SchemaElement) => el.schema.content.default,
-
   (el: SchemaElement) =>
     el.schema.content.description && (
       <Markdown>{el.schema.content.description}</Markdown>
     ),
 ];
 
-export const handleNotProperty = (prop: Schema): Schema => {
+const handleNotProperty = (prop: Schema): Schema => {
   if (prop.not) {
     const arrayOfChangedObjects = Object.entries(prop).map(([key, val]) => {
       if (key === 'not') {
@@ -66,86 +65,84 @@ export const handleNotProperty = (prop: Schema): Schema => {
   return prop;
 };
 
+const renderItems = (schema: Schema, treeSpace: number): React.ReactNode => {
+  const properties =
+    schema.items && schema.items.properties ? schema.items.properties : null;
+
+  if (!properties) {
+    return null;
+  }
+
+  return renderProperties(schema.items as Schema, treeSpace);
+};
+
+const renderProperties = (
+  schema: Schema,
+  treeSpace: number,
+): React.ReactNode => {
+  const properties = schema.properties;
+
+  if (!properties) {
+    return null;
+  }
+
+  return Object.entries(properties).map(([key, prop]) => (
+    <SchemaPropertiesComponent
+      key={key}
+      name={key}
+      properties={prop}
+      treeSpace={treeSpace}
+    />
+  ));
+};
+
+const renderOf = (treeSpace: number, schemas?: Schema[]): React.ReactNode => {
+  if (!schemas) {
+    return null;
+  }
+
+  return schemas.map((schema, index) => {
+    const id = index.toString();
+
+    return (
+      <SchemaPropertiesComponent
+        key={index}
+        name={id}
+        properties={schema}
+        treeSpace={treeSpace}
+      />
+    );
+  });
+};
+
 interface Props {
   name: string;
   properties: Schema;
   treeSpace: number;
 }
 
-export class SchemaPropertiesComponent extends Component<Props> {
-  render() {
-    const { name, properties, treeSpace } = this.props;
+export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
+  name,
+  properties,
+  treeSpace,
+}) => {
+  const alteredProperties = handleNotProperty(properties);
+  const space = treeSpace + 1;
+  const element: SchemaElement = {
+    schema: {
+      key: name,
+      content: alteredProperties,
+    },
+    treeSpace,
+  };
 
-    const alteredProperties = handleNotProperty(properties);
-
-    const space = treeSpace + 1;
-    const element: SchemaElement = {
-      schema: {
-        key: name,
-        content: alteredProperties,
-      },
-      treeSpace,
-    };
-
-    return (
-      <>
-        <TableRow accessors={schemaPropertiesAccesors} element={element} />
-        {this.renderOf('anyOf', space, alteredProperties.anyOf)}
-        {this.renderOf('oneOf', space, alteredProperties.oneOf)}
-        {this.renderProperties(alteredProperties, space)}
-        {this.renderItems(alteredProperties, space)}
-      </>
-    );
-  }
-
-  private renderOf(
-    type: string,
-    treeSpace: number,
-    schemas?: Schema[],
-  ): React.ReactNode {
-    if (!schemas) {
-      return null;
-    }
-
-    return schemas.map((schema, index) => {
-      const id = index.toString();
-
-      return (
-        <SchemaPropertiesComponent
-          key={index}
-          name={id}
-          properties={schema}
-          treeSpace={treeSpace}
-        />
-      );
-    });
-  }
-
-  private renderProperties(schema: Schema, treeSpace: number): React.ReactNode {
-    const properties = schema.properties;
-
-    if (!properties) {
-      return null;
-    }
-
-    return Object.entries(properties).map(([key, prop]) => (
-      <SchemaPropertiesComponent
-        key={key}
-        name={key}
-        properties={prop}
-        treeSpace={treeSpace}
-      />
-    ));
-  }
-
-  private renderItems(schema: Schema, treeSpace: number): React.ReactNode {
-    const properties =
-      schema.items && schema.items.properties ? schema.items.properties : null;
-
-    if (!properties) {
-      return null;
-    }
-
-    return this.renderProperties(schema.items as Schema, treeSpace);
-  }
-}
+  return (
+    <>
+      <TableRow accessors={schemaPropertiesAccessors} element={element} />
+      {renderOf(space, alteredProperties.anyOf)}
+      {renderOf(space, alteredProperties.oneOf)}
+      {renderProperties(alteredProperties, space)}
+      {renderItems(alteredProperties, space)}
+    </>
+  );
+};

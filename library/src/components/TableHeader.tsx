@@ -1,71 +1,49 @@
-import * as React from 'react';
-
-import { TableColumnName } from '../types';
+import React from 'react';
 
 import { TableAccessor } from './TableRow';
+
+import { bemClasses } from '../helpers';
+import { TableColumnName } from '../types';
 
 export interface TableColumn {
   name: string;
   accessor: TableAccessor;
 }
 
-import {
-  TableHeaderWrapper,
-  TableHeaderTitle,
-  TableHeaderColumnsWrapper,
-  TableHeaderColumnName,
-  TableHeaderWrapperNested,
-  TableHeaderTitleNested,
-  TableHeaderColumnsWrapperNested,
-  TableHeaderColumnNameNested,
-} from './styled';
-
-interface Props {
+export interface TableHeaderProps {
   title?: string;
   columns: TableColumnName[];
   nested?: boolean;
 }
 
-export class TableHeader extends React.Component<Props> {
-  render() {
-    const { title, columns, nested } = this.props;
-
-    if (nested) {
-      return (
-        <TableHeaderWrapperNested>
-          {title && (
-            <TableHeaderTitleNested>
-              <td colSpan={columns.length}>{title}</td>
-            </TableHeaderTitleNested>
-          )}
-          <TableHeaderColumnsWrapperNested>
-            {columns &&
-              columns.map((column, index) => (
-                <TableHeaderColumnNameNested key={index}>
-                  {column}
-                </TableHeaderColumnNameNested>
-              ))}
-          </TableHeaderColumnsWrapperNested>
-        </TableHeaderWrapperNested>
-      );
-    }
-
-    return (
-      <TableHeaderWrapper>
-        {title && (
-          <TableHeaderTitle>
-            <td colSpan={columns.length}>{title}</td>
-          </TableHeaderTitle>
-        )}
-        <TableHeaderColumnsWrapper>
-          {columns &&
-            columns.map((column, index) => (
-              <TableHeaderColumnName key={index}>
-                {column}
-              </TableHeaderColumnName>
-            ))}
-        </TableHeaderColumnsWrapper>
-      </TableHeaderWrapper>
-    );
+export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
+  title = '',
+  columns = [],
+  nested = false,
+}) => {
+  if (!columns) {
+    return null;
   }
-}
+
+  const createClassName = (className: string): string =>
+    nested
+      ? bemClasses.modifier(`nested`, className)
+      : bemClasses.element(className);
+
+  return (
+    <thead className={createClassName(`table-header`)}>
+      {title && (
+        <tr className={createClassName(`table-header-title`)}>
+          <td colSpan={columns.length}>{title}</td>
+        </tr>
+      )}
+      <tr className={createClassName(`table-header-columns`)}>
+        {columns.map((column, index) => (
+          <th key={index} className={createClassName(`table-header-column`)}>
+            {column}
+          </th>
+        ))}
+      </tr>
+    </thead>
+  );
+};

@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-
-import { Server } from '../../types';
+import React, { useState } from 'react';
 
 import { ServerVariablesComponent } from './ServerVariables';
 
+import { bemClasses } from '../../helpers';
+import { Server } from '../../types';
 import { Markdown, TableAccessor, TableRow } from '../../components';
-import { ServerExpandIcon } from './styled';
 
 interface ServerWithVariables {
   server: Server;
@@ -18,10 +17,14 @@ interface ServerWithVariables {
 const serverAccessors: TableAccessor[] = [
   (el: ServerWithVariables) => (
     <>
-      {el.serverVariables && typeof el.toggleVariables === 'function' && (
-        <ServerExpandIcon
+      {el.serverVariables && el.toggleVariables instanceof Function && (
+        <span
+          className={`${bemClasses.element(`server-expand-icon`)}${
+            el.openAccordion
+              ? ` ${bemClasses.modifier(`open`, `server-expand-icon`)}`
+              : ''
+          }`}
           onClick={el.toggleVariables}
-          open={el.openAccordion}
         />
       )}
       {el.server.url}
@@ -38,48 +41,34 @@ interface Props {
   stage: string;
 }
 
-interface State {
-  openAccordion: boolean;
-}
+export const ServerComponent: React.FunctionComponent<Props> = ({
+  server,
+  stage,
+}) => {
+  const [openAccordion, setOpenAccordion] = useState<boolean>(false);
 
-export class ServerComponent extends Component<Props, State> {
-  state = {
-    openAccordion: false,
+  const vars = server.variables
+    ? Object.entries(server.variables).map(([key, variable]) => ({
+        key,
+        content: variable,
+      }))
+    : [];
+
+  const serverWithVariables: ServerWithVariables = {
+    stage,
+    server,
+    serverVariables: vars.length > 0,
+    openAccordion,
+    toggleVariables: (_: any) => setOpenAccordion(state => !state),
   };
 
-  render() {
-    const {
-      props: { server, stage },
-      state: { openAccordion },
-    } = this;
-
-    const vars = server.variables
-      ? Object.entries(server.variables).map(([key, variable]) => ({
-          key,
-          content: variable,
-        }))
-      : [];
-
-    const serverWithVariables: ServerWithVariables = {
-      stage,
-      server,
-      serverVariables: vars.length > 0,
-      openAccordion,
-      toggleVariables: this.toggle,
-    };
-
-    return (
-      <>
-        <TableRow element={serverWithVariables} accessors={serverAccessors} />
-        <ServerVariablesComponent
-          variables={vars}
-          openAccordion={openAccordion}
-        />
-      </>
-    );
-  }
-
-  private toggle = () => {
-    this.setState(prevState => ({ openAccordion: !prevState.openAccordion }));
-  };
-}
+  return (
+    <>
+      <TableRow element={serverWithVariables} accessors={serverAccessors} />
+      <ServerVariablesComponent
+        variables={vars}
+        openAccordion={openAccordion}
+      />
+    </>
+  );
+};

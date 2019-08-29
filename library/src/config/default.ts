@@ -11,4 +11,5 @@ export const defaultConfig: ConfigInterface = {
   },
   showErrors: false,
   disableDefaultTheme: false,
+  prefixClassName: 'asyncapi',
 };

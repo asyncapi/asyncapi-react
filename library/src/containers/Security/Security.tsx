@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import {
   SecurityScheme,
@@ -7,67 +7,10 @@ import {
   ExcludeNullable,
 } from '../../types';
 import { renderMd } from '../../helpers/renderMarkdown';
-import {
-  H2,
-  Markdown,
-  TableAccessor,
-  TableWrapper,
-  TableHeader,
-  TableBodyWrapper,
-  TableRow,
-} from '../../components';
-import { Security as SecurityWrapper, SecurityHeader } from './styled';
+import { Table, Markdown, TableAccessor, TableRow } from '../../components';
 import { SECURITY_TEXT, SECURITY_COLUMNS_NAMES } from '../../constants';
 
-interface SecuritySchemeWithStages extends SecurityScheme {
-  stages: string[];
-}
-
-const securityAccesors: TableAccessor[] = [
-  (el: SecuritySchemeWithStages) => el.type,
-  (el: SecuritySchemeWithStages) => el.stages && el.stages.join(', '),
-  (el: SecuritySchemeWithStages) => el.in,
-  (el: SecuritySchemeWithStages) => el.name,
-  (el: SecuritySchemeWithStages) => el.scheme,
-  (el: SecuritySchemeWithStages) => el.bearerFormat,
-  (el: SecuritySchemeWithStages) =>
-    el.description && <Markdown>{renderMd(el.description)}</Markdown>,
-];
-
-interface Props {
-  securitySchemes: ExcludeNullable<ComponentsType['securitySchemes']>;
-  servers: ServersType;
-}
-
-export class SecurityComponent extends Component<Props> {
-  render() {
-    const alteredSecuritySchemes = addStageToSecurity(this.props);
-
-    return (
-      <SecurityWrapper>
-        <SecurityHeader>
-          <H2>{SECURITY_TEXT}</H2>
-        </SecurityHeader>
-        <TableWrapper>
-          <TableHeader columns={SECURITY_COLUMNS_NAMES} />
-          <TableBodyWrapper>
-            {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
-              !sec ? null : (
-                <TableRow
-                  key={stage}
-                  accessors={securityAccesors}
-                  element={sec}
-                />
-              ),
-            )}
-          </TableBodyWrapper>
-        </TableWrapper>
-      </SecurityWrapper>
-    );
-  }
-}
-
-export const addStageToSecurity: (
+const addStageToSecurity: (
   arg: Props,
 ) => Record<string, SecuritySchemeWithStages> = ({
   servers,
@@ -92,4 +35,47 @@ export const addStageToSecurity: (
   });
 
   return copiedSecSchemes;
+};
+
+interface SecuritySchemeWithStages extends SecurityScheme {
+  stages: string[];
+}
+
+const securityAccesors: TableAccessor[] = [
+  (el: SecuritySchemeWithStages) => el.type,
+  (el: SecuritySchemeWithStages) => el.stages && el.stages.join(', '),
+  (el: SecuritySchemeWithStages) => el.in,
+  (el: SecuritySchemeWithStages) => el.name,
+  (el: SecuritySchemeWithStages) => el.scheme,
+  (el: SecuritySchemeWithStages) => el.bearerFormat,
+  (el: SecuritySchemeWithStages) =>
+    el.description && <Markdown>{renderMd(el.description)}</Markdown>,
+];
+
+interface Props {
+  securitySchemes: ExcludeNullable<ComponentsType['securitySchemes']>;
+  servers: ServersType;
+}
+
+export const SecurityComponent: React.FunctionComponent<Props> = props => {
+  const alteredSecuritySchemes = addStageToSecurity(props);
+
+  return (
+    <div>
+      <header>
+        <h2>{SECURITY_TEXT}</h2>
+      </header>
+      <Table
+        header={{
+          columns: SECURITY_COLUMNS_NAMES,
+        }}
+      >
+        {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
+          !sec ? null : (
+            <TableRow key={stage} accessors={securityAccesors} element={sec} />
+          ),
+        )}
+      </Table>
+    </div>
+  );
 };
