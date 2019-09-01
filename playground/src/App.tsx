@@ -102,11 +102,7 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi
-              schema={schema}
-              theme={parsedTheme}
-              config={parsedConfig}
-            />
+            <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </ContentWrapper>
       </PlaygroundWrapper>
