@@ -116,6 +116,7 @@ export interface Server {
   description?: DescriptionHTML;
   variables?: ServerVariables;
   security?: SecurityRequirement[];
+  bindings?: ServerBindings[];
 }
 
 export interface ServerVariables {
@@ -127,6 +128,14 @@ export interface ServerVariable {
   default?: string;
   description?: DescriptionHTML;
   examples?: string[];
+}
+
+export interface SecurityRequirement {
+  [key: string]: string[];
+}
+
+export interface ServerBindings {
+  [key: string]: string[];
 }
 
 export interface Topic {
@@ -240,10 +249,6 @@ export interface XML {
   prefix?: string;
   attribute?: boolean;
   wrapped?: boolean;
-}
-
-export interface SecurityRequirement {
-  [key: string]: string[];
 }
 
 export interface Schema {
