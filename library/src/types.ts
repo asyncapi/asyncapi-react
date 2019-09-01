@@ -1,6 +1,5 @@
 import { ErrorObject } from 'ajv';
 import { ConfigInterface } from './config';
-import { ThemeInterface } from './theme';
 
 // Helpers
 export type PrimitiveType = number | boolean | string | null;
@@ -311,7 +310,6 @@ export interface ParserOptions {
 
 export interface AsyncApiProps {
   schema: PropsSchema;
-  theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
   parserOptions?: Partial<ParserOptions>;
 }

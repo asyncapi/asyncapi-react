@@ -665,6 +665,12 @@
 }
 
 .asyncapi__error {
+  background-color: #ffffff;
+  border-left: 6px solid #f44336;
+  border-radius: 4px;
+  color: #32363a;
+  font-family: '72';
+  font-size: 13px;
 }
 
 .asyncapi__error-button {
@@ -674,13 +680,34 @@
 }
 
 .asyncapi__error-header {
+  padding: 12px 20px;
+  box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
+  font-weight: bold;
+  position: relative;
 }
 
 .asyncapi__error-content {
+  padding: 12px 20px;
+  font-weight: normal;
+}
+.asyncapi__error-content:after {
+  content: '\uE0B1';
+  color: #f44336;
+  position: absolute;
+  display: block;
+  top: 12px;
+  right: 14px;
+  box-sizing: border-box;
+  font-family: SAP-Icons;
 }
 
 .asyncapi__error-content-pre {
+  margin: 0;
 }
 
 .asyncapi__error-content-code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  display: block;
 }

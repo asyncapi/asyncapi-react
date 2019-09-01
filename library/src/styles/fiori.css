@@ -1,3 +1,44 @@
+.asyncapi {
+  font-family: '72';
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  background: #f3f4f5;
+}
+
+.asyncapi__components {
+}
+
+.asyncapi__anchor {
+}
+
+.asyncapi__markdown {
+}
+.asyncapi__markdown > div > ul {
+  margin: 0;
+  padding-left: 16px;
+}
+.asyncapi__markdown > div > ul {
+  margin: 0;
+  padding-left: 16px;
+}
+.asyncapi__markdown > div > p {
+  margin: 0;
+}
+.asyncapi__markdown > div > p > code {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 14px;
+  border-radius: 3px;
+  padding: 0px 5px;
+  text-align: center;
+  background: #e2eaf2;
+  color: #18873d;
+}
+
 .asyncapi__table {
   margin: 0 0 20px 0;
   width: 100%;
@@ -86,6 +127,14 @@
   border-bottom: none;
 }
 
+.asyncapi__table-row-accordion {
+  display: none;
+}
+
+.asyncapi__table-row-accordion--open {
+  display: table-row;
+}
+
 .asyncapi__table-cell {
   padding: 12px 20px;
   vertical-align: top;
@@ -100,4 +149,565 @@
   vertical-align: top;
   font-size: 13px;
   border-bottom: solid 1px #d4d4d4;
+}
+
+.asyncapi__tree-space {
+  display: inline-block;
+  width: 20px;
+}
+
+.asyncapi__tree-leaf {
+  display: inline-block;
+  position: relative;
+  width: 25px;
+}
+
+.asyncapi__tree-leaf:before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  width: 13px;
+  height: 10px;
+  border-left: #aaa 2px solid;
+  border-bottom: #aaa 2px solid;
+  border-radius: 0 0 0 70%;
+}
+
+.asyncapi__badge {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 18px;
+  border-radius: 3px;
+  padding: 0px 5px;
+  text-align: center;
+  text-transform: uppercase;
+  background: #e2eaf2;
+}
+
+.asyncapi__badge--publish {
+  color: #18873d;
+}
+
+.asyncapi__badge--subscribe {
+  color: #107ee3;
+}
+
+.asyncapi__badge--deprecated {
+  margin-left: 10px;
+  color: #f59702;
+}
+
+.asyncapi__badge--required {
+  font-size: 9px;
+  line-height: 14px;
+  color: #f59702;
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.asyncapi__badge--generated {
+  font-size: 9px;
+  line-height: 14px;
+  color: #18873d;
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.asyncapi__tag {
+  display: inline-block;
+  mix-blend-mode: multiply;
+  border-radius: 4px;
+  background-color: #e2eaf2;
+  font-size: 11px;
+  font-family: 72;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #73787d;
+  padding: 3px 8px;
+  margin: 0 5px 0 0;
+}
+
+.asyncapi__code {
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  background: #fff;
+}
+.asyncapi__code-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid #e4e4e4;
+}
+.asyncapi__code-header > h4 {
+  margin: 0;
+  color: #32363a;
+  font-size: 13px;
+}
+.asyncapi__code-pre {
+  margin: 0;
+  font-size: 13px;
+}
+.asyncapi__code-body {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  margin: 0;
+  background: #fff;
+  font-size: 12px;
+}
+
+.asyncapi__info {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.asyncapi__info-header {
+}
+.asyncapi__info-header > h1 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.asyncapi__info-header-description {
+}
+
+.asyncapi__info-header-terms-of-service {
+}
+.asyncapi__info-header-terms-of-service > h2 {
+}
+
+.asyncapi__contact {
+  margin-top: 24px;
+}
+
+.asyncapi__contact-header {
+}
+
+.asyncapi__contact-list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.asyncapi__contact-list-item {
+}
+
+.asyncapi__license {
+  margin-top: 24px;
+}
+
+.asyncapi__license-header {
+}
+
+.asyncapi__license-list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.asyncapi__license-list-item {
+}
+
+.asyncapi__messages {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.asyncapi__messages-header {
+}
+.asyncapi__messages-header > h2 {
+  margin: 0 0 24px 0;
+}
+
+.asyncapi__messages-oneOf-list {
+}
+
+.asyncapi__messages-oneOf-list-item {
+}
+
+.asyncapi__message {
+  margin-bottom: 24px;
+  padding-left: 18px;
+  position: relative;
+}
+.asyncapi__message:before {
+  content: '';
+  position: absolute;
+  border: 3px solid #0071d4;
+  border-radius: 100%;
+  left: 0;
+  top: 6px;
+}
+.asyncapi__message:last-child {
+  margin-bottom: 0;
+}
+
+.asyncapi__message-header {
+}
+.asyncapi__message-header > h3 {
+  color: #0b74de;
+  font-size: 15px;
+}
+
+.asyncapi__message-header-title {
+}
+
+.asyncapi__message-header-deprecated-badge {
+}
+
+.asyncapi__message-header-summary {
+}
+
+.asyncapi__message-header-description {
+}
+
+.asyncapi__message-headers {
+  margin: 20px 0;
+}
+
+.asyncapi__message-headers-header {
+  color: #32363a;
+}
+.asyncapi__message-headers-header > h4 {
+  margin: 0 0 8px 0;
+}
+
+.asyncapi__message-headers-schema {
+}
+
+.asyncapi__message-payload-oneOf {
+}
+
+.asyncapi__message-payload-oneOf-header {
+}
+
+.asyncapi__message-payload-oneOf-list {
+}
+
+.asyncapi__message-payload-oneOf-list-item {
+}
+
+.asyncapi__message-payload-anyOf {
+}
+
+.asyncapi__message-payload-anyOf-header {
+}
+
+.asyncapi__message-payload-anyOf-list {
+}
+
+.asyncapi__message-payload-anyOf-list-item {
+}
+
+.asyncapi__message-payload {
+  margin: 20px 0;
+}
+
+.asyncapi__message-payload-header {
+  color: #32363a;
+}
+.asyncapi__message-payload-header > h4 {
+  margin: 0 0 8px 0;
+}
+
+.asyncapi__message-payload-schema {
+  margin: 20px 0;
+}
+
+.asyncapi__message-tags {
+  margin: 20px 0;
+}
+
+.asyncapi__message-tags-header {
+  color: #32363a;
+}
+.asyncapi__message-tags-header > h4 {
+  margin: 0 0 8px 0;
+}
+
+.asyncapi__message-tags-list {
+}
+
+.asyncapi__message-tags-list-item {
+}
+
+.asyncapi__schemas {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.asyncapi__schemas-header {
+}
+.asyncapi__schemas-header > h2 {
+  margin: 0 0 24px 0;
+}
+
+.asyncapi__schemas-list {
+}
+
+.asyncapi__schemas-list-item {
+}
+
+.asyncapi__schema {
+  margin-bottom: 24px;
+  padding-left: 18px;
+  position: relative;
+}
+.asyncapi__schema:before {
+  content: '';
+  position: absolute;
+  border: 3px solid #0071d4;
+  border-radius: 100%;
+  left: 0;
+  top: 6px;
+}
+.asyncapi__schema:last-child {
+  margin-bottom: 0;
+}
+
+.asyncapi__schema-header {
+}
+.asyncapi__schema-header > h4 {
+  color: #0b74de;
+  font-size: 15px;
+  margin: 0 0 8px 0;
+}
+
+.asyncapi__schema-table {
+}
+
+.asyncapi__schema-example {
+}
+
+.asyncapi__schema-example-header {
+}
+
+.asyncapi__schema-example-header-title {
+}
+
+.asyncapi__schema-example-header-generated-badge {
+}
+
+.asyncapi__security {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.asyncapi__security-header {
+}
+.asyncapi__security-header > h2 {
+  margin: 0 0 24px 0;
+}
+
+.asyncapi__security-table {
+  margin: 0;
+}
+
+.asyncapi__servers {
+  margin-top: 24px;
+}
+
+.asyncapi__servers-header {
+}
+
+.asyncapi__servers-table {
+  margin-bottom: 0;
+}
+
+.asyncapi__server-variables {
+}
+
+.asyncapi__server-expand-icon {
+  display: inline-block;
+  position: relative;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  transform-origin: 50% 50%;
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+.asyncapi__server-expand-icon:before {
+  content: '\uE066';
+  font-family: SAP-icons;
+  position: absolute;
+  color: #0071d4;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.asyncapi__server-expand-icon--open {
+}
+
+.asyncapi__server-variables-enum-list {
+  margin: 0 0 0 15px;
+  padding: 0;
+}
+
+.asyncapi__server-variables-enum-list-item {
+}
+
+.asyncapi__channels {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.asyncapi__channels-header {
+}
+.asyncapi__channels-header > h2 {
+  margin: 0 0 24px 0;
+}
+
+.asyncapi__channels-list {
+}
+
+.asyncapi__channels-list-item {
+}
+
+.asyncapi__channel {
+  margin-bottom: 24px;
+  padding-left: 18px;
+  position: relative;
+}
+.asyncapi__channel:before {
+  content: '';
+  position: absolute;
+  border: 3px solid #0071d4;
+  border-radius: 100%;
+  left: 0;
+  top: 6px;
+}
+.asyncapi__channel:last-child {
+  margin-bottom: 0;
+}
+
+.asyncapi__channel-header {
+}
+.asyncapi__channel-header > h3 {
+  color: #0b74de;
+  font-size: 15px;
+}
+
+.asyncapi__channel-header-badges {
+}
+
+.asyncapi__channel-header-badges-deprecated-badge {
+}
+
+.asyncapi__channel-header-badges-publish-badge {
+}
+
+.asyncapi__channel-header-badges-subscribe-badge {
+}
+
+.asyncapi__channel-header-title {
+}
+
+.asyncapi__channel-operations {
+}
+
+.asyncapi__channel-operations-header {
+}
+
+.asyncapi__channel-operations-header-oneOf {
+}
+
+.asyncapi__channel-operations-list {
+}
+
+.asyncapi__channel-operations-list-item {
+}
+
+.asyncapi__channel-operations-subscribe {
+}
+
+.asyncapi__channel-operations-publish {
+}
+
+.asyncapi__channel-operation {
+}
+
+.asyncapi__channel-parameters {
+}
+
+.asyncapi__channel-parameters-header {
+}
+
+.asyncapi__channel-parameters-list {
+}
+
+.asyncapi__channel-parameters-list-item {
+}
+
+.asyncapi__channel-parameter {
+}
+
+.asyncapi__channel-parameter-header {
+}
+
+.asyncapi__channel-parameter-header-description {
+}
+
+.asyncapi__channel-parameter-schema {
+}
+
+.asyncapi__error {
+  background-color: #ffffff;
+  border-left: 6px solid #f44336;
+  border-radius: 4px;
+  color: #32363a;
+  font-family: '72';
+  font-size: 13px;
+}
+
+.asyncapi__error-button {
+}
+
+.asyncapi__error-button--expanded {
+}
+
+.asyncapi__error-header {
+  padding: 12px 20px;
+  box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
+  font-weight: bold;
+  position: relative;
+}
+
+.asyncapi__error-content {
+  padding: 12px 20px;
+  font-weight: normal;
+}
+.asyncapi__error-content:after {
+  content: '\uE0B1';
+  color: #f44336;
+  position: absolute;
+  display: block;
+  top: 12px;
+  right: 14px;
+  box-sizing: border-box;
+  font-family: SAP-Icons;
+}
+
+.asyncapi__error-content-pre {
+  margin: 0;
+}
+
+.asyncapi__error-content-code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  display: block;
 }
