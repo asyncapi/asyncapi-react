@@ -15,7 +15,7 @@ export const Operation: React.FunctionComponent<Props> = ({ operation }) => {
   }
 
   return (
-    <section className={bemClasses.element(`operation`)}>
+    <section className={bemClasses.element(`channel-operation`)}>
       <MessageComponent message={operation.message} />
     </section>
   );

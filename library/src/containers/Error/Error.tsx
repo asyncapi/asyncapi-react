@@ -5,7 +5,9 @@ import { bemClasses } from '../../helpers';
 import { ParserError } from '../../types';
 import { ERROR, EXPAND_ERROR_BUTTON } from '../../constants';
 
-const renderErrors = (error: ValidationError): React.ReactNode => {
+const renderErrors = (
+  error: ParserError['validationError'],
+): React.ReactNode => {
   if (!error) {
     return null;
   }
@@ -18,7 +20,7 @@ const renderErrors = (error: ValidationError): React.ReactNode => {
         return null;
       }
       return (
-        <code className={bemClasses.element(`error-code`)} key={index}>
+        <code className={bemClasses.element(`error-content-code`)} key={index}>
           {formattedError}
         </code>
       );
@@ -33,8 +35,6 @@ export const formatErrors = (singleError: ErrorObject): string => {
   return `${dataPath} ${message}${keyword === 'type' ? '' : `: ${info}`}`;
 };
 
-type ValidationError = ParserError['validationError'];
-
 interface Props {
   error: ParserError;
 }
@@ -45,16 +45,22 @@ export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
   if (!error) {
     return null;
   }
+
   const { message, validationError } = error;
-  const buttonClassName = `${bemClasses.element(
-    `error-button`,
-  )} ${bemClasses.modifier(`expanded`, `error-button`)}`;
+  const buttonClassName = `error-button`;
+  const expandedButtonClassName = visible
+    ? bemClasses.modifier(`expanded`, buttonClassName)
+    : ``;
+  const buttonClassNames = bemClasses.concatenate([
+    buttonClassName,
+    expandedButtonClassName,
+  ]);
 
   return (
     <div className={bemClasses.element(`error`)}>
       <button
         onClick={() => setVisible(state => !state)}
-        className={buttonClassName}
+        className={buttonClassNames}
       >
         {EXPAND_ERROR_BUTTON}
       </button>
@@ -65,7 +71,7 @@ export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
       </header>
       {!!validationError && visible && (
         <div className={bemClasses.element(`error-content`)}>
-          <pre className={bemClasses.element(`error-pre`)}>
+          <pre className={bemClasses.element(`error-content-pre`)}>
             {renderErrors(validationError)}
           </pre>
         </div>

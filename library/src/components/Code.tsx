@@ -11,7 +11,7 @@ export const CodeComponent: React.FunctionComponent<Props> = ({
   title,
   code,
 }) => (
-  <div className={bemClasses.element(`code-wrapper`)}>
+  <div className={bemClasses.element(`code`)}>
     {title && (
       <header className={bemClasses.element(`code-header`)}>
         <h4>{title}</h4>

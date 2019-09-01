@@ -16,13 +16,16 @@ export const Parameters: React.FunctionComponent<Props> = ({ parameters }) => {
   }
 
   return (
-    <div className={bemClasses.element(`parameters`)}>
-      <header className={bemClasses.element(`parameters-header`)}>
+    <div className={bemClasses.element(`channel-parameters`)}>
+      <header className={bemClasses.element(`channel-parameters-header`)}>
         <h3>{CHANNEL_PARAMETERS}</h3>
       </header>
-      <ul className={bemClasses.element(`parameters-list`)}>
+      <ul className={bemClasses.element(`channel-parameters-list`)}>
         {Object.entries(parameters).map(([name, param]) => (
-          <li key={name} className={bemClasses.element(`parameters-list-item`)}>
+          <li
+            key={name}
+            className={bemClasses.element(`channel-parameters-list-item`)}
+          >
             <Parameter param={param} name={name} />
           </li>
         ))}

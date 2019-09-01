@@ -23,22 +23,24 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
       <header className={bemClasses.element(`servers-header`)}>
         <h2>{CONNECTION_DETAILS}</h2>
       </header>
-      <Table
-        header={{
-          columns: SERVER_COLUMN_NAMES,
-        }}
-      >
-        {Object.entries(servers).map(([stage, server]) => {
-          const { url, protocol } = server;
-          return (
-            <ServerComponent
-              key={`${url}${protocol}${stage}`}
-              server={server}
-              stage={stage}
-            />
-          );
-        })}
-      </Table>
+      <div className={bemClasses.element(`servers-table`)}>
+        <Table
+          header={{
+            columns: SERVER_COLUMN_NAMES,
+          }}
+        >
+          {Object.entries(servers).map(([stage, server]) => {
+            const { url, protocol } = server;
+            return (
+              <ServerComponent
+                key={`${url}${protocol}${stage}`}
+                server={server}
+                stage={stage}
+              />
+            );
+          })}
+        </Table>
+      </div>
     </div>
   );
 };

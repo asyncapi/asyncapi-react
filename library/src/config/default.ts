@@ -9,7 +9,6 @@ export const defaultConfig: ConfigInterface = {
     schemas: true,
     channels: true,
   },
-  showErrors: false,
-  disableDefaultTheme: false,
+  showErrors: true,
   prefixClassName: 'asyncapi',
 };

@@ -47,13 +47,13 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   }
 
   const summary = message.summary && (
-    <div className={bemClasses.element(`message-summary`)}>
+    <div className={bemClasses.element(`message-header-summary`)}>
       <Markdown>{message.summary}</Markdown>
     </div>
   );
 
   const description = message.description && (
-    <div className={bemClasses.element(`message-description`)}>
+    <div className={bemClasses.element(`message-header-description`)}>
       <Markdown>{message.description}</Markdown>
     </div>
   );
@@ -62,9 +62,15 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     <header className={bemClasses.element(`message-header`)}>
       {title ? (
         <h3>
-          <span className={bemClasses.element(`message-title`)}>{title}</span>
+          <span className={bemClasses.element(`message-header-title`)}>
+            {title}
+          </span>
           {message.deprecated && (
-            <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
+            <div
+              className={bemClasses.element(`message-header-deprecated-badge`)}
+            >
+              <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
+            </div>
           )}
         </h3>
       ) : null}
@@ -78,7 +84,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
       <header className={bemClasses.element(`message-headers-header`)}>
         <h4>{HEADERS}</h4>
       </header>
-      <div className={bemClasses.element(`message-schema`)}>
+      <div className={bemClasses.element(`message-headers-schema`)}>
         <SchemaComponent
           name={MESSAGE_HEADERS}
           schema={message.headers}

@@ -30,18 +30,20 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
       <CodeComponent
         code={example}
         title={
-          <>
-            <span className={bemClasses.element(`schema-example-title`)}>
+          <div className={bemClasses.element(`schema-example-header`)}>
+            <span className={bemClasses.element(`schema-example-header-title`)}>
               {title ? title : SCHEMA_EXAMPLE_TEXT}
             </span>
             {!schema.example ? (
               <div
-                className={bemClasses.element(`schema-example-generated-badge`)}
+                className={bemClasses.element(
+                  `schema-example-header-generated-badge`,
+                )}
               >
                 <Badge type={BadgeType.GENERATED} />
               </div>
             ) : null}
-          </>
+          </div>
         }
       />
     </div>

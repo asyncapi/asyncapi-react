@@ -23,17 +23,17 @@ export const Table: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const className = `table`;
+  const tableClassName = nested
+    ? bemClasses.modifier(`nested`, `table`)
+    : bemClasses.element(`table`);
+  const tableBodyClassName = nested
+    ? bemClasses.modifier(`nested`, `table-body`)
+    : bemClasses.element(`table-body`);
+
   return (
-    <table
-      className={
-        nested
-          ? bemClasses.modifier(`nested`, className)
-          : bemClasses.element(className)
-      }
-    >
+    <table className={tableClassName}>
       <TableHeader {...header} nested={header.nested || nested} />
-      <tbody className={bemClasses.element(`table-body`)}>
+      <tbody className={tableBodyClassName}>
         {children
           ? children
           : rows.map((row, index) => (

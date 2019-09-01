@@ -16,16 +16,22 @@ export const Parameter: FunctionComponent<Props> = ({
   param: { description, location, schema },
   name = '',
 }) => (
-  <div className={bemClasses.element(`parameter`)}>
-    <header className={bemClasses.element(`parameter-header`)}>
-      {description && <Markdown>{description}</Markdown>}
+  <div className={bemClasses.element(`channel-parameter`)}>
+    <header className={bemClasses.element(`channel-parameter-header`)}>
+      {description && (
+        <div
+          className={bemClasses.element(`channel-parameter-header-description`)}
+        >
+          <Markdown>{description}</Markdown>
+        </div>
+      )}
       {location && (
         <h4>
           {LOCATION}: {location}
         </h4>
       )}
     </header>
-    <div className={bemClasses.element(`parameter-schema`)}>
+    <div className={bemClasses.element(`channel-parameter-schema`)}>
       <SchemaComponent name={name} schema={schema} hideTitle={true} />
     </div>
   </div>

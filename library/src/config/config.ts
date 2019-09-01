@@ -1,6 +1,5 @@
 export interface ConfigInterface {
   show?: ShowConfig;
-  disableDefaultTheme?: boolean;
   showErrors?: boolean;
   prefixClassName?: string;
 }

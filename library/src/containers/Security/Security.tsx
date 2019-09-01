@@ -7,6 +7,7 @@ import {
   ExcludeNullable,
 } from '../../types';
 import { renderMd } from '../../helpers/renderMarkdown';
+import { bemClasses } from '../../helpers';
 import { Table, Markdown, TableAccessor, TableRow } from '../../components';
 import { SECURITY_TEXT, SECURITY_COLUMNS_NAMES } from '../../constants';
 
@@ -61,21 +62,27 @@ export const SecurityComponent: React.FunctionComponent<Props> = props => {
   const alteredSecuritySchemes = addStageToSecurity(props);
 
   return (
-    <div>
-      <header>
+    <div className={bemClasses.element(`security`)}>
+      <header className={bemClasses.element(`security-header`)}>
         <h2>{SECURITY_TEXT}</h2>
       </header>
-      <Table
-        header={{
-          columns: SECURITY_COLUMNS_NAMES,
-        }}
-      >
-        {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
-          !sec ? null : (
-            <TableRow key={stage} accessors={securityAccesors} element={sec} />
-          ),
-        )}
-      </Table>
+      <div className={bemClasses.element(`security-table`)}>
+        <Table
+          header={{
+            columns: SECURITY_COLUMNS_NAMES,
+          }}
+        >
+          {Object.entries(alteredSecuritySchemes).map(([stage, sec]) =>
+            !sec ? null : (
+              <TableRow
+                key={stage}
+                accessors={securityAccesors}
+                element={sec}
+              />
+            ),
+          )}
+        </Table>
+      </div>
     </div>
   );
 };

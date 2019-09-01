@@ -30,33 +30,63 @@ export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
     <div className={bemClasses.element(`channel`)}>
       <header className={bemClasses.element(`channel-header`)}>
         <h3>
-          <div className={bemClasses.element(`channel-badges`)}>
-            {channel.deprecated && <Badge type={BadgeType.DEPRECATED} />}
-            {channel.publish && <Badge type={BadgeType.PUBLISH} />}
-            {channel.subscribe && <Badge type={BadgeType.SUBSCRIBE} />}
+          <div className={bemClasses.element(`channel-header-badges`)}>
+            {channel.deprecated && (
+              <div
+                className={bemClasses.element(
+                  `channel-header-badges-deprecated-badge`,
+                )}
+              >
+                <Badge type={BadgeType.DEPRECATED} />
+              </div>
+            )}
+            {channel.publish && (
+              <div
+                className={bemClasses.element(
+                  `schema-example-header-publish-badge`,
+                )}
+              >
+                <Badge type={BadgeType.PUBLISH} />
+              </div>
+            )}
+            {channel.publish && (
+              <div
+                className={bemClasses.element(
+                  `schema-example-header-subscribe-badge`,
+                )}
+              >
+                <Badge type={BadgeType.SUBSCRIBE} />
+              </div>
+            )}
           </div>
-          <span className={bemClasses.element(`channel-title`)}>{name}</span>
+          <span className={bemClasses.element(`channel-header-title`)}>
+            {name}
+          </span>
         </h3>
       </header>
+      <ParametersComponent parameters={channel.parameters} />
       <div className={bemClasses.element(`channel-operations`)}>
-        <ParametersComponent parameters={channel.parameters} />
-      </div>
-      <div className={bemClasses.element(`channel-operations`)}>
-        <div className={bemClasses.element(`channel-header`)}>
+        <div className={bemClasses.element(`channel-operations-header`)}>
           <h4>{oneOf ? MESSAGES : MESSAGE}</h4>
           {oneOf && (
-            <p className={bemClasses.element(`channel-header-paragraph`)}>
+            <p
+              className={bemClasses.element(`channel-operations-header-oneOf`)}
+            >
               {ONE_OF_FOLLOWING_MESSAGES}
             </p>
           )}
         </div>
-        <ul className={bemClasses.element(`channel-operations`)}>
-          <li className={bemClasses.element(`channel-operations-subscribe`)}>
-            <Operation operation={channel.subscribe} />
-          </li>
-          <li className={bemClasses.element(`channel-operations-publish`)}>
-            <Operation operation={channel.publish} />
-          </li>
+        <ul className={bemClasses.element(`channel-operations-list`)}>
+          {channel.subscribe && (
+            <li className={bemClasses.element(`channel-operations-subscribe`)}>
+              <Operation operation={channel.subscribe} />
+            </li>
+          )}
+          {channel.publish && (
+            <li className={bemClasses.element(`channel-operations-publish`)}>
+              <Operation operation={channel.publish} />
+            </li>
+          )}
         </ul>
       </div>
     </div>

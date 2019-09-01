@@ -12,6 +12,7 @@ export interface TableRowProps {
   key?: string | number;
   accessors?: TableAccessor[];
   nested?: boolean;
+  accordion?: boolean;
   openAccordion?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
   key = '',
   accessors = [],
   nested = false,
+  accordion = false,
   openAccordion = false,
 }) => {
   const renderRowByAccessors = (
@@ -55,16 +57,20 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
     return value;
   };
 
-  const content = accessors
-    ? renderRowByAccessors(accessors, element, nested)
-    : element;
+  const content =
+    accessors && accessors.length
+      ? renderRowByAccessors(accessors, element, nested)
+      : element;
 
   const className = `table-row`;
   const nestedClassName = nested
     ? bemClasses.modifier(`nested`, className)
     : bemClasses.element(className);
+  const accordionClassName = accordion
+    ? bemClasses.element(`${className}-accordion`)
+    : '';
   const openAccordionClassName = openAccordion
-    ? bemClasses.modifier(`open-accordion`, className)
+    ? bemClasses.modifier(`open`, `${className}-accordion`)
     : '';
 
   return (
@@ -72,6 +78,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
       key={key}
       className={bemClasses.concatenate([
         nestedClassName,
+        accordionClassName,
         openAccordionClassName,
       ])}
     >

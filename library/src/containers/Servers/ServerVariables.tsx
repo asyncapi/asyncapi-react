@@ -78,5 +78,11 @@ export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
     </td>
   );
 
-  return <TableRow openAccordion={openAccordion} element={element} />;
+  return (
+    <TableRow
+      openAccordion={openAccordion}
+      accordion={true}
+      element={element}
+    />
+  );
 };

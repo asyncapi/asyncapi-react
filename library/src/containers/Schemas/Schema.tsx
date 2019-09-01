@@ -50,13 +50,15 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
           <h4>{name}</h4>
         </header>
       )}
-      <Table
-        header={{
-          columns: SCHEMA_COLUMN_NAMES,
-        }}
-      >
-        {renderSchemaProps(name, schema)}
-      </Table>
+      <div className={bemClasses.element(`schema-table`)}>
+        <Table
+          header={{
+            columns: SCHEMA_COLUMN_NAMES,
+          }}
+        >
+          {renderSchemaProps(name, schema)}
+        </Table>
+      </div>
       {/* we need to disable this component if schema has "not" field anywhere in it */}
       {hasNotField ? null : (
         <SchemaExampleComponent title={exampleTitle} schema={schema} />

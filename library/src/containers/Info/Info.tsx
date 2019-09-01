@@ -3,7 +3,7 @@ import React from 'react';
 import { ServersComponent } from '../Servers/Servers';
 import { ContactComponent } from './Contact';
 import { LicenseComponent } from './License';
-import { Href } from '../../components';
+import { Href, Markdown } from '../../components';
 
 import { bemClasses } from '../../helpers';
 import { Info, Servers } from '../../types';
@@ -24,12 +24,12 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
     <header className={bemClasses.element(`info-header`)}>
       <h1>{`${title} ${version}`}</h1>
       {description && (
-        <div className={bemClasses.element(`info-description`)}>
-          {description}
+        <div className={bemClasses.element(`info-header-description`)}>
+          <Markdown>{description}</Markdown>
         </div>
       )}
       {termsOfService && (
-        <div className={bemClasses.element(`info-terms-of-service`)}>
+        <div className={bemClasses.element(`info-header-terms-of-service`)}>
           <h2>{TERMS_OF_SERVICE}</h2>
           <Href href={termsOfService}>{termsOfService}</Href>
         </div>

@@ -1,5 +1,4 @@
-import React, { Component, FunctionComponent } from 'react';
-import { ThemeProvider } from 'styled-components';
+import React, { Component } from 'react';
 
 import {
   AsyncAPI,
@@ -9,7 +8,6 @@ import {
   AsyncApiProps,
   PropsSchema,
 } from '../../types';
-import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { beautifier } from '../../helpers';
 import Parser from '../../helpers/parser';
@@ -24,8 +22,6 @@ import { ErrorComponent } from '../Error/Error';
 
 import { Channels } from '../Channels/Channels';
 
-import { AsyncApiWrapper } from './styled';
-
 const parser = new Parser(parse, parseFromUrl);
 
 interface AsyncAPIState {
@@ -34,10 +30,10 @@ interface AsyncAPIState {
 }
 
 const defaultAsyncApi: AsyncAPI = {
-  asyncapi: '',
+  asyncapi: '2.0.0-rc2',
   info: {
     title: 'AsyncApi example title',
-    version: '2.0.0',
+    version: '1.0.0',
   },
   channels: {},
 };
@@ -61,7 +57,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { theme, config } = this.props;
+    const { config } = this.props;
     const { validatedSchema, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
@@ -73,19 +69,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     };
     bemClasses.setPrefix(concatenatedConfig.prefixClassName);
 
-    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
-      ? (theme as ThemeInterface)
-      : { ...defaultTheme, ...theme };
-
     if (!validatedSchema || !Object.keys(validatedSchema).length) {
       if (!error) {
         return null;
       }
-      return (
-        <Wrapper theme={concatenatedTheme}>
-          {concatenatedConfig.showErrors && <ErrorComponent error={error} />}
-        </Wrapper>
-      );
+      return concatenatedConfig.showErrors && <ErrorComponent error={error} />;
     }
 
     if (!concatenatedConfig.show) {
@@ -93,7 +81,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     return (
-      <Wrapper theme={concatenatedTheme}>
+      <div className={concatenatedConfig.prefixClassName}>
         {concatenatedConfig.showErrors && !!error && (
           <ErrorComponent error={error} />
         )}
@@ -120,24 +108,22 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
           <Channels channels={validatedSchema.channels} />
         )}
         {validatedSchema.components && (
-          <>
+          <div className={bemClasses.element(`components`)}>
             {concatenatedConfig.show.messages &&
-              validatedSchema.components &&
               validatedSchema.components.messages && (
                 <MessagesComponent
                   messages={validatedSchema.components.messages}
                 />
               )}
             {concatenatedConfig.show.schemas &&
-              validatedSchema.components &&
               validatedSchema.components.schemas && (
                 <SchemasComponent
                   schemas={validatedSchema.components.schemas}
                 />
               )}
-          </>
+          </div>
         )}
-      </Wrapper>
+      </div>
     );
   }
 
@@ -168,15 +154,5 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     return beautifier.beautify(schema);
   }
 }
-
-interface WrapperProps {
-  theme: ThemeInterface;
-}
-
-const Wrapper: FunctionComponent<WrapperProps> = ({ children, theme }) => (
-  <ThemeProvider theme={theme}>
-    <AsyncApiWrapper>{children}</AsyncApiWrapper>
-  </ThemeProvider>
-);
 
 export default AsyncApiComponent;
