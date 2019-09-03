@@ -11,7 +11,9 @@ import {
 } from '../../types';
 import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { parser, beautifier } from '../../helpers';
+import { beautifier } from '../../helpers';
+import Parser from '../../helpers/parser';
+import { parse, parseFromUrl } from 'asyncapi-parser';
 
 import { InfoComponent } from '../Info/Info';
 import { SecurityComponent } from '../Security/Security';
@@ -23,6 +25,8 @@ import { ErrorComponent } from '../Error/Error';
 import { Channels } from '../Channels/Channels';
 
 import { AsyncApiWrapper } from './styled';
+
+const parser = new Parser(parse, parseFromUrl);
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
