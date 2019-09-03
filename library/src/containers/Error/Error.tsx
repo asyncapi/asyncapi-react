@@ -3,7 +3,11 @@ import { ErrorObject } from 'ajv';
 
 import { bemClasses } from '../../helpers';
 import { ParserError } from '../../types';
-import { ERROR, EXPAND_ERROR_BUTTON } from '../../constants';
+import {
+  ERROR,
+  EXPAND_ERROR_BUTTON,
+  COLLAPSE_ERROR_BUTTON,
+} from '../../constants';
 
 const renderErrors = (
   error: ParserError['validationError'],
@@ -40,7 +44,7 @@ interface Props {
 }
 
 export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   if (!error) {
     return null;
@@ -52,22 +56,22 @@ export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
     ? bemClasses.modifier(`expanded`, buttonClassName)
     : ``;
   const buttonClassNames = bemClasses.concatenate([
-    buttonClassName,
+    bemClasses.element(buttonClassName),
     expandedButtonClassName,
   ]);
 
   return (
     <div className={bemClasses.element(`error`)}>
-      <button
-        onClick={() => setVisible(state => !state)}
-        className={buttonClassNames}
-      >
-        {EXPAND_ERROR_BUTTON}
-      </button>
       <header className={bemClasses.element(`error-header`)}>
         <h2>
           {ERROR}: {message}
         </h2>
+        <button
+          onClick={() => setVisible(state => !state)}
+          className={buttonClassNames}
+        >
+          {visible ? COLLAPSE_ERROR_BUTTON : EXPAND_ERROR_BUTTON}
+        </button>
       </header>
       {!!validationError && visible && (
         <div className={bemClasses.element(`error-content`)}>

@@ -238,19 +238,24 @@
   border-radius: 5px;
   background: #fff;
 }
+
 .asyncapi__code-header {
   padding: 12px 20px;
   border-bottom: 1px solid #e4e4e4;
 }
+
 .asyncapi__code-header > h4 {
   margin: 0;
   color: #32363a;
   font-size: 13px;
 }
+
 .asyncapi__code-pre {
   margin: 0;
   font-size: 13px;
+  padding: 12px;
 }
+
 .asyncapi__code-body {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -273,42 +278,29 @@
   margin-bottom: 10px;
 }
 
-.asyncapi__info-header-description {
+.asyncapi__info-description {
 }
 
-.asyncapi__info-header-terms-of-service {
+.asyncapi__info-list {
+  margin: 14px 0 20px 0;
+  padding: 0;
+  list-style-type: none;
 }
-.asyncapi__info-header-terms-of-service > h2 {
+.asyncapi__info-list > li {
+  padding: 3px 12px;
+  border-radius: 0.25rem;
+  border: 1px solid #0071d4;
+  margin: 6px 6px 0 0;
+  display: inline-block;
+  color: #0b74de;
+  font-weight: 700;
 }
-
-.asyncapi__contact {
-  margin-top: 24px;
+.asyncapi__info-list > li:hover {
+  background: rgba(11, 116, 222, 0.2);
 }
-
-.asyncapi__contact-header {
-}
-
-.asyncapi__contact-list {
-  margin: 0;
-  padding-left: 16px;
-}
-
-.asyncapi__contact-list-item {
-}
-
-.asyncapi__license {
-  margin-top: 24px;
-}
-
-.asyncapi__license-header {
-}
-
-.asyncapi__license-list {
-  margin: 0;
-  padding-left: 16px;
-}
-
-.asyncapi__license-list-item {
+.asyncapi__info-list > li a {
+  text-decoration: none;
+  color: #0b74de;
 }
 
 .asyncapi__messages {
@@ -322,6 +314,15 @@
 }
 .asyncapi__messages-header > h2 {
   margin: 0 0 24px 0;
+}
+
+.asyncapi__messages-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.asyncapi__messages-item {
 }
 
 .asyncapi__messages-oneOf-list {
@@ -379,6 +380,14 @@
 
 .asyncapi__message-headers-schema {
 }
+.asyncapi__message-headers-schema > .asyncapi__schema {
+  padding: 0;
+}
+.asyncapi__message-headers-schema > .asyncapi__schema:before {
+  content: '';
+  position: relative;
+  border: none;
+}
 
 .asyncapi__message-payload-oneOf {
 }
@@ -418,6 +427,14 @@
 .asyncapi__message-payload-schema {
   margin: 20px 0;
 }
+.asyncapi__message-payload-schema > .asyncapi__schema {
+  padding: 0;
+}
+.asyncapi__message-payload-schema > .asyncapi__schema:before {
+  content: '';
+  position: relative;
+  border: none;
+}
 
 .asyncapi__message-tags {
   margin: 20px 0;
@@ -450,9 +467,16 @@
 }
 
 .asyncapi__schemas-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .asyncapi__schemas-list-item {
+  margin-bottom: 16px;
+}
+.asyncapi__schemas-list-item:last-child {
+  margin-bottom: 0;
 }
 
 .asyncapi__schema {
@@ -493,6 +517,7 @@
 }
 
 .asyncapi__schema-example-header-generated-badge {
+  display: inline-block;
 }
 
 .asyncapi__security {
@@ -514,9 +539,15 @@
 
 .asyncapi__servers {
   margin-top: 24px;
+  background: #fff;
+  border-radius: 5px;
+  padding: 16px;
 }
 
 .asyncapi__servers-header {
+}
+.asyncapi__servers-header > h2 {
+  margin: 0 0 24px 0;
 }
 
 .asyncapi__servers-table {
@@ -524,6 +555,16 @@
 }
 
 .asyncapi__server-variables {
+  padding: 12px 12px 0 12px;
+}
+.asyncapi__server-variables > table {
+  margin: 0;
+  width: 100%;
+}
+
+.asyncapi__server-variables-table-cell {
+  padding: 0;
+  border-bottom: none;
 }
 
 .asyncapi__server-expand-icon {
@@ -537,8 +578,8 @@
   cursor: pointer;
 }
 .asyncapi__server-expand-icon:before {
-  content: '\uE066';
-  font-family: SAP-icons;
+  content: '';
+  font-family: 'SAP-icons';
   position: absolute;
   color: #0071d4;
   font-size: 12px;
@@ -548,6 +589,7 @@
 }
 
 .asyncapi__server-expand-icon--open {
+  transform: rotate(90deg);
 }
 
 .asyncapi__server-variables-enum-list {
@@ -556,6 +598,96 @@
 }
 
 .asyncapi__server-variables-enum-list-item {
+}
+
+.asyncapi__server-security {
+  padding: 12px 12px 0 12px;
+}
+.asyncapi__server-security > table {
+  margin: 0;
+  width: 100%;
+}
+
+.asyncapi__server-security-table-cell {
+  padding: 0;
+  border-bottom: none;
+}
+
+.asyncapi__server-security-flows-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.asyncapi__server-security-flows-list a {
+  color: #0b74de;
+}
+
+.asyncapi__server-security-flows-list-item {
+  margin-top: 12px;
+}
+.asyncapi__server-security-flows-list-item:first-child {
+  margin-top: 0;
+}
+
+.asyncapi__server-security-flow {
+  background-color: #f8fafc;
+  border: 1px solid #dae1e7;
+  padding: 12px;
+  border-radius: 5px;
+}
+
+.asyncapi__server-security-flow-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.asyncapi__server-security-flow-list-item {
+  padding: 3px 0;
+}
+.asyncapi__server-security-flow-list-item > span {
+  margin-left: 12px;
+}
+.asyncapi__server-security-flow-list-item > a {
+  margin-left: 12px;
+}
+
+.asyncapi__server-security-flows-table-cell {
+  border-bottom: solid 1px #d4d4d4;
+  padding: 8px;
+}
+
+.asyncapi__server-security-oauth2 {
+  border-bottom: none;
+}
+.asyncapi__server-security-oauth2 > td {
+  border-bottom: none;
+}
+
+.asyncapi__server-security-scopes-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.asyncapi__server-security-scopes-list-item {
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.asyncapi__server-security-scope {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 18px;
+  border-radius: 3px;
+  padding: 0px 5px;
+  text-align: center;
+  text-transform: uppercase;
+  background: #e2eaf2;
+  color: #18873d;
 }
 
 .asyncapi__channels {
@@ -572,6 +704,9 @@
 }
 
 .asyncapi__channels-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 .asyncapi__channels-list-item {
@@ -602,15 +737,23 @@
 }
 
 .asyncapi__channel-header-badges {
+  display: inline-block;
+  margin-right: 6px;
 }
 
 .asyncapi__channel-header-badges-deprecated-badge {
+  display: inline-block;
+  margin-right: 6px;
 }
 
 .asyncapi__channel-header-badges-publish-badge {
+  display: inline-block;
+  margin-right: 6px;
 }
 
 .asyncapi__channel-header-badges-subscribe-badge {
+  display: inline-block;
+  margin-right: 6px;
 }
 
 .asyncapi__channel-header-title {
@@ -626,6 +769,9 @@
 }
 
 .asyncapi__channel-operations-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .asyncapi__channel-operations-list-item {
@@ -647,12 +793,26 @@
 }
 
 .asyncapi__channel-parameters-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .asyncapi__channel-parameters-list-item {
 }
 
 .asyncapi__channel-parameter {
+  margin-bottom: 24px;
+  padding-left: 18px;
+  position: relative;
+}
+.asyncapi__channel-parameter:before {
+  content: '';
+  position: absolute;
+  border: 3px solid #0071d4;
+  border-radius: 100%;
+  left: 0;
+  top: 6px;
 }
 
 .asyncapi__channel-parameter-header {
@@ -662,6 +822,15 @@
 }
 
 .asyncapi__channel-parameter-schema {
+  margin: 20px 0;
+}
+.asyncapi__channel-parameter-schema > .asyncapi__schema {
+  padding: 0;
+}
+.asyncapi__channel-parameter-schema > .asyncapi__schema:before {
+  content: '';
+  position: relative;
+  border: none;
 }
 
 .asyncapi__error {
@@ -673,21 +842,42 @@
   font-size: 13px;
 }
 
-.asyncapi__error-button {
-}
-
-.asyncapi__error-button--expanded {
-}
-
 .asyncapi__error-header {
   padding: 12px 20px;
   box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
   font-weight: bold;
   position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+.asyncapi__error-header > h2 {
+  flex-grow: 1;
+}
+
+.asyncapi__error-button {
+  color: #0a6ed1;
+  border: solid 1px #0a6ed1;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: 0;
+  font-size: 14px;
+  line-height: 1.42857;
+  height: 36px;
+  max-height: 36px;
+  padding: 0 12px;
+  transition: all 0.125s ease-in;
+}
+.asyncapi__error-button:hover {
+  color: #fff;
+  background-color: #085caf;
+}
+
+.asyncapi__error-button--expanded {
 }
 
 .asyncapi__error-content {
-  padding: 12px 20px;
   font-weight: normal;
 }
 .asyncapi__error-content:after {
@@ -703,11 +893,14 @@
 
 .asyncapi__error-content-pre {
   margin: 0;
+  padding: 12px 20px;
+  background-color: #263238;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #fff;
 }
 
 .asyncapi__error-content-code {
-  white-space: pre-wrap;
-  word-break: break-word;
   font-family: monospace;
   display: block;
 }

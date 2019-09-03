@@ -47,6 +47,7 @@ export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';
 export const ERROR = 'Error';
 export const EXPAND_ERROR_BUTTON = 'Expand';
+export const COLLAPSE_ERROR_BUTTON = 'Collapse';
 
 export const SECURITY_TEXT = 'Security';
 

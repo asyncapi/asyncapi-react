@@ -578,8 +578,8 @@
   cursor: pointer;
 }
 .asyncapi__server-expand-icon:before {
-  content: '\uE066';
-  font-family: SAP-icons;
+  content: '';
+  font-family: 'SAP-icons';
   position: absolute;
   color: #0071d4;
   font-size: 12px;
@@ -589,6 +589,7 @@
 }
 
 .asyncapi__server-expand-icon--open {
+  transform: rotate(90deg);
 }
 
 .asyncapi__server-variables-enum-list {
@@ -841,41 +842,56 @@
   font-size: 13px;
 }
 
-.asyncapi__error-button {
-}
-
-.asyncapi__error-button--expanded {
-}
-
 .asyncapi__error-header {
   padding: 12px 20px;
   box-shadow: inset 0 -1px 0 0 rgba(115, 121, 128, 0.15);
   font-weight: bold;
   position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+.asyncapi__error-header > h2 {
+  flex-grow: 1;
+}
+
+.asyncapi__error-button {
+  color: #0a6ed1;
+  border: solid 1px #0a6ed1;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: 0;
+  font-size: 14px;
+  line-height: 1.42857;
+  height: 36px;
+  max-height: 36px;
+  padding: 0 12px;
+  transition: all 0.125s ease-in;
+}
+.asyncapi__error-button:hover {
+  color: #fff;
+  background-color: #085caf;
+}
+
+.asyncapi__error-button--expanded {
 }
 
 .asyncapi__error-content {
-  padding: 12px 20px;
   font-weight: normal;
-}
-.asyncapi__error-content:after {
-  content: '\uE0B1';
-  color: #f44336;
-  position: absolute;
-  display: block;
-  top: 12px;
-  right: 14px;
-  box-sizing: border-box;
-  font-family: SAP-Icons;
+  position: relative;
 }
 
 .asyncapi__error-content-pre {
   margin: 0;
+  padding: 12px 20px;
+  background-color: #263238;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #fff;
 }
 
 .asyncapi__error-content-code {
-  white-space: pre-wrap;
-  word-break: break-word;
   font-family: monospace;
   display: block;
 }
