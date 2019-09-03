@@ -9,7 +9,7 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier } from '../../helpers';
+import { beautifier, bemClasses } from '../../helpers';
 import Parser from '../../helpers/parser';
 import { parse, parseFromUrl } from 'asyncapi-parser';
 
