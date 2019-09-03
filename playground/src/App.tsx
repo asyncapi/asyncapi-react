@@ -14,7 +14,7 @@ import {
   AsyncApiWrapper,
 } from './components';
 
-import { defaultSchema, defaultConfig, parse } from './common';
+import { defaultSchema2, defaultConfig, parse } from './common';
 
 interface State {
   schema: string;
@@ -26,9 +26,9 @@ interface State {
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: defaultSchema,
+    schema: defaultSchema2,
     config: defaultConfig,
-    schemaFromEditor: defaultSchema,
+    schemaFromEditor: defaultSchema2,
     schemaFromExternalResource: '',
     configFromEditor: defaultConfig,
   };
