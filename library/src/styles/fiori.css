@@ -879,16 +879,7 @@
 
 .asyncapi__error-content {
   font-weight: normal;
-}
-.asyncapi__error-content:after {
-  content: '\uE0B1';
-  color: #f44336;
-  position: absolute;
-  display: block;
-  top: 12px;
-  right: 14px;
-  box-sizing: border-box;
-  font-family: SAP-Icons;
+  position: relative;
 }
 
 .asyncapi__error-content-pre {
