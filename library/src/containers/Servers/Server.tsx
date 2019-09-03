@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import { ServerVariablesComponent } from './ServerVariables';
+import { ServerVariablesComponent } from './Variables';
+import { ServerSecurityComponent } from './Security';
 
 import { bemClasses } from '../../helpers';
-import { Server } from '../../types';
+import { Server, SecurityScheme } from '../../types';
 import { Markdown, TableAccessor, TableRow } from '../../components';
 
 interface ServerWithVariables {
@@ -14,8 +15,8 @@ interface ServerWithVariables {
   toggleVariables: (event: any) => void;
 }
 
-const serverAccessors: TableAccessor[] = [
-  (el: ServerWithVariables) => (
+const serverAccessors: TableAccessor<ServerWithVariables>[] = [
+  el => (
     <>
       {el.serverVariables && el.toggleVariables instanceof Function && (
         <span
@@ -27,27 +28,32 @@ const serverAccessors: TableAccessor[] = [
           onClick={el.toggleVariables}
         />
       )}
-      {el.server.url}
+      <span>{el.server.url}</span>
     </>
   ),
-  (el: ServerWithVariables) => el.stage,
-  (el: ServerWithVariables) => el.server.protocol,
-  (el: ServerWithVariables) =>
-    el.server.description && <Markdown>{el.server.description}</Markdown>,
+  el => <span>{el.stage}</span>,
+  el => (
+    <span>{`${el.server.protocol}${
+      el.server.protocolVersion ? ` ${el.server.protocolVersion}` : ``
+    }`}</span>
+  ),
+  el => el.server.description && <Markdown>{el.server.description}</Markdown>,
 ];
 
 interface Props {
   server: Server;
   stage: string;
+  securitySchemes?: Record<string, SecurityScheme>;
 }
 
 export const ServerComponent: React.FunctionComponent<Props> = ({
   server,
   stage,
+  securitySchemes,
 }) => {
   const [openAccordion, setOpenAccordion] = useState<boolean>(false);
 
-  const vars = server.variables
+  const variables = server.variables
     ? Object.entries(server.variables).map(([key, variable]) => ({
         key,
         content: variable,
@@ -57,7 +63,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
   const serverWithVariables: ServerWithVariables = {
     stage,
     server,
-    serverVariables: vars.length > 0,
+    serverVariables: variables.length > 0,
     openAccordion,
     toggleVariables: (_: any) => setOpenAccordion(state => !state),
   };
@@ -66,9 +72,16 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
     <>
       <TableRow element={serverWithVariables} accessors={serverAccessors} />
       <ServerVariablesComponent
-        variables={vars}
+        variables={variables}
         openAccordion={openAccordion}
       />
+      {server.security && securitySchemes && (
+        <ServerSecurityComponent
+          requirements={server.security}
+          schemes={securitySchemes}
+          openAccordion={openAccordion}
+        />
+      )}
     </>
   );
 };

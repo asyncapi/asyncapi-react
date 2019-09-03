@@ -42,15 +42,14 @@ interface SecuritySchemeWithStages extends SecurityScheme {
   stages: string[];
 }
 
-const securityAccesors: TableAccessor[] = [
-  (el: SecuritySchemeWithStages) => el.type,
-  (el: SecuritySchemeWithStages) => el.stages && el.stages.join(', '),
-  (el: SecuritySchemeWithStages) => el.in,
-  (el: SecuritySchemeWithStages) => el.name,
-  (el: SecuritySchemeWithStages) => el.scheme,
-  (el: SecuritySchemeWithStages) => el.bearerFormat,
-  (el: SecuritySchemeWithStages) =>
-    el.description && <Markdown>{renderMd(el.description)}</Markdown>,
+const securityAccesors: TableAccessor<SecuritySchemeWithStages>[] = [
+  el => <span>{el.type}</span>,
+  el => (el.stages ? <span>{el.stages.join(', ')}</span> : null),
+  el => <span>{el.in}</span>,
+  el => <span>{el.name}</span>,
+  el => <span>{el.scheme}</span>,
+  el => <span>{el.bearerFormat}</span>,
+  el => el.description && <Markdown>{renderMd(el.description)}</Markdown>,
 ];
 
 interface Props {

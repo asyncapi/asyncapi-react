@@ -2,12 +2,11 @@ import { TableColumnName } from './types';
 
 export const UNSUPPORTED_SCHEMA_VERSION =
   'AsyncAPI version is unsupported, use version 2.0 or higher';
-export const CONNECTION_DETAILS = 'Connection details';
+export const SERVERS = 'Servers';
 
 export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
 export const ANY_OF_PAYLOADS_TEXT = 'Any of those payloads:';
 export const GENERATED_BADGE = 'generated';
-export const TERMS_OF_SERVICE = 'Terms of service';
 export const ONE_OF_FOLLOWING_MESSAGES =
   'You can send one of the following messages:';
 
@@ -16,6 +15,9 @@ export const NAME = 'Name';
 export const URL = 'Url';
 export const EMAIL = 'Email';
 export const LICENSE = 'License';
+export const TERMS_OF_SERVICE = 'Terms of service';
+export const URL_SUPPORT = 'Support';
+export const EMAIL_SUPPORT = 'Email support';
 export const LOCATION = 'Location';
 export const TYPE = 'Type';
 export const SPECIFICATION = 'Specification';
@@ -50,6 +52,14 @@ export const SECURITY_TEXT = 'Security';
 
 export const URL_VARIABLES_TEXT = 'URL Variables';
 
+export const FLOWS = {
+  FLOW: 'Flow',
+  AUTHORIZATION_URL: 'Auth URL',
+  TOKEN_URL: 'Token UR',
+  REFRESH_URL: 'Refresh URL',
+  SCOPES: 'Scopes',
+};
+
 export const SECURITY_COLUMNS_NAMES: TableColumnName[] = [
   'Type',
   'Stage',
@@ -62,8 +72,16 @@ export const SECURITY_COLUMNS_NAMES: TableColumnName[] = [
 
 export const SERVER_COLUMN_NAMES: TableColumnName[] = [
   'URL',
-  'Stage',
+  'Default',
   'Protocol',
+  'Description',
+];
+export const SERVER_SECURITY_COLUMN_NAMES: TableColumnName[] = [
+  'Type',
+  'Bearer format',
+  'In',
+  'Scheme',
+  'Header',
   'Description',
 ];
 

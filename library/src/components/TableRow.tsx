@@ -3,8 +3,8 @@ import React from 'react';
 import { bemClasses } from '../helpers';
 
 export type TableAccessorReturn = React.ReactNode;
-export type TableAccessor =
-  | ((arg: Record<string, any>) => TableAccessorReturn)
+export type TableAccessor<T = Record<string, any>> =
+  | ((arg: T) => TableAccessorReturn)
   | string;
 
 export interface TableRowProps {
@@ -14,6 +14,7 @@ export interface TableRowProps {
   nested?: boolean;
   accordion?: boolean;
   openAccordion?: boolean;
+  className?: string;
 }
 
 export const TableRow: React.FunctionComponent<TableRowProps> = ({
@@ -23,6 +24,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
   nested = false,
   accordion = false,
   openAccordion = false,
+  className = '',
 }) => {
   const renderRowByAccessors = (
     acs: TableAccessor[],
@@ -62,15 +64,15 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
       ? renderRowByAccessors(accessors, element, nested)
       : element;
 
-  const className = `table-row`;
+  const clName = `table-row`;
   const nestedClassName = nested
-    ? bemClasses.modifier(`nested`, className)
-    : bemClasses.element(className);
+    ? bemClasses.modifier(`nested`, clName)
+    : bemClasses.element(clName);
   const accordionClassName = accordion
-    ? bemClasses.element(`${className}-accordion`)
+    ? bemClasses.element(`${clName}-accordion`)
     : '';
   const openAccordionClassName = openAccordion
-    ? bemClasses.modifier(`open`, `${className}-accordion`)
+    ? bemClasses.modifier(`open`, `${clName}-accordion`)
     : '';
 
   return (
@@ -80,6 +82,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
         nestedClassName,
         accordionClassName,
         openAccordionClassName,
+        className,
       ])}
     >
       {content}

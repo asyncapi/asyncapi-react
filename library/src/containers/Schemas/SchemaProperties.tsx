@@ -16,8 +16,8 @@ interface SchemaElement {
   treeSpace: number;
 }
 
-const schemaPropertiesAccessors: TableAccessor[] = [
-  (el: SchemaElement) => (
+const schemaPropertiesAccessors: TableAccessor<SchemaElement>[] = [
+  el => (
     <>
       {(() => {
         const treeSpaces = [];
@@ -32,20 +32,20 @@ const schemaPropertiesAccessors: TableAccessor[] = [
       {el.schema.key}
     </>
   ),
-  (el: SchemaElement) => el.schema.content.title,
-  (el: SchemaElement) => (
-    <>
+  el => <span>{el.schema.content.title}</span>,
+  el => (
+    <span>
       {el.schema.content.type}
       {el.schema.content.anyOf ? ` ${el.schema.content.anyOf}` : ''}
       {el.schema.content.oneOf ? ` ${el.schema.content.oneOf}` : ''}
       {el.schema.content.items && el.schema.content.items.type
         ? ` (${el.schema.content.items.type})`
         : ''}
-    </>
+    </span>
   ),
-  (el: SchemaElement) => el.schema.content.format,
-  (el: SchemaElement) => el.schema.content.default,
-  (el: SchemaElement) =>
+  el => <span>{el.schema.content.format}</span>,
+  el => <span>{el.schema.content.default}</span>,
+  el =>
     el.schema.content.description && (
       <Markdown>{el.schema.content.description}</Markdown>
     ),

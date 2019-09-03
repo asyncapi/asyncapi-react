@@ -14,6 +14,7 @@ import Parser from '../../helpers/parser';
 import { parse, parseFromUrl } from 'asyncapi-parser';
 
 import { InfoComponent } from '../Info/Info';
+import { ServersComponent } from '../Servers/Servers';
 import { SecurityComponent } from '../Security/Security';
 
 import { MessagesComponent } from '../Messages/Messages';
@@ -88,22 +89,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         {concatenatedConfig.show.info && validatedSchema.info && (
           <InfoComponent
             info={validatedSchema.info}
-            servers={validatedSchema.servers}
-            showServers={Boolean(
-              concatenatedConfig.show.servers && !!validatedSchema.servers,
-            )}
+            defaultContentType={validatedSchema.defaultContentType}
           />
         )}
-        {concatenatedConfig.show.security &&
-          validatedSchema.servers &&
-          validatedSchema.components &&
-          validatedSchema.components.securitySchemes && (
-            <SecurityComponent
-              securitySchemes={validatedSchema.components.securitySchemes}
-              servers={validatedSchema.servers}
-            />
-          )}
-
+        {concatenatedConfig.show.servers && !!validatedSchema.servers && (
+          <ServersComponent
+            servers={validatedSchema.servers}
+            securitySchemes={
+              validatedSchema.components &&
+              validatedSchema.components.securitySchemes
+            }
+          />
+        )}
         {concatenatedConfig.show.channels && !!validatedSchema.channels && (
           <Channels channels={validatedSchema.channels} />
         )}
@@ -119,6 +116,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
               validatedSchema.components.schemas && (
                 <SchemasComponent
                   schemas={validatedSchema.components.schemas}
+                />
+              )}
+            {concatenatedConfig.show.security &&
+              validatedSchema.servers &&
+              validatedSchema.components.securitySchemes && (
+                <SecurityComponent
+                  securitySchemes={validatedSchema.components.securitySchemes}
+                  servers={validatedSchema.servers}
                 />
               )}
           </div>

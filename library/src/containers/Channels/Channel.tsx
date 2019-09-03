@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Operation } from './Operation';
-import { ChannelItem, isRawMessage } from '../../types';
+import { Channel as ChannelType, isRawMessage } from '../../types';
 import { Parameters as ParametersComponent } from './Parameters';
 
 import { Badge, BadgeType } from '../../components';
@@ -10,7 +10,7 @@ import { ONE_OF_FOLLOWING_MESSAGES, MESSAGE, MESSAGES } from '../../constants';
 
 interface Props {
   name: string;
-  channel: ChannelItem;
+  channel: ChannelType;
 }
 
 export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
@@ -49,7 +49,7 @@ export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
                 <Badge type={BadgeType.PUBLISH} />
               </div>
             )}
-            {channel.publish && (
+            {channel.subscribe && (
               <div
                 className={bemClasses.element(
                   `schema-example-header-subscribe-badge`,

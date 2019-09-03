@@ -12,9 +12,14 @@ info:
     * Turn a specific streetlight on/off 🌃
     * Dim a specific streetlight 😎
     * Receive real-time information about environmental lighting conditions 📈
+  termsOfService: http://asyncapi.org/terms/
+  contact:
+    name: API Support
+    url: "http://www.asyncapi.org/support"
+    email: "support@asyncapi.org"
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
   production:

@@ -18,11 +18,10 @@ import {
 
 type ServerVariableWithKey = TypeWithKey<string, ServerVariable>;
 
-const serverVariablesAccessors: TableAccessor[] = [
-  (el: ServerVariableWithKey) => el.key,
-  (el: ServerVariableWithKey) =>
-    el.content.default ? el.content.default : <em>{NONE_TEXT}</em>,
-  (el: ServerVariableWithKey) =>
+const serverVariablesAccessors: TableAccessor<ServerVariableWithKey>[] = [
+  el => el.key,
+  el => (el.content.default ? el.content.default : <em>{NONE_TEXT}</em>),
+  el =>
     el.content.enum ? (
       <ul className={bemClasses.element(`server-variables-enum-list`)}>
         {el.content.enum.map(value => (
@@ -37,8 +36,7 @@ const serverVariablesAccessors: TableAccessor[] = [
     ) : (
       <em>{ANY_TEXT}</em>
     ),
-  (el: ServerVariableWithKey) =>
-    el.content.description && <Markdown>{el.content.description}</Markdown>,
+  el => el.content.description && <Markdown>{el.content.description}</Markdown>,
 ];
 
 interface Props {
@@ -48,21 +46,27 @@ interface Props {
 
 export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
   variables,
-  openAccordion,
+  openAccordion = false,
 }) => {
-  const rows = variables.map(
-    variable =>
-      ({
-        key: variable.key,
-        accessors: serverVariablesAccessors,
-        element: variable,
-      } as TableRowProps),
-  );
+  if (!variables.length) {
+    return null;
+  }
 
-  const className = `${bemClasses.element(`table-cell`)} ${bemClasses.modifier(
-    `nested`,
-    `table-cell`,
-  )}`;
+  const rows: TableRowProps[] = variables.map(variable => ({
+    key: variable.key,
+    accessors: serverVariablesAccessors,
+    element: variable,
+  }));
+
+  const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);
+  const variablesTableCellClassName = bemClasses.element(
+    `server-variables-table-cell`,
+  );
+  const className = bemClasses.concatenate([
+    nestedTableCellClassName,
+    variablesTableCellClassName,
+  ]);
+
   const element = (
     <td className={className} colSpan={4}>
       <div className={bemClasses.element(`server-variables`)}>

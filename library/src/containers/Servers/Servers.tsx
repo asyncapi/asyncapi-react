@@ -3,25 +3,40 @@ import React from 'react';
 import { ServerComponent } from './Server';
 
 import { bemClasses } from '../../helpers';
-import { Servers } from '../../types';
+import { Servers, SecurityScheme } from '../../types';
 import { Table } from '../../components';
-import { CONNECTION_DETAILS, SERVER_COLUMN_NAMES } from '../../constants';
+import { SERVERS, SERVER_COLUMN_NAMES } from '../../constants';
 
 interface Props {
   servers?: Servers;
+  securitySchemes?: Record<string, SecurityScheme>;
 }
 
 export const ServersComponent: React.FunctionComponent<Props> = ({
   servers,
+  securitySchemes,
 }) => {
   if (!servers) {
     return null;
   }
 
+  const rows = Object.entries(servers).map(([stage, server]) => {
+    const { url } = server;
+
+    return (
+      <ServerComponent
+        key={`${url}${stage}`}
+        server={server}
+        stage={stage}
+        securitySchemes={securitySchemes}
+      />
+    );
+  });
+
   return (
     <div className={bemClasses.element(`servers`)}>
       <header className={bemClasses.element(`servers-header`)}>
-        <h2>{CONNECTION_DETAILS}</h2>
+        <h2>{SERVERS}</h2>
       </header>
       <div className={bemClasses.element(`servers-table`)}>
         <Table
@@ -29,16 +44,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
             columns: SERVER_COLUMN_NAMES,
           }}
         >
-          {Object.entries(servers).map(([stage, server]) => {
-            const { url, protocol } = server;
-            return (
-              <ServerComponent
-                key={`${url}${protocol}${stage}`}
-                server={server}
-                stage={stage}
-              />
-            );
-          })}
+          {rows}
         </Table>
       </div>
     </div>
