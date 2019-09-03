@@ -42,7 +42,7 @@ interface SecuritySchemeWithStages extends SecurityScheme {
   stages: string[];
 }
 
-const securityAccesors: TableAccessor<SecuritySchemeWithStages>[] = [
+const securityAccesors: Array<TableAccessor<SecuritySchemeWithStages>> = [
   el => <span>{el.type}</span>,
   el => (el.stages ? <span>{el.stages.join(', ')}</span> : null),
   el => <span>{el.in}</span>,

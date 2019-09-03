@@ -26,7 +26,7 @@ export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
   const rows: React.ReactNodeArray = requirements.map(requirement => {
     const def: SecurityScheme = schemes[Object.keys(requirement)[0]];
 
-    return <ServerSecurityItemComponent securityScheme={def} />;
+    return <ServerSecurityItemComponent securityScheme={def} key={def.type} />;
   });
 
   const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);

@@ -14,6 +14,7 @@ export const ServerSecurityFlowScopes: React.FunctionComponent<Props> = ({
       <li
         className={bemClasses.element(`server-security-scopes-list-item`)}
         title={description}
+        key={name}
       >
         <span className={bemClasses.element(`server-security-scope`)}>
           {name}

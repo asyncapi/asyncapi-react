@@ -16,7 +16,7 @@ interface SchemaElement {
   treeSpace: number;
 }
 
-const schemaPropertiesAccessors: TableAccessor<SchemaElement>[] = [
+const schemaPropertiesAccessors: Array<TableAccessor<SchemaElement>> = [
   el => (
     <>
       {(() => {

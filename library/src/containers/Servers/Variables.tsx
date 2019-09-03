@@ -18,7 +18,7 @@ import {
 
 type ServerVariableWithKey = TypeWithKey<string, ServerVariable>;
 
-const serverVariablesAccessors: TableAccessor<ServerVariableWithKey>[] = [
+const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
   el => el.key,
   el => (el.content.default ? el.content.default : <em>{NONE_TEXT}</em>),
   el =>

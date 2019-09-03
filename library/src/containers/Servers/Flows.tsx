@@ -18,7 +18,10 @@ export const ServerSecurityFlows: React.FunctionComponent<Props> = ({
   }
 
   const nodes = Object.entries(flows).map(([flowName, flow]) => (
-    <li className={bemClasses.element(`server-security-flows-list-item`)}>
+    <li
+      key={flowName}
+      className={bemClasses.element(`server-security-flows-list-item`)}
+    >
       <ServerSecurityFlow name={flowName} flow={flow} />
     </li>
   ));

@@ -15,7 +15,7 @@ interface ServerWithVariables {
   toggleVariables: (event: any) => void;
 }
 
-const serverAccessors: TableAccessor<ServerWithVariables>[] = [
+const serverAccessors: Array<TableAccessor<ServerWithVariables>> = [
   el => (
     <>
       {el.serverVariables && el.toggleVariables instanceof Function && (
