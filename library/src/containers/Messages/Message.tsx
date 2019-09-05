@@ -143,7 +143,12 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   return (
     <section className={bemClasses.element(className)}>
       {!inChannel ? (
-        <Toggle header={header} className={className} expanded={toggleExpand}>
+        <Toggle
+          header={header}
+          className={className}
+          expanded={toggleExpand}
+          toggleInState={true}
+        >
           {description}
           {content}
         </Toggle>

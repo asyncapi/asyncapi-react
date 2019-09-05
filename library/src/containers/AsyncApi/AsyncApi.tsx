@@ -9,15 +9,10 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier, bemClasses } from '../../helpers';
-import Parser from '../../helpers/parser';
+import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
 import { parse, parseFromUrl } from 'asyncapi-parser';
 import { CSS_PREFIX } from '../../constants';
-import {
-  useExpandedContext,
-  calculateNumberOfElements,
-  calculateInitialExpandedElements,
-} from '../../store';
+import { useExpandedContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/Info';
@@ -25,8 +20,6 @@ import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
 import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
-
-const parser = new Parser(parse, parseFromUrl);
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
@@ -43,6 +36,14 @@ const defaultAsyncApi: AsyncAPI = {
 };
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+  private readonly parser: Parser;
+
+  constructor(props: AsyncApiProps) {
+    super(props);
+
+    this.parser = new Parser(parse, parseFromUrl);
+  }
+
   state: AsyncAPIState = {
     validatedSchema: defaultAsyncApi,
     error: undefined,
@@ -86,14 +87,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!concatenatedConfig.show) {
       return null;
     }
-    const numberOfElement = calculateNumberOfElements(
-      validatedSchema,
-      concatenatedConfig.show,
-    );
-    const initialExpandedElements = calculateInitialExpandedElements(
-      validatedSchema,
-      concatenatedConfig.show,
-      concatenatedConfig.collapse || {},
+    const numberOfElement = stateHelpers.calculateNumberOfElements({
+      spec: validatedSchema,
+      showConfig: concatenatedConfig.show,
+    });
+    const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
+      {
+        spec: validatedSchema,
+        showConfig: concatenatedConfig.show,
+        collapseConfig: concatenatedConfig.collapse || {},
+      },
     );
 
     return (
@@ -167,7 +170,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     parserOptions?: AsyncApiProps['parserOptions'],
   ) {
     if (isFetchingSchemaInterface(schema)) {
-      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
+      const parsedFromUrl = await this.parser.parseFromUrl(
+        schema,
+        parserOptions,
+      );
       this.setState({
         validatedSchema: this.beautifySchema(parsedFromUrl.data),
         error: parsedFromUrl.error,
@@ -175,7 +181,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return;
     }
 
-    const parsed = await parser.parse(schema, parserOptions);
+    const parsed = await this.parser.parse(schema, parserOptions);
     this.setState({
       validatedSchema: this.beautifySchema(parsed.data),
       error: parsed.error,

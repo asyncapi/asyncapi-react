@@ -1,4 +1,4 @@
-import Parser from '../parser';
+import { Parser } from '../parser';
 import validDoc from './async.json';
 import {
   ParserErrorUnsupportedVersion,

@@ -73,7 +73,12 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
 
   return (
     <section className={bemClasses.element(className)}>
-      <Toggle header={header} className={className} expanded={toggleExpand}>
+      <Toggle
+        header={header}
+        className={className}
+        expanded={toggleExpand}
+        toggleInState={true}
+      >
         {content}
       </Toggle>
     </section>

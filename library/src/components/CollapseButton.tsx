@@ -28,7 +28,6 @@ export const CollapseButton = () => {
     if (numberOfExpanded === numberOfElements && !expanded) {
       setExpanded(true);
     }
-    // eslint-disable-next-line
   }, [numberOfExpanded]);
 
   return (

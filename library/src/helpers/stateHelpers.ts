@@ -2,23 +2,21 @@ import { ShowConfig, CollapseConfig, CollapseNestedConfig } from '../config';
 import { AsyncAPI } from '../types';
 
 class StateHelpers {
-  constructor(
-    private readonly spec: AsyncAPI,
-    private readonly showConfig: ShowConfig,
-    private readonly collapseConfig: CollapseConfig,
-  ) {}
-
-  calculateNumberOfElements = (): number => {
-    const showConfigKeys = Object.keys(this.showConfig);
+  calculateNumberOfElements = ({
+    spec,
+    showConfig,
+  }: {
+    spec: AsyncAPI;
+    showConfig: ShowConfig;
+  }): number => {
+    const showConfigKeys = Object.keys(showConfig);
 
     const fn = (obj: object): number => {
       let numberOfElements: number = 0;
 
       Object.entries(obj).map(([key, value]) => {
         const condition = Boolean(
-          key !== 'info' &&
-            showConfigKeys.includes(key) &&
-            this.showConfig[key],
+          key !== 'info' && showConfigKeys.includes(key) && showConfig[key],
         );
 
         if (condition) {
@@ -36,12 +34,20 @@ class StateHelpers {
       return numberOfElements;
     };
 
-    return fn(this.spec) + fn(this.spec.components || {});
+    return fn(spec) + fn(spec.components || {});
   };
 
-  calculateInitialExpandedElements = (): number => {
-    const showConfigKeys = Object.keys(this.showConfig);
-    const collapseConfigKeys = Object.keys(this.showConfig);
+  calculateInitialExpandedElements = ({
+    spec,
+    showConfig,
+    collapseConfig,
+  }: {
+    spec: AsyncAPI;
+    showConfig: ShowConfig;
+    collapseConfig: CollapseConfig;
+  }): number => {
+    const showConfigKeys = Object.keys(showConfig);
+    const collapseConfigKeys = Object.keys(showConfig);
 
     const fn = (obj: object): number => {
       let numberOfElements: number = 0;
@@ -50,13 +56,13 @@ class StateHelpers {
         const condition = Boolean(
           key !== 'info' &&
             showConfigKeys.includes(key) &&
-            this.showConfig[key] &&
+            showConfig[key] &&
             collapseConfigKeys.includes(key) &&
-            this.collapseConfig[key],
+            collapseConfig[key],
         );
 
         if (condition) {
-          const field: CollapseNestedConfig = this.collapseConfig[key];
+          const field: CollapseNestedConfig = collapseConfig[key];
           if (field.root) {
             numberOfElements += 1;
           }
@@ -77,6 +83,8 @@ class StateHelpers {
       return numberOfElements;
     };
 
-    return fn(this.spec) + fn(this.spec.components || {});
+    return fn(spec) + fn(spec.components || {});
   };
 }
+
+export const stateHelpers = new StateHelpers();

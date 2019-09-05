@@ -20,7 +20,7 @@ type ParseDocumentFromURL = (
   parserOptions?: ParserOptions,
 ) => Promise<any>;
 
-export default class Parser {
+export class Parser {
   private parseSchema: ParseDocument;
   private parseSchemaFromURL: ParseDocumentFromURL;
 

@@ -346,11 +346,35 @@
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.16);
 }
 
-.asyncapi__info-header {
+.asyncapi__info-header-main {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
 }
-.asyncapi__info-header > h1 {
+.asyncapi__info-header-main > h1 {
+  flex-grow: 1;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.asyncapi__collapse-button {
+  border-radius: 0.25rem;
+  border: 1px solid #0071d4;
+  display: inline-block;
+  color: #0b74de;
+  font-weight: 700;
+  transition: all 0.125s ease-in;
+  padding: 10px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.asyncapi__collapse-button:hover {
+  background-color: #085caf;
+  color: #fff;
+}
+.asyncapi__collapse-button:focus {
+  outline: none;
 }
 
 .asyncapi__info-header-version {
@@ -362,7 +386,7 @@
 }
 
 .asyncapi__info-list {
-  margin: 14px 0 20px 0;
+  margin: 0 0 20px 0;
   padding: 0;
   list-style-type: none;
 }

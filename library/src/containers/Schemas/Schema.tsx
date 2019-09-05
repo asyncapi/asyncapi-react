@@ -81,7 +81,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   return (
     <section className={bemClasses.element(className)}>
       {toggle ? (
-        <Toggle header={header} className={className}>
+        <Toggle header={header} className={className} toggleInState={true}>
           {content}
         </Toggle>
       ) : (

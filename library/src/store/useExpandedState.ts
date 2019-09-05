@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import createUseContext from 'constate';
 
 interface Props {
@@ -14,6 +14,10 @@ const useExpandedState = ({
   const [numberOfExpanded, setNumberOfExpanded] = useState<number>(
     initialNumberOfExpandedElement,
   );
+
+  useEffect(() => {
+    console.log(numberOfExpanded);
+  }, [numberOfExpanded]);
 
   return {
     numberOfElements,

@@ -1,24 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+import { useExpandedContext } from '../store';
 import { bemClasses } from '../helpers';
 
 interface Props {
   header: React.ReactNode;
   className?: string;
   expanded?: boolean;
+  toggleInState?: boolean;
 }
 
 export const Toggle: React.FunctionComponent<Props> = ({
   header,
   className: customClassName = '',
   expanded: initialExpanded = false,
+  toggleInState = false,
   children,
 }) => {
+  const {
+    expanded: globalExpanded,
+    setNumberOfExpanded,
+  } = useExpandedContext();
+
+  const [initial, setInitial] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(initialExpanded);
+
   const handleSetExpanded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
     setExpanded(state => !state);
   };
+
+  useEffect(() => {
+    setInitial(true);
+  }, []);
+
+  useEffect(() => {
+    if (initial && toggleInState) {
+      setExpanded(globalExpanded);
+    }
+  }, [globalExpanded]);
+
+  useEffect(() => {
+    if (toggleInState && initial) {
+      setNumberOfExpanded(state => (expanded ? state + 1 : state - 1));
+    }
+  }, [expanded, setNumberOfExpanded]);
 
   const className = `toggle`;
   const classes = bemClasses.concatenate([

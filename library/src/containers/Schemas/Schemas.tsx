@@ -45,6 +45,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={collapse && collapse.root}
+        toggleInState={true}
       >
         {content}
       </Toggle>
