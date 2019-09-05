@@ -1,13 +1,12 @@
 import React from 'react';
 
 import { OperationComponent } from './Operation';
-import { Channel, isRawMessage } from '../../types';
 import { Parameters as ParametersComponent } from './Parameters';
 
 import { Badge, BadgeType, Toggle } from '../../components';
 import { bemClasses } from '../../helpers';
 import { MESSAGE } from '../../constants';
-import { PayloadType } from '../../types';
+import { Channel, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
   name: string;

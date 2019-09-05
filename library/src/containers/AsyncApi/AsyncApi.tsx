@@ -36,6 +36,10 @@ const defaultAsyncApi: AsyncAPI = {
 };
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+  state: AsyncAPIState = {
+    validatedSchema: defaultAsyncApi,
+    error: undefined,
+  };
   private readonly parser: Parser;
 
   constructor(props: AsyncApiProps) {
@@ -43,11 +47,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     this.parser = new Parser(parse, parseFromUrl);
   }
-
-  state: AsyncAPIState = {
-    validatedSchema: defaultAsyncApi,
-    error: undefined,
-  };
 
   async componentDidMount() {
     this.parseSchema(this.props.schema, this.props.parserOptions);

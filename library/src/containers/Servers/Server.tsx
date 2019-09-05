@@ -60,7 +60,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
           <Markdown>{server.description}</Markdown>
         </div>
       )}
-      <div></div>
+      <div />
       <ServerVariablesComponent variables={variables} />
       {server.security && securitySchemes && (
         <ServerSecurityComponent
