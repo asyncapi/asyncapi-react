@@ -1,39 +1,34 @@
-import React, { Component } from 'react';
-
-import { Message } from '../../types';
+import React from 'react';
 
 import { MessageComponent } from './Message';
 
-import { H2 } from '../../components';
-import { Messages, MessagesHeader } from './styled';
+import { bemClasses } from '../../helpers';
+import { Message } from '../../types';
 import { MESSAGES } from '../../constants';
 
 interface Props {
   messages?: Record<string, Message>;
 }
 
-export class MessagesComponent extends Component<Props> {
-  render() {
-    const { messages } = this.props;
-
-    if (!messages) {
-      return null;
-    }
-
-    return (
-      <Messages>
-        <MessagesHeader>
-          <H2>{MESSAGES}</H2>
-        </MessagesHeader>
-        {Object.entries(messages).map(([key, message]) => (
-          <MessageComponent
-            key={key}
-            title={key}
-            message={message}
-            hideTags={true}
-          />
-        ))}
-      </Messages>
-    );
+export const MessagesComponent: React.FunctionComponent<Props> = ({
+  messages,
+}) => {
+  if (!messages) {
+    return null;
   }
-}
+
+  return (
+    <div className={bemClasses.element(`messages`)}>
+      <header className={bemClasses.element(`messages-header`)}>
+        <h2>{MESSAGES}</h2>
+      </header>
+      <ul className={bemClasses.element(`messages-list`)}>
+        {Object.entries(messages).map(([key, message]) => (
+          <li key={key} className={bemClasses.element(`messages-list-item`)}>
+            <MessageComponent title={key} message={message} hideTags={true} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};

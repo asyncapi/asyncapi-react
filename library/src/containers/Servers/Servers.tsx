@@ -1,49 +1,52 @@
 import React from 'react';
 
-import { Servers } from '../../types';
-
 import { ServerComponent } from './Server';
 
-import {
-  H2,
-  TableWrapper,
-  TableHeader,
-  TableBodyWrapper,
-} from '../../components';
-import { Servers as StyledServers, ServersHeader } from './styled';
-import { CONNECTION_DETAILS, SERVER_COLUMN_NAMES } from '../../constants';
+import { bemClasses } from '../../helpers';
+import { Servers, SecurityScheme } from '../../types';
+import { Table } from '../../components';
+import { SERVERS, SERVER_COLUMN_NAMES } from '../../constants';
 
 interface Props {
   servers?: Servers;
+  securitySchemes?: Record<string, SecurityScheme>;
 }
 
 export const ServersComponent: React.FunctionComponent<Props> = ({
   servers,
+  securitySchemes,
 }) => {
   if (!servers) {
     return null;
   }
 
+  const rows = Object.entries(servers).map(([stage, server]) => {
+    const { url } = server;
+
+    return (
+      <ServerComponent
+        key={`${url}${stage}`}
+        server={server}
+        stage={stage}
+        securitySchemes={securitySchemes}
+      />
+    );
+  });
+
   return (
-    <StyledServers>
-      <ServersHeader>
-        <H2>{CONNECTION_DETAILS}</H2>
-      </ServersHeader>
-      <TableWrapper>
-        <TableHeader columns={SERVER_COLUMN_NAMES} />
-        <TableBodyWrapper>
-          {Object.entries(servers).map(([stage, server]) => {
-            const { url, protocol } = server;
-            return (
-              <ServerComponent
-                key={`${url}${protocol}${stage}`}
-                server={server}
-                stage={stage}
-              />
-            );
-          })}
-        </TableBodyWrapper>
-      </TableWrapper>
-    </StyledServers>
+    <div className={bemClasses.element(`servers`)}>
+      <header className={bemClasses.element(`servers-header`)}>
+        <h2>{SERVERS}</h2>
+      </header>
+      <div className={bemClasses.element(`servers-table`)}>
+        <Table
+          header={{
+            columns: SERVER_COLUMN_NAMES,
+          }}
+        >
+          {rows}
+        </Table>
+      </div>
+    </div>
   );
 };

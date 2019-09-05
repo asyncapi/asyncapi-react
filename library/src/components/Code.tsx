@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { CodeWrapper, CodeHeader, CodeHeaderH4, CodeBody } from './styled';
+import { bemClasses } from '../helpers';
 
 interface Props {
   title?: any;
   code: string;
 }
 
-export class CodeComponent extends Component<Props> {
-  render() {
-    const { title, code } = this.props;
-
-    return (
-      <CodeWrapper>
-        {title && (
-          <CodeHeader>
-            <CodeHeaderH4>{title}</CodeHeaderH4>
-          </CodeHeader>
-        )}
-        <CodeBody>{code}</CodeBody>
-      </CodeWrapper>
-    );
-  }
-}
+export const CodeComponent: React.FunctionComponent<Props> = ({
+  title,
+  code,
+}) => (
+  <div className={bemClasses.element(`code`)}>
+    {title && (
+      <header className={bemClasses.element(`code-header`)}>
+        <h4>{title}</h4>
+      </header>
+    )}
+    <pre className={bemClasses.element(`code-pre`)}>
+      <code className={bemClasses.element(`code-body`)}>{code}</code>
+    </pre>
+  </div>
+);

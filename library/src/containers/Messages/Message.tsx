@@ -1,21 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Message, isRawMessage } from '../../types';
-
-import { H3, H4, Markdown, Tag, DeprecatedBadge } from '../../components';
 import { SchemaComponent } from '../Schemas/Schema';
 import { PayloadComponent } from './Payload';
 
+import { bemClasses } from '../../helpers';
+import { Message, isRawMessage } from '../../types';
+
+import { Markdown, Tag, Badge, BadgeType } from '../../components';
+
 import {
-  Message as MessageWrapper,
-  MessageHeader,
-  MessageHeaders,
-  MessageHeadersHeader,
-  MessageTags,
-  MessageTagsHeader,
-} from './styled';
-import {
-  DEPRECATED_BADGE as DEPRECATED_BADGE_TEXT,
+  DEPRECATED,
   HEADERS,
   MESSAGE_HEADERS,
   HEADERS_EXAMPLE,
@@ -28,65 +22,107 @@ interface Props {
   hideTags?: boolean;
 }
 
-export class MessageComponent extends Component<Props> {
-  render() {
-    const { title, message, hideTags } = this.props;
-    if (!message) {
-      return null;
-    }
+export const MessageComponent: React.FunctionComponent<Props> = ({
+  title,
+  message,
+  hideTags,
+}) => {
+  if (!message) {
+    return null;
+  }
 
-    if (!isRawMessage(message)) {
-      return (
-        <>
-          {message.oneOf.map((elem, index) => (
-            <MessageComponent message={elem} key={index} />
-          ))}
-        </>
-      );
-    }
-
-    const headers = message.headers;
-    const payload = message.payload;
-
+  if (!isRawMessage(message)) {
     return (
-      <MessageWrapper>
-        <MessageHeader>
-          {title ? (
-            <H3>
-              {title}{' '}
-              {message.deprecated && (
-                <DeprecatedBadge>{DEPRECATED_BADGE_TEXT}</DeprecatedBadge>
-              )}
-            </H3>
-          ) : null}
-          {message.summary && <Markdown>{message.summary}</Markdown>}
-          {message.description && <Markdown>{message.description}</Markdown>}
-        </MessageHeader>
-        {headers && (
-          <MessageHeaders>
-            <MessageHeadersHeader>
-              <H4>{HEADERS}</H4>
-            </MessageHeadersHeader>
-            <SchemaComponent
-              name={MESSAGE_HEADERS}
-              schema={headers}
-              exampleTitle={HEADERS_EXAMPLE}
-              hideTitle={true}
-            />
-          </MessageHeaders>
-        )}
-        {payload && <PayloadComponent payload={payload} />}
-        {!hideTags && message.tags && (
-          <MessageTags>
-            <MessageTagsHeader>
-              <H4>{TAGS_TEXT}</H4>
-            </MessageTagsHeader>
-            {message.tags.map(tag => (
-              <Tag key={tag.name}>{tag.name}</Tag>
-            ))}
-          </MessageTags>
-        )}
-      </MessageWrapper>
+      <ul className={bemClasses.element(`messages-oneOf-list`)}>
+        {message.oneOf.map((elem, index) => (
+          <li
+            key={index}
+            className={bemClasses.element(`messages-oneOf-list-item`)}
+          >
+            <MessageComponent message={elem} key={index} />
+          </li>
+        ))}
+      </ul>
     );
   }
-}
+
+  const summary = message.summary && (
+    <div className={bemClasses.element(`message-header-summary`)}>
+      <Markdown>{message.summary}</Markdown>
+    </div>
+  );
+
+  const description = message.description && (
+    <div className={bemClasses.element(`message-header-description`)}>
+      <Markdown>{message.description}</Markdown>
+    </div>
+  );
+
+  const header = (
+    <header className={bemClasses.element(`message-header`)}>
+      {title ? (
+        <h3>
+          <span className={bemClasses.element(`message-header-title`)}>
+            {title}
+          </span>
+          {message.deprecated && (
+            <div
+              className={bemClasses.element(`message-header-deprecated-badge`)}
+            >
+              <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
+            </div>
+          )}
+        </h3>
+      ) : null}
+      {summary}
+      {description}
+    </header>
+  );
+
+  const headers = message.headers && (
+    <div className={bemClasses.element(`message-headers`)}>
+      <header className={bemClasses.element(`message-headers-header`)}>
+        <h4>{HEADERS}</h4>
+      </header>
+      <div className={bemClasses.element(`message-headers-schema`)}>
+        <SchemaComponent
+          name={MESSAGE_HEADERS}
+          schema={message.headers}
+          exampleTitle={HEADERS_EXAMPLE}
+          hideTitle={true}
+        />
+      </div>
+    </div>
+  );
+
+  const payload = message.payload && (
+    <PayloadComponent payload={message.payload} />
+  );
+
+  const tags = !hideTags && message.tags && (
+    <div className={bemClasses.element(`message-tags`)}>
+      <header className={bemClasses.element(`message-tags-header`)}>
+        <h4>{TAGS_TEXT}</h4>
+      </header>
+      <ul className={bemClasses.element(`message-tags-list`)}>
+        {message.tags.map(tag => (
+          <li
+            key={tag.name}
+            className={bemClasses.element(`message-tags-list-item`)}
+          >
+            <Tag>{tag.name}</Tag>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  return (
+    <div className={bemClasses.element(`message`)}>
+      {header}
+      {headers}
+      {payload}
+      {tags}
+    </div>
+  );
+};

@@ -1,57 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Info, Servers } from '../../types';
-
-import { ServersComponent } from '../Servers/Servers';
-import { ContactComponent } from './Contact';
+import { TermsOfServiceComponent } from './TermsOfService';
 import { LicenseComponent } from './License';
-import { TERMS_OF_SERVICE } from '../../constants';
-import {
-  H1,
-  H2,
-  HeaderParagraph,
-  HrefHeader,
-  Markdown,
-} from '../../components';
-import { Info as InfoWrapper, InfoHeader } from './styled';
+import { ContactComponent } from './Contact';
+import { DefaultContentTypeComponent } from './DefaultContentType';
+import { Markdown } from '../../components';
+
+import { bemClasses } from '../../helpers';
+import { Info, DefaultContentType } from '../../types';
 
 interface Props {
   info: Info;
-  servers?: Servers;
-  showServers: boolean;
+  defaultContentType?: DefaultContentType;
 }
-export class InfoComponent extends Component<Props> {
-  render() {
-    const {
-      info: { title, version, description, termsOfService, contact, license },
-      servers,
-      showServers,
-    } = this.props;
 
-    return (
-      <InfoWrapper>
-        <InfoHeader>
-          <H1>
-            {title} {version}
-          </H1>
-          {description && <Markdown>{description}</Markdown>}
-          {termsOfService && (
-            <HeaderParagraph>
-              <H2>{TERMS_OF_SERVICE}</H2>
-              <HrefHeader
-                href={termsOfService}
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                {termsOfService}
-              </HrefHeader>
-            </HeaderParagraph>
-          )}
-        </InfoHeader>
-        {contact && <ContactComponent contact={contact} />}
-        {license && <LicenseComponent license={license} />}
-        {showServers && <ServersComponent servers={servers} />}
-      </InfoWrapper>
-    );
-  }
-}
+export const InfoComponent: React.FunctionComponent<Props> = ({
+  info: { title, version, description, termsOfService, contact, license },
+  defaultContentType,
+}) => (
+  <div className={bemClasses.element(`info`)}>
+    <header className={bemClasses.element(`info-header`)}>
+      <h1>{`${title} ${version}`}</h1>
+      <ul className={bemClasses.element(`info-list`)}>
+        {defaultContentType && (
+          <li className={bemClasses.element(`info-default-content-type`)}>
+            <DefaultContentTypeComponent type={defaultContentType} />
+          </li>
+        )}
+        {termsOfService && (
+          <li className={bemClasses.element(`info-terms-of-service`)}>
+            <TermsOfServiceComponent url={termsOfService} />
+          </li>
+        )}
+        {license && (
+          <li className={bemClasses.element(`info-license`)}>
+            <LicenseComponent {...license} />
+          </li>
+        )}
+        {contact && (contact.url || contact.email) ? (
+          <ContactComponent {...contact} />
+        ) : null}
+      </ul>
+    </header>
+    {description && (
+      <div className={bemClasses.element(`info-description`)}>
+        <Markdown>{description}</Markdown>
+      </div>
+    )}
+  </div>
+);

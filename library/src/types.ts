@@ -1,6 +1,5 @@
 import { ErrorObject } from 'ajv';
 import { ConfigInterface } from './config';
-import { ThemeInterface } from './theme';
 
 // Helpers
 export type PrimitiveType = number | boolean | string | null;
@@ -32,22 +31,93 @@ export type SchemaType =
   | 'string';
 
 // AsyncAPI types
+export enum BindingsType {
+  http = 'http',
+  ws = 'ws',
+  kafka = 'kafka',
+  amqp = 'amqp',
+  amqp1 = 'amqp1',
+  mqtt = 'mqtt',
+  mqtt5 = 'mqtt5',
+  nats = 'nats',
+  jms = 'jms',
+  sns = 'sns',
+  sqs = 'sqs',
+  stomp = 'stomp',
+  redis = 'redis',
+}
+export type Bindings = keyof typeof BindingsType;
+
 export interface AsyncAPI {
   asyncapi: AsyncAPIVersion;
-  info: Info;
-  channels: Channels;
   id?: UniqueID;
+  info: Info;
   servers?: Servers;
+  channels: Channels;
   defaultContentType?: DefaultContentType;
   components?: Components;
   tags?: Tag[];
   externalDocs?: ExternalDocs;
 }
 
-export interface Channels {
-  [key: string]: ChannelItem;
+export interface Info {
+  title: string;
+  version: string;
+  description?: DescriptionHTML;
+  termsOfService?: string;
+  contact?: Contact;
+  license?: License;
 }
-export interface ChannelItem {
+
+export interface Contact {
+  name?: string;
+  url?: string;
+  email?: string;
+}
+
+export interface License {
+  name: string;
+  url?: string;
+}
+
+export interface Servers {
+  [k: string]: Server;
+}
+
+export interface Server {
+  url: string;
+  protocol: string;
+  protocolVersion?: string;
+  description?: DescriptionHTML;
+  variables?: ServerVariables;
+  security?: SecurityRequirement[];
+  bindings?: ServerBindings[];
+}
+
+export interface ServerVariables {
+  [k: string]: ServerVariable;
+}
+
+export interface ServerVariable {
+  enum?: string[];
+  default?: string;
+  description?: DescriptionHTML;
+  examples?: string[];
+}
+
+export interface SecurityRequirement {
+  [key: string]: string[];
+}
+
+export interface ServerBindings {
+  [key: string]: any;
+}
+
+export interface Channels {
+  [key: string]: Channel;
+}
+
+export interface Channel {
   parameters?: Parameters;
   description?: DescriptionHTML;
   publish?: Operation;
@@ -84,50 +154,6 @@ export interface ProtocolInfo {
 
 export interface Parameters {
   [key: string]: Parameter;
-}
-
-export interface Info {
-  title: string;
-  version: string;
-  description?: DescriptionHTML;
-  termsOfService?: string;
-  contact?: Contact;
-  license?: License;
-}
-
-export interface Contact {
-  name?: string;
-  url?: string;
-  email?: string;
-}
-
-export interface License {
-  name: string;
-  url?: string;
-}
-
-export interface Servers {
-  [k: string]: Server;
-}
-
-export interface Server {
-  url: string;
-  protocol: string;
-  protocolVersion?: string;
-  description?: DescriptionHTML;
-  variables?: ServerVariables;
-  security?: SecurityRequirement[];
-}
-
-export interface ServerVariables {
-  [k: string]: ServerVariable;
-}
-
-export interface ServerVariable {
-  enum?: string[];
-  default?: string;
-  description?: DescriptionHTML;
-  examples?: string[];
 }
 
 export interface Topic {
@@ -219,20 +245,57 @@ export interface MessageTrait {
 export interface Components {
   schemas?: Record<string, Schema>;
   messages?: Record<string, Message>;
-  securitySchemes?: Record<string, SecurityScheme>;
+  securitySchemes?: Record<Bindings, SecurityScheme>;
   parameters?: Record<string, Parameter>;
   correlationIds?: CorrelationId;
   operationTraits?: Record<string, OperationTrait>;
   messageTraits?: Record<string, MessageTrait>;
 }
 
+export enum SecuritySchemeType {
+  userPassword = 'User / Password',
+  apiKey = 'API key',
+  X509 = 'X509',
+  symmetricEncryption = 'Symmetric Encryption',
+  asymmetricEncryption = 'Asymmetric Encryption',
+  httpApiKey = 'HTTP API key',
+  http = 'HTTP',
+  oauth2 = 'OAuth2',
+  openIdConnect = 'Open ID',
+}
+export type SecuritySchemeTypes = keyof typeof SecuritySchemeType;
+
 export interface SecurityScheme {
-  type: string;
+  type: SecuritySchemeTypes;
+  description?: DescriptionHTML;
   in: string;
   name: string;
   scheme: string;
   bearerFormat?: string;
-  description?: DescriptionHTML;
+  flows?: OAuthFlows;
+  openIdConnectUrl?: string;
+}
+
+export enum OAuthFlowsType {
+  implicit = 'Implicit',
+  password = 'Password',
+  clientCredentials = 'Client Credentials',
+  authorizationCode = 'Authorization Code',
+}
+export type OAuthFlowsTypes = keyof typeof OAuthFlowsType;
+
+export interface OAuthFlows {
+  implicit?: OAuthFlow;
+  password?: OAuthFlow;
+  clientCredentials?: OAuthFlow;
+  authorizationCode?: OAuthFlow;
+}
+
+export interface OAuthFlow {
+  authorizationUrl: string;
+  tokenUrl: string;
+  refreshUrl?: string;
+  scopes: Record<string, string>;
 }
 
 export interface XML {
@@ -241,10 +304,6 @@ export interface XML {
   prefix?: string;
   attribute?: boolean;
   wrapped?: boolean;
-}
-
-export interface SecurityRequirement {
-  [key: string]: string[];
 }
 
 export interface Schema {
@@ -311,7 +370,6 @@ export interface ParserOptions {
 
 export interface AsyncApiProps {
   schema: PropsSchema;
-  theme?: Partial<ThemeInterface>;
   config?: Partial<ConfigInterface>;
   parserOptions?: Partial<ParserOptions>;
 }

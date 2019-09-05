@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-import { Server } from '../../types';
+import { ServerVariablesComponent } from './Variables';
+import { ServerSecurityComponent } from './Security';
 
-import { ServerVariablesComponent } from './ServerVariables';
-
+import { bemClasses } from '../../helpers';
+import { Server, SecurityScheme } from '../../types';
 import { Markdown, TableAccessor, TableRow } from '../../components';
-import { ServerExpandIcon } from './styled';
 
 interface ServerWithVariables {
   server: Server;
@@ -15,71 +15,73 @@ interface ServerWithVariables {
   toggleVariables: (event: any) => void;
 }
 
-const serverAccessors: TableAccessor[] = [
-  (el: ServerWithVariables) => (
+const serverAccessors: Array<TableAccessor<ServerWithVariables>> = [
+  el => (
     <>
-      {el.serverVariables && typeof el.toggleVariables === 'function' && (
-        <ServerExpandIcon
+      {el.serverVariables && el.toggleVariables instanceof Function && (
+        <span
+          className={`${bemClasses.element(`server-expand-icon`)}${
+            el.openAccordion
+              ? ` ${bemClasses.modifier(`open`, `server-expand-icon`)}`
+              : ''
+          }`}
           onClick={el.toggleVariables}
-          open={el.openAccordion}
         />
       )}
-      {el.server.url}
+      <span>{el.server.url}</span>
     </>
   ),
-  (el: ServerWithVariables) => el.stage,
-  (el: ServerWithVariables) => el.server.protocol,
-  (el: ServerWithVariables) =>
-    el.server.description && <Markdown>{el.server.description}</Markdown>,
+  el => <span>{el.stage}</span>,
+  el => (
+    <span>{`${el.server.protocol}${
+      el.server.protocolVersion ? ` ${el.server.protocolVersion}` : ``
+    }`}</span>
+  ),
+  el => el.server.description && <Markdown>{el.server.description}</Markdown>,
 ];
 
 interface Props {
   server: Server;
   stage: string;
+  securitySchemes?: Record<string, SecurityScheme>;
 }
 
-interface State {
-  openAccordion: boolean;
-}
+export const ServerComponent: React.FunctionComponent<Props> = ({
+  server,
+  stage,
+  securitySchemes,
+}) => {
+  const [openAccordion, setOpenAccordion] = useState<boolean>(false);
 
-export class ServerComponent extends Component<Props, State> {
-  state = {
-    openAccordion: false,
+  const variables = server.variables
+    ? Object.entries(server.variables).map(([key, variable]) => ({
+        key,
+        content: variable,
+      }))
+    : [];
+
+  const serverWithVariables: ServerWithVariables = {
+    stage,
+    server,
+    serverVariables: variables.length > 0,
+    openAccordion,
+    toggleVariables: (_: any) => setOpenAccordion(state => !state),
   };
 
-  render() {
-    const {
-      props: { server, stage },
-      state: { openAccordion },
-    } = this;
-
-    const vars = server.variables
-      ? Object.entries(server.variables).map(([key, variable]) => ({
-          key,
-          content: variable,
-        }))
-      : [];
-
-    const serverWithVariables: ServerWithVariables = {
-      stage,
-      server,
-      serverVariables: vars.length > 0,
-      openAccordion,
-      toggleVariables: this.toggle,
-    };
-
-    return (
-      <>
-        <TableRow element={serverWithVariables} accessors={serverAccessors} />
-        <ServerVariablesComponent
-          variables={vars}
+  return (
+    <>
+      <TableRow element={serverWithVariables} accessors={serverAccessors} />
+      <ServerVariablesComponent
+        variables={variables}
+        openAccordion={openAccordion}
+      />
+      {server.security && securitySchemes && (
+        <ServerSecurityComponent
+          requirements={server.security}
+          schemes={securitySchemes}
           openAccordion={openAccordion}
         />
-      </>
-    );
-  }
-
-  private toggle = () => {
-    this.setState(prevState => ({ openAccordion: !prevState.openAccordion }));
-  };
-}
+      )}
+    </>
+  );
+};

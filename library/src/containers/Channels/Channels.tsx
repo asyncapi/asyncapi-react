@@ -1,21 +1,26 @@
-import React, { FunctionComponent } from 'react';
-import { StyledChannels, ChannelsHeader } from './styled';
-import { Channel } from './Channel';
-import { H2 } from '../../components';
-import { Channels as ChannelsType } from '../../types';
+import React from 'react';
 
-import { CHANNELS as CHANNELS_TEXT } from '../../constants';
+import { Channel } from './Channel';
+
+import { bemClasses } from '../../helpers';
+import { Channels as ChannelsType } from '../../types';
+import { CHANNELS } from '../../constants';
+
 interface Props {
   channels: ChannelsType;
 }
 
-export const Channels: FunctionComponent<Props> = ({ channels }) => (
-  <StyledChannels>
-    <ChannelsHeader>
-      <H2>{CHANNELS_TEXT}</H2>
-    </ChannelsHeader>
-    {Object.entries(channels).map(([name, channel]) => (
-      <Channel name={name} channel={channel} key={name} />
-    ))}
-  </StyledChannels>
+export const Channels: React.FunctionComponent<Props> = ({ channels }) => (
+  <div className={bemClasses.element(`channels`)}>
+    <header className={bemClasses.element(`channels-header`)}>
+      <h2>{CHANNELS}</h2>
+    </header>
+    <ul className={bemClasses.element(`channels-list`)}>
+      {Object.entries(channels).map(([name, channel]) => (
+        <li key={name} className={bemClasses.element(`channels-list-item`)}>
+          <Channel name={name} channel={channel} />
+        </li>
+      ))}
+    </ul>
+  </div>
 );

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import AsyncApi, {
-  ThemeInterface,
-  ConfigInterface,
-} from '@kyma-project/asyncapi-react';
+import AsyncApi, { ConfigInterface } from '@kyma-project/asyncapi-react';
 
 import {
   Navigation,
@@ -17,48 +14,34 @@ import {
   AsyncApiWrapper,
 } from './components';
 
-import {
-  defaultSchema,
-  defaultTheme,
-  sampleTheme,
-  defaultConfig,
-  parse,
-  stringify,
-} from './common';
+import { defaultSchema2, defaultConfig, parse } from './common';
 
 interface State {
   schema: string;
-  theme: string;
   config: string;
   schemaFromEditor: string;
   schemaFromExternalResource: string;
-  themeFromEditor: string;
   configFromEditor: string;
 }
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: defaultSchema,
-    theme: stringify<ThemeInterface>(sampleTheme),
+    schema: defaultSchema2,
     config: defaultConfig,
-    schemaFromEditor: defaultSchema,
+    schemaFromEditor: defaultSchema2,
     schemaFromExternalResource: '',
-    themeFromEditor: stringify<ThemeInterface>(sampleTheme),
     configFromEditor: defaultConfig,
   };
 
   render() {
     const {
       schema,
-      theme = stringify<ThemeInterface>(defaultTheme),
       config = defaultConfig,
       schemaFromEditor,
       schemaFromExternalResource,
-      themeFromEditor,
       configFromEditor,
     } = this.state;
 
-    const parsedTheme = parse<ThemeInterface>(theme);
     const parsedConfig = config
       ? parse<ConfigInterface>(config)
       : parse<ConfigInterface>(defaultConfig);
@@ -85,13 +68,6 @@ class Playground extends Component<{}, State> {
                   />
                 </>
               </Tab>
-              <Tab title="Theme" key="Theme">
-                <CodeEditor
-                  key="Theme"
-                  code={themeFromEditor}
-                  parentCallback={this.updateTheme}
-                />
-              </Tab>
               <Tab title="Configuration" key="Configuration">
                 <CodeEditor
                   key="Configuration"
@@ -102,11 +78,7 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi
-              schema={schema}
-              theme={parsedTheme}
-              config={parsedConfig}
-            />
+            <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </ContentWrapper>
       </PlaygroundWrapper>
@@ -121,19 +93,14 @@ class Playground extends Component<{}, State> {
     this.setState({ schemaFromExternalResource: schema });
   };
 
-  private updateTheme = (theme: string) => {
-    this.setState({ themeFromEditor: theme });
-  };
-
   private updateConfig = (config: string) => {
     this.setState({ configFromEditor: config });
   };
 
   private refreshState = () => {
-    const { schemaFromEditor, themeFromEditor, configFromEditor } = this.state;
+    const { schemaFromEditor, configFromEditor } = this.state;
     this.setState({
       schema: schemaFromEditor,
-      theme: themeFromEditor,
       config: configFromEditor,
     });
   };

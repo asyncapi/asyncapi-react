@@ -1,50 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
+
+import { Href } from '../../components';
 
 import { License } from '../../types';
 
-import { H2, HrefHeader } from '../../components';
-import {
-  License as LicenseWrapper,
-  LicenseHeader,
-  LicenseList,
-} from './styled';
-import { LICENSE, TYPE, SPECIFICATION } from '../../constants';
+export const LicenseComponent: React.FunctionComponent<License> = ({
+  name,
+  url,
+}) => {
+  const nameWrapper = <span>{name}</span>;
 
-interface Props {
-  license: License;
-}
-
-export class LicenseComponent extends Component<Props> {
-  render() {
-    const {
-      license: { name, url },
-    } = this.props;
-
-    return (
-      <LicenseWrapper>
-        <LicenseHeader>
-          <H2>{LICENSE}</H2>
-        </LicenseHeader>
-        <LicenseList>
-          {name && (
-            <li>
-              <strong>{TYPE}</strong>: {name}
-            </li>
-          )}
-          {url && (
-            <li>
-              <strong>{SPECIFICATION}</strong>:{' '}
-              <HrefHeader
-                href={url}
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                {url}
-              </HrefHeader>
-            </li>
-          )}
-        </LicenseList>
-      </LicenseWrapper>
-    );
-  }
-}
+  return <div>{url ? <Href href={url}>{nameWrapper}</Href> : nameWrapper}</div>;
+};

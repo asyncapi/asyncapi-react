@@ -3,12 +3,7 @@ import {
   ParserErrorNoJS,
 } from 'asyncapi-parser';
 
-import {
-  AsyncAPI,
-  ParserReturn,
-  FetchingSchemaInterface,
-  AsyncApiProps,
-} from '../types';
+import { ParserReturn, FetchingSchemaInterface, AsyncApiProps } from '../types';
 
 import { UNSUPPORTED_SCHEMA_VERSION } from '../constants';
 
@@ -17,13 +12,13 @@ type ParserOptions = AsyncApiProps['parserOptions'];
 type ParseDocument = (
   content: string | any,
   parserOptions?: ParserOptions,
-) => Promise<AsyncAPI>;
+) => Promise<any>;
 
 type ParseDocumentFromURL = (
   url: string,
   requestOptions?: RequestInit,
   parserOptions?: ParserOptions,
-) => Promise<AsyncAPI>;
+) => Promise<any>;
 
 export default class Parser {
   private parseSchema: ParseDocument;
@@ -39,8 +34,8 @@ export default class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncAPI = await this.parseSchema(content, parserOptions);
-      return { data };
+      const data = await this.parseSchema(content, parserOptions);
+      return this.extractDocument(data);
     } catch (err) {
       return this.handleError(err);
     }
@@ -51,18 +46,18 @@ export default class Parser {
     parserOptions?: ParserOptions,
   ): Promise<ParserReturn> {
     try {
-      const data: AsyncAPI = await this.parseSchemaFromURL(
+      const data = await this.parseSchemaFromURL(
         arg.url,
         arg.requestOptions,
         parserOptions,
       );
-      return { data };
+      return this.extractDocument(data);
     } catch (err) {
       return this.handleError(err);
     }
   }
 
-  handleError = (err: any): ParserReturn => {
+  private handleError = (err: any): ParserReturn => {
     if (
       err instanceof ParserErrorUnsupportedVersion ||
       err instanceof ParserErrorNoJS
@@ -80,6 +75,17 @@ export default class Parser {
     return {
       data: err.parsedJSON || null,
       error: { message: err.message, validationError: err.errors },
+    };
+  };
+
+  private extractDocument = (data: any): ParserReturn => {
+    if (data.json instanceof Function) {
+      return {
+        data: data.json(),
+      };
+    }
+    return {
+      data,
     };
   };
 }

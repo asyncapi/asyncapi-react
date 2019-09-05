@@ -1,5 +1,4 @@
-import React, { Component, FunctionComponent } from 'react';
-import { ThemeProvider } from 'styled-components';
+import React, { Component } from 'react';
 
 import {
   AsyncAPI,
@@ -9,13 +8,13 @@ import {
   AsyncApiProps,
   PropsSchema,
 } from '../../types';
-import { ThemeInterface, defaultTheme } from '../../theme';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier } from '../../helpers';
+import { beautifier, bemClasses } from '../../helpers';
 import Parser from '../../helpers/parser';
 import { parse, parseFromUrl } from 'asyncapi-parser';
 
 import { InfoComponent } from '../Info/Info';
+import { ServersComponent } from '../Servers/Servers';
 import { SecurityComponent } from '../Security/Security';
 
 import { MessagesComponent } from '../Messages/Messages';
@@ -23,8 +22,6 @@ import { SchemasComponent } from '../Schemas/Schemas';
 import { ErrorComponent } from '../Error/Error';
 
 import { Channels } from '../Channels/Channels';
-
-import { AsyncApiWrapper } from './styled';
 
 const parser = new Parser(parse, parseFromUrl);
 
@@ -34,15 +31,13 @@ interface AsyncAPIState {
 }
 
 const defaultAsyncApi: AsyncAPI = {
-  asyncapi: '',
+  asyncapi: '2.0.0-rc2',
   info: {
     title: 'AsyncApi example title',
-    version: '2.0.0',
+    version: '1.0.0',
   },
   channels: {},
 };
-
-// todo: add ability to forward options to parser and dereferencer
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
@@ -63,7 +58,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { theme, config } = this.props;
+    const { config } = this.props;
     const { validatedSchema, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
@@ -73,20 +68,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...(!!config && config.show),
       },
     };
-
-    const concatenatedTheme: ThemeInterface = concatenatedConfig.disableDefaultTheme
-      ? (theme as ThemeInterface)
-      : { ...defaultTheme, ...theme };
+    bemClasses.setPrefix(concatenatedConfig.prefixClassName);
 
     if (!validatedSchema || !Object.keys(validatedSchema).length) {
       if (!error) {
         return null;
       }
-      return (
-        <Wrapper theme={concatenatedTheme}>
-          {concatenatedConfig.showErrors && <ErrorComponent error={error} />}
-        </Wrapper>
-      );
+      return concatenatedConfig.showErrors && <ErrorComponent error={error} />;
     }
 
     if (!concatenatedConfig.show) {
@@ -94,51 +82,53 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     return (
-      <Wrapper theme={concatenatedTheme}>
+      <div className={concatenatedConfig.prefixClassName}>
         {concatenatedConfig.showErrors && !!error && (
           <ErrorComponent error={error} />
         )}
         {concatenatedConfig.show.info && validatedSchema.info && (
           <InfoComponent
             info={validatedSchema.info}
-            servers={validatedSchema.servers}
-            showServers={Boolean(
-              concatenatedConfig.show.servers && !!validatedSchema.servers,
-            )}
+            defaultContentType={validatedSchema.defaultContentType}
           />
         )}
-        {concatenatedConfig.show.security &&
-          validatedSchema.servers &&
-          validatedSchema.components &&
-          validatedSchema.components.securitySchemes && (
-            <SecurityComponent
-              securitySchemes={validatedSchema.components.securitySchemes}
-              servers={validatedSchema.servers}
-            />
-          )}
-
+        {concatenatedConfig.show.servers && !!validatedSchema.servers && (
+          <ServersComponent
+            servers={validatedSchema.servers}
+            securitySchemes={
+              validatedSchema.components &&
+              validatedSchema.components.securitySchemes
+            }
+          />
+        )}
         {concatenatedConfig.show.channels && !!validatedSchema.channels && (
           <Channels channels={validatedSchema.channels} />
         )}
         {validatedSchema.components && (
-          <>
+          <div className={bemClasses.element(`components`)}>
             {concatenatedConfig.show.messages &&
-              validatedSchema.components &&
               validatedSchema.components.messages && (
                 <MessagesComponent
                   messages={validatedSchema.components.messages}
                 />
               )}
             {concatenatedConfig.show.schemas &&
-              validatedSchema.components &&
               validatedSchema.components.schemas && (
                 <SchemasComponent
                   schemas={validatedSchema.components.schemas}
                 />
               )}
-          </>
+            {concatenatedConfig.show.security &&
+              validatedSchema.servers &&
+              validatedSchema.components.securitySchemes && (
+                <SecurityComponent
+                  securitySchemes={validatedSchema.components.securitySchemes}
+                  servers={validatedSchema.servers}
+                />
+              )}
+          </div>
         )}
-      </Wrapper>
+      </div>
     );
   }
 
@@ -147,26 +137,19 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     parserOptions?: AsyncApiProps['parserOptions'],
   ) {
     if (isFetchingSchemaInterface(schema)) {
-      /* tslint:disable: no-shadowed-variable 
-      there's clearly a return statement in this code block so I don't why this triggers */
-
-      const { data, error } = await parser.parseFromUrl(schema, parserOptions);
-
-      const beautifiedSchema = this.beautifySchema(data);
-
+      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
       this.setState({
-        validatedSchema: beautifiedSchema,
-        error,
+        validatedSchema: this.beautifySchema(parsedFromUrl.data),
+        error: parsedFromUrl.error,
       });
       return;
-      /* tslint:enable: no-shadowed-variable */
     }
 
-    const { data, error } = await parser.parse(schema, parserOptions);
-
-    const beautifiedSchema = this.beautifySchema(data);
-
-    this.setState({ validatedSchema: beautifiedSchema, error });
+    const parsed = await parser.parse(schema, parserOptions);
+    this.setState({
+      validatedSchema: this.beautifySchema(parsed.data),
+      error: parsed.error,
+    });
   }
 
   private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
@@ -176,15 +159,5 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     return beautifier.beautify(schema);
   }
 }
-
-interface WrapperProps {
-  theme: ThemeInterface;
-}
-
-const Wrapper: FunctionComponent<WrapperProps> = ({ children, theme }) => (
-  <ThemeProvider theme={theme}>
-    <AsyncApiWrapper>{children}</AsyncApiWrapper>
-  </ThemeProvider>
-);
 
 export default AsyncApiComponent;
