@@ -26,6 +26,7 @@ export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
     .map(requirement => {
       const def: SecurityScheme | undefined =
         schemes[Object.keys(requirement)[0]];
+
       if (!def) {
         return null;
       }

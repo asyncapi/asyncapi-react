@@ -37,8 +37,8 @@
   },
   "lint-staged": {
     "linters": {
-      "**/*.{ts,tsx,js,jsx,json,html,css,yaml}": [
-        "prettier --write",
+      "**/*.{ts,tsx,js,jsx,json,css,html,yaml}": [
+        "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
         "git add"
       ]
     },
