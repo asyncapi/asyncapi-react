@@ -1,6 +1,6 @@
 # AsyncAPI React Component
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
 
@@ -76,8 +76,15 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars2.githubusercontent.com/u/20404945?v=4" width="100px;" alt="Maciej Urbańczyk"/><br /><sub><b>Maciej Urbańczyk</b></sub>](https://github.com/magicmatatjahu)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Code") [📖](https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu "Documentation") [🤔](#ideas-magicmatatjahu "Ideas, Planning, & Feedback") [🚧](#maintenance-magicmatatjahu "Maintenance") | [<img src="https://avatars0.githubusercontent.com/u/40655785?v=4" width="100px;" alt="Karolina Zydek"/><br /><sub><b>Karolina Zydek</b></sub>](https://github.com/kazydek)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=kazydek "Documentation") [👀](#review-kazydek "Reviewed Pull Requests") [🚧](#maintenance-kazydek "Maintenance") | [<img src="https://avatars3.githubusercontent.com/u/20790348?v=4" width="100px;" alt="Agata"/><br /><sub><b>Agata</b></sub>](https://github.com/akucharska)<br />[💻](https://github.com/asyncapi/asyncapi-react/commits?author=akucharska "Code") [🚧](#maintenance-akucharska "Maintenance") | [<img src="https://avatars1.githubusercontent.com/u/6995927?v=4" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub>](http://resume.github.io/?derberg)<br />[📖](https://github.com/asyncapi/asyncapi-react/commits?author=derberg "Documentation") [💡](#example-derberg "Examples") [🤔](#ideas-derberg "Ideas, Planning, & Feedback") |
-| :---: | :---: | :---: | :---: |
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/magicmatatjahu"><img src="https://avatars2.githubusercontent.com/u/20404945?v=4" width="100px;" alt="Maciej Urbańczyk"/><br /><sub><b>Maciej Urbańczyk</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=magicmatatjahu" title="Documentation">📖</a> <a href="#ideas-magicmatatjahu" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-magicmatatjahu" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/kazydek"><img src="https://avatars0.githubusercontent.com/u/40655785?v=4" width="100px;" alt="Karolina Zydek"/><br /><sub><b>Karolina Zydek</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=kazydek" title="Documentation">📖</a> <a href="#review-kazydek" title="Reviewed Pull Requests">👀</a> <a href="#maintenance-kazydek" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/akucharska"><img src="https://avatars3.githubusercontent.com/u/20790348?v=4" width="100px;" alt="Agata"/><br /><sub><b>Agata</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=akucharska" title="Code">💻</a> <a href="#maintenance-akucharska" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="http://resume.github.io/?derberg"><img src="https://avatars1.githubusercontent.com/u/6995927?v=4" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=derberg" title="Documentation">📖</a> <a href="#example-derberg" title="Examples">💡</a> <a href="#ideas-derberg" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/aerfio"><img src="https://avatars0.githubusercontent.com/u/17271979?v=4" width="100px;" alt="Mateusz Puczyński"/><br /><sub><b>Mateusz Puczyński</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Documentation">📖</a> <a href="#ideas-aerfio" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-aerfio" title="Maintenance">🚧</a> <a href="#review-aerfio" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Tests">⚠️</a></td>
+  </tr>
+</table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
