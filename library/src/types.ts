@@ -180,6 +180,11 @@ export function isRawMessage(message: Message): message is RawMessage {
   return !(message as any).oneOf;
 }
 
+export enum PayloadType {
+  PUBLISH = 'publish',
+  SUBSCRIBE = 'subscribe',
+}
+
 export function isOneOfPayload(
   payload: RawMessage['payload'],
 ): payload is Record<OneOf, Schema[]> {

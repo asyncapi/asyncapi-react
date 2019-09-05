@@ -1,19 +1,13 @@
+import { CSS_PREFIX } from '../constants';
+
 class BEMCLasses {
-  private prefix: string = '';
-
-  setPrefix(prefix?: string): void {
-    if (prefix) {
-      this.prefix = prefix;
-    }
-  }
-
   element(element: string): string {
-    return element ? `${this.prefix}__${element}` : '';
+    return element ? `${CSS_PREFIX}__${element}` : '';
   }
 
   modifier(modifier: string, element?: string): string {
     return modifier
-      ? `${this.prefix}${element ? `__${element}` : ''}--${modifier}`
+      ? `${CSS_PREFIX}${element ? `__${element}` : ''}--${modifier}`
       : '';
   }
 

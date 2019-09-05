@@ -7,7 +7,6 @@ import {
   Table,
   TableRowProps,
   TableAccessor,
-  TableRow,
 } from '../../components';
 import {
   URL_VARIABLES_TEXT,
@@ -19,8 +18,13 @@ import {
 type ServerVariableWithKey = TypeWithKey<string, ServerVariable>;
 
 const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
-  el => el.key,
-  el => (el.content.default ? el.content.default : <em>{NONE_TEXT}</em>),
+  el => <span>{el.key}</span>,
+  el =>
+    el.content.default ? (
+      <span>{el.content.default}</span>
+    ) : (
+      <em>{NONE_TEXT}</em>
+    ),
   el =>
     el.content.enum ? (
       <ul className={bemClasses.element(`server-variables-enum-list`)}>
@@ -41,52 +45,34 @@ const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
 
 interface Props {
   variables: ServerVariableWithKey[];
-  openAccordion: boolean;
 }
 
 export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
   variables,
-  openAccordion = false,
 }) => {
   if (!variables.length) {
     return null;
   }
-
+  const className = `server-variables`;
   const rows: TableRowProps[] = variables.map(variable => ({
     key: variable.key,
     accessors: serverVariablesAccessors,
     element: variable,
   }));
 
-  const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);
-  const variablesTableCellClassName = bemClasses.element(
-    `server-variables-table-cell`,
-  );
-  const className = bemClasses.concatenate([
-    nestedTableCellClassName,
-    variablesTableCellClassName,
-  ]);
-
-  const element = (
-    <td className={className} colSpan={4}>
-      <div className={bemClasses.element(`server-variables`)}>
+  return (
+    <section className={bemClasses.element(className)}>
+      <header className={bemClasses.element(`${className}-header`)}>
+        <h4>{URL_VARIABLES_TEXT}</h4>
+      </header>
+      <div className={bemClasses.element(`${className}-table`)}>
         <Table
           header={{
-            title: URL_VARIABLES_TEXT,
             columns: SERVER_COLUMN_NAMES,
           }}
           rows={rows}
-          nested={true}
         />
       </div>
-    </td>
-  );
-
-  return (
-    <TableRow
-      openAccordion={openAccordion}
-      accordion={true}
-      element={element}
-    />
+    </section>
   );
 };

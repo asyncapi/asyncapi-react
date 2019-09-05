@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ServerSecurityItemComponent } from './SecurityItem';
 
-import { Table, TableRow } from '../../components';
+import { Table } from '../../components';
 import { bemClasses } from '../../helpers';
 import {
   Components,
@@ -21,45 +21,39 @@ interface Props {
 export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
   requirements,
   schemes,
-  openAccordion = false,
 }) => {
-  const rows: React.ReactNodeArray = requirements.map(requirement => {
-    const def: SecurityScheme = schemes[Object.keys(requirement)[0]];
+  const rows: React.ReactNodeArray = requirements
+    .map(requirement => {
+      const def: SecurityScheme | undefined =
+        schemes[Object.keys(requirement)[0]];
+      if (!def) {
+        return null;
+      }
+      return (
+        <ServerSecurityItemComponent securityScheme={def} key={def.type} />
+      );
+    })
+    .filter(Boolean);
 
-    return <ServerSecurityItemComponent securityScheme={def} key={def.type} />;
-  });
+  if (!rows || !rows.length) {
+    return null;
+  }
+  const className = `server-security`;
 
-  const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);
-  const securityTableCellClassName = bemClasses.element(
-    `server-security-table-cell`,
-  );
-  const className = bemClasses.concatenate([
-    nestedTableCellClassName,
-    securityTableCellClassName,
-  ]);
-
-  const element = (
-    <td className={className} colSpan={4}>
-      <div className={bemClasses.element(`server-security`)}>
+  return (
+    <section className={bemClasses.element(className)}>
+      <header className={bemClasses.element(`${className}-header`)}>
+        <h4>{SECURITY_TEXT}</h4>
+      </header>
+      <div className={bemClasses.element(`${className}-table`)}>
         <Table
           header={{
-            title: SECURITY_TEXT,
             columns: SERVER_SECURITY_COLUMN_NAMES,
           }}
-          nested={true}
         >
           {rows}
         </Table>
       </div>
-    </td>
-  );
-
-  return (
-    <TableRow
-      openAccordion={openAccordion}
-      accordion={true}
-      element={element}
-      nested={true}
-    />
+    </section>
   );
 };

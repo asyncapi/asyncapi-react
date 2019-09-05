@@ -119,6 +119,7 @@ interface Props {
   name: string;
   properties: Schema;
   treeSpace: number;
+  description?: React.ReactNode;
 }
 
 export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({

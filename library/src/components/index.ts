@@ -7,3 +7,4 @@ export * from './Markdown';
 export * from './Badge';
 export * from './Tag';
 export * from './Tree';
+export * from './Toggle';

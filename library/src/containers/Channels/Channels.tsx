@@ -1,26 +1,49 @@
 import React from 'react';
 
-import { Channel } from './Channel';
+import { ChannelComponent } from './Channel';
 
+import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
-import { Channels as ChannelsType } from '../../types';
+import { Channels } from '../../types';
+import { Toggle } from '../../components';
 import { CHANNELS } from '../../constants';
 
 interface Props {
-  channels: ChannelsType;
+  channels: Channels;
+  collapse?: CollapseNestedConfig;
 }
 
-export const Channels: React.FunctionComponent<Props> = ({ channels }) => (
-  <div className={bemClasses.element(`channels`)}>
-    <header className={bemClasses.element(`channels-header`)}>
-      <h2>{CHANNELS}</h2>
-    </header>
-    <ul className={bemClasses.element(`channels-list`)}>
+export const ChannelsComponent: React.FunctionComponent<Props> = ({
+  channels,
+  collapse,
+}) => {
+  const className = `channels`;
+
+  const header = <h2>{CHANNELS}</h2>;
+
+  const content = (
+    <ul className={bemClasses.element(`${className}-list`)}>
       {Object.entries(channels).map(([name, channel]) => (
-        <li key={name} className={bemClasses.element(`channels-list-item`)}>
-          <Channel name={name} channel={channel} />
+        <li key={name} className={bemClasses.element(`${className}-list-item`)}>
+          <ChannelComponent
+            name={name}
+            channel={channel}
+            toggleExpand={collapse && collapse.elements}
+          />
         </li>
       ))}
     </ul>
-  </div>
-);
+  );
+
+  return (
+    <section className={bemClasses.element(className)}>
+      <Toggle
+        header={header}
+        className={className}
+        expanded={collapse && collapse.root}
+      >
+        {content}
+      </Toggle>
+    </section>
+  );
+};

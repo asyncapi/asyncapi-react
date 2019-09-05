@@ -1,5 +1,11 @@
 import { TableColumnName } from './types';
 
+export const CSS_PREFIX = 'asyncapi';
+export const CONTENT_TYPES_SITE =
+  'https://www.iana.org/assignments/media-types';
+export const COLLAPSE_ALL = 'Collapse All';
+export const EXPAND_ALL = 'Expand All';
+
 export const UNSUPPORTED_SCHEMA_VERSION =
   'AsyncAPI version is unsupported, use version 2.0 or higher';
 export const SERVERS = 'Servers';
@@ -7,8 +13,14 @@ export const SERVERS = 'Servers';
 export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
 export const ANY_OF_PAYLOADS_TEXT = 'Any of those payloads:';
 export const GENERATED_BADGE = 'generated';
-export const ONE_OF_FOLLOWING_MESSAGES =
+export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH =
+  'You can receive one of the following messages:';
+export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE =
+  'You can receive the following message:';
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE =
   'You can send one of the following messages:';
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE =
+  'You can send the following message:';
 
 export const CONTACT = 'Contact';
 export const NAME = 'Name';
@@ -33,7 +45,7 @@ export const SCHEMAS_TEXT = 'Schemas';
 export const MESSAGE = 'Message';
 
 export const CHANNELS = 'Channels';
-export const CHANNEL_PARAMETERS = 'Channel Parameters';
+export const PARAMETERS = 'Parameters';
 export const HEADERS = 'Headers';
 export const MESSAGE_HEADERS = 'Message Headers';
 export const HEADERS_EXAMPLE = 'Example of headers';
@@ -55,8 +67,8 @@ export const URL_VARIABLES_TEXT = 'URL Variables';
 
 export const FLOWS = {
   FLOW: 'Flow',
-  AUTHORIZATION_URL: 'Auth URL',
-  TOKEN_URL: 'Token UR',
+  AUTHORIZATION_URL: 'Authorization URL',
+  TOKEN_URL: 'Token URL',
   REFRESH_URL: 'Refresh URL',
   SCOPES: 'Scopes',
 };
@@ -74,9 +86,10 @@ export const SECURITY_COLUMNS_NAMES: TableColumnName[] = [
 export const SERVER_COLUMN_NAMES: TableColumnName[] = [
   'URL',
   'Default',
-  'Protocol',
+  'Possible values',
   'Description',
 ];
+
 export const SERVER_SECURITY_COLUMN_NAMES: TableColumnName[] = [
   'Type',
   'Bearer format',

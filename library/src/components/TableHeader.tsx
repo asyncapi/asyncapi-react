@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TableAccessor } from './TableRow';
 
-import { bemClasses } from '../helpers';
+import { createNestedClassName } from '../helpers';
 import { TableColumnName } from '../types';
 
 export interface TableColumn {
@@ -25,21 +25,19 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
     return null;
   }
 
-  const createClassName = (className: string): string =>
-    nested
-      ? bemClasses.modifier(`nested`, className)
-      : bemClasses.element(className);
-
   return (
-    <thead className={createClassName(`table-header`)}>
+    <thead className={createNestedClassName(`table-header`, nested)}>
       {title && (
-        <tr className={createClassName(`table-header-title`)}>
+        <tr className={createNestedClassName(`table-header-title`, nested)}>
           <td colSpan={columns.length}>{title}</td>
         </tr>
       )}
-      <tr className={createClassName(`table-header-columns`)}>
+      <tr className={createNestedClassName(`table-header-columns`, nested)}>
         {columns.map((column, index) => (
-          <th key={index} className={createClassName(`table-header-column`)}>
+          <th
+            key={index}
+            className={createNestedClassName(`table-header-column`, nested)}
+          >
             {column}
           </th>
         ))}

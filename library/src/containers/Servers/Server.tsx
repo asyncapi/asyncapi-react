@@ -1,57 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
 
 import { bemClasses } from '../../helpers';
+import { Toggle, Markdown } from '../../components';
 import { Server, SecurityScheme } from '../../types';
-import { Markdown, TableAccessor, TableRow } from '../../components';
-
-interface ServerWithVariables {
-  server: Server;
-  stage: string;
-  serverVariables: boolean;
-  openAccordion: boolean;
-  toggleVariables: (event: any) => void;
-}
-
-const serverAccessors: Array<TableAccessor<ServerWithVariables>> = [
-  el => (
-    <>
-      {el.serverVariables && el.toggleVariables instanceof Function && (
-        <span
-          className={`${bemClasses.element(`server-expand-icon`)}${
-            el.openAccordion
-              ? ` ${bemClasses.modifier(`open`, `server-expand-icon`)}`
-              : ''
-          }`}
-          onClick={el.toggleVariables}
-        />
-      )}
-      <span>{el.server.url}</span>
-    </>
-  ),
-  el => <span>{el.stage}</span>,
-  el => (
-    <span>{`${el.server.protocol}${
-      el.server.protocolVersion ? ` ${el.server.protocolVersion}` : ``
-    }`}</span>
-  ),
-  el => el.server.description && <Markdown>{el.server.description}</Markdown>,
-];
 
 interface Props {
   server: Server;
   stage: string;
   securitySchemes?: Record<string, SecurityScheme>;
+  toggleExpand?: boolean;
 }
 
 export const ServerComponent: React.FunctionComponent<Props> = ({
   server,
   stage,
   securitySchemes,
+  toggleExpand = false,
 }) => {
-  const [openAccordion, setOpenAccordion] = useState<boolean>(false);
+  const className = `server`;
 
   const variables = server.variables
     ? Object.entries(server.variables).map(([key, variable]) => ({
@@ -60,28 +29,53 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
       }))
     : [];
 
-  const serverWithVariables: ServerWithVariables = {
-    stage,
-    server,
-    serverVariables: variables.length > 0,
-    openAccordion,
-    toggleVariables: (_: any) => setOpenAccordion(state => !state),
-  };
-
-  return (
+  const header = (
     <>
-      <TableRow element={serverWithVariables} accessors={serverAccessors} />
-      <ServerVariablesComponent
-        variables={variables}
-        openAccordion={openAccordion}
-      />
+      <h4>
+        <span
+          className={bemClasses.concatenate([
+            bemClasses.element(`${className}-header-protocol`),
+            bemClasses.element(`badge`),
+          ])}
+        >{`${server.protocol}${
+          server.protocolVersion ? ` ${server.protocolVersion}` : ``
+        }`}</span>
+        <span
+          className={bemClasses.concatenate([
+            bemClasses.element(`${className}-header-stage`),
+            bemClasses.element(`badge`),
+          ])}
+        >
+          {stage}
+        </span>
+        <span>{server.url}</span>
+      </h4>
+    </>
+  );
+
+  const content = (
+    <>
+      {server.description && (
+        <div className={bemClasses.element(`${className}-description`)}>
+          <Markdown>{server.description}</Markdown>
+        </div>
+      )}
+      <div></div>
+      <ServerVariablesComponent variables={variables} />
       {server.security && securitySchemes && (
         <ServerSecurityComponent
           requirements={server.security}
           schemes={securitySchemes}
-          openAccordion={openAccordion}
         />
       )}
     </>
+  );
+
+  return (
+    <section className={bemClasses.element(className)}>
+      <Toggle header={header} className={className} expanded={toggleExpand}>
+        {content}
+      </Toggle>
+    </section>
   );
 };

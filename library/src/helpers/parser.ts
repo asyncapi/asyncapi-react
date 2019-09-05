@@ -84,6 +84,11 @@ export default class Parser {
         data: data.json(),
       };
     }
+    if (data._json instanceof Object) {
+      return {
+        data: data._json,
+      };
+    }
     return {
       data,
     };

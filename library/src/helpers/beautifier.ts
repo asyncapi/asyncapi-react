@@ -140,7 +140,8 @@ class Beautifier {
   private beautifyMessage(message: Message): Message {
     if (!isRawMessage(message)) {
       const beautified = {
-        oneOf: message.oneOf.map(this.beautifyMessage),
+        ...message,
+        oneOf: message.oneOf.map(el => this.beautifyMessage(el)),
       } as Message;
 
       return beautified;
@@ -154,16 +155,8 @@ class Beautifier {
     if (message.summary) {
       message.summary = renderMd(message.summary as string);
     }
-
     if (message.description) {
       message.description = renderMd(message.description as string);
-    }
-
-    if (message.headers) {
-      message.headers = this.beautifySchema(message.headers);
-    }
-    if (message.payload) {
-      message.payload = this.beautifySchema(message.payload);
     }
 
     return message;
@@ -205,13 +198,6 @@ class Beautifier {
     if (!operation.message) {
       return operation;
     }
-
-    if (!isRawMessage(operation.message)) {
-      const messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
-      messages.map(arg => this.beautifyMessage(arg));
-      return { ...operation, message: { oneOf: messages } };
-    }
-
     return { ...operation, message: this.beautifyMessage(operation.message) };
   }
 
@@ -226,7 +212,6 @@ class Beautifier {
       }
 
       const subscribe = channel.subscribe;
-
       if (subscribe) {
         newChannels[key].subscribe = this.beautifyOperation(subscribe);
       }

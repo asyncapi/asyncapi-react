@@ -4,7 +4,7 @@ import { ServerSecurityFlow } from './Flow';
 
 import { TableRow } from '../../components';
 import { bemClasses } from '../../helpers';
-import { OAuthFlows } from '../../types';
+import { OAuthFlows, OAuthFlow } from '../../types';
 
 interface Props {
   flows: OAuthFlows;
@@ -17,12 +17,15 @@ export const ServerSecurityFlows: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const nodes = Object.entries(flows).map(([flowName, flow]) => (
+  const sortedFlows = Object.keys(flows)
+    .sort()
+    .reduce((r, k) => ((r[k] = flows[k]), r), {});
+  const nodes = Object.entries(sortedFlows).map(([flowName, flow]) => (
     <li
       key={flowName}
       className={bemClasses.element(`server-security-flows-list-item`)}
     >
-      <ServerSecurityFlow name={flowName} flow={flow} />
+      <ServerSecurityFlow name={flowName} flow={flow as OAuthFlow} />
     </li>
   ));
 
