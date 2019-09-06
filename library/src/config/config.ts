@@ -1,7 +1,10 @@
+import { Options as ParserOptions } from 'json-schema-ref-parser';
+
 export interface ConfigInterface {
   show?: ShowConfig;
   collapse?: CollapseConfig;
   showErrors?: boolean;
+  parserOptions?: ParserOptions;
 }
 
 export interface ShowConfig {

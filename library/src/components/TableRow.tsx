@@ -9,7 +9,7 @@ export type TableAccessor<T = Record<string, any>> =
 
 export interface TableRowProps {
   element: any;
-  key?: string | number;
+  rootKey?: string | number;
   accessors?: TableAccessor[];
   nested?: boolean;
   className?: string;
@@ -17,7 +17,7 @@ export interface TableRowProps {
 
 export const TableRow: React.FunctionComponent<TableRowProps> = ({
   element,
-  key = '',
+  rootKey = '',
   accessors = [],
   nested = false,
   className = '',
@@ -56,7 +56,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
 
   return (
     <tr
-      key={key}
+      key={rootKey}
       className={bemClasses.concatenate([nestedClassName, className])}
     >
       {content}

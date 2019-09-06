@@ -27,11 +27,11 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
 
   return (
     <thead className={createNestedClassName(`table-header`, nested)}>
-      {title && (
+      {title ? (
         <tr className={createNestedClassName(`table-header-title`, nested)}>
           <td colSpan={columns.length}>{title}</td>
         </tr>
-      )}
+      ) : null}
       <tr className={createNestedClassName(`table-header-columns`, nested)}>
         {columns.map((column, index) => (
           <th

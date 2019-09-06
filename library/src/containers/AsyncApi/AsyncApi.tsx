@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Options as ParserOptions } from 'json-schema-ref-parser';
 
 import {
   AsyncAPI,
@@ -49,14 +50,20 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   async componentDidMount() {
-    this.parseSchema(this.props.schema, this.props.parserOptions);
+    this.parseSchema(
+      this.props.schema,
+      this.props.config && this.props.config.parserOptions,
+    );
   }
 
   async componentDidUpdate(prevProps: AsyncApiProps) {
     const { schema } = prevProps;
 
     if (schema !== this.props.schema) {
-      this.parseSchema(this.props.schema, this.props.parserOptions);
+      this.parseSchema(
+        this.props.schema,
+        this.props.config && this.props.config.parserOptions,
+      );
     }
   }
 
@@ -166,7 +173,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   private async parseSchema(
     schema: PropsSchema,
-    parserOptions?: AsyncApiProps['parserOptions'],
+    parserOptions?: ParserOptions,
   ) {
     if (isFetchingSchemaInterface(schema)) {
       const parsedFromUrl = await this.parser.parseFromUrl(
