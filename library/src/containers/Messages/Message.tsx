@@ -30,7 +30,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   message,
   hideTags,
   inChannel = false,
-  toggleExpand,
+  toggleExpand = false,
   oneOf = false,
 }) => {
   if (!message) {
@@ -71,28 +71,25 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     </div>
   );
 
-  const header =
-    title || summary ? (
-      <h3>
-        {message.deprecated && (
-          <div
-            className={bemClasses.element(
-              `${className}-header-deprecated-badge`,
-            )}
-          >
-            <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
-          </div>
-        )}
-        {title ? (
-          <span className={bemClasses.element(`${className}-header-title`)}>
-            {title}
-          </span>
-        ) : null}
-        <span className={bemClasses.element(`${className}-header-summary`)}>
-          {summary}
+  const header = !(title || summary) ? null : (
+    <h3>
+      {message.deprecated && (
+        <div
+          className={bemClasses.element(`${className}-header-deprecated-badge`)}
+        >
+          <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
+        </div>
+      )}
+      {title ? (
+        <span className={bemClasses.element(`${className}-header-title`)}>
+          {title}
         </span>
-      </h3>
-    ) : null;
+      ) : null}
+      <span className={bemClasses.element(`${className}-header-summary`)}>
+        {summary}
+      </span>
+    </h3>
+  );
 
   const headers = message.headers && (
     <div className={bemClasses.element(`${className}-headers`)}>

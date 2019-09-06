@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.streetlights;
+const defaultSchema = specs.rpcClient;
 
 interface State {
   schema: string;

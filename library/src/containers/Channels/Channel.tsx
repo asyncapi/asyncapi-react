@@ -117,6 +117,8 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
+  const body = (channel.subscribe || channel.publish) && content;
+
   return (
     <section className={bemClasses.element(className)}>
       <Toggle
@@ -125,7 +127,7 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
         expanded={toggleExpand}
         toggleInState={true}
       >
-        {content}
+        {body}
       </Toggle>
     </section>
   );

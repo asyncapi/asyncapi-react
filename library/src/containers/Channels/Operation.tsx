@@ -5,13 +5,7 @@ import { MessageComponent } from '../Messages/Message';
 
 import { bemClasses } from '../../helpers';
 import { Badge, BadgeType } from '../../components';
-import {
-  Operation,
-  PayloadType,
-  OneOf,
-  RawMessage,
-  Message,
-} from '../../types';
+import { Operation, PayloadType, Message, isRawMessage } from '../../types';
 import {
   ONE_OF_FOLLOWING_MESSAGES_PUBLISH,
   ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE,
@@ -40,8 +34,8 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
   const className = `channel-operation`;
 
   let messages: Record<string, Message> = {};
-  if (oneOf) {
-    messages = (operation.message as Record<OneOf, RawMessage[]>).oneOf
+  if (oneOf && !isRawMessage(operation.message)) {
+    messages = operation.message.oneOf
       .map((message, index) => ({ [index.toString()]: message }))
       .reduce((obj, item) => Object.assign(obj, item), {});
   }

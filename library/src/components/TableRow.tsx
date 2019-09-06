@@ -28,7 +28,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
     nest: boolean,
   ): React.ReactNode[] =>
     acs.map((accessor, index) => (
-      <td key={index} className={createNestedClassName(`table-cell`, nested)}>
+      <td key={index} className={createNestedClassName(`table-cell`, nest)}>
         {resolveAccessor(accessor, el)}
       </td>
     ));

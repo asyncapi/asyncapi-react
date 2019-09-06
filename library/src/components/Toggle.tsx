@@ -51,6 +51,8 @@ export const Toggle: React.FunctionComponent<Props> = ({
     bemClasses.element(className),
     expanded ? bemClasses.modifier(`expanded`, className) : '',
     bemClasses.element(`${customClassName}-toggle`),
+    !children ? bemClasses.modifier(`no-children`, className) : '',
+    !children ? bemClasses.modifier(`no-children`, customClassName) : '',
     expanded
       ? bemClasses.modifier(`expanded`, `${customClassName}-toggle`)
       : '',
@@ -81,11 +83,13 @@ export const Toggle: React.FunctionComponent<Props> = ({
         <div className={bemClasses.element(`${className}-header-content`)}>
           {header}
         </div>
-        <button className={bemClasses.element(`${className}-button`)}>
-          <span className={arrowClasses} />
-        </button>
+        {children && (
+          <button className={bemClasses.element(`${className}-button`)}>
+            <span className={arrowClasses} />
+          </button>
+        )}
       </header>
-      <div className={bodyClasses}>{children}</div>
+      {children && <div className={bodyClasses}>{children}</div>}
     </div>
   );
 };

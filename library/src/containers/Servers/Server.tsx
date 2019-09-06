@@ -60,7 +60,6 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
           <Markdown>{server.description}</Markdown>
         </div>
       )}
-      <div />
       <ServerVariablesComponent variables={variables} />
       {server.security && securitySchemes && (
         <ServerSecurityComponent
@@ -71,6 +70,9 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
+  const body =
+    (server.description || server.security || server.variables) && content;
+
   return (
     <section className={bemClasses.element(className)}>
       <Toggle
@@ -79,7 +81,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         expanded={toggleExpand}
         toggleInState={true}
       >
-        {content}
+        {body}
       </Toggle>
     </section>
   );

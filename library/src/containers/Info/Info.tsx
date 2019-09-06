@@ -40,7 +40,7 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
           </h1>
           <CollapseButton />
         </div>
-        {showInfoList ? (
+        {!showInfoList ? null : (
           <ul className={bemClasses.element(`${className}-list`)}>
             {defaultContentType && (
               <li
@@ -67,7 +67,7 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
               <ContactComponent {...contact} />
             ) : null}
           </ul>
-        ) : null}
+        )}
       </header>
       {description && (
         <div className={bemClasses.element(`${className}-description`)}>

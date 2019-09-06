@@ -17,17 +17,23 @@ export const ServerSecurityFlows: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const sortedFlows = Object.keys(flows)
+  const sortedFlows: OAuthFlows = Object.keys(flows)
     .sort()
-    .reduce((r, k) => ((r[k] = flows[k]), r), {});
-  const nodes = Object.entries(sortedFlows).map(([flowName, flow]) => (
-    <li
-      key={flowName}
-      className={bemClasses.element(`server-security-flows-list-item`)}
-    >
-      <ServerSecurityFlow name={flowName} flow={flow as OAuthFlow} />
-    </li>
-  ));
+    .reduce((accumulator, currentValue) => {
+      accumulator[currentValue] = flows[currentValue];
+      return accumulator;
+    }, {});
+
+  const nodes = Object.entries(sortedFlows).map(
+    ([flowName, flow]: [string, OAuthFlow]) => (
+      <li
+        key={flowName}
+        className={bemClasses.element(`server-security-flows-list-item`)}
+      >
+        <ServerSecurityFlow name={flowName} flow={flow} />
+      </li>
+    ),
+  );
 
   const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);
   const flowsTableCellClassName = bemClasses.element(

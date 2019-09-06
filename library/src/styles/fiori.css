@@ -22,6 +22,12 @@
   display: block;
 }
 
+.asyncapi__toggle--no-children {
+}
+.asyncapi__toggle--no-children > .asyncapi__toggle-header {
+  cursor: default;
+}
+
 .asyncapi__toggle-header {
   position: relative;
   display: flex;

@@ -34,7 +34,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
             <span className={bemClasses.element(`schema-example-header-title`)}>
               {title ? title : SCHEMA_EXAMPLE_TEXT}
             </span>
-            {!schema.example ? (
+            {schema.example ? null : (
               <div
                 className={bemClasses.element(
                   `schema-example-header-generated-badge`,
@@ -42,7 +42,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
               >
                 <Badge type={BadgeType.GENERATED} />
               </div>
-            ) : null}
+            )}
           </div>
         }
       />
