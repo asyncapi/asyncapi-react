@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.rpcClient;
+const defaultSchema = specs.slackRtm;
 
 interface State {
   schema: string;

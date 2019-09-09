@@ -138,9 +138,9 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   );
 
   const isBody = !!(
-    message.description &&
-    message.headers &&
-    message.payload &&
+    message.description ||
+    message.headers ||
+    message.payload ||
     (!hideTags && message.tags)
   );
 
