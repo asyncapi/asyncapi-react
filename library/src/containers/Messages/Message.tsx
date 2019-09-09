@@ -137,6 +137,13 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
+  const isBody = !!(
+    message.description &&
+    message.headers &&
+    message.payload &&
+    (!hideTags && message.tags)
+  );
+
   return (
     <section className={bemClasses.element(className)}>
       {!inChannel ? (
@@ -146,8 +153,12 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           expanded={toggleExpand}
           toggleInState={true}
         >
-          {description}
-          {content}
+          {!isBody ? null : (
+            <>
+              {description}
+              {content}
+            </>
+          )}
         </Toggle>
       ) : (
         <>{content}</>
