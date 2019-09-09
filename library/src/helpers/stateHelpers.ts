@@ -1,5 +1,5 @@
 import { ShowConfig, CollapseConfig, CollapseNestedConfig } from '../config';
-import { AsyncAPI } from '../types';
+import { AsyncAPI, Servers, Server } from '../types';
 
 class StateHelpers {
   calculateNumberOfElements = ({
@@ -26,7 +26,11 @@ class StateHelpers {
             numberOfElements += value.length;
           }
           if (typeof value === 'object') {
-            numberOfElements += Object.keys(value).length;
+            if (this.isServers(value)) {
+              numberOfElements += this.calculateServers(value);
+            } else {
+              numberOfElements += Object.keys(value).length;
+            }
           }
         }
       });
@@ -75,7 +79,11 @@ class StateHelpers {
             numberOfElements += value.length;
           }
           if (typeof value === 'object') {
-            numberOfElements += Object.keys(value).length;
+            if (this.isServers(value)) {
+              numberOfElements += this.calculateServers(value);
+            } else {
+              numberOfElements += Object.keys(value).length;
+            }
           }
         }
       });
@@ -85,6 +93,27 @@ class StateHelpers {
 
     return fn(spec) + fn(spec.components || {});
   };
+
+  private calculateServers(servers?: Servers): number {
+    if (!servers || !Object.keys(servers).length) {
+      return 0;
+    }
+
+    let elements: number = 0;
+    Object.entries(servers).map(([_, server]) => {
+      elements += Number(
+        Boolean(server.description && server.security && server.variables),
+      );
+    });
+    return elements;
+  }
+
+  private isServers(v: any): v is Servers {
+    if (!v || !Object.keys(v).length) {
+      return false;
+    }
+    return !!(v[Object.keys(v)[0]] as Server).protocol;
+  }
 }
 
 export const stateHelpers = new StateHelpers();

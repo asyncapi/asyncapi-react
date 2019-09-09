@@ -79,7 +79,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={toggleExpand}
-        toggleInState={true}
+        toggleInState={!!body}
       >
         {body}
       </Toggle>

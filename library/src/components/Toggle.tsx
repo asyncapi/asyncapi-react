@@ -27,7 +27,9 @@ export const Toggle: React.FunctionComponent<Props> = ({
 
   const handleSetExpanded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
-    setExpanded(state => !state);
+    if (children) {
+      setExpanded(state => !state);
+    }
   };
 
   useEffect(() => {
