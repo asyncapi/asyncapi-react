@@ -2,7 +2,7 @@ import { Options as ParserOptions } from 'json-schema-ref-parser';
 
 export interface ConfigInterface {
   show?: ShowConfig;
-  collapse?: CollapseConfig;
+  expand?: ExpandConfig;
   showErrors?: boolean;
   parserOptions?: ParserOptions;
 }
@@ -15,14 +15,14 @@ export interface ShowConfig {
   schemas?: boolean;
 }
 
-export interface CollapseNestedConfig {
+export interface ExpandNestedConfig {
   root?: boolean;
   elements?: boolean;
 }
 
-export interface CollapseConfig {
-  channels?: CollapseNestedConfig;
-  servers?: CollapseNestedConfig;
-  messages?: CollapseNestedConfig;
-  schemas?: CollapseNestedConfig;
+export interface ExpandConfig {
+  channels?: ExpandNestedConfig;
+  servers?: ExpandNestedConfig;
+  messages?: ExpandNestedConfig;
+  schemas?: ExpandNestedConfig;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ChannelComponent } from './Channel';
 
-import { CollapseNestedConfig } from '../../config';
+import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Channels } from '../../types';
 import { Toggle, ToggleLabel } from '../../components';
@@ -10,12 +10,12 @@ import { CHANNELS_TEXT } from '../../constants';
 
 interface Props {
   channels: Channels;
-  collapse?: CollapseNestedConfig;
+  expand?: ExpandNestedConfig;
 }
 
 export const ChannelsComponent: React.FunctionComponent<Props> = ({
   channels,
-  collapse,
+  expand,
 }) => {
   const className = `channels`;
 
@@ -28,7 +28,7 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
           <ChannelComponent
             name={name}
             channel={channel}
-            toggleExpand={collapse && collapse.elements}
+            toggleExpand={expand && expand.elements}
           />
         </li>
       ))}
@@ -40,7 +40,7 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
       <Toggle
         header={header}
         className={className}
-        expanded={collapse && collapse.root}
+        expanded={expand && expand.root}
         label={ToggleLabel.CHANNELS}
         toggleInState={true}
       >

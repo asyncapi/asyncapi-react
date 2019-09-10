@@ -1,4 +1,4 @@
-import { ShowConfig, CollapseConfig, CollapseNestedConfig } from '../config';
+import { ShowConfig, ExpandNestedConfig, ExpandConfig } from '../config';
 import { AsyncAPI, Servers, Server } from '../types';
 
 class StateHelpers {
@@ -44,11 +44,11 @@ class StateHelpers {
   calculateInitialExpandedElements = ({
     spec,
     showConfig,
-    collapseConfig,
+    expandConfig,
   }: {
     spec: AsyncAPI;
     showConfig: ShowConfig;
-    collapseConfig: CollapseConfig;
+    expandConfig: ExpandConfig;
   }): number => {
     const showConfigKeys = Object.keys(showConfig);
     const collapseConfigKeys = Object.keys(showConfig);
@@ -62,11 +62,11 @@ class StateHelpers {
             showConfigKeys.includes(key) &&
             showConfig[key] &&
             collapseConfigKeys.includes(key) &&
-            collapseConfig[key],
+            expandConfig[key],
         );
 
         if (condition) {
-          const field: CollapseNestedConfig = collapseConfig[key];
+          const field: ExpandNestedConfig = expandConfig[key];
           if (field.root) {
             numberOfElements += 1;
           }

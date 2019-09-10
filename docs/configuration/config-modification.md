@@ -6,20 +6,37 @@ Learn how to use various configuration options available in `ConfigInterface`.
 
 ## Definition
 
-See the definition of the object that you must pass to probs to modify the component configuration:
+See the definition of the object that you must pass to props to modify the component configuration:
 
 ```ts
 interface ConfigInterface {
   show?: {
     info?: boolean;
-    security?: boolean;
-    servers?: boolean;
     channels?: boolean;
+    servers?: boolean;
     messages?: boolean;
     schemas?: boolean;
   };
-  disableDefaultTheme?: boolean;
+  expand?: {
+    channels?: {
+      root?: boolean;
+      elements?: boolean;
+    };
+    servers?: {
+      root?: boolean;
+      elements?: boolean;
+    };
+    messages?: {
+      root?: boolean;
+      elements?: boolean;
+    };
+    schemas?: {
+      root?: boolean;
+      elements?: boolean;
+    };
+  },
   showErrors?: boolean;
+  parserOptions?: ParserOptions;
 }
 ```
 
@@ -28,44 +45,25 @@ interface ConfigInterface {
   This field contains configuration responsible for rendering specific parts of the AsyncApi component.
   All fields are set to `true` by default.
 
-- **disableDefaultTheme?: boolean**
+- **expand?: Partial<ExpandConfig>**
 
-  This field informs whether the forwarded [`ThemeInterface`](../../library/src/theme/theme.ts#L5) should be concatenated with the [default theme](../../library/src/theme/default.ts) or if the AsyncApi component should consider only the forwarded one.
-  This field is set to `false` by default.
-
-  > **NOTE:** When you set this flag to `true`, you must provide definitions of all styles.
+  This field contains configuration responsible for initial expanding specific parts of the AsyncApi component.
+  `root` means root component for specific parts of the AsyncApi component. Otherwise, `elements` means elements inside `root` component.
+  By default `expand.channels.root` is set to `true`.
 
 - **showErrors?: boolean**
 
   This field turns on or off the option displaying validation or parsing errors that show at the top of the component.
-  This field is set to `false` by default.
+  This field is set to `true` by default.
+
+- **parserOptions?: ParserOptions**
+
+  This field contains configuration for [`asyncapi-parser`](https://github.com/asyncapi/parser). See available options [here](https://github.com/asyncapi/parser-js/blob/master/API.md#parser).
+  This field is set to `null` by default.
 
 ## Examples
 
-See exemplary component configuration in JavaScript and TypeScript.
-
-### JavaScript
-
-```jsx
-import * as React from "react";
-import { render } from "react-dom";
-import AsyncApiComponent from "asyncapi-react";
-
-import { schema } from "./mock";
-
-const config = {
-  show: {
-    security: false,
-    schemas: false
-  },
-  disableDefaultTheme: true,
-  showErrors: true
-};
-
-const App = () => <AsyncApiComponent schema={schema} config={config} />;
-
-render(<App />, document.getElementById("root"));
-```
+See exemplary component configuration in TypeScript and JavaScript.
 
 ### TypeScript
 
@@ -78,11 +76,30 @@ import { schema } from "./mock";
 
 const config: Partial<ConfigInterface> = {
   show: {
-    security: false,
     schemas: false
   },
-  disableDefaultTheme: true,
-  showErrors: true
+  showErrors: false
+};
+
+const App = () => <AsyncApiComponent schema={schema} config={config} />;
+
+render(<App />, document.getElementById("root"));
+```
+
+### JavaScript
+
+```jsx
+import * as React from "react";
+import { render } from "react-dom";
+import AsyncApiComponent from "asyncapi-react";
+
+import { schema } from "./mock";
+
+const config = {
+  show: {
+    schemas: false
+  },
+  showErrors: false
 };
 
 const App = () => <AsyncApiComponent schema={schema} config={config} />;
@@ -96,13 +113,11 @@ In the above examples, after concatenation with the default configuration, the r
 {
   show: {
     info: true,
-    security: false,
     servers: true,
     channels: true,
     messages: true,
     schemas: false
   },
-  disableDefaultTheme: true,
-  showErrors: true
+  showErrors: false
 }
 ```
