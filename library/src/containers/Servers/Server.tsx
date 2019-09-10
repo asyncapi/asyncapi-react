@@ -4,7 +4,7 @@ import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
 
 import { bemClasses } from '../../helpers';
-import { Toggle, Markdown } from '../../components';
+import { Toggle, ToggleLabel, Markdown } from '../../components';
 import { Server, SecurityScheme } from '../../types';
 
 interface Props {
@@ -79,6 +79,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={toggleExpand}
+        label={ToggleLabel.SERVER}
         toggleInState={!!body}
       >
         {body}

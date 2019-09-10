@@ -5,7 +5,7 @@ import { ChannelComponent } from './Channel';
 import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Channels } from '../../types';
-import { Toggle } from '../../components';
+import { Toggle, ToggleLabel } from '../../components';
 import { CHANNELS_TEXT } from '../../constants';
 
 interface Props {
@@ -41,6 +41,7 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={collapse && collapse.root}
+        label={ToggleLabel.CHANNELS}
         toggleInState={true}
       >
         {content}

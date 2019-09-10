@@ -3,7 +3,7 @@ import React from 'react';
 import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
 import { SchemaExampleComponent } from './SchemaExample';
 
-import { Table, Toggle } from '../../components';
+import { Table, Toggle, ToggleLabel } from '../../components';
 import { Schema } from '../../types';
 import { bemClasses, searchForNestedObject } from '../../helpers';
 import { SCHEMA_COLUMN_NAMES } from '../../constants';
@@ -81,7 +81,12 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   return (
     <section className={bemClasses.element(className)}>
       {toggle ? (
-        <Toggle header={header} className={className} toggleInState={true}>
+        <Toggle
+          header={header}
+          className={className}
+          label={ToggleLabel.SCHEMA}
+          toggleInState={true}
+        >
           {content}
         </Toggle>
       ) : (

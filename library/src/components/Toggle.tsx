@@ -3,10 +3,29 @@ import React, { useState, useEffect } from 'react';
 import { useExpandedContext } from '../store';
 import { bemClasses } from '../helpers';
 
+export enum ToggleLabel {
+  DEFAULT = '',
+  CHANNELS = 'channels',
+  CHANNEL = 'channel',
+  SERVERS = 'servers',
+  SERVER = 'server',
+  MESSAGES = 'messages',
+  MESSAGE = 'message',
+  SCHEMAS = 'schemas',
+  SCHEMA = 'schema',
+}
+const ROOT_LABELS = [
+  ToggleLabel.CHANNELS,
+  ToggleLabel.SERVERS,
+  ToggleLabel.MESSAGES,
+  ToggleLabel.SCHEMAS,
+];
+
 interface Props {
   header: React.ReactNode;
   className?: string;
   expanded?: boolean;
+  label?: ToggleLabel;
   toggleInState?: boolean;
 }
 
@@ -15,11 +34,14 @@ export const Toggle: React.FunctionComponent<Props> = ({
   className: customClassName = '',
   expanded: initialExpanded = false,
   toggleInState = false,
+  label = ToggleLabel.DEFAULT,
   children,
 }) => {
   const {
     expanded: globalExpanded,
     setNumberOfExpanded,
+    clickedToggle,
+    setClickedToggle,
   } = useExpandedContext();
 
   const [initial, setInitial] = useState<boolean>(false);
@@ -27,8 +49,16 @@ export const Toggle: React.FunctionComponent<Props> = ({
 
   const handleSetExpanded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
+
+    const oldState = expanded;
     if (children) {
-      setExpanded(state => !state);
+      setExpanded(!oldState);
+    }
+    if (oldState && ROOT_LABELS.includes(label)) {
+      setClickedToggle({
+        label,
+        expanded: !oldState,
+      });
     }
   };
 
@@ -41,6 +71,12 @@ export const Toggle: React.FunctionComponent<Props> = ({
       setExpanded(globalExpanded);
     }
   }, [globalExpanded]);
+
+  useEffect(() => {
+    if (initial && label === clickedToggle.label.slice(0, -1)) {
+      setExpanded(false);
+    }
+  }, [clickedToggle]);
 
   useEffect(() => {
     if (toggleInState && initial) {

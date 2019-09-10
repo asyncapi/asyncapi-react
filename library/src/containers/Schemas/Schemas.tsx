@@ -4,7 +4,7 @@ import { SchemaComponent } from './Schema';
 
 import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
-import { Toggle } from '../../components';
+import { Toggle, ToggleLabel } from '../../components';
 import { SCHEMAS_TEXT } from '../../constants';
 import { Schema } from '../../types';
 
@@ -45,6 +45,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={collapse && collapse.root}
+        label={ToggleLabel.SCHEMAS}
         toggleInState={true}
       >
         {content}

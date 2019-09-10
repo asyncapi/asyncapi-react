@@ -6,7 +6,14 @@ import { PayloadComponent } from './Payload';
 import { bemClasses } from '../../helpers';
 import { Message, isRawMessage } from '../../types';
 
-import { Markdown, Tag, Badge, BadgeType, Toggle } from '../../components';
+import {
+  Markdown,
+  Tag,
+  Badge,
+  BadgeType,
+  Toggle,
+  ToggleLabel,
+} from '../../components';
 
 import {
   DEPRECATED_TEXT,
@@ -151,6 +158,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           header={header}
           className={className}
           expanded={toggleExpand}
+          label={ToggleLabel.MESSAGE}
           toggleInState={true}
         >
           {!isBody ? null : (

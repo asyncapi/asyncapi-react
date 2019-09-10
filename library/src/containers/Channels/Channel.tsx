@@ -3,7 +3,7 @@ import React from 'react';
 import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
 
-import { Badge, BadgeType, Toggle } from '../../components';
+import { Badge, BadgeType, Toggle, ToggleLabel } from '../../components';
 import { bemClasses } from '../../helpers';
 import { MESSAGE_TEXT } from '../../constants';
 import { Channel, isRawMessage, PayloadType } from '../../types';
@@ -125,6 +125,7 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={toggleExpand}
+        label={ToggleLabel.CHANNEL}
         toggleInState={true}
       >
         {body}

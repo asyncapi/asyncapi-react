@@ -4,7 +4,7 @@ import { MessageComponent } from './Message';
 
 import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
-import { Toggle } from '../../components';
+import { Toggle, ToggleLabel } from '../../components';
 import { Message } from '../../types';
 import { MESSAGES_TEXT } from '../../constants';
 
@@ -54,6 +54,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
       header={header}
       className={className}
       expanded={collapse && collapse.root}
+      label={ToggleLabel.MESSAGES}
       toggleInState={true}
     >
       {content}

@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import createUseContext from 'constate';
 
+import { ToggleLabel } from '../components';
+
+interface ClickedToggle {
+  label: ToggleLabel;
+  expanded: boolean;
+}
+
 interface Props {
   numberOfElements?: number;
   numberOfExpandedElement?: number;
@@ -14,6 +21,10 @@ const useExpandedState = ({
   const [numberOfExpanded, setNumberOfExpanded] = useState<number>(
     initialNumberOfExpandedElement,
   );
+  const [clickedToggle, setClickedToggle] = useState<ClickedToggle>({
+    label: ToggleLabel.DEFAULT,
+    expanded: false,
+  });
 
   return {
     numberOfElements,
@@ -21,6 +32,8 @@ const useExpandedState = ({
     setExpanded,
     numberOfExpanded,
     setNumberOfExpanded,
+    clickedToggle,
+    setClickedToggle,
   };
 };
 

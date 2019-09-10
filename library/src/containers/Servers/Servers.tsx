@@ -5,7 +5,7 @@ import { ServerComponent } from './Server';
 import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Servers, SecurityScheme } from '../../types';
-import { Toggle } from '../../components';
+import { Toggle, ToggleLabel } from '../../components';
 import { SERVERS } from '../../constants';
 
 interface Props {
@@ -51,6 +51,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
         header={header}
         className={className}
         expanded={collapse && collapse.root}
+        label={ToggleLabel.SERVERS}
         toggleInState={true}
       >
         {content}
