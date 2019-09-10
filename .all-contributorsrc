@@ -18,7 +18,9 @@
         "code",
         "doc",
         "ideas",
-        "maintenance"
+        "maintenance",
+        "review",
+        "test"
       ]
     },
     {
