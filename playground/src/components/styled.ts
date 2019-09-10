@@ -96,8 +96,11 @@ export const AsyncApiWrapper = styled.div`
   min-height: calc(100vh - 50px);
   overflow: auto;
 
-  > main {
+  > .asyncapi {
     padding: 24px;
+  }
+  > .asyncapi__error {
+    margin: 24px;
   }
 `;
 

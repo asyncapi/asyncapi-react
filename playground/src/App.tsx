@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.slackRtm;
+const defaultSchema = specs.streetlights;
 
 interface State {
   schema: string;
