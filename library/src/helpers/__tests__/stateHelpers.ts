@@ -1,5 +1,5 @@
 import { stateHelpers } from '../stateHelpers';
-import { ShowConfig, CollapseConfig } from '../../config';
+import { ShowConfig, ExpandConfig } from '../../config';
 import { AsyncAPI } from '../../types';
 
 describe('stateHelpers', () => {
@@ -45,7 +45,7 @@ describe('stateHelpers', () => {
     messages: true,
     schemas: true,
   };
-  const collapseConfig: CollapseConfig = {
+  const expandConfig: ExpandConfig = {
     channels: {
       root: true,
       elements: false,
@@ -77,7 +77,7 @@ describe('stateHelpers', () => {
     const result = stateHelpers.calculateInitialExpandedElements({
       spec,
       showConfig,
-      collapseConfig,
+      expandConfig,
     });
 
     expect(result).toEqual(4);

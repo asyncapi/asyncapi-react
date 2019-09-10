@@ -8,7 +8,7 @@ export const defaultConfig: ConfigInterface = {
     messages: true,
     schemas: true,
   },
-  collapse: {
+  expand: {
     channels: {
       root: true,
       elements: false,
