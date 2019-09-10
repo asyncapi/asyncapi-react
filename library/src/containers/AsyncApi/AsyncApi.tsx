@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Options as ParserOptions } from 'json-schema-ref-parser';
 
 import {
   AsyncAPI,
@@ -9,21 +10,17 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier, bemClasses } from '../../helpers';
-import Parser from '../../helpers/parser';
+import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
 import { parse, parseFromUrl } from 'asyncapi-parser';
+import { CSS_PREFIX } from '../../constants';
+import { useExpandedContext } from '../../store';
 
+import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/Info';
+import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
-import { SecurityComponent } from '../Security/Security';
-
 import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
-import { ErrorComponent } from '../Error/Error';
-
-import { Channels } from '../Channels/Channels';
-
-const parser = new Parser(parse, parseFromUrl);
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
@@ -44,16 +41,29 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     validatedSchema: defaultAsyncApi,
     error: undefined,
   };
+  private readonly parser: Parser;
+
+  constructor(props: AsyncApiProps) {
+    super(props);
+
+    this.parser = new Parser(parse, parseFromUrl);
+  }
 
   async componentDidMount() {
-    this.parseSchema(this.props.schema, this.props.parserOptions);
+    this.parseSchema(
+      this.props.schema,
+      this.props.config && this.props.config.parserOptions,
+    );
   }
 
   async componentDidUpdate(prevProps: AsyncApiProps) {
     const { schema } = prevProps;
 
     if (schema !== this.props.schema) {
-      this.parseSchema(this.props.schema, this.props.parserOptions);
+      this.parseSchema(
+        this.props.schema,
+        this.props.config && this.props.config.parserOptions,
+      );
     }
   }
 
@@ -67,8 +77,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.show,
         ...(!!config && config.show),
       },
+      collapse: {
+        ...defaultConfig.collapse,
+        ...(!!config && config.collapse),
+      },
     };
-    bemClasses.setPrefix(concatenatedConfig.prefixClassName);
 
     if (!validatedSchema || !Object.keys(validatedSchema).length) {
       if (!error) {
@@ -80,64 +93,93 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!concatenatedConfig.show) {
       return null;
     }
+    const numberOfElement = stateHelpers.calculateNumberOfElements({
+      spec: validatedSchema,
+      showConfig: concatenatedConfig.show,
+    });
+    const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
+      {
+        spec: validatedSchema,
+        showConfig: concatenatedConfig.show,
+        collapseConfig: concatenatedConfig.collapse || {},
+      },
+    );
 
     return (
-      <div className={concatenatedConfig.prefixClassName}>
-        {concatenatedConfig.showErrors && !!error && (
-          <ErrorComponent error={error} />
-        )}
-        {concatenatedConfig.show.info && validatedSchema.info && (
-          <InfoComponent
-            info={validatedSchema.info}
-            defaultContentType={validatedSchema.defaultContentType}
-          />
-        )}
-        {concatenatedConfig.show.servers && !!validatedSchema.servers && (
-          <ServersComponent
-            servers={validatedSchema.servers}
-            securitySchemes={
-              validatedSchema.components &&
-              validatedSchema.components.securitySchemes
-            }
-          />
-        )}
-        {concatenatedConfig.show.channels && !!validatedSchema.channels && (
-          <Channels channels={validatedSchema.channels} />
-        )}
-        {validatedSchema.components && (
-          <div className={bemClasses.element(`components`)}>
-            {concatenatedConfig.show.messages &&
-              validatedSchema.components.messages && (
-                <MessagesComponent
-                  messages={validatedSchema.components.messages}
-                />
-              )}
-            {concatenatedConfig.show.schemas &&
-              validatedSchema.components.schemas && (
-                <SchemasComponent
-                  schemas={validatedSchema.components.schemas}
-                />
-              )}
-            {concatenatedConfig.show.security &&
-              validatedSchema.servers &&
-              validatedSchema.components.securitySchemes && (
-                <SecurityComponent
-                  securitySchemes={validatedSchema.components.securitySchemes}
-                  servers={validatedSchema.servers}
-                />
-              )}
-          </div>
-        )}
-      </div>
+      <useExpandedContext.Provider
+        numberOfElements={numberOfElement}
+        numberOfExpandedElement={initialExpandedElements}
+      >
+        <main className={CSS_PREFIX}>
+          {concatenatedConfig.showErrors && !!error && (
+            <ErrorComponent error={error} />
+          )}
+          {concatenatedConfig.show.info && validatedSchema.info && (
+            <InfoComponent
+              info={validatedSchema.info}
+              defaultContentType={validatedSchema.defaultContentType}
+            />
+          )}
+          {concatenatedConfig.show.channels && validatedSchema.channels && (
+            <ChannelsComponent
+              channels={validatedSchema.channels}
+              collapse={
+                concatenatedConfig.collapse &&
+                concatenatedConfig.collapse.channels
+              }
+            />
+          )}
+          {concatenatedConfig.show.servers && !!validatedSchema.servers && (
+            <ServersComponent
+              servers={validatedSchema.servers}
+              securitySchemes={
+                validatedSchema.components &&
+                validatedSchema.components.securitySchemes
+              }
+              collapse={
+                concatenatedConfig.collapse &&
+                concatenatedConfig.collapse.servers
+              }
+            />
+          )}
+          {validatedSchema.components && (
+            <section className={bemClasses.element(`components`)}>
+              {concatenatedConfig.show.messages &&
+                validatedSchema.components.messages && (
+                  <MessagesComponent
+                    messages={validatedSchema.components.messages}
+                    collapse={
+                      concatenatedConfig.collapse &&
+                      concatenatedConfig.collapse.messages
+                    }
+                  />
+                )}
+              {concatenatedConfig.show.schemas &&
+                validatedSchema.components.schemas && (
+                  <SchemasComponent
+                    schemas={validatedSchema.components.schemas}
+                    collapse={
+                      concatenatedConfig.collapse &&
+                      concatenatedConfig.collapse.schemas
+                    }
+                  />
+                )}
+            </section>
+          )}
+        </main>
+      </useExpandedContext.Provider>
     );
   }
 
   private async parseSchema(
     schema: PropsSchema,
-    parserOptions?: AsyncApiProps['parserOptions'],
+    parserOptions?: ParserOptions,
   ) {
     if (isFetchingSchemaInterface(schema)) {
-      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
+      const parsedFromUrl = await this.parser.parseFromUrl(
+        schema,
+        parserOptions,
+      );
       this.setState({
         validatedSchema: this.beautifySchema(parsedFromUrl.data),
         error: parsedFromUrl.error,
@@ -145,7 +187,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return;
     }
 
-    const parsed = await parser.parse(schema, parserOptions);
+    const parsed = await this.parser.parse(schema, parserOptions);
     this.setState({
       validatedSchema: this.beautifySchema(parsed.data),
       error: parsed.error,

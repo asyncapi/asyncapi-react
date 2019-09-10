@@ -1,19 +1,26 @@
 import React from 'react';
 
-import { Operation } from './Operation';
-import { Channel as ChannelType, isRawMessage } from '../../types';
+import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
 
-import { Badge, BadgeType } from '../../components';
+import { Badge, BadgeType, Toggle, ToggleLabel } from '../../components';
 import { bemClasses } from '../../helpers';
-import { ONE_OF_FOLLOWING_MESSAGES, MESSAGE, MESSAGES } from '../../constants';
+import { MESSAGE_TEXT } from '../../constants';
+import { Channel, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
   name: string;
-  channel: ChannelType;
+  channel: Channel;
+  toggleExpand?: boolean;
 }
 
-export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
+export const ChannelComponent: React.FunctionComponent<Props> = ({
+  name,
+  channel,
+  toggleExpand = false,
+}) => {
+  const className = `channel`;
+
   const oneOfPublish =
     channel.publish &&
     channel.publish.message &&
@@ -24,71 +31,105 @@ export const Channel: React.FunctionComponent<Props> = ({ name, channel }) => {
     channel.subscribe.message &&
     !isRawMessage(channel.subscribe.message);
 
-  const oneOf = Boolean(oneOfPublish || oneOfSubscribe);
+  const oneOfExists = Boolean(oneOfPublish || oneOfSubscribe);
 
-  return (
-    <div className={bemClasses.element(`channel`)}>
-      <header className={bemClasses.element(`channel-header`)}>
-        <h3>
-          <div className={bemClasses.element(`channel-header-badges`)}>
-            {channel.deprecated && (
-              <div
-                className={bemClasses.element(
-                  `channel-header-badges-deprecated-badge`,
-                )}
-              >
-                <Badge type={BadgeType.DEPRECATED} />
-              </div>
+  const header = (
+    <h3>
+      <ul className={bemClasses.element(`${className}-header-badges`)}>
+        {channel.deprecated && (
+          <li
+            className={bemClasses.element(
+              `${className}-header-badges-deprecated-badge`,
             )}
-            {channel.publish && (
-              <div
-                className={bemClasses.element(
-                  `schema-example-header-publish-badge`,
-                )}
-              >
-                <Badge type={BadgeType.PUBLISH} />
-              </div>
+          >
+            <Badge type={BadgeType.DEPRECATED} />
+          </li>
+        )}
+        {channel.publish && (
+          <li
+            className={bemClasses.element(`${className}-header-publish-badge`)}
+          >
+            <Badge type={BadgeType.PUBLISH} />
+          </li>
+        )}
+        {channel.subscribe && (
+          <li
+            className={bemClasses.element(
+              `${className}-header-subscribe-badge`,
             )}
-            {channel.subscribe && (
-              <div
-                className={bemClasses.element(
-                  `schema-example-header-subscribe-badge`,
-                )}
-              >
-                <Badge type={BadgeType.SUBSCRIBE} />
-              </div>
-            )}
-          </div>
-          <span className={bemClasses.element(`channel-header-title`)}>
-            {name}
-          </span>
-        </h3>
-      </header>
+          >
+            <Badge type={BadgeType.SUBSCRIBE} />
+          </li>
+        )}
+      </ul>
+      <span className={bemClasses.element(`${className}-header-title`)}>
+        {name}
+      </span>
+    </h3>
+  );
+
+  const content = (
+    <>
       <ParametersComponent parameters={channel.parameters} />
-      <div className={bemClasses.element(`channel-operations`)}>
-        <div className={bemClasses.element(`channel-operations-header`)}>
-          <h4>{oneOf ? MESSAGES : MESSAGE}</h4>
-          {oneOf && (
-            <p
-              className={bemClasses.element(`channel-operations-header-oneOf`)}
-            >
-              {ONE_OF_FOLLOWING_MESSAGES}
-            </p>
-          )}
-        </div>
-        <ul className={bemClasses.element(`channel-operations-list`)}>
+      <div className={bemClasses.element(`${className}-operations`)}>
+        {oneOfExists ? null : (
+          <header
+            className={bemClasses.element(`${className}-operations-header`)}
+          >
+            <h4>
+              <span>{MESSAGE_TEXT}</span>
+            </h4>
+          </header>
+        )}
+        <ul className={bemClasses.element(`${className}-operations-list`)}>
           {channel.subscribe && (
-            <li className={bemClasses.element(`channel-operations-subscribe`)}>
-              <Operation operation={channel.subscribe} />
+            <li
+              className={bemClasses.element(
+                `${className}-operations-subscribe`,
+              )}
+            >
+              <OperationComponent
+                payloadType={PayloadType.SUBSCRIBE}
+                operation={channel.subscribe}
+                oneOf={oneOfSubscribe}
+                otherOneOf={oneOfPublish}
+                isPublish={!!channel.publish}
+                isSubscribe={!!channel.subscribe}
+              />
             </li>
           )}
           {channel.publish && (
-            <li className={bemClasses.element(`channel-operations-publish`)}>
-              <Operation operation={channel.publish} />
+            <li
+              className={bemClasses.element(`${className}-operations-publish`)}
+            >
+              <OperationComponent
+                payloadType={PayloadType.PUBLISH}
+                operation={channel.publish}
+                otherOneOf={oneOfSubscribe}
+                oneOf={oneOfPublish}
+                isPublish={!!channel.publish}
+                isSubscribe={!!channel.subscribe}
+              />
             </li>
           )}
         </ul>
       </div>
-    </div>
+    </>
+  );
+
+  const body = (channel.subscribe || channel.publish) && content;
+
+  return (
+    <section className={bemClasses.element(className)}>
+      <Toggle
+        header={header}
+        className={className}
+        expanded={toggleExpand}
+        label={ToggleLabel.CHANNEL}
+        toggleInState={true}
+      >
+        {body}
+      </Toggle>
+    </section>
   );
 };

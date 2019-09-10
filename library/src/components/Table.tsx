@@ -3,7 +3,7 @@ import React from 'react';
 import { TableHeader, TableHeaderProps } from './TableHeader';
 import { TableRow, TableRowProps, TableAccessor } from './TableRow';
 
-import { bemClasses } from '../helpers';
+import { createNestedClassName } from '../helpers';
 
 interface Props {
   header: TableHeaderProps;
@@ -16,19 +16,15 @@ export const Table: React.FunctionComponent<Props> = ({
   header,
   rows = [],
   accessors = [],
-  nested,
+  nested = false,
   children,
 }) => {
   if (!children && !rows.length) {
     return null;
   }
 
-  const tableClassName = nested
-    ? bemClasses.modifier(`nested`, `table`)
-    : bemClasses.element(`table`);
-  const tableBodyClassName = nested
-    ? bemClasses.modifier(`nested`, `table-body`)
-    : bemClasses.element(`table-body`);
+  const tableClassName = createNestedClassName(`table`, nested);
+  const tableBodyClassName = createNestedClassName(`table-body`, nested);
 
   return (
     <table className={tableClassName}>

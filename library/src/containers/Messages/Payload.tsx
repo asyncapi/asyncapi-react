@@ -4,6 +4,7 @@ import { SchemaComponent } from '../Schemas/Schema';
 
 import { bemClasses } from '../../helpers';
 import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
+import { Toggle } from '../../components';
 import {
   ONE_OF_PAYLOADS_TEXT,
   ANY_OF_PAYLOADS_TEXT,
@@ -12,24 +13,38 @@ import {
   PAYLOAD_EXAMPLE_TEXT,
 } from '../../constants';
 
-type PayloadProps = Required<Pick<RawMessage, 'payload'>>;
+interface Props extends Required<Pick<RawMessage, 'payload'>> {
+  oneOf?: boolean;
+  anyOf?: boolean;
+  id?: number;
+}
 
-export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
+export const PayloadComponent: React.FunctionComponent<Props> = ({
   payload,
+  oneOf = false,
+  anyOf = false,
+  id,
 }) => {
+  const className = `message-payload`;
+
   if (isOneOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`message-payload-oneOf`)}>
-        <header className={bemClasses.element(`message-payload-oneOf-header`)}>
+      <div className={bemClasses.element(`${className}-oneOf`)}>
+        <header className={bemClasses.element(`${className}-oneOf-header`)}>
           <h4>{ONE_OF_PAYLOADS_TEXT}</h4>
         </header>
-        <ul className={bemClasses.element(`message-payload-oneOf-list`)}>
+        <ul className={bemClasses.element(`${className}-oneOf-list`)}>
           {payload.oneOf.map((elem, index: number) => (
             <li
               key={index}
-              className={bemClasses.element(`message-payload-oneOf-list-item`)}
+              className={bemClasses.element(`${className}-oneOf-list-item`)}
             >
-              <PayloadComponent payload={elem} key={index} />
+              <PayloadComponent
+                payload={elem}
+                key={index}
+                oneOf={true}
+                id={index}
+              />
             </li>
           ))}
         </ul>
@@ -39,17 +54,22 @@ export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
 
   if (isAnyOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`message-payload-anyOf`)}>
-        <header className={bemClasses.element(`message-payload-anyOf-header`)}>
+      <div className={bemClasses.element(`${className}-anyOf`)}>
+        <header className={bemClasses.element(`${className}-anyOf-header`)}>
           <h4>{ANY_OF_PAYLOADS_TEXT}</h4>
         </header>
-        <ul className={bemClasses.element(`message-payload-anyOf-list`)}>
+        <ul className={bemClasses.element(`${className}-anyOf-list`)}>
           {payload.anyOf.map((elem, index: number) => (
             <li
               key={index}
-              className={bemClasses.element(`message-payload-anyOf-list-item`)}
+              className={bemClasses.element(`${className}-anyOf-list-item`)}
             >
-              <PayloadComponent payload={elem} key={index} />
+              <PayloadComponent
+                id={index}
+                payload={elem}
+                key={index}
+                anyOf={true}
+              />
             </li>
           ))}
         </ul>
@@ -57,19 +77,37 @@ export const PayloadComponent: React.FunctionComponent<PayloadProps> = ({
     );
   }
 
-  return (
-    <div className={bemClasses.element(`message-payload`)}>
-      <header className={bemClasses.element(`message-payload-header`)}>
-        <h4>{PAYLOAD_TEXT}</h4>
-      </header>
-      <div className={bemClasses.element(`message-payload-schema`)}>
-        <SchemaComponent
-          name={MESSAGE_PAYLOAD_TEXT}
-          schema={payload}
-          exampleTitle={PAYLOAD_EXAMPLE_TEXT}
-          hideTitle={true}
-        />
-      </div>
+  const header = (
+    <header className={bemClasses.element(`${className}-header`)}>
+      <h4>{id !== undefined ? id : PAYLOAD_TEXT}</h4>
+    </header>
+  );
+
+  const content = (
+    <div className={bemClasses.element(`${className}-schema`)}>
+      <SchemaComponent
+        name={MESSAGE_PAYLOAD_TEXT}
+        schema={payload}
+        exampleTitle={PAYLOAD_EXAMPLE_TEXT}
+        hideTitle={true}
+      />
     </div>
+  );
+
+  if (oneOf || anyOf) {
+    return (
+      <section className={bemClasses.element(className)}>
+        <Toggle header={header} className={className}>
+          {content}
+        </Toggle>
+      </section>
+    );
+  }
+
+  return (
+    <section className={bemClasses.element(className)}>
+      {header}
+      {content}
+    </section>
   );
 };

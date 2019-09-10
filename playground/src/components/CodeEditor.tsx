@@ -25,6 +25,7 @@ class CodeEditorComponent extends Component<Props, State> {
   state = {
     code: this.props.code,
   };
+
   componentDidUpdate(nextProps: Props, nextState: State) {
     const { externalResource } = this.props;
     if (nextProps.externalResource !== externalResource) {

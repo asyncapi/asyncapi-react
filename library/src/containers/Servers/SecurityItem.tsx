@@ -7,11 +7,11 @@ import { Markdown, TableAccessor, TableRow } from '../../components';
 import { bemClasses } from '../../helpers';
 
 const securitySchemeAccessors: Array<TableAccessor<SecurityScheme>> = [
-  el => el.type,
-  el => el.bearerFormat,
-  el => el.in,
-  el => el.scheme,
-  el => el.name,
+  el => <span>{el.type}</span>,
+  el => <span>{el.bearerFormat}</span>,
+  el => <span>{el.in}</span>,
+  el => <span>{el.scheme}</span>,
+  el => <span>{el.name}</span>,
   el => el.description && <Markdown>{el.description}</Markdown>,
 ];
 
@@ -26,7 +26,6 @@ export const ServerSecurityItemComponent: React.FunctionComponent<Props> = ({
     <TableRow
       element={securityScheme}
       accessors={securitySchemeAccessors}
-      nested={true}
       className={bemClasses.element(`server-security-${securityScheme.type}`)}
     />
     {securityScheme.flows && (

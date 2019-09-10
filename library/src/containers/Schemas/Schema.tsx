@@ -3,7 +3,7 @@ import React from 'react';
 import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
 import { SchemaExampleComponent } from './SchemaExample';
 
-import { Table } from '../../components';
+import { Table, Toggle, ToggleLabel } from '../../components';
 import { Schema } from '../../types';
 import { bemClasses, searchForNestedObject } from '../../helpers';
 import { SCHEMA_COLUMN_NAMES } from '../../constants';
@@ -11,8 +11,11 @@ import { SCHEMA_COLUMN_NAMES } from '../../constants';
 interface Props {
   name: string;
   schema?: Schema;
+  description?: React.ReactNode;
   exampleTitle?: string;
   hideTitle?: boolean;
+  toggle?: boolean;
+  toggleExpand?: boolean;
 }
 
 const renderSchemaProps = (
@@ -35,22 +38,31 @@ const renderSchemaProps = (
 export const SchemaComponent: React.FunctionComponent<Props> = ({
   name,
   schema,
+  description,
   exampleTitle,
-  hideTitle,
+  hideTitle = false,
+  toggle = false,
+  toggleExpand = false,
 }) => {
   if (!schema) {
     return null;
   }
+  schema.description = schema.description || description || '';
+
+  const className = `schema`;
   const hasNotField = searchForNestedObject(schema, 'not');
 
-  return (
-    <div className={bemClasses.element(`schema`)}>
-      {hideTitle ? null : (
-        <header className={bemClasses.element(`schema-header`)}>
-          <h4>{name}</h4>
-        </header>
-      )}
-      <div className={bemClasses.element(`schema-table`)}>
+  const header = (
+    <h3>
+      <span className={bemClasses.element(`${className}-header-title`)}>
+        {name}
+      </span>
+    </h3>
+  );
+
+  const content = (
+    <>
+      <div className={bemClasses.element(`${className}-table`)}>
         <Table
           header={{
             columns: SCHEMA_COLUMN_NAMES,
@@ -63,6 +75,30 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       {hasNotField ? null : (
         <SchemaExampleComponent title={exampleTitle} schema={schema} />
       )}
-    </div>
+    </>
+  );
+
+  return (
+    <section className={bemClasses.element(className)}>
+      {toggle ? (
+        <Toggle
+          header={header}
+          className={className}
+          label={ToggleLabel.SCHEMA}
+          toggleInState={true}
+        >
+          {content}
+        </Toggle>
+      ) : (
+        <>
+          {hideTitle ? null : (
+            <header className={bemClasses.element(`${className}-header`)}>
+              {header}
+            </header>
+          )}
+          {content}
+        </>
+      )}
+    </section>
   );
 };

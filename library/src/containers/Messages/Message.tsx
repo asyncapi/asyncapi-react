@@ -6,13 +6,20 @@ import { PayloadComponent } from './Payload';
 import { bemClasses } from '../../helpers';
 import { Message, isRawMessage } from '../../types';
 
-import { Markdown, Tag, Badge, BadgeType } from '../../components';
+import {
+  Markdown,
+  Tag,
+  Badge,
+  BadgeType,
+  Toggle,
+  ToggleLabel,
+} from '../../components';
 
 import {
-  DEPRECATED,
-  HEADERS,
-  MESSAGE_HEADERS,
-  HEADERS_EXAMPLE,
+  DEPRECATED_TEXT,
+  HEADERS_TEXT,
+  MESSAGE_HEADERS_TEXT,
+  HEADERS_EXAMPLE_TEXT,
   TAGS_TEXT,
 } from '../../constants';
 
@@ -20,16 +27,23 @@ interface Props {
   title?: string;
   message: Message;
   hideTags?: boolean;
+  inChannel?: boolean;
+  toggleExpand?: boolean;
+  oneOf?: boolean;
 }
 
 export const MessageComponent: React.FunctionComponent<Props> = ({
   title,
   message,
   hideTags,
+  inChannel = false,
+  toggleExpand = false,
+  oneOf = false,
 }) => {
   if (!message) {
     return null;
   }
+  const className = `message`;
 
   if (!isRawMessage(message)) {
     return (
@@ -39,7 +53,13 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
             key={index}
             className={bemClasses.element(`messages-oneOf-list-item`)}
           >
-            <MessageComponent message={elem} key={index} />
+            <MessageComponent
+              message={elem}
+              key={index}
+              title={elem.title}
+              inChannel={inChannel}
+              oneOf={true}
+            />
           </li>
         ))}
       </ul>
@@ -47,48 +67,47 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   }
 
   const summary = message.summary && (
-    <div className={bemClasses.element(`message-header-summary`)}>
+    <div className={bemClasses.element(`${className}-summary`)}>
       <Markdown>{message.summary}</Markdown>
     </div>
   );
 
   const description = message.description && (
-    <div className={bemClasses.element(`message-header-description`)}>
+    <div className={bemClasses.element(`${className}-description`)}>
       <Markdown>{message.description}</Markdown>
     </div>
   );
 
-  const header = (
-    <header className={bemClasses.element(`message-header`)}>
+  const header = !(title || summary) ? null : (
+    <h3>
+      {message.deprecated && (
+        <div
+          className={bemClasses.element(`${className}-header-deprecated-badge`)}
+        >
+          <Badge type={BadgeType.DEPRECATED}>{DEPRECATED_TEXT}</Badge>
+        </div>
+      )}
       {title ? (
-        <h3>
-          <span className={bemClasses.element(`message-header-title`)}>
-            {title}
-          </span>
-          {message.deprecated && (
-            <div
-              className={bemClasses.element(`message-header-deprecated-badge`)}
-            >
-              <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
-            </div>
-          )}
-        </h3>
+        <span className={bemClasses.element(`${className}-header-title`)}>
+          {title}
+        </span>
       ) : null}
-      {summary}
-      {description}
-    </header>
+      <span className={bemClasses.element(`${className}-header-summary`)}>
+        {summary}
+      </span>
+    </h3>
   );
 
   const headers = message.headers && (
-    <div className={bemClasses.element(`message-headers`)}>
-      <header className={bemClasses.element(`message-headers-header`)}>
-        <h4>{HEADERS}</h4>
+    <div className={bemClasses.element(`${className}-headers`)}>
+      <header className={bemClasses.element(`${className}-headers-header`)}>
+        <h4>{HEADERS_TEXT}</h4>
       </header>
-      <div className={bemClasses.element(`message-headers-schema`)}>
+      <div className={bemClasses.element(`${className}-headers-schema`)}>
         <SchemaComponent
-          name={MESSAGE_HEADERS}
+          name={MESSAGE_HEADERS_TEXT}
           schema={message.headers}
-          exampleTitle={HEADERS_EXAMPLE}
+          exampleTitle={HEADERS_EXAMPLE_TEXT}
           hideTitle={true}
         />
       </div>
@@ -100,15 +119,15 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   );
 
   const tags = !hideTags && message.tags && (
-    <div className={bemClasses.element(`message-tags`)}>
-      <header className={bemClasses.element(`message-tags-header`)}>
+    <div className={bemClasses.element(`${className}-tags`)}>
+      <header className={bemClasses.element(`${className}-tags-header`)}>
         <h4>{TAGS_TEXT}</h4>
       </header>
-      <ul className={bemClasses.element(`message-tags-list`)}>
+      <ul className={bemClasses.element(`${className}-tags-list`)}>
         {message.tags.map(tag => (
           <li
             key={tag.name}
-            className={bemClasses.element(`message-tags-list-item`)}
+            className={bemClasses.element(`${className}-tags-list-item`)}
           >
             <Tag>{tag.name}</Tag>
           </li>
@@ -117,12 +136,41 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     </div>
   );
 
-  return (
-    <div className={bemClasses.element(`message`)}>
-      {header}
+  const content = (
+    <>
       {headers}
       {payload}
       {tags}
-    </div>
+    </>
+  );
+
+  const isBody = !!(
+    message.description ||
+    message.headers ||
+    message.payload ||
+    (!hideTags && message.tags)
+  );
+
+  return (
+    <section className={bemClasses.element(className)}>
+      {!inChannel ? (
+        <Toggle
+          header={header}
+          className={className}
+          expanded={toggleExpand}
+          label={ToggleLabel.MESSAGE}
+          toggleInState={true}
+        >
+          {!isBody ? null : (
+            <>
+              {description}
+              {content}
+            </>
+          )}
+        </Toggle>
+      ) : (
+        <>{content}</>
+      )}
+    </section>
   );
 };

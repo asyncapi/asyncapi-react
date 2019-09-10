@@ -14,7 +14,10 @@ import {
   AsyncApiWrapper,
 } from './components';
 
-import { defaultSchema2, defaultConfig, parse } from './common';
+import { defaultConfig, parse } from './common';
+import * as specs from './specs';
+
+const defaultSchema = specs.streetlights;
 
 interface State {
   schema: string;
@@ -26,9 +29,9 @@ interface State {
 
 class Playground extends Component<{}, State> {
   state = {
-    schema: defaultSchema2,
+    schema: defaultSchema,
     config: defaultConfig,
-    schemaFromEditor: defaultSchema2,
+    schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
     configFromEditor: defaultConfig,
   };

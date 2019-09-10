@@ -1,10 +1,13 @@
-import Parser from '../parser';
-import validDoc from './async.json';
 import {
   ParserErrorUnsupportedVersion,
   ParserErrorNoJS,
 } from 'asyncapi-parser';
-import { AsyncAPI, ParserOptions } from '../../types';
+import { Options as ParserOptions } from 'json-schema-ref-parser';
+
+import { Parser } from '../parser';
+import { AsyncAPI } from '../../types';
+
+import validDoc from './async.json';
 
 const mockParse = (d: AsyncAPI) =>
   jest.fn(async (c: string | any, opts?: ParserOptions) => d);

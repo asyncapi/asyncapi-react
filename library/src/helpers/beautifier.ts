@@ -26,27 +26,28 @@ class Beautifier {
     }
 
     if (asyncApi.components) {
-      if (asyncApi.components.messages) {
-        asyncApi.components.messages = this.beautifyMessages(
-          asyncApi.components.messages,
-        );
-      }
-      if (asyncApi.components.schemas) {
-        asyncApi.components.schemas = this.beautifySchemas(
-          asyncApi.components.schemas,
-        );
-      }
+      asyncApi.components.messages = this.beautifyMessages(
+        asyncApi.components.messages,
+      );
+      asyncApi.components.schemas = this.beautifySchemas(
+        asyncApi.components.schemas,
+      );
     }
 
     return asyncApi;
   }
 
-  private resolveAllOf(schema: Schema): Schema {
+  private resolveAllOf(schema?: Schema): Schema | undefined {
+    if (!schema || !Object.keys(schema).length) {
+      return schema;
+    }
+
     if (schema.allOf) {
-      const schemas: Schema[] = [];
+      let schemas: Schema[] = [];
       schema.allOf.forEach(s => {
-        schemas.push(this.resolveAllOf(s));
+        schemas.push(this.resolveAllOf(s) || s);
       });
+      schemas = schemas.filter(Boolean);
 
       return merge.recursive(...schemas);
     }
@@ -56,7 +57,7 @@ class Beautifier {
 
       for (const [key, property] of Object.entries(schema.properties)) {
         if (property.allOf) {
-          transformed[key] = this.resolveAllOf(property);
+          transformed[key] = this.resolveAllOf(property) || property;
           continue;
         }
         transformed[key] = property;
@@ -68,7 +69,11 @@ class Beautifier {
     return schema;
   }
 
-  private beautifySchema(schema: Schema): Schema {
+  private beautifySchema(schema?: Schema): Schema | undefined {
+    if (!schema || !Object.keys(schema).length) {
+      return schema;
+    }
+
     if (schema.properties) {
       const properties = schema.properties;
       const newProperties: Record<string, Schema> = properties;
@@ -82,7 +87,8 @@ class Beautifier {
           const newPropProperties: Record<string, Schema> = {};
 
           for (const [propKey, propValue] of Object.entries(propProperties)) {
-            newPropProperties[propKey] = this.beautifySchema(propValue);
+            newPropProperties[propKey] =
+              this.beautifySchema(propValue) || propValue;
           }
 
           prop.properties = newPropProperties;
@@ -111,9 +117,8 @@ class Beautifier {
           for (const [propKey, propValue] of Object.entries(
             propAdditionalProperties,
           )) {
-            newPropAdditionalProperties[propKey] = this.beautifySchema(
-              propValue,
-            );
+            newPropAdditionalProperties[propKey] =
+              this.beautifySchema(propValue) || propValue;
           }
           prop.properties = newPropAdditionalProperties;
         }
@@ -127,12 +132,16 @@ class Beautifier {
   }
 
   private beautifySchemas(
-    schemas: Record<string, Schema>,
-  ): Record<string, Schema> {
+    schemas?: Record<string, Schema>,
+  ): Record<string, Schema> | undefined {
+    if (!schemas || !Object.keys(schemas).length) {
+      return schemas;
+    }
+
     const newSchemas: Record<string, Schema> = {};
     for (const [key, schema] of Object.entries(schemas)) {
-      newSchemas[key] = this.resolveAllOf(schema);
-      newSchemas[key] = this.beautifySchema(newSchemas[key]);
+      newSchemas[key] = this.resolveAllOf(schema) || schema;
+      newSchemas[key] = this.beautifySchema(newSchemas[key]) || newSchemas[key];
     }
     return newSchemas;
   }
@@ -140,7 +149,8 @@ class Beautifier {
   private beautifyMessage(message: Message): Message {
     if (!isRawMessage(message)) {
       const beautified = {
-        oneOf: message.oneOf.map(this.beautifyMessage),
+        ...message,
+        oneOf: message.oneOf.map(el => this.beautifyMessage(el)),
       } as Message;
 
       return beautified;
@@ -154,24 +164,20 @@ class Beautifier {
     if (message.summary) {
       message.summary = renderMd(message.summary as string);
     }
-
     if (message.description) {
       message.description = renderMd(message.description as string);
-    }
-
-    if (message.headers) {
-      message.headers = this.beautifySchema(message.headers);
-    }
-    if (message.payload) {
-      message.payload = this.beautifySchema(message.payload);
     }
 
     return message;
   }
 
   private beautifyMessages(
-    messages: Record<string, Message>,
-  ): Record<string, Message> {
+    messages?: Record<string, Message>,
+  ): Record<string, Message> | undefined {
+    if (!messages || !Object.keys(messages).length) {
+      return messages;
+    }
+
     const newMessages: Record<string, Message> = {};
     for (const [key, message] of Object.entries(messages)) {
       newMessages[key] = this.beautifyMessage(message);
@@ -205,13 +211,6 @@ class Beautifier {
     if (!operation.message) {
       return operation;
     }
-
-    if (!isRawMessage(operation.message)) {
-      const messages = [...operation.message.oneOf.map(elem => ({ ...elem }))];
-      messages.map(arg => this.beautifyMessage(arg));
-      return { ...operation, message: { oneOf: messages } };
-    }
-
     return { ...operation, message: this.beautifyMessage(operation.message) };
   }
 
@@ -226,7 +225,6 @@ class Beautifier {
       }
 
       const subscribe = channel.subscribe;
-
       if (subscribe) {
         newChannels[key].subscribe = this.beautifyOperation(subscribe);
       }

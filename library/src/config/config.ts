@@ -1,14 +1,28 @@
+import { Options as ParserOptions } from 'json-schema-ref-parser';
+
 export interface ConfigInterface {
   show?: ShowConfig;
+  collapse?: CollapseConfig;
   showErrors?: boolean;
-  prefixClassName?: string;
+  parserOptions?: ParserOptions;
 }
 
-interface ShowConfig {
+export interface ShowConfig {
   info?: boolean;
-  security?: boolean;
-  servers?: boolean;
   channels?: boolean;
+  servers?: boolean;
   messages?: boolean;
   schemas?: boolean;
+}
+
+export interface CollapseNestedConfig {
+  root?: boolean;
+  elements?: boolean;
+}
+
+export interface CollapseConfig {
+  channels?: CollapseNestedConfig;
+  servers?: CollapseNestedConfig;
+  messages?: CollapseNestedConfig;
+  schemas?: CollapseNestedConfig;
 }

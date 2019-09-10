@@ -79,6 +79,7 @@ export const ContentWrapper = styled.div`
   min-height: calc(100vh - 50px);
   display: flex;
   justify-content: space-between;
+  background: #f3f4f5;
 `;
 
 export const CodeEditorsWrapper = styled.div`
@@ -95,8 +96,11 @@ export const AsyncApiWrapper = styled.div`
   min-height: calc(100vh - 50px);
   overflow: auto;
 
-  > div {
-    padding: 20px;
+  > .asyncapi {
+    padding: 24px;
+  }
+  > .asyncapi__error {
+    margin: 24px;
   }
 `;
 

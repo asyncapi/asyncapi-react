@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ErrorObject } from 'ajv';
 
 import { bemClasses } from '../../helpers';
 import { ParserError } from '../../types';
-import {
-  ERROR,
-  EXPAND_ERROR_BUTTON,
-  COLLAPSE_ERROR_BUTTON,
-} from '../../constants';
+import { Toggle } from '../../components';
+import { ERROR_TEXT } from '../../constants';
 
 const renderErrors = (
   error: ParserError['validationError'],
@@ -44,42 +41,29 @@ interface Props {
 }
 
 export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
-  const [visible, setVisible] = useState(false);
-
   if (!error) {
     return null;
   }
-
+  const className = `error`;
   const { message, validationError } = error;
-  const buttonClassName = `error-button`;
-  const expandedButtonClassName = visible
-    ? bemClasses.modifier(`expanded`, buttonClassName)
-    : ``;
-  const buttonClassNames = bemClasses.concatenate([
-    bemClasses.element(buttonClassName),
-    expandedButtonClassName,
-  ]);
+
+  const header = (
+    <h2>
+      {ERROR_TEXT}: {message}
+    </h2>
+  );
 
   return (
-    <div className={bemClasses.element(`error`)}>
-      <header className={bemClasses.element(`error-header`)}>
-        <h2>
-          {ERROR}: {message}
-        </h2>
-        <button
-          onClick={() => setVisible(state => !state)}
-          className={buttonClassNames}
-        >
-          {visible ? COLLAPSE_ERROR_BUTTON : EXPAND_ERROR_BUTTON}
-        </button>
-      </header>
-      {!!validationError && visible && (
-        <div className={bemClasses.element(`error-content`)}>
-          <pre className={bemClasses.element(`error-content-pre`)}>
-            {renderErrors(validationError)}
-          </pre>
-        </div>
-      )}
-    </div>
+    <section className={bemClasses.element(className)}>
+      <Toggle header={header} className={className}>
+        {!!validationError && (
+          <div className={bemClasses.element(`${className}-body`)}>
+            <pre className={bemClasses.element(`${className}-body-pre`)}>
+              {renderErrors(validationError)}
+            </pre>
+          </div>
+        )}
+      </Toggle>
+    </section>
   );
 };

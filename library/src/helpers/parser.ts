@@ -2,12 +2,11 @@ import {
   ParserErrorUnsupportedVersion,
   ParserErrorNoJS,
 } from 'asyncapi-parser';
+import { Options as ParserOptions } from 'json-schema-ref-parser';
 
-import { ParserReturn, FetchingSchemaInterface, AsyncApiProps } from '../types';
+import { ParserReturn, FetchingSchemaInterface } from '../types';
 
 import { UNSUPPORTED_SCHEMA_VERSION } from '../constants';
-
-type ParserOptions = AsyncApiProps['parserOptions'];
 
 type ParseDocument = (
   content: string | any,
@@ -20,7 +19,7 @@ type ParseDocumentFromURL = (
   parserOptions?: ParserOptions,
 ) => Promise<any>;
 
-export default class Parser {
+export class Parser {
   private parseSchema: ParseDocument;
   private parseSchemaFromURL: ParseDocumentFromURL;
 
@@ -82,6 +81,11 @@ export default class Parser {
     if (data.json instanceof Function) {
       return {
         data: data.json(),
+      };
+    }
+    if (data._json instanceof Object) {
+      return {
+        data: data._json,
       };
     }
     return {

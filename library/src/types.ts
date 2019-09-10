@@ -180,6 +180,11 @@ export function isRawMessage(message: Message): message is RawMessage {
   return !(message as any).oneOf;
 }
 
+export enum PayloadType {
+  PUBLISH = 'publish',
+  SUBSCRIBE = 'subscribe',
+}
+
 export function isOneOfPayload(
   payload: RawMessage['payload'],
 ): payload is Record<OneOf, Schema[]> {
@@ -360,18 +365,9 @@ export interface Schema {
 
 export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
 
-export interface ParserOptions {
-  path?: string;
-  parse?: Record<string, any>;
-  resolve?: Record<string, any>;
-  dereference?: boolean;
-  applyTraits?: boolean;
-}
-
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
-  parserOptions?: Partial<ParserOptions>;
 }
 
 export type NullableAsyncApi = AsyncAPI | null;

@@ -2,11 +2,11 @@ import React from 'react';
 
 import { bemClasses } from '../helpers';
 import {
-  DEPRECATED,
-  PUBLISH,
-  SUBSCRIBE,
-  REQUIRED,
-  GENERATED,
+  DEPRECATED_TEXT,
+  PUBLISH_TEXT,
+  SUBSCRIBE_TEXT,
+  REQUIRED_TEXT,
+  GENERATED_TEXT,
 } from '../constants';
 
 export enum BadgeType {
@@ -35,19 +35,19 @@ export const Badge: React.FunctionComponent<Props> = ({ type = '' }) => {
 
   switch (type) {
     case BadgeType.DEPRECATED: {
-      return element(BadgeType.DEPRECATED, DEPRECATED);
+      return element(BadgeType.DEPRECATED, DEPRECATED_TEXT);
     }
     case BadgeType.PUBLISH: {
-      return element(BadgeType.PUBLISH, PUBLISH);
+      return element(BadgeType.PUBLISH, PUBLISH_TEXT);
     }
     case BadgeType.SUBSCRIBE: {
-      return element(BadgeType.SUBSCRIBE, SUBSCRIBE);
+      return element(BadgeType.SUBSCRIBE, SUBSCRIBE_TEXT);
     }
     case BadgeType.REQUIRED: {
-      return element(BadgeType.REQUIRED, REQUIRED);
+      return element(BadgeType.REQUIRED, REQUIRED_TEXT);
     }
     case BadgeType.GENERATED: {
-      return element(BadgeType.GENERATED, GENERATED);
+      return element(BadgeType.GENERATED, GENERATED_TEXT);
     }
     default: {
       return null;

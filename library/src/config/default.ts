@@ -3,12 +3,28 @@ import { ConfigInterface } from './config';
 export const defaultConfig: ConfigInterface = {
   show: {
     info: true,
+    channels: true,
     servers: true,
-    security: false,
     messages: true,
     schemas: true,
-    channels: true,
+  },
+  collapse: {
+    channels: {
+      root: true,
+      elements: false,
+    },
+    servers: {
+      root: false,
+      elements: false,
+    },
+    messages: {
+      root: false,
+      elements: false,
+    },
+    schemas: {
+      root: false,
+      elements: false,
+    },
   },
   showErrors: true,
-  prefixClassName: 'asyncapi',
 };

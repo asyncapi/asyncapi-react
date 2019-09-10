@@ -16,8 +16,8 @@
     "changelog": "lerna-changelog",
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
-    "lint-check": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-check": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md"
   },
@@ -37,7 +37,7 @@
   },
   "lint-staged": {
     "linters": {
-      "**/*.{ts,tsx,js,jsx,json,html,css,yaml}": [
+      "**/*.{ts,tsx,js,jsx,json,css,html,yaml}": [
         "prettier --write",
         "git add"
       ]

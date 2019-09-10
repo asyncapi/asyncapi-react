@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CodeComponent, Badge, BadgeType } from '../../components';
 
-import { bemClasses, generateExample } from '../../helpers';
+import { bemClasses, generateExampleSchema } from '../../helpers';
 import { Schema } from '../../types';
 import { SCHEMA_EXAMPLE_TEXT } from '../../constants';
 
@@ -16,7 +16,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
   schema,
 }) => {
   const example = JSON.stringify(
-    schema.example ? schema.example : generateExample(schema),
+    schema.example ? schema.example : generateExampleSchema(schema),
     null,
     2,
   );
@@ -34,7 +34,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
             <span className={bemClasses.element(`schema-example-header-title`)}>
               {title ? title : SCHEMA_EXAMPLE_TEXT}
             </span>
-            {!schema.example ? (
+            {schema.example ? null : (
               <div
                 className={bemClasses.element(
                   `schema-example-header-generated-badge`,
@@ -42,7 +42,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
               >
                 <Badge type={BadgeType.GENERATED} />
               </div>
-            ) : null}
+            )}
           </div>
         }
       />

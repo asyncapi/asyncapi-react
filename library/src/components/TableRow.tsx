@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { bemClasses } from '../helpers';
+import { bemClasses, createNestedClassName } from '../helpers';
 
 export type TableAccessorReturn = React.ReactNode;
 export type TableAccessor<T = Record<string, any>> =
@@ -9,21 +9,17 @@ export type TableAccessor<T = Record<string, any>> =
 
 export interface TableRowProps {
   element: any;
-  key?: string | number;
+  rootKey?: string | number;
   accessors?: TableAccessor[];
   nested?: boolean;
-  accordion?: boolean;
-  openAccordion?: boolean;
   className?: string;
 }
 
 export const TableRow: React.FunctionComponent<TableRowProps> = ({
   element,
-  key = '',
+  rootKey = '',
   accessors = [],
   nested = false,
-  accordion = false,
-  openAccordion = false,
   className = '',
 }) => {
   const renderRowByAccessors = (
@@ -32,14 +28,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
     nest: boolean,
   ): React.ReactNode[] =>
     acs.map((accessor, index) => (
-      <td
-        key={index}
-        className={
-          nest
-            ? bemClasses.modifier(`nested`, `table-cell`)
-            : bemClasses.element(`table-cell`)
-        }
-      >
+      <td key={index} className={createNestedClassName(`table-cell`, nest)}>
         {resolveAccessor(accessor, el)}
       </td>
     ));
@@ -63,27 +52,12 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
     accessors && accessors.length
       ? renderRowByAccessors(accessors, element, nested)
       : element;
-
-  const clName = `table-row`;
-  const nestedClassName = nested
-    ? bemClasses.modifier(`nested`, clName)
-    : bemClasses.element(clName);
-  const accordionClassName = accordion
-    ? bemClasses.element(`${clName}-accordion`)
-    : '';
-  const openAccordionClassName = openAccordion
-    ? bemClasses.modifier(`open`, `${clName}-accordion`)
-    : '';
+  const nestedClassName = createNestedClassName(`table-row`, nested);
 
   return (
     <tr
-      key={key}
-      className={bemClasses.concatenate([
-        nestedClassName,
-        accordionClassName,
-        openAccordionClassName,
-        className,
-      ])}
+      key={rootKey}
+      className={bemClasses.concatenate([nestedClassName, className])}
     >
       {content}
     </tr>

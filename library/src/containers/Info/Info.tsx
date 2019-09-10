@@ -4,8 +4,8 @@ import { TermsOfServiceComponent } from './TermsOfService';
 import { LicenseComponent } from './License';
 import { ContactComponent } from './Contact';
 import { DefaultContentTypeComponent } from './DefaultContentType';
-import { Markdown } from '../../components';
 
+import { Markdown, CollapseButton } from '../../components';
 import { bemClasses } from '../../helpers';
 import { Info, DefaultContentType } from '../../types';
 
@@ -17,35 +17,63 @@ interface Props {
 export const InfoComponent: React.FunctionComponent<Props> = ({
   info: { title, version, description, termsOfService, contact, license },
   defaultContentType,
-}) => (
-  <div className={bemClasses.element(`info`)}>
-    <header className={bemClasses.element(`info-header`)}>
-      <h1>{`${title} ${version}`}</h1>
-      <ul className={bemClasses.element(`info-list`)}>
-        {defaultContentType && (
-          <li className={bemClasses.element(`info-default-content-type`)}>
-            <DefaultContentTypeComponent type={defaultContentType} />
-          </li>
+}) => {
+  const className = `info`;
+  const showInfoList =
+    defaultContentType || termsOfService || license || contact;
+
+  return (
+    <div className={bemClasses.element(className)}>
+      <header className={bemClasses.element(`${className}-header`)}>
+        <div className={bemClasses.element(`${className}-header-main`)}>
+          <h1>
+            <span className={bemClasses.element(`${className}-header-title`)}>
+              {title}
+            </span>
+            {version && (
+              <span
+                className={bemClasses.element(`${className}-header-version`)}
+              >
+                {version}
+              </span>
+            )}
+          </h1>
+          <CollapseButton />
+        </div>
+        {!showInfoList ? null : (
+          <ul className={bemClasses.element(`${className}-list`)}>
+            {defaultContentType && (
+              <li
+                className={bemClasses.element(
+                  `${className}-default-content-type`,
+                )}
+              >
+                <DefaultContentTypeComponent type={defaultContentType} />
+              </li>
+            )}
+            {termsOfService && (
+              <li
+                className={bemClasses.element(`${className}-terms-of-service`)}
+              >
+                <TermsOfServiceComponent url={termsOfService} />
+              </li>
+            )}
+            {license && (
+              <li className={bemClasses.element(`${className}-license`)}>
+                <LicenseComponent {...license} />
+              </li>
+            )}
+            {contact && (contact.url || contact.email) ? (
+              <ContactComponent {...contact} />
+            ) : null}
+          </ul>
         )}
-        {termsOfService && (
-          <li className={bemClasses.element(`info-terms-of-service`)}>
-            <TermsOfServiceComponent url={termsOfService} />
-          </li>
-        )}
-        {license && (
-          <li className={bemClasses.element(`info-license`)}>
-            <LicenseComponent {...license} />
-          </li>
-        )}
-        {contact && (contact.url || contact.email) ? (
-          <ContactComponent {...contact} />
-        ) : null}
-      </ul>
-    </header>
-    {description && (
-      <div className={bemClasses.element(`info-description`)}>
-        <Markdown>{description}</Markdown>
-      </div>
-    )}
-  </div>
-);
+      </header>
+      {description && (
+        <div className={bemClasses.element(`${className}-description`)}>
+          <Markdown>{description}</Markdown>
+        </div>
+      )}
+    </div>
+  );
+};
