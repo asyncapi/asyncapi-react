@@ -48,7 +48,7 @@ interface ConfigInterface {
 - **expand?: Partial<ExpandConfig>**
 
   This field contains configuration responsible for initial expanding specific parts of the AsyncApi component.
-  `root` means root component for specific parts of the AsyncApi component. Otherwise, `elements` means elements inside `root` component.
+  `root` means root component for specific parts of the AsyncApi component. `Elements` means elements inside `root` component.
   By default `expand.channels.root` is set to `true`.
 
 - **showErrors?: boolean**
