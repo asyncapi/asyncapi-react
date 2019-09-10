@@ -9,10 +9,10 @@ import { Message, isRawMessage } from '../../types';
 import { Markdown, Tag, Badge, BadgeType, Toggle } from '../../components';
 
 import {
-  DEPRECATED,
-  HEADERS,
-  MESSAGE_HEADERS,
-  HEADERS_EXAMPLE,
+  DEPRECATED_TEXT,
+  HEADERS_TEXT,
+  MESSAGE_HEADERS_TEXT,
+  HEADERS_EXAMPLE_TEXT,
   TAGS_TEXT,
 } from '../../constants';
 
@@ -77,7 +77,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
         <div
           className={bemClasses.element(`${className}-header-deprecated-badge`)}
         >
-          <Badge type={BadgeType.DEPRECATED}>{DEPRECATED}</Badge>
+          <Badge type={BadgeType.DEPRECATED}>{DEPRECATED_TEXT}</Badge>
         </div>
       )}
       {title ? (
@@ -94,13 +94,13 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   const headers = message.headers && (
     <div className={bemClasses.element(`${className}-headers`)}>
       <header className={bemClasses.element(`${className}-headers-header`)}>
-        <h4>{HEADERS}</h4>
+        <h4>{HEADERS_TEXT}</h4>
       </header>
       <div className={bemClasses.element(`${className}-headers-schema`)}>
         <SchemaComponent
-          name={MESSAGE_HEADERS}
+          name={MESSAGE_HEADERS_TEXT}
           schema={message.headers}
-          exampleTitle={HEADERS_EXAMPLE}
+          exampleTitle={HEADERS_EXAMPLE_TEXT}
           hideTitle={true}
         />
       </div>

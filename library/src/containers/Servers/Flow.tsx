@@ -5,7 +5,7 @@ import { ServerSecurityFlowScopes } from './Scopes';
 import { bemClasses } from '../../helpers';
 import { Href } from '../../components';
 import { OAuthFlow, OAuthFlowsType } from '../../types';
-import { FLOWS } from '../../constants';
+import { FLOWS_TEXTS } from '../../constants';
 
 interface Props {
   name: string;
@@ -19,29 +19,29 @@ export const ServerSecurityFlow: React.FunctionComponent<Props> = ({
   <div className={bemClasses.element(`server-security-flow`)}>
     <ul className={bemClasses.element(`server-security-flow-list`)}>
       <li className={bemClasses.element(`server-security-flow-list-item`)}>
-        <strong>{FLOWS.FLOW}</strong>:<span>{OAuthFlowsType[name]}</span>
+        <strong>{FLOWS_TEXTS.FLOW}</strong>:<span>{OAuthFlowsType[name]}</span>
       </li>
       {flow.authorizationUrl && (
         <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS.AUTHORIZATION_URL}:</strong>
+          <strong>{FLOWS_TEXTS.AUTHORIZATION_URL}:</strong>
           <Href href={flow.authorizationUrl}>{flow.authorizationUrl}</Href>
         </li>
       )}
       {flow.tokenUrl && (
         <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS.TOKEN_URL}</strong>:
+          <strong>{FLOWS_TEXTS.TOKEN_URL}</strong>:
           <Href href={flow.tokenUrl}>{flow.tokenUrl}</Href>
         </li>
       )}
       {flow.refreshUrl && (
         <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS.REFRESH_URL}</strong>:
+          <strong>{FLOWS_TEXTS.REFRESH_URL}</strong>:
           <Href href={flow.refreshUrl}>{flow.refreshUrl}</Href>
         </li>
       )}
       {flow.scopes && (
         <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS.SCOPES}</strong>:
+          <strong>{FLOWS_TEXTS.SCOPES}</strong>:
           <ServerSecurityFlowScopes scopes={flow.scopes} />
         </li>
       )}

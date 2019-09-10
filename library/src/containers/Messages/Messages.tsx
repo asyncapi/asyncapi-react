@@ -6,7 +6,7 @@ import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle } from '../../components';
 import { Message } from '../../types';
-import { MESSAGES } from '../../constants';
+import { MESSAGES_TEXT } from '../../constants';
 
 interface Props {
   messages?: Record<string, Message>;
@@ -28,7 +28,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   const wrapper = (children: React.ReactNode) => (
     <section className={bemClasses.element(className)}>{children}</section>
   );
-  const header = <h2>{MESSAGES}</h2>;
+  const header = <h2>{MESSAGES_TEXT}</h2>;
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
       {Object.entries(messages).map(([key, message]) => (

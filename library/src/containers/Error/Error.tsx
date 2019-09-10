@@ -4,7 +4,7 @@ import { ErrorObject } from 'ajv';
 import { bemClasses } from '../../helpers';
 import { ParserError } from '../../types';
 import { Toggle } from '../../components';
-import { ERROR } from '../../constants';
+import { ERROR_TEXT } from '../../constants';
 
 const renderErrors = (
   error: ParserError['validationError'],
@@ -49,7 +49,7 @@ export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
 
   const header = (
     <h2>
-      {ERROR}: {message}
+      {ERROR_TEXT}: {message}
     </h2>
   );
 

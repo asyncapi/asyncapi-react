@@ -3,8 +3,8 @@ import { TableColumnName } from './types';
 export const CSS_PREFIX = 'asyncapi';
 export const CONTENT_TYPES_SITE =
   'https://www.iana.org/assignments/media-types';
-export const COLLAPSE_ALL = 'Collapse All';
-export const EXPAND_ALL = 'Expand All';
+export const COLLAPSE_ALL_TEXT = 'Collapse All';
+export const EXPAND_ALL_TEXT = 'Expand All';
 
 export const UNSUPPORTED_SCHEMA_VERSION =
   'AsyncAPI version is unsupported, use version 2.0 or higher';
@@ -12,43 +12,43 @@ export const SERVERS = 'Servers';
 
 export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
 export const ANY_OF_PAYLOADS_TEXT = 'Any of those payloads:';
-export const GENERATED_BADGE = 'generated';
-export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH =
+export const GENERATED_BADGE_TEXT = 'generated';
+export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT =
   'You can receive one of the following messages:';
-export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE =
+export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT =
   'You can receive the following message:';
-export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE =
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
   'You can send one of the following messages:';
-export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE =
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
   'You can send the following message:';
 
-export const CONTACT = 'Contact';
-export const NAME = 'Name';
-export const URL = 'Url';
-export const EMAIL = 'Email';
-export const LICENSE = 'License';
-export const TERMS_OF_SERVICE = 'Terms of service';
-export const URL_SUPPORT = 'Support';
-export const EMAIL_SUPPORT = 'Email support';
-export const LOCATION = 'Location';
-export const TYPE = 'Type';
-export const SPECIFICATION = 'Specification';
+export const CONTACT_TEXT = 'Contact';
+export const NAM_TEXTE = 'Name';
+export const URL_TEXT = 'Url';
+export const EMAIL_TEXT = 'Email';
+export const LICENSE_TEXT = 'License';
+export const TERMS_OF_SERVICE_TEXT = 'Terms of service';
+export const URL_SUPPORT_TEXT = 'Support';
+export const EMAIL_SUPPORT_TEXT = 'Email support';
+export const LOCATION_TEXT = 'Location';
+export const TYPE_TEXT = 'Type';
+export const SPECIFICATION_TEXT = 'Specification';
 
-export const DEPRECATED = 'Deprecated';
-export const PUBLISH = 'Publish';
-export const SUBSCRIBE = 'Subscribe';
-export const REQUIRED = 'Required';
-export const GENERATED = 'Generated';
+export const DEPRECATED_TEXT = 'Deprecated';
+export const PUBLISH_TEXT = 'Publish';
+export const SUBSCRIBE_TEXT = 'Subscribe';
+export const REQUIRED_TEXT = 'Required';
+export const GENERATED_TEXT = 'Generated';
 
-export const MESSAGES = 'Messages';
+export const MESSAGES_TEXT = 'Messages';
 export const SCHEMAS_TEXT = 'Schemas';
-export const MESSAGE = 'Message';
+export const MESSAGE_TEXT = 'Message';
 
-export const CHANNELS = 'Channels';
-export const PARAMETERS = 'Parameters';
-export const HEADERS = 'Headers';
-export const MESSAGE_HEADERS = 'Message Headers';
-export const HEADERS_EXAMPLE = 'Example of headers';
+export const CHANNELS_TEXT = 'Channels';
+export const PARAMETERS_TEXT = 'Parameters';
+export const HEADERS_TEXT = 'Headers';
+export const MESSAGE_HEADERS_TEXT = 'Message Headers';
+export const HEADERS_EXAMPLE_TEXT = 'Example of headers';
 export const TAGS_TEXT = 'Tags';
 export const PAYLOAD_TEXT = 'Payload';
 export const MESSAGE_PAYLOAD_TEXT = 'Message Payload';
@@ -57,15 +57,15 @@ export const SCHEMA_EXAMPLE_TEXT = 'Example';
 
 export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';
-export const ERROR = 'Error';
-export const EXPAND_ERROR_BUTTON = 'Expand';
-export const COLLAPSE_ERROR_BUTTON = 'Collapse';
+export const ERROR_TEXT = 'Error';
+export const EXPAND_ERROR_BUTTON_TEXT = 'Expand';
+export const COLLAPSE_ERROR_BUTTON_TEXT = 'Collapse';
 
 export const SECURITY_TEXT = 'Security';
 
 export const URL_VARIABLES_TEXT = 'URL Variables';
 
-export const FLOWS = {
+export const FLOWS_TEXTS = {
   FLOW: 'Flow',
   AUTHORIZATION_URL: 'Authorization URL',
   TOKEN_URL: 'Token URL',

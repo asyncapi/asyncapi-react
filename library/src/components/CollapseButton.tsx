@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { bemClasses } from '../helpers';
-import { COLLAPSE_ALL, EXPAND_ALL } from '../constants';
+import { COLLAPSE_ALL_TEXT, EXPAND_ALL_TEXT } from '../constants';
 import { useExpandedContext } from '../store';
 
 export const CollapseButton = () => {
@@ -35,7 +35,7 @@ export const CollapseButton = () => {
       className={bemClasses.element(`collapse-button`)}
       onClick={() => setExpanded(state => !state)}
     >
-      <span>{expanded ? COLLAPSE_ALL : EXPAND_ALL}</span>
+      <span>{expanded ? COLLAPSE_ALL_TEXT : EXPAND_ALL_TEXT}</span>
     </button>
   );
 };

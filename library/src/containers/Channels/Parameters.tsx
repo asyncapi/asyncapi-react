@@ -4,7 +4,7 @@ import { Parameter } from './Parameter';
 
 import { bemClasses } from '../../helpers';
 import { Parameters as ParametersType } from '../../types';
-import { PARAMETERS } from '../../constants';
+import { PARAMETERS_TEXT } from '../../constants';
 
 interface Props {
   parameters?: ParametersType;
@@ -18,7 +18,7 @@ export const Parameters: React.FunctionComponent<Props> = ({ parameters }) => {
   return (
     <div className={bemClasses.element(`channel-parameters`)}>
       <header className={bemClasses.element(`channel-parameters-header`)}>
-        <h4>{PARAMETERS}</h4>
+        <h4>{PARAMETERS_TEXT}</h4>
       </header>
       <ul className={bemClasses.element(`channel-parameters-list`)}>
         {Object.entries(parameters).map(([name, param]) => (

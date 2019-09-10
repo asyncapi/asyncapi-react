@@ -6,7 +6,7 @@ import { CollapseNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Channels } from '../../types';
 import { Toggle } from '../../components';
-import { CHANNELS } from '../../constants';
+import { CHANNELS_TEXT } from '../../constants';
 
 interface Props {
   channels: Channels;
@@ -19,7 +19,7 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
 }) => {
   const className = `channels`;
 
-  const header = <h2>{CHANNELS}</h2>;
+  const header = <h2>{CHANNELS_TEXT}</h2>;
 
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>

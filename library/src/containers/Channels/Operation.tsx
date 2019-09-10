@@ -7,8 +7,8 @@ import { bemClasses } from '../../helpers';
 import { Badge, BadgeType } from '../../components';
 import { Operation, PayloadType, Message, isRawMessage } from '../../types';
 import {
-  ONE_OF_FOLLOWING_MESSAGES_PUBLISH,
-  ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE,
+  ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT,
+  ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT,
 } from '../../constants';
 
 interface Props {
@@ -67,8 +67,8 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
             ) : null}
             <span>
               {payloadType === PayloadType.PUBLISH
-                ? ONE_OF_FOLLOWING_MESSAGES_PUBLISH
-                : ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE}
+                ? ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT
+                : ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT}
             </span>
           </h4>
         </header>

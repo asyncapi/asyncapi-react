@@ -5,7 +5,7 @@ import { Parameters as ParametersComponent } from './Parameters';
 
 import { Badge, BadgeType, Toggle } from '../../components';
 import { bemClasses } from '../../helpers';
-import { MESSAGE } from '../../constants';
+import { MESSAGE_TEXT } from '../../constants';
 import { Channel, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
@@ -77,7 +77,7 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
             className={bemClasses.element(`${className}-operations-header`)}
           >
             <h4>
-              <span>{MESSAGE}</span>
+              <span>{MESSAGE_TEXT}</span>
             </h4>
           </header>
         )}

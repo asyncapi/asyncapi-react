@@ -4,7 +4,7 @@ import { SchemaComponent } from '../Schemas/Schema';
 
 import { bemClasses } from '../../helpers';
 import { Parameter as ParamType } from '../../types';
-import { LOCATION } from '../../constants';
+import { LOCATION_TEXT } from '../../constants';
 
 interface Props {
   name: string;
@@ -19,7 +19,7 @@ export const Parameter: FunctionComponent<Props> = ({
     <header className={bemClasses.element(`channel-parameter-header`)}>
       {location && (
         <h4>
-          {LOCATION}: {location}
+          {LOCATION_TEXT}: {location}
         </h4>
       )}
     </header>

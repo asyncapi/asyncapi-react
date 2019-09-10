@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Href } from '../../components';
 
-import { TERMS_OF_SERVICE } from '../../constants';
+import { TERMS_OF_SERVICE_TEXT } from '../../constants';
 
 interface TermsOfServiceProps {
   url: string;
@@ -13,7 +13,7 @@ export const TermsOfServiceComponent: React.FunctionComponent<
 > = ({ url }) => (
   <div>
     <Href href={url}>
-      <span>{TERMS_OF_SERVICE}</span>
+      <span>{TERMS_OF_SERVICE_TEXT}</span>
     </Href>
   </div>
 );
