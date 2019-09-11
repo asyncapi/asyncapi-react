@@ -1,10 +1,19 @@
-# AsyncAPI React Component
+<h5 align="center">
+  <img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200">
+  <br>
+  React Component
+</h5>
+<h4 align="center">A official React component for AsyncAPI 2.0 specification</h4>
+
+---
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
 
-A [React](https://reactjs.org/) component for AsyncAPI specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
+A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
+
+> **CAUTION**: This package only supports AsyncAPI 2.0 specification. If you use 1.x, we recommend that you upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
 
 ## Playground
 
@@ -12,11 +21,13 @@ This repository comes in with a [Playground application](https://www.asyncapi.co
 
 You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
 
+## Prerequisites
+
+- [`react`](https://github.com/facebook/react/) (version 16.8.0 or higher)
+
 ## Usage
 
-> **NOTE:** Use React version 16.0.0 or higher and styled-components version 4.0.0 or higher.
-
-Run this command to install the component:
+Run this command to install the component in your project:
 
 ```sh
 npm install --save @kyma-project/asyncapi-react
@@ -28,24 +39,28 @@ Check out this simple sandbox application that uses the asyncapi-react component
 
 ### Props
 
-The list of props for the AsyncApi React component includes:
+The list of props for the AsyncAPI React component includes:
 
 - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
   The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
-- **theme?: Partial<ThemeInterface\>**
-
-  The `theme` property is optional and contains styles for specific parts of the AsyncApi component. For information on how to change styles, read the [Theme Modification](./docs/configuration/theme-modification.md) document.
-
-  > **NOTE:** If you do not pass the [**disableDefaultTheme**](./docs/configuration/config-modification.md) config as `true`, this property is concatenated with the [default theme](./library/src/theme/default.ts)
-
 - **config?: Partial<ConfigInterface\>**
 
-  The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
+  The `config` property is optional and contains configuration for the AsyncAPI component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
   This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
   > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
+
+### Styles
+
+To use default styles based on [SAP Fundamentals](https://sap.github.io/fundamental/), import them as follows:
+
+``` js
+import "@kyma-project/asyncapi-react/lib/styles/fiori.css";
+```
+
+For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
 
 ## Development
 
@@ -61,6 +76,18 @@ If you have a feature request, add it as an issue or propose changes in a pull r
 If you create a feature request, use the dedicated **Feature request** issue template. When you create a PR, follow the contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
+
+## Missing features
+
+See the list of features that are still missing in the component:
+
+- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#fixed-fields-19)
+- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#tagsObject)
+- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#externalDocumentationObject)
+- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#properties) 
+- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#correlationIdObject)
+
+If you want to help us develop them, feel free to contribute.
 
 ## Credits
 

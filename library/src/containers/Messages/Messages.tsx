@@ -2,7 +2,7 @@ import React from 'react';
 
 import { MessageComponent } from './Message';
 
-import { CollapseNestedConfig } from '../../config';
+import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle, ToggleLabel } from '../../components';
 import { Message } from '../../types';
@@ -10,13 +10,13 @@ import { MESSAGES_TEXT } from '../../constants';
 
 interface Props {
   messages?: Record<string, Message>;
-  collapse?: CollapseNestedConfig;
+  expand?: ExpandNestedConfig;
   inChannel?: boolean;
 }
 
 export const MessagesComponent: React.FunctionComponent<Props> = ({
   messages,
-  collapse,
+  expand,
   inChannel = false,
 }) => {
   if (!messages) {
@@ -38,7 +38,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
             message={message}
             hideTags={true}
             inChannel={false}
-            toggleExpand={collapse && collapse.elements}
+            toggleExpand={expand && expand.elements}
           />
         </li>
       ))}
@@ -53,7 +53,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
     <Toggle
       header={header}
       className={className}
-      expanded={collapse && collapse.root}
+      expanded={expand && expand.root}
       label={ToggleLabel.MESSAGES}
       toggleInState={true}
     >

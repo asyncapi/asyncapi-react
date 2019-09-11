@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SchemaComponent } from './Schema';
 
-import { CollapseNestedConfig } from '../../config';
+import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle, ToggleLabel } from '../../components';
 import { SCHEMAS_TEXT } from '../../constants';
@@ -10,12 +10,12 @@ import { Schema } from '../../types';
 
 interface Props {
   schemas?: Record<string, Schema>;
-  collapse?: CollapseNestedConfig;
+  expand?: ExpandNestedConfig;
 }
 
 export const SchemasComponent: React.FunctionComponent<Props> = ({
   schemas,
-  collapse,
+  expand,
 }) => {
   if (!schemas) {
     return null;
@@ -32,7 +32,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
             name={key}
             schema={schema}
             toggle={true}
-            toggleExpand={collapse && collapse.elements}
+            toggleExpand={expand && expand.elements}
           />
         </li>
       ))}
@@ -44,7 +44,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
       <Toggle
         header={header}
         className={className}
-        expanded={collapse && collapse.root}
+        expanded={expand && expand.root}
         label={ToggleLabel.SCHEMAS}
         toggleInState={true}
       >

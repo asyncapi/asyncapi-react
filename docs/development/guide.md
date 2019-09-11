@@ -11,20 +11,20 @@ Read the document to find out how to install dependencies, launch the developmen
 This repository has the following structure:
 
 <!-- markdownlint-disable MD040 -->
-<!-- remember to update docs after removing styled components, like `theme` folder here -->
 
 ```
   ├── .github                     # Pull request and issue templates
   ├── docs                        # Directory with project-related documents
-  ├── library                     # Source code of the AsyncApi React component
-  │    ├── src                    # Source code of the AsyncApi React component
-  │    │    ├── components        # Source code of generic components used in the "containers" directory
-  │    │    ├── config            # Configuration of the AsyncApi React component
-  │    │    ├── containers        # Subcomponents for specific parts of the AsyncApi React component
+  ├── library                     # Source code of the AsyncAPI React component
+  │    ├── src                    # Source code of the AsyncAPI React component
+  │    │    ├── components        # Source code of shared components used in the "containers" directory
+  │    │    ├── config            # Configuration of the AsyncAPI React component
+  │    │    ├── containers        # Subcomponents for specific parts of the AsyncAPI React component
   │    │    ├── helpers           # Various helper functions
-  │    │    └── theme             # Theme-related files for the AsyncApi React component
-  │    └── test                   # Tests for the AsyncApi React component
-  └── playground                  # Source code of the Playground application for the AsyncApi React component
+  │    │    ├── store             # Global store of the AsyncAPI React component
+  │    │    └── styles            # Style-related files for the AsyncAPI React component
+  │    └── test                   # Tests for the AsyncAPI React component
+  └── playground                  # Source code of the Playground application for the AsyncAPI React component
        ├── public                 # Fonts, images, and icons used in the Playground application
        └── src                    # Source code of the Playground application
             ├── common            # Various helper functions including mocks
@@ -34,14 +34,6 @@ This repository has the following structure:
 <!-- markdownlint-enable MD040 -->
 
 If you make any changes in the project structure, remember to update it.
-
-## Prerequisites
-
-Use the following tools to develop the AsyncApi React component:
-
-- React (version 16.8.0 or higher)
-- [Styled-components](https://github.com/styled-components/styled-components) (version 4.0.0 or higher)
-- TypeScript (version 3.5.0 or higher)
 
 ## Install dependencies
 
@@ -75,14 +67,6 @@ To launch tests for the [`library`](../../library) package, run this command:
 ```sh
 npm test
 ```
-
-If you only want to run tests for a specific part of the repository, use:
-
-```sh
-npm run test:{PART}
-```
-
-In this command `{PART}` must be either `playground` or `library`.
 
 ## Naming and architecture convention
 

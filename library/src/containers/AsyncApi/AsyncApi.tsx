@@ -77,9 +77,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.show,
         ...(!!config && config.show),
       },
-      collapse: {
-        ...defaultConfig.collapse,
-        ...(!!config && config.collapse),
+      expand: {
+        ...defaultConfig.expand,
+        ...(!!config && config.expand),
       },
     };
 
@@ -101,7 +101,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       {
         spec: validatedSchema,
         showConfig: concatenatedConfig.show,
-        collapseConfig: concatenatedConfig.collapse || {},
+        expandConfig: concatenatedConfig.expand || {},
       },
     );
 
@@ -123,9 +123,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
           {concatenatedConfig.show.channels && validatedSchema.channels && (
             <ChannelsComponent
               channels={validatedSchema.channels}
-              collapse={
-                concatenatedConfig.collapse &&
-                concatenatedConfig.collapse.channels
+              expand={
+                concatenatedConfig.expand && concatenatedConfig.expand.channels
               }
             />
           )}
@@ -136,9 +135,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 validatedSchema.components &&
                 validatedSchema.components.securitySchemes
               }
-              collapse={
-                concatenatedConfig.collapse &&
-                concatenatedConfig.collapse.servers
+              expand={
+                concatenatedConfig.expand && concatenatedConfig.expand.servers
               }
             />
           )}
@@ -148,9 +146,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 validatedSchema.components.messages && (
                   <MessagesComponent
                     messages={validatedSchema.components.messages}
-                    collapse={
-                      concatenatedConfig.collapse &&
-                      concatenatedConfig.collapse.messages
+                    expand={
+                      concatenatedConfig.expand &&
+                      concatenatedConfig.expand.messages
                     }
                   />
                 )}
@@ -158,9 +156,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 validatedSchema.components.schemas && (
                   <SchemasComponent
                     schemas={validatedSchema.components.schemas}
-                    collapse={
-                      concatenatedConfig.collapse &&
-                      concatenatedConfig.collapse.schemas
+                    expand={
+                      concatenatedConfig.expand &&
+                      concatenatedConfig.expand.schemas
                     }
                   />
                 )}

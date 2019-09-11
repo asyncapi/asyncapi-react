@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ServerComponent } from './Server';
 
-import { CollapseNestedConfig } from '../../config';
+import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Servers, SecurityScheme } from '../../types';
 import { Toggle, ToggleLabel } from '../../components';
@@ -11,13 +11,13 @@ import { SERVERS } from '../../constants';
 interface Props {
   servers?: Servers;
   securitySchemes?: Record<string, SecurityScheme>;
-  collapse?: CollapseNestedConfig;
+  expand?: ExpandNestedConfig;
 }
 
 export const ServersComponent: React.FunctionComponent<Props> = ({
   servers,
   securitySchemes,
-  collapse,
+  expand,
 }) => {
   if (!servers) {
     return null;
@@ -38,7 +38,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
             server={server}
             stage={stage}
             securitySchemes={securitySchemes}
-            toggleExpand={collapse && collapse.elements}
+            toggleExpand={expand && expand.elements}
           />
         </li>
       ))}
@@ -50,7 +50,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
       <Toggle
         header={header}
         className={className}
-        expanded={collapse && collapse.root}
+        expanded={expand && expand.root}
         label={ToggleLabel.SERVERS}
         toggleInState={true}
       >
