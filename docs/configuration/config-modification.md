@@ -42,14 +42,14 @@ interface ConfigInterface {
 
 - **show?: Partial<ShowConfig>**
 
-  This field contains configuration responsible for rendering specific parts of the AsyncApi component.
+  This field contains configuration responsible for rendering specific parts of the AsyncAPI component.
   All fields are set to `true` by default.
 
 - **expand?: Partial<ExpandConfig>**
 
-  This field contains configuration responsible for initial expanding specific parts of the AsyncApi component.
-  `root` means root component for specific parts of the AsyncApi component. `Elements` means elements inside `root` component.
-  By default `expand.channels.root` is set to `true`.
+  This field contains configuration responsible for expanding specific parts of the AsyncAPI component automatically.
+  `root` refers to a root component for specific parts of the AsyncAPI component, and `elements` refers to elements inside the `root` component.
+  By default, `expand.channels.root` is set to `true`.
 
 - **showErrors?: boolean**
 

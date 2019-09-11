@@ -15,16 +15,16 @@ This repository has the following structure:
 ```
   ├── .github                     # Pull request and issue templates
   ├── docs                        # Directory with project-related documents
-  ├── library                     # Source code of the AsyncApi React component
-  │    ├── src                    # Source code of the AsyncApi React component
+  ├── library                     # Source code of the AsyncAPI React component
+  │    ├── src                    # Source code of the AsyncAPI React component
   │    │    ├── components        # Source code of shared components used in the "containers" directory
-  │    │    ├── config            # Configuration of the AsyncApi React component
-  │    │    ├── containers        # Subcomponents for specific parts of the AsyncApi React component
+  │    │    ├── config            # Configuration of the AsyncAPI React component
+  │    │    ├── containers        # Subcomponents for specific parts of the AsyncAPI React component
   │    │    ├── helpers           # Various helper functions
-  │    │    ├── store             # Global store of the AsyncApi React component
-  │    │    └── styles            # Style-related files for the AsyncApi React component
-  │    └── test                   # Tests for the AsyncApi React component
-  └── playground                  # Source code of the Playground application for the AsyncApi React component
+  │    │    ├── store             # Global store of the AsyncAPI React component
+  │    │    └── styles            # Style-related files for the AsyncAPI React component
+  │    └── test                   # Tests for the AsyncAPI React component
+  └── playground                  # Source code of the Playground application for the AsyncAPI React component
        ├── public                 # Fonts, images, and icons used in the Playground application
        └── src                    # Source code of the Playground application
             ├── common            # Various helper functions including mocks

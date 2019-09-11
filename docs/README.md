@@ -5,7 +5,7 @@
 This directory contains the following documents that relate to the project:
 
 - configuration:
-  - [Style Modification](./configuration/style-modification.md) describes how to edit the styles of the AsyncApi component.
+  - [Style Modification](./configuration/style-modification.md) describes how to edit the styles of the AsyncAPI component.
   - [Configuration Modification](./configuration/config-modification.md) describes the available component configuration options.
 - development:
   - [Development Guide](./development/guide.md) describes how to set up a development environment, write, and run tests. It also contains the naming and architecture convention.

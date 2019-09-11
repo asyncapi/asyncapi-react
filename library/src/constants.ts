@@ -18,9 +18,9 @@ export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT =
 export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT =
   'You can send the following message:';
 export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
-  'You can receive one of the following messages:';
+  'You can subscribe to one of the following messages:';
 export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
-  'You can receive the following message:';
+  'You can subscribe to the following message:';
 
 export const CONTACT_TEXT = 'Contact';
 export const NAM_TEXTE = 'Name';

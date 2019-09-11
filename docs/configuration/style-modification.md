@@ -2,15 +2,15 @@
 
 ## Overview
 
-This document describes how you can apply the styles for the AsyncApi component.
+This document describes how you can apply the styles for the AsyncAPI component.
 
 ## Changing styles
 
-In the AsyncApi component we use pure css styling and [`BEM`](http://getbem.com/) methodology. Each HTML tag inside the AsyncApi component has a unique css class. Each class has form: `asyncapi__{ELEMENT}--{MODIFIER}`, where:
+In the AsyncApi component, we use pure CSS styling and [`BEM`](http://getbem.com/) methodology. Each HTML tag inside the root component has a unique CSS class in the `asyncapi__{ELEMENT}--{MODIFIER}` format, where:
 
-- `{ELEMENT}` - is a name of specific element. Each element name is the concatenation of the names of the elements in which it is located. For example: `asyncapi__channel-header-title` is located in `header` HTML element of `channel` element. 
-- `{MODIFIER}` - is a modifier for `{ELEMENT}`. Very few elements have a modifier. This is usually badge, button and similar, generic components.
+- `{ELEMENT}` is the name of a specific element. Each element name is the concatenation of the names of the elements in which it is located. For example, `asyncapi__channel-header-title` is located in the `header` HTML element of the `channel` element. 
+- `{MODIFIER}` is a modifier for `{ELEMENT}`. Very few elements have a modifier. This is usually a badge, button, or similar, generic components.
 
-For changing styles, you must create (or if you use [default](../../library/src/styles/fiori.css) style, modify) appropriate class.
+To change styles, create an appropriate class or modify it if you use the [default](../../library/src/styles/fiori.css) style.
 
-> **NOTE**: We recommend copy default styles from [here](../../library/src/styles/fiori.css) and changing them at its sole discretion.
+> **NOTE**: We recommend that you first [copy](../../library/src/styles/fiori.css) the default styles to a separate file and then modify them as you prefer.

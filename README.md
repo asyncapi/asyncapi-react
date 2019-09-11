@@ -13,7 +13,7 @@
 
 A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
 
-> **CAUTION**:: This package support only AsyncAPI 2.0 specification. If you using 1.x we recommend to upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
+> **CAUTION**: This package only supports AsyncAPI 2.0 specification. If you use 1.x, we recommend that you upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
 
 ## Playground
 
@@ -23,7 +23,7 @@ You can also run the Playground application locally by following [this](./docs/d
 
 ## Prerequisites
 
-- [`react`](https://github.com/facebook/react/): >= 16.8.0
+- [`react`](https://github.com/facebook/react/) (version 16.8.0 or higher)
 
 ## Usage
 
@@ -39,7 +39,7 @@ Check out this simple sandbox application that uses the asyncapi-react component
 
 ### Props
 
-The list of props for the AsyncApi React component includes:
+The list of props for the AsyncAPI React component includes:
 
 - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
@@ -47,7 +47,7 @@ The list of props for the AsyncApi React component includes:
 
 - **config?: Partial<ConfigInterface\>**
 
-  The `config` property is optional and contains configuration for the AsyncApi component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
+  The `config` property is optional and contains configuration for the AsyncAPI component. For more information on the available configuration options, read the [Configuration Modification](./docs/configuration/config-modification.md) document.
   This property is concatenated with the [default configuration](./library/src/config/default.ts).
 
   > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
