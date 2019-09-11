@@ -1,5 +1,5 @@
 export const applicationHeaders = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 info:
   title: Application Headers example
   version: '1.0.0'

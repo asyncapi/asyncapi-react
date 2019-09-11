@@ -1,5 +1,5 @@
 export const gitterStreaming = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 id: 'urn:com:gitter:streaming:api'
 info:
   title: Gitter Streaming API
