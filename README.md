@@ -1,10 +1,20 @@
-# AsyncAPI React Component
+<h5 align="center">
+  <br>
+  <a href="https://www.asyncapi.org"><img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200"></a>
+  <br>
+  React Component
+</h5>
+<h4 align="center">A React component for AsyncAPI specification</h4>
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
+---
 
 > :warning: This package doesn't support AsyncAPI 1.x anymore. We recommend to upgrade to the latest AsyncAPI version using the [AsyncAPI converter](https://github.com/asyncapi/converter). If you need to convert documents on the fly, you may use the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
 >
 > However, if you have to use 1.x version use command `npm install --save @kyma-project/asyncapi-react@0.2.0`
+
+---
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 
 ## Overview
 
