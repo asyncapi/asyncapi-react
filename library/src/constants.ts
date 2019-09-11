@@ -14,13 +14,13 @@ export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
 export const ANY_OF_PAYLOADS_TEXT = 'Any of those payloads:';
 export const GENERATED_BADGE_TEXT = 'generated';
 export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT =
-  'You can receive one of the following messages:';
-export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT =
-  'You can receive the following message:';
-export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
   'You can send one of the following messages:';
-export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
+export const ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT =
   'You can send the following message:';
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
+  'You can receive one of the following messages:';
+export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
+  'You can receive the following message:';
 
 export const CONTACT_TEXT = 'Contact';
 export const NAM_TEXTE = 'Name';

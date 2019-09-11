@@ -35,13 +35,6 @@ This repository has the following structure:
 
 If you make any changes in the project structure, remember to update it.
 
-## Prerequisites
-
-Use the following tools to develop the AsyncApi React component:
-
-- [`react`](https://github.com/facebook/react/) (version 16.8.0 or higher)
-- [`typescript`](https://github.com/microsoft/TypeScript) (version 3.5.0 or higher)
-
 ## Install dependencies
 
 To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run these commands:

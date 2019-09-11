@@ -1,10 +1,9 @@
 <h5 align="center">
-  <br>
-  <a href="https://www.asyncapi.org"><img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200"></a>
+  <img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200">
   <br>
   React Component
 </h5>
-<h4 align="center">A React component for AsyncAPI specification</h4>
+<h4 align="center">A official React component for AsyncAPI 2.0 specification</h4>
 
 ---
 
@@ -12,9 +11,9 @@
 
 ## Overview
 
-A [React](https://reactjs.org/) component for AsyncAPI specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
+A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
 
-> :warning: This package doesn't support AsyncAPI 1.x anymore. We recommend to upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
+> **CAUTION**:: This package support only AsyncAPI 2.0 specification. If you using 1.x we recommend to upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
 
 ## Playground
 
@@ -77,6 +76,14 @@ If you have a feature request, add it as an issue or propose changes in a pull r
 If you create a feature request, use the dedicated **Feature request** issue template. When you create a PR, follow the contributing rules described in the [`CONTRIBUTING.md`](CONTRIBUTING.md) document.
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
+
+## Missing features
+
+- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#fixed-fields-19)
+- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#tagsObject)
+- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#externalDocumentationObject)
+- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#properties) 
+- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#correlationIdObject)
 
 ## Credits
 
