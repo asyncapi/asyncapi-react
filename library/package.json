@@ -45,6 +45,7 @@
     "testWatch": "jest --detectOpenHandles --watch",
     "eject": "react-scripts eject",
     "copyCss": "cp -r ./src/styles ./lib/styles",
+    "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
