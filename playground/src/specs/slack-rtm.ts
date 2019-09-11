@@ -1,5 +1,5 @@
 export const slackRtm = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 id: 'urn:com:slack:rtm:api'
 info:
   title: Slack Real Time Messaging API

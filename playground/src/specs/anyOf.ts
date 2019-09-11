@@ -1,5 +1,5 @@
 export const anyOf = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 info:
   title: AnyOf example
   version: '1.0.0'

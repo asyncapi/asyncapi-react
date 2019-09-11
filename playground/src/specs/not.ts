@@ -1,5 +1,5 @@
 export const not = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 info:
   title: Not example
   version: '1.0.0'

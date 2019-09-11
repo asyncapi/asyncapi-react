@@ -1,5 +1,5 @@
 export const rpcServer = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 id: 'urn:rpc:example:server'
 defaultContentType: application/json
 

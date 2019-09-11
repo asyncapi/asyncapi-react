@@ -1,5 +1,5 @@
 export const correlationId = `
-asyncapi: '2.0.0-rc2'
+asyncapi: '2.0.0'
 info:
   title: Correlation ID Example
   version: '1.0.0'
