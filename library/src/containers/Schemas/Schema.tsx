@@ -44,7 +44,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   toggle = false,
   toggleExpand = false,
 }) => {
-  if (!schema) {
+  if (!schema || typeof schema === 'string') {
     return null;
   }
   schema.description = schema.description || description || '';
