@@ -56,6 +56,9 @@ class Beautifier {
       const transformed: Record<string, Schema> = {};
 
       for (const [key, property] of Object.entries(schema.properties)) {
+        if (typeof property !== 'object' || !property) {
+          continue;
+        }
         if (property.allOf) {
           transformed[key] = this.resolveAllOf(property) || property;
           continue;
