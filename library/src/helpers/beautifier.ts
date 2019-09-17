@@ -56,6 +56,9 @@ class Beautifier {
       const transformed: Record<string, Schema> = {};
 
       for (const [key, property] of Object.entries(schema.properties)) {
+        if (typeof property !== 'object' || !property) {
+          continue;
+        }
         if (property.allOf) {
           transformed[key] = this.resolveAllOf(property) || property;
           continue;
@@ -140,8 +143,10 @@ class Beautifier {
 
     const newSchemas: Record<string, Schema> = {};
     for (const [key, schema] of Object.entries(schemas)) {
-      newSchemas[key] = this.resolveAllOf(schema) || schema;
-      newSchemas[key] = this.beautifySchema(newSchemas[key]) || newSchemas[key];
+      if (typeof schema === 'object') {
+        newSchemas[key] = this.resolveAllOf(schema) || schema;
+        newSchemas[key] = this.beautifySchema(newSchemas[key]) || newSchemas[key];
+      }
     }
     return newSchemas;
   }
