@@ -10,8 +10,8 @@ In the AsyncAPI React component is a possibility to direct to appropriate part o
 
 - `{NAME_OF_SCHEMA}` is the name of schema. It is passed to component by configuration with [`schemaID`](../configuration/config-modification.md#definition) field.
 - `{CONTAINER|ITEM}` is the name of container or item. Possible values are:
-    - for container: `info`, `channels`, `servers`, `messages`, `schemas`
-    - for item: `channel`, `server`, `message`, `schema`
+    - for `container`: `info`, `channels`, `servers`, `messages`, `schemas`
+    - for `item`: `channel`, `server`, `message`, `schema`
 - `{ITEM_NAME}` this part only appears, when on second part of anchor is item and contains `name` or `title` of item.
 - `{ITEM_PROPERTY}` this part only appears, when on second part of anchor is item. Possible values are:
     - for `channel` item: `parameters`
