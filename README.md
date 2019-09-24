@@ -52,6 +52,10 @@ The list of props for the AsyncAPI React component includes:
 
   > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
+### Features
+
+For information which features offers the component, read documents [here](./docs/features).
+
 ### Styles
 
 To use default styles based on [SAP Fundamentals](https://sap.github.io/fundamental/), import them as follows:
@@ -61,10 +65,6 @@ import "@kyma-project/asyncapi-react/lib/styles/fiori.css";
 ```
 
 For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
-
-### Features
-
-For information which features offers the component, read documents [here](./docs/features).
 
 ## Development
 
