@@ -4,7 +4,7 @@
 
 Read the document to find out how to works internal anchors in the AsyncAPI React component.
 
-## How works anchors
+## How anchors work
 
 In the AsyncAPI React component is a possibility to direct to appropriate part of schema by anchors in url. Each component has a unique anchor in the `{NAME_OF_SCHEMA}--{CONTAINER|ITEM}--{ITEM_NAME}--{ITEM_PROPERTY}` format, where:
 
