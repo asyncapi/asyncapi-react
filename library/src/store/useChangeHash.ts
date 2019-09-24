@@ -5,16 +5,13 @@ import createUseContext from 'constate';
 import { useExpandedContext } from './useExpandedState';
 import { PushStateBehavior } from '../types';
 
-import { extractHashData } from '../helpers';
+import { extractHashData, scrollIntoViewOfAnchor } from '../helpers';
 
+// if line for this function will change, please update `config-modification.md` doc in `docs/configuration` path
 const defaultPushStateBehavior = (hash: string) => {
   setTimeout(() => {
-    const serializedHash = hash.startsWith('#') ? hash.substr(1) : hash;
-    const element = document.getElementById(serializedHash);
-    if (element && element.scrollIntoView) {
-      element.scrollIntoView(true);
-    }
-  }, 100);
+    scrollIntoViewOfAnchor(hash);
+  }, 50);
 };
 
 interface Props {

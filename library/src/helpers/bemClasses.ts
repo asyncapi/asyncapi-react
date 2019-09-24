@@ -1,10 +1,6 @@
 import { CSS_PREFIX } from '../constants';
+import { Identifier } from '../types';
 import { toKebabCase } from './toKebabCase';
-
-interface Identifier {
-  id: string;
-  toKebabCase?: boolean;
-}
 
 class BEMCLasses {
   private schemaID: string = CSS_PREFIX;

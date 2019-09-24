@@ -8,7 +8,7 @@ const ITEMS_REGEX = new RegExp(
 );
 const PROPERTIES_REGEX = new RegExp(`(.*?)--(.*?)$`);
 
-interface HashData {
+export interface HashData {
   schema: string;
   label: CONTAINER_LABELS | ITEM_LABELS;
   item?: string;
@@ -16,21 +16,6 @@ interface HashData {
 
 function removeHash(str: string): string {
   return str.startsWith('#') ? str.substr(1) : str;
-}
-
-export function inContainer(item: ITEM_LABELS): CONTAINER_LABELS | string {
-  switch (item) {
-    case ITEM_LABELS.CHANNEL:
-      return CONTAINER_LABELS.CHANNELS;
-    case ITEM_LABELS.SERVER:
-      return CONTAINER_LABELS.SERVERS;
-    case ITEM_LABELS.MESSAGE:
-      return CONTAINER_LABELS.MESSAGES;
-    case ITEM_LABELS.SCHEMA:
-      return CONTAINER_LABELS.SCHEMAS;
-    default:
-      return '';
-  }
 }
 
 export function extractHashData(hash: string): HashData | undefined {
