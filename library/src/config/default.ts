@@ -23,8 +23,8 @@ export const defaultConfig: ConfigInterface = {
       elements: false,
     },
     schemas: {
-      root: true,
-      elements: true,
+      root: false,
+      elements: false,
     },
   },
   showErrors: true,

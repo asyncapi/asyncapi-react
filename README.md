@@ -62,6 +62,10 @@ import "@kyma-project/asyncapi-react/lib/styles/fiori.css";
 
 For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
 
+### Features
+
+For information which features offers the component, read documents [here](./docs/features).
+
 ## Development
 
 For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./docs/development/guide.md).
