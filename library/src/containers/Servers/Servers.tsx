@@ -5,8 +5,8 @@ import { ServerComponent } from './Server';
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Servers, SecurityScheme } from '../../types';
-import { Toggle, ToggleLabel } from '../../components';
-import { SERVERS } from '../../constants';
+import { Toggle } from '../../components';
+import { SERVERS, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
   servers?: Servers;
@@ -46,12 +46,15 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={bemClasses.identifier([className])}
+    >
       <Toggle
         header={header}
         className={className}
         expanded={expand && expand.root}
-        label={ToggleLabel.SERVERS}
+        label={CONTAINER_LABELS.SERVERS}
         toggleInState={true}
       >
         {content}

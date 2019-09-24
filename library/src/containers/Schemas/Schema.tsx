@@ -3,10 +3,10 @@ import React from 'react';
 import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
 import { SchemaExampleComponent } from './SchemaExample';
 
-import { Table, Toggle, ToggleLabel } from '../../components';
+import { Table, Toggle } from '../../components';
 import { Schema } from '../../types';
 import { bemClasses, searchForNestedObject } from '../../helpers';
-import { SCHEMA_COLUMN_NAMES } from '../../constants';
+import { SCHEMA_COLUMN_NAMES, ITEM_LABELS } from '../../constants';
 
 interface Props {
   name: string;
@@ -78,13 +78,18 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
+  const schemaID = toggle
+    ? bemClasses.identifier([className, name])
+    : undefined;
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(className)} id={schemaID}>
       {toggle ? (
         <Toggle
           header={header}
           className={className}
-          label={ToggleLabel.SCHEMA}
+          expanded={toggleExpand}
+          label={ITEM_LABELS.SCHEMA}
+          itemName={name}
           toggleInState={true}
         >
           {content}

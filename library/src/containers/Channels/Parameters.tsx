@@ -8,15 +8,19 @@ import { PARAMETERS_TEXT } from '../../constants';
 
 interface Props {
   parameters?: ParametersType;
+  identifier: string;
 }
 
-export const Parameters: React.FunctionComponent<Props> = ({ parameters }) => {
+export const Parameters: React.FunctionComponent<Props> = ({
+  parameters,
+  identifier,
+}) => {
   if (!parameters) {
     return null;
   }
 
   return (
-    <div className={bemClasses.element(`channel-parameters`)}>
+    <div className={bemClasses.element(`channel-parameters`)} id={identifier}>
       <header className={bemClasses.element(`channel-parameters-header`)}>
         <h4>{PARAMETERS_TEXT}</h4>
       </header>

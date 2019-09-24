@@ -4,8 +4,9 @@ import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
 
 import { bemClasses } from '../../helpers';
-import { Toggle, ToggleLabel, Markdown } from '../../components';
+import { Toggle, Markdown } from '../../components';
 import { Server, SecurityScheme } from '../../types';
+import { ITEM_LABELS } from '../../constants';
 
 interface Props {
   server: Server;
@@ -53,6 +54,10 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
+  const identifier = bemClasses.identifier([
+    className,
+    { id: server.url, toKebabCase: false },
+  ]);
   const content = (
     <>
       {server.description && (
@@ -60,11 +65,12 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
           <Markdown>{server.description}</Markdown>
         </div>
       )}
-      <ServerVariablesComponent variables={variables} />
+      <ServerVariablesComponent variables={variables} identifier={identifier} />
       {server.security && securitySchemes && (
         <ServerSecurityComponent
           requirements={server.security}
           schemes={securitySchemes}
+          identifier={identifier}
         />
       )}
     </>
@@ -74,12 +80,13 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
     (server.description || server.security || server.variables) && content;
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(className)} id={identifier}>
       <Toggle
         header={header}
         className={className}
         expanded={toggleExpand}
-        label={ToggleLabel.SERVER}
+        label={ITEM_LABELS.SERVER}
+        itemName={server.url}
         toggleInState={!!body}
       >
         {body}

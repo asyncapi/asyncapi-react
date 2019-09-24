@@ -16,12 +16,20 @@ interface Props {
   requirements: SecurityRequirement[];
   schemes: ExcludeNullable<Components['securitySchemes']>;
   openAccordion?: boolean;
+  identifier: string;
 }
 
 export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
   requirements,
   schemes,
+  identifier: id,
 }) => {
+  const identifier = bemClasses.identifier([
+    { id, toKebabCase: false },
+    'security',
+  ]);
+  const className = `server-security`;
+
   const rows: React.ReactNodeArray = requirements
     .map(requirement => {
       const def: SecurityScheme | undefined =
@@ -39,10 +47,9 @@ export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
   if (!rows || !rows.length) {
     return null;
   }
-  const className = `server-security`;
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(className)} id={identifier}>
       <header className={bemClasses.element(`${className}-header`)}>
         <h4>{SECURITY_TEXT}</h4>
       </header>

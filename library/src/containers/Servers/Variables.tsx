@@ -45,10 +45,12 @@ const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
 
 interface Props {
   variables: ServerVariableWithKey[];
+  identifier: string;
 }
 
 export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
   variables,
+  identifier: id,
 }) => {
   if (!variables.length) {
     return null;
@@ -59,9 +61,13 @@ export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
     accessors: serverVariablesAccessors,
     element: variable,
   }));
+  const identifier = bemClasses.identifier([
+    { id, toKebabCase: false },
+    'url-variables',
+  ]);
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(className)} id={identifier}>
       <header className={bemClasses.element(`${className}-header`)}>
         <h4>{URL_VARIABLES_TEXT}</h4>
       </header>

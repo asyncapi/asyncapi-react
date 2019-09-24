@@ -4,8 +4,8 @@ import { SchemaComponent } from './Schema';
 
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
-import { Toggle, ToggleLabel } from '../../components';
-import { SCHEMAS_TEXT } from '../../constants';
+import { Toggle } from '../../components';
+import { SCHEMAS_TEXT, CONTAINER_LABELS } from '../../constants';
 import { Schema } from '../../types';
 
 interface Props {
@@ -40,12 +40,15 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={bemClasses.identifier([className])}
+    >
       <Toggle
         header={header}
         className={className}
         expanded={expand && expand.root}
-        label={ToggleLabel.SCHEMAS}
+        label={CONTAINER_LABELS.SCHEMAS}
         toggleInState={true}
       >
         {content}

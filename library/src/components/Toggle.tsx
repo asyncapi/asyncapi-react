@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 import { useExpandedContext } from '../store';
-import { bemClasses } from '../helpers';
-
-export enum ToggleLabel {
-  DEFAULT = '',
-  CHANNELS = 'channels',
-  CHANNEL = 'channel',
-  SERVERS = 'servers',
-  SERVER = 'server',
-  MESSAGES = 'messages',
-  MESSAGE = 'message',
-  SCHEMAS = 'schemas',
-  SCHEMA = 'schema',
-}
-const ROOT_LABELS = [
-  ToggleLabel.CHANNELS,
-  ToggleLabel.SERVERS,
-  ToggleLabel.MESSAGES,
-  ToggleLabel.SCHEMAS,
-];
+import { bemClasses, inContainer, toKebabCase } from '../helpers';
+import {
+  CONTAINER_LABELS,
+  CONTAINER_LABELS_VALUES,
+  ITEM_LABELS,
+} from '../constants';
 
 interface Props {
   header: React.ReactNode;
   className?: string;
   expanded?: boolean;
-  label?: ToggleLabel;
+  label?: CONTAINER_LABELS | ITEM_LABELS | '';
+  itemName?: string;
   toggleInState?: boolean;
 }
 
@@ -34,15 +22,17 @@ export const Toggle: React.FunctionComponent<Props> = ({
   className: customClassName = '',
   expanded: initialExpanded = false,
   toggleInState = false,
-  label = ToggleLabel.DEFAULT,
+  label = '',
+  itemName: name = '',
   children,
 }) => {
   const {
     expanded: globalExpanded,
     setNumberOfExpanded,
-    clickedToggle,
-    setClickedToggle,
+    clickedItem,
+    setClickedItem,
   } = useExpandedContext();
+  const itemName = toKebabCase(name);
 
   const [initial, setInitial] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(initialExpanded);
@@ -50,16 +40,15 @@ export const Toggle: React.FunctionComponent<Props> = ({
   const handleSetExpanded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
 
-    const oldState = expanded;
+    const newState = !expanded;
     if (children) {
-      setExpanded(!oldState);
+      setExpanded(newState);
     }
-    if (oldState && ROOT_LABELS.includes(label)) {
-      setClickedToggle({
-        label,
-        expanded: !oldState,
-      });
-    }
+    setClickedItem({
+      label,
+      itemName,
+      state: newState,
+    });
   };
 
   useEffect(() => {
@@ -73,10 +62,38 @@ export const Toggle: React.FunctionComponent<Props> = ({
   }, [globalExpanded]);
 
   useEffect(() => {
-    if (initial && label === clickedToggle.label.slice(0, -1)) {
+    if (!initial) {
+      return;
+    }
+
+    // for collapsing items in container when container will collapse
+    if (
+      !clickedItem.state &&
+      clickedItem.label === inContainer(label as ITEM_LABELS)
+    ) {
       setExpanded(false);
     }
-  }, [clickedToggle]);
+
+    if (!expanded && clickedItem.state && label) {
+      // for container when hash changed (also when hash point to item in container)
+      if (
+        (label === clickedItem.label &&
+          CONTAINER_LABELS_VALUES.includes(label)) ||
+        label === inContainer(clickedItem.label as ITEM_LABELS)
+      ) {
+        setExpanded(true);
+      }
+
+      // for item when hash changed
+      if (
+        itemName &&
+        label === clickedItem.label &&
+        clickedItem.itemName === itemName
+      ) {
+        setExpanded(true);
+      }
+    }
+  }, [initial, clickedItem]);
 
   useEffect(() => {
     if (toggleInState && initial) {

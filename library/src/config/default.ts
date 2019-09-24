@@ -1,6 +1,7 @@
 import { ConfigInterface } from './config';
 
 export const defaultConfig: ConfigInterface = {
+  schemaID: '',
   show: {
     info: true,
     channels: true,
@@ -22,8 +23,8 @@ export const defaultConfig: ConfigInterface = {
       elements: false,
     },
     schemas: {
-      root: false,
-      elements: false,
+      root: true,
+      elements: true,
     },
   },
   showErrors: true,

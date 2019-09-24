@@ -399,3 +399,5 @@ export interface ParserReturn {
 }
 
 export type TableColumnName = string;
+
+export type PushStateBehavior = (hash: string) => void;

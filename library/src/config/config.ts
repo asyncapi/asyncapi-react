@@ -1,10 +1,13 @@
 import { Options as ParserOptions } from 'json-schema-ref-parser';
+import { PushStateBehavior } from '../types';
 
 export interface ConfigInterface {
+  schemaID?: string;
   show?: ShowConfig;
   expand?: ExpandConfig;
   showErrors?: boolean;
   parserOptions?: ParserOptions;
+  pushStateBehavior?: PushStateBehavior;
 }
 
 export interface ShowConfig {

@@ -16,6 +16,7 @@ import {
 interface Props extends Required<Pick<RawMessage, 'payload'>> {
   oneOf?: boolean;
   anyOf?: boolean;
+  identifier?: string;
   id?: number;
 }
 
@@ -23,13 +24,15 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   payload,
   oneOf = false,
   anyOf = false,
+  identifier,
   id,
 }) => {
   const className = `message-payload`;
+  const payloadsID = identifier ? `${identifier}s` : undefined;
 
   if (isOneOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`${className}-oneOf`)}>
+      <div className={bemClasses.element(`${className}-oneOf`)} id={payloadsID}>
         <header className={bemClasses.element(`${className}-oneOf-header`)}>
           <h4>{ONE_OF_PAYLOADS_TEXT}</h4>
         </header>
@@ -43,6 +46,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
                 payload={elem}
                 key={index}
                 oneOf={true}
+                identifier={identifier}
                 id={index}
               />
             </li>
@@ -54,7 +58,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
 
   if (isAnyOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`${className}-anyOf`)}>
+      <div className={bemClasses.element(`${className}-anyOf`)} id={payloadsID}>
         <header className={bemClasses.element(`${className}-anyOf-header`)}>
           <h4>{ANY_OF_PAYLOADS_TEXT}</h4>
         </header>
@@ -65,10 +69,11 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
               className={bemClasses.element(`${className}-anyOf-list-item`)}
             >
               <PayloadComponent
-                id={index}
                 payload={elem}
                 key={index}
                 anyOf={true}
+                identifier={identifier}
+                id={index}
               />
             </li>
           ))}
@@ -94,9 +99,17 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     </div>
   );
 
+  let payloadID;
+  if (identifier) {
+    payloadID =
+      payload.title && payload.title.length
+        ? `${identifier}-${payload.title}`
+        : `${identifier}${id !== undefined ? `-${id}` : ''}`;
+  }
+
   if (oneOf || anyOf) {
     return (
-      <section className={bemClasses.element(className)}>
+      <section className={bemClasses.element(className)} id={payloadID}>
         <Toggle header={header} className={className}>
           {content}
         </Toggle>
@@ -105,7 +118,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(className)} id={payloadID}>
       {header}
       {content}
     </section>

@@ -5,8 +5,8 @@ import { ChannelComponent } from './Channel';
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Channels } from '../../types';
-import { Toggle, ToggleLabel } from '../../components';
-import { CHANNELS_TEXT } from '../../constants';
+import { Toggle } from '../../components';
+import { CHANNELS_TEXT, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
   channels: Channels;
@@ -36,12 +36,15 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={bemClasses.identifier([className])}
+    >
       <Toggle
         header={header}
         className={className}
         expanded={expand && expand.root}
-        label={ToggleLabel.CHANNELS}
+        label={CONTAINER_LABELS.CHANNELS}
         toggleInState={true}
       >
         {content}
