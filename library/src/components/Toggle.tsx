@@ -6,6 +6,7 @@ import {
   CONTAINER_LABELS,
   CONTAINER_LABELS_VALUES,
   ITEM_LABELS,
+  ITEM_LABELS_VALUES,
 } from '../constants';
 
 interface Props {
@@ -69,6 +70,7 @@ export const Toggle: React.FunctionComponent<Props> = ({
     // for collapsing items in container when container will collapse
     if (
       !clickedItem.state &&
+      ITEM_LABELS_VALUES.includes(label) &&
       clickedItem.label === inContainer(label as ITEM_LABELS)
     ) {
       setExpanded(false);

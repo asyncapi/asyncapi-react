@@ -11,7 +11,7 @@ import { extractHashData, scrollIntoViewOfAnchor } from '../helpers';
 const defaultPushStateBehavior = (hash: string) => {
   setTimeout(() => {
     scrollIntoViewOfAnchor(hash);
-  }, 50);
+  }, 150);
 };
 
 interface Props {
