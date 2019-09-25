@@ -2,21 +2,26 @@
 
 ## Overview
 
-Read the document to find out how to works internal anchors in the AsyncAPI React component.
+The anchors provide the possibility to point to a particular part of a schema.
 
-## How anchors work
+## Details
 
-In the AsyncAPI React component is a possibility to direct to appropriate part of schema by anchors in url. Each component has a unique anchor in the `{NAME_OF_SCHEMA}--{CONTAINER|ITEM}--{ITEM_NAME}--{ITEM_PROPERTY}` format, where:
+To point to a particular part of a schema, the AsyncAPI React component uses anchors in URLs. Each component has a unique anchor in the `http://{URL}/#{SCHEMA_NAME}--{CONTAINER}--{ITEM_NAME}--{ITEM_PROPERTY}` format, where:
 
-- `{NAME_OF_SCHEMA}` is the name of schema. It is passed to component by configuration with [`schemaID`](../configuration/config-modification.md#definition) field.
-- `{CONTAINER|ITEM}` is the name of container or item. Possible values are:
-    - for `container`: `info`, `channels`, `servers`, `messages`, `schemas`
-    - for `item`: `channel`, `server`, `message`, `schema`
-- `{ITEM_NAME}` this part only appears, when on second part of anchor is item and contains `name` or `title` of item.
-- `{ITEM_PROPERTY}` this part only appears, when on second part of anchor is item. Possible values are:
-    - for `channel` item: `parameters`
-    - for `server` item: `url-variables`, `security`
-    - for `message` item: `headers`, `payload`, `payload-{NAME_OF_PARAMETER}`
-    - for `schema` are not defined properties
+- `{URL}` is the URL address of a website.
+- `{SCHEMA_NAME}` is the name of a schema. It is passed to a component by configuration with the [`schemaID`](../configuration/config-modification.md#definition) field. `schemaID` is set to `asyncapi` by default.
+- `{CONTAINER}` is the name of a container. The possible values are: `info`, `channels`, `servers`, `messages`, `schemas`.
+- `{ITEM_NAME}` is the `name` or `title` of an item. For `info` container are no defined items.
+- `{ITEM_PROPERTY}` is the name of particular part of an item. Possible values are:
+    - for the `info` container: there are no defined properties
+    - for the `channels` container: `parameters`
+    - for the `servers` container: `url-variables`, `security`
+    - for the `messages` container: `headers`, `payload`, `payloads`, `payload-{NAME_OF_PARAMETER}`
+    - for the `schemas` container: there are no defined properties
 
-Each part of anchor has a [kebab cased](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles) form (except are `{ITEM_NAME}` of `channel` and `server` items).
+## Examples
+
+- `http://{URL}/#asyncapi` - anchor point to rendered specification.
+- `http://{URL}/#asyncapi--channels` - anchor point to `channels`.
+- `http://{URL}/#asyncapi--channels--testUrl` - anchor point to `testUrl` item of `channels`.
+- `http://{URL}/#asyncapi--channels--testUrl--parameters` - anchor point to `parameters` part of `testUrl` item of `channels`.

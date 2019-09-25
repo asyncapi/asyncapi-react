@@ -54,7 +54,7 @@ The list of props for the AsyncAPI React component includes:
 
 ### Features
 
-For information which features offers the component, read documents [here](./docs/features).
+For a list and description of features offered by the AsyncAPI React component, see [this](./docs/features) directory.
 
 ### Styles
 

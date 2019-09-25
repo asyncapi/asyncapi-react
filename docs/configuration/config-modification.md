@@ -44,7 +44,7 @@ interface ConfigInterface {
 
 - **schemaID?: string**
 
-  This field contains name of schema.
+  This field contains a schema name.
   This field is set to `asyncapi` by default.
 
 - **show?: Partial<ShowConfig>**
@@ -70,8 +70,8 @@ interface ConfigInterface {
 
 - **pushStateBehavior?: (hash: string) => void**
 
-  This field contains custom logic for changing `hash` parameter in url of page.
-  See default logic [here](../../library/src/store/useChangeHash.ts#L11).
+  This field contains custom logic for changing the `hash` parameter in the URL of a page.
+  See the default logic [here](../../library/src/store/useChangeHash.ts#L11).
 
 ## Examples
 
