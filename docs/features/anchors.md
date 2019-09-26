@@ -6,13 +6,13 @@ The anchors provide the possibility to point to a particular part of a schema.
 
 ## Details
 
-To point to a particular part of a schema, the AsyncAPI React component uses anchors in URLs. Each component has a unique anchor in the `http://{URL}/#{SCHEMA_NAME}--{CONTAINER}--{ITEM_NAME}--{ITEM_PROPERTY}` format, where:
+Each component has a unique anchor in the `http://{URL}/#{SCHEMA_NAME}--{CONTAINER}--{ITEM_NAME}--{ITEM_PROPERTY}` format, where:
 
-- `{URL}` is the URL address of a website.
-- `{SCHEMA_NAME}` is the name of a schema. It is passed to a component by configuration with the [`schemaID`](../configuration/config-modification.md#definition) field. `schemaID` is set to `asyncapi` by default.
-- `{CONTAINER}` is the name of a container. The possible values are: `info`, `channels`, `servers`, `messages`, `schemas`.
-- `{ITEM_NAME}` is the `name` or `title` of an item. For `info` container are no defined items.
-- `{ITEM_PROPERTY}` is the name of particular part of an item. Possible values are:
+- `{URL}` is the website URL.
+- `{SCHEMA_NAME}` is the name of the schema. It is passed to the component by configuration with the [`schemaID`](../configuration/config-modification.md#definition) field. By default, the value of `schemaID` is always `asyncapi`.
+- `{CONTAINER}` is the name of the container. The possible values are: `info`, `channels`, `servers`, `messages`, `schemas`.
+- `{ITEM_NAME}` is the `name` or `title` of the item. There are no defined items for the `info` container.
+- `{ITEM_PROPERTY}` is the name of a particular part of the item. The possible values are:
     - for the `info` container: there are no defined properties
     - for the `channels` container: `parameters`
     - for the `servers` container: `url-variables`, `security`
@@ -21,7 +21,7 @@ To point to a particular part of a schema, the AsyncAPI React component uses anc
 
 ## Examples
 
-- `http://{URL}/#asyncapi` - anchor point to rendered specification.
-- `http://{URL}/#asyncapi--channels` - anchor point to `channels`.
-- `http://{URL}/#asyncapi--channels--testUrl` - anchor point to `testUrl` item of `channels`.
-- `http://{URL}/#asyncapi--channels--testUrl--parameters` - anchor point to `parameters` part of `testUrl` item of `channels`.
+- `http://{URL}/#asyncapi` is an anchor that points to the rendered specification. 
+- `http://{URL}/#asyncapi--channels` is an anchor that points to the `channels` container of the `asyncapi` specification.
+- `http://{URL}/#asyncapi--channels--testUrl` is an anchor that points to the `testUrl` item of the `channels` container.
+- `http://{URL}/#asyncapi--channels--testUrl--parameters` - is an anchor that points to the `parameters` part of the `testUrl` item of the `channels` container.
