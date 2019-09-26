@@ -20,7 +20,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
   if (!schemas) {
     return null;
   }
-  const className = `schemas`;
+  const className = CONTAINER_LABELS.SCHEMAS;
 
   const header = <h2>{SCHEMAS_TEXT}</h2>;
 

@@ -5,8 +5,16 @@ import { SchemaExampleComponent } from './SchemaExample';
 
 import { Table, Toggle } from '../../components';
 import { Schema } from '../../types';
-import { bemClasses, searchForNestedObject } from '../../helpers';
-import { SCHEMA_COLUMN_NAMES, ITEM_LABELS } from '../../constants';
+import {
+  bemClasses,
+  searchForNestedObject,
+  removeSpecialChars,
+} from '../../helpers';
+import {
+  SCHEMA_COLUMN_NAMES,
+  ITEM_LABELS,
+  CONTAINER_LABELS,
+} from '../../constants';
 
 interface Props {
   name: string;
@@ -49,7 +57,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   }
   schema.description = schema.description || description || '';
 
-  const className = `schema`;
+  const className = ITEM_LABELS.SCHEMA;
   const hasNotField = searchForNestedObject(schema, 'not');
 
   const header = (
@@ -79,10 +87,20 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   );
 
   const schemaID = toggle
-    ? bemClasses.identifier([className, name])
+    ? bemClasses.identifier([CONTAINER_LABELS.SCHEMAS, name])
+    : undefined;
+  const schemaDataID = toggle
+    ? bemClasses.identifier([
+        CONTAINER_LABELS.SCHEMAS,
+        removeSpecialChars(name),
+      ])
     : undefined;
   return (
-    <section className={bemClasses.element(className)} id={schemaID}>
+    <section
+      className={bemClasses.element(className)}
+      id={schemaID}
+      data-asyncapi-id={schemaDataID}
+    >
       {toggle ? (
         <Toggle
           header={header}

@@ -41,7 +41,7 @@ class BEMCLasses {
         if (!i) {
           return;
         }
-        return toKebabCase(i);
+        return i;
       })
       .filter(Boolean)
       .join('--');

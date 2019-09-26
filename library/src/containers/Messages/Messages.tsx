@@ -22,7 +22,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   if (!messages) {
     return null;
   }
-  const className = `messages`;
+  const className = CONTAINER_LABELS.MESSAGES;
   const messagesLength = Object.keys(messages).length;
 
   const wrapper = (children: React.ReactNode) => (

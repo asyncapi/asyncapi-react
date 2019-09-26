@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.oneOf;
+const defaultSchema = specs.streetlights;
 
 interface State {
   schema: string;
@@ -52,6 +52,10 @@ class Playground extends Component<{}, State> {
     return (
       <PlaygroundWrapper>
         <Navigation />
+        <a href="#asyncapi--servers--api.streetlights.smartylighting.com:{port}">
+          dupa
+        </a>
+        <a href="#asyncapi--schemas--lightMeasuredPayload">dupa2</a>
         <ContentWrapper>
           <CodeEditorsWrapper>
             <Tabs

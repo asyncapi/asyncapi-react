@@ -1,10 +1,9 @@
-import { CSS_PREFIX, CONTAINER_LABELS, ITEM_LABELS } from '../../constants';
+import { CSS_PREFIX, CONTAINER_LABELS } from '../../constants';
 import { extractHashData, HashData } from '../extractHashData';
 
 describe('extractHashData', () => {
   const schema = CSS_PREFIX;
   const container = CONTAINER_LABELS.CHANNELS;
-  const item = ITEM_LABELS.CHANNEL;
   const itemName = `foo-bar`;
   const property = `parameters`;
 
@@ -12,17 +11,17 @@ describe('extractHashData', () => {
     const hash = `${schema}--${container}`;
     const expectedResult: HashData = {
       schema,
-      label: container,
+      container,
     };
 
     expect(extractHashData(hash)).toStrictEqual(expectedResult);
   });
 
   test('extract whole parameters', () => {
-    const hash = `${schema}--${item}--${itemName}`;
+    const hash = `${schema}--${container}--${itemName}`;
     const expectedResult: HashData = {
       schema,
-      label: item,
+      container,
       item: itemName,
     };
 
@@ -30,10 +29,10 @@ describe('extractHashData', () => {
   });
 
   test('extract with additional property of item', () => {
-    const hash = `${schema}--${item}--${itemName}--${property}`;
+    const hash = `${schema}--${container}--${itemName}--${property}`;
     const expectedResult: HashData = {
       schema,
-      label: item,
+      container,
       item: itemName,
     };
 
@@ -42,10 +41,10 @@ describe('extractHashData', () => {
 
   test('extract non default schema', () => {
     const nonDefaultSchema = `non-default-schema`;
-    const hash = `${nonDefaultSchema}--${item}--${itemName}--${property}`;
+    const hash = `${nonDefaultSchema}--${container}--${itemName}--${property}`;
     const expectedResult: HashData = {
       schema: nonDefaultSchema,
-      label: item,
+      container,
       item: itemName,
     };
 
@@ -53,10 +52,10 @@ describe('extractHashData', () => {
   });
 
   test('remove hash char in schema', () => {
-    const hash = `#${schema}--${item}--${itemName}--${property}`;
+    const hash = `#${schema}--${container}--${itemName}--${property}`;
     const expectedResult: HashData = {
       schema,
-      label: item,
+      container,
       item: itemName,
     };
 

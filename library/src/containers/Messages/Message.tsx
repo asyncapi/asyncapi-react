@@ -3,7 +3,7 @@ import React from 'react';
 import { SchemaComponent } from '../Schemas/Schema';
 import { PayloadComponent } from './Payload';
 
-import { bemClasses } from '../../helpers';
+import { bemClasses, removeSpecialChars } from '../../helpers';
 import { Message, isRawMessage } from '../../types';
 
 import { Markdown, Badge, BadgeType, Toggle } from '../../components';
@@ -13,6 +13,7 @@ import {
   HEADERS_TEXT,
   MESSAGE_HEADERS_TEXT,
   HEADERS_EXAMPLE_TEXT,
+  CONTAINER_LABELS,
   ITEM_LABELS,
 } from '../../constants';
 
@@ -36,11 +37,18 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   if (!message) {
     return null;
   }
-  const className = `message`;
+  const className = ITEM_LABELS.MESSAGE;
   const messageID =
     title && title.length
-      ? bemClasses.identifier([className, title])
-      : bemClasses.identifier([className]);
+      ? bemClasses.identifier([CONTAINER_LABELS.MESSAGES, title])
+      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
+  const messageDataID =
+    title && title.length
+      ? bemClasses.identifier([
+          CONTAINER_LABELS.MESSAGES,
+          removeSpecialChars(title),
+        ])
+      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
 
   if (!isRawMessage(message)) {
     return (
@@ -102,6 +110,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     <section
       className={bemClasses.element(`${className}-headers`)}
       id={headersID}
+      data-asyncapi-id={headersID}
     >
       <header className={bemClasses.element(`${className}-headers-header`)}>
         <h4>{HEADERS_TEXT}</h4>
@@ -120,8 +129,18 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   const payloadID = !inChannel
     ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'payload'])
     : undefined;
+  const payloadDataID = !inChannel
+    ? bemClasses.identifier([
+        { id: messageDataID, toKebabCase: false },
+        'payload',
+      ])
+    : undefined;
   const payload = message.payload && (
-    <PayloadComponent payload={message.payload} identifier={payloadID} />
+    <PayloadComponent
+      payload={message.payload}
+      identifier={payloadID}
+      dataIdentifier={payloadDataID}
+    />
   );
 
   // TAGS IS NOT SUPPORTED YET - please don't remove code!
@@ -157,9 +176,14 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     (!hideTags && message.tags)
   );
 
-  const id = !inChannel ? messageID : undefined;
+  const identifier = !inChannel ? messageID : undefined;
+  const dataIdentifier = !inChannel ? messageDataID : undefined;
   return (
-    <section className={bemClasses.element(className)} id={id}>
+    <section
+      className={bemClasses.element(className)}
+      id={identifier}
+      data-asyncapi-id={dataIdentifier}
+    >
       {!inChannel ? (
         <Toggle
           header={header}

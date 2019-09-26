@@ -8,4 +8,5 @@ export * from './generateExampleSchema';
 export * from './inContainer';
 export * from './stateHelpers';
 export * from './parser';
+export * from './removeSpecialChars';
 export * from './toKebabCase';

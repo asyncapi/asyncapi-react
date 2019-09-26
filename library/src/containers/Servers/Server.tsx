@@ -3,10 +3,10 @@ import React from 'react';
 import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
 
-import { bemClasses } from '../../helpers';
+import { bemClasses, removeSpecialChars } from '../../helpers';
 import { Toggle, Markdown } from '../../components';
 import { Server, SecurityScheme } from '../../types';
-import { ITEM_LABELS } from '../../constants';
+import { ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
   server: Server;
@@ -21,7 +21,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
   securitySchemes,
   toggleExpand = false,
 }) => {
-  const className = `server`;
+  const className = ITEM_LABELS.SERVER;
 
   const variables = server.variables
     ? Object.entries(server.variables).map(([key, variable]) => ({
@@ -55,8 +55,12 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
   );
 
   const identifier = bemClasses.identifier([
-    className,
-    { id: server.url, toKebabCase: false },
+    CONTAINER_LABELS.SERVERS,
+    server.url,
+  ]);
+  const dataIdentifier = bemClasses.identifier([
+    CONTAINER_LABELS.SERVERS,
+    removeSpecialChars(server.url),
   ]);
   const content = (
     <>
@@ -65,12 +69,17 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
           <Markdown>{server.description}</Markdown>
         </div>
       )}
-      <ServerVariablesComponent variables={variables} identifier={identifier} />
+      <ServerVariablesComponent
+        variables={variables}
+        identifier={identifier}
+        dataIdentifier={dataIdentifier}
+      />
       {server.security && securitySchemes && (
         <ServerSecurityComponent
           requirements={server.security}
           schemes={securitySchemes}
           identifier={identifier}
+          dataIdentifier={dataIdentifier}
         />
       )}
     </>
@@ -80,7 +89,11 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
     (server.description || server.security || server.variables) && content;
 
   return (
-    <section className={bemClasses.element(className)} id={identifier}>
+    <section
+      className={bemClasses.element(className)}
+      id={identifier}
+      data-asyncapi-id={dataIdentifier}
+    >
       <Toggle
         header={header}
         className={className}

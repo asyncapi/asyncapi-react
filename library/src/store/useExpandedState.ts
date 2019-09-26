@@ -7,6 +7,7 @@ interface ClickedItem {
   label: CONTAINER_LABELS | ITEM_LABELS | '';
   itemName?: string;
   state: boolean;
+  scroll?: boolean;
 }
 
 interface Props {
@@ -26,7 +27,9 @@ const useExpandedState = ({
     label: '',
     itemName: '',
     state: false,
+    scroll: false,
   });
+  const [scrollToView, setScrollToView] = useState<boolean>(false);
 
   const clickItem = useCallback(({ label, ...rest }: ClickedItem) => {
     if (label) {
@@ -38,13 +41,15 @@ const useExpandedState = ({
   }, []);
 
   return {
-    numberOfElements,
     expanded,
     setExpanded,
+    numberOfElements,
     numberOfExpanded,
     setNumberOfExpanded,
     clickedItem,
     setClickedItem: clickItem,
+    scrollToView,
+    setScrollToView,
   };
 };
 

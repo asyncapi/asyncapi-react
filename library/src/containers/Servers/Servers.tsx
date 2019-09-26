@@ -22,7 +22,7 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
   if (!servers) {
     return null;
   }
-  const className = `servers`;
+  const className = CONTAINER_LABELS.SERVERS;
 
   const header = <h2>{SERVERS}</h2>;
 

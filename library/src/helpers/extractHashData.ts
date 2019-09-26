@@ -1,16 +1,16 @@
-import { CONTAINER_LABELS, ITEM_LABELS } from '../constants';
+import { CONTAINER_LABELS } from '../constants';
 
 const CONTAINERS_REGEX = new RegExp(
   `(.*?)--(${Object.values(CONTAINER_LABELS).join('|')})$`,
 );
 const ITEMS_REGEX = new RegExp(
-  `(.*?)--(${Object.values(ITEM_LABELS).join('|')})--(.*?)$`,
+  `(.*?)--(${Object.values(CONTAINER_LABELS).join('|')})--(.*?)$`,
 );
 const PROPERTIES_REGEX = new RegExp(`(.*?)--(.*?)$`);
 
 export interface HashData {
   schema: string;
-  label: CONTAINER_LABELS | ITEM_LABELS;
+  container: CONTAINER_LABELS;
   item?: string;
 }
 
@@ -26,20 +26,20 @@ export function extractHashData(hash: string): HashData | undefined {
   if (hashData && hashData.length === 3) {
     return {
       schema: removeHash(hashData[1]),
-      label: hashData[2] as CONTAINER_LABELS,
+      container: hashData[2] as CONTAINER_LABELS,
     };
   }
 
   // hashData[0] = original string
   // hashData[1] = schema name
-  // hashData[2] = item name
+  // hashData[2] = container name
   // hashData[3] = rest of string
   hashData = hash.match(ITEMS_REGEX);
   if (!hashData || hashData.length !== 4) {
     return;
   }
 
-  const label = hashData[2] as ITEM_LABELS;
+  const container = hashData[2] as CONTAINER_LABELS;
   let item = hashData[3];
 
   // hashData[0] = original string
@@ -52,7 +52,7 @@ export function extractHashData(hash: string): HashData | undefined {
 
   return {
     schema: removeHash(hashData[1]),
-    label,
+    container,
     item,
   };
 }

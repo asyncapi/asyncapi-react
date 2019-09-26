@@ -7,13 +7,6 @@ import { PushStateBehavior } from '../types';
 
 import { extractHashData, scrollIntoViewOfAnchor } from '../helpers';
 
-// if line for this function will change, please update `config-modification.md` doc in `docs/configuration` path
-const defaultPushStateBehavior = (hash: string) => {
-  setTimeout(() => {
-    scrollIntoViewOfAnchor(hash);
-  }, 150);
-};
-
 interface Props {
   schemaName: string;
   pushStateBehavior?: PushStateBehavior;
@@ -21,10 +14,10 @@ interface Props {
 
 const useChangeHash = ({
   schemaName,
-  pushStateBehavior = defaultPushStateBehavior,
+  pushStateBehavior = scrollIntoViewOfAnchor,
 }: Props) => {
   const { hash } = useLocation();
-  const { setClickedItem } = useExpandedContext();
+  const { setClickedItem, scrollToView } = useExpandedContext();
 
   useEffect(() => {
     if (!hash) {
@@ -37,15 +30,25 @@ const useChangeHash = ({
     }
 
     setClickedItem({
-      label: hashData.label,
+      label: hashData.container,
       itemName: hashData.item,
       state: true,
+      scroll: true,
     });
-
-    if (hashData.item && pushStateBehavior) {
-      pushStateBehavior(hash);
-    }
   }, [hash]);
+
+  useEffect(() => {
+    if (!hash) {
+      return;
+    }
+
+    const hashData = extractHashData(hash);
+    if (!hashData || hashData.schema !== schemaName) {
+      return;
+    }
+
+    pushStateBehavior && pushStateBehavior(hash);
+  }, [scrollToView]);
 };
 
 export const useChangeHashContext = createUseContext(useChangeHash);

@@ -17,7 +17,7 @@ export const ChannelsComponent: React.FunctionComponent<Props> = ({
   channels,
   expand,
 }) => {
-  const className = `channels`;
+  const className = CONTAINER_LABELS.CHANNELS;
 
   const header = <h2>{CHANNELS_TEXT}</h2>;
 

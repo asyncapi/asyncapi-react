@@ -17,6 +17,7 @@ interface Props extends Required<Pick<RawMessage, 'payload'>> {
   oneOf?: boolean;
   anyOf?: boolean;
   identifier?: string;
+  dataIdentifier?: string;
   id?: number;
 }
 
@@ -25,6 +26,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   oneOf = false,
   anyOf = false,
   identifier,
+  dataIdentifier,
   id,
 }) => {
   const className = `message-payload`;
@@ -32,7 +34,11 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
 
   if (isOneOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`${className}-oneOf`)} id={payloadsID}>
+      <div
+        className={bemClasses.element(`${className}-oneOf`)}
+        id={payloadsID}
+        data-asyncapi-id={dataIdentifier}
+      >
         <header className={bemClasses.element(`${className}-oneOf-header`)}>
           <h4>{ONE_OF_PAYLOADS_TEXT}</h4>
         </header>
@@ -58,7 +64,11 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
 
   if (isAnyOfPayload(payload)) {
     return (
-      <div className={bemClasses.element(`${className}-anyOf`)} id={payloadsID}>
+      <div
+        className={bemClasses.element(`${className}-anyOf`)}
+        id={payloadsID}
+        data-asyncapi-id={dataIdentifier}
+      >
         <header className={bemClasses.element(`${className}-anyOf-header`)}>
           <h4>{ANY_OF_PAYLOADS_TEXT}</h4>
         </header>
@@ -106,10 +116,21 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
         ? `${identifier}-${payload.title}`
         : `${identifier}${id !== undefined ? `-${id}` : ''}`;
   }
+  let payloadDataID;
+  if (dataIdentifier) {
+    payloadDataID =
+      payload.title && payload.title.length
+        ? `${dataIdentifier}-${payload.title}`
+        : `${dataIdentifier}${id !== undefined ? `-${id}` : ''}`;
+  }
 
   if (oneOf || anyOf) {
     return (
-      <section className={bemClasses.element(className)} id={payloadID}>
+      <section
+        className={bemClasses.element(className)}
+        id={payloadID}
+        data-asyncapi-id={payloadDataID}
+      >
         <Toggle header={header} className={className}>
           {content}
         </Toggle>
@@ -118,7 +139,11 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <section className={bemClasses.element(className)} id={payloadID}>
+    <section
+      className={bemClasses.element(className)}
+      id={payloadID}
+      data-asyncapi-id={payloadDataID}
+    >
       {header}
       {content}
     </section>

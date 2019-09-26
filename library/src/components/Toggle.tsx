@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useExpandedContext } from '../store';
-import { bemClasses, inContainer, toKebabCase } from '../helpers';
+import { bemClasses, inContainer } from '../helpers';
 import {
   CONTAINER_LABELS,
   CONTAINER_LABELS_VALUES,
@@ -24,7 +24,7 @@ export const Toggle: React.FunctionComponent<Props> = ({
   expanded: initialExpanded = false,
   toggleInState = false,
   label = '',
-  itemName: name = '',
+  itemName = '',
   children,
 }) => {
   const {
@@ -32,8 +32,8 @@ export const Toggle: React.FunctionComponent<Props> = ({
     setNumberOfExpanded,
     clickedItem,
     setClickedItem,
+    setScrollToView,
   } = useExpandedContext();
-  const itemName = toKebabCase(name);
 
   const [initial, setInitial] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(initialExpanded);
@@ -49,12 +49,23 @@ export const Toggle: React.FunctionComponent<Props> = ({
       label,
       itemName,
       state: newState,
+      scroll: false,
     });
   };
 
   useEffect(() => {
     setInitial(true);
   }, []);
+
+  useEffect(() => {
+    if (
+      clickedItem.scroll &&
+      clickedItem.state &&
+      clickedItem.label === label
+    ) {
+      setScrollToView(state => !state);
+    }
+  }, [expanded]);
 
   useEffect(() => {
     if (initial && toggleInState) {
@@ -74,25 +85,27 @@ export const Toggle: React.FunctionComponent<Props> = ({
       clickedItem.label === inContainer(label as ITEM_LABELS)
     ) {
       setExpanded(false);
+      return;
     }
 
     if (!expanded && clickedItem.state && label) {
-      // for container when hash changed (also when hash point to item in container)
+      // for container when hash will change
       if (
-        (label === clickedItem.label &&
-          CONTAINER_LABELS_VALUES.includes(label)) ||
-        label === inContainer(clickedItem.label as ITEM_LABELS)
+        clickedItem.label === label &&
+        CONTAINER_LABELS_VALUES.includes(label)
       ) {
         setExpanded(true);
+        return;
       }
 
-      // for item when hash changed
+      // for item when hash will change
       if (
+        clickedItem.label === inContainer(label as ITEM_LABELS) &&
         itemName &&
-        label === clickedItem.label &&
         clickedItem.itemName === itemName
       ) {
         setExpanded(true);
+        return;
       }
     }
   }, [initial, clickedItem]);

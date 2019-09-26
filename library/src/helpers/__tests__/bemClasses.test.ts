@@ -70,7 +70,7 @@ describe('bemClasses', () => {
     test('should be equal', () => {
       const elements: Array<Identifier | string> = [
         { id: `${CSS_PREFIX}--foo`, toKebabCase: false },
-        { id: 'foo-bar', toKebabCase: false },
+        { id: 'fooBar', toKebabCase: true },
         '',
         'bar',
       ];

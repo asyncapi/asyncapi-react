@@ -4,8 +4,8 @@ import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
 
 import { Badge, BadgeType, Toggle } from '../../components';
-import { bemClasses } from '../../helpers';
-import { MESSAGE_TEXT, ITEM_LABELS } from '../../constants';
+import { bemClasses, removeSpecialChars } from '../../helpers';
+import { MESSAGE_TEXT, ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
 import { Channel, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
@@ -19,10 +19,11 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
   channel,
   toggleExpand = false,
 }) => {
-  const className = `channel`;
-  const identifier = bemClasses.identifier([
-    className,
-    { id: name, toKebabCase: false },
+  const className = ITEM_LABELS.CHANNEL;
+  const identifier = bemClasses.identifier([CONTAINER_LABELS.CHANNELS, name]);
+  const dataIdentifier = bemClasses.identifier([
+    CONTAINER_LABELS.CHANNELS,
+    removeSpecialChars(name),
   ]);
 
   const oneOfPublish =
@@ -80,6 +81,10 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
           { id: identifier, toKebabCase: false },
           'parameters',
         ])}
+        dataIdentifier={bemClasses.identifier([
+          { id: dataIdentifier, toKebabCase: false },
+          'parameters',
+        ])}
       />
       <div className={bemClasses.element(`${className}-operations`)}>
         {oneOfExists ? null : (
@@ -130,7 +135,11 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
   const body = (channel.subscribe || channel.publish) && content;
 
   return (
-    <section className={bemClasses.element(className)} id={identifier}>
+    <section
+      className={bemClasses.element(className)}
+      id={identifier}
+      data-asyncapi-id={dataIdentifier}
+    >
       <Toggle
         header={header}
         className={className}
