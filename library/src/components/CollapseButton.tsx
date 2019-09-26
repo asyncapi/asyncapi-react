@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 import { bemClasses } from '../helpers';
-import { COLLAPSE_ALL_TEXT, EXPAND_ALL_TEXT } from '../constants';
+import {
+  COLLAPSE_ALL_TEXT,
+  EXPAND_ALL_TEXT,
+  COLLAPSE_BUTTON,
+} from '../constants';
 import { useExpandedContext } from '../store';
 
 export const CollapseButton = () => {
@@ -10,6 +14,8 @@ export const CollapseButton = () => {
     setExpanded,
     numberOfElements,
     numberOfExpanded,
+    setClickedItem,
+    clickedItem,
   } = useExpandedContext();
   const [initial, setInitial] = useState<boolean>(false);
 
@@ -18,22 +24,39 @@ export const CollapseButton = () => {
   }, []);
 
   useEffect(() => {
+    if (clickedItem && clickedItem.label === COLLAPSE_BUTTON) {
+      setExpanded(clickedItem.state);
+    }
+  }, [clickedItem]);
+
+  useEffect(() => {
     if (!initial) {
       return;
     }
 
     if (numberOfExpanded === 0 && expanded) {
-      setExpanded(false);
+      setClickedItem({
+        label: COLLAPSE_BUTTON,
+        state: false,
+      });
     }
     if (numberOfExpanded === numberOfElements && !expanded) {
-      setExpanded(true);
+      setClickedItem({
+        label: COLLAPSE_BUTTON,
+        state: true,
+      });
     }
   }, [numberOfExpanded]);
 
   return (
     <button
       className={bemClasses.element(`collapse-button`)}
-      onClick={() => setExpanded(state => !state)}
+      onClick={() =>
+        setClickedItem({
+          label: COLLAPSE_BUTTON,
+          state: !expanded,
+        })
+      }
     >
       <span>{expanded ? COLLAPSE_ALL_TEXT : EXPAND_ALL_TEXT}</span>
     </button>

@@ -4,7 +4,7 @@ import createUseContext from 'constate';
 import { CONTAINER_LABELS, ITEM_LABELS } from '../constants';
 
 interface ClickedItem {
-  label: CONTAINER_LABELS | ITEM_LABELS | '';
+  label: CONTAINER_LABELS | ITEM_LABELS | 'COLLAPSE_BUTTON' | '';
   itemName?: string;
   state: boolean;
   scroll?: boolean;
