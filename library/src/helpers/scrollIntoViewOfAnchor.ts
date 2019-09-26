@@ -46,7 +46,7 @@ export function scrollIntoViewOfAnchor(hash: string): void {
           `[data-asyncapi-id="${parseHashForDataId(hash)}"]`,
         );
         scroll(target);
-      }, 25);
+      }, 50);
     } catch (e) {
       return;
     }

@@ -115,7 +115,6 @@ export const SERVER_VARIABLES_COLUMN_NAMES: TableColumnName[] = [
   'Description',
 ];
 
-export const COLLAPSE_BUTTON = 'COLLAPSE_BUTTON';
 export enum CONTAINER_LABELS {
   INFO = 'info',
   CHANNELS = 'channels',

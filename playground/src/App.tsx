@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.anyOf;
+const defaultSchema = specs.streetlights;
 
 interface State {
   schema: string;
@@ -52,7 +52,6 @@ class Playground extends Component<{}, State> {
     return (
       <PlaygroundWrapper>
         <Navigation />
-        <a href="#asyncapi--schemas--objectWithKey">dupa</a>
         <ContentWrapper>
           <CodeEditorsWrapper>
             <Tabs
