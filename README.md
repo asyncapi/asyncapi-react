@@ -81,11 +81,11 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 
 See the list of features that are still missing in the component:
 
-- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#fixed-fields-19)
-- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#tagsObject)
-- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#externalDocumentationObject)
-- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#properties) 
-- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/next/asyncapi.md#correlationIdObject)
+- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#fixed-fields-19)
+- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#tagsObject)
+- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#externalDocumentationObject)
+- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#properties) 
+- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#correlationIdObject)
 
 If you want to help us develop them, feel free to contribute.
 
