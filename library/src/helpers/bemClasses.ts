@@ -9,10 +9,8 @@ class BEMCLasses {
     return this.schemaID;
   }
 
-  setSchemaID(id?: string): void {
-    if (id) {
-      this.schemaID = toKebabCase(id);
-    }
+  setSchemaID(id: string): void {
+    this.schemaID = toKebabCase(id);
   }
 
   element(element: string): string {
@@ -32,14 +30,14 @@ class BEMCLasses {
   identifier(identifiers: Array<Identifier | string>): string {
     const id = identifiers
       .map(i => {
+        if (!i) {
+          return;
+        }
         if (this.isIdentifier(i)) {
           if (!i.id) {
             return;
           }
           return i.toKebabCase ? toKebabCase(i.id) : i.id;
-        }
-        if (!i) {
-          return;
         }
         return i;
       })

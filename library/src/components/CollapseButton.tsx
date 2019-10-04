@@ -12,7 +12,6 @@ export const CollapseButton = () => {
     numberOfExpanded,
   } = useExpandedContext();
   const [initial, setInitial] = useState<boolean>(false);
-  console.log(numberOfElements, numberOfExpanded);
 
   useEffect(() => {
     setInitial(true);
