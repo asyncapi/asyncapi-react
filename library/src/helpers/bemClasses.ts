@@ -10,7 +10,7 @@ class BEMCLasses {
   }
 
   setSchemaID(id: string): void {
-    this.schemaID = toKebabCase(id);
+    this.schemaID = id ? toKebabCase(id) : this.schemaID;
   }
 
   element(element: string): string {
@@ -34,9 +34,6 @@ class BEMCLasses {
           return;
         }
         if (this.isIdentifier(i)) {
-          if (!i.id) {
-            return;
-          }
           return i.toKebabCase ? toKebabCase(i.id) : i.id;
         }
         return i;
@@ -48,7 +45,7 @@ class BEMCLasses {
   }
 
   private isIdentifier(v: any): v is Identifier {
-    return !!(v as Identifier).id;
+    return v.hasOwnProperty('id');
   }
 }
 
