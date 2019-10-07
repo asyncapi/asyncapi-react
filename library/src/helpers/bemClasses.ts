@@ -9,7 +9,7 @@ class BEMCLasses {
     return this.schemaID;
   }
 
-  setSchemaID(id: string): void {
+  setSchemaID(id?: string): void {
     this.schemaID = id ? toKebabCase(id) : this.schemaID;
   }
 
