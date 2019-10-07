@@ -145,7 +145,8 @@ class Beautifier {
     for (const [key, schema] of Object.entries(schemas)) {
       if (typeof schema === 'object') {
         newSchemas[key] = this.resolveAllOf(schema) || schema;
-        newSchemas[key] = this.beautifySchema(newSchemas[key]) || newSchemas[key];
+        newSchemas[key] =
+          this.beautifySchema(newSchemas[key]) || newSchemas[key];
       }
     }
     return newSchemas;

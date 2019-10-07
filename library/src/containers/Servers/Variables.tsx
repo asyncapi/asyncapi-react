@@ -45,10 +45,14 @@ const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
 
 interface Props {
   variables: ServerVariableWithKey[];
+  identifier: string;
+  dataIdentifier: string;
 }
 
 export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
   variables,
+  identifier: id,
+  dataIdentifier: dataId,
 }) => {
   if (!variables.length) {
     return null;
@@ -59,9 +63,21 @@ export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
     accessors: serverVariablesAccessors,
     element: variable,
   }));
+  const identifier = bemClasses.identifier([
+    { id, toKebabCase: false },
+    'url-variables',
+  ]);
+  const dataIdentifier = bemClasses.identifier([
+    { id: dataId, toKebabCase: false },
+    'url-variables',
+  ]);
 
   return (
-    <section className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={identifier}
+      data-asyncapi-id={dataIdentifier}
+    >
       <header className={bemClasses.element(`${className}-header`)}>
         <h4>{URL_VARIABLES_TEXT}</h4>
       </header>

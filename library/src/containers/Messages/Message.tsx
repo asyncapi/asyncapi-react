@@ -3,24 +3,18 @@ import React from 'react';
 import { SchemaComponent } from '../Schemas/Schema';
 import { PayloadComponent } from './Payload';
 
-import { bemClasses } from '../../helpers';
+import { bemClasses, removeSpecialChars } from '../../helpers';
 import { Message, isRawMessage } from '../../types';
 
-import {
-  Markdown,
-  Tag,
-  Badge,
-  BadgeType,
-  Toggle,
-  ToggleLabel,
-} from '../../components';
+import { Markdown, Badge, BadgeType, Toggle } from '../../components';
 
 import {
   DEPRECATED_TEXT,
   HEADERS_TEXT,
   MESSAGE_HEADERS_TEXT,
   HEADERS_EXAMPLE_TEXT,
-  TAGS_TEXT,
+  CONTAINER_LABELS,
+  ITEM_LABELS,
 } from '../../constants';
 
 interface Props {
@@ -43,7 +37,18 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   if (!message) {
     return null;
   }
-  const className = `message`;
+  const className = ITEM_LABELS.MESSAGE;
+  const messageID =
+    title && title.length
+      ? bemClasses.identifier([CONTAINER_LABELS.MESSAGES, title])
+      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
+  const messageDataID =
+    title && title.length
+      ? bemClasses.identifier([
+          CONTAINER_LABELS.MESSAGES,
+          removeSpecialChars(title),
+        ])
+      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
 
   if (!isRawMessage(message)) {
     return (
@@ -98,8 +103,15 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     </h3>
   );
 
+  const headersID = !inChannel
+    ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'headers'])
+    : undefined;
   const headers = message.headers && (
-    <div className={bemClasses.element(`${className}-headers`)}>
+    <section
+      className={bemClasses.element(`${className}-headers`)}
+      id={headersID}
+      data-asyncapi-id={headersID}
+    >
       <header className={bemClasses.element(`${className}-headers-header`)}>
         <h4>{HEADERS_TEXT}</h4>
       </header>
@@ -111,36 +123,49 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           hideTitle={true}
         />
       </div>
-    </div>
+    </section>
   );
 
+  const payloadID = !inChannel
+    ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'payload'])
+    : undefined;
+  const payloadDataID = !inChannel
+    ? bemClasses.identifier([
+        { id: messageDataID, toKebabCase: false },
+        'payload',
+      ])
+    : undefined;
   const payload = message.payload && (
-    <PayloadComponent payload={message.payload} />
+    <PayloadComponent
+      payload={message.payload}
+      identifier={payloadID}
+      dataIdentifier={payloadDataID}
+    />
   );
 
-  const tags = !hideTags && message.tags && (
-    <div className={bemClasses.element(`${className}-tags`)}>
-      <header className={bemClasses.element(`${className}-tags-header`)}>
-        <h4>{TAGS_TEXT}</h4>
-      </header>
-      <ul className={bemClasses.element(`${className}-tags-list`)}>
-        {message.tags.map(tag => (
-          <li
-            key={tag.name}
-            className={bemClasses.element(`${className}-tags-list-item`)}
-          >
-            <Tag>{tag.name}</Tag>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  // TAGS IS NOT SUPPORTED YET - please don't remove code!
+  // const tags = !hideTags && message.tags && (
+  //   <section className={bemClasses.element(`${className}-tags`)}>
+  //     <header className={bemClasses.element(`${className}-tags-header`)}>
+  //       <h4>{TAGS_TEXT}</h4>
+  //     </header>
+  //     <ul className={bemClasses.element(`${className}-tags-list`)}>
+  //       {message.tags.map(tag => (
+  //         <li
+  //           key={tag.name}
+  //           className={bemClasses.element(`${className}-tags-list-item`)}
+  //         >
+  //           <Tag>{tag.name}</Tag>
+  //         </li>
+  //       ))}
+  //     </ul>
+  //   </section>
+  // );
 
   const content = (
     <>
       {headers}
       {payload}
-      {tags}
     </>
   );
 
@@ -151,14 +176,21 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     (!hideTags && message.tags)
   );
 
+  const identifier = !inChannel ? messageID : undefined;
+  const dataIdentifier = !inChannel ? messageDataID : undefined;
   return (
-    <section className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={identifier}
+      data-asyncapi-id={dataIdentifier}
+    >
       {!inChannel ? (
         <Toggle
           header={header}
           className={className}
           expanded={toggleExpand}
-          label={ToggleLabel.MESSAGE}
+          label={ITEM_LABELS.MESSAGE}
+          itemName={title}
           toggleInState={true}
         >
           {!isBody ? null : (

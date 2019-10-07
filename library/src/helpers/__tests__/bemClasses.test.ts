@@ -1,4 +1,5 @@
 import { CSS_PREFIX } from '../../constants';
+import { Identifier } from '../../types';
 import { bemClasses } from '../bemClasses';
 
 describe('bemClasses', () => {
@@ -62,6 +63,20 @@ describe('bemClasses', () => {
       const expectedClassName = `foo bar`;
 
       expect(bemClasses.concatenate(arr)).toBe(expectedClassName);
+    });
+  });
+
+  describe('identifier', () => {
+    test('should be equal', () => {
+      const elements: Array<Identifier | string> = [
+        { id: `${CSS_PREFIX}--foo`, toKebabCase: false },
+        { id: 'fooBar', toKebabCase: true },
+        '',
+        'bar',
+      ];
+      const expectedID = `${CSS_PREFIX}--foo--foo-bar--bar`;
+
+      expect(bemClasses.identifier(elements)).toBe(expectedID);
     });
   });
 });

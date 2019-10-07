@@ -43,7 +43,6 @@
     "build": "tsc && npm run copyCss",
     "test": "jest --detectOpenHandles",
     "testWatch": "jest --detectOpenHandles --watch",
-    "eject": "react-scripts eject",
     "copyCss": "cp -r ./src/styles ./lib/styles",
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
@@ -55,7 +54,8 @@
     "dompurify": "^1.0.11",
     "markdown-it": "^9.1.0",
     "merge": "^1.2.1",
-    "openapi-sampler": "^1.0.0-beta.15"
+    "openapi-sampler": "^1.0.0-beta.15",
+    "react-use": "^12.2.0"
   },
   "devDependencies": {
     "@types/dompurify": "^0.0.33",

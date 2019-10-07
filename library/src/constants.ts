@@ -114,3 +114,19 @@ export const SERVER_VARIABLES_COLUMN_NAMES: TableColumnName[] = [
   'Possible values',
   'Description',
 ];
+
+export enum CONTAINER_LABELS {
+  INFO = 'info',
+  CHANNELS = 'channels',
+  SERVERS = 'servers',
+  MESSAGES = 'messages',
+  SCHEMAS = 'schemas',
+}
+export const CONTAINER_LABELS_VALUES = Object.values(CONTAINER_LABELS);
+export enum ITEM_LABELS {
+  CHANNEL = 'channel',
+  SERVER = 'server',
+  MESSAGE = 'message',
+  SCHEMA = 'schema',
+}
+export const ITEM_LABELS_VALUES = Object.values(ITEM_LABELS);

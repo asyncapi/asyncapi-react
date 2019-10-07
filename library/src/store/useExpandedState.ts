@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import createUseContext from 'constate';
 
-import { ToggleLabel } from '../components';
+import { CONTAINER_LABELS, ITEM_LABELS } from '../constants';
 
-interface ClickedToggle {
-  label: ToggleLabel;
-  expanded: boolean;
+interface ClickedItem {
+  label: CONTAINER_LABELS | ITEM_LABELS | 'COLLAPSE_BUTTON' | '';
+  itemName?: string;
+  state: boolean;
+  scroll?: boolean;
 }
 
 interface Props {
@@ -21,19 +23,33 @@ const useExpandedState = ({
   const [numberOfExpanded, setNumberOfExpanded] = useState<number>(
     initialNumberOfExpandedElement,
   );
-  const [clickedToggle, setClickedToggle] = useState<ClickedToggle>({
-    label: ToggleLabel.DEFAULT,
-    expanded: false,
+  const [clickedItem, setClickedItem] = useState<ClickedItem>({
+    label: '',
+    itemName: '',
+    state: false,
+    scroll: false,
   });
+  const [scrollToView, setScrollToView] = useState<boolean>(false);
+
+  const clickItem = useCallback(({ label, ...rest }: ClickedItem) => {
+    if (label) {
+      setClickedItem({
+        label,
+        ...rest,
+      });
+    }
+  }, []);
 
   return {
-    numberOfElements,
     expanded,
     setExpanded,
+    numberOfElements,
     numberOfExpanded,
     setNumberOfExpanded,
-    clickedToggle,
-    setClickedToggle,
+    clickedItem,
+    setClickedItem: clickItem,
+    scrollToView,
+    setScrollToView,
   };
 };
 

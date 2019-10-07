@@ -13,7 +13,7 @@ import { ConfigInterface, defaultConfig } from '../../config';
 import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
 import { parse, parseFromUrl } from 'asyncapi-parser';
 import { CSS_PREFIX } from '../../constants';
-import { useExpandedContext } from '../../store';
+import { useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/Info';
@@ -93,6 +93,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!concatenatedConfig.show) {
       return null;
     }
+
+    bemClasses.setSchemaID(concatenatedConfig.schemaID);
     const numberOfElement = stateHelpers.calculateNumberOfElements({
       spec: validatedSchema,
       showConfig: concatenatedConfig.show,
@@ -110,61 +112,64 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         numberOfElements={numberOfElement}
         numberOfExpandedElement={initialExpandedElements}
       >
-        <main className={CSS_PREFIX}>
-          {concatenatedConfig.showErrors && !!error && (
-            <ErrorComponent error={error} />
-          )}
-          {concatenatedConfig.show.info && validatedSchema.info && (
-            <InfoComponent
-              info={validatedSchema.info}
-              defaultContentType={validatedSchema.defaultContentType}
-            />
-          )}
-          {concatenatedConfig.show.channels && validatedSchema.channels && (
-            <ChannelsComponent
-              channels={validatedSchema.channels}
-              expand={
-                concatenatedConfig.expand && concatenatedConfig.expand.channels
-              }
-            />
-          )}
-          {concatenatedConfig.show.servers && !!validatedSchema.servers && (
-            <ServersComponent
-              servers={validatedSchema.servers}
-              securitySchemes={
-                validatedSchema.components &&
-                validatedSchema.components.securitySchemes
-              }
-              expand={
-                concatenatedConfig.expand && concatenatedConfig.expand.servers
-              }
-            />
-          )}
-          {validatedSchema.components && (
-            <section className={bemClasses.element(`components`)}>
-              {concatenatedConfig.show.messages &&
-                validatedSchema.components.messages && (
-                  <MessagesComponent
-                    messages={validatedSchema.components.messages}
-                    expand={
-                      concatenatedConfig.expand &&
-                      concatenatedConfig.expand.messages
-                    }
-                  />
-                )}
-              {concatenatedConfig.show.schemas &&
-                validatedSchema.components.schemas && (
-                  <SchemasComponent
-                    schemas={validatedSchema.components.schemas}
-                    expand={
-                      concatenatedConfig.expand &&
-                      concatenatedConfig.expand.schemas
-                    }
-                  />
-                )}
-            </section>
-          )}
-        </main>
+        <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
+          <main className={CSS_PREFIX} id={bemClasses.getSchemaID()}>
+            {concatenatedConfig.showErrors && !!error && (
+              <ErrorComponent error={error} />
+            )}
+            {concatenatedConfig.show.info && validatedSchema.info && (
+              <InfoComponent
+                info={validatedSchema.info}
+                defaultContentType={validatedSchema.defaultContentType}
+              />
+            )}
+            {concatenatedConfig.show.channels && validatedSchema.channels && (
+              <ChannelsComponent
+                channels={validatedSchema.channels}
+                expand={
+                  concatenatedConfig.expand &&
+                  concatenatedConfig.expand.channels
+                }
+              />
+            )}
+            {concatenatedConfig.show.servers && !!validatedSchema.servers && (
+              <ServersComponent
+                servers={validatedSchema.servers}
+                securitySchemes={
+                  validatedSchema.components &&
+                  validatedSchema.components.securitySchemes
+                }
+                expand={
+                  concatenatedConfig.expand && concatenatedConfig.expand.servers
+                }
+              />
+            )}
+            {validatedSchema.components && (
+              <section className={bemClasses.element(`components`)}>
+                {concatenatedConfig.show.messages &&
+                  validatedSchema.components.messages && (
+                    <MessagesComponent
+                      messages={validatedSchema.components.messages}
+                      expand={
+                        concatenatedConfig.expand &&
+                        concatenatedConfig.expand.messages
+                      }
+                    />
+                  )}
+                {concatenatedConfig.show.schemas &&
+                  validatedSchema.components.schemas && (
+                    <SchemasComponent
+                      schemas={validatedSchema.components.schemas}
+                      expand={
+                        concatenatedConfig.expand &&
+                        concatenatedConfig.expand.schemas
+                      }
+                    />
+                  )}
+              </section>
+            )}
+          </main>
+        </useChangeHashContext.Provider>
       </useExpandedContext.Provider>
     );
   }

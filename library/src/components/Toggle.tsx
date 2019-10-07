@@ -1,31 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 import { useExpandedContext } from '../store';
-import { bemClasses } from '../helpers';
-
-export enum ToggleLabel {
-  DEFAULT = '',
-  CHANNELS = 'channels',
-  CHANNEL = 'channel',
-  SERVERS = 'servers',
-  SERVER = 'server',
-  MESSAGES = 'messages',
-  MESSAGE = 'message',
-  SCHEMAS = 'schemas',
-  SCHEMA = 'schema',
-}
-const ROOT_LABELS = [
-  ToggleLabel.CHANNELS,
-  ToggleLabel.SERVERS,
-  ToggleLabel.MESSAGES,
-  ToggleLabel.SCHEMAS,
-];
+import { bemClasses, inContainer } from '../helpers';
+import {
+  CONTAINER_LABELS,
+  CONTAINER_LABELS_VALUES,
+  ITEM_LABELS,
+  ITEM_LABELS_VALUES,
+} from '../constants';
 
 interface Props {
   header: React.ReactNode;
   className?: string;
   expanded?: boolean;
-  label?: ToggleLabel;
+  label?: CONTAINER_LABELS | ITEM_LABELS | '';
+  itemName?: string;
   toggleInState?: boolean;
 }
 
@@ -34,14 +23,16 @@ export const Toggle: React.FunctionComponent<Props> = ({
   className: customClassName = '',
   expanded: initialExpanded = false,
   toggleInState = false,
-  label = ToggleLabel.DEFAULT,
+  label = '',
+  itemName = '',
   children,
 }) => {
   const {
     expanded: globalExpanded,
     setNumberOfExpanded,
-    clickedToggle,
-    setClickedToggle,
+    clickedItem,
+    setClickedItem,
+    setScrollToView,
   } = useExpandedContext();
 
   const [initial, setInitial] = useState<boolean>(false);
@@ -50,21 +41,31 @@ export const Toggle: React.FunctionComponent<Props> = ({
   const handleSetExpanded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation();
 
-    const oldState = expanded;
+    const newState = !expanded;
     if (children) {
-      setExpanded(!oldState);
+      setExpanded(newState);
     }
-    if (oldState && ROOT_LABELS.includes(label)) {
-      setClickedToggle({
-        label,
-        expanded: !oldState,
-      });
-    }
+    setClickedItem({
+      label,
+      itemName,
+      state: newState,
+      scroll: false,
+    });
   };
 
   useEffect(() => {
     setInitial(true);
   }, []);
+
+  useEffect(() => {
+    if (
+      clickedItem.scroll &&
+      clickedItem.state &&
+      clickedItem.label === label
+    ) {
+      setScrollToView(state => !state);
+    }
+  }, [expanded]);
 
   useEffect(() => {
     if (initial && toggleInState) {
@@ -73,10 +74,41 @@ export const Toggle: React.FunctionComponent<Props> = ({
   }, [globalExpanded]);
 
   useEffect(() => {
-    if (initial && label === clickedToggle.label.slice(0, -1)) {
-      setExpanded(false);
+    if (!initial) {
+      return;
     }
-  }, [clickedToggle]);
+
+    // for collapsing items in container when container will collapse
+    if (
+      !clickedItem.state &&
+      ITEM_LABELS_VALUES.includes(label) &&
+      clickedItem.label === inContainer(label as ITEM_LABELS)
+    ) {
+      setExpanded(false);
+      return;
+    }
+
+    if (!expanded && clickedItem.state && label) {
+      // for container when hash will change
+      if (
+        clickedItem.label === label &&
+        CONTAINER_LABELS_VALUES.includes(label)
+      ) {
+        setExpanded(true);
+        return;
+      }
+
+      // for item when hash will change
+      if (
+        clickedItem.label === inContainer(label as ITEM_LABELS) &&
+        itemName &&
+        clickedItem.itemName === itemName
+      ) {
+        setExpanded(true);
+        return;
+      }
+    }
+  }, [initial, clickedItem]);
 
   useEffect(() => {
     if (toggleInState && initial) {

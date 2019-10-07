@@ -23,7 +23,10 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
     defaultContentType || termsOfService || license || contact;
 
   return (
-    <div className={bemClasses.element(className)}>
+    <section
+      className={bemClasses.element(className)}
+      id={bemClasses.identifier([className])}
+    >
       <header className={bemClasses.element(`${className}-header`)}>
         <div className={bemClasses.element(`${className}-header-main`)}>
           <h1>
@@ -74,6 +77,6 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
           <Markdown>{description}</Markdown>
         </div>
       )}
-    </div>
+    </section>
   );
 };

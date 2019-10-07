@@ -52,6 +52,10 @@ The list of props for the AsyncAPI React component includes:
 
   > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
+### Features
+
+For a list and description of features offered by the AsyncAPI React component, see [this](./docs/features) directory.
+
 ### Styles
 
 To use default styles based on [SAP Fundamentals](https://sap.github.io/fundamental/), import them as follows:

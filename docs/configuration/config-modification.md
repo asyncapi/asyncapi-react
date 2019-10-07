@@ -10,6 +10,7 @@ See the definition of the object that you must pass to props to modify the compo
 
 ```ts
 interface ConfigInterface {
+  schemaID?: string;
   show?: {
     info?: boolean;
     channels?: boolean;
@@ -37,8 +38,14 @@ interface ConfigInterface {
   },
   showErrors?: boolean;
   parserOptions?: ParserOptions;
+  pushStateBehavior?: (hash: string) => void;
 }
 ```
+
+- **schemaID?: string**
+
+  This field contains a schema name.
+  This field is set to `asyncapi` by default.
 
 - **show?: Partial<ShowConfig>**
 
@@ -61,6 +68,11 @@ interface ConfigInterface {
   This field contains configuration for [`asyncapi-parser`](https://github.com/asyncapi/parser). See available options [here](https://github.com/asyncapi/parser-js/blob/master/API.md#parser).
   This field is set to `null` by default.
 
+- **pushStateBehavior?: (hash: string) => void**
+
+  This field contains custom logic for changing the `hash` parameter in the URL of a page.
+  See the default logic [here](../../library/src/store/useChangeHash.ts#L11).
+
 ## Examples
 
 See exemplary component configuration in TypeScript and JavaScript.
@@ -75,6 +87,7 @@ import AsyncApiComponent, { ConfigInterface } from "asyncapi-react";
 import { schema } from "./mock";
 
 const config: Partial<ConfigInterface> = {
+  schemaID: 'custom-name',
   show: {
     schemas: false
   },
@@ -96,6 +109,7 @@ import AsyncApiComponent from "asyncapi-react";
 import { schema } from "./mock";
 
 const config = {
+  schemaID: 'custom-name',
   show: {
     schemas: false
   },
@@ -111,6 +125,7 @@ In the above examples, after concatenation with the default configuration, the r
 
 ```js
 {
+  schemaID: 'custom-name',
   show: {
     info: true,
     servers: true,

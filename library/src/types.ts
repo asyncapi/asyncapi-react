@@ -399,3 +399,10 @@ export interface ParserReturn {
 }
 
 export type TableColumnName = string;
+
+export type PushStateBehavior = (hash: string) => void;
+
+export interface Identifier {
+  id: string;
+  toKebabCase?: boolean;
+}
