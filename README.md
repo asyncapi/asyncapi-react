@@ -35,7 +35,7 @@ npm install --save @kyma-project/asyncapi-react
 
 Check out this simple sandbox application that uses the asyncapi-react component:
 
-[![Edit 5vz8l9zlmn](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6xym00rv0r)
+[![Edit asyncapi-react-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/derberg/asyncapi-react-in-action/tree/master/?fontsize=14)
 
 ### Props
 
