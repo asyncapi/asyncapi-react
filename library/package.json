@@ -40,14 +40,15 @@
   ],
   "scripts": {
     "start": "tsc --watch",
-    "build": "tsc && npm run copyCss",
+    "build": "tsc && npm run copyCss && npm run bundle-webcomponent",
     "test": "jest --detectOpenHandles",
     "testWatch": "jest --detectOpenHandles --watch",
     "copyCss": "cp -r ./src/styles ./lib/styles",
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "get-version": "echo $npm_package_version"
+    "get-version": "echo $npm_package_version",
+    "bundle-webcomponent": "webpack"
   },
   "dependencies": {
     "asyncapi-parser": "0.11.1",
@@ -56,7 +57,10 @@
     "markdown-it": "^9.1.0",
     "merge": "^1.2.1",
     "openapi-sampler": "^1.0.0-beta.15",
-    "react-use": "^12.2.0"
+    "react-dom": "^16.11.0",
+    "react-use": "^12.2.0",
+    "web-react-components": "^1.4.2",
+    "webpack": "^4.41.2"
   },
   "devDependencies": {
     "@types/dompurify": "^0.0.33",
@@ -64,8 +68,11 @@
     "@types/markdown-it": "^0.0.8",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
+    "awesome-typescript-loader": "^5.2.1",
     "jest": "^24.9.0",
     "react": "^16.9.0",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.7.2",
+    "webpack-cli": "^3.3.10"
   }
 }
