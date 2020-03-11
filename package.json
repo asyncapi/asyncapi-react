@@ -23,17 +23,17 @@
     "markdownlint": "markdownlint **/*.md"
   },
   "devDependencies": {
+    "husky": "^2.4.1",
+    "lerna": "^3.15.0",
+    "lerna-changelog": "^1.0.1",
+    "lint-staged": "^8.2.1",
+    "markdownlint-cli": "^0.17.0",
+    "prettier": "^1.18.2",
     "tslib": "^1.10.0",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
     "tslint-react-hooks": "^2.1.1",
-    "lerna-changelog": "^0.8.2",
-    "lint-staged": "^8.2.1",
-    "husky": "^2.4.1",
-    "lerna": "^3.15.0",
-    "markdownlint-cli": "^0.17.0",
-    "prettier": "^1.18.2",
     "typescript": "^3.5.3"
   },
   "lint-staged": {
