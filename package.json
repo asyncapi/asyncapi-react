@@ -13,7 +13,6 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "changelog": "lerna-changelog",
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
@@ -28,7 +27,6 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
     "tslint-react-hooks": "^2.1.1",
-    "lerna-changelog": "^0.8.2",
     "lint-staged": "^8.2.1",
     "husky": "^2.4.1",
     "lerna": "^3.15.0",
