@@ -46,7 +46,8 @@
     "copyCss": "cp -r ./src/styles ./lib/styles",
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
+    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
+    "release": "semantic-release"
   },
   "dependencies": {
     "asyncapi-parser": "0.11.1",
@@ -65,6 +66,33 @@
     "@types/react": "^16.9.2",
     "jest": "^24.9.0",
     "react": "^16.9.0",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/github": "^7.0.4",
+    "@semantic-release/npm": "^7.0.3",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "semantic-release": "^17.0.4"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
   }
 }
