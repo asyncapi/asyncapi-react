@@ -47,7 +47,8 @@
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "get-version": "echo $npm_package_version"
   },
   "dependencies": {
     "asyncapi-parser": "0.11.1",
