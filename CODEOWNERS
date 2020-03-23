@@ -8,7 +8,7 @@
 * @kyma-team
 
 # All .md files
-*.md @kazydek @mmitoraj
+*.md @kazydek @mmitoraj @bszwarc
 
 # Text constants file
-library/src/constants.ts @kazydek @mmitoraj
+library/src/constants.ts @kazydek @mmitoraj @bszwarc
