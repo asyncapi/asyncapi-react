@@ -6,7 +6,7 @@ Learn the rules to follow when you contribute code or content to this project.
 
 ## Contributing process
 
-The contributing process in this project relies on the [GitHub flow](https://guides.github.com/introduction/flow/index.html). This means that you contribute through pull requests. When adding new code or content to this project, follow these rules:
+The contributing process in this project relies on the [GitHub flow](https://guides.github.com/introduction/flow/index.html). This means that you contribute through pull requests (PRs). When adding new code or content to this project, follow these rules:
 
 1. Fork this repository.
 1. Make your changes. Do not forgot about:
@@ -14,17 +14,17 @@ The contributing process in this project relies on the [GitHub flow](https://gui
    - [Project structure](./development-guide.md/#project-structure)
    - Tests
    - Updating relevant documents if you add, remove, update props, configuration, or themes
-1. Create a pull request.
+1. Create a PR.
 
 > **NOTE:** When you add content to the `asyncapi-react` repository, follow the [guidelines](https://github.com/kyma-project/community/tree/master/guidelines/content-guidelines) from the `kyma-project` organization.
 
-Pull requests are very welcome. However, if you want to add a new feature, use GitHub issues to discuss your ideas first.
+PRs are very welcome. However, if you want to add a new feature, use GitHub issues to discuss your ideas first.
 
 ## Conventional commits
 
-This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification. Releasing to GitHub and NPM is done with the support of [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification. Releasing to GitHub and NPM is done with the support of [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
-Pull requests should have a title that follows the specification, otherwise, merging is blocked. If you are not familiar with the specification simply ask maintainers to modify. You can also use this cheatsheet if you want:
+PRs should have a title that follows the specification, otherwise, merging is blocked. If you are not familiar with the specification simply ask maintainers to modify the PR. You can also use this cheatsheet:
 
 - `fix: ` prefix in the title indicates that PR is a bug fix and PATCH release must be triggered.
 - `feat: ` prefix in the title indicates that PR is a feature and MINOR release must be triggered.
@@ -35,4 +35,4 @@ Pull requests should have a title that follows the specification, otherwise, mer
 
 What about MAJOR release? just add `!` to the prefix, like `fix!: ` or `refactor!: `
 
-Prefix that follows specification is not enough though. Remember that the title must be clear and descriptive with usage of [imperative mood](https://chris.beams.io/posts/git-commit/#imperative).
+A prefix that follows the specification is not enough though. Remember that the title must be clear, descriptive, and in the [imperative mood](https://chris.beams.io/posts/git-commit/#imperative).
