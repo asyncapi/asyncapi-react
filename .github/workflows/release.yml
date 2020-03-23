@@ -34,9 +34,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GIT_AUTHOR_NAME: kyma-bot
+          GIT_AUTHOR_NAME: asyncapi-bot
           GIT_AUTHOR_EMAIL: info@asyncapi.io
-          GIT_COMMITTER_NAME: kyma-bot
+          GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
         run: npm run release
         working-directory: ./library
