@@ -62,6 +62,6 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: ./playground/build
+          FOLDER: playground/build
           GIT_CONFIG_NAME: asyncapi-bot
           GIT_CONFIG_EMAIL: info@asyncapi.io
