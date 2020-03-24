@@ -24,7 +24,7 @@ PRs are very welcome. However, if you want to add a new feature, use GitHub issu
 
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification. Releasing to GitHub and NPM is done with the support of [semantic-release](https://semantic-release.gitbook.io/semantic-release/).
 
-A PR should have a title that follows the specification, otherwise, merging is blocked. If you are not familiar with the specification simply ask maintainers to modify the PR. You can also use this cheatsheet:
+A PR should have a title that follows the specification, otherwise, merging is blocked. If you are not familiar with the specification, simply ask maintainers to modify the PR. You can also use this cheatsheet:
 
 - `fix: ` prefix in the title indicates that a PR is a bug fix and the PATCH release must be triggered.
 - `feat: ` prefix in the title indicates that a PR is a feature and the MINOR release must be triggered.
