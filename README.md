@@ -17,7 +17,7 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 ## Playground
 
-This repository comes in with a [Playground application](https://www.asyncapi.com/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
+This repository comes in with a [Playground application](https://asyncapi.github.io/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
 
 You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
 

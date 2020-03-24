@@ -27,7 +27,8 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "test": "react-app-rewired test"
+    "test": "react-app-rewired test",
+    "build": "react-app-rewired build"
   },
   "browserslist": {
     "production": [

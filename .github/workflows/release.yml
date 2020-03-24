@@ -16,15 +16,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 13
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./library
-      - name: Run tests
+      - name: Install dependencies for library and playground
+        run: | 
+          npm ci
+          npm run bootstrap
+      - name: Run library tests
         run: npm test
-        working-directory: ./library
       - name: Build library
         run: npm run prepare
-        working-directory: ./library
       - name: Get version from package.json before release step
         id: initversion
         run: echo "::set-output name=version::$(npm run get-version --silent)"
@@ -55,3 +54,14 @@ jobs:
           title: 'chore(release): ${{ steps.extractver.outputs.version }}'
           body: 'Version bump in package.json and package-lock.json for release [${{ steps.extractver.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ steps.extractver.outputs.version }})'
           branch: version-bump/${{ steps.extractver.outputs.version }}
+      - name: Build playground
+        run: npm run build
+        working-directory: ./playground
+      - name: Deploy GH page
+        uses: JamesIves/github-pages-deploy-action@releases/3.4.2
+        with:
+          ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: ./playground/build
+          GIT_CONFIG_NAME: asyncapi-bot
+          GIT_CONFIG_EMAIL: info@asyncapi.io
