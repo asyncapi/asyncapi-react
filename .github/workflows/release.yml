@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: 'Release NPM, GitHub, Docker'
+    name: 'Release NPM, GitHub, GH Pages'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -17,13 +17,13 @@ jobs:
         with:
           node-version: 13
       - name: Install dependencies for library and playground
-        run: | 
-          npm ci
-          npm run bootstrap
+        run: npm install
+      - name: Bootstrap the project
+        run: npm run bootstrap
       - name: Run library tests
         run: npm test
       - name: Build library
-        run: npm run prepare
+        run: npm run build
       - name: Get version from package.json before release step
         id: initversion
         run: echo "::set-output name=version::$(npm run get-version --silent)"
@@ -58,7 +58,7 @@ jobs:
         run: npm run build
         working-directory: ./playground
       - name: Deploy GH page
-        uses: JamesIves/github-pages-deploy-action@releases/3.4.2
+        uses: JamesIves/github-pages-deploy-action@3.4.2
         with:
           ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
           BRANCH: gh-pages

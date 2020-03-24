@@ -16,7 +16,7 @@
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
-    "prepare": "cd library && npm run prepare",
+    "build": "cd library && npm run prepare",
     "lint-check": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
