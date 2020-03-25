@@ -7,17 +7,5 @@
     "publish": {
       "message": "Bump version to %s"
     }
-  },
-  "changelog": {
-    "repo": "asyncapi/asyncapi-react",
-    "labels": {
-      "breaking": ":boom: Breaking Changes",
-      "enhancement": ":rocket: Enhancements",
-      "bug": ":bug: Fixed",
-      "area/library": ":zap: Library",
-      "area/playground": ":video_game: Playground app",
-      "area/documentation": ":memo: Documentation"
-    },
-    "cacheDir": ".changelog"
   }
 }
