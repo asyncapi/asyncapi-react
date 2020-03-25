@@ -80,7 +80,7 @@
       [
         "@semantic-release/npm",
         {
-          "pkgRoot": "library/lib"
+          "pkgRoot": "library"
         }
       ],
       "@semantic-release/github"
