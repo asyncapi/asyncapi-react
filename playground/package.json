@@ -2,6 +2,7 @@
   "name": "playground",
   "private": true,
   "description": "Playground app for AsyncApi React Component",
+  "homepage": "https://asyncapi.github.io/asyncapi-react",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
