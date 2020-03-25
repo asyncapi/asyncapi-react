@@ -26,8 +26,7 @@ jobs:
         run: npm run build
       - name: Get version from package.json before release step
         id: initversion
-        run: echo "::set-output name=version::$(npm run get-version --silent)"
-        working-directory: ./library
+        run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
       - name: Release to NPM and GitHub
         id: release
         env:
@@ -38,11 +37,9 @@ jobs:
           GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
         run: npm run release
-        working-directory: ./library
       - name: Get version from package.json after release step
         id: extractver
-        run: echo "::set-output name=version::$(npm run get-version --silent)"
-        working-directory: ./library
+        run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: peter-evans/create-pull-request@v2.4.4
