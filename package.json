@@ -20,7 +20,9 @@
     "lint-check": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
-    "markdownlint": "markdownlint **/*.md"
+    "markdownlint": "markdownlint **/*.md",
+    "release": "semantic-release",
+    "get-lib-version": "cd library && npm run get-version"
   },
   "devDependencies": {
     "tslib": "^1.10.0",
@@ -33,7 +35,13 @@
     "lerna": "^3.15.0",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "@semantic-release/commit-analyzer": "^8.0.1",
+    "@semantic-release/github": "^7.0.4",
+    "@semantic-release/npm": "^7.0.3",
+    "@semantic-release/release-notes-generator": "^9.0.1",
+    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "semantic-release": "^17.0.4"
   },
   "lint-staged": {
     "linters": {
@@ -51,5 +59,31 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "library"
+        }
+      ],
+      "@semantic-release/github"
+    ]
   }
 }
