@@ -1,6 +1,6 @@
 {
   "name": "@kyma-project/asyncapi-react",
-  "version": "0.4.2",
+  "version": "0.3.1",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -45,9 +45,7 @@
     "testWatch": "jest --detectOpenHandles --watch",
     "copyCss": "cp -r ./src/styles ./lib/styles",
     "prepare": "npm run build",
-    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "get-version": "echo $npm_package_version",
     "bundle-webcomponent": "webpack"
   },
   "dependencies": {
