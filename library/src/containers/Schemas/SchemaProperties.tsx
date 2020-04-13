@@ -1,6 +1,7 @@
 import React from 'react';
 import merge from 'merge';
 
+import { bemClasses } from '../../helpers';
 import { TypeWithKey, Schema } from '../../types';
 import {
   Markdown,
@@ -45,11 +46,31 @@ const schemaPropertiesAccessors: Array<TableAccessor<SchemaElement>> = [
   ),
   el => <span>{el.schema.content.format}</span>,
   el => <span>{el.schema.content.default}</span>,
-  el =>
-    el.schema.content.description && (
-      <Markdown>{el.schema.content.description}</Markdown>
-    ),
+  el => {
+    const enumElements = getEnumHTMLElements(el.schema);
+    return (
+      el.schema.content.description && (
+        <div>
+          <Markdown>{el.schema.content.description}</Markdown>
+          {enumElements.length && <div>Enum: {enumElements}</div>}
+        </div>
+      )
+    );
+  },
 ];
+
+const getEnumHTMLElements = (schema: SchemaWithKey): HTMLElement[] => {
+  let enumElements: any[] = [];
+  if (schema.content.enum && schema.content.enum.length) {
+    enumElements = schema.content.enum.map((value: any, i: number) => (
+      <span className={bemClasses.element(`enum`)} key={i}>
+        "{value}"
+      </span>
+    ));
+  }
+
+  return enumElements;
+};
 
 const handleNotProperty = (prop: Schema): Schema => {
   if (prop.not) {
