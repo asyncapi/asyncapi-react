@@ -40,6 +40,10 @@ jobs:
       - name: Get version from package.json after release step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
+      - name: Use latest version in the Playground #this will update package.json and a lock file for the playground that will also be pushed to PR with next step
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        run: npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
+        working-directory: ./playground
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: peter-evans/create-pull-request@v2.4.4

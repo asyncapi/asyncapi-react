@@ -1,7 +1,7 @@
 import {
   ParserErrorUnsupportedVersion,
   ParserErrorNoJS,
-} from 'asyncapi-parser';
+} from '@asyncapi/parser';
 import { Options as ParserOptions } from 'json-schema-ref-parser';
 
 import { ParserReturn, FetchingSchemaInterface } from '../types';
