@@ -1,0 +1,16 @@
+name: Simple PR Validation
+
+on:
+  pull_request
+  
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: npm install
+      - name: Bootstrap the project
+        run: npm run bootstrap
+      - name: Run library tests
+        run: npm test

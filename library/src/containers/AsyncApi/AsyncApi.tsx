@@ -11,7 +11,7 @@ import {
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
-import { parse, parseFromUrl } from 'asyncapi-parser';
+import { parse, parseFromUrl } from '@asyncapi/parser';
 import { CSS_PREFIX } from '../../constants';
 import { useExpandedContext, useChangeHashContext } from '../../store';
 
