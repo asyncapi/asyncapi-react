@@ -68,7 +68,18 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "hesyar",
+      "name": "Hesyar Uzuner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/35898?v=4",
+      "profile": "https://www.hash-tech.ch",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
