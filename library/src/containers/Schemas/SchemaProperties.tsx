@@ -52,7 +52,7 @@ const schemaPropertiesAccessors: Array<TableAccessor<SchemaElement>> = [
       el.schema.content.description && (
         <div>
           <Markdown>{el.schema.content.description}</Markdown>
-          {enumElements.length && <div>Enum: {enumElements}</div>}
+          {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
         </div>
       )
     );
