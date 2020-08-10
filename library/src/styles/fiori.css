@@ -1265,3 +1265,14 @@
   padding: 0 0.5rem;
   color: #fff;
 }
+
+.asyncapi__additional-properties-notice {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+  color: #333333;
+  font-size: 0.75rem;
+  line-height: 2;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}

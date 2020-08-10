@@ -9,6 +9,7 @@ import {
   Channels,
   Parameters,
   Operation,
+  AdditionalProperties,
 } from '../types';
 
 import { renderMd } from './renderMarkdown';
@@ -104,18 +105,16 @@ class Beautifier {
 
     if (schema.additionalProperties) {
       const additionalProperties = schema.additionalProperties;
-      const newAdditionalProperties: Record<
-        string,
-        Schema
-      > = additionalProperties;
+      const newAdditionalProperties: AdditionalProperties = additionalProperties;
 
       for (const [key, prop] of Object.entries(additionalProperties)) {
         if (prop.description) {
           prop.description = renderMd(prop.description as string);
         }
-        if (prop.additionalProperties) {
-          const propAdditionalProperties = prop.additionalProperties;
-          const newPropAdditionalProperties: Record<string, Schema> = {};
+        if (typeof prop.additionalProperties !== 'boolean') {
+          const propAdditionalProperties: AdditionalProperties =
+            prop.additionalProperties;
+          const newPropAdditionalProperties: AdditionalProperties = {};
 
           for (const [propKey, propValue] of Object.entries(
             propAdditionalProperties,
