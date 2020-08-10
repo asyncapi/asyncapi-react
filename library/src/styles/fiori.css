@@ -1255,3 +1255,13 @@
   padding: 0 0.5rem;
   color: #f6993f;
 }
+
+.asyncapi__pattern {
+  line-height: 2;
+  background-color: #794acf;
+  font-weight: bold;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+  padding: 0 0.5rem;
+  color: #fff;
+}

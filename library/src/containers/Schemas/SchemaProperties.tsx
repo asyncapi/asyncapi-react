@@ -49,12 +49,20 @@ const schemaPropertiesAccessors: Array<TableAccessor<SchemaElement>> = [
   el => {
     const enumElements = getEnumHTMLElements(el.schema);
     return (
-      el.schema.content.description && (
-        <div>
+      <div>
+        {el.schema.content.description && (
           <Markdown>{el.schema.content.description}</Markdown>
-          {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
-        </div>
-      )
+        )}
+        {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
+        {el.schema.content.pattern && (
+          <div>
+            Must Match{' '}
+            <span className={bemClasses.element(`pattern`)}>
+              {el.schema.content.pattern}
+            </span>
+          </div>
+        )}
+      </div>
     );
   },
 ];
