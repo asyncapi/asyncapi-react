@@ -1,4 +1,3 @@
-import { ErrorObject } from 'ajv';
 import { ConfigInterface } from './config';
 
 // Helpers
@@ -374,7 +373,7 @@ export type NullableAsyncApi = AsyncAPI | null;
 
 export interface AsyncApiState {
   validatedSchema: NullableAsyncApi;
-  error?: ParserError;
+  error?: ErrorObject;
 }
 
 export function isFetchingSchemaInterface(
@@ -388,14 +387,9 @@ export interface FetchingSchemaInterface {
   requestOptions?: RequestInit;
 }
 
-export interface ParserError {
-  message: string;
-  validationError?: ErrorObject[] | null;
-}
-
 export interface ParserReturn {
   data: NullableAsyncApi;
-  error?: ParserError;
+  error?: ErrorObject;
 }
 
 export type TableColumnName = string;
@@ -405,4 +399,38 @@ export type PushStateBehavior = (hash: string) => void;
 export interface Identifier {
   id: string;
   toKebabCase?: boolean;
+}
+
+export interface ValidationError {
+  title: string;
+  jsonPointer: string;
+  startLine: number;
+  startColumn: number;
+  startOffset: number;
+  endLine: number;
+  endColumn: number;
+  endOffset: number;
+}
+
+export interface ErrorObject {
+  type: string;
+  title: string;
+  detail?: string;
+  parsedJSON?: any;
+  validationErrors?: ValidationError[];
+  location?: {
+    startLine: number;
+    startColumn: number;
+    startOffset: number;
+  };
+  refs?: {
+    title: string;
+    jsonPointer: string;
+    startLine: number;
+    startColumn: number;
+    startOffset: number;
+    endLine: number;
+    endColumn: number;
+    endOffset: number;
+  }[];
 }

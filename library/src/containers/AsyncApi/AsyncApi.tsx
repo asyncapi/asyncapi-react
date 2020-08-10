@@ -5,7 +5,7 @@ import {
   AsyncAPI,
   isFetchingSchemaInterface,
   NullableAsyncApi,
-  ParserError,
+  ErrorObject,
   AsyncApiProps,
   PropsSchema,
 } from '../../types';
@@ -24,7 +24,7 @@ import { SchemasComponent } from '../Schemas/Schemas';
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
-  error?: ParserError;
+  error?: ErrorObject;
 }
 
 const defaultAsyncApi: AsyncAPI = {
