@@ -310,6 +310,8 @@ export interface XML {
   wrapped?: boolean;
 }
 
+export type AdditionalProperties = boolean | Record<string, Schema>;
+
 export interface Schema {
   nullable?: boolean;
   format?: string;
@@ -346,7 +348,7 @@ export interface Schema {
   not?: Schema;
   properties?: Record<string, Schema>;
 
-  additionalProperties?: Record<string, Schema>;
+  additionalProperties?: AdditionalProperties;
 
   // old field
 

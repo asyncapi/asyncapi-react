@@ -78,6 +78,10 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         >
           {renderSchemaProps(name, schema)}
         </Table>
+        <div className={bemClasses.element('additional-properties-notice')}>
+          Additional properties are{' '}
+          {schema.additionalProperties === false && 'NOT'} allowed.
+        </div>
       </div>
       {/* we need to disable this component if schema has "not" field anywhere in it */}
       {hasNotField ? null : (
