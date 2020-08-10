@@ -85,5 +85,8 @@
       ],
       "@semantic-release/github"
     ]
+  },
+  "dependencies": {
+    "@asyncapi/parser": "^0.33.0"
   }
 }
