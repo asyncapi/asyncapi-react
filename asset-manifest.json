@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.js": "/asyncapi-react/static/js/main.419da052.chunk.js",
-    "main.js.map": "/asyncapi-react/static/js/main.419da052.chunk.js.map",
+    "main.css": "/asyncapi-react/static/css/main.6c4b6262.chunk.css",
+    "main.js": "/asyncapi-react/static/js/main.a6bc89d1.chunk.js",
+    "main.js.map": "/asyncapi-react/static/js/main.a6bc89d1.chunk.js.map",
     "runtime-main.js": "/asyncapi-react/static/js/runtime-main.c6b19c34.js",
     "runtime-main.js.map": "/asyncapi-react/static/js/runtime-main.c6b19c34.js.map",
-    "static/css/2.6005724f.chunk.css": "/asyncapi-react/static/css/2.6005724f.chunk.css",
-    "static/js/2.8ba36257.chunk.js": "/asyncapi-react/static/js/2.8ba36257.chunk.js",
-    "static/js/2.8ba36257.chunk.js.map": "/asyncapi-react/static/js/2.8ba36257.chunk.js.map",
+    "static/css/2.dce6ea28.chunk.css": "/asyncapi-react/static/css/2.dce6ea28.chunk.css",
+    "static/js/2.338c4c7f.chunk.js": "/asyncapi-react/static/js/2.338c4c7f.chunk.js",
+    "static/js/2.338c4c7f.chunk.js.map": "/asyncapi-react/static/js/2.338c4c7f.chunk.js.map",
     "index.html": "/asyncapi-react/index.html",
-    "precache-manifest.785c20b872975157e92cfad8bfa2fb85.js": "/asyncapi-react/precache-manifest.785c20b872975157e92cfad8bfa2fb85.js",
+    "precache-manifest.9af5abaae47a72856e98dfc8ee449cfb.js": "/asyncapi-react/precache-manifest.9af5abaae47a72856e98dfc8ee449cfb.js",
     "service-worker.js": "/asyncapi-react/service-worker.js",
-    "static/css/2.6005724f.chunk.css.map": "/asyncapi-react/static/css/2.6005724f.chunk.css.map"
+    "static/css/2.dce6ea28.chunk.css.map": "/asyncapi-react/static/css/2.dce6ea28.chunk.css.map",
+    "static/css/main.6c4b6262.chunk.css.map": "/asyncapi-react/static/css/main.6c4b6262.chunk.css.map"
   }
 }
