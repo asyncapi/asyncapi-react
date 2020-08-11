@@ -119,14 +119,6 @@ const renderPropertyDescription = (el: SchemaElement): React.ReactNode => {
         <Markdown>{el.schema.content.description}</Markdown>
       )}
       {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
-      {el.schema.content.pattern && (
-        <div>
-          Must Match{' '}
-          <span className={bemClasses.element(`pattern`)}>
-            {el.schema.content.pattern}
-          </span>
-        </div>
-      )}
       {el.schema.content.default && (
         <div>
           Default: <span>{el.schema.content.default}</span>
@@ -174,6 +166,14 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
             >
               {element.schema.content.format}
+            </span>
+          )}
+          {element.schema.content.pattern && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded normal-case ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+            >
+              must match {element.schema.content.pattern}
             </span>
           )}
           <div className="py-2">{renderPropertyDescription(element)}</div>

@@ -62,8 +62,14 @@
 .lowercase {
   text-transform: lowercase;
 }
+.normal-case {
+  text-transform: none;
+}
 .text-black {
   color: #22292f;
+}
+.text-white {
+  color: #fff;
 }
 .ml-2 {
   margin-left: 0.5rem;
@@ -73,6 +79,9 @@
 }
 .bg-yellow-dark {
   background-color: #f2d024;
+}
+.bg-purple-dark {
+  background-color: #794acf;
 }
 
 /* CURRENT THEME BASED ON KYMA STYLES */
@@ -1333,16 +1342,6 @@
   margin-left: 0.25rem;
   padding: 0 0.5rem;
   color: #f6993f;
-}
-
-.asyncapi__pattern {
-  line-height: 2;
-  background-color: #794acf;
-  font-weight: bold;
-  border-radius: 0.25rem;
-  margin-left: 0.25rem;
-  padding: 0 0.5rem;
-  color: #fff;
 }
 
 .asyncapi__additional-properties-notice {
