@@ -50,7 +50,7 @@
     "get-version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/parser": "^0.33.0",
+    "@asyncapi/parser": "^1.0.0-rc.1",
     "constate": "^1.2.0",
     "dompurify": "^1.0.11",
     "json-schema-ref-parser": "^9.0.6",
