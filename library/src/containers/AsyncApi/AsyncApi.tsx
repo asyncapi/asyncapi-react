@@ -11,7 +11,10 @@ import {
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
-import { parse, parseFromUrl } from '@asyncapi/parser';
+import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
+import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
+import ramlSchemaParser from '@asyncapi/raml-dt-schema-parser';
+import avroSchemaParser from '@asyncapi/avro-schema-parser';
 import { CSS_PREFIX } from '../../constants';
 import { useExpandedContext, useChangeHashContext } from '../../store';
 
@@ -21,6 +24,10 @@ import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
 import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
+
+registerSchemaParser(openapiSchemaParser);
+registerSchemaParser(ramlSchemaParser);
+registerSchemaParser(avroSchemaParser);
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
