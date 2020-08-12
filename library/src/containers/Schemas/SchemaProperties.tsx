@@ -3,69 +3,13 @@ import merge from 'merge';
 
 import { bemClasses } from '../../helpers';
 import { TypeWithKey, Schema } from '../../types';
-import {
-  Markdown,
-  TableAccessor,
-  TableRow,
-  TreeSpace,
-  TreeLeaf,
-} from '../../components';
+import { Markdown, TreeSpace, TreeLeaf } from '../../components';
 
 type SchemaWithKey = TypeWithKey<string, Schema>;
 interface SchemaElement {
   schema: SchemaWithKey;
   treeSpace: number;
 }
-
-const schemaPropertiesAccessors: Array<TableAccessor<SchemaElement>> = [
-  el => (
-    <>
-      {(() => {
-        const treeSpaces = [];
-        if (el.treeSpace) {
-          for (let i = 0; i < el.treeSpace; i++) {
-            treeSpaces.push(<TreeSpace key={i} />);
-          }
-          treeSpaces.push(<TreeLeaf key={el.treeSpace} />);
-        }
-        return treeSpaces;
-      })()}
-      {el.schema.key}
-    </>
-  ),
-  el => <span>{el.schema.content.title}</span>,
-  el => (
-    <span>
-      {el.schema.content.type}
-      {el.schema.content.anyOf ? ` ${el.schema.content.anyOf}` : ''}
-      {el.schema.content.oneOf ? ` ${el.schema.content.oneOf}` : ''}
-      {el.schema.content.items && el.schema.content.items.type
-        ? ` (${el.schema.content.items.type})`
-        : ''}
-    </span>
-  ),
-  el => <span>{el.schema.content.format}</span>,
-  el => <span>{el.schema.content.default}</span>,
-  el => {
-    const enumElements = getEnumHTMLElements(el.schema);
-    return (
-      <div>
-        {el.schema.content.description && (
-          <Markdown>{el.schema.content.description}</Markdown>
-        )}
-        {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
-        {el.schema.content.pattern && (
-          <div>
-            Must Match{' '}
-            <span className={bemClasses.element(`pattern`)}>
-              {el.schema.content.pattern}
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  },
-];
 
 const getEnumHTMLElements = (schema: SchemaWithKey): HTMLElement[] => {
   let enumElements: any[] = [];
@@ -151,6 +95,39 @@ interface Props {
   description?: React.ReactNode;
 }
 
+const renderPropertyName = (el: SchemaElement): React.ReactNode => (
+  <>
+    {(() => {
+      const treeSpaces = [];
+      if (el.treeSpace) {
+        for (let i = 0; i < el.treeSpace; i++) {
+          treeSpaces.push(<TreeSpace key={i} />);
+        }
+        treeSpaces.push(<TreeLeaf key={el.treeSpace} />);
+      }
+      return treeSpaces;
+    })()}
+    {el.schema.key}
+  </>
+);
+
+const renderPropertyDescription = (el: SchemaElement): React.ReactNode => {
+  const enumElements = getEnumHTMLElements(el.schema);
+  return (
+    <div>
+      {el.schema.content.description && (
+        <Markdown>{el.schema.content.description}</Markdown>
+      )}
+      {enumElements.length > 0 && <div>Enum: {enumElements}</div>}
+      {el.schema.content.default && (
+        <div>
+          Default: <span>{el.schema.content.default}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
   name,
   properties,
@@ -167,12 +144,45 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <>
-      <TableRow accessors={schemaPropertiesAccessors} element={element} />
+    <div>
+      <div className="flex py-2">
+        <div className="flex-1">{renderPropertyName(element)}</div>
+        <div className="flex-1">
+          <span className="capitalize text-sm text-teal font-bold">
+            {element.schema.content.type}
+            {element.schema.content.anyOf
+              ? ` ${element.schema.content.anyOf}`
+              : ''}
+            {element.schema.content.oneOf
+              ? ` ${element.schema.content.oneOf}`
+              : ''}
+            {element.schema.content.items && element.schema.content.items.type
+              ? ` (${element.schema.content.items.type})`
+              : ''}
+          </span>
+          {element.schema.content.format && (
+            <span
+              className="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+            >
+              {element.schema.content.format}
+            </span>
+          )}
+          {element.schema.content.pattern && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded normal-case ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+            >
+              must match {element.schema.content.pattern}
+            </span>
+          )}
+          <div className="py-2">{renderPropertyDescription(element)}</div>
+        </div>
+      </div>
       {renderOf(space, alteredProperties.anyOf)}
       {renderOf(space, alteredProperties.oneOf)}
       {renderProperties(alteredProperties, space)}
       {renderItems(alteredProperties, space)}
-    </>
+    </div>
   );
 };

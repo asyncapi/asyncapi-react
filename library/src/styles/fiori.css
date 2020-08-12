@@ -1,3 +1,91 @@
+/*
+  STYLES:
+    - Tailwind Helpers
+    - Fiori theme
+*/
+
+/*
+  These are some rules from Tailwind CSS.
+  The purpose is to help with a future migration, where this file will
+  probably be replaced by Tailwind CSS file.
+*/
+
+.capitalize {
+  text-transform: capitalize;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.text-teal {
+  color: #4dc0b5;
+}
+.font-bold {
+  font-weight: 700;
+}
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.p-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.p-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1 1 0%;
+}
+.no-underline {
+  text-decoration: none;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.normal-case {
+  text-transform: none;
+}
+.text-black {
+  color: #22292f;
+}
+.text-white {
+  color: #fff;
+}
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.rounded {
+  border-radius: 0.25rem;
+}
+.bg-yellow-dark {
+  background-color: #f2d024;
+}
+.bg-purple-dark {
+  background-color: #794acf;
+}
+
+/* CURRENT THEME BASED ON KYMA STYLES */
+
 .asyncapi {
   font-family: '72';
   font-size: 14px;
@@ -1254,16 +1342,6 @@
   margin-left: 0.25rem;
   padding: 0 0.5rem;
   color: #f6993f;
-}
-
-.asyncapi__pattern {
-  line-height: 2;
-  background-color: #794acf;
-  font-weight: bold;
-  border-radius: 0.25rem;
-  margin-left: 0.25rem;
-  padding: 0 0.5rem;
-  color: #fff;
 }
 
 .asyncapi__additional-properties-notice {
