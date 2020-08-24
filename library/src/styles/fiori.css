@@ -418,6 +418,7 @@
 }
 
 .asyncapi__code-pre {
+  overflow-x: auto;
   margin: 0;
   font-size: 13px;
   padding: 12px;
