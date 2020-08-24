@@ -111,7 +111,10 @@ class Beautifier {
         if (prop.description) {
           prop.description = renderMd(prop.description as string);
         }
-        if (typeof prop.additionalProperties !== 'boolean') {
+        if (
+          typeof prop.additionalProperties === 'object' &&
+          prop.additionalProperties !== null
+        ) {
           const propAdditionalProperties: AdditionalProperties =
             prop.additionalProperties;
           const newPropAdditionalProperties: AdditionalProperties = {};
