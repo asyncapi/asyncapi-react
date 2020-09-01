@@ -69,6 +69,29 @@ const renderProperties = (
   ));
 };
 
+const renderAdditionalProperties = (
+  schema: Schema,
+  treeSpace: number,
+): React.ReactNode => {
+  const additionalProperties = schema.additionalProperties;
+
+  if (!additionalProperties || typeof additionalProperties === 'boolean') {
+    return null;
+  }
+
+  return (
+    <div>
+      <SchemaPropertiesComponent
+        key="property-name"
+        name="(property name)"
+        hasDynamicName
+        properties={additionalProperties as Schema}
+        treeSpace={treeSpace}
+      />
+    </div>
+  );
+};
+
 const renderOf = (treeSpace: number, schemas?: Schema[]): React.ReactNode => {
   if (!schemas) {
     return null;
@@ -90,6 +113,7 @@ const renderOf = (treeSpace: number, schemas?: Schema[]): React.ReactNode => {
 
 interface Props {
   name: string;
+  hasDynamicName?: boolean;
   properties: Schema;
   treeSpace: number;
   description?: React.ReactNode;
@@ -130,6 +154,7 @@ const renderPropertyDescription = (el: SchemaElement): React.ReactNode => {
 
 export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
   name,
+  hasDynamicName = false,
   properties,
   treeSpace,
 }) => {
@@ -146,7 +171,9 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
   return (
     <div>
       <div className="flex py-2">
-        <div className="flex-1">{renderPropertyName(element)}</div>
+        <div className={`flex-1 ${hasDynamicName && 'font-italic'}`}>
+          {renderPropertyName(element)}
+        </div>
         <div className="flex-1">
           <span className="capitalize text-sm text-teal font-bold">
             {element.schema.content.type}
@@ -176,12 +203,124 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               must match {element.schema.content.pattern}
             </span>
           )}
+          {element.schema.content.uniqueItems && (
+            <span
+              className="bg-red-700 font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+            >
+              Unique
+            </span>
+          )}
+          {element.schema.content.minItems && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At least ${element.schema.content.minItems} items`}
+            >
+              &gt;= {element.schema.content.minItems} items
+            </span>
+          )}
+          {element.schema.content.maxItems && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At most ${element.schema.content.maxItems} items`}
+            >
+              &lt;= {element.schema.content.maxItems} items
+            </span>
+          )}
+          {element.schema.content.minLength && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At least ${element.schema.content.minLength} characters long`}
+            >
+              length &gt;= {element.schema.content.minLength}
+            </span>
+          )}
+          {element.schema.content.maxLength && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At most ${element.schema.content.maxLength} characters long`}
+            >
+              length &lt;= {element.schema.content.maxLength}
+            </span>
+          )}
+          {element.schema.content.minimum && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At least ${element.schema.content.minimum}`}
+            >
+              &gt;= {element.schema.content.minimum}
+            </span>
+          )}
+          {element.schema.content.maximum && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`At most ${element.schema.content.maximum}`}
+            >
+              &lt;= {element.schema.content.maximum}
+            </span>
+          )}
+          {element.schema.content.exclusiveMinimum && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`Greater than ${element.schema.content.exclusiveMinimum}`}
+            >
+              &gt; {element.schema.content.exclusiveMinimum}
+            </span>
+          )}
+          {element.schema.content.exclusiveMaximum && (
+            <span
+              className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+              style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+              title={`Less than ${element.schema.content.exclusiveMaximum}`}
+            >
+              &lt; {element.schema.content.exclusiveMaximum}
+            </span>
+          )}
           <div className="py-2">{renderPropertyDescription(element)}</div>
+          {element.schema.content.type === 'object' && (
+            <div className="font-italic text-gray-600 text-sm">
+              {(!element.schema.content.additionalProperties ||
+                typeof element.schema.content.additionalProperties ===
+                  'boolean') && (
+                <p className="my-0">
+                  Additional properties are{' '}
+                  {element.schema.content.additionalProperties === false &&
+                    'NOT'}{' '}
+                  allowed.
+                </p>
+              )}
+              {element.schema.content.additionalProperties &&
+                typeof element.schema.content.additionalProperties ===
+                  'object' && (
+                  <p className="my-0">
+                    Additional properties must adhere to the following schema.
+                  </p>
+                )}
+            </div>
+          )}
+          {element.schema.content.items && (
+            <div className="font-italic text-gray-600 text-sm">
+              {element.schema.content.items &&
+                typeof element.schema.content.items === 'object' && (
+                  <p className="my-0">
+                    Array items must adhere to the following schema.
+                  </p>
+                )}
+            </div>
+          )}
         </div>
       </div>
       {renderOf(space, alteredProperties.anyOf)}
       {renderOf(space, alteredProperties.oneOf)}
       {renderProperties(alteredProperties, space)}
+      {renderAdditionalProperties(alteredProperties, space)}
       {renderItems(alteredProperties, space)}
     </div>
   );

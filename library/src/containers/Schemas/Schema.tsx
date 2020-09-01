@@ -28,15 +28,20 @@ const renderSchemaProps = (
 ): React.ReactNode => {
   const properties = schema.properties;
 
-  if (!properties) {
-    return (
-      <SchemaProperties name={schemaName} properties={schema} treeSpace={0} />
-    );
+  if (properties) {
+    return Object.entries(properties).map(([key, prop]) => (
+      <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
+    ));
   }
 
-  return Object.entries(properties).map(([key, prop]) => (
-    <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
-  ));
+  return (
+    <SchemaProperties
+      name={schemaName}
+      hasDynamicName
+      properties={schema}
+      treeSpace={0}
+    />
+  );
 };
 
 export const SchemaComponent: React.FunctionComponent<Props> = ({
@@ -68,10 +73,6 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
     <>
       <div className={`${bemClasses.element(`${className}-table`)} p-4`}>
         {renderSchemaProps(name, schema)}
-        <div className={bemClasses.element('additional-properties-notice')}>
-          Additional properties are{' '}
-          {schema.additionalProperties === false && 'NOT'} allowed.
-        </div>
       </div>
       {/* we need to disable this component if schema has "not" field anywhere in it */}
       {hasNotField ? null : (

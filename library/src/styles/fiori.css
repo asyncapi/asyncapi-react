@@ -22,6 +22,9 @@
 .font-bold {
   font-weight: 700;
 }
+.font-italic {
+  font-style: italic;
+}
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -71,6 +74,16 @@
 .text-white {
   color: #fff;
 }
+.text-gray-600 {
+  color: #718096;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.my-0 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -82,6 +95,9 @@
 }
 .bg-purple-dark {
   background-color: #794acf;
+}
+.bg-red-700 {
+  background-color: #c53030;
 }
 
 /* CURRENT THEME BASED ON KYMA STYLES */
@@ -1343,15 +1359,4 @@
   margin-left: 0.25rem;
   padding: 0 0.5rem;
   color: #f6993f;
-}
-
-.asyncapi__additional-properties-notice {
-  text-align: center;
-  font-style: italic;
-  font-weight: bold;
-  color: #333333;
-  font-size: 0.75rem;
-  line-height: 2;
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
 }
