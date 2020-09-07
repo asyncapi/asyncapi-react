@@ -122,11 +122,11 @@ export enum CONTAINER_LABELS {
   MESSAGES = 'messages',
   SCHEMAS = 'schemas',
 }
-export const CONTAINER_LABELS_VALUES = Object.values(CONTAINER_LABELS);
+export const CONTAINER_LABELS_VALUES = Object.values<string>(CONTAINER_LABELS);
 export enum ITEM_LABELS {
   CHANNEL = 'channel',
   SERVER = 'server',
   MESSAGE = 'message',
   SCHEMA = 'schema',
 }
-export const ITEM_LABELS_VALUES = Object.values(ITEM_LABELS);
+export const ITEM_LABELS_VALUES = Object.values<string>(ITEM_LABELS);

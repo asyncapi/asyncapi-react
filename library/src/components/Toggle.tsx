@@ -82,7 +82,7 @@ export const Toggle: React.FunctionComponent<Props> = ({
     // for collapsing items in container when container will collapse
     if (
       !(clickedItem && clickedItem.state) &&
-      ITEM_LABELS_VALUES.toString().includes(label) &&
+      ITEM_LABELS_VALUES.includes(label) &&
       clickedItem.label === inContainer(label as ITEM_LABELS)
     ) {
       setExpanded(false);
@@ -93,7 +93,7 @@ export const Toggle: React.FunctionComponent<Props> = ({
       // for container when hash will change
       if (
         clickedItem.label === label &&
-        CONTAINER_LABELS_VALUES.toString().includes(label)
+        CONTAINER_LABELS_VALUES.includes(label)
       ) {
         setExpanded(true);
         return;
