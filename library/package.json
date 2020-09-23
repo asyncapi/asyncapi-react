@@ -40,7 +40,7 @@
   ],
   "scripts": {
     "start": "tsc --watch",
-    "build": "tsc && npm run copyCss && npm run bundle-webcomponent",
+    "build": "tsc && npm run copyCss",
     "test": "jest --detectOpenHandles",
     "testWatch": "jest --detectOpenHandles --watch",
     "copyCss": "cp -r ./src/styles ./lib",
@@ -57,6 +57,7 @@
     "@asyncapi/raml-dt-schema-parser": "^2.0.0",
     "constate": "^1.2.0",
     "dompurify": "^1.0.11",
+    "file-system": "^2.2.2",
     "json-schema-ref-parser": "^9.0.6",
     "markdown-it": "^9.1.0",
     "merge": "^1.2.1",
@@ -72,11 +73,11 @@
     "@types/markdown-it": "^0.0.8",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
-    "awesome-typescript-loader": "^5.2.1",
     "jest": "^24.9.0",
     "react": "^16.9.0",
+    "awesome-typescript-loader": "^5.2.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.7.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.12"
   }
 }
