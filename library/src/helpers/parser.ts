@@ -1,12 +1,8 @@
-import {
-  ParserErrorUnsupportedVersion,
-  ParserErrorNoJS,
-} from '@asyncapi/parser';
 import { Options as ParserOptions } from 'json-schema-ref-parser';
 
-import { ParserReturn, FetchingSchemaInterface } from '../types';
+import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
-import { UNSUPPORTED_SCHEMA_VERSION } from '../constants';
+import { VALIDATION_ERRORS_TYPE } from '../constants';
 
 type ParseDocument = (
   content: string | any,
@@ -56,25 +52,15 @@ export class Parser {
     }
   }
 
-  private handleError = (err: any): ParserReturn => {
-    if (
-      err instanceof ParserErrorUnsupportedVersion ||
-      err instanceof ParserErrorNoJS
-    ) {
-      return { data: null, error: { message: err.message } };
-    }
-
-    if (err.parsedJSON && err.parsedJSON.asyncapi.startsWith('1')) {
+  private handleError = (err: ErrorObject): ParserReturn => {
+    if (err.type === VALIDATION_ERRORS_TYPE) {
       return {
-        data: null,
-        error: { message: UNSUPPORTED_SCHEMA_VERSION },
+        data: err.parsedJSON || null,
+        error: err,
       };
     }
 
-    return {
-      data: err.parsedJSON || null,
-      error: { message: err.message, validationError: err.errors },
-    };
+    return { data: null, error: err };
   };
 
   private extractDocument = (data: any): ParserReturn => {
