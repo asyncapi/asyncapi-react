@@ -6,8 +6,8 @@ export const CONTENT_TYPES_SITE =
 export const COLLAPSE_ALL_TEXT = 'Collapse All';
 export const EXPAND_ALL_TEXT = 'Expand All';
 
-export const UNSUPPORTED_SCHEMA_VERSION =
-  'AsyncAPI version is unsupported, use version 2.0 or higher';
+export const VALIDATION_ERRORS_TYPE =
+  'https://github.com/asyncapi/parser-js/validation-errors';
 export const SERVERS = 'Servers';
 
 export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
@@ -122,11 +122,11 @@ export enum CONTAINER_LABELS {
   MESSAGES = 'messages',
   SCHEMAS = 'schemas',
 }
-export const CONTAINER_LABELS_VALUES = Object.values(CONTAINER_LABELS);
+export const CONTAINER_LABELS_VALUES = Object.values<string>(CONTAINER_LABELS);
 export enum ITEM_LABELS {
   CHANNEL = 'channel',
   SERVER = 'server',
   MESSAGE = 'message',
   SCHEMA = 'schema',
 }
-export const ITEM_LABELS_VALUES = Object.values(ITEM_LABELS);
+export const ITEM_LABELS_VALUES = Object.values<string>(ITEM_LABELS);

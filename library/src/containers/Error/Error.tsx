@@ -1,43 +1,42 @@
 import React from 'react';
-import { ErrorObject } from 'ajv';
 
 import { bemClasses } from '../../helpers';
-import { ParserError } from '../../types';
 import { Toggle } from '../../components';
 import { ERROR_TEXT } from '../../constants';
+import { ErrorObject, ValidationError } from '../../types';
 
-const renderErrors = (
-  error: ParserError['validationError'],
-): React.ReactNode => {
-  if (!error) {
+const renderErrors = (errors: ValidationError[]): React.ReactNode => {
+  if (!errors) {
     return null;
   }
 
-  return error
-    .map((singleError: ErrorObject, index: number) => {
-      const formattedError = formatErrors(singleError);
+  return errors
+    .map((singleError: ValidationError, index: number) => {
+      const formattedError = formatError(singleError);
 
       if (!formattedError) {
         return null;
       }
       return (
-        <code className={bemClasses.element(`error-content-code`)} key={index}>
-          {formattedError}
-        </code>
+        <div>
+          <code
+            className={bemClasses.element(`error-content-code`)}
+            key={index}
+          >
+            {formattedError}
+          </code>
+        </div>
       );
     })
     .filter(Boolean);
 };
 
-export const formatErrors = (singleError: ErrorObject): string => {
-  const { message, dataPath, params, keyword } = singleError;
-
-  const info = Object.values(params)[0];
-  return `${dataPath} ${message}${keyword === 'type' ? '' : `: ${info}`}`;
+export const formatError = (singleError: ValidationError): string => {
+  return singleError.title;
 };
 
 interface Props {
-  error: ParserError;
+  error: ErrorObject;
 }
 
 export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
@@ -45,21 +44,21 @@ export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
     return null;
   }
   const className = `error`;
-  const { message, validationError } = error;
+  const { title, validationErrors } = error;
 
   const header = (
     <h2>
-      {ERROR_TEXT}: {message}
+      {ERROR_TEXT}: {title}
     </h2>
   );
 
   return (
     <section className={bemClasses.element(className)}>
       <Toggle header={header} className={className}>
-        {!!validationError && (
+        {validationErrors && validationErrors.length && (
           <div className={bemClasses.element(`${className}-body`)}>
             <pre className={bemClasses.element(`${className}-body-pre`)}>
-              {renderErrors(validationError)}
+              {renderErrors(validationErrors)}
             </pre>
           </div>
         )}

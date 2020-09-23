@@ -85,5 +85,6 @@
       ],
       "@semantic-release/github"
     ]
-  }
+  },
+  "dependencies": {}
 }
