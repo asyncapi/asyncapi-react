@@ -66,6 +66,45 @@ import "@kyma-project/asyncapi-react/lib/styles/fiori.css";
 
 For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
 
+## Web Component
+
+If you are not using react you may want to use the asyncapi-rect component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+
+### Building the web component
+
+```bash
+npm run boostrap
+cd library
+npm run bundle-webcomponents
+```
+
+the web component is saved as library/lib/async-api-web-component.js
+
+### Usage
+
+Copy the async-api-web-component.js file along with the fiori.css (library/lib/styles/fiori.css) to your project.
+
+Using Angular for instance, you can then use the component as follows:
+
+`angular.json`
+ 
+     {
+      "projects": {
+        "project-name": {
+          "architect": {
+            "build": {
+              "options": {
+                "scripts": [
+                  "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
+                  "src/assets/async-api/async-api-web-component.js"
+                ]
+
+In an Angular component you can use the following way
+
+    <async-api-component [schema]="asyncApiDoc" [config]="asyncApiConfig"></async-api-component>
+
+Whereas asyncApiDoc is the AsyncAPI YAML doc and config is the component configuration, just as it is for the react component.
+
 ## Development
 
 For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./docs/development/guide.md).
