@@ -78,6 +78,10 @@ class Beautifier {
       return schema;
     }
 
+    if (schema.description) {
+      schema.description = renderMd(schema.description as string);
+    }
+
     if (schema.properties) {
       const properties = schema.properties;
       const newProperties: Record<string, Schema> = properties;
@@ -96,6 +100,9 @@ class Beautifier {
           }
 
           prop.properties = newPropProperties;
+        }
+        if (prop.items) {
+          prop.items = this.beautifySchema(prop.items);
         }
 
         newProperties[key] = prop;
@@ -133,6 +140,10 @@ class Beautifier {
       schema.additionalProperties = newAdditionalProperties;
     }
 
+    if (schema.items) {
+      schema.items = this.beautifySchema(schema.items);
+    }
+
     return schema;
   }
 
@@ -165,6 +176,7 @@ class Beautifier {
     }
     if (message.payload) {
       message.payload = this.resolveAllOf(message.payload);
+      message.payload = this.beautifySchema(message.payload);
     }
     if (message.headers) {
       message.headers = this.resolveAllOf(message.headers);
