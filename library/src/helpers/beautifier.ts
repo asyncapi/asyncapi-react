@@ -216,6 +216,9 @@ class Beautifier {
   }
 
   private beautifyOperation(operation: Operation): Operation {
+    if (operation.description) {
+      operation.description = renderMd(operation.description as string);
+    }
     if (!operation.message) {
       return operation;
     }

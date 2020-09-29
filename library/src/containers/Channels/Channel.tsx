@@ -3,7 +3,7 @@ import React from 'react';
 import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
 
-import { Badge, BadgeType, Toggle } from '../../components';
+import { Badge, BadgeType, Markdown, Toggle } from '../../components';
 import { bemClasses, removeSpecialChars } from '../../helpers';
 import { MESSAGE_TEXT, ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
 import { Channel, isRawMessage, PayloadType } from '../../types';
@@ -75,6 +75,11 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
 
   const content = (
     <>
+      {channel.description && (
+        <div className={bemClasses.element(`${className}-description`)}>
+          <Markdown>{channel.description}</Markdown>
+        </div>
+      )}
       <ParametersComponent
         parameters={channel.parameters}
         identifier={bemClasses.identifier([
