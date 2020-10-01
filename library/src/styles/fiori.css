@@ -77,9 +77,6 @@
 .text-gray-600 {
   color: #718096;
 }
-.text-sm {
-  font-size: 0.875rem;
-}
 .my-0 {
   margin-top: 0;
   margin-bottom: 0;
@@ -199,10 +196,6 @@
 }
 
 .asyncapi__markdown {
-}
-.asyncapi__markdown > div > ul {
-  margin: 0;
-  padding-left: 16px;
 }
 .asyncapi__markdown > div > ul {
   margin: 0;
@@ -404,7 +397,6 @@
   background-color: #e2eaf2;
   font-size: 11px;
   font-family: 72;
-  font-weight: 300;
   text-transform: uppercase;
   font-weight: normal;
   font-style: normal;
