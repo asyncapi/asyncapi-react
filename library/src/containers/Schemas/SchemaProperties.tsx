@@ -15,9 +15,12 @@ const getEnumHTMLElements = (schema: SchemaWithKey): HTMLElement[] => {
   let enumElements: any[] = [];
   if (schema.content.enum && schema.content.enum.length) {
     enumElements = schema.content.enum.map((value: any, i: number) => (
-      <span className={bemClasses.element(`enum`)} key={i}>
-        "{value}"
-      </span>
+      <>
+        {' '}
+        <span className={bemClasses.element(`enum`)} key={i}>
+          "{value}"
+        </span>
+      </>
     ));
   }
 
