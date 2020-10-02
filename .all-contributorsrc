@@ -88,6 +88,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "dhenneke",
+      "name": "Dominik Henneke",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/720821?v=4",
+      "profile": "https://github.com/dhenneke",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
