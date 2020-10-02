@@ -1247,6 +1247,14 @@
 .asyncapi__channel-operation {
 }
 
+.asyncapi__channel-operation-description {
+  padding: 16px 16px 0;
+}
+
+.asyncapi__channel-description {
+  padding: 0 16px 16px;
+}
+
 .asyncapi__channel-parameters {
 }
 
