@@ -153,6 +153,7 @@
 
 .asyncapi__toggle-button {
   border: none;
+  background: none;
   height: 100%;
   cursor: pointer;
 }
