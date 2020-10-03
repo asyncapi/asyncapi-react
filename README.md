@@ -121,6 +121,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
   <tr>
     <td align="center"><a href="https://github.com/dhenneke"><img src="https://avatars0.githubusercontent.com/u/720821?v=4" width="100px;" alt=""/><br /><sub><b>Dominik Henneke</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=dhenneke" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Fox32"><img src="https://avatars1.githubusercontent.com/u/648527?v=4" width="100px;" alt=""/><br /><sub><b>Oliver Sand</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=Fox32" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/JakubIwanowski"><img src="https://avatars0.githubusercontent.com/u/25127286?v=4" width="100px;" alt=""/><br /><sub><b>Jakub Iwanowski</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=JakubIwanowski" title="Code">💻</a></td>
   </tr>
 </table>
 
