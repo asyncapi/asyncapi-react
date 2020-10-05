@@ -47,7 +47,7 @@ export function scrollIntoViewOfAnchor(hash: string): void {
         );
         scroll(target);
       }, 50);
-    } catch (e) {
+    } catch (error) {
       return;
     }
   }
