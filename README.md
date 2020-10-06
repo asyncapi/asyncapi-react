@@ -72,17 +72,23 @@ If you are not using react you may want to use the asyncapi-rect component as a 
 
 ### Building the web component
 
+The web component is built along with the library and playground if invoked from project root:
+
 ```bash
 npm run boostrap
-cd library
+```
+
+In case you want to only rebuild the web component
+```bash
+cd web-component
 npm run bundle-webcomponent
 ```
 
-the web component is saved as library/lib/async-api-web-component.js
+the web component is saved as web-component/lib/async-api-web-component.js
 
 ### Usage
 
-Copy the async-api-web-component.js file along with the fiori.css (library/lib/styles/fiori.css) to your project.
+Copy the async-api-web-component.js file along with the fiori.css (web-component/lib/styles/fiori.css) to your project.
 
 Using Angular for instance, you can then use the component as follows:
 
