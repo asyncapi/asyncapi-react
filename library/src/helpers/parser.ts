@@ -1,18 +1,13 @@
-import { Options as ParserOptions } from 'json-schema-ref-parser';
-
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
-type ParseDocument = (
-  content: string | any,
-  parserOptions?: ParserOptions,
-) => Promise<any>;
+type ParseDocument = (content: string | any, options?: any) => Promise<any>;
 
 type ParseDocumentFromURL = (
   url: string,
   requestOptions?: RequestInit,
-  parserOptions?: ParserOptions,
+  options?: any,
 ) => Promise<any>;
 
 export class Parser {
@@ -26,7 +21,7 @@ export class Parser {
 
   async parse(
     content: string | any,
-    parserOptions?: ParserOptions,
+    parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
       const data = await this.parseSchema(content, parserOptions);
@@ -38,7 +33,7 @@ export class Parser {
 
   async parseFromUrl(
     arg: FetchingSchemaInterface,
-    parserOptions?: ParserOptions,
+    parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
       const data = await this.parseSchemaFromURL(
@@ -69,7 +64,7 @@ export class Parser {
         data: data.json(),
       };
     }
-    if (data._json instanceof Object) {
+    if (typeof data._json === 'object') {
       return {
         data: data._json,
       };

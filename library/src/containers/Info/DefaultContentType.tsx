@@ -8,9 +8,9 @@ interface DefaultContentTypeProps {
   type: string;
 }
 
-export const DefaultContentTypeComponent: React.FunctionComponent<
-  DefaultContentTypeProps
-> = ({ type }) => (
+export const DefaultContentTypeComponent: React.FunctionComponent<DefaultContentTypeProps> = ({
+  type,
+}) => (
   <div>
     <Href href={`${CONTENT_TYPES_SITE}/${type}`}>
       <span>{type}</span>

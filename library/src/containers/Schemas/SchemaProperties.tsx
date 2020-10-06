@@ -87,7 +87,7 @@ const renderAdditionalProperties = (
       <SchemaPropertiesComponent
         key="property-name"
         name="(property name)"
-        hasDynamicName
+        hasDynamicName={true}
         properties={additionalProperties as Schema}
         treeSpace={treeSpace}
       />

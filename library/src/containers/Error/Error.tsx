@@ -18,7 +18,7 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
         return null;
       }
       return (
-        <div>
+        <div key={index}>
           <code
             className={bemClasses.element(`error-content-code`)}
             key={index}
@@ -31,9 +31,8 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
     .filter(Boolean);
 };
 
-export const formatError = (singleError: ValidationError): string => {
-  return singleError.title;
-};
+export const formatError = (singleError: ValidationError): string =>
+  singleError.title;
 
 interface Props {
   error: ErrorObject;
