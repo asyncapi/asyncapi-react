@@ -6,7 +6,7 @@ describe('toKebabCase', () => {
   });
 
   test('should return empty string if input is undefined', () => {
-    expect('').toEqual(toKebabCase(undefined));
+    expect('').toEqual(toKebabCase());
   });
 
   test('should work with `lorem ipsum BIG-letter @!#$% something`', () => {
