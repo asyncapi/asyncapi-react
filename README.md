@@ -75,7 +75,7 @@ If you are not using react you may want to use the asyncapi-rect component as a 
 ```bash
 npm run boostrap
 cd library
-npm run bundle-webcomponents
+npm run bundle-webcomponent
 ```
 
 the web component is saved as library/lib/async-api-web-component.js
@@ -88,6 +88,7 @@ Using Angular for instance, you can then use the component as follows:
 
 `angular.json`
  
+```json
      {
       "projects": {
         "project-name": {
@@ -98,11 +99,14 @@ Using Angular for instance, you can then use the component as follows:
                   "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
                   "src/assets/async-api/async-api-web-component.js"
                 ]
+ ```
 
 In an Angular component you can use the following way
 
-    <async-api-component [schema]="asyncApiDoc" [config]="asyncApiConfig"></async-api-component>
-
+```html
+    <async-api-component [schema]="asyncApiDoc" [config]="asyncApiConfig" [cssImportPath]="optionalCssImportPath"></async-api-component>
+```
+ 
 Whereas asyncApiDoc is the AsyncAPI YAML doc and config is the component configuration, just as it is for the react component.
 
 ## Development

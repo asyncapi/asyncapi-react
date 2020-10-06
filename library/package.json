@@ -47,8 +47,7 @@
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "get-version": "echo $npm_package_version",
-    "bundle-webcomponent": "webpack"
+    "get-version": "echo $npm_package_version"
   },
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.1.2",
@@ -61,10 +60,7 @@
     "markdown-it": "^9.1.0",
     "merge": "^1.2.1",
     "openapi-sampler": "^1.0.0-beta.15",
-    "react-dom": "^16.11.0",
-    "react-use": "^12.2.0",
-    "web-react-components": "^1.4.2",
-    "webpack": "^4.41.2"
+    "react-use": "^12.2.0"
   },
   "devDependencies": {
     "@types/dompurify": "^0.0.33",
@@ -74,9 +70,6 @@
     "@types/react": "^16.9.2",
     "jest": "^24.9.0",
     "react": "^16.9.0",
-    "awesome-typescript-loader": "^5.2.1",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.7.2",
-    "webpack-cli": "^3.3.12"
+    "ts-jest": "^24.0.2"
   }
 }

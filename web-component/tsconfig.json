@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "baseUrl": "./src",
+    "declaration": true
+  },
+  "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
+  "exclude": ["lib/**/*"]
+}

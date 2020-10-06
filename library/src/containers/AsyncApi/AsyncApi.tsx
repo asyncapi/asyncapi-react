@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Options as ParserOptions } from 'json-schema-ref-parser';
 
-// @ts-ignore
-import { register } from 'web-react-components';
-
 import {
   AsyncAPI,
   isFetchingSchemaInterface,
@@ -123,7 +120,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         numberOfExpandedElement={initialExpandedElements}
       >
         <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
-          <style>@import '/assets/async-api/fiori.css';</style>
           <main className={CSS_PREFIX} id={bemClasses.getSchemaID()}>
             {concatenatedConfig.showErrors && !!error && (
               <ErrorComponent error={error} />
@@ -215,8 +211,5 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     return beautifier.beautify(schema);
   }
 }
-
-// call it to register the web component
-register(AsyncApiComponent, 'async-api-component', ['schema', 'config']);
 
 export default AsyncApiComponent;
