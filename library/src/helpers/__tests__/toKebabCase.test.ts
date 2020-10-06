@@ -5,7 +5,7 @@ describe('toKebabCase', () => {
     expect('').toEqual(toKebabCase(''));
   });
 
-  test('should return empty string if input is undefined', () => {
+  test('should return empty string if input is not provided', () => {
     expect('').toEqual(toKebabCase());
   });
 
