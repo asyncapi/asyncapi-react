@@ -115,6 +115,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "depimomo",
+      "name": "depimomo",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12368942?v=4",
+      "profile": "https://github.com/depimomo",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
