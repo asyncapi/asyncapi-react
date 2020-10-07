@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { parse, parseFromUrl } from '@asyncapi/parser';
 
 import {
   AsyncAPI,
@@ -44,8 +43,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   constructor(props: AsyncApiProps) {
     super(props);
-
-    this.parser = new Parser(parse, parseFromUrl);
+    this.parser = new Parser();
   }
 
   async componentDidMount() {

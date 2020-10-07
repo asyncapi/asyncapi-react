@@ -1,3 +1,7 @@
+import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
+import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
+import avroSchemaParser from '@asyncapi/avro-schema-parser';
+
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
@@ -10,13 +14,16 @@ type ParseDocumentFromURL = (
   options?: any,
 ) => Promise<any>;
 
+registerSchemaParser(openapiSchemaParser);
+registerSchemaParser(avroSchemaParser);
+
 export class Parser {
   private parseSchema: ParseDocument;
   private parseSchemaFromURL: ParseDocumentFromURL;
 
-  constructor(parse: ParseDocument, parseURL: ParseDocumentFromURL) {
+  constructor() {
     this.parseSchema = parse;
-    this.parseSchemaFromURL = parseURL;
+    this.parseSchemaFromURL = parseFromUrl;
   }
 
   async parse(
