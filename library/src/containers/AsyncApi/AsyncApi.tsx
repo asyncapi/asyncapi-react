@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Options as ParserOptions } from 'json-schema-ref-parser';
 
 import {
   AsyncAPI,
@@ -11,10 +10,6 @@ import {
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
-import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
-import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
-import ramlSchemaParser from '@asyncapi/raml-dt-schema-parser';
-import avroSchemaParser from '@asyncapi/avro-schema-parser';
 import { CSS_PREFIX } from '../../constants';
 import { useExpandedContext, useChangeHashContext } from '../../store';
 
@@ -24,10 +19,6 @@ import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
 import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
-
-registerSchemaParser(openapiSchemaParser);
-registerSchemaParser(ramlSchemaParser);
-registerSchemaParser(avroSchemaParser);
 
 interface AsyncAPIState {
   validatedSchema: NullableAsyncApi;
@@ -52,8 +43,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   constructor(props: AsyncApiProps) {
     super(props);
-
-    this.parser = new Parser(parse, parseFromUrl);
+    this.parser = new Parser();
   }
 
   async componentDidMount() {
@@ -181,10 +171,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private async parseSchema(
-    schema: PropsSchema,
-    parserOptions?: ParserOptions,
-  ) {
+  private async parseSchema(schema: PropsSchema, parserOptions?: any) {
     if (isFetchingSchemaInterface(schema)) {
       const parsedFromUrl = await this.parser.parseFromUrl(
         schema,

@@ -37,7 +37,7 @@ const renderSchemaProps = (
   return (
     <SchemaProperties
       name={schemaName}
-      hasDynamicName
+      hasDynamicName={true}
       properties={schema}
       treeSpace={0}
     />
