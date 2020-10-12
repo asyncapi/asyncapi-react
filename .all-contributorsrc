@@ -124,6 +124,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "sanskar-p",
+      "name": "Sanskar Patro",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/54014518?v=4",
+      "profile": "https://github.com/sanskar-p",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
