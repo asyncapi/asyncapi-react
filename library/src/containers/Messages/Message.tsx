@@ -71,6 +71,8 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     );
   }
 
+  title = title || message.title || message.name;
+
   const summary = message.summary && (
     <div className={bemClasses.element(`${className}-summary`)}>
       <Markdown>{message.summary}</Markdown>

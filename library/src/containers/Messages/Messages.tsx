@@ -5,7 +5,7 @@ import { MessageComponent } from './Message';
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle } from '../../components';
-import { Message } from '../../types';
+import { Message, RawMessage } from '../../types';
 import { MESSAGES_TEXT, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
@@ -36,17 +36,28 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   const header = <h2>{MESSAGES_TEXT}</h2>;
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(messages).map(([key, message]) => (
-        <li key={key} className={bemClasses.element(`${className}-list-item`)}>
-          <MessageComponent
-            title={messagesLength < 2 && inChannel ? '' : key}
-            message={message}
-            hideTags={true}
-            inChannel={false}
-            toggleExpand={expand && expand.elements}
-          />
-        </li>
-      ))}
+      {Object.entries(messages).map(([key, message]) => {
+        const title =
+          messagesLength < 2 && inChannel
+            ? ''
+            : (message as RawMessage).title ||
+              (message as RawMessage).name ||
+              key;
+        return (
+          <li
+            key={key}
+            className={bemClasses.element(`${className}-list-item`)}
+          >
+            <MessageComponent
+              title={title}
+              message={message}
+              hideTags={true}
+              inChannel={false}
+              toggleExpand={expand && expand.elements}
+            />
+          </li>
+        );
+      })}
     </ul>
   );
 
