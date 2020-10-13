@@ -37,6 +37,11 @@ jobs:
           GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
         run: npm run release
+      # Sleep for 10 seconds before using latest version in playground, because sometimes NPM needs additional few seconds to `save` package in registry
+      - name: Sleep for 10 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
       - name: Get version from package.json after release step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
