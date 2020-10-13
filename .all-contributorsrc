@@ -133,6 +133,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "DanielChuDC",
+      "name": "danielchu",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/52316624?v=4",
+      "profile": "https://github.com/DanielChuDC",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
