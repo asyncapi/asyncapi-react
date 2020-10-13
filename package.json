@@ -32,7 +32,7 @@
     "tslint-react-hooks": "^2.1.1",
     "lint-staged": "^8.2.1",
     "husky": "^2.4.1",
-    "lerna": "^3.15.0",
+    "lerna": "^3.22.1",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
     "typescript": "^3.5.3",
@@ -40,7 +40,7 @@
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.3",
     "@semantic-release/release-notes-generator": "^9.0.1",
-    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "conventional-changelog-conventionalcommits": "^4.4.0",
     "semantic-release": "^17.0.4"
   },
   "lint-staged": {
