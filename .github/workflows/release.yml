@@ -40,10 +40,11 @@ jobs:
       - name: Get version from package.json after release step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
-      - name: Use latest version in the Playground #this will update package.json and a lock file for the playground that will also be pushed to PR with next step
+      - name: Use latest version in the Playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
-        # Sleep for 10 seconds before using latest version in playground, because sometimes NPM needs additional few seconds to `save` package in registry
-        run: sleep 10 && npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
+        run: |
+          sleep 10 # sleep for 10 seconds before using latest version in playground, because sometimes NPM needs additional few seconds to `save` package in registry
+          npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
         working-directory: ./playground
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
