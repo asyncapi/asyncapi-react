@@ -214,7 +214,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               Unique
             </span>
           )}
-          {element.schema.content.minItems && (
+          {typeof element.schema.content.minItems === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
@@ -223,7 +223,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               &gt;= {element.schema.content.minItems} items
             </span>
           )}
-          {element.schema.content.maxItems && (
+          {typeof element.schema.content.maxItems === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
@@ -232,7 +232,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               &lt;= {element.schema.content.maxItems} items
             </span>
           )}
-          {element.schema.content.minLength && (
+          {typeof element.schema.content.minLength === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
@@ -241,7 +241,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               length &gt;= {element.schema.content.minLength}
             </span>
           )}
-          {element.schema.content.maxLength && (
+          {typeof element.schema.content.maxLength === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
@@ -259,7 +259,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               &gt;= {element.schema.content.minimum}
             </span>
           )}
-          {element.schema.content.maximum && (
+          {typeof element.schema.content.maximum === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
