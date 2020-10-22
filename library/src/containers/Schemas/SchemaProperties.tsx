@@ -250,7 +250,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
               length &lt;= {element.schema.content.maxLength}
             </span>
           )}
-          {element.schema.content.minimum && (
+          {typeof element.schema.content.minimum === 'number' && (
             <span
               className="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
               style={{ height: '20px', fontSize: '11px', padding: '3px' }}
