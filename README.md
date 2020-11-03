@@ -68,7 +68,7 @@ For information on how to change styles, read the [Style Modification](./docs/co
 
 ## Web Component
 
-If you are not using the React you may want to use the `@kyma-project/asyncapi-react` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+If you are not using React you may want to use the `@kyma-project/asyncapi-react` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
 
 ### Installation
 
@@ -80,9 +80,9 @@ npm install --save @kyma-project/asyncapi-web-component
 
 ### Using in Angular
 
-To using component in Angular, follows these steps:
+To use component in Angular, follow these steps:
 
-1. Update `AppModule` with adding the `CUSTOM_ELEMENTS_SCHEMA` to `schemas` array in the `NgModule` metadata:
+1. Update `AppModule` by adding the `CUSTOM_ELEMENTS_SCHEMA` to the `schemas` array in the `NgModule` metadata:
 
   ```ts
   import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -96,7 +96,7 @@ To using component in Angular, follows these steps:
   export class AppModule {}
   ```
 
-2. Import the `@kyma-project/asyncapi-web-component` module in an Angular's component where you to want use the web component: 
+2. Import the `@kyma-project/asyncapi-web-component` module in an Angular's component where you want to use the web component: 
 
   ```ts
   import { Component } from '@angular/core';
@@ -112,7 +112,7 @@ To using component in Angular, follows these steps:
   }
   ```
 
-3. Use web-component in the template as follow:
+3. Use web component in the template as follows:
 
   ```html
   <async-api-component [schema]="schema" [config]="config" [cssImportPath]="cssImportPath"></async-api-component>
@@ -124,7 +124,7 @@ To using component in Angular, follows these steps:
   - `config` is a `config` property from React component,
   - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
 
-  > **NOTE**: The easiest way to use the default css is to copy the content of the `@kyma-project/asyncapi-react/lib/styles/fiori.css` file to a file `assets/asyncapi.css`.
+  > **NOTE**: The easiest way to use the default css is to copy the content of the `@kyma-project/asyncapi-react/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
 
 ## Development
 
