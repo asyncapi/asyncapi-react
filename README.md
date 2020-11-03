@@ -105,7 +105,6 @@ Using Angular for instance, you can then use the component as follows:
                   "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
                   "src/assets/async-api/async-api-web-component.js"
                 ]
- ```
 
 In an Angular component you can use the following way
 
