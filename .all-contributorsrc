@@ -88,6 +88,70 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "dhenneke",
+      "name": "Dominik Henneke",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/720821?v=4",
+      "profile": "https://github.com/dhenneke",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Fox32",
+      "name": "Oliver Sand",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/648527?v=4",
+      "profile": "https://github.com/Fox32",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "JakubIwanowski",
+      "name": "Jakub Iwanowski",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/25127286?v=4",
+      "profile": "https://github.com/JakubIwanowski",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "depimomo",
+      "name": "depimomo",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12368942?v=4",
+      "profile": "https://github.com/depimomo",
+      "contributions": [
+        "test"
+      ]
+    },
+    {
+      "login": "sanskar-p",
+      "name": "Sanskar Patro",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/54014518?v=4",
+      "profile": "https://github.com/sanskar-p",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "DanielChuDC",
+      "name": "danielchu",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/52316624?v=4",
+      "profile": "https://github.com/DanielChuDC",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "fmvilas",
+      "name": "Fran Méndez",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/242119?v=4",
+      "profile": "http://www.fmvilas.com",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,

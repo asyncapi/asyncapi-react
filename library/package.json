@@ -1,6 +1,6 @@
 {
   "name": "@kyma-project/asyncapi-react",
-  "version": "0.12.1",
+  "version": "0.14.2",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -50,26 +50,24 @@
     "get-version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/avro-schema-parser": "^0.1.2",
+    "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
-    "@asyncapi/parser": "^1.0.0-rc.1",
-    "@asyncapi/raml-dt-schema-parser": "^2.0.0",
+    "@asyncapi/parser": "^1.0.1",
     "constate": "^1.2.0",
-    "dompurify": "^1.0.11",
-    "json-schema-ref-parser": "^9.0.6",
-    "markdown-it": "^9.1.0",
+    "dompurify": "^2.1.1",
+    "markdown-it": "^11.0.1",
     "merge": "^1.2.1",
     "openapi-sampler": "^1.0.0-beta.15",
     "react-use": "^12.2.0"
   },
   "devDependencies": {
-    "@types/dompurify": "^0.0.33",
+    "@types/dompurify": "^2.0.4",
     "@types/jest": "^24.0.18",
-    "@types/markdown-it": "^0.0.8",
+    "@types/markdown-it": "^10.0.2",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
     "jest": "^24.9.0",
     "react": "^16.9.0",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^26.4.1"
   }
 }

@@ -3,10 +3,10 @@ import React from 'react';
 import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
 
-import { Badge, BadgeType, Toggle } from '../../components';
+import { Badge, BadgeType, Markdown, Toggle } from '../../components';
 import { bemClasses, removeSpecialChars } from '../../helpers';
 import { MESSAGE_TEXT, ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
-import { Channel, isRawMessage, PayloadType } from '../../types';
+import { Channel, RawMessage, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
   name: string;
@@ -25,6 +25,10 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
     CONTAINER_LABELS.CHANNELS,
     removeSpecialChars(name),
   ]);
+
+  const message =
+    (channel.publish && channel.publish.message) ||
+    (channel.subscribe && channel.subscribe.message);
 
   const oneOfPublish =
     channel.publish &&
@@ -75,6 +79,11 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
 
   const content = (
     <>
+      {channel.description && (
+        <div className={bemClasses.element(`${className}-description`)}>
+          <Markdown>{channel.description}</Markdown>
+        </div>
+      )}
       <ParametersComponent
         parameters={channel.parameters}
         identifier={bemClasses.identifier([
@@ -92,7 +101,11 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
             className={bemClasses.element(`${className}-operations-header`)}
           >
             <h4>
-              <span>{MESSAGE_TEXT}</span>
+              <span>
+                {(message as RawMessage)?.title ||
+                  (message as RawMessage)?.name ||
+                  MESSAGE_TEXT}
+              </span>
             </h4>
           </header>
         )}

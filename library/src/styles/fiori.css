@@ -77,9 +77,6 @@
 .text-gray-600 {
   color: #718096;
 }
-.text-sm {
-  font-size: 0.875rem;
-}
 .my-0 {
   margin-top: 0;
   margin-bottom: 0;
@@ -156,6 +153,7 @@
 
 .asyncapi__toggle-button {
   border: none;
+  background: none;
   height: 100%;
   cursor: pointer;
 }
@@ -199,10 +197,6 @@
 }
 
 .asyncapi__markdown {
-}
-.asyncapi__markdown > div > ul {
-  margin: 0;
-  padding-left: 16px;
 }
 .asyncapi__markdown > div > ul {
   margin: 0;
@@ -404,7 +398,6 @@
   background-color: #e2eaf2;
   font-size: 11px;
   font-family: 72;
-  font-weight: 300;
   text-transform: uppercase;
   font-weight: normal;
   font-style: normal;
@@ -1255,6 +1248,14 @@
 .asyncapi__channel-operation {
 }
 
+.asyncapi__channel-operation-description {
+  padding: 16px 16px 0;
+}
+
+.asyncapi__channel-description {
+  padding: 0 16px 16px;
+}
+
 .asyncapi__channel-parameters {
 }
 
@@ -1356,7 +1357,6 @@
   border-color: #dae1e7;
   border-radius: 0.25rem;
   border-width: 1px;
-  margin-left: 0.25rem;
   padding: 0 0.5rem;
   color: #f6993f;
 }

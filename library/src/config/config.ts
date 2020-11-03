@@ -1,4 +1,3 @@
-import { Options as ParserOptions } from 'json-schema-ref-parser';
 import { PushStateBehavior } from '../types';
 
 export interface ConfigInterface {
@@ -6,7 +5,7 @@ export interface ConfigInterface {
   show?: ShowConfig;
   expand?: ExpandConfig;
   showErrors?: boolean;
-  parserOptions?: ParserOptions;
+  parserOptions?: any;
   pushStateBehavior?: PushStateBehavior;
 }
 

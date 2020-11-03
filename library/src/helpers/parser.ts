@@ -1,32 +1,34 @@
-import { Options as ParserOptions } from 'json-schema-ref-parser';
+import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
+import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
+import avroSchemaParser from '@asyncapi/avro-schema-parser';
 
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
-type ParseDocument = (
-  content: string | any,
-  parserOptions?: ParserOptions,
-) => Promise<any>;
+type ParseDocument = (content: string | any, options?: any) => Promise<any>;
 
 type ParseDocumentFromURL = (
   url: string,
   requestOptions?: RequestInit,
-  parserOptions?: ParserOptions,
+  options?: any,
 ) => Promise<any>;
+
+registerSchemaParser(openapiSchemaParser);
+registerSchemaParser(avroSchemaParser);
 
 export class Parser {
   private parseSchema: ParseDocument;
   private parseSchemaFromURL: ParseDocumentFromURL;
 
-  constructor(parse: ParseDocument, parseURL: ParseDocumentFromURL) {
+  constructor() {
     this.parseSchema = parse;
-    this.parseSchemaFromURL = parseURL;
+    this.parseSchemaFromURL = parseFromUrl;
   }
 
   async parse(
     content: string | any,
-    parserOptions?: ParserOptions,
+    parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
       const data = await this.parseSchema(content, parserOptions);
@@ -38,7 +40,7 @@ export class Parser {
 
   async parseFromUrl(
     arg: FetchingSchemaInterface,
-    parserOptions?: ParserOptions,
+    parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
       const data = await this.parseSchemaFromURL(
@@ -69,7 +71,7 @@ export class Parser {
         data: data.json(),
       };
     }
-    if (data._json instanceof Object) {
+    if (typeof data._json === 'object') {
       return {
         data: data._json,
       };

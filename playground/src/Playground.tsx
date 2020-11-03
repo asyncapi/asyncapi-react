@@ -3,7 +3,7 @@ import AsyncApi, { ConfigInterface } from '@kyma-project/asyncapi-react';
 
 import {
   Navigation,
-  CodeEditor,
+  CodeEditorComponent,
   FetchSchema,
   RefreshIcon,
   Tabs,
@@ -62,7 +62,7 @@ class Playground extends Component<{}, State> {
                   <FetchSchema
                     parentCallback={this.updateSchemaFromExternalResource}
                   />
-                  <CodeEditor
+                  <CodeEditorComponent
                     key="Schema"
                     code={schemaFromEditor}
                     externalResource={schemaFromExternalResource}
@@ -72,7 +72,7 @@ class Playground extends Component<{}, State> {
                 </>
               </Tab>
               <Tab title="Configuration" key="Configuration">
-                <CodeEditor
+                <CodeEditorComponent
                   key="Configuration"
                   code={configFromEditor}
                   parentCallback={this.updateConfig}
