@@ -1,4 +1,5 @@
 const path = require('path');
+
 module.exports = {
   entry: {
     'async-api-web-component': './src/index.ts',
@@ -39,9 +40,5 @@ module.exports = {
         },
       },
     ],
-  },
-
-  node: {
-    fs: 'empty',
   },
 };

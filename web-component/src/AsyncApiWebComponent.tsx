@@ -1,8 +1,7 @@
+import * as React from 'react';
 // @ts-ignore
 import { register } from 'web-react-components';
 import AsyncApiComponent, { AsyncApiProps } from '@kyma-project/asyncapi-react';
-
-import * as React from 'react';
 
 export interface AsyncApiWebComponentProps extends AsyncApiProps {
   cssImportPath?: string;
@@ -17,7 +16,7 @@ export class AsyncApiWebComponent extends React.Component<
 
   render() {
     const finalCssImportPath =
-      this.props.cssImportPath || '/assets/async-api/fiori.css';
+      this.props.cssImportPath || 'assets/asyncapi.css';
 
     return (
       <>

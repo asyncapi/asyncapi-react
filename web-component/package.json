@@ -1,8 +1,8 @@
 {
   "name": "@kyma-project/asyncapi-web-component",
-  "version": "0.12.1",
+  "version": "0.14.2",
   "private": false,
-  "description": "A web component for AsyncAPI specification.",
+  "description": "A web component for AsyncAPI specification. Based on @kyma-project/asyncapi-react.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/asyncapi/asyncapi-react"
@@ -18,13 +18,15 @@
   "keywords": [
     "asyncapi",
     "asyncapi-specification",
-    "styled-components",
+    "webcomponent",
+    "web-component",
     "event"
   ],
   "tags": [
     "asyncapi",
     "asyncapi-specification",
-    "styled-components",
+    "webcomponent",
+    "web-component",
     "event"
   ],
   "main": "lib/index.js",
@@ -35,23 +37,20 @@
     "./LICENSE"
   ],
   "scripts": {
-    "build": "tsc && npm run copyCss && npm run bundle-webcomponent",
-    "copyCss": "cp -r ../library/src/styles ./lib",
-    "prepare": "npm run build",
+    "bundle": "webpack",
+    "prepare": "npm run bundle",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "get-version": "echo $npm_package_version",
-    "bundle-webcomponent": "webpack"
+    "get-version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@kyma-project/asyncapi-react": "^0.12.1",
+    "@kyma-project/asyncapi-react": "^0.14.2",
     "web-react-components": "^1.4.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@types/react": "^16.9.2",
-    "typescript": "^3.7.2",
     "awesome-typescript-loader": "^5.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.12"
