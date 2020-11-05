@@ -80,7 +80,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       {hasExamples ? (
         examples.map((el, i) => (
           <SchemaExampleComponent
-            title={examples.length > 1 ? `${exampleTitle} ${i}` : exampleTitle}
+            title={hasExamples > 1 ? `${exampleTitle} ${i}` : exampleTitle}
             example={el}
             key={i}
           />
