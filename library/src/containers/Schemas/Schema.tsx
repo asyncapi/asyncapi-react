@@ -53,7 +53,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   hideTitle = false,
   toggle = false,
   toggleExpand = false,
-  examples,
+  examples = [],
 }) => {
   if (!schema) {
     return null;
@@ -78,20 +78,14 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       </div>
 
       {examples ? (
-        (() => {
-          const allExamples: object[] = [];
-          const examplesLength = examples.length;
-          examples.forEach((el, i) => {
-            const title =
-              examplesLength > 1 ? `${exampleTitle} ${i}` : exampleTitle;
-            allExamples.push(
-              <SchemaExampleComponent title={title} example={el} />,
-            );
-          });
-          return allExamples;
-        })()
-      ) : // we need to disable this component if schema has "not" field anywhere in it
-      hasNotField ? null : (
+        examples.map((el, i) => (
+          <SchemaExampleComponent
+            title={examples.length > 1 ? `${exampleTitle} ${i}` : exampleTitle}
+            example={el}
+            key={i}
+          />
+        )) // we need to disable this component if schema has "not" field anywhere in it
+      ) : hasNotField ? null : (
         <SchemaExampleComponent title={exampleTitle} schema={schema} />
       )}
     </>

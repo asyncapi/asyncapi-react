@@ -247,8 +247,8 @@ export interface MessageTrait {
 }
 
 export interface Example {
-  headers?: any;
-  payload?: any;
+  headers?: object;
+  payload?: object;
 }
 
 export interface Components {

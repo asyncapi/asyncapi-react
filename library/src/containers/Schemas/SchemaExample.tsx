@@ -21,7 +21,7 @@ export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
     schema && schema.example
       ? schema.example
       : schema && generateExampleSchema(schema);
-  const exampleString = JSON.stringify(example || schemaExample, null, 2);
+  const exampleString = JSON.stringify(example || schemaExample || '', null, 2);
 
   if (!exampleString) {
     return null;
