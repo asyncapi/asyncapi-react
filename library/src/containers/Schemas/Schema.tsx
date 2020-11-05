@@ -70,14 +70,14 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       </span>
     </h3>
   );
-
+  const hasExamples = examples.length;
   const content = (
     <>
       <div className={`${bemClasses.element(`${className}-table`)} p-4`}>
         {renderSchemaProps(name, schema)}
       </div>
 
-      {examples ? (
+      {hasExamples ? (
         examples.map((el, i) => (
           <SchemaExampleComponent
             title={examples.length > 1 ? `${exampleTitle} ${i}` : exampleTitle}
