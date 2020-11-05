@@ -209,7 +209,7 @@ export interface RawMessage {
   description?: DescriptionHTML;
   externalDocs?: ExternalDocs;
   deprecated?: boolean;
-  examples?: any[];
+  examples?: Example[];
   protocolInfo?: any;
   traits?: MessageTrait | [MessageTrait, any];
 }
@@ -242,8 +242,13 @@ export interface MessageTrait {
   description?: DescriptionHTML;
   externalDocs?: ExternalDocs;
   deprecated?: boolean;
-  examples?: any[];
+  examples?: Example[];
   protocolInfo?: Record<string, any>;
+}
+
+export interface Example {
+  headers?: any;
+  payload?: any;
 }
 
 export interface Components {

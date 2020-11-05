@@ -8,33 +8,35 @@ import { SCHEMA_EXAMPLE_TEXT } from '../../constants';
 
 interface Props {
   title?: string;
-  schema: Schema;
+  schema?: Schema;
+  example?: object;
 }
 
 export const SchemaExampleComponent: React.FunctionComponent<Props> = ({
   title,
   schema,
+  example,
 }) => {
-  const example = JSON.stringify(
-    schema.example ? schema.example : generateExampleSchema(schema),
-    null,
-    2,
-  );
+  const schemaExample =
+    schema && schema.example
+      ? schema.example
+      : schema && generateExampleSchema(schema);
+  const exampleString = JSON.stringify(example || schemaExample, null, 2);
 
-  if (!example) {
+  if (!exampleString) {
     return null;
   }
 
   return (
     <div className={bemClasses.element(`schema-example`)}>
       <CodeComponent
-        code={example}
+        code={exampleString}
         title={
           <div className={bemClasses.element(`schema-example-header`)}>
             <span className={bemClasses.element(`schema-example-header-title`)}>
               {title ? title : SCHEMA_EXAMPLE_TEXT}
             </span>
-            {schema.example ? null : (
+            {example || (schema && schema.example) ? null : (
               <div
                 className={bemClasses.element(
                   `schema-example-header-generated-badge`,

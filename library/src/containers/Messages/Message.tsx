@@ -3,7 +3,11 @@ import React from 'react';
 import { SchemaComponent } from '../Schemas/Schema';
 import { PayloadComponent } from './Payload';
 
-import { bemClasses, removeSpecialChars } from '../../helpers';
+import {
+  bemClasses,
+  removeSpecialChars,
+  getExamplesFromSpec,
+} from '../../helpers';
 import { Message, isRawMessage } from '../../types';
 
 import { Markdown, Badge, BadgeType, Toggle } from '../../components';
@@ -72,6 +76,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   }
 
   title = title || message.title || message.name;
+  const examples = message.examples;
 
   const summary = message.summary && (
     <div className={bemClasses.element(`${className}-summary`)}>
@@ -108,6 +113,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   const headersID = !inChannel
     ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'headers'])
     : undefined;
+
   const headers = message.headers && (
     <section
       className={bemClasses.element(`${className}-headers`)}
@@ -123,6 +129,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           schema={message.headers}
           exampleTitle={HEADERS_EXAMPLE_TEXT}
           hideTitle={true}
+          examples={examples && getExamplesFromSpec(examples, 'headers')}
         />
       </div>
     </section>
@@ -142,6 +149,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
       payload={message.payload}
       identifier={payloadID}
       dataIdentifier={payloadDataID}
+      examples={examples && getExamplesFromSpec(examples, 'payload')}
     />
   );
 

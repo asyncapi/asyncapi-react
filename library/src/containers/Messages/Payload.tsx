@@ -19,6 +19,7 @@ interface Props extends Required<Pick<RawMessage, 'payload'>> {
   identifier?: string;
   dataIdentifier?: string;
   id?: number;
+  examples?: object[];
 }
 
 export const PayloadComponent: React.FunctionComponent<Props> = ({
@@ -28,6 +29,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   identifier,
   dataIdentifier,
   id,
+  examples,
 }) => {
   const className = `message-payload`;
   const payloadsID = identifier ? `${identifier}s` : undefined;
@@ -54,6 +56,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
                 oneOf={true}
                 identifier={identifier}
                 id={index}
+                examples={examples}
               />
             </li>
           ))}
@@ -84,6 +87,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
                 anyOf={true}
                 identifier={identifier}
                 id={index}
+                examples={examples}
               />
             </li>
           ))}
@@ -105,6 +109,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
         schema={payload}
         exampleTitle={PAYLOAD_EXAMPLE_TEXT}
         hideTitle={true}
+        examples={examples}
       />
     </div>
   );
