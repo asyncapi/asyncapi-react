@@ -75,7 +75,7 @@ If you are not using React you may want to use the `@kyma-project/asyncapi-react
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @kyma-project/asyncapi-web-component
+npm install --save @asyncapi/web-component
 ```
 
 ### Using in Angular
@@ -96,11 +96,11 @@ To use component in Angular, follow these steps:
   export class AppModule {}
   ```
 
-2. Import the `@kyma-project/asyncapi-web-component` module in an Angular's component where you want to use the web component: 
+2. Import the `@asyncapi/web-component` module in an Angular's component where you want to use the web component: 
 
   ```ts
   import { Component } from '@angular/core';
-  import '@kyma-project/asyncapi-web-component/lib/async-api-web-component';
+  import '@asyncapi/web-component/lib/asyncapi-web-component';
 
   @Component({
     selector: 'app-root',
@@ -115,7 +115,7 @@ To use component in Angular, follow these steps:
 3. Use web component in the template as follows:
 
   ```html
-  <async-api-component [schema]="schema" [config]="config" [cssImportPath]="cssImportPath"></async-api-component>
+  <asyncapi-component [schema]="schema" [config]="config" [cssImportPath]="cssImportPath"></asyncapi-component>
   ```
  
   where:

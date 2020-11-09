@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 13
-      - name: Install dependencies for library. web-component and playground
+      - name: Install dependencies for library, web-component and playground
         run: npm install
       - name: Bootstrap the project
         run: npm run bootstrap

@@ -27,7 +27,7 @@ export class AsyncApiWebComponent extends React.Component<
   }
 }
 
-register(AsyncApiWebComponent, 'async-api-component', [
+register(AsyncApiWebComponent, 'asyncapi-component', [
   'schema',
   'config',
   'cssImportPath',

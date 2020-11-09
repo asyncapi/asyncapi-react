@@ -1,5 +1,5 @@
 {
-  "name": "@kyma-project/asyncapi-web-component",
+  "name": "@asyncapi/web-component",
   "version": "0.14.2",
   "private": false,
   "description": "A web component for AsyncAPI specification. Based on @kyma-project/asyncapi-react.",
@@ -54,5 +54,8 @@
     "awesome-typescript-loader": "^5.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.12"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
