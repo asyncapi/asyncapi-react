@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/web-component",
-  "version": "0.1.0",
+  "version": "0.14.2",
   "private": false,
   "description": "A web component for AsyncAPI specification. Based on @kyma-project/asyncapi-react.",
   "repository": {
