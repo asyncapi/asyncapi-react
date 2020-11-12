@@ -44,10 +44,10 @@
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {
-    "@kyma-project/asyncapi-react": "0.14.2",
-    "web-react-components": "^1.4.2",
+    "@kyma-project/asyncapi-react": "^0.15.0",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "web-react-components": "^1.4.2"
   },
   "devDependencies": {
     "@types/react": "^16.9.2",
