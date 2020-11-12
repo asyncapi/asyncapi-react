@@ -8,7 +8,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "@kyma-project/asyncapi-react": "0.14.2",
+    "@kyma-project/asyncapi-react": "^0.15.0",
     "codemirror": "^5.48.4",
     "re-resizable": "^6.0.0",
     "react": "^16.9.0",
