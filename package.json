@@ -16,12 +16,15 @@
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
-    "build": "cd library && npm run prepare",
+    "build": "npm run build-library && npm run build-web-component",
+    "build-library": "cd library && npm run prepare",
+    "build-web-component": "cd web-component && npm run prepare",
     "lint-check": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
-    "release": "semantic-release",
+    "release-library": "semantic-release --extends ./library/semantic-release",
+    "release-web-component": "semantic-release --extends ./web-component/semantic-release",
     "get-lib-version": "cd library && npm run get-version"
   },
   "devDependencies": {
@@ -35,7 +38,7 @@
     "lerna": "^3.22.1",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.3",
+    "typescript": "^4.0.0",
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.3",
@@ -59,32 +62,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "release": {
-    "branches": [
-      "master"
-    ],
-    "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/release-notes-generator",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "library"
-        }
-      ],
-      "@semantic-release/github"
-    ]
   },
   "dependencies": {}
 }

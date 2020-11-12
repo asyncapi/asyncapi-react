@@ -20,7 +20,6 @@
     "asyncapi-specification",
     "react",
     "reactjs",
-    "styled-components",
     "event"
   ],
   "tags": [
@@ -28,7 +27,6 @@
     "asyncapi-specification",
     "react",
     "reactjs",
-    "styled-components",
     "event"
   ],
   "main": "lib/index.js",
