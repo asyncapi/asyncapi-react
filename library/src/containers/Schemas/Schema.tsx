@@ -20,6 +20,7 @@ interface Props {
   hideTitle?: boolean;
   toggle?: boolean;
   toggleExpand?: boolean;
+  examples?: object[];
 }
 
 const renderSchemaProps = (
@@ -52,6 +53,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   hideTitle = false,
   toggle = false,
   toggleExpand = false,
+  examples = [],
 }) => {
   if (!schema) {
     return null;
@@ -68,14 +70,22 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       </span>
     </h3>
   );
-
+  const hasExamples = examples.length;
   const content = (
     <>
       <div className={`${bemClasses.element(`${className}-table`)} p-4`}>
         {renderSchemaProps(name, schema)}
       </div>
-      {/* we need to disable this component if schema has "not" field anywhere in it */}
-      {hasNotField ? null : (
+
+      {hasExamples ? (
+        examples.map((el, i) => (
+          <SchemaExampleComponent
+            title={hasExamples > 1 ? `${exampleTitle} ${i}` : exampleTitle}
+            example={el}
+            key={i}
+          />
+        )) // we need to disable this component if schema has "not" field anywhere in it
+      ) : hasNotField ? null : (
         <SchemaExampleComponent title={exampleTitle} schema={schema} />
       )}
     </>

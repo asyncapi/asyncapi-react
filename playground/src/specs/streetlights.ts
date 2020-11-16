@@ -96,6 +96,17 @@ components:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
         $ref: "#/components/schemas/lightMeasuredPayload"
+      examples:
+        - headers:
+            my-app-header: 12
+          payload:
+            lumens: 1
+            sentAt: 2020-01-31T13:24:53Z
+        - headers:
+            my-app-header: 13
+        - payload:
+            lumens: 3
+            sentAt: 2020-10-31T13:24:53Z
     turnOnOff:
       name: turnOnOff
       title: Turn on/off

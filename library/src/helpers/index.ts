@@ -10,3 +10,4 @@ export * from './stateHelpers';
 export * from './parser';
 export * from './removeSpecialChars';
 export * from './toKebabCase';
+export * from './getExamplesFromSpec';
