@@ -46,10 +46,13 @@ jobs:
       # Web-component
       - name: Install latest version of library in the web-component # this will update package.json and a lock file for the web-component that will also be pushed to PR with next step
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
-        # sleep for 20 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `saves` package in registry
+        # sleep for 30 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `saves` package in registry
         run: |
-          sleep 20
-          npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
+          sleep 30
+          echo "Log latest version of the package on npm registry"
+          npm show @kyma-project/asyncapi-react dist-tags.latest
+          echo "Starting installation"
+          npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} --save --loglevel verbose
         working-directory: ./web-component
       - name: Build web-component
         run: npm run build-web-component
