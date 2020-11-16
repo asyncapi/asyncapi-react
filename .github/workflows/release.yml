@@ -63,7 +63,7 @@ jobs:
           GIT_COMMITTER_EMAIL: info@asyncapi.io
         # bump to newest version and publish without generating changelog etc...
         run: |
-          npm version ${{ steps.extractver.outputs.version }}
+          npm version ${{ steps.extractver.outputs.version }} -m "Upgrade to %s"
           npm publish
         working-directory: ./web-component
 
