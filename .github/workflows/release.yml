@@ -38,7 +38,7 @@ jobs:
           GIT_AUTHOR_EMAIL: info@asyncapi.io
           GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
-        run: npm run release-library
+        run: npm run release
       - name: Get version from package.json after release-library step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
@@ -53,8 +53,7 @@ jobs:
         working-directory: ./web-component
       - name: Build web-component
         run: npm run build-web-component
-      - name: Release web-component to NPM and GitHub
-        id: release-web-component
+      - name: Release web-component to NPM
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -62,7 +61,11 @@ jobs:
           GIT_AUTHOR_EMAIL: info@asyncapi.io
           GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
-        run: npm run release-web-component
+        # bump to newest version and publish without generating changelog etc...
+        run: |
+          npm version ${{ steps.extractver.outputs.version }} -m "Upgrade to %s"
+          npm publish
+        working-directory: ./web-component
 
       # Playground
       - name: Use latest version in the playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step

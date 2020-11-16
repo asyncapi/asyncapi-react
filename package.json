@@ -23,8 +23,7 @@
     "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
-    "release-library": "semantic-release --extends ./library/semantic-release",
-    "release-web-component": "semantic-release --extends ./web-component/semantic-release",
+    "release": "semantic-release",
     "get-lib-version": "cd library && npm run get-version"
   },
   "devDependencies": {
@@ -62,6 +61,32 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "library"
+        }
+      ],
+      "@semantic-release/github"
+    ]
   },
   "dependencies": {}
 }
