@@ -59,18 +59,12 @@ jobs:
       - name: Build web-component
         run: npm run build-web-component
       - name: Release web-component to NPM
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GIT_AUTHOR_NAME: asyncapi-bot
-          GIT_AUTHOR_EMAIL: info@asyncapi.io
-          GIT_COMMITTER_NAME: asyncapi-bot
-          GIT_COMMITTER_EMAIL: info@asyncapi.io
-        # bump to newest version and publish without generating changelog etc...
-        run: |
-          npm version ${{ steps.extractver.outputs.version }} -m "Upgrade to %s"
-          npm publish
-        working-directory: ./web-component
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./web-component/package.json
+          tag: ${{ steps.extractver.outputs.version }}
+          access: public
 
       # Playground
       - name: Use latest version in the playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step
