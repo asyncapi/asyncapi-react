@@ -1,6 +1,6 @@
 {
-  "name": "@kyma-project/asyncapi-react",
-  "version": "0.15.0",
+  "name": "@asyncapi/react-component",
+  "version": "0.16.2",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -67,5 +67,8 @@
     "jest": "^24.9.0",
     "react": "^16.9.0",
     "ts-jest": "^26.4.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

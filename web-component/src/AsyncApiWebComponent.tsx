@@ -1,7 +1,7 @@
 import * as React from 'react';
 // @ts-ignore
 import { register } from 'web-react-components';
-import AsyncApiComponent, { AsyncApiProps } from '@kyma-project/asyncapi-react';
+import AsyncApiComponent, { AsyncApiProps } from '@asyncapi/react-component';
 
 export interface AsyncApiWebComponentProps extends AsyncApiProps {
   cssImportPath?: string;
