@@ -44,7 +44,7 @@
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^0.17.0",
+    "@asyncapi/react-component": "^0.17.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "web-react-components": "^1.4.2"
