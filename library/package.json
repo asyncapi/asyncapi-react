@@ -1,6 +1,6 @@
 {
   "name": "@kyma-project/asyncapi-react",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -20,7 +20,6 @@
     "asyncapi-specification",
     "react",
     "reactjs",
-    "styled-components",
     "event"
   ],
   "tags": [
@@ -28,7 +27,6 @@
     "asyncapi-specification",
     "react",
     "reactjs",
-    "styled-components",
     "event"
   ],
   "main": "lib/index.js",

@@ -25,7 +25,7 @@ You can also run the Playground application locally by following [this](./docs/d
 
 - [`react`](https://github.com/facebook/react/) (version 16.8.0 or higher)
 
-## Usage
+## Installation
 
 Run this command to install the component in your project:
 
@@ -68,51 +68,63 @@ For information on how to change styles, read the [Style Modification](./docs/co
 
 ## Web Component
 
-If you are not using react you may want to use the asyncapi-rect component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+If you are not using React you may want to use the `@kyma-project/asyncapi-react` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
 
-### Building the web component
+### Installation
 
-The web component is built along with the library and playground if invoked from project root:
+Run this command to install the component in your project:
 
-```bash
-npm run boostrap
+```sh
+npm install --save @asyncapi/web-component
 ```
 
-In case you want to only rebuild the web component
-```bash
-cd web-component
-npm run bundle-webcomponent
-```
+### Using in Angular
 
-the web component is saved as web-component/lib/async-api-web-component.js
+To use component in Angular, follow these steps:
 
-### Usage
+1. Update `AppModule` by adding the `CUSTOM_ELEMENTS_SCHEMA` to the `schemas` array in the `NgModule` metadata:
 
-Copy the async-api-web-component.js file along with the fiori.css (web-component/lib/styles/fiori.css) to your project.
+  ```ts
+  import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-Using Angular for instance, you can then use the component as follows:
+  @NgModule({
+    ...
+    schemas: [
+      CUSTOM_ELEMENTS_SCHEMA,
+    ]
+  })
+  export class AppModule {}
+  ```
 
-`angular.json`
+2. Import the `@asyncapi/web-component` module in an Angular's component where you want to use the web component: 
+
+  ```ts
+  import { Component } from '@angular/core';
+  import '@asyncapi/web-component/lib/asyncapi-web-component';
+
+  @Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+  })
+  export class AppComponent {
+    ...
+  }
+  ```
+
+3. Use web component in the template as follows:
+
+  ```html
+  <asyncapi-component [schema]="schema" [config]="config" [cssImportPath]="cssImportPath"></asyncapi-component>
+  ```
  
-```json
-     {
-      "projects": {
-        "project-name": {
-          "architect": {
-            "build": {
-              "options": {
-                "scripts": [
-                  "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
-                  "src/assets/async-api/async-api-web-component.js"
-                ]
+  where:
+  
+  - `schema` is a `schema` property from React component,
+  - `config` is a `config` property from React component,
+  - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
 
-In an Angular component you can use the following way
-
-```html
-    <async-api-component [schema]="asyncApiDoc" [config]="asyncApiConfig" [cssImportPath]="optionalCssImportPath"></async-api-component>
-```
- 
-Whereas asyncApiDoc is the AsyncAPI YAML doc and config is the component configuration, just as it is for the react component.
+  > **NOTE**: The easiest way to use the default css is to copy the content of the `@kyma-project/asyncapi-react/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
 
 ## Development
 

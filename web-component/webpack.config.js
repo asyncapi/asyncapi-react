@@ -1,7 +1,8 @@
 const path = require('path');
+
 module.exports = {
   entry: {
-    'async-api-web-component': './src/index.ts',
+    'asyncapi-web-component': './src/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'lib'),
@@ -39,9 +40,5 @@ module.exports = {
         },
       },
     ],
-  },
-
-  node: {
-    fs: 'empty',
   },
 };

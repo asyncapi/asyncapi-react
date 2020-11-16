@@ -16,19 +16,21 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 13
-      - name: Install dependencies for library and playground
+      - name: Install dependencies for library, web-component and playground
         run: npm install
       - name: Bootstrap the project
         run: npm run bootstrap
+
+      # Library
       - name: Run library tests
         run: npm test
       - name: Build library
-        run: npm run build
-      - name: Get version from package.json before release step
+        run: npm run build-library
+      - name: Get version from package.json before release-library step
         id: initversion
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
-      - name: Release to NPM and GitHub
-        id: release
+      - name: Release library to NPM and GitHub
+        id: release-library
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -37,15 +39,41 @@ jobs:
           GIT_COMMITTER_NAME: asyncapi-bot
           GIT_COMMITTER_EMAIL: info@asyncapi.io
         run: npm run release
-      - name: Get version from package.json after release step
+      - name: Get version from package.json after release-library step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
-      - name: Use latest version in the Playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step
+
+      # Web-component
+      - name: Install latest version of library in the web-component # this will update package.json and a lock file for the web-component that will also be pushed to PR with next step
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        # sleep for 10 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `saves` package in registry
         run: |
-          sleep 10 # sleep for 10 seconds before using latest version in playground, because sometimes NPM needs additional few seconds to `save` package in registry
+          sleep 10
           npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
+        working-directory: ./web-component
+      - name: Build web-component
+        run: npm run build-web-component
+      - name: Release web-component to NPM
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GIT_AUTHOR_NAME: asyncapi-bot
+          GIT_AUTHOR_EMAIL: info@asyncapi.io
+          GIT_COMMITTER_NAME: asyncapi-bot
+          GIT_COMMITTER_EMAIL: info@asyncapi.io
+        # bump to newest version and publish without generating changelog etc...
+        run: |
+          npm version ${{ steps.extractver.outputs.version }} -m "Upgrade to %s"
+          npm publish
+        working-directory: ./web-component
+
+      # Playground
+      - name: Use latest version in the playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        run: npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
         working-directory: ./playground
+
+      # Pull request
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
         uses: peter-evans/create-pull-request@v2.4.4
@@ -57,6 +85,8 @@ jobs:
           title: 'chore(release): ${{ steps.extractver.outputs.version }}'
           body: 'Version bump in package.json and package-lock.json for release [${{ steps.extractver.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ steps.extractver.outputs.version }})'
           branch: version-bump/${{ steps.extractver.outputs.version }}
+
+      # Playground
       - name: Build playground
         run: npm run build
         working-directory: ./playground
