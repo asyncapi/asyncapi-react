@@ -67,5 +67,8 @@
     "jest": "^24.9.0",
     "react": "^16.9.0",
     "ts-jest": "^26.4.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
