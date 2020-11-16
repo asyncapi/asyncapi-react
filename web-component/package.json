@@ -2,7 +2,7 @@
   "name": "@asyncapi/web-component",
   "version": "0.14.2",
   "private": false,
-  "description": "A web component for AsyncAPI specification. Based on @kyma-project/asyncapi-react.",
+  "description": "A web component for AsyncAPI specification. Based on @asyncapi/react-component.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/asyncapi/asyncapi-react"
@@ -44,7 +44,7 @@
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {
-    "@kyma-project/asyncapi-react": "^0.15.0",
+    "@asyncapi/react-component": "^0.16.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "web-react-components": "^1.4.2"

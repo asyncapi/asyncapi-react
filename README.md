@@ -30,7 +30,7 @@ You can also run the Playground application locally by following [this](./docs/d
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @kyma-project/asyncapi-react
+npm install --save @asyncapi/react-component
 ```
 
 Check out this simple sandbox application that uses the asyncapi-react component:
@@ -61,14 +61,14 @@ For a list and description of features offered by the AsyncAPI React component, 
 To use default styles based on [SAP Fundamentals](https://sap.github.io/fundamental/), import them as follows:
 
 ``` js
-import "@kyma-project/asyncapi-react/lib/styles/fiori.css";
+import "@asyncapi/react-component/lib/styles/fiori.css";
 ```
 
 For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
 
 ## Web Component
 
-If you are not using React you may want to use the `@kyma-project/asyncapi-react` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+If you are not using React you may want to use the `@asyncapi/web-component` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
 
 ### Installation
 
@@ -124,7 +124,7 @@ To use component in Angular, follow these steps:
   - `config` is a `config` property from React component,
   - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
 
-  > **NOTE**: The easiest way to use the default css is to copy the content of the `@kyma-project/asyncapi-react/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
+  > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
 
 ## Development
 

@@ -33,7 +33,7 @@ jobs:
         id: release-library
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.KYMA_NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GIT_AUTHOR_NAME: asyncapi-bot
           GIT_AUTHOR_EMAIL: info@asyncapi.io
           GIT_COMMITTER_NAME: asyncapi-bot
@@ -50,11 +50,11 @@ jobs:
         run: |
           sleep 1m
           echo "Log all versions of the package on npm registry"
-          npm show @kyma-project/asyncapi-react versions
+          npm show @asyncapi/react-component versions
           echo "Log latest version of the package on npm registry"
-          npm show @kyma-project/asyncapi-react dist-tags.latest
+          npm show @asyncapi/react-component dist-tags.latest
           echo "Starting installation"
-          npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} --save --loglevel verbose
+          npm install @asyncapi/react-component@${{ steps.extractver.outputs.version }} --save --loglevel verbose
         working-directory: ./web-component
       - name: Build web-component
         run: npm run build-web-component
@@ -75,7 +75,7 @@ jobs:
       # Playground
       - name: Use latest version in the playground # this will update package.json and a lock file for the playground that will also be pushed to PR with next step
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
-        run: npm install @kyma-project/asyncapi-react@${{ steps.extractver.outputs.version }} -s
+        run: npm install @asyncapi/react-component@${{ steps.extractver.outputs.version }} -s
         working-directory: ./playground
 
       # Pull request
