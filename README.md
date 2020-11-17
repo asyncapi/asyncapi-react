@@ -191,6 +191,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     <td align="center"><a href="https://github.com/DanielChuDC"><img src="https://avatars3.githubusercontent.com/u/52316624?v=4" width="100px;" alt=""/><br /><sub><b>danielchu</b></sub></a><br /><a href="#infra-DanielChuDC" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
     <td align="center"><a href="http://www.fmvilas.com"><img src="https://avatars3.githubusercontent.com/u/242119?v=4" width="100px;" alt=""/><br /><sub><b>Fran Méndez</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=fmvilas" title="Code">💻</a> <a href="#maintenance-fmvilas" title="Maintenance">🚧</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://www.codeblock.ch"><img src="https://avatars3.githubusercontent.com/u/416252?v=4" width="100px;" alt=""/><br /><sub><b>Claude Gex</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=gexclaude" title="Code">💻</a> <a href="#platform-gexclaude" title="Packaging/porting to new platform">📦</a> <a href="#ideas-gexclaude" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
