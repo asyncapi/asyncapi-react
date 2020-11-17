@@ -41,7 +41,8 @@
     "bundle": "webpack",
     "prepare": "npm run bundle",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
+    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
+    "get-version": "echo $npm_package_version"
   },
   "dependencies": {
     "@asyncapi/react-component": "^0.17.1",
