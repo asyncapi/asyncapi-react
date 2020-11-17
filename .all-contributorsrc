@@ -20,7 +20,10 @@
         "ideas",
         "maintenance",
         "review",
-        "test"
+        "test",
+        "infra",
+        "bug",
+        "example"
       ]
     },
     {
