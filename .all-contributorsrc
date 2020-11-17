@@ -52,7 +52,12 @@
       "contributions": [
         "doc",
         "example",
-        "ideas"
+        "ideas",
+        "code",
+        "infra",
+        "bug",
+        "blog",
+        "maintenance"
       ]
     },
     {
