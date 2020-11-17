@@ -59,9 +59,11 @@ jobs:
           echo "Starting installation"
           npm install @asyncapi/react-component@${{ steps.extractver.outputs.version }} --save --loglevel verbose
         working-directory: ./web-component
-      - name: Build web-component
+      - name: Build and bump web-component
         if: steps.webcompver.outputs.version != steps.extractver.outputs.version
-        run: npm run build-web-component
+        run: |
+          npm run build-web-component
+          npm version ${{ steps.extractver.outputs.version }}
       - name: Release web-component to NPM
         if: steps.webcompver.outputs.version != steps.extractver.outputs.version
         uses: JS-DevTools/npm-publish@v1
@@ -79,7 +81,7 @@ jobs:
       # Pull request
       - name: Create Pull Request with updated package files
         if: steps.initversion.outputs.version != steps.extractver.outputs.version
-        uses: peter-evans/create-pull-request@v2.4.4
+        uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
           commit-message: 'chore(release): ${{ steps.extractver.outputs.version }}'
