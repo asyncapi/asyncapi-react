@@ -59,11 +59,13 @@ jobs:
           echo "Starting installation"
           npm install @asyncapi/react-component@${{ steps.extractver.outputs.version }} --save --loglevel verbose
         working-directory: ./web-component
-      - name: Build and bump web-component
+      - name: Build web-component
         if: steps.webcompver.outputs.version != steps.extractver.outputs.version
-        run: |
-          npm run build-web-component
-          npm version ${{ steps.extractver.outputs.version }}
+        run: npm run build-web-component
+      - name: Bump web-component
+        if: steps.webcompver.outputs.version != steps.extractver.outputs.version
+        run: npm version ${{ steps.extractver.outputs.version }}
+        working-directory: ./web-component
       - name: Release web-component to NPM
         if: steps.webcompver.outputs.version != steps.extractver.outputs.version
         uses: JS-DevTools/npm-publish@v1
