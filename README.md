@@ -78,7 +78,7 @@ Run this command to install the component in your project:
 npm install --save @asyncapi/web-component
 ```
 
-Check out this simple sandbox application that uses the web-component:
+Check out this simple sandbox application that uses the Web Component in Angular project:
 
 [![Edit asyncapi-web-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-web-component-in-action-l652x)
 
