@@ -24,7 +24,8 @@
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
     "release": "semantic-release",
-    "get-lib-version": "cd library && npm run get-version"
+    "get-lib-version": "cd library && npm run get-version",
+    "get-web-version": "cd web-component && npm run get-version"
   },
   "devDependencies": {
     "tslib": "^1.10.0",

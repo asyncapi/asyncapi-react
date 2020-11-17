@@ -42,10 +42,13 @@ jobs:
       - name: Get version from package.json after release-library step
         id: extractver
         run: echo "::set-output name=version::$(npm run get-lib-version --silent)"
+      - name: Get version from web-component package.json
+        id: webcompver
+        run: echo "::set-output name=version::$(npm run get-web-version --silent)"
 
       # Web-component
       - name: Install latest version of library in the web-component # this will update package.json and a lock file for the web-component that will also be pushed to PR with next step
-        if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        if: steps.webcompver.outputs.version != steps.extractver.outputs.version
         # sleep for 30 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `saves` package in registry
         run: |
           sleep 1m
@@ -57,13 +60,14 @@ jobs:
           npm install @asyncapi/react-component@${{ steps.extractver.outputs.version }} --save --loglevel verbose
         working-directory: ./web-component
       - name: Build web-component
+        if: steps.webcompver.outputs.version != steps.extractver.outputs.version
         run: npm run build-web-component
       - name: Release web-component to NPM
+        if: steps.webcompver.outputs.version != steps.extractver.outputs.version
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./web-component/package.json
-          tag: ${{ steps.extractver.outputs.version }}
           access: public
 
       # Playground
