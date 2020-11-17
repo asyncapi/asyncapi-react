@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/web-component",
-  "version": "0.16.2",
+  "version": "0.17.5",
   "private": false,
   "description": "A web component for AsyncAPI specification. Based on @asyncapi/react-component.",
   "repository": {
@@ -45,7 +45,7 @@
     "get-version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^0.17.3",
+    "@asyncapi/react-component": "^0.17.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "web-react-components": "^1.4.2"
