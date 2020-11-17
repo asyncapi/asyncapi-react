@@ -33,7 +33,7 @@ Run this command to install the component in your project:
 npm install --save @asyncapi/react-component
 ```
 
-Check out this simple sandbox application that uses the react-component:
+Check out this simple sandbox application that uses the React component:
 
 [![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-react-component-in-action-wvdy2)
 
