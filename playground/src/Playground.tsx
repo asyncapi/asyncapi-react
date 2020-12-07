@@ -25,7 +25,6 @@ interface State {
   schemaFromEditor: string;
   schemaFromExternalResource: string;
   configFromEditor: string;
-  timeout: number | undefined;
 }
 
 class Playground extends Component<{}, State> {
@@ -37,7 +36,6 @@ class Playground extends Component<{}, State> {
     schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
     configFromEditor: defaultConfig,
-    timeout: undefined,
   };
 
   constructor(props: any) {
