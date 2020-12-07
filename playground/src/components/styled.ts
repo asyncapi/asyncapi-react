@@ -133,31 +133,40 @@ export const TabsAdditionalHeaderContent = styled.li`
   padding: 19px 15px;
 `;
 
-export const RefreshIcon = styled.div`
+interface RefreshIconProps {
+  show?: boolean;
+}
+
+export const RefreshIcon = styled.div<RefreshIconProps>`
   font-family: 'SAP-Icons';
   font-weight: 700;
   color: #f77669;
-  transition: 0.2s color linear;
-  cursor: pointer;
+  transition: 0.2s all linear;
+  opacity: ${props => (props.show ? '1' : '0')};
+  animation-name: spin;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 
-  &:hover {
-    color: #c3e88d;
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
-interface TabsContentProps {
-  margin?: string;
-}
-
-export const TabsContent = styled.div<TabsContentProps>`
+export const TabsContent = styled.div`
   margin: 0;
   padding: 0 20px;
   font-size: 14px;
   color: #515559;
   line-height: 1.57;
   overflow: auto;
-  height: calc(100vh - 122px);
-  min-height: calc(100vh - 122px);
+  height: calc(100vh - 117px);
+  min-height: calc(100vh - 117px);
 `;
 
 export const TabWrapper = styled.li``;

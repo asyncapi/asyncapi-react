@@ -34,17 +34,20 @@ function handleResponse(response: any) {
   return response.text().then((data: string) => data);
 }
 
-export function debounce(
+export function debounce<T>(
   func: Function,
-  context: any,
   wait: number = 1500,
-): Function {
+  onStart: () => void,
+  onCancel: () => void,
+): () => any {
   let timeout: number | undefined;
   return function(...args: any[]) {
     if (timeout) clearTimeout(timeout);
+    onStart();
     timeout = setTimeout(() => {
       timeout = undefined;
-      func.apply(context, args);
+      func(...args);
+      onCancel();
     }, wait);
   };
 }

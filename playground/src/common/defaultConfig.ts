@@ -5,7 +5,7 @@ export const defaultConfig: string = `{
     "security": false,
     "messages": true,
     "schemas": true,
-    "channels": true,
+    "channels": true
   },
   "showErrors": true,
   "disableDefaultTheme": false
