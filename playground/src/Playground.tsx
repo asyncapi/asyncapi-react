@@ -41,13 +41,13 @@ class Playground extends Component<{}, State> {
     super(props);
     this.updateSchemaFn = debounce(
       this.updateSchema,
-      500,
+      750,
       this.startRefreshing,
       this.stopRefreshing,
     );
     this.updateConfigFn = debounce(
       this.updateConfig,
-      500,
+      750,
       this.startRefreshing,
       this.stopRefreshing,
     );

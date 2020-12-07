@@ -36,7 +36,7 @@ function handleResponse(response: any) {
 
 export function debounce<T>(
   func: Function,
-  wait: number = 1500,
+  wait: number,
   onStart: () => void,
   onCancel: () => void,
 ): () => any {
@@ -48,6 +48,6 @@ export function debounce<T>(
       timeout = undefined;
       func(...args);
       onCancel();
-    }, wait);
+    }, wait || 1000);
   };
 }
