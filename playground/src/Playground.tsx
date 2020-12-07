@@ -22,9 +22,7 @@ const defaultSchema = specs.streetlights;
 interface State {
   schema: string;
   config: string;
-  schemaFromEditor: string;
   schemaFromExternalResource: string;
-  configFromEditor: string;
   refreshing: boolean;
 }
 
@@ -58,13 +56,7 @@ class Playground extends Component<{}, State> {
   }
 
   render() {
-    const {
-      schema,
-      config,
-      schemaFromEditor,
-      schemaFromExternalResource,
-      configFromEditor,
-    } = this.state;
+    const { schema, config, schemaFromExternalResource } = this.state;
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
 
     return (
@@ -82,7 +74,7 @@ class Playground extends Component<{}, State> {
                   />
                   <CodeEditorComponent
                     key="Schema"
-                    code={schemaFromEditor}
+                    code={schema}
                     externalResource={schemaFromExternalResource}
                     parentCallback={this.updateSchemaFn}
                     mode="text/yaml"
@@ -92,7 +84,7 @@ class Playground extends Component<{}, State> {
               <Tab title="Configuration" key="Configuration">
                 <CodeEditorComponent
                   key="Configuration"
-                  code={configFromEditor}
+                  code={config}
                   parentCallback={this.updateConfigFn}
                 />
               </Tab>
