@@ -14,7 +14,7 @@ import {
   AsyncApiWrapper,
 } from './components';
 
-import { defaultConfig, parse } from './common';
+import { defaultConfig, parse, debounce } from './common';
 import * as specs from './specs';
 
 const defaultSchema = specs.streetlights;
@@ -25,16 +25,29 @@ interface State {
   schemaFromEditor: string;
   schemaFromExternalResource: string;
   configFromEditor: string;
+  timeout: number | undefined;
 }
 
 class Playground extends Component<{}, State> {
+  refreshFn: Function;
+
   state = {
     schema: defaultSchema,
     config: defaultConfig,
     schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
     configFromEditor: defaultConfig,
+    timeout: undefined,
   };
+
+  constructor(props: any) {
+    super(props);
+    this.refreshFn = debounce(this.refreshState, this, 1000);
+  }
+
+  componentDidUpdate() {
+    this.refreshFn();
+  }
 
   render() {
     const {

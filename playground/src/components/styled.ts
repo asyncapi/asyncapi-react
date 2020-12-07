@@ -84,9 +84,6 @@ export const ContentWrapper = styled.div`
 
 export const CodeEditorsWrapper = styled.div`
   width: 40%;
-  height: calc(100vh - 50px);
-  min-height: calc(100vh - 50px);
-  overflow: auto;
   background: rgb(38, 50, 56);
 `;
 
@@ -123,7 +120,7 @@ export const CodeEditorWrapper = styled.div`
 export const TabsHeader = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 0 5px;
+  margin: 0 5px 15px;
   display: flex;
   justify-items: flex-start;
   flex-flow: row nowrap;
@@ -153,10 +150,14 @@ interface TabsContentProps {
 }
 
 export const TabsContent = styled.div<TabsContentProps>`
-  margin: ${props => (props.margin ? props.margin : '20px')};
+  margin: 0;
+  padding: 0 20px;
   font-size: 14px;
   color: #515559;
   line-height: 1.57;
+  overflow: auto;
+  height: calc(100vh - 122px);
+  min-height: calc(100vh - 122px);
 `;
 
 export const TabWrapper = styled.li``;
