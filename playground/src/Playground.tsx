@@ -33,9 +33,7 @@ class Playground extends Component<{}, State> {
   state = {
     schema: defaultSchema,
     config: defaultConfig,
-    schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
-    configFromEditor: defaultConfig,
     refreshing: false,
   };
 
@@ -111,7 +109,9 @@ class Playground extends Component<{}, State> {
   };
 
   private startRefreshing = (): void => {
-    this.setState({ refreshing: true });
+    setTimeout(() => {
+      this.setState({ refreshing: true });
+    }, 500);
   };
 
   private stopRefreshing = (): void => {
