@@ -14,7 +14,7 @@ import {
   AsyncApiWrapper,
 } from './components';
 
-import { defaultConfig, parse } from './common';
+import { defaultConfig, parse, debounce } from './common';
 import * as specs from './specs';
 
 const defaultSchema = specs.streetlights;
@@ -22,32 +22,40 @@ const defaultSchema = specs.streetlights;
 interface State {
   schema: string;
   config: string;
-  schemaFromEditor: string;
   schemaFromExternalResource: string;
-  configFromEditor: string;
+  refreshing: boolean;
 }
 
 class Playground extends Component<{}, State> {
+  updateSchemaFn: (value: string) => void;
+  updateConfigFn: (value: string) => void;
+
   state = {
     schema: defaultSchema,
     config: defaultConfig,
-    schemaFromEditor: defaultSchema,
     schemaFromExternalResource: '',
-    configFromEditor: defaultConfig,
+    refreshing: false,
   };
 
-  render() {
-    const {
-      schema,
-      config = defaultConfig,
-      schemaFromEditor,
-      schemaFromExternalResource,
-      configFromEditor,
-    } = this.state;
+  constructor(props: any) {
+    super(props);
+    this.updateSchemaFn = debounce(
+      this.updateSchema,
+      750,
+      this.startRefreshing,
+      this.stopRefreshing,
+    );
+    this.updateConfigFn = debounce(
+      this.updateConfig,
+      750,
+      this.startRefreshing,
+      this.stopRefreshing,
+    );
+  }
 
-    const parsedConfig = config
-      ? parse<ConfigInterface>(config)
-      : parse<ConfigInterface>(defaultConfig);
+  render() {
+    const { schema, config, schemaFromExternalResource } = this.state;
+    const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
 
     return (
       <PlaygroundWrapper>
@@ -64,9 +72,9 @@ class Playground extends Component<{}, State> {
                   />
                   <CodeEditorComponent
                     key="Schema"
-                    code={schemaFromEditor}
+                    code={schema}
                     externalResource={schemaFromExternalResource}
-                    parentCallback={this.updateSchema}
+                    parentCallback={this.updateSchemaFn}
                     mode="text/yaml"
                   />
                 </>
@@ -74,8 +82,8 @@ class Playground extends Component<{}, State> {
               <Tab title="Configuration" key="Configuration">
                 <CodeEditorComponent
                   key="Configuration"
-                  code={configFromEditor}
-                  parentCallback={this.updateConfig}
+                  code={config}
+                  parentCallback={this.updateConfigFn}
                 />
               </Tab>
             </Tabs>
@@ -89,7 +97,7 @@ class Playground extends Component<{}, State> {
   }
 
   private updateSchema = (schema: string) => {
-    this.setState({ schemaFromEditor: schema });
+    this.setState({ schema: schema });
   };
 
   private updateSchemaFromExternalResource = (schema: string) => {
@@ -97,19 +105,21 @@ class Playground extends Component<{}, State> {
   };
 
   private updateConfig = (config: string) => {
-    this.setState({ configFromEditor: config });
+    this.setState({ config: config });
   };
 
-  private refreshState = () => {
-    const { schemaFromEditor, configFromEditor } = this.state;
-    this.setState({
-      schema: schemaFromEditor,
-      config: configFromEditor,
-    });
+  private startRefreshing = (): void => {
+    setTimeout(() => {
+      this.setState({ refreshing: true });
+    }, 500);
+  };
+
+  private stopRefreshing = (): void => {
+    this.setState({ refreshing: false });
   };
 
   private renderAdditionalHeaderContent = () => (
-    <RefreshIcon onClick={this.refreshState}>{'\uE00A'}</RefreshIcon>
+    <RefreshIcon show={this.state.refreshing}>{'\uE00A'}</RefreshIcon>
   );
 }
 

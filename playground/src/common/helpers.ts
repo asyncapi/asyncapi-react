@@ -33,3 +33,21 @@ export const fetchSchema = async (link: string): Promise<any> => {
 function handleResponse(response: any) {
   return response.text().then((data: string) => data);
 }
+
+export function debounce<T>(
+  func: Function,
+  wait: number,
+  onStart: () => void,
+  onCancel: () => void,
+): () => any {
+  let timeout: number | undefined;
+  return function(...args: any[]) {
+    if (timeout) clearTimeout(timeout);
+    onStart();
+    timeout = setTimeout(() => {
+      timeout = undefined;
+      func(...args);
+      onCancel();
+    }, wait || 1000);
+  };
+}
