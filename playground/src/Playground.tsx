@@ -97,7 +97,7 @@ class Playground extends Component<{}, State> {
   }
 
   private updateSchema = (schema: string) => {
-    this.setState({ schema: schema });
+    this.setState({ schema });
   };
 
   private updateSchemaFromExternalResource = (schema: string) => {
@@ -105,7 +105,7 @@ class Playground extends Component<{}, State> {
   };
 
   private updateConfig = (config: string) => {
-    this.setState({ config: config });
+    this.setState({ config });
   };
 
   private startRefreshing = (): void => {
