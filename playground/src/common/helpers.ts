@@ -35,14 +35,16 @@ function handleResponse(response: any) {
 }
 
 export function debounce<T>(
-  func: Function,
+  func: (...args: any[]) => void,
   wait: number,
   onStart: () => void,
   onCancel: () => void,
 ): () => any {
   let timeout: number | undefined;
-  return function(...args: any[]) {
-    if (timeout) clearTimeout(timeout);
+  return (...args: any[]) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
     onStart();
     timeout = setTimeout(() => {
       timeout = undefined;
