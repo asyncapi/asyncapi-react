@@ -35,6 +35,12 @@ class FetchSchema extends Component<Props, State> {
   }
 
   private fetchSchemaFromExternalResources = async () => {
+    try {
+      // tslint:disable-next-line
+      new URL(this.state.link);
+    } catch (e) {
+      return;
+    }
     const {
       props: { parentCallback },
       state: { link },
