@@ -339,6 +339,7 @@ export interface Schema {
   required?: string[];
   enum?: any[];
   deprecated?: boolean;
+  const?: any;
   type?: SchemaType;
   items?: Schema /*| Schema[];*/; // todo: end this
   discriminator?: string;

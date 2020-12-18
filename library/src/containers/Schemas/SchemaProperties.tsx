@@ -151,6 +151,16 @@ const renderPropertyDescription = (el: SchemaElement): React.ReactNode => {
           Default: <span>{el.schema.content.default}</span>
         </div>
       )}
+      {el.schema.content.hasOwnProperty('const') && (
+        <div>
+          Const:{' '}
+          <span>
+            {typeof el.schema.content.const !== 'object'
+              ? String(el.schema.content.const)
+              : JSON.stringify(el.schema.content.const)}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
