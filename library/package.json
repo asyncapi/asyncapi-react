@@ -54,7 +54,7 @@
     "constate": "^1.2.0",
     "dompurify": "^2.1.1",
     "markdown-it": "^11.0.1",
-    "merge": "^1.2.1",
+    "merge": "^2.1.0",
     "openapi-sampler": "^1.0.0-beta.15",
     "react-use": "^12.2.0"
   },
