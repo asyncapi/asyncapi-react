@@ -31,7 +31,13 @@ const renderSchemaProps = (
 
   if (properties) {
     return Object.entries(properties).map(([key, prop]) => (
-      <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
+      <SchemaProperties
+        key={key}
+        name={key}
+        properties={prop}
+        treeSpace={0}
+        required={schema.required && schema.required.includes(key)}
+      />
     ));
   }
 
