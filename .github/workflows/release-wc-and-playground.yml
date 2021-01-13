@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Install latest version of library in the web-component
         # sleep for 60 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `save` package in registry
         run: |
@@ -53,7 +53,7 @@ jobs:
         with:
           node-version: 14
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Use latest version of react component in the playground
         run: |
           sleep 1m
