@@ -19,7 +19,7 @@
     "build": "npm run build-library && npm run build-web-component",
     "build:library": "cd library && npm run prepare",
     "build:webcomponent": "cd web-component && npm run prepare",
-    "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
     "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
