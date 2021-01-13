@@ -29,7 +29,7 @@ jobs:
           node-version: 14
       - if: steps.packagejson.outputs.exists == 'true'
         name: Install dependencies
-        run: npm install
+        run: npm install --loglevel verbose
       - if: steps.packagejson.outputs.exists == 'true'
         name: Test
         run: npm test
