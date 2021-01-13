@@ -1,0 +1,79 @@
+name: Release Web-component and Playground
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  webcomponent:
+    name: Release Web-component
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: npm ci
+      - name: Install latest version of library in the web-component
+        # sleep for 60 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `save` package in registry
+        run: |
+          sleep 1m
+          echo "Log all versions of the package on npm registry"
+          npm show @asyncapi/react-component versions
+          echo "Log latest version of the package on npm registry"
+          npm show @asyncapi/react-component dist-tags.latest
+          echo "Starting installation"
+          npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
+        working-directory: ./web-component
+      - name: Build web-component
+        run: npm run build:webcomponent
+      - name: Bump web-component
+        run: npm --no-git-tag-version --allow-same-version version ${{ github.event.release.tag_name }}
+        working-directory: ./web-component
+      - name: Release web-component to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./web-component/package.json
+          access: public
+
+  playground:
+    name: Release Playground
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install dependencies
+        run: npm ci
+      - name: Use latest version of react component in the playground
+        run: |
+          sleep 1m
+          echo "Log all versions of the package on npm registry"
+          npm show @asyncapi/react-component versions
+          echo "Log latest version of the package on npm registry"
+          npm show @asyncapi/react-component dist-tags.latest
+          echo "Starting installation"
+          npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
+        working-directory: ./playground
+      - name: Build playground
+        run: npm run build
+        working-directory: ./playground
+      - name: Deploy GH page
+        uses: JamesIves/github-pages-deploy-action@3.4.2
+        with:
+          ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: playground/build
+          GIT_CONFIG_NAME: asyncapi-bot
+          GIT_CONFIG_EMAIL: info@asyncapi.io
+
+
