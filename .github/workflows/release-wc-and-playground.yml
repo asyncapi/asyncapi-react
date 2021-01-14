@@ -1,9 +1,9 @@
 name: Release Web-component and Playground
 
-on:
-  push:
-    branches:
-      - master
+on: 
+  release:
+    types: 
+      - published
 
 jobs:
 
