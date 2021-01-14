@@ -144,10 +144,13 @@ const renderPropertyName = (el: SchemaElement): React.ReactNode => (
         {(() => {
           const treeSpaces = [];
           if (el.treeSpace) {
-            // el.treeSpace + 1 to account for the missing TreeLeaf
-            for (let i = 0; i < el.treeSpace + 1; i++) {
+            for (let i = 0; i < el.treeSpace; i++) {
               treeSpaces.push(<TreeSpace key={i} />);
             }
+            // adding 25px span to account for the missing TreeLeaf
+            treeSpaces.push(
+              <span style={{ display: 'inline-block', width: '25px' }} />,
+            );
           }
           return treeSpaces;
         })()}
