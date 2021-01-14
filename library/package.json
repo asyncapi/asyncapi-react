@@ -44,8 +44,7 @@
     "copyCss": "cp -r ./src/styles ./lib",
     "prepare": "npm run build",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
-    "get-version": "echo $npm_package_version"
+    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.2.0",

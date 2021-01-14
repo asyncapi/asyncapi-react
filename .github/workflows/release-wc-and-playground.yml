@@ -18,15 +18,7 @@ jobs:
         with:
           node-version: 14
       - name: Install latest version of library in the web-component
-        # sleep for 60 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `save` package in registry
-        run: |
-          sleep 1m
-          echo "Log all versions of the package on npm registry"
-          npm show @asyncapi/react-component versions
-          echo "Log latest version of the package on npm registry"
-          npm show @asyncapi/react-component dist-tags.latest
-          echo "Starting installation"
-          npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
+        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
         working-directory: ./web-component
       - name: Install dependencies
         run: npm install
@@ -48,14 +40,7 @@ jobs:
         with:
           node-version: 14
       - name: Use latest version of react component in the playground
-        run: |
-          sleep 1m
-          echo "Log all versions of the package on npm registry"
-          npm show @asyncapi/react-component versions
-          echo "Log latest version of the package on npm registry"
-          npm show @asyncapi/react-component dist-tags.latest
-          echo "Starting installation"
-          npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
+        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
         working-directory: ./playground
       - name: Install dependencies
         run: npm install

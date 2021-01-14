@@ -31,7 +31,7 @@
     "bump:playground:version": "cd playground && npm --no-git-tag-version --allow-same-version version $VERSION",
     "bump:webcomp:version": "cd web-component && npm --no-git-tag-version --allow-same-version version $VERSION",
     "bump:lib:version": "cd library && npm --no-git-tag-version --allow-same-version version $VERSION",
-    "bump:version": "npm run bump:lib:version && npm run bump:webcomp:version && npm run bump:playground:version"
+    "bump:version": "npm run bump:lib:version && npm run bump:webcomp:version && npm run bump:playground:version && cd playground && npm run install:reactcomp && cd web-component && npm run install:reactcomp"
   },
   "devDependencies": {
     "tslib": "^1.10.0",
