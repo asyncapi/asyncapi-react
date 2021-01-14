@@ -17,8 +17,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install dependencies
-        run: npm install
       - name: Install latest version of library in the web-component
         # sleep for 60 seconds before using latest version in web-component, because sometimes NPM needs additional few seconds to `save` package in registry
         run: |
@@ -30,11 +28,8 @@ jobs:
           echo "Starting installation"
           npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
         working-directory: ./web-component
-      - name: Build web-component
-        run: npm run build:webcomponent
-      - name: Bump web-component
-        run: npm --no-git-tag-version --allow-same-version version ${{ github.event.release.tag_name }}
-        working-directory: ./web-component
+      - name: Install dependencies
+        run: npm install
       - name: Release web-component to NPM
         uses: JS-DevTools/npm-publish@v1
         with:
@@ -52,8 +47,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install dependencies
-        run: npm install
       - name: Use latest version of react component in the playground
         run: |
           sleep 1m
@@ -64,9 +57,8 @@ jobs:
           echo "Starting installation"
           npm install @asyncapi/react-component@${{ github.event.release.tag_name }} --save --loglevel verbose
         working-directory: ./playground
-      - name: Build playground
-        run: npm run build
-        working-directory: ./playground
+      - name: Install dependencies
+        run: npm install
       - name: Deploy GH page
         uses: JamesIves/github-pages-deploy-action@3.4.2
         with:

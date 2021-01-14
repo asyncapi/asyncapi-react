@@ -37,7 +37,7 @@ If you make any changes in the project structure, remember to update it.
 
 ## Install dependencies
 
-To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run thisnp command:
+To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run this command:
 
 ```sh
 npm install
