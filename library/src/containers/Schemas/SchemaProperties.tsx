@@ -138,7 +138,22 @@ const renderPropertyName = (el: SchemaElement): React.ReactNode => (
       return treeSpaces;
     })()}
     {el.schema.key}
-    {el.required && <div className="text-red">required</div>}
+
+    {el.required && (
+      <div className="text-red">
+        {(() => {
+          const treeSpaces = [];
+          if (el.treeSpace) {
+            // el.treeSpace + 1 to account for the missing TreeLeaf
+            for (let i = 0; i < el.treeSpace + 1; i++) {
+              treeSpaces.push(<TreeSpace key={i} />);
+            }
+          }
+          return treeSpaces;
+        })()}
+        required
+      </div>
+    )}
   </>
 );
 
