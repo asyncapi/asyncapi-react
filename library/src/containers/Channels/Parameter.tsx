@@ -29,6 +29,7 @@ export const Parameter: FunctionComponent<Props> = ({
         schema={schema}
         hideTitle={true}
         description={description}
+        required={true} // parameters are always required
       />
     </div>
   </div>
