@@ -4,11 +4,9 @@ name: 'Notify slack'
 
 on:
     issues:
-        types:
-            - opened
+        types: [opened, reopened]
     pull_request:
-        types:
-            - opened
+        types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
 
