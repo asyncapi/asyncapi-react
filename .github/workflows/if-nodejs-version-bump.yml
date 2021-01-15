@@ -19,6 +19,9 @@ jobs:
         id: packagejson
         run: test -e ./package.json && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
       - if: steps.packagejson.outputs.exists == 'true'
+        name: Install dependencies
+        run: npm install
+      - if: steps.packagejson.outputs.exists == 'true'
         name: Assets generation
         run: npm run generate:assets
       - if: steps.packagejson.outputs.exists == 'true'  
