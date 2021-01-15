@@ -134,6 +134,8 @@ components:
           description: Light intensity measured in lumens.
         sentAt:
           $ref: "#/components/schemas/sentAt"
+      required:
+        - lumens
     turnOnOffPayload:
       type: object
       properties:
@@ -214,6 +216,8 @@ components:
             type: integer
             minimum: 0
             maximum: 100
+        required:
+          - my-app-header
   
   operationTraits:
     kafka:
