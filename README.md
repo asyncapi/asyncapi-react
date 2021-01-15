@@ -3,11 +3,11 @@
   <br>
   React Component
 </h5>
-<h4 align="center">A official React component for AsyncAPI 2.0 specification</h4>
+<h4 align="center">React component for AsyncAPI 2.0 specification. Available also as a Web component.</h4>
 
 ---
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component)
 
 ## Overview
 
@@ -15,11 +15,26 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 > **CAUTION**: This package only supports AsyncAPI 2.0 specification. If you use 1.x, we recommend that you upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
 
-## Playground
+<!-- toc is generated with GitHub Actions do not remove toc markers -->
 
-This repository comes in with a [Playground application](https://asyncapi.github.io/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
+<!-- toc -->
 
-You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+  * [Props](#props)
+  * [Features](#features)
+  * [Styles](#styles)
+- [Playground](#playground)
+- [Web Component](#web-component)
+  * [Installation](#installation-1)
+  * [Using in Angular](#using-in-angular)
+- [Development](#development)
+- [Contribution](#contribution)
+- [Missing features](#missing-features)
+- [Credits](#credits)
+- [Contributors](#contributors)
+
+<!-- tocstop -->
 
 ## Prerequisites
 
@@ -65,6 +80,12 @@ import "@asyncapi/react-component/lib/styles/fiori.css";
 ```
 
 For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
+
+## Playground
+
+This repository comes in with a [Playground application](https://asyncapi.github.io/asyncapi-react/). Test it to see the component in action and play with it before you use it in your application.
+
+You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
 
 ## Web Component
 
@@ -133,10 +154,6 @@ To use component in Angular, follow these steps:
 ## Development
 
 For information on how to set up a development environment, write and run tests, follow the naming and architecture convention defined for the project in the [Development Guide](./docs/development/guide.md).
-
-## Releasing
-
-For information on how to release a new version of the library or the playground application, or details on creating a changelog file, read the [Releasing](./docs/development/releasing.md) document.
 
 ## Contribution
 
