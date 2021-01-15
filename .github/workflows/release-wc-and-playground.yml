@@ -1,0 +1,56 @@
+name: Release Web-component and Playground
+
+on: 
+  release:
+    types: 
+      - published
+
+jobs:
+
+  webcomponent:
+    name: Release Web-component
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install latest version of library in the web-component
+        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
+        working-directory: ./web-component
+      - name: Install dependencies
+        run: npm install
+      - name: Release web-component to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./web-component/package.json
+          access: public
+
+  playground:
+    name: Release Playground
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Use latest version of react component in the playground
+        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
+        working-directory: ./playground
+      - name: Install dependencies
+        run: npm install
+      - name: Deploy GH page
+        uses: JamesIves/github-pages-deploy-action@3.4.2
+        with:
+          ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: playground/build
+          GIT_CONFIG_NAME: asyncapi-bot
+          GIT_CONFIG_EMAIL: info@asyncapi.io
+
+

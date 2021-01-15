@@ -16,16 +16,24 @@
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
-    "build": "npm run build-library && npm run build-web-component",
-    "build-library": "cd library && npm run prepare",
-    "build-web-component": "cd web-component && npm run prepare",
-    "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "lint-fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
+    "build": "npm run build:library && npm run build:webcomponent && npm run build:playground",
+    "build:library": "cd library && npm run prepare",
+    "build:webcomponent": "cd web-component && npm run prepare",
+    "build:playground": "cd playground && npm run build",
+    "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
+    "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
     "release": "semantic-release",
-    "get-lib-version": "cd library && npm run get-version",
-    "get-web-version": "cd web-component && npm run get-version"
+    "postinstall": "npm run bootstrap",
+    "prepublishOnly": "npm run build",
+    "generate:assets": "echo 'No additional assets need to be generated at the moment'",
+    "bump:playground:version": "cd playground && npm --no-git-tag-version --allow-same-version version $VERSION",
+    "bump:webcomp:version": "cd web-component && npm --no-git-tag-version --allow-same-version version $VERSION",
+    "bump:lib:version": "cd library && npm --no-git-tag-version --allow-same-version version $VERSION",
+    "bump:version": "npm run bump:lib:version && npm run bump:webcomp:version && npm run bump:playground:version && npm run install:reactcomp:webcomponent && npm run install:reactcomp:playground",
+    "install:reactcomp:playground": "cd playground && npm run install:reactcomp",
+    "install:reactcomp:webcomponent": "cd web-component && npm run install:reactcomp"
   },
   "devDependencies": {
     "tslib": "^1.10.0",
@@ -88,6 +96,5 @@
       ],
       "@semantic-release/github"
     ]
-  },
-  "dependencies": {}
+  }
 }
