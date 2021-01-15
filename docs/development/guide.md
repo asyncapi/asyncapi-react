@@ -37,11 +37,10 @@ If you make any changes in the project structure, remember to update it.
 
 ## Install dependencies
 
-To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run these commands:
+To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run this command:
 
 ```sh
 npm install
-npm run bootstrap
 ```
 
 If you want to clear dependencies and remove a symlink, run this command:

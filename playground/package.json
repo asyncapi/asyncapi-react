@@ -29,7 +29,8 @@
   "scripts": {
     "start": "react-app-rewired start",
     "test": "react-app-rewired test",
-    "build": "react-app-rewired build"
+    "build": "react-app-rewired build",
+    "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
   },
   "browserslist": {
     "production": [
