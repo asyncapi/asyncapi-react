@@ -9,6 +9,7 @@ type SchemaWithKey = TypeWithKey<string, Schema>;
 interface SchemaElement {
   schema: SchemaWithKey;
   treeSpace: number;
+  required: boolean;
 }
 
 const getEnumHTMLElements = (schema: SchemaWithKey): HTMLElement[] => {
@@ -68,6 +69,7 @@ const renderProperties = (
       name={key}
       properties={prop}
       treeSpace={treeSpace}
+      required={schema.required && schema.required.includes(key)}
     />
   ));
 };
@@ -120,6 +122,7 @@ interface Props {
   properties: Schema;
   treeSpace: number;
   description?: React.ReactNode;
+  required?: boolean;
 }
 
 const renderPropertyName = (el: SchemaElement): React.ReactNode => (
@@ -135,6 +138,22 @@ const renderPropertyName = (el: SchemaElement): React.ReactNode => (
       return treeSpaces;
     })()}
     {el.schema.key}
+
+    {el.required && (
+      <div className="text-red">
+        {(() => {
+          const treeSpaces = [];
+          if (el.treeSpace) {
+            // el.treeSpace + 1 to account for the missing TreeLeaf
+            for (let i = 0; i < el.treeSpace + 1; i++) {
+              treeSpaces.push(<TreeSpace key={i} />);
+            }
+          }
+          return treeSpaces;
+        })()}
+        required
+      </div>
+    )}
   </>
 );
 
@@ -170,6 +189,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
   hasDynamicName = false,
   properties,
   treeSpace,
+  required = false,
 }) => {
   const alteredProperties = handleNotProperty(properties);
   const space = treeSpace + 1;
@@ -179,6 +199,7 @@ export const SchemaPropertiesComponent: React.FunctionComponent<Props> = ({
       content: alteredProperties,
     },
     treeSpace,
+    required,
   };
 
   return (

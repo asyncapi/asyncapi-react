@@ -21,17 +21,25 @@ interface Props {
   toggle?: boolean;
   toggleExpand?: boolean;
   examples?: object[];
+  required?: boolean;
 }
 
 const renderSchemaProps = (
   schemaName: string,
   schema: Schema,
+  required: boolean,
 ): React.ReactNode => {
   const properties = schema.properties;
 
   if (properties) {
     return Object.entries(properties).map(([key, prop]) => (
-      <SchemaProperties key={key} name={key} properties={prop} treeSpace={0} />
+      <SchemaProperties
+        key={key}
+        name={key}
+        properties={prop}
+        treeSpace={0}
+        required={schema.required && schema.required.includes(key)}
+      />
     ));
   }
 
@@ -41,6 +49,7 @@ const renderSchemaProps = (
       hasDynamicName={true}
       properties={schema}
       treeSpace={0}
+      required={required}
     />
   );
 };
@@ -54,6 +63,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   toggle = false,
   toggleExpand = false,
   examples = [],
+  required = false,
 }) => {
   if (!schema) {
     return null;
@@ -74,7 +84,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   const content = (
     <>
       <div className={`${bemClasses.element(`${className}-table`)} p-4`}>
-        {renderSchemaProps(name, schema)}
+        {renderSchemaProps(name, schema, required)}
       </div>
 
       {hasExamples ? (
