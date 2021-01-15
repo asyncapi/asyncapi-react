@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          ref: master
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -22,6 +24,11 @@ jobs:
         working-directory: ./web-component
       - name: Install dependencies
         run: npm install
+      - name: Bump version in package.json
+        # There is no need to substract "v" from the tag as version script handles it
+        # When adding "bump:version" script in package.json, make sure no tags are added by default (--no-git-tag-version) as they are already added by release workflow
+        # When adding "bump:version" script in package.json, make sure --allow-same-version is set in case someone forgot and updated package.json manually and we want to avoide this action to fail and raise confusion
+        run: VERSION=${{github.event.release.tag_name}} npm run bump:webcomp:version
       - name: Release web-component to NPM
         uses: JS-DevTools/npm-publish@v1
         with:
@@ -44,6 +51,9 @@ jobs:
         working-directory: ./playground
       - name: Install dependencies
         run: npm install
+      - name: Build
+        run: npm run build
+        working-directory: ./playground
       - name: Deploy GH page
         uses: JamesIves/github-pages-deploy-action@3.4.2
         with:
