@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          ref: master
       - name: Check if Node.js project and has package.json
         id: packagejson
         run: test -e ./package.json && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
