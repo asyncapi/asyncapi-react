@@ -58,7 +58,7 @@ export const NavigationLinksItem = styled.li`
   margin-left: 12px;
 
   > a {
-    font-family: 'SAP-Icons';
+    font-family: sans-serif;
     font-weight: 700;
     color: #f77669;
     transition: 0.2s color linear;
@@ -106,7 +106,7 @@ export const TabsWrapper = styled.div`
   width: 100%;
   height: 100%;
   margin: 0;
-  font-family: '72';
+  font-family: sans-serif;
   font-weight: normal;
 `;
 
@@ -138,7 +138,7 @@ interface RefreshIconProps {
 }
 
 export const RefreshIcon = styled.div<RefreshIconProps>`
-  font-family: 'SAP-Icons';
+  font-family: sans-serif;
   font-weight: 700;
   color: #f77669;
   transition: 0.2s all linear;
