@@ -3,7 +3,7 @@
   <br>
   React Component
 </h5>
-<h4 align="center">React component for AsyncAPI 2.0 specification. Available also as a Web component.</h4>
+<h4 align="center">React component for AsyncAPI 2.0 specification. Available also as a Web Component.</h4>
 
 ---
 
@@ -58,7 +58,7 @@ The list of props for the AsyncAPI React component includes:
 
 - **schema: string | AsyncApiInterface | FetchingSchemaInterface**
 
-  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/helpers/fetchSchema.ts#L1) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
 - **config?: Partial<ConfigInterface\>**
 
@@ -73,7 +73,7 @@ For a list and description of features offered by the AsyncAPI React component, 
 
 ### Styles
 
-To use default styles based on [SAP Fundamentals](https://sap.github.io/fundamental/), import them as follows:
+To use default styles import them as follows:
 
 ``` js
 import "@asyncapi/react-component/lib/styles/fiori.css";
@@ -89,7 +89,35 @@ You can also run the Playground application locally by following [this](./docs/d
 
 ## Web Component
 
-If you are not using React you may want to use the `@asyncapi/web-component` component as a plain web component. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+If you are not using React you may want to use the `@asyncapi/web-component` component as a plain web component in any other web framework of your choice or as an element of a static HTML webpage. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
+
+When invoked as an independent entity, Web Component takes the following props (as it is still a React component):
+
+- `schema` is a `schema` property from the React component,
+    > **NOTE**: Since version 0.19.0 specifying a `schema` object can be omitted. `schema.url` and `schema.requestOptions` can be replaced with `schemaUrl` and `schemaFetchOptions` properties accordingly.
+- `config` is an **optional** `config` property from the React component,
+- `schemaUrl` property is a `string`, specific to Web Component, containing a URL to fetch an AsyncAPI Schema from. It is a wrapper for `schema.url` property in `schema` object under the hood,
+    > **NOTE**: If `schemaUrl` property is specified, the `schema.url` property of the React component will be ignored.
+- `schemaFetchOptions` property is an **optional** `object` of [RequestInit](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.requestinit.html) type in JSON format, specific to Web Component, containing additional fetching options. It is a wrapper for `schema.requestOptions` property in `schema` object, which are both needed only in case process of fetching from a URL is any different from a usual browser request,
+    > **NOTE**: If `schemaFetchOptions` property is specified, `schema.requestOptions` property of the React component will be ignored. If `schemaUrl` property is NOT specified, `schemaFetchOptions` will be ignored itself and `schema.url`/`schema.requestOptions` properties of the React component must be used in this case.
+- `cssImportPath` property is the path to styles. Default version from `unpkg.com` contains guaranteed minimum styling for the Web Component,
+- [webcomponentsjs](https://www.npmjs.com/package/@webcomponents/webcomponentsjs) is a series of polyfills to make code runnable in old browsers. It is **optional** if you do not intend to support any.
+
+```html
+<!-- Remove 'webcomponentsjs' if no support for older browsers is required -->
+<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.5.0/webcomponents-bundle.js"></script>
+<script src="https://unpkg.com/@asyncapi/web-component@0.19.0/lib/asyncapi-web-component.js" defer></script>
+
+<asyncapi-component
+  schemaUrl="https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/2.0.0/streetlights.yml"
+  schemaFetchOptions='{"method":"GET","mode":"cors"}' <!-- Remove if it is only a plain browser request -->
+  cssImportPath="https://unpkg.com/@asyncapi/react-component@0.19.0/lib/styles/fiori.css">
+</asyncapi-component>
+```
+
+> **NOTE**: If a Web Component is called with no properties at all, error will be shown on page.
+
+> **NOTE**: If there are several Web Components on one page, each one will be rendered using its own properties.
 
 ### Installation
 
@@ -140,13 +168,18 @@ To use component in Angular, follow these steps:
 3. Use web component in the template as follows:
 
   ```html
-  <asyncapi-component [schema]="schema" [config]="config" [cssImportPath]="cssImportPath"></asyncapi-component>
+  <asyncapi-component
+    [schema]="schema"
+    [config]="config"
+    [schemaUrl]="schemaUrl"
+    [schemaFetchOptions]="schemaFetchOptions"
+    [cssImportPath]="cssImportPath">
+  </asyncapi-component>
   ```
  
   where:
   
-  - `schema` is a `schema` property from React component,
-  - `config` is a `config` property from React component,
+  - `schema`, `config`, `schemaUrl`, `schemaFetchOptions` are Web Component's properties used in any valid combination, as described in [Web Component specification](#web-component),
   - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
 
   > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
