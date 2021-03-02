@@ -2,11 +2,16 @@ import React from 'react';
 
 import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
+import { BindingsComponent } from '../Bindings/Bindings';
 
 import { Badge, BadgeType, Markdown, Toggle } from '../../components';
 import { bemClasses, removeSpecialChars } from '../../helpers';
-import { MESSAGE_TEXT, ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
-import { Channel, RawMessage, isRawMessage, PayloadType } from '../../types';
+import {
+  ITEM_LABELS,
+  CONTAINER_LABELS,
+  CHANNEL_BINDINGS_TEXT,
+} from '../../constants';
+import { Channel, isRawMessage, PayloadType } from '../../types';
 
 interface Props {
   name: string;
@@ -26,10 +31,6 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
     removeSpecialChars(name),
   ]);
 
-  const message =
-    (channel.publish && channel.publish.message) ||
-    (channel.subscribe && channel.subscribe.message);
-
   const oneOfPublish =
     channel.publish &&
     channel.publish.message &&
@@ -39,8 +40,6 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
     channel.subscribe &&
     channel.subscribe.message &&
     !isRawMessage(channel.subscribe.message);
-
-  const oneOfExists = Boolean(oneOfPublish || oneOfSubscribe);
 
   const header = (
     <h3>
@@ -95,20 +94,13 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
           'parameters',
         ])}
       />
+      {channel.bindings && (
+        <BindingsComponent
+          bindings={channel.bindings}
+          title={CHANNEL_BINDINGS_TEXT}
+        />
+      )}
       <div className={bemClasses.element(`${className}-operations`)}>
-        {oneOfExists ? null : (
-          <header
-            className={bemClasses.element(`${className}-operations-header`)}
-          >
-            <h4>
-              <span>
-                {(message as RawMessage)?.title ||
-                  (message as RawMessage)?.name ||
-                  MESSAGE_TEXT}
-              </span>
-            </h4>
-          </header>
-        )}
         <ul className={bemClasses.element(`${className}-operations-list`)}>
           {channel.subscribe && (
             <li

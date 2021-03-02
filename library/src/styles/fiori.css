@@ -576,21 +576,24 @@
 }
 
 .asyncapi__message-header {
-  padding: 12px;
+  padding: 0px;
 }
-.asyncapi__message-header > h3 {
+.asyncapi__message-header-title > h3 {
   color: #0b74de;
-  font-size: 14px;
+  padding: 12px;
+  margin: 0px;
 }
 
 .asyncapi__message-header-title {
-  font-size: 14px;
-  margin-right: 10px;
+  background-color: #fafafa;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
 }
 
 .asyncapi__message-header-summary {
   font-size: 14px;
   font-weight: 500;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+  padding: 12px;
 }
 
 .asyncapi__message-header-deprecated-badge {
@@ -1245,6 +1248,37 @@
 }
 
 .asyncapi__channel-operation {
+}
+
+.asyncapi__message-headers {
+}
+
+.asyncapi__bindings-header {
+  color: #32363a;
+}
+.asyncapi__bindings-header > h4 {
+  background-color: #fafafa;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+  border-bottom: solid 1px rgba(151, 151, 151, 0.26);
+  padding: 12px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-top: 10 px;
+}
+
+.asyncapi__binding {
+}
+.asyncapi__binding-protocol {
+  color: #18873d;
+  margin-right: 6px;
+}
+
+.asyncapi__binding-table {
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+}
+.asyncapi__inding-table > table {
+  margin: 0;
 }
 
 .asyncapi__channel-operation-description {

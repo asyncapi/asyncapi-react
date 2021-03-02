@@ -47,6 +47,10 @@ export enum BindingsType {
 }
 export type Bindings = keyof typeof BindingsType;
 
+export interface BaseBindings {
+  [key: string]: any;
+}
+
 export interface AsyncAPI {
   asyncapi: AsyncAPIVersion;
   id?: UniqueID;
@@ -108,7 +112,7 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
-export interface ServerBindings {
+export interface ServerBindings extends BaseBindings {
   [key: string]: any;
 }
 
@@ -123,6 +127,11 @@ export interface Channel {
   subscribe?: Operation;
   deprecated?: boolean;
   protocolInfo?: ProtocolInfo;
+  bindings?: ChannelBindings;
+}
+
+export interface ChannelBindings extends BaseBindings {
+  [key: string]: any;
 }
 
 export interface OperationTrait {
@@ -145,6 +154,11 @@ export interface Operation {
   operationId?: string;
   protocolInfo?: ProtocolInfo;
   message?: Message;
+  bindings?: OperationBindings[];
+}
+
+export interface OperationBindings extends BaseBindings {
+  [key: string]: any;
 }
 
 export interface ProtocolInfo {
@@ -212,6 +226,11 @@ export interface RawMessage {
   examples?: Example[];
   protocolInfo?: any;
   traits?: MessageTrait | [MessageTrait, any];
+  bindings?: MessageBindings;
+}
+
+export interface MessageBindings extends BaseBindings {
+  [key: string]: any;
 }
 
 export interface Tag {

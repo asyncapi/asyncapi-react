@@ -55,6 +55,11 @@ export const MESSAGE_PAYLOAD_TEXT = 'Message Payload';
 export const PAYLOAD_EXAMPLE_TEXT = 'Example of payload';
 export const SCHEMA_EXAMPLE_TEXT = 'Example';
 
+export const SERVER_BINDINGS_TEXT = 'Server Bindings';
+export const CHANNEL_BINDINGS_TEXT = 'Channel Bindings';
+export const OPERATION_BINDINGS_TEXT = 'Operation Bindings';
+export const MESSAGE_BINDINGS_TEXT = 'Message Bindings';
+
 export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';
 export const ERROR_TEXT = 'Error';
