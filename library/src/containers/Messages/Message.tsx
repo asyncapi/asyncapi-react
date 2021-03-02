@@ -2,6 +2,7 @@ import React from 'react';
 
 import { SchemaComponent } from '../Schemas/Schema';
 import { PayloadComponent } from './Payload';
+import { BindingsComponent } from '../Bindings/Bindings';
 
 import {
   bemClasses,
@@ -19,6 +20,7 @@ import {
   HEADERS_EXAMPLE_TEXT,
   CONTAINER_LABELS,
   ITEM_LABELS,
+  MESSAGE_BINDINGS_TEXT,
 } from '../../constants';
 
 interface Props {
@@ -91,7 +93,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
   );
 
   const header = !(title || summary) ? null : (
-    <h3>
+    <section className={bemClasses.element(`${className}-header`)}>
       {message.deprecated && (
         <div
           className={bemClasses.element(`${className}-header-deprecated-badge`)}
@@ -100,14 +102,14 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
         </div>
       )}
       {title ? (
-        <span className={bemClasses.element(`${className}-header-title`)}>
-          {title}
-        </span>
+        <header className={bemClasses.element(`${className}-header-title`)}>
+          <h3>{title}</h3>
+        </header>
       ) : null}
-      <span className={bemClasses.element(`${className}-header-summary`)}>
+      <div className={bemClasses.element(`${className}-header-summary`)}>
         {summary}
-      </span>
-    </h3>
+      </div>
+    </section>
   );
 
   const headersID = !inChannel
@@ -176,6 +178,12 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
     <>
       {headers}
       {payload}
+      {message.bindings && (
+        <BindingsComponent
+          bindings={message.bindings}
+          title={MESSAGE_BINDINGS_TEXT}
+        />
+      )}
     </>
   );
 
@@ -211,7 +219,9 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           )}
         </Toggle>
       ) : (
-        <>{content}</>
+        <>
+          {header} {content}
+        </>
       )}
     </section>
   );

@@ -35,6 +35,12 @@ servers:
         - streetlights:off
         - streetlights:dim
       - openIdConnectWellKnown: []
+    bindings:
+      mqtt:
+        clientId: guest
+        cleanSession: true
+        keepAlive: 60
+        bindingVersion: 0.1.0
 
 defaultContentType: application/json
 
@@ -44,9 +50,24 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
+    bindings:
+      ws:
+        method: 'POST'
+        bindingVersion: '0.1.0'
     subscribe:
       summary: Receive information about environmental lighting conditions of a particular streetlight.
       operationId: receiveLightMeasurement
+      traits:
+        - $ref: '#/components/operationTraits/kafka'
+      message:
+        $ref: '#/components/messages/lightMeasured'
+      bindings:
+        mqtt:
+          qos: 1
+          bindingVersion: 0.1.0
+    publish:
+      summary: Send information about environmental lighting conditions of a particular streetlight.
+      operationId: sendLightMeasurement
       traits:
         - $ref: '#/components/operationTraits/kafka'
       message:
@@ -62,6 +83,10 @@ channels:
         - $ref: '#/components/operationTraits/kafka'
       message:
         $ref: '#/components/messages/turnOnOff'
+      bindings:
+        mqtt:
+          qos: 1
+          bindingVersion: 0.1.0
 
   smartylighting/streetlights/1/0/action/{streetlightId}/turn/off:
     parameters:
@@ -92,6 +117,9 @@ components:
       title: Light measured
       summary: Inform about environmental lighting conditions for a particular streetlight.
       contentType: application/json
+      bindings:
+        mqtt:
+          bindingVersion: 0.1.0
       traits:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
