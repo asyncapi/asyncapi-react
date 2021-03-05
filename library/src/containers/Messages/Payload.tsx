@@ -96,9 +96,12 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     );
   }
 
+  const parsedId = payload['x-parser-schema-id'];
+  const title =
+    id !== undefined ? (parsedId ? `${id} ${parsedId}` : id) : PAYLOAD_TEXT;
   const header = (
     <header className={bemClasses.element(`${className}-header`)}>
-      <h4>{id !== undefined ? id : PAYLOAD_TEXT}</h4>
+      <h4>{title}</h4>
     </header>
   );
 
