@@ -2,10 +2,12 @@ import React from 'react';
 
 import { bemClasses } from '../../helpers';
 
+import { BindingFieldComponent } from './BindingField';
+
 const className = `binding`;
 interface Props {
-  name?: string;
-  binding?: any;
+  name: string;
+  binding: any;
 }
 
 export const BindingComponent: React.FunctionComponent<Props> = ({
@@ -30,13 +32,13 @@ export const BindingComponent: React.FunctionComponent<Props> = ({
           </div>
         </div>
       </div>
-      {Object.entries(binding).map(([x, y]) => (
-        <div key={x}>
-          <div className="flex py-2">
-            <div className="flex-1">{x}</div>
-            <div className="flex-1">{String(y)}</div>
-          </div>
-        </div>
+      {Object.entries(binding).map(([key, value]) => (
+        <BindingFieldComponent
+          value={value}
+          context={key}
+          bindingType={name}
+          key={key}
+        />
       ))}
     </section>
   );

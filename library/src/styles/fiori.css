@@ -1277,10 +1277,13 @@
 .asyncapi__binding-table {
   border-top: solid 1px rgba(151, 151, 151, 0.26);
 }
-.asyncapi__inding-table > table {
+.asyncapi__binding-table > table {
   margin: 0;
 }
-
+.asyncapi__binding-field-name {
+  font-weight: bold;
+  padding-left: 12px;
+}
 .asyncapi__channel-operation-description {
   padding: 16px 16px 0;
 }

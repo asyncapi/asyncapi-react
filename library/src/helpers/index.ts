@@ -7,6 +7,7 @@ export * from './searchForNestedObject';
 export * from './generateExampleSchema';
 export * from './inContainer';
 export * from './stateHelpers';
+export * from './bindingsHelpers';
 export * from './parser';
 export * from './removeSpecialChars';
 export * from './toKebabCase';
