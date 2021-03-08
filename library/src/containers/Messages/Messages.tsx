@@ -37,12 +37,20 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
       {Object.entries(messages).map(([key, message]) => {
+        const msg = message as RawMessage;
+        let inferredName = msg['x-parser-message-name'] as string;
+        inferredName = inferredName.includes('anonymous-message')
+          ? ''
+          : inferredName;
+
         const title =
           messagesLength < 2 && inChannel
             ? ''
             : (message as RawMessage).title ||
               (message as RawMessage).name ||
+              inferredName ||
               key;
+
         return (
           <li
             key={key}
