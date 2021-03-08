@@ -37,10 +37,15 @@ servers:
       - openIdConnectWellKnown: []
     bindings:
       mqtt:
-        clientId: guest
-        cleanSession: true
+        clientId: guest        
+        cleanSession: false
         keepAlive: 60
         bindingVersion: 0.1.0
+        lastWill:
+          topic: smartylighting/streetlights/1/0/lastwill
+          qos: 1
+          message: so long and thanks for all the fish
+          retain: false
 
 defaultContentType: application/json
 
@@ -65,6 +70,19 @@ channels:
         mqtt:
           qos: 1
           bindingVersion: 0.1.0
+        http:
+          type: request
+          method: GET
+          query:
+            type: object
+            required:
+            - companyId
+            properties:
+              companyId:
+                type: number
+                minimum: 1
+                description: The Id of the company.
+            additionalProperties: false
     publish:
       summary: Send information about environmental lighting conditions of a particular streetlight.
       operationId: sendLightMeasurement
@@ -251,5 +269,8 @@ components:
     kafka:
       bindings:
         kafka:
-          clientId: my-app-id
+          clientId:
+            type: string
+            enum: ['my-app-id']
+          bindingVersion: '0.1.0'
 `;
