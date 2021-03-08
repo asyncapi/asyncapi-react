@@ -1282,7 +1282,24 @@
 }
 .asyncapi__binding-field-name {
   font-weight: bold;
-  padding-left: 12px;
+  padding-left: 0px;
+}
+
+.asyncapi__binding-field-schema {
+  margin: 0;
+}
+.asyncapi__binding-field-schema > .asyncapi__schema {
+  padding: 0;
+  border: none;
+}
+
+.asyncapi__binding-field-schema .asyncapi__schema-table {
+  border-top: none;
+}
+.asyncapi__binding-field-schema > .asyncapi__schema:before {
+  content: '';
+  position: relative;
+  border: none;
 }
 .asyncapi__channel-operation-description {
   padding: 16px 16px 0;

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { bemClasses, bindingsHelper } from '../../helpers';
 import { SchemaComponent } from '../Schemas/Schema';
+import { BINDINGS_SCHEMA_OBJECT_TEXT } from '../../constants';
 
 const className = `binding-field`;
 interface Props {
@@ -15,7 +16,7 @@ export const BindingFieldComponent: React.FunctionComponent<Props> = ({
   context,
   bindingType,
 }) => {
-  if (!value) {
+  if (value === null || value === undefined) {
     return null;
   }
 
@@ -54,7 +55,22 @@ export const BindingFieldComponent: React.FunctionComponent<Props> = ({
           ))}
         </>
       )}
-      {isSchemaObject && <SchemaComponent name={context} schema={value} />}
+
+      {isSchemaObject && (
+        <>
+          <div className="flex py-2">
+            <div className="flex-1">
+              <div className={bemClasses.element(`${className}-name`)}>
+                {context}
+              </div>
+            </div>
+            <div className="flex-1">{BINDINGS_SCHEMA_OBJECT_TEXT}</div>
+          </div>
+          <div className={bemClasses.element(`${className}-schema`)}>
+            <SchemaComponent name={context} schema={value} hideTitle={true} />
+          </div>
+        </>
+      )}
     </>
   );
 };
