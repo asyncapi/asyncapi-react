@@ -19,8 +19,7 @@ class BindingsHelper {
   }
 
   isObject(value: any): boolean {
-    const type = typeof value;
-    return type === 'function' || (type === 'object' && !!value);
+    return !!value && typeof value === 'object';
   }
 }
 export const bindingsHelper = new BindingsHelper();
