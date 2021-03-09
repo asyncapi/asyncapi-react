@@ -94,7 +94,7 @@ export interface Server {
   description?: DescriptionHTML;
   variables?: ServerVariables;
   security?: SecurityRequirement[];
-  bindings?: ServerBindings[];
+  bindings?: BaseBindings[];
 }
 
 export interface ServerVariables {
@@ -112,8 +112,6 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
-export interface ServerBindings extends BaseBindings {}
-
 export interface Channels {
   [key: string]: Channel;
 }
@@ -125,10 +123,8 @@ export interface Channel {
   subscribe?: Operation;
   deprecated?: boolean;
   protocolInfo?: ProtocolInfo;
-  bindings?: ChannelBindings;
+  bindings?: BaseBindings;
 }
-
-export interface ChannelBindings extends BaseBindings {}
 
 export interface OperationTrait {
   summary?: string;
@@ -150,10 +146,8 @@ export interface Operation {
   operationId?: string;
   protocolInfo?: ProtocolInfo;
   message?: Message;
-  bindings?: OperationBindings[];
+  bindings?: BaseBindings[];
 }
-
-export interface OperationBindings extends BaseBindings {}
 
 export interface ProtocolInfo {
   [key: string]: any;
@@ -220,10 +214,8 @@ export interface RawMessage {
   examples?: Example[];
   protocolInfo?: any;
   traits?: MessageTrait | [MessageTrait, any];
-  bindings?: MessageBindings;
+  bindings?: BaseBindings;
 }
-
-export interface MessageBindings extends BaseBindings {}
 
 export interface Tag {
   name: string;
