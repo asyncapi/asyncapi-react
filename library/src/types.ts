@@ -112,9 +112,7 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
-export interface ServerBindings extends BaseBindings {
-  [key: string]: any;
-}
+export interface ServerBindings extends BaseBindings {}
 
 export interface Channels {
   [key: string]: Channel;
@@ -130,9 +128,7 @@ export interface Channel {
   bindings?: ChannelBindings;
 }
 
-export interface ChannelBindings extends BaseBindings {
-  [key: string]: any;
-}
+export interface ChannelBindings extends BaseBindings {}
 
 export interface OperationTrait {
   summary?: string;
@@ -157,9 +153,7 @@ export interface Operation {
   bindings?: OperationBindings[];
 }
 
-export interface OperationBindings extends BaseBindings {
-  [key: string]: any;
-}
+export interface OperationBindings extends BaseBindings {}
 
 export interface ProtocolInfo {
   [key: string]: any;
@@ -229,9 +223,7 @@ export interface RawMessage {
   bindings?: MessageBindings;
 }
 
-export interface MessageBindings extends BaseBindings {
-  [key: string]: any;
-}
+export interface MessageBindings extends BaseBindings {}
 
 export interface Tag {
   name: string;

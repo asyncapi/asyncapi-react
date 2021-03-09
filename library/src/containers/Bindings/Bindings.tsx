@@ -14,7 +14,7 @@ export const BindingsComponent: React.FunctionComponent<Props> = ({
   bindings,
   title,
 }) => {
-  if (!bindings || bindings.length === 0) {
+  if (!bindings || Object.keys(bindings).length === 0) {
     return null;
   }
   const content = (

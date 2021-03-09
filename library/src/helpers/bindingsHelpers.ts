@@ -1,4 +1,10 @@
 class BindingsHelper {
+  /**
+   *
+   * Since we do not have a reliable way to identify schema objects via a spec, schema or similar - using a list of known
+   * binding properties of type SchemaObject
+   * Change it when AsyncAPI will support JSON Schema specification (definition) for bindings
+   */
   private schemaObjectKeys: string[] = [
     'http.query',
     'kafka.groupId',
@@ -9,10 +15,7 @@ class BindingsHelper {
   ];
 
   isSchemaObject(context: string, bindingType: string): boolean {
-    return (
-      this.schemaObjectKeys.find(e => e === `${bindingType}.${context}`) !==
-      undefined
-    );
+    return this.schemaObjectKeys.includes(`${bindingType}.${context}`);
   }
 
   isObject(value: any): boolean {
