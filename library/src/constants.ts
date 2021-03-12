@@ -21,6 +21,9 @@ export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
   'You can subscribe to one of the following messages:';
 export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
   'You can subscribe to the following message:';
+export const RAW_MESSAGE_SUBSCRIBE_TEXT =
+  'You can subscribe to the following message:';
+export const RAW_MESSAGE_PUBLISH_TEXT = 'You can send the following message:';
 
 export const CONTACT_TEXT = 'Contact';
 export const NAM_TEXTE = 'Name';

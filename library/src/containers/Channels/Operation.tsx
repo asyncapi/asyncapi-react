@@ -10,8 +10,8 @@ import { Operation, PayloadType, Message, isRawMessage } from '../../types';
 import {
   ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT,
   ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT,
-  ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT,
-  ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT,
+  RAW_MESSAGE_PUBLISH_TEXT,
+  RAW_MESSAGE_SUBSCRIBE_TEXT,
   OPERATION_BINDINGS_TEXT,
 } from '../../constants';
 
@@ -97,16 +97,16 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
     );
   }
 
+  const operationTitle = operation.summary
+    ? operation.summary
+    : payloadType === PayloadType.PUBLISH
+    ? RAW_MESSAGE_PUBLISH_TEXT
+    : RAW_MESSAGE_SUBSCRIBE_TEXT;
+
   return (
-    <section
-      className={bemClasses.element(`${className}-oneOf-${payloadType}`)}
-    >
-      <header
-        className={bemClasses.element(
-          `${className}-oneOf-${payloadType}-header`,
-        )}
-      >
-        <h3>
+    <section className={bemClasses.element(`${className}-message`)}>
+      <header className={bemClasses.element(`${className}-message-header`)}>
+        <h4>
           {isPublish && isSubscribe ? (
             <Badge
               type={
@@ -116,18 +116,10 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
               }
             />
           ) : null}
-          <span>
-            {payloadType === PayloadType.PUBLISH
-              ? ONE_OF_FOLLOWING_MESSAGES_PUBLISH_SINGLE_TEXT
-              : ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT}
-          </span>
-        </h3>
+          {operationTitle}
+        </h4>
       </header>
-      {operation.summary && (
-        <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{operation.summary}</Markdown>
-        </div>
-      )}
+
       {operation.description && (
         <div className={bemClasses.element(`${className}-description`)}>
           <Markdown>{operation.description}</Markdown>

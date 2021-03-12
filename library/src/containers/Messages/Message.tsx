@@ -58,11 +58,11 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
 
   if (!isRawMessage(message)) {
     return (
-      <ul className={bemClasses.element(`messages-oneOf-list`)}>
+      <ul className={bemClasses.element(`${className}-raw-list`)}>
         {message.oneOf.map((elem, index) => (
           <li
             key={index}
-            className={bemClasses.element(`messages-oneOf-list-item`)}
+            className={bemClasses.element(`${className}-raw-list-item`)}
           >
             <MessageComponent
               message={elem}
@@ -106,9 +106,6 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
           <h3>{title}</h3>
         </header>
       ) : null}
-      <div className={bemClasses.element(`${className}-header-summary`)}>
-        {summary}
-      </div>
     </section>
   );
 
@@ -213,6 +210,7 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
         >
           {!isBody ? null : (
             <>
+              {summary}
               {description}
               {content}
             </>
@@ -220,7 +218,10 @@ export const MessageComponent: React.FunctionComponent<Props> = ({
         </Toggle>
       ) : (
         <>
-          {header} {content}
+          {header}
+          {summary}
+          {description}
+          {content}
         </>
       )}
     </section>
