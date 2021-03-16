@@ -1,10 +1,11 @@
 import React from 'react';
+import { OAuthFlow } from '@asyncapi/parser';
 
 import { ServerSecurityFlowScopes } from './Scopes';
 
 import { bemClasses } from '../../helpers';
 import { Href } from '../../components';
-import { OAuthFlow, OAuthFlowsType } from '../../types';
+import { OAuthFlowsType } from '../../types';
 import { FLOWS_TEXTS } from '../../constants';
 
 interface Props {
@@ -15,36 +16,44 @@ interface Props {
 export const ServerSecurityFlow: React.FunctionComponent<Props> = ({
   name,
   flow,
-}) => (
-  <div className={bemClasses.element(`server-security-flow`)}>
-    <ul className={bemClasses.element(`server-security-flow-list`)}>
-      <li className={bemClasses.element(`server-security-flow-list-item`)}>
-        <strong>{FLOWS_TEXTS.FLOW}</strong>:<span>{OAuthFlowsType[name]}</span>
-      </li>
-      {flow.authorizationUrl && (
+}) => {
+  const authorizationUrl = flow.authorizationUrl();
+  const tokenUrl = flow.tokenUrl();
+  const refreshUrl = flow.refreshUrl();
+  const scopes = flow.scopes();
+
+  return (
+    <div className={bemClasses.element(`server-security-flow`)}>
+      <ul className={bemClasses.element(`server-security-flow-list`)}>
         <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS_TEXTS.AUTHORIZATION_URL}:</strong>
-          <Href href={flow.authorizationUrl}>{flow.authorizationUrl}</Href>
+          <strong>{FLOWS_TEXTS.FLOW}</strong>:
+          <span>{OAuthFlowsType[name]}</span>
         </li>
-      )}
-      {flow.tokenUrl && (
-        <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS_TEXTS.TOKEN_URL}</strong>:
-          <Href href={flow.tokenUrl}>{flow.tokenUrl}</Href>
-        </li>
-      )}
-      {flow.refreshUrl && (
-        <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS_TEXTS.REFRESH_URL}</strong>:
-          <Href href={flow.refreshUrl}>{flow.refreshUrl}</Href>
-        </li>
-      )}
-      {flow.scopes && (
-        <li className={bemClasses.element(`server-security-flow-list-item`)}>
-          <strong>{FLOWS_TEXTS.SCOPES}</strong>:
-          <ServerSecurityFlowScopes scopes={flow.scopes} />
-        </li>
-      )}
-    </ul>
-  </div>
-);
+        {authorizationUrl && (
+          <li className={bemClasses.element(`server-security-flow-list-item`)}>
+            <strong>{FLOWS_TEXTS.AUTHORIZATION_URL}:</strong>
+            <Href href={authorizationUrl}>{authorizationUrl}</Href>
+          </li>
+        )}
+        {tokenUrl && (
+          <li className={bemClasses.element(`server-security-flow-list-item`)}>
+            <strong>{FLOWS_TEXTS.TOKEN_URL}</strong>:
+            <Href href={tokenUrl}>{tokenUrl}</Href>
+          </li>
+        )}
+        {refreshUrl && (
+          <li className={bemClasses.element(`server-security-flow-list-item`)}>
+            <strong>{FLOWS_TEXTS.REFRESH_URL}</strong>:
+            <Href href={refreshUrl}>{refreshUrl}</Href>
+          </li>
+        )}
+        {scopes && (
+          <li className={bemClasses.element(`server-security-flow-list-item`)}>
+            <strong>{FLOWS_TEXTS.SCOPES}</strong>:
+            <ServerSecurityFlowScopes scopes={scopes} />
+          </li>
+        )}
+      </ul>
+    </div>
+  );
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Channel } from '@asyncapi/parser';
 
 import { OperationComponent } from './Operation';
 import { Parameters as ParametersComponent } from './Parameters';
@@ -6,62 +7,54 @@ import { Parameters as ParametersComponent } from './Parameters';
 import { Badge, BadgeType, Markdown, Toggle } from '../../components';
 import { bemClasses, removeSpecialChars } from '../../helpers';
 import { MESSAGE_TEXT, ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
-import { Channel, RawMessage, isRawMessage, PayloadType } from '../../types';
+import { PayloadType } from '../../types';
 
 interface Props {
-  name: string;
+  channelName: string;
   channel: Channel;
   toggleExpand?: boolean;
 }
 
 export const ChannelComponent: React.FunctionComponent<Props> = ({
-  name,
+  channelName,
   channel,
   toggleExpand = false,
 }) => {
   const className = ITEM_LABELS.CHANNEL;
-  const identifier = bemClasses.identifier([CONTAINER_LABELS.CHANNELS, name]);
+  const identifier = bemClasses.identifier([
+    CONTAINER_LABELS.CHANNELS,
+    channelName,
+  ]);
   const dataIdentifier = bemClasses.identifier([
     CONTAINER_LABELS.CHANNELS,
-    removeSpecialChars(name),
+    removeSpecialChars(channelName),
   ]);
 
+  const hasPublish = channel.hasPublish();
+  const publish = channel.publish();
+
+  const hasSubscribe = channel.hasSubscribe();
+  const subscribe = channel.subscribe();
+
   const message =
-    (channel.publish && channel.publish.message) ||
-    (channel.subscribe && channel.subscribe.message);
+    (hasPublish && publish.message()) || (hasSubscribe && subscribe.message());
 
-  const oneOfPublish =
-    channel.publish &&
-    channel.publish.message &&
-    !isRawMessage(channel.publish.message);
+  const oneOfPublish = hasPublish && publish.hasMultipleMessages();
+  const oneOfSubscribe = hasSubscribe && subscribe.hasMultipleMessages();
 
-  const oneOfSubscribe =
-    channel.subscribe &&
-    channel.subscribe.message &&
-    !isRawMessage(channel.subscribe.message);
-
-  const oneOfExists = Boolean(oneOfPublish || oneOfSubscribe);
+  const oneOfExists = oneOfPublish || oneOfSubscribe;
 
   const header = (
     <h3>
       <ul className={bemClasses.element(`${className}-header-badges`)}>
-        {channel.deprecated && (
-          <li
-            className={bemClasses.element(
-              `${className}-header-badges-deprecated-badge`,
-            )}
-          >
-            <Badge type={BadgeType.DEPRECATED} />
-          </li>
-        )}
-        {channel.publish && (
+        {hasPublish && (
           <li
             className={bemClasses.element(`${className}-header-publish-badge`)}
           >
             <Badge type={BadgeType.PUBLISH} />
           </li>
         )}
-        {channel.subscribe && (
+        {hasSubscribe && (
           <li
             className={bemClasses.element(
               `${className}-header-subscribe-badge`,
@@ -72,45 +65,43 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
         )}
       </ul>
       <span className={bemClasses.element(`${className}-header-title`)}>
-        {name}
+        {channelName}
       </span>
     </h3>
   );
 
   const content = (
     <>
-      {channel.description && (
+      {channel.hasDescription() && (
         <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{channel.description}</Markdown>
+          <Markdown>{channel.description()}</Markdown>
         </div>
       )}
-      <ParametersComponent
-        parameters={channel.parameters}
-        identifier={bemClasses.identifier([
-          { id: identifier, toKebabCase: false },
-          'parameters',
-        ])}
-        dataIdentifier={bemClasses.identifier([
-          { id: dataIdentifier, toKebabCase: false },
-          'parameters',
-        ])}
-      />
+      {channel.hasParameters() && (
+        <ParametersComponent
+          parameters={channel.parameters()}
+          identifier={bemClasses.identifier([
+            { id: identifier, toKebabCase: false },
+            'parameters',
+          ])}
+          dataIdentifier={bemClasses.identifier([
+            { id: dataIdentifier, toKebabCase: false },
+            'parameters',
+          ])}
+        />
+      )}
       <div className={bemClasses.element(`${className}-operations`)}>
         {oneOfExists ? null : (
           <header
             className={bemClasses.element(`${className}-operations-header`)}
           >
             <h4>
-              <span>
-                {(message as RawMessage)?.title ||
-                  (message as RawMessage)?.name ||
-                  MESSAGE_TEXT}
-              </span>
+              <span>{(message && message.uid()) || MESSAGE_TEXT}</span>
             </h4>
           </header>
         )}
         <ul className={bemClasses.element(`${className}-operations-list`)}>
-          {channel.subscribe && (
+          {hasSubscribe && (
             <li
               className={bemClasses.element(
                 `${className}-operations-subscribe`,
@@ -118,25 +109,25 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
             >
               <OperationComponent
                 payloadType={PayloadType.SUBSCRIBE}
-                operation={channel.subscribe}
+                operation={subscribe}
                 oneOf={oneOfSubscribe}
                 otherOneOf={oneOfPublish}
-                isPublish={!!channel.publish}
-                isSubscribe={!!channel.subscribe}
+                isPublish={hasPublish}
+                isSubscribe={hasSubscribe}
               />
             </li>
           )}
-          {channel.publish && (
+          {hasPublish && (
             <li
               className={bemClasses.element(`${className}-operations-publish`)}
             >
               <OperationComponent
                 payloadType={PayloadType.PUBLISH}
-                operation={channel.publish}
+                operation={publish}
                 otherOneOf={oneOfSubscribe}
                 oneOf={oneOfPublish}
-                isPublish={!!channel.publish}
-                isSubscribe={!!channel.subscribe}
+                isPublish={hasPublish}
+                isSubscribe={hasSubscribe}
               />
             </li>
           )}
@@ -145,7 +136,7 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
     </>
   );
 
-  const body = (channel.subscribe || channel.publish) && content;
+  // const body = (channel.subscribe || channel.publish) && content;
 
   return (
     <section
@@ -158,10 +149,10 @@ export const ChannelComponent: React.FunctionComponent<Props> = ({
         className={className}
         expanded={toggleExpand}
         label={ITEM_LABELS.CHANNEL}
-        itemName={name}
+        itemName={channelName}
         toggleInState={true}
       >
-        {body}
+        {content}
       </Toggle>
     </section>
   );

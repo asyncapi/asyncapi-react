@@ -1,72 +1,78 @@
 import React from 'react';
+import { Server } from '@asyncapi/parser';
 
 import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
 
 import { bemClasses, removeSpecialChars } from '../../helpers';
 import { Toggle, Markdown } from '../../components';
-import { Server, SecurityScheme } from '../../types';
 import { ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
+  serverName: string;
   server: Server;
-  stage: string;
-  securitySchemes?: Record<string, SecurityScheme>;
   toggleExpand?: boolean;
 }
 
 export const ServerComponent: React.FunctionComponent<Props> = ({
+  serverName,
   server,
-  stage,
-  securitySchemes,
   toggleExpand = false,
 }) => {
+  const serverUrl = server.url();
+  const serverSecurity = server.security();
+
   const className = ITEM_LABELS.SERVER;
 
-  const variables = server.variables
-    ? Object.entries(server.variables).map(([key, variable]) => ({
-        key,
-        content: variable,
-      }))
-    : [];
+  const protocol = server.protocol();
+  const protocolVersion = server.protocolVersion();
+  const protocolTitle = `${protocol}${
+    protocolVersion ? ` ${protocolVersion}` : ``
+  }`;
 
   const header = (
-    <>
-      <h4>
-        <span
-          className={bemClasses.concatenate([
-            bemClasses.element(`${className}-header-protocol`),
-            bemClasses.element(`badge`),
-          ])}
-        >{`${server.protocol}${
-          server.protocolVersion ? ` ${server.protocolVersion}` : ``
-        }`}</span>
-        <span
-          className={bemClasses.concatenate([
-            bemClasses.element(`${className}-header-stage`),
-            bemClasses.element(`badge`),
-          ])}
-        >
-          {stage}
-        </span>
-        <span>{server.url}</span>
-      </h4>
-    </>
+    <h4>
+      <span
+        className={bemClasses.concatenate([
+          bemClasses.element(`${className}-header-protocol`),
+          bemClasses.element(`badge`),
+        ])}
+      >
+        {protocolTitle}
+      </span>
+      <span
+        className={bemClasses.concatenate([
+          bemClasses.element(`${className}-header-stage`),
+          bemClasses.element(`badge`),
+        ])}
+      >
+        {serverName}
+      </span>
+      <span>{serverUrl}</span>
+    </h4>
   );
 
   const identifier = bemClasses.identifier([
     CONTAINER_LABELS.SERVERS,
-    server.url,
+    serverUrl,
   ]);
   const dataIdentifier = bemClasses.identifier([
     CONTAINER_LABELS.SERVERS,
-    removeSpecialChars(server.url),
+    removeSpecialChars(serverUrl),
   ]);
+
+  const variables = Object.entries(server.variables()).map(
+    ([key, variable]) => ({
+      key,
+      content: variable,
+    }),
+  );
+
   const content = (
     <>
-      {server.description && (
+      {server.hasDescription() && (
         <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{server.description}</Markdown>
+          <Markdown>{server.description()}</Markdown>
         </div>
       )}
       <ServerVariablesComponent
@@ -74,10 +80,9 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         identifier={identifier}
         dataIdentifier={dataIdentifier}
       />
-      {server.security && securitySchemes && (
+      {serverSecurity.length && (
         <ServerSecurityComponent
-          requirements={server.security}
-          schemes={securitySchemes}
+          requirements={serverSecurity}
           identifier={identifier}
           dataIdentifier={dataIdentifier}
         />
@@ -86,7 +91,10 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
   );
 
   const body =
-    (server.description || server.security || server.variables) && content;
+    (server.hasDescription() ||
+      server.hasVariables() ||
+      serverSecurity.length) &&
+    content;
 
   return (
     <section
@@ -99,7 +107,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         className={className}
         expanded={toggleExpand}
         label={ITEM_LABELS.SERVER}
-        itemName={server.url}
+        itemName={serverUrl}
         toggleInState={!!body}
       >
         {body}

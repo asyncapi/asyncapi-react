@@ -1,11 +1,12 @@
 import React from 'react';
+import { Operation, Message } from '@asyncapi/parser';
 
 import { MessagesComponent } from '../Messages/Messages';
 import { MessageComponent } from '../Messages/Message';
 
 import { bemClasses } from '../../helpers';
 import { Badge, BadgeType, Markdown } from '../../components';
-import { Operation, PayloadType, Message, isRawMessage } from '../../types';
+import { PayloadType } from '../../types';
 import {
   ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT,
   ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT,
@@ -13,7 +14,7 @@ import {
 
 interface Props {
   payloadType?: PayloadType;
-  operation?: Operation;
+  operation: Operation;
   oneOf?: boolean;
   otherOneOf?: boolean;
   isPublish?: boolean;
@@ -28,24 +29,32 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
   isPublish = false,
   isSubscribe = false,
 }) => {
-  if (!operation || !operation.message) {
-    return null;
-  }
   const className = `channel-operation`;
 
-  let messages: Record<string, Message> = {};
-  if (oneOf && !isRawMessage(operation.message)) {
-    messages = operation.message.oneOf
-      .map((message, index) => ({ [index.toString()]: message }))
-      .reduce((obj, item) => Object.assign(obj, item), {});
-  }
-  if (!oneOf && otherOneOf) {
-    messages = {
-      0: operation.message,
-    };
-  }
+  const description = operation.hasDescription() && (
+    <div className={bemClasses.element(`${className}-description`)}>
+      <Markdown>{operation.description()}</Markdown>
+    </div>
+  );
 
   if (oneOf || otherOneOf) {
+    let messages: Record<string, Message> = {};
+    if (oneOf && operation.hasMultipleMessages()) {
+      messages = operation
+        .messages()
+        .map((message, index) => ({ [`${index}`]: message }))
+        .reduce((obj, item) => Object.assign(obj, item), {});
+    }
+    if (!oneOf && otherOneOf) {
+      messages = {
+        0: operation.message(),
+      };
+    }
+
+    if (!Object.keys(messages).length) {
+      return null;
+    }
+
     return (
       <section
         className={bemClasses.element(`${className}-oneOf-${payloadType}`)}
@@ -72,11 +81,7 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
             </span>
           </h4>
         </header>
-        {operation.description && (
-          <div className={bemClasses.element(`${className}-description`)}>
-            <Markdown>{operation.description}</Markdown>
-          </div>
-        )}
+        {description}
         <MessagesComponent messages={messages} inChannel={true} />
       </section>
     );
@@ -84,12 +89,8 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
 
   return (
     <section className={bemClasses.element(className)}>
-      {operation.description && (
-        <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{operation.description}</Markdown>
-        </div>
-      )}
-      <MessageComponent message={operation.message} inChannel={true} />
+      {description}
+      <MessageComponent message={operation.message()} inChannel={true} />
     </section>
   );
 };

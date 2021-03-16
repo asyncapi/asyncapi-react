@@ -1,9 +1,9 @@
 import React from 'react';
+import { Schema } from '@asyncapi/parser';
 
 import { SchemaComponent } from '../Schemas/Schema';
 
 import { bemClasses } from '../../helpers';
-import { RawMessage, isOneOfPayload, isAnyOfPayload } from '../../types';
 import { Toggle } from '../../components';
 import {
   ONE_OF_PAYLOADS_TEXT,
@@ -13,7 +13,8 @@ import {
   PAYLOAD_EXAMPLE_TEXT,
 } from '../../constants';
 
-interface Props extends Required<Pick<RawMessage, 'payload'>> {
+interface Props {
+  payload: Schema;
   oneOf?: boolean;
   anyOf?: boolean;
   identifier?: string;
@@ -34,7 +35,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
   const className = `message-payload`;
   const payloadsID = identifier ? `${identifier}s` : undefined;
 
-  if (isOneOfPayload(payload)) {
+  if (payload.oneOf()) {
     return (
       <div
         className={bemClasses.element(`${className}-oneOf`)}
@@ -45,7 +46,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
           <h4>{ONE_OF_PAYLOADS_TEXT}</h4>
         </header>
         <ul className={bemClasses.element(`${className}-oneOf-list`)}>
-          {payload.oneOf.map((elem, index: number) => (
+          {payload.oneOf().map((elem, index: number) => (
             <li
               key={index}
               className={bemClasses.element(`${className}-oneOf-list-item`)}
@@ -65,7 +66,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     );
   }
 
-  if (isAnyOfPayload(payload)) {
+  if (payload.anyOf()) {
     return (
       <div
         className={bemClasses.element(`${className}-anyOf`)}
@@ -76,7 +77,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
           <h4>{ANY_OF_PAYLOADS_TEXT}</h4>
         </header>
         <ul className={bemClasses.element(`${className}-anyOf-list`)}>
-          {payload.anyOf.map((elem, index: number) => (
+          {payload.anyOf().map((elem, index: number) => (
             <li
               key={index}
               className={bemClasses.element(`${className}-anyOf-list-item`)}
@@ -96,7 +97,8 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     );
   }
 
-  let inferredId = (payload['x-parser-schema-id'] as string) || '';
+  // check it without `.uid()` function
+  let inferredId = (payload.ext['x-parser-schema-id'] as string) || '';
   inferredId = inferredId.includes('anonymous-schema') ? '' : inferredId;
   const title =
     id !== undefined ? (inferredId ? `${id} ${inferredId}` : id) : PAYLOAD_TEXT;
@@ -110,7 +112,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     <div className={bemClasses.element(`${className}-schema`)}>
       <SchemaComponent
         name={MESSAGE_PAYLOAD_TEXT}
-        schema={payload}
+        schema={payload.json()}
         exampleTitle={PAYLOAD_EXAMPLE_TEXT}
         hideTitle={true}
         examples={examples}
@@ -120,17 +122,15 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
 
   let payloadID;
   if (identifier) {
-    payloadID =
-      payload.title && payload.title.length
-        ? `${identifier}-${payload.title}`
-        : `${identifier}${id !== undefined ? `-${id}` : ''}`;
+    payloadID = payload.title()
+      ? `${identifier}-${payload.title()}`
+      : `${identifier}${id !== undefined ? `-${id}` : ''}`;
   }
   let payloadDataID;
   if (dataIdentifier) {
-    payloadDataID =
-      payload.title && payload.title.length
-        ? `${dataIdentifier}-${payload.title}`
-        : `${dataIdentifier}${id !== undefined ? `-${id}` : ''}`;
+    payloadDataID = payload.title()
+      ? `${dataIdentifier}-${payload.title()}`
+      : `${dataIdentifier}${id !== undefined ? `-${id}` : ''}`;
   }
 
   if (oneOf || anyOf) {

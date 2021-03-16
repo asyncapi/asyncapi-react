@@ -7,17 +7,17 @@ import { DefaultContentTypeComponent } from './DefaultContentType';
 
 import { Markdown, CollapseButton } from '../../components';
 import { bemClasses } from '../../helpers';
-import { Info, DefaultContentType } from '../../types';
+import { useSpec } from '../../store';
 
-interface Props {
-  info: Info;
-  defaultContentType?: DefaultContentType;
-}
+export const InfoComponent: React.FunctionComponent = () => {
+  const asyncapi = useSpec();
+  const info = asyncapi.info();
 
-export const InfoComponent: React.FunctionComponent<Props> = ({
-  info: { title, version, description, termsOfService, contact, license },
-  defaultContentType,
-}) => {
+  const termsOfService = info.termsOfService();
+  const contact = info.contact();
+  const license = info.license();
+  const defaultContentType = asyncapi.defaultContentType();
+
   const className = `info`;
   const showInfoList =
     defaultContentType || termsOfService || license || contact;
@@ -31,19 +31,15 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
         <div className={bemClasses.element(`${className}-header-main`)}>
           <h1>
             <span className={bemClasses.element(`${className}-header-title`)}>
-              {title}
+              {info.title()}
             </span>
-            {version && (
-              <span
-                className={bemClasses.element(`${className}-header-version`)}
-              >
-                {version}
-              </span>
-            )}
+            <span className={bemClasses.element(`${className}-header-version`)}>
+              {info.version()}
+            </span>
           </h1>
           <CollapseButton />
         </div>
-        {!showInfoList ? null : (
+        {showInfoList && (
           <ul className={bemClasses.element(`${className}-list`)}>
             {defaultContentType && (
               <li
@@ -63,18 +59,18 @@ export const InfoComponent: React.FunctionComponent<Props> = ({
             )}
             {license && (
               <li className={bemClasses.element(`${className}-license`)}>
-                <LicenseComponent {...license} />
+                <LicenseComponent name={license.name()} url={license.url()} />
               </li>
             )}
-            {contact && (contact.url || contact.email) ? (
-              <ContactComponent {...contact} />
-            ) : null}
+            {contact && (
+              <ContactComponent url={contact.url()} email={contact.email()} />
+            )}
           </ul>
         )}
       </header>
-      {description && (
+      {info.hasDescription() && (
         <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{description}</Markdown>
+          <Markdown>{info.description()}</Markdown>
         </div>
       )}
     </section>

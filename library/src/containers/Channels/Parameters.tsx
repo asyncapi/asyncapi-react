@@ -1,23 +1,23 @@
 import React from 'react';
+import { ChannelParameter } from '@asyncapi/parser';
 
 import { Parameter } from './Parameter';
 
 import { bemClasses } from '../../helpers';
-import { Parameters as ParametersType } from '../../types';
 import { PARAMETERS_TEXT } from '../../constants';
 
 interface Props {
-  parameters?: ParametersType;
+  parameters?: Record<string, ChannelParameter>;
   identifier: string;
   dataIdentifier: string;
 }
 
 export const Parameters: React.FunctionComponent<Props> = ({
-  parameters,
+  parameters = {},
   identifier,
   dataIdentifier,
 }) => {
-  if (!parameters) {
+  if (!Object.keys(parameters).length) {
     return null;
   }
 
@@ -31,12 +31,12 @@ export const Parameters: React.FunctionComponent<Props> = ({
         <h4>{PARAMETERS_TEXT}</h4>
       </header>
       <ul className={bemClasses.element(`channel-parameters-list`)}>
-        {Object.entries(parameters).map(([name, param]) => (
+        {Object.entries(parameters).map(([parameterName, parameter]) => (
           <li
-            key={name}
+            key={parameterName}
             className={bemClasses.element(`channel-parameters-list-item`)}
           >
-            <Parameter param={param} name={name} />
+            <Parameter parameterName={parameterName} parameter={parameter} />
           </li>
         ))}
       </ul>

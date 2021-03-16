@@ -1,12 +1,13 @@
 import React from 'react';
+import { Message } from '@asyncapi/parser';
 
 import { MessageComponent } from './Message';
 
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle } from '../../components';
-import { Message, RawMessage } from '../../types';
 import { MESSAGES_TEXT, CONTAINER_LABELS } from '../../constants';
+import { useSpec } from '../../store';
 
 interface Props {
   messages?: Record<string, Message>;
@@ -19,9 +20,18 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   expand,
   inChannel = false,
 }) => {
-  if (!messages) {
+  const asyncapi = useSpec();
+  messages =
+    messages ||
+    Array.from(asyncapi.allMessages()).reduce((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
+
+  if (!messages || !Object.keys(messages).length) {
     return null;
   }
+
   const className = CONTAINER_LABELS.MESSAGES;
   const messagesLength = Object.keys(messages).length;
 
@@ -36,9 +46,9 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
   const header = <h2>{MESSAGES_TEXT}</h2>;
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(messages).map(([key, message]) => {
-        const msg = message as RawMessage;
-        let inferredName = (msg['x-parser-message-name'] as string) || '';
+      {Object.entries(messages).map(([key, msg]) => {
+        // check it without `.uid()` function
+        let inferredName = (msg.ext['x-parser-message-name'] as string) || '';
         inferredName = inferredName.includes('anonymous-message')
           ? ''
           : inferredName;
@@ -46,10 +56,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
         const title =
           messagesLength < 2 && inChannel
             ? ''
-            : (message as RawMessage).title ||
-              (message as RawMessage).name ||
-              inferredName ||
-              key;
+            : msg.uid() || inferredName || `${key}`;
 
         return (
           <li
@@ -58,7 +65,7 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
           >
             <MessageComponent
               title={title}
-              message={message}
+              message={msg}
               hideTags={true}
               inChannel={false}
               toggleExpand={expand && expand.elements}

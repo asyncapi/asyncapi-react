@@ -4,40 +4,36 @@ import { ServerComponent } from './Server';
 
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
-import { Servers, SecurityScheme } from '../../types';
+import { useSpec } from '../../store';
 import { Toggle } from '../../components';
 import { SERVERS, CONTAINER_LABELS } from '../../constants';
 
 interface Props {
-  servers?: Servers;
-  securitySchemes?: Record<string, SecurityScheme>;
   expand?: ExpandNestedConfig;
 }
 
 export const ServersComponent: React.FunctionComponent<Props> = ({
-  servers,
-  securitySchemes,
   expand,
 }) => {
-  if (!servers) {
+  const servers = useSpec().servers();
+
+  if (!Object.keys(servers).length) {
     return null;
   }
+
   const className = CONTAINER_LABELS.SERVERS;
-
   const header = <h2>{SERVERS}</h2>;
-
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(servers).map(([stage, server]) => (
+      {Object.entries(servers).map(([serverName, server]) => (
         <li
-          key={stage}
+          key={serverName}
           className={bemClasses.element(`${className}-list-item`)}
         >
           <ServerComponent
-            key={`${server.url}${stage}`}
+            key={serverName}
+            serverName={serverName}
             server={server}
-            stage={stage}
-            securitySchemes={securitySchemes}
             toggleExpand={expand && expand.elements}
           />
         </li>

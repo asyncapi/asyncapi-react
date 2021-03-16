@@ -3,10 +3,11 @@ import React from 'react';
 import { ChannelComponent } from './Channel';
 
 import { ExpandNestedConfig } from '../../config';
-import { bemClasses } from '../../helpers';
-import { Channels } from '../../types';
 import { Toggle } from '../../components';
 import { CHANNELS_TEXT, CONTAINER_LABELS } from '../../constants';
+import { bemClasses } from '../../helpers';
+import { useSpec } from '../../store';
+import { Channels } from '../../types';
 
 interface Props {
   channels: Channels;
@@ -14,19 +15,26 @@ interface Props {
 }
 
 export const ChannelsComponent: React.FunctionComponent<Props> = ({
-  channels,
   expand,
 }) => {
-  const className = CONTAINER_LABELS.CHANNELS;
+  const channels = useSpec().channels();
 
+  if (!Object.keys(channels).length) {
+    return null;
+  }
+
+  const className = CONTAINER_LABELS.CHANNELS;
   const header = <h2>{CHANNELS_TEXT}</h2>;
 
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(channels).map(([name, channel]) => (
-        <li key={name} className={bemClasses.element(`${className}-list-item`)}>
+      {Object.entries(channels).map(([channelName, channel]) => (
+        <li
+          key={channelName}
+          className={bemClasses.element(`${className}-list-item`)}
+        >
           <ChannelComponent
-            name={name}
+            channelName={channelName}
             channel={channel}
             toggleExpand={expand && expand.elements}
           />
