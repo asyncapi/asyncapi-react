@@ -150,16 +150,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                       }
                     />
                   )}
-                  {concatenatedConfig.show.schemas &&
-                    validatedSchema.components.schemas && (
-                      <SchemasComponent
-                        schemas={validatedSchema.components.schemas}
-                        expand={
-                          concatenatedConfig.expand &&
-                          concatenatedConfig.expand.schemas
-                        }
-                      />
-                    )}
+                  {concatenatedConfig.show.schemas && (
+                    <SchemasComponent
+                      expand={
+                        concatenatedConfig.expand &&
+                        concatenatedConfig.expand.schemas
+                      }
+                    />
+                  )}
                 </section>
               )}
             </main>

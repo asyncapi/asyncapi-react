@@ -6,31 +6,30 @@ import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { Toggle } from '../../components';
 import { SCHEMAS_TEXT, CONTAINER_LABELS } from '../../constants';
-import { Schema } from '../../types';
+import { useSpec } from '../../store';
 
 interface Props {
-  schemas?: Record<string, Schema>;
   expand?: ExpandNestedConfig;
 }
 
 export const SchemasComponent: React.FunctionComponent<Props> = ({
-  schemas,
   expand,
 }) => {
-  if (!schemas) {
+  const schemas = useSpec().allSchemas();
+  if (!schemas.size) {
     return null;
   }
-  const className = CONTAINER_LABELS.SCHEMAS;
 
+  const className = CONTAINER_LABELS.SCHEMAS;
   const header = <h2>{SCHEMAS_TEXT}</h2>;
 
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(schemas).map(([key, schema]) => (
+      {Array.from(schemas).map(([key, schema]) => (
         <li key={key} className={bemClasses.element(`${className}-list-item`)}>
           <SchemaComponent
             name={key}
-            schema={schema}
+            schema={schema.json()}
             toggle={true}
             toggleExpand={expand && expand.elements}
           />

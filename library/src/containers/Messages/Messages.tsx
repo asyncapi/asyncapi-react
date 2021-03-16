@@ -48,15 +48,10 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
     <ul className={bemClasses.element(`${className}-list`)}>
       {Object.entries(messages).map(([key, msg]) => {
         // check it without `.uid()` function
-        let inferredName = (msg.ext['x-parser-message-name'] as string) || '';
-        inferredName = inferredName.includes('anonymous-message')
-          ? ''
-          : inferredName;
+        let name = msg.uid();
+        name = name.includes('anonymous-message') ? '' : name;
 
-        const title =
-          messagesLength < 2 && inChannel
-            ? ''
-            : msg.uid() || inferredName || `${key}`;
+        const title = messagesLength < 2 && inChannel ? '' : name || `${key}`;
 
         return (
           <li
