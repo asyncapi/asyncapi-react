@@ -123,9 +123,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 <ErrorComponent error={error} />
               )}
               {concatenatedConfig.show.info && <InfoComponent />}
-              {concatenatedConfig.show.channels && validatedSchema.channels && (
+              {concatenatedConfig.show.channels && (
                 <ChannelsComponent
-                  channels={validatedSchema.channels}
                   expand={
                     concatenatedConfig.expand &&
                     concatenatedConfig.expand.channels

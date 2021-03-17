@@ -7,10 +7,8 @@ import { Toggle } from '../../components';
 import { CHANNELS_TEXT, CONTAINER_LABELS } from '../../constants';
 import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
-import { Channels } from '../../types';
 
 interface Props {
-  channels: Channels;
   expand?: ExpandNestedConfig;
 }
 
