@@ -1,7 +1,8 @@
 import React from 'react';
+import { ServerVariable } from '@asyncapi/parser';
 
 import { bemClasses } from '../../helpers';
-import { ServerVariable, TypeWithKey } from '../../types';
+import { TypeWithKey } from '../../types';
 import {
   Markdown,
   Table,
@@ -20,15 +21,15 @@ type ServerVariableWithKey = TypeWithKey<string, ServerVariable>;
 const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
   el => <span>{el.key}</span>,
   el =>
-    el.content.default ? (
-      <span>{el.content.default}</span>
+    el.content.hasDefaultValue() ? (
+      <span>{el.content.defaultValue()}</span>
     ) : (
       <em>{NONE_TEXT}</em>
     ),
   el =>
-    el.content.enum ? (
+    el.content.hasAllowedValues() ? (
       <ul className={bemClasses.element(`server-variables-enum-list`)}>
-        {el.content.enum.map(value => (
+        {el.content.allowedValues().map(value => (
           <li
             className={bemClasses.element(`server-variables-enum-list-item`)}
             key={value}
@@ -40,7 +41,10 @@ const serverVariablesAccessors: Array<TableAccessor<ServerVariableWithKey>> = [
     ) : (
       <em>{ANY_TEXT}</em>
     ),
-  el => el.content.description && <Markdown>{el.content.description}</Markdown>,
+  el =>
+    el.content.hasDescription() && (
+      <Markdown>{el.content.description()}</Markdown>
+    ),
 ];
 
 interface Props {
@@ -57,6 +61,7 @@ export const ServerVariablesComponent: React.FunctionComponent<Props> = ({
   if (!variables.length) {
     return null;
   }
+
   const className = `server-variables`;
   const rows: TableRowProps[] = variables.map(variable => ({
     key: variable.key,

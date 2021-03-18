@@ -1,3 +1,4 @@
+import { AsyncAPIDocument } from '@asyncapi/parser';
 import { ConfigInterface } from './config';
 
 // Helpers
@@ -397,6 +398,7 @@ export interface FetchingSchemaInterface {
 
 export interface ParserReturn {
   data: NullableAsyncApi;
+  asyncapi: AsyncAPIDocument | null;
   error?: ErrorObject;
 }
 

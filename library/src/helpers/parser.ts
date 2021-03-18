@@ -58,26 +58,30 @@ export class Parser {
     if (err.type === VALIDATION_ERRORS_TYPE) {
       return {
         data: err.parsedJSON || null,
+        asyncapi: null,
         error: err,
       };
     }
 
-    return { data: null, error: err };
+    return { data: null, asyncapi: null, error: err };
   };
 
   private extractDocument = (data: any): ParserReturn => {
     if (data.json instanceof Function) {
       return {
         data: data.json(),
+        asyncapi: data,
       };
     }
     if (typeof data._json === 'object') {
       return {
         data: data._json,
+        asyncapi: data,
       };
     }
     return {
       data,
+      asyncapi: data,
     };
   };
 }

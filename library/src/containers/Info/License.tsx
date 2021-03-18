@@ -9,6 +9,5 @@ export const LicenseComponent: React.FunctionComponent<License> = ({
   url,
 }) => {
   const nameWrapper = <span>{name}</span>;
-
   return <div>{url ? <Href href={url}>{nameWrapper}</Href> : nameWrapper}</div>;
 };

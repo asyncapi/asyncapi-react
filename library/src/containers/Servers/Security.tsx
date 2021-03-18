@@ -1,31 +1,28 @@
 import React from 'react';
+import { SecurityScheme, ServerSecurityRequirement } from '@asyncapi/parser';
 
 import { ServerSecurityItemComponent } from './SecurityItem';
 
 import { Table } from '../../components';
 import { bemClasses } from '../../helpers';
-import {
-  Components,
-  SecurityRequirement,
-  ExcludeNullable,
-  SecurityScheme,
-} from '../../types';
+import { useSpec } from '../../store';
 import { SECURITY_TEXT, SERVER_SECURITY_COLUMN_NAMES } from '../../constants';
 
 interface Props {
-  requirements: SecurityRequirement[];
-  schemes: ExcludeNullable<Components['securitySchemes']>;
-  openAccordion?: boolean;
+  requirements: ServerSecurityRequirement[];
   identifier: string;
   dataIdentifier: string;
 }
 
 export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
   requirements,
-  schemes,
   identifier: id,
   dataIdentifier: dataId,
 }) => {
+  const asyncapi = useSpec();
+  const securitySchemes =
+    asyncapi.hasComponents() && asyncapi.components().securitySchemes();
+
   const identifier = bemClasses.identifier([
     { id, toKebabCase: false },
     'security',
@@ -38,19 +35,19 @@ export const ServerSecurityComponent: React.FunctionComponent<Props> = ({
 
   const rows: React.ReactNodeArray = requirements
     .map(requirement => {
-      const def: SecurityScheme | undefined =
-        schemes[Object.keys(requirement)[0]];
+      const def: SecurityScheme =
+        securitySchemes[Object.keys(requirement.json())[0]];
 
       if (!def) {
         return null;
       }
       return (
-        <ServerSecurityItemComponent securityScheme={def} key={def.type} />
+        <ServerSecurityItemComponent securityScheme={def} key={def.type()} />
       );
     })
     .filter(Boolean);
 
-  if (!rows || !rows.length) {
+  if (!rows.length) {
     return null;
   }
 

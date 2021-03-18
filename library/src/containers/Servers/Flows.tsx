@@ -1,13 +1,15 @@
 import React from 'react';
+import { OAuthFlow } from '@asyncapi/parser';
 
 import { ServerSecurityFlow } from './Flow';
 
 import { TableRow } from '../../components';
 import { bemClasses } from '../../helpers';
-import { OAuthFlows, OAuthFlow } from '../../types';
 
 interface Props {
-  flows: OAuthFlows;
+  flows: {
+    [key: string]: OAuthFlow;
+  };
 }
 
 export const ServerSecurityFlows: React.FunctionComponent<Props> = ({
@@ -17,23 +19,22 @@ export const ServerSecurityFlows: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const sortedFlows: OAuthFlows = Object.keys(flows)
-    .sort()
-    .reduce((accumulator, currentValue) => {
-      accumulator[currentValue] = flows[currentValue];
-      return accumulator;
-    }, {});
+  // TODO: check if this should be removed
+  // const sortedFlows: { [key: string]: OAuthFlow } = Object.keys(flows)
+  //   .sort()
+  //   .reduce((accumulator, currentValue) => {
+  //     accumulator[currentValue] = flows[currentValue];
+  //     return accumulator;
+  //   }, {});
 
-  const nodes = Object.entries(sortedFlows).map(
-    ([flowName, flow]: [string, OAuthFlow]) => (
-      <li
-        key={flowName}
-        className={bemClasses.element(`server-security-flows-list-item`)}
-      >
-        <ServerSecurityFlow name={flowName} flow={flow} />
-      </li>
-    ),
-  );
+  const nodes = Object.entries(flows).map(([flowName, flow]) => (
+    <li
+      key={flowName}
+      className={bemClasses.element(`server-security-flows-list-item`)}
+    >
+      <ServerSecurityFlow name={flowName} flow={flow} />
+    </li>
+  ));
 
   const nestedTableCellClassName = bemClasses.modifier(`nested`, `table-cell`);
   const flowsTableCellClassName = bemClasses.element(
