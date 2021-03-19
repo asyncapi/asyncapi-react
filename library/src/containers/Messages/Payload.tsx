@@ -96,7 +96,7 @@ export const PayloadComponent: React.FunctionComponent<Props> = ({
     );
   }
 
-  let inferredId = payload['x-parser-schema-id'] as string;
+  let inferredId = (payload['x-parser-schema-id'] as string) || '';
   inferredId = inferredId.includes('anonymous-schema') ? '' : inferredId;
   const title =
     id !== undefined ? (inferredId ? `${id} ${inferredId}` : id) : PAYLOAD_TEXT;
