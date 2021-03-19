@@ -2,6 +2,7 @@ import React from 'react';
 import { Schema } from '@asyncapi/parser';
 
 import { Markdown } from '../../components';
+import { SchemaHelpers } from '../../helpers';
 
 interface Props {
   schema?: Schema;
@@ -31,6 +32,8 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
     rootClassName = 'bg-gray-100 rounded';
   }
 
+  const constraints = SchemaHelpers.humanizeConstraints(schema);
+
   return (
     <div className={rootClassName} style={{ marginLeft: odd ? '20px' : '0' }}>
       <div className="flex property">
@@ -39,7 +42,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
             // fix styling from html-template in this place - e.g. line-through on deprecated etc
             className="text-sm italic text-gray-500"
           >
-            {schemaName} {schema.uid()}
+            {schemaName || schema.uid()}
           </span>
           {required && <div className="text-red-600 text-xs">required</div>}
           {schema.deprecated() && (
@@ -55,7 +58,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         ) : (
           <div>
             <div className="capitalize text-sm text-teal-500 font-bold">
-              {toSchemaType(schema)}
+              {SchemaHelpers.toSchemaType(schema)}
               <div className="inline-block">
                 {schema.format() && (
                   <span
@@ -66,93 +69,39 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                   </span>
                 )}
 
-                {schema.minimum() !== undefined && (
+                {/* constraints */}
+                {!!constraints.length && (
                   <span
                     className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                    title={`At least ${schema.minimum()}`}
                   >
-                    {`>=`} {schema.minimum()}
-                  </span>
-                )}
-                {schema.exclusiveMinimum() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                    title={`Greater than ${schema.exclusiveMinimum()}`}
-                  >
-                    {`>`} {schema.exclusiveMinimum()}
+                    {constraints.join(', ')}
                   </span>
                 )}
 
-                {schema.maximum() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                    title={`At most ${schema.maximum()}`}
-                  >
-                    {`<=`} {schema.maximum()}
-                  </span>
-                )}
-                {schema.exclusiveMaximum() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                    title={`Less than ${schema.exclusiveMaximum()}`}
-                  >
-                    {`<`} {schema.exclusiveMaximum()}
-                  </span>
-                )}
-
-                {schema.minItems() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {`>=`} {schema.minItems()} items
-                  </span>
-                )}
-                {schema.maxItems() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {`<=`} {schema.maxItems()} items
-                  </span>
-                )}
-                {schema.uniqueItems() && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                    title="Array items must be unique"
-                  >
-                    unique items
-                  </span>
-                )}
-
-                {schema.minLength() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {`>=`} {schema.minLength()} characters
-                  </span>
-                )}
-                {schema.maxLength() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {`<=`} {schema.maxLength()} characters
-                  </span>
-                )}
-
+                {/* related to string */}
                 {schema.pattern() !== undefined && (
                   <span
                     className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
                   >
                     must match {schema.pattern()}
+                  </span>
+                )}
+                {schema.contentMediaType() !== undefined && (
+                  <span
+                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
+                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+                  >
+                    {schema.contentMediaType()} media type
+                  </span>
+                )}
+                {schema.contentEncoding() !== undefined && (
+                  <span
+                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
+                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+                  >
+                    {schema.contentEncoding()} encoding
                   </span>
                 )}
               </div>
@@ -193,10 +142,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       {isCircular ? null : (
         <>
           <SchemaProperties schema={schema} odd={odd} />
-          <SchemaAdditionalProperties schema={schema} />
-
           <SchemaItems schema={schema} />
-          <SchemaAdditionalItems schema={schema} />
 
           {schema.oneOf() && (
             <>
@@ -241,6 +187,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
   const required = schema.required() || [];
   const circularProps = schema.circularProps() || [];
+  const patternProperties = schema.patternProperties() || {};
 
   return (
     <>
@@ -253,6 +200,15 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           odd={!odd}
         />
       ))}
+      {Object.entries(patternProperties).map(([propertyName, property]) => (
+        <SchemaComponent
+          schema={property}
+          schemaName={propertyName}
+          isCircular={circularProps.includes(propertyName)}
+          odd={!odd}
+        />
+      ))}
+      <SchemaAdditionalProperties schema={schema} />
     </>
   );
 };
@@ -318,6 +274,7 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
         {items.map((item, idx) => (
           <SchemaComponent schema={item} schemaName={`${idx}`} />
         ))}
+        <SchemaAdditionalItems schema={schema} />
       </>
     );
   }
@@ -387,26 +344,3 @@ const SchemaExtension: React.FunctionComponent<SchemaExtensionProps> = ({
     </>
   );
 };
-
-// TODO: this function doesn't support combined schema, we should support it
-function toSchemaType(schema: Schema): string {
-  const type = schema.type();
-  if (Array.isArray(type)) {
-    return type.map(t => toType(t, schema)).join(' | ');
-  }
-  return toType(type, schema);
-}
-
-function toType(type: string, schema: Schema): string {
-  if (type === 'array') {
-    const items = schema.items();
-    let types = 'Unknown';
-    if (Array.isArray(items)) {
-      types = items.map(item => toSchemaType(item)).join(', ');
-    } else if (items) {
-      types = toSchemaType(items);
-    }
-    return `Array<${types}>`;
-  }
-  return type;
-}

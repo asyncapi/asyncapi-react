@@ -11,3 +11,4 @@ export * from './parser';
 export * from './removeSpecialChars';
 export * from './toKebabCase';
 export * from './getExamplesFromSpec';
+export * from './schema';

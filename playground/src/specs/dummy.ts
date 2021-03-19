@@ -191,8 +191,14 @@ components:
           $ref: "#/components/schemas/dummyArrayWithArray"
         dummyObject:
           $ref: "#/components/schemas/dummyObject"
+      patternProperties:
+        ^S_:
+          type: string
+        ^I_: 
+          type: integer
     dummyInfo:
       type: object
+      maxProperties: 5
       required:
         - prop1
       properties:
@@ -214,6 +220,7 @@ components:
         - $ref: "#/components/schemas/dummyInfo"
         - type: string
         - type: number
+          multipleOf: 5
     dummyObject:
       type: object
       properties:
