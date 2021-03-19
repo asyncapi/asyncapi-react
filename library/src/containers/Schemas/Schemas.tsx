@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { SchemaComponent } from './Schema';
+// import { SchemaComponent } from './Schema';
+import { SchemaComponent } from './NewSchema';
 
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
@@ -28,10 +29,10 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
       {Array.from(schemas).map(([key, schema]) => (
         <li key={key} className={bemClasses.element(`${className}-list-item`)}>
           <SchemaComponent
-            name={key}
-            schema={schema.json()}
-            toggle={true}
-            toggleExpand={expand && expand.elements}
+            // name={key}
+            schema={schema}
+            // toggle={true}
+            // toggleExpand={expand && expand.elements}
           />
         </li>
       ))}
@@ -46,7 +47,8 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
       <Toggle
         header={header}
         className={className}
-        expanded={expand && expand.root}
+        expanded={true}
+        // expanded={expand && expand.root}
         label={CONTAINER_LABELS.SCHEMAS}
         toggleInState={true}
       >

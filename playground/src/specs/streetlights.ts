@@ -147,6 +147,9 @@ components:
           description: Whether to turn on or off the light.
         sentAt:
           $ref: "#/components/schemas/sentAt"
+      additionalProperties:
+        type: string
+
     dimLightPayload:
       type: object
       properties:
@@ -157,10 +160,35 @@ components:
           maximum: 100
         sentAt:
           $ref: "#/components/schemas/sentAt"
+      additionalProperties: false
     sentAt:
       type: string
       format: date-time
       description: Date and time when the message was sent.
+    union:
+      type: [string, number]
+    objectWithKey:
+      type: object
+      properties:
+        key:
+          type: string
+    objectWithKey2:
+      type: object
+      properties:
+        key2:
+          type: string
+    oneOfSchema:
+      oneOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    anyOfSchema:
+      anyOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    allOfSchema:
+      allOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
 
   securitySchemes:
     apiKey:
