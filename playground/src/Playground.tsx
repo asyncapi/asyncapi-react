@@ -9,9 +9,9 @@ import {
   Tabs,
   Tab,
   PlaygroundWrapper,
-  ContentWrapper,
   CodeEditorsWrapper,
   AsyncApiWrapper,
+  SplitWrapper,
 } from './components';
 
 import { defaultConfig, parse, debounce } from './common';
@@ -60,7 +60,7 @@ class Playground extends Component<{}, State> {
     return (
       <PlaygroundWrapper>
         <Navigation />
-        <ContentWrapper>
+        <SplitWrapper>
           <CodeEditorsWrapper>
             <Tabs
               additionalHeaderContent={this.renderAdditionalHeaderContent()}
@@ -91,7 +91,7 @@ class Playground extends Component<{}, State> {
           <AsyncApiWrapper>
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
-        </ContentWrapper>
+        </SplitWrapper>
       </PlaygroundWrapper>
     );
   }
