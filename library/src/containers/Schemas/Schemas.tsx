@@ -26,11 +26,15 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
 
   const content = (
     <ul className={bemClasses.element(`${className}-list`)}>
-      {Array.from(schemas).map(([key, schema]) => (
-        <li key={key} className={bemClasses.element(`${className}-list-item`)}>
+      {Array.from(schemas).map(([schemaName, schema]) => (
+        <li
+          key={schemaName}
+          className={bemClasses.element(`${className}-list-item`)}
+        >
           <SchemaComponent
             // name={key}
             schema={schema}
+            // schemaName={schemaName}
             // toggle={true}
             // toggleExpand={expand && expand.elements}
           />
