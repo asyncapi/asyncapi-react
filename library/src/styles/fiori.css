@@ -99,6 +99,11 @@
 .bg-red-700 {
   background-color: #c53030;
 }
+.expand {
+  width: 20px;
+  margin-bottom: -4px;
+  transform: rotate(-90deg);
+}
 
 /* CURRENT THEME BASED ON KYMA STYLES */
 

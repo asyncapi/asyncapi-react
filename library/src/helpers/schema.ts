@@ -2,11 +2,19 @@ import { Schema } from '@asyncapi/parser';
 
 export class SchemaHelpers {
   static toSchemaType(schema: Schema): string {
-    const type = schema.type();
+    let type = schema.type();
     if (Array.isArray(type)) {
       return type.map(t => this.toType(t, schema)).join(' | ');
     }
-    return this.toType(type, schema);
+    type = this.toType(type, schema);
+    const combinedType = this.toCombinedType(schema);
+
+    if (type && combinedType) {
+      return `${type} ${combinedType}`;
+    } else if (combinedType) {
+      return combinedType;
+    }
+    return type;
   }
 
   private static toType(type: string, schema: Schema): string {
@@ -21,6 +29,13 @@ export class SchemaHelpers {
       return `Array<${types}>`;
     }
     return type;
+  }
+
+  private static toCombinedType(schema: Schema): string | undefined {
+    if (schema.oneOf()) return 'OneOf';
+    if (schema.anyOf()) return 'AnyOf';
+    if (schema.allOf()) return 'AllOf';
+    return;
   }
 
   static humanizeConstraints(schema: Schema): string[] {
@@ -136,5 +151,29 @@ export class SchemaHelpers {
       }
     }
     return stringRange;
+  }
+
+  static isExpandable(schema: Schema): boolean {
+    let type = schema.type();
+    type = Array.isArray(type) ? type : [type];
+    if (type.includes('object') || type.includes('array')) {
+      return true;
+    }
+
+    console.log(schema);
+
+    if (
+      schema.oneOf() ||
+      schema.anyOf() ||
+      schema.allOf() ||
+      Object.keys(schema.properties()).length ||
+      schema.additionalProperties() ||
+      schema.items() ||
+      schema.additionalItems()
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }

@@ -235,10 +235,33 @@ components:
           $ref: "#/components/schemas/dummyObject"
         dummyRecursiveProp2:
           type: string
+
+    objectWithKey:
+      type: object
+      properties:
+        key:
+          type: string
+    objectWithKey2:
+      type: object
+      properties:
+        key2:
+          type: string
     sentAt:
       type: string
       format: date-time
       description: Date and time when the message was sent.
+    oneOfSchema:
+      oneOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    anyOfSchema:
+      anyOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    allOfSchema:
+      allOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
 
   securitySchemes:
     user-password:

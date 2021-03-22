@@ -1,49 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Schema } from '@asyncapi/parser';
 
-import { Markdown } from '../../components';
+import { Chevron, Markdown } from '../../components';
 import { SchemaHelpers } from '../../helpers';
 
 interface Props {
-  schema?: Schema;
   schemaName?: string;
-  root?: boolean;
+  schema?: Schema;
   required?: boolean;
   isCircular?: boolean;
   odd?: boolean;
 }
 
 export const SchemaComponent: React.FunctionComponent<Props> = ({
-  schema,
   schemaName,
-  root = true,
+  schema,
   required = false,
   isCircular = false,
   odd = false,
 }) => {
+  const [expand, setExpand] = useState(false);
+
   if (!schema) {
     return null;
   }
 
-  let rootClassName = '';
-  if (odd) {
-    rootClassName = 'bg-gray-200 rounded';
-  } else {
-    rootClassName = 'bg-gray-100 rounded';
-  }
-
   const constraints = SchemaHelpers.humanizeConstraints(schema);
+  const isExpandable = SchemaHelpers.isExpandable(schema);
 
   return (
-    <div className={rootClassName} style={{ marginLeft: odd ? '20px' : '0' }}>
+    <div
+      className={`${
+        odd ? 'bg-gray-200' : 'bg-gray-100'
+      } pl-8 pr-8 py-2 rounded`}
+    >
       <div className="flex property">
-        <div className="pr-4">
-          <span
-            // fix styling from html-template in this place - e.g. line-through on deprecated etc
-            className="text-sm italic text-gray-500"
-          >
+        <div className="pr-4" style={{ marginTop: '-2px', minWidth: '25%' }}>
+          <span className="text-sm italic text-gray-500">
             {schemaName || schema.uid()}
           </span>
+          {isExpandable && (
+            <span onClick={() => setExpand(prev => !prev)}>
+              <Chevron />
+            </span>
+          )}
           {required && <div className="text-red-600 text-xs">required</div>}
           {schema.deprecated() && (
             <div className="text-red-600 text-xs">deprecated</div>
@@ -139,31 +139,31 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         )}
       </div>
 
-      {isCircular ? null : (
-        <>
-          <SchemaProperties schema={schema} odd={odd} />
-          <SchemaItems schema={schema} />
+      {isCircular || !isExpandable ? null : expand ? (
+        <div className={`${odd ? 'bg-gray-100' : 'bg-gray-200'}`}>
+          <SchemaProperties schema={schema} odd={!odd} />
+          <SchemaItems schema={schema} odd={!odd} />
 
           {schema.oneOf() &&
             schema
               .oneOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} />
+                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
               ))}
           {schema.anyOf() &&
             schema
               .anyOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} />
+                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
               ))}
           {schema.allOf() &&
             schema
               .allOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} />
+                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
               ))}
-        </>
-      )}
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -193,20 +193,22 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
-          odd={!odd}
+          odd={odd}
         />
       ))}
-      <SchemaAdditionalProperties schema={schema} />
+      <SchemaAdditionalProperties schema={schema} odd={odd} />
     </>
   );
 };
 
 interface SchemaAdditionalPropertiesProps {
   schema: Schema;
+  odd: boolean;
 }
 
 const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalPropertiesProps> = ({
   schema,
+  odd,
 }) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
@@ -217,25 +219,25 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
   const additionalProperties = schema.additionalProperties();
   if (additionalProperties === true || additionalProperties === undefined) {
     return (
-      <p className="pl-6 mb-2 mt-4 text-xs text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
     );
   }
   if (additionalProperties === false) {
     return (
-      <p className="pl-6 mb-2 mt-4 text-xs text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
         Additional properties are <strong>NOT</strong> allowed.
       </p>
     );
   }
   return (
     <>
-      <p className="pl-6 mb-2 mt-4 text-xs font-bold text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs font-bold text-gray-700">
         Additional properties must adhere to the following schema:
       </p>
       <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalProperties} />
+        <SchemaComponent schema={additionalProperties} odd={odd} />
       </div>
     </>
   );
@@ -243,9 +245,13 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
 
 interface SchemaItemsProps {
   schema: Schema;
+  odd: boolean;
 }
 
-const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
+const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
+  schema,
+  odd,
+}) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
   if (!type.includes('array')) {
@@ -255,26 +261,28 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
 
   // object in items
   if (items && !Array.isArray(items) && items.properties()) {
-    return <SchemaProperties schema={items} odd={false} />;
+    return <SchemaProperties schema={items} odd={odd} />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
-          <SchemaComponent schema={item} schemaName={`${idx}`} />
+          <SchemaComponent schema={item} schemaName={`${idx}`} odd={odd} />
         ))}
-        <SchemaAdditionalItems schema={schema} />
+        <SchemaAdditionalItems schema={schema} odd={odd} />
       </>
     );
   }
-  return <SchemaComponent schema={items} schemaName={'0'} />;
+  return <SchemaComponent schema={items} schemaName={'0'} odd={odd} />;
 };
 
 interface SchemaAdditionalItemsProps {
   schema: Schema;
+  odd: boolean;
 }
 
 const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps> = ({
   schema,
+  odd,
 }) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
@@ -285,25 +293,25 @@ const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps>
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
-      <p className="pl-6 mb-2 mt-4 text-xs text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
         Additional items are allowed.
       </p>
     );
   }
   if (additionalItems === false) {
     return (
-      <p className="pl-6 mb-2 mt-4 text-xs text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
         Additional items are <strong>NOT</strong> allowed.
       </p>
     );
   }
   return (
     <>
-      <p className="pl-6 mb-2 mt-4 text-xs font-bold text-gray-700">
+      <p className="pl-6 pb-2 mb-2 mt-4 text-xs font-bold text-gray-700">
         Additional items must adhere to the following schema:
       </p>
       <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalItems} />
+        <SchemaComponent schema={additionalItems} odd={odd} />
       </div>
     </>
   );

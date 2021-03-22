@@ -10,15 +10,15 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { bemClasses, stateHelpers, Parser } from '../../helpers';
+import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
-// import { InfoComponent } from '../Info/Info';
-// import { ChannelsComponent } from '../Channels/Channels';
-// import { ServersComponent } from '../Servers/Servers';
-// import { MessagesComponent } from '../Messages/Messages';
+import { InfoComponent } from '../Info/Info';
+import { ChannelsComponent } from '../Channels/Channels';
+import { ServersComponent } from '../Servers/Servers';
+import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
 
 interface AsyncAPIState {
@@ -122,7 +122,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
               {concatenatedConfig.showErrors && !!error && (
                 <ErrorComponent error={error} />
               )}
-              {/* {concatenatedConfig.show.info && <InfoComponent />}
+              {concatenatedConfig.show.info && <InfoComponent />}
               {concatenatedConfig.show.servers && (
                 <ServersComponent
                   expand={
@@ -138,17 +138,17 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                     concatenatedConfig.expand.channels
                   }
                 />
-              )} */}
+              )}
               {validatedSchema.components && (
                 <section className={bemClasses.element(`components`)}>
-                  {/* {concatenatedConfig.show.messages && (
+                  {concatenatedConfig.show.messages && (
                     <MessagesComponent
                       expand={
                         concatenatedConfig.expand &&
                         concatenatedConfig.expand.messages
                       }
                     />
-                  )} */}
+                  )}
                   {concatenatedConfig.show.schemas && (
                     <SchemasComponent
                       expand={
@@ -173,7 +173,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         parserOptions,
       );
       this.setState({
-        validatedSchema: parsedFromUrl.data, // this.beautifySchema(parsedFromUrl.data),
+        validatedSchema: this.beautifySchema(parsedFromUrl.data),
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
       });
@@ -182,18 +182,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     const parsed = await this.parser.parse(schema, parserOptions);
     this.setState({
-      validatedSchema: parsed.data, // this.beautifySchema(parsed.data),
+      validatedSchema: this.beautifySchema(parsed.data),
       asyncapi: parsed.asyncapi,
       error: parsed.error,
     });
   }
 
-  // private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
-  //   if (!schema) {
-  //     return null;
-  //   }
-  //   return beautifier.beautify(schema);
-  // }
+  private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
+    if (!schema) {
+      return null;
+    }
+    return beautifier.beautify(schema);
+  }
 }
 
 export default AsyncApiComponent;
