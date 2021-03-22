@@ -21,12 +21,10 @@ class SplitWrapper extends Component<WrapperProps> {
           gutter.onmouseover = () => (gutter.style.cursor = 'ew-resize');
           return gutter;
         }}
-        gutterStyle={() => {
-          return {
-            backgroundColor: 'gray',
-            width: '7px',
-          };
-        }}
+        gutterStyle={() => ({
+          backgroundColor: 'gray',
+          width: '7px',
+        })}
         minSize={250}
       >
         {this.props.children}
