@@ -10,15 +10,15 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
+import { bemClasses, stateHelpers, Parser } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
-import { InfoComponent } from '../Info/Info';
-import { ChannelsComponent } from '../Channels/Channels';
-import { ServersComponent } from '../Servers/Servers';
-import { MessagesComponent } from '../Messages/Messages';
+// import { InfoComponent } from '../Info/Info';
+// import { ChannelsComponent } from '../Channels/Channels';
+// import { ServersComponent } from '../Servers/Servers';
+// import { MessagesComponent } from '../Messages/Messages';
 import { SchemasComponent } from '../Schemas/Schemas';
 
 interface AsyncAPIState {
@@ -188,12 +188,12 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     });
   }
 
-  private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
-    if (!schema) {
-      return null;
-    }
-    return beautifier.beautify(schema);
-  }
+  // private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
+  //   if (!schema) {
+  //     return null;
+  //   }
+  //   return beautifier.beautify(schema);
+  // }
 }
 
 export default AsyncApiComponent;

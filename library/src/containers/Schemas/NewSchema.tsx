@@ -144,27 +144,24 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
           <SchemaProperties schema={schema} odd={odd} />
           <SchemaItems schema={schema} />
 
-          {schema.oneOf() && (
-            <>
-              {schema.oneOf().map((s, idx) => (
+          {schema.oneOf() &&
+            schema
+              .oneOf()
+              .map((s, idx) => (
                 <SchemaComponent schema={s} schemaName={`${idx}`} />
               ))}
-            </>
-          )}
-          {schema.anyOf() && (
-            <>
-              {schema.anyOf().map((s, idx) => (
+          {schema.anyOf() &&
+            schema
+              .anyOf()
+              .map((s, idx) => (
                 <SchemaComponent schema={s} schemaName={`${idx}`} />
               ))}
-            </>
-          )}
-          {schema.allOf() && (
-            <>
-              {schema.allOf().map((s, idx) => (
+          {schema.allOf() &&
+            schema
+              .allOf()
+              .map((s, idx) => (
                 <SchemaComponent schema={s} schemaName={`${idx}`} />
               ))}
-            </>
-          )}
         </>
       )}
     </div>
@@ -187,7 +184,6 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
   const required = schema.required() || [];
   const circularProps = schema.circularProps() || [];
-  const patternProperties = schema.patternProperties() || {};
 
   return (
     <>
@@ -196,14 +192,6 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schema={property}
           schemaName={propertyName}
           required={required.includes(propertyName)}
-          isCircular={circularProps.includes(propertyName)}
-          odd={!odd}
-        />
-      ))}
-      {Object.entries(patternProperties).map(([propertyName, property]) => (
-        <SchemaComponent
-          schema={property}
-          schemaName={propertyName}
           isCircular={circularProps.includes(propertyName)}
           odd={!odd}
         />
@@ -317,30 +305,6 @@ const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps>
       <div className="bg-gray-300 pl-6">
         <SchemaComponent schema={additionalItems} />
       </div>
-    </>
-  );
-};
-
-interface SchemaExtensionProps {
-  schema: Schema;
-}
-
-const SchemaExtension: React.FunctionComponent<SchemaExtensionProps> = ({
-  schema,
-}) => {
-  const extensions = Object.entries(schema.extensions()).filter(ext => {
-    return !ext[0].startsWith('x-parser-');
-  });
-
-  if (!extensions.length) {
-    return null;
-  }
-
-  return (
-    <>
-      {extensions.map(([extensionName, extensionValue]) => {
-        return <>{`${extensionName}: ${extensionValue}`}</>;
-      })}
     </>
   );
 };

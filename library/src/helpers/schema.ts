@@ -54,16 +54,14 @@ export class SchemaHelpers {
     }
 
     // related to array
+    const hasUniqueItems = schema.uniqueItems();
     const arrayRange = this.humanizeRangeConstraint(
-      'items',
+      hasUniqueItems ? 'unique items' : 'items',
       schema.minItems(),
       schema.maxItems(),
     );
     if (arrayRange !== undefined) {
       constraints.push(arrayRange);
-    }
-    if (schema.uniqueItems()) {
-      constraints.push('unique');
     }
 
     // related to object
