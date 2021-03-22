@@ -17,27 +17,6 @@ export class SchemaHelpers {
     return type;
   }
 
-  private static toType(type: string, schema: Schema): string {
-    if (type === 'array') {
-      const items = schema.items();
-      let types = 'Unknown';
-      if (Array.isArray(items)) {
-        types = items.map(item => this.toSchemaType(item)).join(', ');
-      } else if (items) {
-        types = this.toSchemaType(items);
-      }
-      return `Array<${types}>`;
-    }
-    return type;
-  }
-
-  private static toCombinedType(schema: Schema): string | undefined {
-    if (schema.oneOf()) return 'OneOf';
-    if (schema.anyOf()) return 'AnyOf';
-    if (schema.allOf()) return 'AllOf';
-    return;
-  }
-
   static humanizeConstraints(schema: Schema): string[] {
     const constraints: string[] = [];
 
@@ -90,6 +69,55 @@ export class SchemaHelpers {
     }
 
     return constraints;
+  }
+
+  static isExpandable(schema: Schema): boolean {
+    let type = schema.type();
+    type = Array.isArray(type) ? type : [type];
+    if (type.includes('object') || type.includes('array')) {
+      return true;
+    }
+
+    if (
+      schema.oneOf() ||
+      schema.anyOf() ||
+      schema.allOf() ||
+      Object.keys(schema.properties()).length ||
+      schema.additionalProperties() ||
+      schema.items() ||
+      schema.additionalItems()
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private static toType(type: string, schema: Schema): string {
+    if (type === 'array') {
+      const items = schema.items();
+      let types = 'Unknown';
+      if (Array.isArray(items)) {
+        types = items.map(item => this.toSchemaType(item)).join(', ');
+      } else if (items) {
+        types = this.toSchemaType(items);
+      }
+      return `Array<${types}>`;
+    }
+    return type;
+  }
+
+  private static toCombinedType(schema: Schema): string | undefined {
+    if (schema.oneOf()) {
+      return 'OneOf';
+    }
+    if (schema.anyOf()) {
+      return 'AnyOf';
+    }
+    if (schema.allOf()) {
+      return 'AllOf';
+    }
+    return;
   }
 
   // TODO: Fix exclusive fields
@@ -151,29 +179,5 @@ export class SchemaHelpers {
       }
     }
     return stringRange;
-  }
-
-  static isExpandable(schema: Schema): boolean {
-    let type = schema.type();
-    type = Array.isArray(type) ? type : [type];
-    if (type.includes('object') || type.includes('array')) {
-      return true;
-    }
-
-    console.log(schema);
-
-    if (
-      schema.oneOf() ||
-      schema.anyOf() ||
-      schema.allOf() ||
-      Object.keys(schema.properties()).length ||
-      schema.additionalProperties() ||
-      schema.items() ||
-      schema.additionalItems()
-    ) {
-      return true;
-    }
-
-    return false;
   }
 }

@@ -117,8 +117,11 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               {schema.enum() && (
                 <div className="text-xs">
                   Enum:{' '}
-                  {schema.enum().map(e => (
-                    <span className="border text-orange-600 rounded ml-1 py-0 px-2">
+                  {schema.enum().map((e, idx) => (
+                    <span
+                      key={idx}
+                      className="border text-orange-600 rounded ml-1 py-0 px-2"
+                    >
                       {e}
                     </span>
                   ))}
@@ -127,8 +130,11 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               {schema.examples() && (
                 <div className="text-xs">
                   Examples:{' '}
-                  {schema.examples().map(e => (
-                    <span className="border text-orange-600 rounded ml-1 py-0 px-2">
+                  {schema.examples().map((e, idx) => (
+                    <span
+                      key={idx}
+                      className="border text-orange-600 rounded ml-1 py-0 px-2"
+                    >
                       {e}
                     </span>
                   ))}
@@ -148,19 +154,34 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
             schema
               .oneOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
+                <SchemaComponent
+                  key={idx}
+                  schema={s}
+                  schemaName={`${idx}`}
+                  odd={!odd}
+                />
               ))}
           {schema.anyOf() &&
             schema
               .anyOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
+                <SchemaComponent
+                  key={idx}
+                  schema={s}
+                  schemaName={`${idx}`}
+                  odd={!odd}
+                />
               ))}
           {schema.allOf() &&
             schema
               .allOf()
               .map((s, idx) => (
-                <SchemaComponent schema={s} schemaName={`${idx}`} odd={!odd} />
+                <SchemaComponent
+                  key={idx}
+                  schema={s}
+                  schemaName={`${idx}`}
+                  odd={!odd}
+                />
               ))}
         </div>
       ) : null}
@@ -194,6 +215,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
           odd={odd}
+          key={propertyName}
         />
       ))}
       <SchemaAdditionalProperties schema={schema} odd={odd} />
@@ -266,7 +288,12 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
     return (
       <>
         {items.map((item, idx) => (
-          <SchemaComponent schema={item} schemaName={`${idx}`} odd={odd} />
+          <SchemaComponent
+            schema={item}
+            schemaName={`${idx}`}
+            odd={odd}
+            key={idx}
+          />
         ))}
         <SchemaAdditionalItems schema={schema} odd={odd} />
       </>
