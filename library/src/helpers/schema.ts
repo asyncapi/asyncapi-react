@@ -1,4 +1,4 @@
-import { Schema } from '@asyncapi/parser';
+import { Schema, ChannelParameter } from '@asyncapi/parser';
 
 export class SchemaHelpers {
   static toSchemaType(schema: Schema): string {
@@ -72,6 +72,28 @@ export class SchemaHelpers {
   }
 
   static isExpandable(schema: Schema): boolean {
+    let type = schema.type();
+    type = Array.isArray(type) ? type : [type];
+    if (type.includes('object') || type.includes('array')) {
+      return true;
+    }
+
+    if (
+      schema.oneOf() ||
+      schema.anyOf() ||
+      schema.allOf() ||
+      Object.keys(schema.properties()).length ||
+      schema.additionalProperties() ||
+      schema.items() ||
+      schema.additionalItems()
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static parametersToSchema(schema: Schema): boolean {
     let type = schema.type();
     type = Array.isArray(type) ? type : [type];
     if (type.includes('object') || type.includes('array')) {

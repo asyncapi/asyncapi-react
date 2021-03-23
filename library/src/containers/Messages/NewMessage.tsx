@@ -6,7 +6,7 @@ import { Markdown, Tags } from '../../components';
 
 interface Props {
   message: Message;
-  index?: number;
+  index?: number | string;
 }
 
 export const MessageComponent: React.FunctionComponent<Props> = ({

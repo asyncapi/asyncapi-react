@@ -22,7 +22,7 @@ export const MessagesComponent: React.FunctionComponent = () => {
       {Array.from(messages).map(([key, msg]) => {
         return (
           <li key={key}>
-            <MessageComponent message={msg} />
+            <MessageComponent message={msg} index={key} />
           </li>
         );
       })}
@@ -39,7 +39,7 @@ export const MessagesComponent: React.FunctionComponent = () => {
         className={className}
         expanded={true}
         // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.SCHEMAS}
+        label={CONTAINER_LABELS.MESSAGES}
         toggleInState={true}
       >
         <div className="all-messages pb-8">{messagesList}</div>

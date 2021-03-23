@@ -19,6 +19,7 @@ import { InfoComponent } from '../Info/Info';
 import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
 // import { MessagesComponent } from '../Messages/Messages';
+import { OperationsComponent } from '../Channels/NewOperations';
 import { MessagesComponent } from '../Messages/NewMessages';
 import { SchemasComponent } from '../Schemas/Schemas';
 
@@ -140,6 +141,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                   }
                 />
               )} */}
+              {concatenatedConfig.show.channels && (
+                <OperationsComponent
+                // expand={
+                //   concatenatedConfig.expand &&
+                //   concatenatedConfig.expand.channels
+                // }
+                />
+              )}
               {validatedSchema.components && (
                 <section className={bemClasses.element(`components`)}>
                   {concatenatedConfig.show.messages && (
