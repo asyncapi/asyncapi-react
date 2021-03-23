@@ -565,6 +565,14 @@
 .asyncapi__messages-oneOf-list-item {
 }
 
+.asyncapi__message-raw-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.asyncapi__message-raw-list-item {
+}
 .asyncapi__message {
   position: relative;
   border-radius: 4px;
@@ -576,27 +584,31 @@
 }
 
 .asyncapi__message-header {
-  padding: 12px;
+  background-color: #fafafa;
+  padding: 0px;
 }
-.asyncapi__message-header > h3 {
+.asyncapi__message-header-title > h3 {
   color: #0b74de;
-  font-size: 14px;
+  padding: 12px;
+  margin: 0px;
 }
 
 .asyncapi__message-header-title {
-  font-size: 14px;
-  margin-right: 10px;
+  background-color: #fafafa;
 }
 
 .asyncapi__message-header-summary {
   font-size: 14px;
   font-weight: 500;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+  padding: 12px;
 }
 
 .asyncapi__message-header-deprecated-badge {
 }
 
 .asyncapi__message-summary {
+  padding: 12px;
 }
 
 .asyncapi__message-description {
@@ -649,7 +661,6 @@
 .asyncapi__message-payload-oneOf-header {
   color: #32363a;
   background-color: #fafafa;
-  border-top: solid 1px rgba(151, 151, 151, 0.26);
 }
 .asyncapi__message-payload-oneOf-header > h4 {
   padding: 12px;
@@ -685,7 +696,6 @@
 .asyncapi__message-payload-anyOf-header {
   color: #32363a;
   background-color: #fafafa;
-  border-top: solid 1px rgba(151, 151, 151, 0.26);
 }
 .asyncapi__message-payload-anyOf-header > h4 {
   padding: 12px;
@@ -1167,8 +1177,9 @@
 
 .asyncapi__channel-operations {
 }
+
 .asyncapi__channel-operations .asyncapi__message {
-  border: none;
+  margin: 12px;
 }
 
 .asyncapi__channel-operations-header {
@@ -1216,11 +1227,54 @@
 .asyncapi__channel-operations-list-item {
 }
 
+.asyncapi__channel-operations-subscribe {
+}
+
+.asyncapi__channel-operation-message > .asyncapi__bindings {
+  border-radius: 4px;
+  border: solid 1px rgba(151, 151, 151, 0.26);
+  margin: 12px;
+}
+.asyncapi__channel-operation-message
+  > .asyncapi__bindings
+  > .asyncapi__bindings-header
+  > h4 {
+  margin: 0px;
+  border-top: 0px;
+}
+
+.asyncapi__channel-operation-message-header {
+  color: #32363a;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+}
+.asyncapi__channel-operation-message-header > h4 {
+  padding: 12px;
+  margin: 0;
+}
+.asyncapi__channel-operation-message-header > h4 > .asyncapi__badge {
+  margin-right: 6px;
+}
+
+.asyncapi__channel-operation-message .asyncapi__message-header-title {
+  border-top: 0px;
+}
+
+.asyncapi__channel-operation-oneOf-subscribe > .asyncapi__bindings {
+  border-radius: 4px;
+  border: solid 1px rgba(151, 151, 151, 0.26);
+  margin: 12px;
+}
+.asyncapi__channel-operation-oneOf-subscribe
+  > .asyncapi__bindings
+  > .asyncapi__bindings-header
+  > h4 {
+  margin: 0px;
+  border-top: 0px;
+}
+
 .asyncapi__channel-operation-oneOf-subscribe-header {
   color: #32363a;
-  background-color: #fafafa;
   border-top: solid 1px rgba(151, 151, 151, 0.26);
-  border-bottom: solid 1px rgba(151, 151, 151, 0.26);
 }
 .asyncapi__channel-operation-oneOf-subscribe-header > h4 {
   padding: 12px;
@@ -1230,11 +1284,26 @@
   margin-right: 6px;
 }
 
+.asyncapi__channel-operation-oneOf-subscribe .asyncapi__message-header-title {
+  border-top: 0px;
+}
+
+.asyncapi__channel-operation-oneOf-publish > .asyncapi__bindings {
+  border-radius: 4px;
+  border: solid 1px rgba(151, 151, 151, 0.26);
+  margin: 12px;
+}
+.asyncapi__channel-operation-oneOf-publish
+  > .asyncapi__bindings
+  > .asyncapi__bindings-header
+  > h4 {
+  margin: 0px;
+  border-top: 0px;
+}
+
 .asyncapi__channel-operation-oneOf-publish-header {
   color: #32363a;
-  background-color: #fafafa;
   border-top: solid 1px rgba(151, 151, 151, 0.26);
-  border-bottom: solid 1px rgba(151, 151, 151, 0.26);
 }
 .asyncapi__channel-operation-oneOf-publish-header > h4 {
   padding: 12px;
@@ -1244,11 +1313,69 @@
   margin-right: 6px;
 }
 
+.asyncapi__channel-operation-oneOf-publish .asyncapi__message-header-title {
+  border-top: 0px;
+}
+
 .asyncapi__channel-operation {
 }
 
+.asyncapi__message-headers {
+}
+
+.asyncapi__bindings {
+}
+
+.asyncapi__bindings-header {
+  color: #32363a;
+}
+.asyncapi__bindings-header > h4 {
+  background-color: #fafafa;
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+  border-bottom: solid 1px rgba(151, 151, 151, 0.26);
+  padding: 12px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.asyncapi__binding {
+}
+.asyncapi__binding-protocol {
+  color: #18873d;
+  margin-right: 6px;
+}
+
+.asyncapi__binding-table {
+  border-top: solid 1px rgba(151, 151, 151, 0.26);
+}
+.asyncapi__binding-table > table {
+  margin: 0;
+}
+.asyncapi__binding-field-name {
+  font-weight: bold;
+  padding-left: 0px;
+}
+
+.asyncapi__binding-field-schema {
+  margin: 0;
+}
+.asyncapi__binding-field-schema > .asyncapi__schema {
+  padding: 0;
+  border: none;
+}
+
+.asyncapi__binding-field-schema .asyncapi__schema-table {
+  border-top: none;
+}
+.asyncapi__binding-field-schema > .asyncapi__schema:before {
+  content: '';
+  position: relative;
+  border: none;
+}
 .asyncapi__channel-operation-description {
-  padding: 16px 16px 0;
+  padding: 12px 12px 0;
 }
 
 .asyncapi__channel-description {

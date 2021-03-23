@@ -21,6 +21,9 @@ export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
   'You can subscribe to one of the following messages:';
 export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
   'You can subscribe to the following message:';
+export const RAW_MESSAGE_SUBSCRIBE_TEXT =
+  'You can subscribe to the following message:';
+export const RAW_MESSAGE_PUBLISH_TEXT = 'You can send the following message:';
 
 export const CONTACT_TEXT = 'Contact';
 export const NAM_TEXTE = 'Name';
@@ -54,6 +57,13 @@ export const PAYLOAD_TEXT = 'Payload';
 export const MESSAGE_PAYLOAD_TEXT = 'Message Payload';
 export const PAYLOAD_EXAMPLE_TEXT = 'Example of payload';
 export const SCHEMA_EXAMPLE_TEXT = 'Example';
+
+export const SERVER_BINDINGS_TEXT = 'Server Bindings';
+export const CHANNEL_BINDINGS_TEXT = 'Channel Bindings';
+export const OPERATION_BINDINGS_TEXT = 'Operation Bindings';
+export const MESSAGE_BINDINGS_TEXT = 'Message Bindings';
+
+export const BINDINGS_SCHEMA_OBJECT_TEXT = 'Schema Object';
 
 export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';

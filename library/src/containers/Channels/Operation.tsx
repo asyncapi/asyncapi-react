@@ -2,6 +2,7 @@ import React from 'react';
 
 import { MessagesComponent } from '../Messages/Messages';
 import { MessageComponent } from '../Messages/Message';
+import { BindingsComponent } from '../Bindings/Bindings';
 
 import { bemClasses } from '../../helpers';
 import { Badge, BadgeType, Markdown } from '../../components';
@@ -9,6 +10,9 @@ import { Operation, PayloadType, Message, isRawMessage } from '../../types';
 import {
   ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT,
   ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT,
+  RAW_MESSAGE_PUBLISH_TEXT,
+  RAW_MESSAGE_SUBSCRIBE_TEXT,
+  OPERATION_BINDINGS_TEXT,
 } from '../../constants';
 
 interface Props {
@@ -72,22 +76,60 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
             </span>
           </h4>
         </header>
+        {operation.summary && (
+          <div className={bemClasses.element(`${className}-description`)}>
+            <Markdown>{operation.summary}</Markdown>
+          </div>
+        )}
         {operation.description && (
           <div className={bemClasses.element(`${className}-description`)}>
             <Markdown>{operation.description}</Markdown>
           </div>
+        )}
+        {operation.bindings && (
+          <BindingsComponent
+            bindings={operation.bindings}
+            title={OPERATION_BINDINGS_TEXT}
+          />
         )}
         <MessagesComponent messages={messages} inChannel={true} />
       </section>
     );
   }
 
+  const operationTitle = operation.summary
+    ? operation.summary
+    : payloadType === PayloadType.PUBLISH
+    ? RAW_MESSAGE_PUBLISH_TEXT
+    : RAW_MESSAGE_SUBSCRIBE_TEXT;
+
   return (
-    <section className={bemClasses.element(className)}>
+    <section className={bemClasses.element(`${className}-message`)}>
+      <header className={bemClasses.element(`${className}-message-header`)}>
+        <h4>
+          {isPublish && isSubscribe ? (
+            <Badge
+              type={
+                payloadType === PayloadType.PUBLISH
+                  ? BadgeType.PUBLISH
+                  : BadgeType.SUBSCRIBE
+              }
+            />
+          ) : null}
+          {operationTitle}
+        </h4>
+      </header>
+
       {operation.description && (
         <div className={bemClasses.element(`${className}-description`)}>
           <Markdown>{operation.description}</Markdown>
         </div>
+      )}
+      {operation.bindings && (
+        <BindingsComponent
+          bindings={operation.bindings}
+          title={OPERATION_BINDINGS_TEXT}
+        />
       )}
       <MessageComponent message={operation.message} inChannel={true} />
     </section>

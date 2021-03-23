@@ -2,11 +2,16 @@ import React from 'react';
 
 import { ServerVariablesComponent } from './Variables';
 import { ServerSecurityComponent } from './Security';
+import { BindingsComponent } from '../Bindings/Bindings';
 
 import { bemClasses, removeSpecialChars } from '../../helpers';
 import { Toggle, Markdown } from '../../components';
 import { Server, SecurityScheme } from '../../types';
-import { ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
+import {
+  ITEM_LABELS,
+  CONTAINER_LABELS,
+  SERVER_BINDINGS_TEXT,
+} from '../../constants';
 
 interface Props {
   server: Server;
@@ -80,6 +85,12 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
           schemes={securitySchemes}
           identifier={identifier}
           dataIdentifier={dataIdentifier}
+        />
+      )}
+      {server.bindings && (
+        <BindingsComponent
+          bindings={server.bindings}
+          title={SERVER_BINDINGS_TEXT}
         />
       )}
     </>
