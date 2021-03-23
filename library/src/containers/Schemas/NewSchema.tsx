@@ -9,7 +9,6 @@ interface Props {
   schema?: Schema;
   required?: boolean;
   isCircular?: boolean;
-  odd?: boolean;
 }
 
 export const SchemaComponent: React.FunctionComponent<Props> = ({
@@ -17,7 +16,6 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   schema,
   required = false,
   isCircular = false,
-  odd = false,
 }) => {
   const [expand, setExpand] = useState(false);
 
@@ -30,9 +28,9 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
 
   return (
     <div
-      className={`${
-        odd ? 'bg-gray-200' : 'bg-gray-100'
-      } pl-8 pr-8 py-2 rounded`}
+      className={`json-schema pl-8 pr-8 py-2 rounded ${
+        expand ? 'json-schema-open' : ''
+      }`}
     >
       <div className="flex property">
         <div className="pr-4" style={{ marginTop: '-2px', minWidth: '25%' }}>
@@ -146,42 +144,27 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       </div>
 
       {isCircular || !isExpandable ? null : expand ? (
-        <div className={`${odd ? 'bg-gray-100' : 'bg-gray-200'}`}>
-          <SchemaProperties schema={schema} odd={!odd} />
-          <SchemaItems schema={schema} odd={!odd} />
+        <div className="json-schema">
+          <SchemaProperties schema={schema} />
+          <SchemaItems schema={schema} />
 
           {schema.oneOf() &&
             schema
               .oneOf()
               .map((s, idx) => (
-                <SchemaComponent
-                  key={idx}
-                  schema={s}
-                  schemaName={`${idx}`}
-                  odd={!odd}
-                />
+                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
               ))}
           {schema.anyOf() &&
             schema
               .anyOf()
               .map((s, idx) => (
-                <SchemaComponent
-                  key={idx}
-                  schema={s}
-                  schemaName={`${idx}`}
-                  odd={!odd}
-                />
+                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
               ))}
           {schema.allOf() &&
             schema
               .allOf()
               .map((s, idx) => (
-                <SchemaComponent
-                  key={idx}
-                  schema={s}
-                  schemaName={`${idx}`}
-                  odd={!odd}
-                />
+                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
               ))}
         </div>
       ) : null}
@@ -191,12 +174,10 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
 
 interface SchemaPropertiesProps {
   schema: Schema;
-  odd: boolean;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
-  odd,
 }) => {
   const properties = schema.properties() || {};
   if (!Object.keys(properties)) {
@@ -214,23 +195,20 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
-          odd={odd}
           key={propertyName}
         />
       ))}
-      <SchemaAdditionalProperties schema={schema} odd={odd} />
+      <SchemaAdditionalProperties schema={schema} />
     </>
   );
 };
 
 interface SchemaAdditionalPropertiesProps {
   schema: Schema;
-  odd: boolean;
 }
 
 const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalPropertiesProps> = ({
   schema,
-  odd,
 }) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
@@ -259,7 +237,7 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
         Additional properties must adhere to the following schema:
       </p>
       <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalProperties} odd={odd} />
+        <SchemaComponent schema={additionalProperties} />
       </div>
     </>
   );
@@ -267,13 +245,9 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
 
 interface SchemaItemsProps {
   schema: Schema;
-  odd: boolean;
 }
 
-const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
-  schema,
-  odd,
-}) => {
+const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
   if (!type.includes('array')) {
@@ -283,33 +257,26 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
 
   // object in items
   if (items && !Array.isArray(items) && items.properties()) {
-    return <SchemaProperties schema={items} odd={odd} />;
+    return <SchemaProperties schema={items} />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
-          <SchemaComponent
-            schema={item}
-            schemaName={`${idx}`}
-            odd={odd}
-            key={idx}
-          />
+          <SchemaComponent schema={item} schemaName={`${idx}`} key={idx} />
         ))}
-        <SchemaAdditionalItems schema={schema} odd={odd} />
+        <SchemaAdditionalItems schema={schema} />
       </>
     );
   }
-  return <SchemaComponent schema={items} schemaName={'0'} odd={odd} />;
+  return <SchemaComponent schema={items} schemaName={'0'} />;
 };
 
 interface SchemaAdditionalItemsProps {
   schema: Schema;
-  odd: boolean;
 }
 
 const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps> = ({
   schema,
-  odd,
 }) => {
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
@@ -338,7 +305,7 @@ const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps>
         Additional items must adhere to the following schema:
       </p>
       <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalItems} odd={odd} />
+        <SchemaComponent schema={additionalItems} />
       </div>
     </>
   );

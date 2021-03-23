@@ -103,6 +103,16 @@
   width: 20px;
   margin-bottom: -4px;
   transform: rotate(-90deg);
+  cursor: pointer;
+}
+.json-schema {
+  background: rgb(247, 250, 252);
+}
+.json-schema > .json-schema {
+  background: rgb(237, 242, 247);
+}
+.json-schema > .json-schema > .json-schema > .json-schema {
+  background: rgb(247, 250, 252);
 }
 
 /* CURRENT THEME BASED ON KYMA STYLES */
