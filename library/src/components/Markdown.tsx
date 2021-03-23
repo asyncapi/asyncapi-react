@@ -1,7 +1,20 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
+import MarkdownIt from 'markdown-it';
 
 import { bemClasses } from '../helpers';
 
-export const Markdown: React.FunctionComponent = ({ children }) => (
-  <div className={bemClasses.element(`markdown`)}>{children}</div>
-);
+const markdownIt = new MarkdownIt();
+
+export const Markdown: React.FunctionComponent = ({ children }) => {
+  if (typeof children !== 'string') {
+    return <>{children}</>;
+  }
+
+  const html = markdownIt.render(children);
+  return (
+    <div className={bemClasses.element(`markdown`)}>
+      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
+    </div>
+  );
+};

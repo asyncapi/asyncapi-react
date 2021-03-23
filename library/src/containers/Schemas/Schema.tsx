@@ -120,7 +120,8 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         <Toggle
           header={header}
           className={className}
-          expanded={toggleExpand}
+          expanded={true}
+          // expanded={toggleExpand}
           label={ITEM_LABELS.SCHEMA}
           itemName={name}
           toggleInState={true}
