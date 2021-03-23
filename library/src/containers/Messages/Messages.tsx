@@ -79,7 +79,8 @@ export const MessagesComponent: React.FunctionComponent<Props> = ({
     <Toggle
       header={header}
       className={className}
-      expanded={expand && expand.root}
+      expanded={true}
+      // expanded={expand && expand.root}
       label={CONTAINER_LABELS.MESSAGES}
       toggleInState={true}
     >

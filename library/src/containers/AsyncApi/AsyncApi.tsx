@@ -18,7 +18,8 @@ import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/Info';
 import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
-import { MessagesComponent } from '../Messages/Messages';
+// import { MessagesComponent } from '../Messages/Messages';
+import { MessagesComponent } from '../Messages/NewMessages';
 import { SchemasComponent } from '../Schemas/Schemas';
 
 interface AsyncAPIState {
@@ -123,7 +124,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 <ErrorComponent error={error} />
               )}
               {concatenatedConfig.show.info && <InfoComponent />}
-              {concatenatedConfig.show.servers && (
+              {/* {concatenatedConfig.show.servers && (
                 <ServersComponent
                   expand={
                     concatenatedConfig.expand &&
@@ -138,15 +139,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                     concatenatedConfig.expand.channels
                   }
                 />
-              )}
+              )} */}
               {validatedSchema.components && (
                 <section className={bemClasses.element(`components`)}>
                   {concatenatedConfig.show.messages && (
                     <MessagesComponent
-                      expand={
-                        concatenatedConfig.expand &&
-                        concatenatedConfig.expand.messages
-                      }
+                    // expand={
+                    //   concatenatedConfig.expand &&
+                    //   concatenatedConfig.expand.messages
+                    // }
                     />
                   )}
                   {concatenatedConfig.show.schemas && (
