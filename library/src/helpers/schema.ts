@@ -1,4 +1,6 @@
-import { Schema, ChannelParameter } from '@asyncapi/parser';
+import { ChannelParameter, Schema } from '@asyncapi/parser';
+// @ts-ignore
+import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
 export class SchemaHelpers {
   static toSchemaType(schema: Schema): string {
@@ -93,26 +95,26 @@ export class SchemaHelpers {
     return false;
   }
 
-  static parametersToSchema(schema: Schema): boolean {
-    let type = schema.type();
-    type = Array.isArray(type) ? type : [type];
-    if (type.includes('object') || type.includes('array')) {
-      return true;
+  static parametersToSchema(
+    parameters?: Record<string, ChannelParameter>,
+  ): Schema | undefined {
+    if (!parameters || !Object.keys(parameters).length) {
+      return undefined;
     }
 
-    if (
-      schema.oneOf() ||
-      schema.anyOf() ||
-      schema.allOf() ||
-      Object.keys(schema.properties()).length ||
-      schema.additionalProperties() ||
-      schema.items() ||
-      schema.additionalItems()
-    ) {
-      return true;
-    }
-
-    return false;
+    const json = {
+      type: 'object',
+      properties: Object.entries(parameters).reduce(
+        (obj, [paramaterName, parameter]) => {
+          obj[paramaterName] = Object.assign({}, parameter.schema().json());
+          obj[paramaterName].description = parameter.description();
+          return obj;
+        },
+        {},
+      ),
+      required: Object.keys(parameters),
+    };
+    return new SchemaClass(json);
   }
 
   private static toType(type: string, schema: Schema): string {

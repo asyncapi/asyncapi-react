@@ -2,8 +2,10 @@ import React from 'react';
 import { Channel, Operation } from '@asyncapi/parser';
 
 import { MessageComponent } from '../Messages/NewMessage';
+import { SchemaComponent } from '../Schemas/NewSchema';
 import { Markdown, Tags } from '../../components';
 
+import { SchemaHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
 
 interface Props {
@@ -19,6 +21,8 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
   channelName,
   channel,
 }) => {
+  const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
+
   return (
     <div className="center-block p-8">
       <div className="operation pt-8 pb-8">
@@ -36,6 +40,10 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
           <span>{channelName}</span>
         </h3>
       </div>
+
+      {parameters && (
+        <SchemaComponent schemaName="Parameters" schema={parameters} />
+      )}
 
       <Markdown>{channel.description()}</Markdown>
       <Markdown>{operation.summary()}</Markdown>

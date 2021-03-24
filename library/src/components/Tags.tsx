@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tag } from '@asyncapi/parser';
+import { Tag as TagType } from '@asyncapi/parser';
 
 interface Props {
-  tags?: Tag[];
+  tags?: TagType[];
 }
 
 export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
@@ -13,17 +13,13 @@ export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
   return (
     <div className="mt-4">
       {tags.map(tag => (
-        <TagComponent tag={tag} />
+        <Tag tag={tag} />
       ))}
     </div>
   );
 };
 
-interface TagProps {
-  tag: Tag;
-}
-
-const TagComponent: React.FunctionComponent<TagProps> = ({ tag }) => {
+const Tag: React.FunctionComponent<{ tag: TagType }> = ({ tag }) => {
   const externalDocs = tag.externalDocs();
 
   if (externalDocs) {

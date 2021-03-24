@@ -19,10 +19,10 @@ export const MessagesComponent: React.FunctionComponent = () => {
 
   const messagesList = (
     <ul>
-      {Array.from(messages).map(([key, msg]) => {
+      {Array.from(messages).map(([key, msg], idx) => {
         return (
           <li key={key}>
-            <MessageComponent message={msg} index={key} />
+            <MessageComponent message={msg} index={idx + 1} />
           </li>
         );
       })}

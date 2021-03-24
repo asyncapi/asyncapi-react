@@ -32,9 +32,9 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
           className={bemClasses.element(`${className}-list-item`)}
         >
           <SchemaComponent
-            // name={key}
+            schemaName={schemaName}
             schema={schema}
-            // schemaName={schemaName}
+            // name={key}
             // toggle={true}
             // toggleExpand={expand && expand.elements}
           />
