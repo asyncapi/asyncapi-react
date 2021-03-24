@@ -55,7 +55,7 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
             Accepts <strong>one of</strong> the following messages:
           </p>
           {operation.messages().map((msg, idx) => (
-            <MessageComponent message={msg} index={idx} />
+            <MessageComponent message={msg} index={idx} key={idx} />
           ))}
         </>
       ) : (

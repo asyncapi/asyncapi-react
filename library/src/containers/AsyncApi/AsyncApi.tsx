@@ -159,7 +159,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         parserOptions,
       );
       this.setState({
-        validatedSchema: parsedFromUrl.data, //this.beautifySchema(parsedFromUrl.data),
+        validatedSchema: parsedFromUrl.data, // this.beautifySchema(parsedFromUrl.data),
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
       });
@@ -168,7 +168,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     const parsed = await this.parser.parse(schema, parserOptions);
     this.setState({
-      validatedSchema: parsed.data, //this.beautifySchema(parsed.data),
+      validatedSchema: parsed.data, // this.beautifySchema(parsed.data),
       asyncapi: parsed.asyncapi,
       error: parsed.error,
     });

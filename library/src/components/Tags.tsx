@@ -13,7 +13,7 @@ export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
   return (
     <div className="mt-4">
       {tags.map(tag => (
-        <Tag tag={tag} />
+        <Tag tag={tag} key={tag.name()} />
       ))}
     </div>
   );
