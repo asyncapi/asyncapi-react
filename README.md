@@ -246,6 +246,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     <td align="center"><a href="https://github.com/c-pius"><img src="https://avatars0.githubusercontent.com/u/22994291?v=4?s=100" width="100px;" alt=""/><br /><sub><b>c-pius</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=c-pius" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/issues?q=author%3Ac-pius" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/aeworxet"><img src="https://avatars.githubusercontent.com/u/16149591?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Viacheslav Turovskyi</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Documentation">📖</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/195858"><img src="https://avatars.githubusercontent.com/u/3858485?v=4?s=100" width="100px;" alt=""/><br /><sub><b>195858</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=195858" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/aayushmau5"><img src="https://avatars.githubusercontent.com/u/54525741?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aayush Kumar Sahu</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aayushmau5" title="Code">💻</a></td>
   </tr>
 </table>
 
