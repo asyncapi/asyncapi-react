@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Href } from '../../components';
 
-import { License } from '../../types';
+interface Props {
+  name: string;
+  url?: string;
+}
 
-export const LicenseComponent: React.FunctionComponent<License> = ({
+export const LicenseComponent: React.FunctionComponent<Props> = ({
   name,
   url,
-}) => {
-  const nameWrapper = <span>{name}</span>;
-  return <div>{url ? <Href href={url}>{nameWrapper}</Href> : nameWrapper}</div>;
-};
+}) => <div>{url ? <Href href={url}>{name}</Href> : name}</div>;
