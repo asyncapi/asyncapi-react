@@ -15,7 +15,7 @@ import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
-import { InfoComponent } from '../Info/Info';
+import { InfoComponent } from '../Info/NewInfo';
 import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
 import { MessagesComponent } from '../Messages/Messages';
