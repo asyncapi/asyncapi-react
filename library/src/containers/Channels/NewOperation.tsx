@@ -42,7 +42,14 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
       </div>
 
       {parameters && (
-        <SchemaComponent schemaName="Parameters" schema={parameters} />
+        <SchemaComponent
+          schemaName="Parameters"
+          schema={parameters}
+          notRender={{
+            rootType: false,
+            additionalInfo: false,
+          }}
+        />
       )}
 
       <Markdown>{channel.description()}</Markdown>
@@ -50,19 +57,19 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
       <Markdown>{operation.description()}</Markdown>
 
       {operation.hasMultipleMessages() ? (
-        <>
+        <div>
           <p>
             Accepts <strong>one of</strong> the following messages:
           </p>
           {operation.messages().map((msg, idx) => (
             <MessageComponent message={msg} index={idx} key={idx} />
           ))}
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           <p>Accepts the following message:</p>
           <MessageComponent message={operation.message()} />
-        </>
+        </div>
       )}
 
       <Tags tags={operation.tags()} />

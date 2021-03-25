@@ -4,11 +4,17 @@ import { Schema } from '@asyncapi/parser';
 import { Chevron, Markdown } from '../../components';
 import { SchemaHelpers } from '../../helpers';
 
+interface NotRenderProps {
+  rootType?: boolean;
+  additionalInfo?: boolean;
+}
+
 interface Props {
   schemaName?: string;
   schema?: Schema;
   required?: boolean;
   isCircular?: boolean;
+  notRender?: NotRenderProps;
 }
 
 export const SchemaComponent: React.FunctionComponent<Props> = ({
@@ -16,6 +22,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   schema,
   required = false,
   isCircular = false,
+  notRender = {},
 }) => {
   const [expand, setExpand] = useState(false);
 
@@ -25,6 +32,9 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema);
+
+  const renderType = notRender.rootType !== false;
+  const renderAdditionalInfo = notRender.additionalInfo !== false;
 
   return (
     <div
@@ -56,7 +66,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         ) : (
           <div>
             <div className="capitalize text-sm text-teal-500 font-bold">
-              {SchemaHelpers.toSchemaType(schema)}
+              {renderType && SchemaHelpers.toSchemaType(schema)}
               <div className="inline-block">
                 {schema.format() && (
                   <span
@@ -145,7 +155,10 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
 
       {isCircular || !isExpandable ? null : expand ? (
         <div className="json-schema">
-          <SchemaProperties schema={schema} />
+          <SchemaProperties
+            schema={schema}
+            renderAdditionalInfo={renderAdditionalInfo}
+          />
           <SchemaItems schema={schema} />
 
           {schema.oneOf() &&
@@ -174,10 +187,12 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
 
 interface SchemaPropertiesProps {
   schema: Schema;
+  renderAdditionalInfo?: boolean;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
+  renderAdditionalInfo,
 }) => {
   const properties = schema.properties() || {};
   if (!Object.keys(properties)) {
@@ -198,7 +213,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           key={propertyName}
         />
       ))}
-      <SchemaAdditionalProperties schema={schema} />
+      {renderAdditionalInfo && <SchemaAdditionalProperties schema={schema} />}
     </>
   );
 };
