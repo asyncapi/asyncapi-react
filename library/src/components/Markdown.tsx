@@ -5,6 +5,9 @@ import MarkdownIt from 'markdown-it';
 const markdownIt = new MarkdownIt();
 
 export const Markdown: React.FunctionComponent = ({ children }) => {
+  if (!children) {
+    return null;
+  }
   if (typeof children !== 'string') {
     return <>{children}</>;
   }

@@ -1,4 +1,6 @@
-import { Schema } from '@asyncapi/parser';
+import { ChannelParameter, Schema } from '@asyncapi/parser';
+// @ts-ignore
+import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
 export class SchemaHelpers {
   static toSchemaType(schema: Schema): string {
@@ -91,6 +93,28 @@ export class SchemaHelpers {
     }
 
     return false;
+  }
+
+  static parametersToSchema(
+    parameters?: Record<string, ChannelParameter>,
+  ): Schema | undefined {
+    if (!parameters || !Object.keys(parameters).length) {
+      return undefined;
+    }
+
+    const json = {
+      type: 'object',
+      properties: Object.entries(parameters).reduce(
+        (obj, [paramaterName, parameter]) => {
+          obj[paramaterName] = Object.assign({}, parameter.schema().json());
+          obj[paramaterName].description = parameter.description();
+          return obj;
+        },
+        {},
+      ),
+      required: Object.keys(parameters),
+    };
+    return new SchemaClass(json);
   }
 
   private static toType(type: string, schema: Schema): string {

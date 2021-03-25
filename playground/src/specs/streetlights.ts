@@ -119,6 +119,23 @@ components:
       name: dimLight
       title: Dim light
       summary: Command a particular streetlight to dim the lights.
+      correlationId:
+        $ref: "#/components/correlationIds/sentAtCorrelator"
+      tags:
+        - name: oparation-tag1
+          externalDocs:
+            description: External docs description 1
+            url: https://www.asyncapi.com/
+        - name: oparation-tag2
+          description: Description 2
+          externalDocs:
+            url: "https://www.asyncapi.com/"
+        - name: oparation-tag3
+        - name: oparation-tag4
+          description: Description 4
+        - name: oparation-tag5
+          externalDocs:
+            url: "https://www.asyncapi.com/"
       traits:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
@@ -234,6 +251,11 @@ components:
       description: The ID of the streetlight.
       schema:
         type: string
+
+  correlationIds:
+    sentAtCorrelator:
+      description: Data from message payload used as correlation ID
+      location: $message.payload#/sentAt
 
   messageTraits:
     commonHeaders:

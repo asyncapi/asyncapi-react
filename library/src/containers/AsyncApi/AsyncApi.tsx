@@ -10,15 +10,15 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { beautifier, bemClasses, stateHelpers, Parser } from '../../helpers';
+import { bemClasses, stateHelpers, Parser } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/NewInfo';
-import { ChannelsComponent } from '../Channels/Channels';
 import { ServersComponent } from '../Servers/Servers';
-import { MessagesComponent } from '../Messages/Messages';
+import { Operations } from '../Channels/NewOperations';
+import { Messages } from '../Messages/NewMessages';
 import { SchemasComponent } from '../Schemas/Schemas';
 
 interface AsyncAPIState {
@@ -131,24 +131,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                   }
                 />
               )}
-              {concatenatedConfig.show.channels && (
-                <ChannelsComponent
-                  expand={
-                    concatenatedConfig.expand &&
-                    concatenatedConfig.expand.channels
-                  }
-                />
-              )}
+              {concatenatedConfig.show.channels && <Operations />}
               {validatedSchema.components && (
                 <section className={bemClasses.element(`components`)}>
-                  {concatenatedConfig.show.messages && (
-                    <MessagesComponent
-                      expand={
-                        concatenatedConfig.expand &&
-                        concatenatedConfig.expand.messages
-                      }
-                    />
-                  )}
+                  {concatenatedConfig.show.messages && <Messages />}
                   {concatenatedConfig.show.schemas && (
                     <SchemasComponent
                       expand={
@@ -173,7 +159,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         parserOptions,
       );
       this.setState({
-        validatedSchema: this.beautifySchema(parsedFromUrl.data),
+        validatedSchema: parsedFromUrl.data,
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
       });
@@ -182,17 +168,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     const parsed = await this.parser.parse(schema, parserOptions);
     this.setState({
-      validatedSchema: this.beautifySchema(parsed.data),
+      validatedSchema: parsed.data,
       asyncapi: parsed.asyncapi,
       error: parsed.error,
     });
-  }
-
-  private beautifySchema(schema: NullableAsyncApi): NullableAsyncApi {
-    if (!schema) {
-      return null;
-    }
-    return beautifier.beautify(schema);
   }
 }
 
