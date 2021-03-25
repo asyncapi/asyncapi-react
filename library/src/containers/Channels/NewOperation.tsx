@@ -1,7 +1,7 @@
 import React from 'react';
-import { Channel, Operation } from '@asyncapi/parser';
+import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
-import { MessageComponent } from '../Messages/NewMessage';
+import { Message } from '../Messages/NewMessage';
 import { SchemaComponent } from '../Schemas/NewSchema';
 import { Markdown, Tags } from '../../components';
 
@@ -9,19 +9,20 @@ import { SchemaHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
 
 interface Props {
-  operationType: PayloadType;
-  operation: Operation;
+  type: PayloadType;
+  operation: OperationType;
   channelName: string;
   channel: Channel;
 }
 
-export const OperationComponent: React.FunctionComponent<Props> = ({
-  operationType = PayloadType.PUBLISH,
+export const Operation: React.FunctionComponent<Props> = ({
+  type = PayloadType.PUBLISH,
   operation,
   channelName,
   channel,
 }) => {
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
+  const operationSummary = operation.summary();
 
   return (
     <div className="center-block p-8">
@@ -29,13 +30,13 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
         <h3 className="font-mono text-base">
           <span
             className={`font-mono border uppercase p-1 rounded ${
-              operationType === PayloadType.PUBLISH
+              type === PayloadType.PUBLISH
                 ? 'border-blue-600 text-blue-500'
                 : 'border-green-600 text-green-600'
             }`}
-            title={operationType}
+            title={type}
           >
-            {operationType === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
+            {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
           </span>{' '}
           <span>{channelName}</span>
         </h3>
@@ -53,7 +54,9 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
       )}
 
       <Markdown>{channel.description()}</Markdown>
-      <Markdown>{operation.summary()}</Markdown>
+      {operationSummary && (
+        <p className="text-gray-600 text-sm">{operationSummary}</p>
+      )}
       <Markdown>{operation.description()}</Markdown>
 
       {operation.hasMultipleMessages() ? (
@@ -62,13 +65,13 @@ export const OperationComponent: React.FunctionComponent<Props> = ({
             Accepts <strong>one of</strong> the following messages:
           </p>
           {operation.messages().map((msg, idx) => (
-            <MessageComponent message={msg} index={idx} key={idx} />
+            <Message message={msg} index={idx} key={idx} />
           ))}
         </div>
       ) : (
         <div>
           <p>Accepts the following message:</p>
-          <MessageComponent message={operation.message()} />
+          <Message message={operation.message()} />
         </div>
       )}
 

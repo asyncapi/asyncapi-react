@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { MessageComponent } from './NewMessage';
+import { Message } from './NewMessage';
 import { Toggle } from '../../components';
 
 import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
 import { CONTAINER_LABELS, MESSAGES_TEXT } from '../../constants';
 
-export const MessagesComponent: React.FunctionComponent = () => {
+export const Messages: React.FunctionComponent = () => {
   const messages = useSpec().allMessages();
 
   if (!messages.size) {
@@ -21,7 +21,7 @@ export const MessagesComponent: React.FunctionComponent = () => {
     <ul>
       {Array.from(messages).map(([key, msg], idx) => (
         <li key={key}>
-          <MessageComponent message={msg} index={idx + 1} key={idx} />
+          <Message message={msg} index={idx + 1} key={idx} />
         </li>
       ))}
     </ul>

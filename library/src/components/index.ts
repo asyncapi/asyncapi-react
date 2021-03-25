@@ -6,6 +6,7 @@ export * from './TableHeader';
 export * from './TableRow';
 export * from './Href';
 export * from './Markdown';
+export * from './Tag';
 export * from './Tags';
 export * from './Tree';
 export * from './Toggle';

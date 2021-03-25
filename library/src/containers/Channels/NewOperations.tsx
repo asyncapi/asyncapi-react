@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OperationComponent } from './NewOperation';
+import { Operation } from './NewOperation';
 import { Toggle } from '../../components';
 
 import { bemClasses } from '../../helpers';
@@ -8,7 +8,7 @@ import { useSpec } from '../../store';
 import { PayloadType } from '../../types';
 import { CONTAINER_LABELS, CHANNELS_TEXT } from '../../constants';
 
-export const OperationsComponent: React.FunctionComponent = () => {
+export const Operations: React.FunctionComponent = () => {
   const channels = useSpec().channels();
 
   if (!Object.keys(channels).length) {
@@ -23,8 +23,8 @@ export const OperationsComponent: React.FunctionComponent = () => {
     if (channel.hasPublish()) {
       operationsList.push(
         <li key={channelName}>
-          <OperationComponent
-            operationType={PayloadType.PUBLISH}
+          <Operation
+            type={PayloadType.PUBLISH}
             operation={channel.publish()}
             channelName={channelName}
             channel={channel}
@@ -35,8 +35,8 @@ export const OperationsComponent: React.FunctionComponent = () => {
     if (channel.hasSubscribe()) {
       operationsList.push(
         <li key={channelName}>
-          <OperationComponent
-            operationType={PayloadType.SUBSCRIBE}
+          <Operation
+            type={PayloadType.SUBSCRIBE}
             operation={channel.subscribe()}
             channelName={channelName}
             channel={channel}

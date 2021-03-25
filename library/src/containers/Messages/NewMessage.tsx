@@ -1,18 +1,15 @@
 import React from 'react';
-import { Message } from '@asyncapi/parser';
+import { Message as MessageType } from '@asyncapi/parser';
 
 import { SchemaComponent } from '../Schemas/NewSchema';
 import { Markdown, Tags } from '../../components';
 
 interface Props {
-  message: Message;
+  message: MessageType;
   index?: number | string;
 }
 
-export const MessageComponent: React.FunctionComponent<Props> = ({
-  message,
-  index,
-}) => {
+export const Message: React.FunctionComponent<Props> = ({ message, index }) => {
   const title = message.title();
   const summary = message.summary();
 
