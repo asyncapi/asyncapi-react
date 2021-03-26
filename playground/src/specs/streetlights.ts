@@ -149,10 +149,23 @@ components:
           type: integer
           minimum: 0
           description: Light intensity measured in lumens.
+          writeOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
       required:
         - lumens
+      x-schema-extensions-as-object:
+        type: object
+        properties:
+          prop1:
+            type: string
+          prop2:
+            type: integer
+            minimum: 0
+      x-schema-extensions-as-primitive: dummy
+      x-schema-extensions-as-array: 
+        - "item1"
+        - "item2"
     turnOnOffPayload:
       type: object
       properties:
@@ -175,6 +188,7 @@ components:
           description: Percentage to which the light should be dimmed to.
           minimum: 0
           maximum: 100
+          readOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
       additionalProperties: false
@@ -206,6 +220,35 @@ components:
       allOf:
         - $ref: "#/components/schemas/objectWithKey"
         - $ref: "#/components/schemas/objectWithKey2"
+
+    subscriptionStatus:
+      type: object
+      oneOf:
+        - properties:
+            channelID:
+              type: integer
+              description: ChannelID on successful subscription, applicable to public messages only.
+            channelName:
+              type: string
+              description: Channel Name on successful subscription. For payloads 'ohlc' and 'book', respective interval or depth will be added as suffix.
+        - properties:
+            errorMessage:
+              type: string
+      properties:
+        event:
+          type: string
+          const: subscriptionStatus
+        subscription:
+          type: object
+          properties:
+            depth:
+              type: string
+            interval:
+              type: string
+          required:
+            - name
+      required:
+        - event
 
   securitySchemes:
     apiKey:

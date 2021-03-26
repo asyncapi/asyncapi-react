@@ -1,6 +1,7 @@
 import React from 'react';
 import { Message as MessageType } from '@asyncapi/parser';
 
+import { Bindings } from '../Bindings/Bindings';
 import { SchemaComponent } from '../Schemas/NewSchema';
 import { Markdown, Tags } from '../../components';
 
@@ -48,6 +49,8 @@ export const Message: React.FunctionComponent<Props> = ({ message, index }) => {
 
       {payload && <SchemaComponent schemaName="Payload" schema={payload} />}
       {headers && <SchemaComponent schemaName="Headers" schema={headers} />}
+
+      {message.hasBindings() && <Bindings bindings={message.bindings()} />}
 
       <Tags tags={message.tags()} />
     </div>
