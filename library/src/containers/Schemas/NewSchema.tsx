@@ -11,7 +11,7 @@ interface Props {
   required?: boolean;
   isCircular?: boolean;
   isPatternProperty?: boolean;
-  isPropertyName?: boolean;
+  isProperty?: boolean;
   expanded?: boolean;
 }
 
@@ -21,7 +21,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   required = false,
   isCircular = false,
   isPatternProperty = false,
-  isPropertyName = false,
+  isProperty = false,
   expanded = false,
 }) => {
   const [expand, setExpand] = useState(expanded);
@@ -45,9 +45,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       <div className="flex property">
         <div className="pr-4" style={{ minWidth: '25%' }}>
           <span
-            className={`text-sm text-gray-500 ${
-              isPropertyName ? 'italic' : ''
-            }`}
+            className={`text-sm text-gray-500 ${isProperty ? 'italic' : ''}`}
           >
             {schemaName || schema.uid()}
           </span>
@@ -282,7 +280,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
-          isPropertyName={true}
+          isProperty={true}
           key={propertyName}
         />
       ))}
@@ -292,7 +290,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           isCircular={circularProps.includes(propertyName)}
           isPatternProperty={true}
-          isPropertyName={true}
+          isProperty={true}
           key={propertyName}
         />
       ))}

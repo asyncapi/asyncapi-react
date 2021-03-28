@@ -152,6 +152,7 @@ components:
           writeOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        lol: {}
         ifElseThen:
           type: integer
           minimum: 1
