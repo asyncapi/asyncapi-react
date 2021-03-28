@@ -32,7 +32,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   const isExpandable = SchemaHelpers.isExpandable(schema);
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
-  const hasValue = schema.ext(SchemaHelpers.exthasValue) === true;
+  const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
 
   return (
     <div
@@ -70,7 +70,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               [CIRCULAR]
             </div>
           </div>
-        ) : hasValue ? (
+        ) : rawValue ? (
           <div>
             <div className="text-sm text-teal-500 font-bold">
               {schema.const()}
@@ -170,6 +170,13 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         ? null
         : expand && (
             <div className="json-schema">
+              {schema.propertyNames() && (
+                <SchemaComponent
+                  schema={schema.propertyNames()}
+                  schemaName="Property names must adhere:"
+                />
+              )}
+
               <SchemaProperties schema={schema} />
               <SchemaItems schema={schema} />
 
@@ -203,16 +210,22 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                       schemaName={`${idx}`}
                     />
                   ))}
-
               {schema.not() && (
                 <SchemaComponent
                   schema={schema.not()}
-                  schemaName="Cannot adhere"
+                  schemaName="Cannot adhere:"
                 />
               )}
 
-              <SchemaAdditionalProperties schema={schema} />
-              <SchemaAdditionalItems schema={schema} />
+              {schema.contains() && (
+                <SchemaComponent
+                  schema={schema.contains()}
+                  schemaName="Array must contain at least one of:"
+                />
+              )}
+
+              <AdditionalProperties schema={schema} />
+              <AdditionalItems schema={schema} />
 
               <Extensions item={schema} />
             </div>
@@ -261,11 +274,11 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   );
 };
 
-interface SchemaAdditionalPropertiesProps {
+interface AdditionalPropertiesProps {
   schema: Schema;
 }
 
-const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalPropertiesProps> = ({
+const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
   schema,
 }) => {
   if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
@@ -295,7 +308,7 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
   }
   return (
     <SchemaComponent
-      schemaName="Additional properties must adhere"
+      schemaName="Additional properties must adhere:"
       schema={additionalProperties}
     />
   );
@@ -328,11 +341,11 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
   return <SchemaComponent schema={items} schemaName={'0'} />;
 };
 
-interface SchemaAdditionalItemsProps {
+interface AdditionalItemsProps {
   schema: Schema;
 }
 
-const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps> = ({
+const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
   if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
@@ -365,7 +378,7 @@ const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps>
   }
   return (
     <SchemaComponent
-      schemaName="Additional items must adhere"
+      schemaName="Additional items must adhere:"
       schema={additionalItems}
     />
   );

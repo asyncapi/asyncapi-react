@@ -5,7 +5,7 @@ import SchemaClass from '@asyncapi/parser/lib/models/schema';
 export class SchemaHelpers {
   static extRenderType = 'x-schema-private-render-type';
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
-  static exthasValue = 'x-schema-private-has-value';
+  static extRawValue = 'x-schema-private-raw-value';
 
   static toSchemaType(schema: Schema): string {
     let type = schema.type();
@@ -260,7 +260,7 @@ export class SchemaHelpers {
       return {
         type: 'string',
         const: value,
-        [this.exthasValue]: true,
+        [this.extRawValue]: true,
       };
     }
     if (this.isJSONSchema(value)) {

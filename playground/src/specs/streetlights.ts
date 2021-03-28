@@ -209,6 +209,8 @@ components:
       type: [string, number]
     objectWithKey:
       type: object
+      propertyNames:
+        format: email
       properties:
         key:
           type: string
@@ -229,6 +231,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/objectWithKey"
         - $ref: "#/components/schemas/objectWithKey2"
+    arrayContains: 
+      type: array
+      contains:
+        type: integer
 
     subscriptionStatus:
       type: object
