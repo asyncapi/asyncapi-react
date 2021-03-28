@@ -88,11 +88,17 @@ export class SchemaHelpers {
       schema.oneOf() ||
       schema.anyOf() ||
       schema.allOf() ||
+      schema.not() ||
       Object.keys(schema.properties()).length ||
       schema.additionalProperties() ||
       schema.items() ||
       schema.additionalItems()
     ) {
+      return true;
+    }
+
+    const customExtensions = this.getCustomExtensions(schema);
+    if (customExtensions && Object.keys(customExtensions).length) {
       return true;
     }
 
@@ -190,21 +196,23 @@ export class SchemaHelpers {
     max: number | undefined,
     exclusiveMax: number | undefined,
   ): string | undefined {
-    const hasMin = min !== undefined || exclusiveMin !== undefined;
-    const hasMax = max !== undefined || exclusiveMax !== undefined;
+    const hasExclusiveMin = exclusiveMin !== undefined;
+    const hasMin = min !== undefined || hasExclusiveMin;
+    const hasExclusiveMax = exclusiveMax !== undefined;
+    const hasMax = max !== undefined || hasExclusiveMax;
 
     let numberRange;
     if (hasMin && hasMax) {
-      numberRange = exclusiveMin !== undefined ? '( ' : '[ ';
-      numberRange += exclusiveMin !== undefined ? exclusiveMin : min;
+      numberRange = hasExclusiveMin ? '( ' : '[ ';
+      numberRange += hasExclusiveMin ? exclusiveMin : min;
       numberRange += ' .. ';
-      numberRange += exclusiveMax !== undefined ? exclusiveMax : max;
-      numberRange += exclusiveMax !== undefined ? ' )' : ' ]';
+      numberRange += hasExclusiveMax ? exclusiveMax : max;
+      numberRange += hasExclusiveMax ? ' )' : ' ]';
     } else if (hasMin) {
-      numberRange = exclusiveMin !== undefined ? '> ' : '>= ';
+      numberRange = hasExclusiveMin ? '> ' : '>= ';
       numberRange += min;
     } else if (hasMax) {
-      numberRange = exclusiveMax !== undefined ? '< ' : '<= ';
+      numberRange = hasExclusiveMax ? '< ' : '<= ';
       numberRange += max;
     }
     return numberRange;
@@ -268,6 +276,7 @@ export class SchemaHelpers {
       [this.extRenderAdditionalInfo]: false,
     };
   }
+
   private static isJSONSchema(value: any): boolean {
     if (
       value &&

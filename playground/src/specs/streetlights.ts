@@ -191,6 +191,15 @@ components:
           readOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        key:
+          type: integer
+          not:
+            minimum: 3
+      patternProperties:
+        ^S_:
+          type: string
+        ^I_:
+          type: integer
       additionalProperties: false
     sentAt:
       type: string
