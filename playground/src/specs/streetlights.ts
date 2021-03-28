@@ -152,6 +152,19 @@ components:
           writeOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        ifElseThen:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          if:
+            minimum: 100
+          then: 
+            multipleOf: 100
+          else:
+            if: 
+              minimum: 10
+            then: 
+              multipleOf: 10
       required:
         - lumens
       x-schema-extensions-as-object:

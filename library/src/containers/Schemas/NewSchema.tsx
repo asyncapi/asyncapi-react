@@ -11,6 +11,7 @@ interface Props {
   required?: boolean;
   isCircular?: boolean;
   isPatternProperty?: boolean;
+  isPropertyName?: boolean;
   expanded?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   required = false,
   isCircular = false,
   isPatternProperty = false,
+  isPropertyName = false,
   expanded = false,
 }) => {
   const [expand, setExpand] = useState(expanded);
@@ -42,7 +44,11 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
     >
       <div className="flex property">
         <div className="pr-4" style={{ minWidth: '25%' }}>
-          <span className="text-sm italic text-gray-500">
+          <span
+            className={`text-sm text-gray-500 ${
+              isPropertyName ? 'italic' : ''
+            }`}
+          >
             {schemaName || schema.uid()}
           </span>
           {isExpandable && (
@@ -173,7 +179,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               {schema.propertyNames() && (
                 <SchemaComponent
                   schema={schema.propertyNames()}
-                  schemaName="Property names must adhere:"
+                  schemaName="Property names must adhere to:"
                 />
               )}
 
@@ -213,7 +219,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               {schema.not() && (
                 <SchemaComponent
                   schema={schema.not()}
-                  schemaName="Cannot adhere:"
+                  schemaName="Cannot adhere to:"
                 />
               )}
 
@@ -221,6 +227,25 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                 <SchemaComponent
                   schema={schema.contains()}
                   schemaName="Array must contain at least one of:"
+                />
+              )}
+
+              {schema.if() && (
+                <SchemaComponent
+                  schema={schema.if()}
+                  schemaName="If schema adheres to:"
+                />
+              )}
+              {schema.then() && (
+                <SchemaComponent
+                  schema={schema.then()}
+                  schemaName="Then it must adhere to:"
+                />
+              )}
+              {schema.else() && (
+                <SchemaComponent
+                  schema={schema.else()}
+                  schemaName="Otherwise it must adhere to:"
                 />
               )}
 
@@ -258,6 +283,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
+          isPropertyName={true}
           key={propertyName}
         />
       ))}
@@ -267,6 +293,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           isCircular={circularProps.includes(propertyName)}
           isPatternProperty={true}
+          isPropertyName={true}
           key={propertyName}
         />
       ))}
@@ -308,7 +335,7 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   }
   return (
     <SchemaComponent
-      schemaName="Additional properties must adhere:"
+      schemaName="Additional properties must adhere to:"
       schema={additionalProperties}
     />
   );
@@ -378,7 +405,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   }
   return (
     <SchemaComponent
-      schemaName="Additional items must adhere:"
+      schemaName="Additional items must adhere to:"
       schema={additionalItems}
     />
   );

@@ -7,10 +7,16 @@ export class SchemaHelpers {
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
   static extRawValue = 'x-schema-private-raw-value';
 
-  static toSchemaType(schema: Schema): string {
+  static toSchemaType(schema: Schema | boolean): string {
+    if (schema === true) {
+      return 'Any';
+    } else if (schema === false) {
+      return 'Never';
+    }
+
     let type = schema.type();
     if (Array.isArray(type)) {
-      return type.map(t => this.toType(t, schema)).join(' | ');
+      return type.map(t => this.toType(t, schema)).join(' or ');
     }
     type = this.toType(type, schema);
     const combinedType = this.toCombinedType(schema);
@@ -92,7 +98,8 @@ export class SchemaHelpers {
       Object.keys(schema.properties()).length ||
       schema.additionalProperties() ||
       schema.items() ||
-      schema.additionalItems()
+      schema.additionalItems() ||
+      schema.if()
     ) {
       return true;
     }
