@@ -16,7 +16,7 @@ export class SchemaHelpers {
 
     let type = schema.type();
     if (Array.isArray(type)) {
-      return type.map(t => this.toType(t, schema)).join(' or ');
+      return type.map(t => this.toType(t, schema)).join(' | ');
     }
     type = this.toType(type, schema);
     const combinedType = this.toCombinedType(schema);
