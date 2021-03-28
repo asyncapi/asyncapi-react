@@ -360,12 +360,16 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     return (
       <>
         {items.map((item, idx) => (
-          <SchemaComponent schema={item} schemaName={`${idx}`} key={idx} />
+          <SchemaComponent
+            schema={item}
+            schemaName={`${idx + 1} item:`}
+            key={idx}
+          />
         ))}
       </>
     );
   }
-  return <SchemaComponent schema={items} schemaName={'0'} />;
+  return <SchemaComponent schema={items} schemaName="Items:" />;
 };
 
 interface AdditionalItemsProps {
