@@ -176,13 +176,6 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         ? null
         : expand && (
             <div className="json-schema">
-              {schema.propertyNames() && (
-                <SchemaComponent
-                  schema={schema.propertyNames()}
-                  schemaName="Property names must adhere to:"
-                />
-              )}
-
               <SchemaProperties schema={schema} />
               <SchemaItems schema={schema} />
 
@@ -223,6 +216,12 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                 />
               )}
 
+              {schema.propertyNames() && (
+                <SchemaComponent
+                  schema={schema.propertyNames()}
+                  schemaName="Property names must adhere to:"
+                />
+              )}
               {schema.contains() && (
                 <SchemaComponent
                   schema={schema.contains()}
