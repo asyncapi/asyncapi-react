@@ -1,6 +1,7 @@
 import React from 'react';
 import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
+import { Bindings } from '../Bindings/Bindings';
 import { Message } from '../Messages/NewMessage';
 import { SchemaComponent } from '../Schemas/NewSchema';
 import { Markdown, Tags } from '../../components';
@@ -46,10 +47,7 @@ export const Operation: React.FunctionComponent<Props> = ({
         <SchemaComponent
           schemaName="Parameters"
           schema={parameters}
-          notRender={{
-            rootType: false,
-            additionalInfo: false,
-          }}
+          expanded={true}
         />
       )}
 
@@ -73,6 +71,13 @@ export const Operation: React.FunctionComponent<Props> = ({
           <p>Accepts the following message:</p>
           <Message message={operation.message()} />
         </div>
+      )}
+
+      {operation.hasBindings() && (
+        <Bindings name="Operation Bindings" bindings={operation.bindings()} />
+      )}
+      {channel.hasBindings() && (
+        <Bindings name="Channel Bindings" bindings={channel.bindings()} />
       )}
 
       <Tags tags={operation.tags()} />

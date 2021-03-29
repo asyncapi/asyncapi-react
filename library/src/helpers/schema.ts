@@ -3,7 +3,17 @@ import { ChannelParameter, Schema } from '@asyncapi/parser';
 import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
 export class SchemaHelpers {
-  static toSchemaType(schema: Schema): string {
+  static extRenderType = 'x-schema-private-render-type';
+  static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
+  static extRawValue = 'x-schema-private-raw-value';
+
+  static toSchemaType(schema: Schema | boolean): string {
+    if (schema === true) {
+      return 'Any';
+    } else if (schema === false) {
+      return 'Never';
+    }
+
     let type = schema.type();
     if (Array.isArray(type)) {
       return type.map(t => this.toType(t, schema)).join(' | ');
@@ -84,11 +94,18 @@ export class SchemaHelpers {
       schema.oneOf() ||
       schema.anyOf() ||
       schema.allOf() ||
+      schema.not() ||
       Object.keys(schema.properties()).length ||
       schema.additionalProperties() ||
       schema.items() ||
-      schema.additionalItems()
+      schema.additionalItems() ||
+      schema.if()
     ) {
+      return true;
+    }
+
+    const customExtensions = this.getCustomExtensions(schema);
+    if (customExtensions && Object.keys(customExtensions).length) {
       return true;
     }
 
@@ -107,15 +124,51 @@ export class SchemaHelpers {
       properties: Object.entries(parameters).reduce(
         (obj, [paramaterName, parameter]) => {
           obj[paramaterName] = Object.assign({}, parameter.schema().json());
-          obj[paramaterName].description = parameter.description();
+          obj[paramaterName].description =
+            parameter.description() || obj[paramaterName].description;
           return obj;
         },
         {},
       ),
       required: Object.keys(parameters),
+      [this.extRenderType]: false,
+      [this.extRenderAdditionalInfo]: false,
     };
     return new SchemaClass(json);
   }
+
+  static jsonToSchema(value: any): any {
+    const json = this.jsonFieldToSchema(value);
+    return new SchemaClass(json);
+  }
+
+  static getCustomExtensions(value: any) {
+    if (!value || typeof value.extensions !== 'function') {
+      return;
+    }
+    return Object.entries(value.extensions() || {}).reduce(
+      (obj, [extName, ext]) => {
+        if (
+          !extName.startsWith('x-parser-') &&
+          !extName.startsWith('x-schema-private')
+        ) {
+          obj[extName] = ext;
+        }
+        return obj;
+      },
+      {},
+    );
+  }
+
+  private static jsonSchemaTypes = [
+    'string',
+    'number',
+    'integer',
+    'boolean',
+    'array',
+    'object',
+    'null',
+  ];
 
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
@@ -144,25 +197,29 @@ export class SchemaHelpers {
     return;
   }
 
-  // TODO: Fix exclusive fields
   private static humanizeNumberRangeConstraint(
     min: number | undefined,
     exclusiveMin: number | undefined,
     max: number | undefined,
     exclusiveMax: number | undefined,
   ): string | undefined {
+    const hasExclusiveMin = exclusiveMin !== undefined;
+    const hasMin = min !== undefined || hasExclusiveMin;
+    const hasExclusiveMax = exclusiveMax !== undefined;
+    const hasMax = max !== undefined || hasExclusiveMax;
+
     let numberRange;
-    if (min !== undefined && max !== undefined) {
-      numberRange = exclusiveMin !== undefined ? '( ' : '[ ';
-      numberRange += min;
+    if (hasMin && hasMax) {
+      numberRange = hasExclusiveMin ? '( ' : '[ ';
+      numberRange += hasExclusiveMin ? exclusiveMin : min;
       numberRange += ' .. ';
-      numberRange += max;
-      numberRange += exclusiveMax !== undefined ? ' )' : ' ]';
-    } else if (min !== undefined) {
-      numberRange = exclusiveMin !== undefined ? '> ' : '>= ';
+      numberRange += hasExclusiveMax ? exclusiveMax : max;
+      numberRange += hasExclusiveMax ? ' )' : ' ]';
+    } else if (hasMin) {
+      numberRange = hasExclusiveMin ? '> ' : '>= ';
       numberRange += min;
-    } else if (max !== undefined) {
-      numberRange = exclusiveMax !== undefined ? '< ' : '<= ';
+    } else if (hasMax) {
+      numberRange = hasExclusiveMax ? '< ' : '<= ';
       numberRange += max;
     }
     return numberRange;
@@ -203,5 +260,40 @@ export class SchemaHelpers {
       }
     }
     return stringRange;
+  }
+
+  private static jsonFieldToSchema(value: any): any {
+    if (typeof value !== 'object') {
+      return {
+        type: 'string',
+        const: value,
+        [this.extRawValue]: true,
+      };
+    }
+    if (this.isJSONSchema(value)) {
+      return value;
+    }
+    return {
+      type: 'object',
+      properties: Object.entries(value).reduce((obj, [k, v]) => {
+        obj[k] = this.jsonFieldToSchema(v);
+        return obj;
+      }, {}),
+      [this.extRenderType]: false,
+      [this.extRenderAdditionalInfo]: false,
+    };
+  }
+
+  private static isJSONSchema(value: any): boolean {
+    if (
+      value &&
+      typeof value === 'object' &&
+      (this.jsonSchemaTypes.includes(value.type) ||
+        (Array.isArray(value.type) &&
+          value.type.some((t: string) => !this.jsonSchemaTypes.includes(t))))
+    ) {
+      return true;
+    }
+    return false;
   }
 }

@@ -149,10 +149,37 @@ components:
           type: integer
           minimum: 0
           description: Light intensity measured in lumens.
+          writeOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        lol: {}
+        ifElseThen:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          if:
+            minimum: 100
+          then: 
+            multipleOf: 100
+          else:
+            if: 
+              minimum: 10
+            then: 
+              multipleOf: 10
       required:
         - lumens
+      x-schema-extensions-as-object:
+        type: object
+        properties:
+          prop1:
+            type: string
+          prop2:
+            type: integer
+            minimum: 0
+      x-schema-extensions-as-primitive: dummy
+      x-schema-extensions-as-array: 
+        - "item1"
+        - "item2"
     turnOnOffPayload:
       type: object
       properties:
@@ -175,8 +202,18 @@ components:
           description: Percentage to which the light should be dimmed to.
           minimum: 0
           maximum: 100
+          readOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        key:
+          type: integer
+          not:
+            minimum: 3
+      patternProperties:
+        ^S_:
+          type: string
+        ^I_:
+          type: integer
       additionalProperties: false
     sentAt:
       type: string
@@ -186,6 +223,8 @@ components:
       type: [string, number]
     objectWithKey:
       type: object
+      propertyNames:
+        format: email
       properties:
         key:
           type: string
@@ -206,6 +245,39 @@ components:
       allOf:
         - $ref: "#/components/schemas/objectWithKey"
         - $ref: "#/components/schemas/objectWithKey2"
+    arrayContains: 
+      type: array
+      contains:
+        type: integer
+
+    subscriptionStatus:
+      type: object
+      oneOf:
+        - properties:
+            channelID:
+              type: integer
+              description: ChannelID on successful subscription, applicable to public messages only.
+            channelName:
+              type: string
+              description: Channel Name on successful subscription. For payloads 'ohlc' and 'book', respective interval or depth will be added as suffix.
+        - properties:
+            errorMessage:
+              type: string
+      properties:
+        event:
+          type: string
+          const: subscriptionStatus
+        subscription:
+          type: object
+          properties:
+            depth:
+              type: string
+            interval:
+              type: string
+          required:
+            - name
+      required:
+        - event
 
   securitySchemes:
     apiKey:

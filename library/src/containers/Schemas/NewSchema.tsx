@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { Schema } from '@asyncapi/parser';
 
+import { Extensions } from '../Extensions/Extensions';
 import { Chevron, Markdown } from '../../components';
 import { SchemaHelpers } from '../../helpers';
-
-interface NotRenderProps {
-  rootType?: boolean;
-  additionalInfo?: boolean;
-}
 
 interface Props {
   schemaName?: string;
   schema?: Schema;
   required?: boolean;
   isCircular?: boolean;
-  notRender?: NotRenderProps;
+  isPatternProperty?: boolean;
+  isProperty?: boolean;
+  expanded?: boolean;
 }
 
 export const SchemaComponent: React.FunctionComponent<Props> = ({
@@ -22,9 +20,11 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   schema,
   required = false,
   isCircular = false,
-  notRender = {},
+  isPatternProperty = false,
+  isProperty = false,
+  expanded = false,
 }) => {
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(expanded);
 
   if (!schema) {
     return null;
@@ -33,8 +33,8 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema);
 
-  const renderType = notRender.rootType !== false;
-  const renderAdditionalInfo = notRender.additionalInfo !== false;
+  const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
+  const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
 
   return (
     <div
@@ -43,8 +43,10 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
       }`}
     >
       <div className="flex property">
-        <div className="pr-4" style={{ marginTop: '-2px', minWidth: '25%' }}>
-          <span className="text-sm italic text-gray-500">
+        <div className="pr-4" style={{ minWidth: '25%' }}>
+          <span
+            className={`text-sm text-gray-500 ${isProperty ? 'italic' : ''}`}
+          >
             {schemaName || schema.uid()}
           </span>
           {isExpandable && (
@@ -52,15 +54,30 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               <Chevron />
             </span>
           )}
+          {isPatternProperty && (
+            <div className="text-teal-500 text-xs">(pattern property)</div>
+          )}
           {required && <div className="text-red-600 text-xs">required</div>}
           {schema.deprecated() && (
             <div className="text-red-600 text-xs">deprecated</div>
+          )}
+          {schema.writeOnly() && (
+            <div className="text-teal-500 text-xs">write-only</div>
+          )}
+          {schema.readOnly() && (
+            <div className="text-teal-500 text-xs">read-only</div>
           )}
         </div>
         {isCircular ? (
           <div>
             <div className="capitalize text-sm text-teal-500 font-bold">
               [CIRCULAR]
+            </div>
+          </div>
+        ) : rawValue ? (
+          <div>
+            <div className="text-sm text-teal-500 font-bold">
+              {schema.const()}
             </div>
           </div>
         ) : (
@@ -73,7 +90,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                     className="bg-yellow-600 font-bold no-underline text-black rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
                   >
-                    {schema.format()}
+                    format: {schema.format()}
                   </span>
                 )}
 
@@ -101,7 +118,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                     className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
                   >
-                    {schema.contentMediaType()} media type
+                    media type: {schema.contentMediaType()}
                   </span>
                 )}
                 {schema.contentEncoding() !== undefined && (
@@ -109,7 +126,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
                     className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
                   >
-                    {schema.contentEncoding()} encoding
+                    encoding: {schema.contentEncoding()}
                   </span>
                 )}
               </div>
@@ -117,14 +134,14 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               <Markdown>{schema.description()}</Markdown>
 
               {schema.default() !== undefined && (
-                <div className="text-xs">Default: {schema.default()}</div>
+                <div className="text-xs">Default value: {schema.default()}</div>
               )}
               {schema.const() !== undefined && (
                 <div className="text-xs">Const: {schema.const()}</div>
               )}
               {schema.enum() && (
                 <div className="text-xs">
-                  Enum:{' '}
+                  Allowed values:{' '}
                   {schema.enum().map((e, idx) => (
                     <span
                       key={idx}
@@ -137,7 +154,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
               )}
               {schema.examples() && (
                 <div className="text-xs">
-                  Examples:{' '}
+                  Examples values:{' '}
                   {schema.examples().map((e, idx) => (
                     <span
                       key={idx}
@@ -153,46 +170,98 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
         )}
       </div>
 
-      {isCircular || !isExpandable ? null : expand ? (
-        <div className="json-schema">
-          <SchemaProperties
-            schema={schema}
-            renderAdditionalInfo={renderAdditionalInfo}
-          />
-          <SchemaItems schema={schema} />
+      {isCircular || !isExpandable
+        ? null
+        : expand && (
+            <div className="json-schema">
+              <SchemaProperties schema={schema} />
+              <SchemaItems schema={schema} />
 
-          {schema.oneOf() &&
-            schema
-              .oneOf()
-              .map((s, idx) => (
-                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
-              ))}
-          {schema.anyOf() &&
-            schema
-              .anyOf()
-              .map((s, idx) => (
-                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
-              ))}
-          {schema.allOf() &&
-            schema
-              .allOf()
-              .map((s, idx) => (
-                <SchemaComponent key={idx} schema={s} schemaName={`${idx}`} />
-              ))}
-        </div>
-      ) : null}
+              {schema.oneOf() &&
+                schema
+                  .oneOf()
+                  .map((s, idx) => (
+                    <SchemaComponent
+                      key={idx}
+                      schema={s}
+                      schemaName={`${idx}`}
+                    />
+                  ))}
+              {schema.anyOf() &&
+                schema
+                  .anyOf()
+                  .map((s, idx) => (
+                    <SchemaComponent
+                      key={idx}
+                      schema={s}
+                      schemaName={`${idx}`}
+                    />
+                  ))}
+              {schema.allOf() &&
+                schema
+                  .allOf()
+                  .map((s, idx) => (
+                    <SchemaComponent
+                      key={idx}
+                      schema={s}
+                      schemaName={`${idx}`}
+                    />
+                  ))}
+              {schema.not() && (
+                <SchemaComponent
+                  schema={schema.not()}
+                  schemaName="Cannot adhere to:"
+                />
+              )}
+
+              {schema.propertyNames() && (
+                <SchemaComponent
+                  schema={schema.propertyNames()}
+                  schemaName="Property names must adhere to:"
+                />
+              )}
+              {schema.contains() && (
+                <SchemaComponent
+                  schema={schema.contains()}
+                  schemaName="Array must contain at least one of:"
+                />
+              )}
+
+              {schema.if() && (
+                <SchemaComponent
+                  schema={schema.if()}
+                  schemaName="If schema adheres to:"
+                />
+              )}
+              {schema.then() && (
+                <SchemaComponent
+                  schema={schema.then()}
+                  schemaName="Then it must adhere to:"
+                />
+              )}
+              {schema.else() && (
+                <SchemaComponent
+                  schema={schema.else()}
+                  schemaName="Otherwise it must adhere to:"
+                />
+              )}
+
+              <AdditionalProperties schema={schema} />
+              <AdditionalItems schema={schema} />
+
+              <Extensions item={schema} />
+            </div>
+          )}
     </div>
   );
 };
 
 interface SchemaPropertiesProps {
   schema: Schema;
-  renderAdditionalInfo?: boolean;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
-  renderAdditionalInfo,
 }) => {
   const properties = schema.properties() || {};
   if (!Object.keys(properties)) {
@@ -200,6 +269,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   }
 
   const required = schema.required() || [];
+  const patternProperties = schema.patternProperties();
   const circularProps = schema.circularProps() || [];
 
   return (
@@ -210,21 +280,35 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
+          isProperty={true}
           key={propertyName}
         />
       ))}
-      {renderAdditionalInfo && <SchemaAdditionalProperties schema={schema} />}
+      {Object.entries(patternProperties).map(([propertyName, property]) => (
+        <SchemaComponent
+          schema={property}
+          schemaName={propertyName}
+          isCircular={circularProps.includes(propertyName)}
+          isPatternProperty={true}
+          isProperty={true}
+          key={propertyName}
+        />
+      ))}
     </>
   );
 };
 
-interface SchemaAdditionalPropertiesProps {
+interface AdditionalPropertiesProps {
   schema: Schema;
 }
 
-const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalPropertiesProps> = ({
+const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
   schema,
 }) => {
+  if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
+    return null;
+  }
+
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
   if (!type.includes('object')) {
@@ -247,14 +331,10 @@ const SchemaAdditionalProperties: React.FunctionComponent<SchemaAdditionalProper
     );
   }
   return (
-    <>
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs font-bold text-gray-700">
-        Additional properties must adhere to the following schema:
-      </p>
-      <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalProperties} />
-      </div>
-    </>
+    <SchemaComponent
+      schemaName="Additional properties must adhere to:"
+      schema={additionalProperties}
+    />
   );
 };
 
@@ -277,25 +357,35 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     return (
       <>
         {items.map((item, idx) => (
-          <SchemaComponent schema={item} schemaName={`${idx}`} key={idx} />
+          <SchemaComponent
+            schema={item}
+            schemaName={`${idx + 1} item:`}
+            key={idx}
+          />
         ))}
-        <SchemaAdditionalItems schema={schema} />
       </>
     );
   }
-  return <SchemaComponent schema={items} schemaName={'0'} />;
+  return <SchemaComponent schema={items} schemaName="Items:" />;
 };
 
-interface SchemaAdditionalItemsProps {
+interface AdditionalItemsProps {
   schema: Schema;
 }
 
-const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps> = ({
+const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
+  if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
+    return null;
+  }
+
   let type = schema.type();
   type = Array.isArray(type) ? type : [type];
   if (!type.includes('array')) {
+    return null;
+  }
+  if (!Array.isArray(schema.items())) {
     return null;
   }
 
@@ -315,13 +405,9 @@ const SchemaAdditionalItems: React.FunctionComponent<SchemaAdditionalItemsProps>
     );
   }
   return (
-    <>
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs font-bold text-gray-700">
-        Additional items must adhere to the following schema:
-      </p>
-      <div className="bg-gray-300 pl-6">
-        <SchemaComponent schema={additionalItems} />
-      </div>
-    </>
+    <SchemaComponent
+      schemaName="Additional items must adhere to:"
+      schema={additionalItems}
+    />
   );
 };
