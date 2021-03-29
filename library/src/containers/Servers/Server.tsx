@@ -80,7 +80,7 @@ export const ServerComponent: React.FunctionComponent<Props> = ({
         identifier={identifier}
         dataIdentifier={dataIdentifier}
       />
-      {serverSecurity.length && (
+      {serverSecurity && serverSecurity.length && (
         <ServerSecurityComponent
           requirements={serverSecurity}
           identifier={identifier}
