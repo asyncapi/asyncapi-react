@@ -1,5 +1,4 @@
 import { AsyncAPIDocument } from '@asyncapi/parser';
-import { ConfigInterface } from './config';
 
 // Helpers
 export type PrimitiveType = number | boolean | string | null;
@@ -373,11 +372,6 @@ export interface Schema {
 
 export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
 
-export interface AsyncApiProps {
-  schema: PropsSchema;
-  config?: Partial<ConfigInterface>;
-}
-
 export type NullableAsyncApi = AsyncAPI | null;
 
 export interface AsyncApiState {
@@ -397,8 +391,7 @@ export interface FetchingSchemaInterface {
 }
 
 export interface ParserReturn {
-  data: NullableAsyncApi;
-  asyncapi: AsyncAPIDocument | null;
+  asyncapi?: AsyncAPIDocument;
   error?: ErrorObject;
 }
 

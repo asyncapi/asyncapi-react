@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Operation } from './NewOperation';
+import { Operation } from './Operation';
 import { Toggle } from '../../components';
 
 import { bemClasses } from '../../helpers';

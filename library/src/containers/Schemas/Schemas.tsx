@@ -1,7 +1,6 @@
 import React from 'react';
 
-// import { SchemaComponent } from './Schema';
-import { SchemaComponent } from './NewSchema';
+import { Schema } from './Schema';
 
 import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
@@ -13,9 +12,7 @@ interface Props {
   expand?: ExpandNestedConfig;
 }
 
-export const SchemasComponent: React.FunctionComponent<Props> = ({
-  expand,
-}) => {
+export const Schemas: React.FunctionComponent<Props> = ({ expand }) => {
   const schemas = useSpec().allSchemas();
   if (!schemas.size) {
     return null;
@@ -31,13 +28,7 @@ export const SchemasComponent: React.FunctionComponent<Props> = ({
           key={schemaName}
           className={bemClasses.element(`${className}-list-item`)}
         >
-          <SchemaComponent
-            schemaName={schemaName}
-            schema={schema}
-            // name={key}
-            // toggle={true}
-            // toggleExpand={expand && expand.elements}
-          />
+          <Schema schemaName={schemaName} schema={schema} />
         </li>
       ))}
     </ul>

@@ -8,6 +8,5 @@ export * from './Href';
 export * from './Markdown';
 export * from './Tag';
 export * from './Tags';
-export * from './Tree';
 export * from './Toggle';
 export * from './CollapseButton';

@@ -2,51 +2,39 @@ import React, { Component } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
 
 import {
-  AsyncAPI,
   isFetchingSchemaInterface,
-  NullableAsyncApi,
   ErrorObject,
-  AsyncApiProps,
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { bemClasses, stateHelpers, Parser } from '../../helpers';
+import { parser, bemClasses, stateHelpers } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
 import { InfoComponent } from '../Info/NewInfo';
 import { ServersComponent } from '../Servers/Servers';
-import { Operations } from '../Channels/NewOperations';
-import { Messages } from '../Messages/NewMessages';
-import { SchemasComponent } from '../Schemas/Schemas';
+import { Operations } from '../Channels/Operations';
+import { Messages } from '../Messages/Messages';
+
+export interface AsyncApiProps {
+  schema: PropsSchema;
+  config?: Partial<ConfigInterface>;
+}
 
 interface AsyncAPIState {
-  validatedSchema: NullableAsyncApi;
-  asyncapi: AsyncAPIDocument | null;
+  asyncapi?: AsyncAPIDocument;
   error?: ErrorObject;
 }
 
-const defaultAsyncApi: AsyncAPI = {
-  asyncapi: '2.0.0-rc2',
-  info: {
-    title: 'AsyncApi example title',
-    version: '1.0.0',
-  },
-  channels: {},
-};
-
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
-    validatedSchema: defaultAsyncApi,
-    asyncapi: null,
+    asyncapi: undefined,
     error: undefined,
   };
-  private readonly parser: Parser;
 
   constructor(props: AsyncApiProps) {
     super(props);
-    this.parser = new Parser();
   }
 
   async componentDidMount() {
@@ -69,7 +57,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   render() {
     const { config } = this.props;
-    const { validatedSchema, asyncapi, error } = this.state;
+    const { asyncapi, error } = this.state;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,
@@ -83,11 +71,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       },
     };
 
-    if (
-      !validatedSchema ||
-      !Object.keys(validatedSchema).length ||
-      asyncapi === null
-    ) {
+    if (asyncapi === undefined) {
       if (!error) {
         return null;
       }
@@ -100,12 +84,12 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     bemClasses.setSchemaID(concatenatedConfig.schemaID);
     const numberOfElement = stateHelpers.calculateNumberOfElements({
-      spec: validatedSchema,
+      spec: asyncapi.json(),
       showConfig: concatenatedConfig.show,
     });
     const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
       {
-        spec: validatedSchema,
+        spec: asyncapi.json(),
         showConfig: concatenatedConfig.show,
         expandConfig: concatenatedConfig.expand || {},
       },
@@ -132,19 +116,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
                 />
               )}
               {concatenatedConfig.show.channels && <Operations />}
-              {validatedSchema.components && (
-                <section className={bemClasses.element(`components`)}>
-                  {concatenatedConfig.show.messages && <Messages />}
-                  {concatenatedConfig.show.schemas && (
-                    <SchemasComponent
-                      expand={
-                        concatenatedConfig.expand &&
-                        concatenatedConfig.expand.schemas
-                      }
-                    />
-                  )}
-                </section>
-              )}
+              {concatenatedConfig.show.messages && <Messages />}
             </main>
           </useChangeHashContext.Provider>
         </useExpandedContext.Provider>
@@ -154,21 +126,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
     if (isFetchingSchemaInterface(schema)) {
-      const parsedFromUrl = await this.parser.parseFromUrl(
-        schema,
-        parserOptions,
-      );
+      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
       this.setState({
-        validatedSchema: parsedFromUrl.data,
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
       });
       return;
     }
 
-    const parsed = await this.parser.parse(schema, parserOptions);
+    const parsed = await parser.parse(schema, parserOptions);
     this.setState({
-      validatedSchema: parsed.data,
       asyncapi: parsed.asyncapi,
       error: parsed.error,
     });

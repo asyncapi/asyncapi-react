@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SchemaComponent } from '../Schemas/NewSchema';
+import { Schema } from '../Schemas/Schema';
 
 import { SchemaHelpers } from '../../helpers';
 
@@ -16,7 +16,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
   if (!bindings || !Object.keys(bindings).length) {
     return null;
   }
-  const schema = SchemaHelpers.jsonToSchema(bindings);
 
-  return <SchemaComponent schemaName={name} schema={schema} />;
+  const schema = SchemaHelpers.jsonToSchema(bindings);
+  return <Schema schemaName={name} schema={schema} />;
 };
