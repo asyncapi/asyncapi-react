@@ -38,20 +38,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   async componentDidMount() {
-    this.parseSchema(
-      this.props.schema,
-      this.props.config && this.props.config.parserOptions,
-    );
+    this.updateState(this.props.schema, this.props.config);
   }
 
   async componentDidUpdate(prevProps: AsyncApiProps) {
-    const { schema } = prevProps;
+    const oldSchema = prevProps;
+    const newSchema = this.props.schema;
 
-    if (schema !== this.props.schema) {
-      this.parseSchema(
-        this.props.schema,
-        this.props.config && this.props.config.parserOptions,
-      );
+    if (oldSchema !== newSchema) {
+      this.updateState(newSchema, this.props.config);
     }
   }
 
@@ -122,6 +117,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         </useExpandedContext.Provider>
       </useSpec.Provider>
     );
+  }
+
+  private updateState(schema: PropsSchema, config?: Partial<ConfigInterface>) {
+    if (typeof schema === 'function' && schema.name === 'AsyncAPIDocument') {
+      this.setState({ asyncapi: schema });
+      return;
+    }
+    this.parseSchema(schema, config && config.parserOptions);
   }
 
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {

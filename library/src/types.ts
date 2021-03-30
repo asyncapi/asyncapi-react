@@ -370,7 +370,11 @@ export interface Schema {
   // defaultProperties?: string[];
 }
 
-export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
+export type PropsSchema =
+  | string
+  | FetchingSchemaInterface
+  | AsyncAPIDocument
+  | any; // any for JSON input
 
 export type NullableAsyncApi = AsyncAPI | null;
 
