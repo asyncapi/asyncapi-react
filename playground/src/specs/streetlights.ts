@@ -150,6 +150,8 @@ components:
           minimum: 0
           description: Light intensity measured in lumens.
           writeOnly: true
+          externalDocs:
+            url: "https://www.asyncapi.com/"
         sentAt:
           $ref: "#/components/schemas/sentAt"
         lol: {}

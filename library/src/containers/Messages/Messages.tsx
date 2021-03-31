@@ -1,90 +1,47 @@
 import React from 'react';
-import { Message } from '@asyncapi/parser';
 
-import { MessageComponent } from './Message';
-
-import { ExpandNestedConfig } from '../../config';
-import { bemClasses } from '../../helpers';
+import { Message } from './Message';
 import { Toggle } from '../../components';
-import { MESSAGES_TEXT, CONTAINER_LABELS } from '../../constants';
+
+import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
+import { CONTAINER_LABELS, MESSAGES_TEXT } from '../../constants';
 
-interface Props {
-  messages?: Record<string, Message>;
-  expand?: ExpandNestedConfig;
-  inChannel?: boolean;
-}
+export const Messages: React.FunctionComponent = () => {
+  const messages = useSpec().allMessages();
 
-export const MessagesComponent: React.FunctionComponent<Props> = ({
-  messages,
-  expand,
-  inChannel = false,
-}) => {
-  const asyncapi = useSpec();
-  messages =
-    messages ||
-    Array.from(asyncapi.allMessages()).reduce((obj, [key, value]) => {
-      obj[key] = value;
-      return obj;
-    }, {});
-
-  if (!messages || !Object.keys(messages).length) {
+  if (!messages.size) {
     return null;
   }
 
-  const className = CONTAINER_LABELS.MESSAGES;
-  const messagesLength = Object.keys(messages).length;
+  const className = CONTAINER_LABELS.SCHEMAS;
+  const header = <h2>{MESSAGES_TEXT}</h2>;
 
-  const wrapper = (children: React.ReactNode) => (
+  const messagesList = (
+    <ul>
+      {Array.from(messages).map(([key, msg], idx) => (
+        <li key={key}>
+          <Message message={msg} index={idx + 1} key={idx} />
+        </li>
+      ))}
+    </ul>
+  );
+
+  return (
     <section
       className={bemClasses.element(className)}
       id={bemClasses.identifier([className])}
     >
-      {children}
+      <Toggle
+        header={header}
+        className={className}
+        expanded={true}
+        // expanded={expand && expand.root}
+        label={CONTAINER_LABELS.MESSAGES}
+        toggleInState={true}
+      >
+        <div className="all-messages pb-8">{messagesList}</div>
+      </Toggle>
     </section>
-  );
-  const header = <h2>{MESSAGES_TEXT}</h2>;
-  const content = (
-    <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(messages).map(([key, msg]) => {
-        // check it without `.uid()` function
-        let name = msg.uid();
-        name = name.includes('anonymous-message') ? '' : name;
-
-        const title = messagesLength < 2 && inChannel ? '' : name || `${key}`;
-
-        return (
-          <li
-            key={key}
-            className={bemClasses.element(`${className}-list-item`)}
-          >
-            <MessageComponent
-              title={title}
-              message={msg}
-              hideTags={true}
-              inChannel={false}
-              toggleExpand={expand && expand.elements}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-
-  if (inChannel) {
-    return wrapper(content);
-  }
-
-  return wrapper(
-    <Toggle
-      header={header}
-      className={className}
-      expanded={true}
-      // expanded={expand && expand.root}
-      label={CONTAINER_LABELS.MESSAGES}
-      toggleInState={true}
-    >
-      {content}
-    </Toggle>,
   );
 };

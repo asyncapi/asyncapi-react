@@ -99,22 +99,6 @@ export const SERVER_SECURITY_COLUMN_NAMES: TableColumnName[] = [
   'Description',
 ];
 
-export const SCHEMA_COLUMN_NAMES: TableColumnName[] = [
-  'Name',
-  'Title',
-  'Type',
-  'Format',
-  'Default',
-  'Description',
-];
-
-export const SERVER_VARIABLES_COLUMN_NAMES: TableColumnName[] = [
-  'Name',
-  'Default value',
-  'Possible values',
-  'Description',
-];
-
 export enum CONTAINER_LABELS {
   INFO = 'info',
   CHANNELS = 'channels',

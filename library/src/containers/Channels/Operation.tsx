@@ -1,96 +1,82 @@
 import React from 'react';
-import { Operation, Message } from '@asyncapi/parser';
+import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
-import { MessagesComponent } from '../Messages/Messages';
-import { MessageComponent } from '../Messages/Message';
+import { Bindings } from '../Bindings/Bindings';
+import { Message } from '../Messages/Message';
+import { Schema } from '../Schemas/Schema';
+import { Markdown, Tags } from '../../components';
 
-import { bemClasses } from '../../helpers';
-import { Badge, BadgeType, Markdown } from '../../components';
+import { SchemaHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
-import {
-  ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT,
-  ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT,
-} from '../../constants';
 
 interface Props {
-  payloadType?: PayloadType;
-  operation: Operation;
-  oneOf?: boolean;
-  otherOneOf?: boolean;
-  isPublish?: boolean;
-  isSubscribe?: boolean;
+  type: PayloadType;
+  operation: OperationType;
+  channelName: string;
+  channel: Channel;
 }
 
-export const OperationComponent: React.FunctionComponent<Props> = ({
-  payloadType = PayloadType.PUBLISH,
+export const Operation: React.FunctionComponent<Props> = ({
+  type = PayloadType.PUBLISH,
   operation,
-  oneOf = false,
-  otherOneOf = false,
-  isPublish = false,
-  isSubscribe = false,
+  channelName,
+  channel,
 }) => {
-  const className = `channel-operation`;
-
-  const description = operation.hasDescription() && (
-    <div className={bemClasses.element(`${className}-description`)}>
-      <Markdown>{operation.description()}</Markdown>
-    </div>
-  );
-
-  if (oneOf || otherOneOf) {
-    let messages: Record<string, Message> = {};
-    if (oneOf && operation.hasMultipleMessages()) {
-      messages = operation
-        .messages()
-        .map((message, index) => ({ [`${index}`]: message }))
-        .reduce((obj, item) => Object.assign(obj, item), {});
-    }
-    if (!oneOf && otherOneOf) {
-      messages = {
-        0: operation.message(),
-      };
-    }
-
-    if (!Object.keys(messages).length) {
-      return null;
-    }
-
-    return (
-      <section
-        className={bemClasses.element(`${className}-oneOf-${payloadType}`)}
-      >
-        <header
-          className={bemClasses.element(
-            `${className}-oneOf-${payloadType}-header`,
-          )}
-        >
-          <h4>
-            {isPublish && isSubscribe ? (
-              <Badge
-                type={
-                  payloadType === PayloadType.PUBLISH
-                    ? BadgeType.PUBLISH
-                    : BadgeType.SUBSCRIBE
-                }
-              />
-            ) : null}
-            <span>
-              {payloadType === PayloadType.PUBLISH
-                ? ONE_OF_FOLLOWING_MESSAGES_PUBLISH_TEXT
-                : ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT}
-            </span>
-          </h4>
-        </header>
-        {description}
-        <MessagesComponent messages={messages} inChannel={true} />
-      </section>
-    );
-  }
+  const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
+  const operationSummary = operation.summary();
 
   return (
-    <section className={bemClasses.element(className)}>
-      {description}
-      <MessageComponent message={operation.message()} inChannel={true} />
-    </section>
+    <div className="center-block p-8">
+      <div className="operation pt-8 pb-8">
+        <h3 className="font-mono text-base">
+          <span
+            className={`font-mono border uppercase p-1 rounded ${
+              type === PayloadType.PUBLISH
+                ? 'border-blue-600 text-blue-500'
+                : 'border-green-600 text-green-600'
+            }`}
+            title={type}
+          >
+            {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
+          </span>{' '}
+          <span>{channelName}</span>
+        </h3>
+      </div>
+
+      {parameters && (
+        <Schema schemaName="Parameters" schema={parameters} expanded={true} />
+      )}
+
+      <Markdown>{channel.description()}</Markdown>
+      {operationSummary && (
+        <p className="text-gray-600 text-sm">{operationSummary}</p>
+      )}
+      <Markdown>{operation.description()}</Markdown>
+
+      {operation.hasMultipleMessages() ? (
+        <div>
+          <p>
+            Accepts <strong>one of</strong> the following messages:
+          </p>
+          {operation.messages().map((msg, idx) => (
+            <Message message={msg} index={idx} key={idx} />
+          ))}
+        </div>
+      ) : (
+        <div>
+          <p>Accepts the following message:</p>
+          <Message message={operation.message()} />
+        </div>
+      )}
+
+      {operation.hasBindings() && (
+        <Bindings name="Operation Bindings" bindings={operation.bindings()} />
+      )}
+      {channel.hasBindings() && (
+        <Bindings name="Channel Bindings" bindings={channel.bindings()} />
+      )}
+
+      <Tags tags={operation.tags()} />
+    </div>
   );
 };
