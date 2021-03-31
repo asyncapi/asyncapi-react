@@ -14,7 +14,7 @@ import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 import { ErrorComponent } from '../Error/Error';
 import { Info } from '../Info/Info';
 import { Servers } from '../Servers/Servers';
-import { Operations } from '../Channels/Operations';
+import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 
 export interface AsyncApiProps {
