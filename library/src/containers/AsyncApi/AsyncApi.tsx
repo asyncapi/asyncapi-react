@@ -42,7 +42,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   async componentDidUpdate(prevProps: AsyncApiProps) {
-    const oldSchema = prevProps;
+    const oldSchema = prevProps.schema;
     const newSchema = this.props.schema;
 
     if (oldSchema !== newSchema) {

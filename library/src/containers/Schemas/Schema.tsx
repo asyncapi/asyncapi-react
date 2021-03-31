@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
 import { Extensions } from '../Extensions/Extensions';
-import { Chevron, Markdown } from '../../components';
+import { Chevron, Markdown, Href } from '../../components';
 import { SchemaHelpers } from '../../helpers';
 
 interface Props {
@@ -32,6 +32,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema);
+  const externalDocs = schema.externalDocs();
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
@@ -110,7 +111,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
                     style={{ height: '20px', fontSize: '11px', padding: '3px' }}
                   >
-                    must match {schema.pattern()}
+                    must match: {schema.pattern()}
                   </span>
                 )}
                 {schema.contentMediaType() !== undefined && (
@@ -164,6 +165,15 @@ export const Schema: React.FunctionComponent<Props> = ({
                     </span>
                   ))}
                 </div>
+              )}
+              {externalDocs && (
+                <Href href={externalDocs.url()}>
+                  {externalDocs.hasDescription() ? (
+                    <Markdown>{externalDocs.description()}</Markdown>
+                  ) : (
+                    'Documentation'
+                  )}
+                </Href>
               )}
             </div>
           </div>
