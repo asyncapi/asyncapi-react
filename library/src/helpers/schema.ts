@@ -1,4 +1,4 @@
-import { ChannelParameter, Schema } from '@asyncapi/parser';
+import { ChannelParameter, ServerVariable, Schema } from '@asyncapi/parser';
 // @ts-ignore
 import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
@@ -110,6 +110,27 @@ export class SchemaHelpers {
     }
 
     return false;
+  }
+
+  static serverVariablesToSchema(
+    urlVariables?: Record<string, ServerVariable>,
+  ): Schema | undefined {
+    if (!urlVariables || !Object.keys(urlVariables).length) {
+      return undefined;
+    }
+
+    const json = {
+      type: 'object',
+      properties: Object.entries(urlVariables).reduce((obj, [urlName, url]) => {
+        obj[urlName] = Object.assign({}, url.json());
+        obj[urlName].type = 'string';
+        return obj;
+      }, {}),
+      required: Object.keys(urlVariables),
+      [this.extRenderType]: false,
+      [this.extRenderAdditionalInfo]: false,
+    };
+    return new SchemaClass(json);
   }
 
   static parametersToSchema(

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Message as MessageType } from '@asyncapi/parser';
 
-import { Bindings } from '../Bindings/Bindings';
-import { Schema } from '../Schemas/Schema';
-import { Markdown, Tags } from '../../components';
+import { Markdown, Schema, Bindings, Tags } from '../../components';
 
 interface Props {
   message: MessageType;

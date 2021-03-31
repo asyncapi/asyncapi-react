@@ -1,5 +1,4 @@
 export * from './bemClasses';
-export * from './createNestedClassName';
 export * from './extractHashData';
 export * from './scrollIntoViewOfAnchor';
 export * from './generateExampleSchema';
@@ -9,4 +8,5 @@ export * from './parser';
 export * from './removeSpecialChars';
 export * from './toKebabCase';
 export * from './getExamplesFromSpec';
+export * from './server';
 export * from './schema';

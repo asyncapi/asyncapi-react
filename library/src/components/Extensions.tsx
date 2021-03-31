@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Schema } from '../Schemas/Schema';
+import { Schema } from './Schema';
 
-import { SchemaHelpers } from '../../helpers';
+import { SchemaHelpers } from '../helpers';
 
 interface Props {
   name?: string;

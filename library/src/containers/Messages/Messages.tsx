@@ -19,9 +19,9 @@ export const Messages: React.FunctionComponent = () => {
 
   const messagesList = (
     <ul>
-      {Array.from(messages).map(([key, msg], idx) => (
-        <li key={key}>
-          <Message message={msg} index={idx + 1} key={idx} />
+      {Array.from(messages).map(([messageName, message], idx) => (
+        <li key={messageName}>
+          <Message message={message} index={idx + 1} key={messageName} />
         </li>
       ))}
     </ul>
