@@ -1,10 +1,8 @@
 import React from 'react';
 import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
-import { Bindings } from '../Bindings/Bindings';
 import { Message } from '../Messages/Message';
-import { Schema } from '../Schemas/Schema';
-import { Markdown, Tags } from '../../components';
+import { Markdown, Schema, Bindings, Tags } from '../../components';
 
 import { SchemaHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
@@ -43,15 +41,15 @@ export const Operation: React.FunctionComponent<Props> = ({
         </h3>
       </div>
 
-      {parameters && (
-        <Schema schemaName="Parameters" schema={parameters} expanded={true} />
-      )}
-
       <Markdown>{channel.description()}</Markdown>
       {operationSummary && (
         <p className="text-gray-600 text-sm">{operationSummary}</p>
       )}
       <Markdown>{operation.description()}</Markdown>
+
+      {parameters && (
+        <Schema schemaName="Parameters" schema={parameters} expanded={true} />
+      )}
 
       {operation.hasMultipleMessages() ? (
         <div>

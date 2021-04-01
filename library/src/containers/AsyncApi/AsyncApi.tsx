@@ -12,9 +12,9 @@ import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
-import { InfoComponent } from '../Info/NewInfo';
-import { ServersComponent } from '../Servers/Servers';
-import { Operations } from '../Channels/Operations';
+import { Info } from '../Info/Info';
+import { Servers } from '../Servers/Servers';
+import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 
 export interface AsyncApiProps {
@@ -101,15 +101,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
               {concatenatedConfig.showErrors && !!error && (
                 <ErrorComponent error={error} />
               )}
-              {concatenatedConfig.show.info && <InfoComponent />}
-              {concatenatedConfig.show.servers && (
-                <ServersComponent
-                  expand={
-                    concatenatedConfig.expand &&
-                    concatenatedConfig.expand.servers
-                  }
-                />
-              )}
+              {concatenatedConfig.show.info && <Info />}
+              {concatenatedConfig.show.servers && <Servers />}
               {concatenatedConfig.show.channels && <Operations />}
               {concatenatedConfig.show.messages && <Messages />}
             </main>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
-import { Extensions } from '../Extensions/Extensions';
-import { Chevron, Markdown, Href } from '../../components';
-import { SchemaHelpers } from '../../helpers';
+import { Extensions } from './Extensions';
+import { Chevron, Markdown, Href } from './index';
+import { SchemaHelpers } from '../helpers';
 
 interface Props {
   schemaName?: string;

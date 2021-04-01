@@ -1,117 +1,53 @@
 import React from 'react';
-import { Server } from '@asyncapi/parser';
+import { Server as ServerType } from '@asyncapi/parser';
 
-import { ServerVariablesComponent } from './Variables';
-import { ServerSecurityComponent } from './Security';
+import { ServerSecurity } from './ServerSecurity';
+import { Markdown, Schema, Bindings } from '../../components';
 
-import { bemClasses, removeSpecialChars } from '../../helpers';
-import { Toggle, Markdown } from '../../components';
-import { ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
+import { SchemaHelpers } from '../../helpers';
 
 interface Props {
   serverName: string;
-  server: Server;
-  toggleExpand?: boolean;
+  server: ServerType;
 }
 
-export const ServerComponent: React.FunctionComponent<Props> = ({
+export const Server: React.FunctionComponent<Props> = ({
   serverName,
   server,
-  toggleExpand = false,
 }) => {
-  const serverUrl = server.url();
-  const serverSecurity = server.security();
-
-  const className = ITEM_LABELS.SERVER;
-
-  const protocol = server.protocol();
+  const urlVariables = SchemaHelpers.serverVariablesToSchema(
+    server.variables(),
+  );
   const protocolVersion = server.protocolVersion();
-  const protocolTitle = `${protocol}${
-    protocolVersion ? ` ${protocolVersion}` : ``
-  }`;
-
-  const header = (
-    <h4>
-      <span
-        className={bemClasses.concatenate([
-          bemClasses.element(`${className}-header-protocol`),
-          bemClasses.element(`badge`),
-        ])}
-      >
-        {protocolTitle}
-      </span>
-      <span
-        className={bemClasses.concatenate([
-          bemClasses.element(`${className}-header-stage`),
-          bemClasses.element(`badge`),
-        ])}
-      >
-        {serverName}
-      </span>
-      <span>{serverUrl}</span>
-    </h4>
-  );
-
-  const identifier = bemClasses.identifier([
-    CONTAINER_LABELS.SERVERS,
-    serverUrl,
-  ]);
-  const dataIdentifier = bemClasses.identifier([
-    CONTAINER_LABELS.SERVERS,
-    removeSpecialChars(serverUrl),
-  ]);
-
-  const variables = Object.entries(server.variables()).map(
-    ([key, variable]) => ({
-      key,
-      content: variable,
-    }),
-  );
-
-  const content = (
-    <>
-      {server.hasDescription() && (
-        <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{server.description()}</Markdown>
-        </div>
-      )}
-      <ServerVariablesComponent
-        variables={variables}
-        identifier={identifier}
-        dataIdentifier={dataIdentifier}
-      />
-      {serverSecurity && serverSecurity.length && (
-        <ServerSecurityComponent
-          requirements={serverSecurity}
-          identifier={identifier}
-          dataIdentifier={dataIdentifier}
-        />
-      )}
-    </>
-  );
-
-  const body =
-    (server.hasDescription() ||
-      server.hasVariables() ||
-      serverSecurity.length) &&
-    content;
+  const serverRequirements = server.security();
 
   return (
-    <section
-      className={bemClasses.element(className)}
-      id={identifier}
-      data-asyncapi-id={dataIdentifier}
-    >
-      <Toggle
-        header={header}
-        className={className}
-        expanded={toggleExpand}
-        label={ITEM_LABELS.SERVER}
-        itemName={serverUrl}
-        toggleInState={!!body}
-      >
-        {body}
-      </Toggle>
-    </section>
+    <div className="bg-gray-200 rounded p-4 mt-2">
+      <div className="pr-4 font-mono">
+        <span>{server.url()}</span>
+        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded ml-2">
+          {protocolVersion
+            ? `${server.protocol()} ${protocolVersion}`
+            : server.protocol()}
+        </span>
+        <span>{serverName}</span>
+      </div>
+
+      <Markdown>{server.description()}</Markdown>
+
+      {urlVariables && (
+        <Schema
+          schemaName="URL Variables"
+          schema={urlVariables}
+          expanded={true}
+        />
+      )}
+
+      {serverRequirements && (
+        <ServerSecurity serverRequirements={serverRequirements} />
+      )}
+
+      {server.hasBindings() && <Bindings bindings={server.bindings()} />}
+    </div>
   );
 };

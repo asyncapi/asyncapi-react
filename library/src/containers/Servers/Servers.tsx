@@ -1,20 +1,13 @@
 import React from 'react';
 
-import { ServerComponent } from './Server';
+import { Server } from './Server';
+import { Toggle } from '../../components';
 
-import { ExpandNestedConfig } from '../../config';
 import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
-import { Toggle } from '../../components';
 import { SERVERS, CONTAINER_LABELS } from '../../constants';
 
-interface Props {
-  expand?: ExpandNestedConfig;
-}
-
-export const ServersComponent: React.FunctionComponent<Props> = ({
-  expand,
-}) => {
+export const Servers: React.FunctionComponent = () => {
   const servers = useSpec().servers();
 
   if (!Object.keys(servers).length) {
@@ -23,19 +16,12 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
 
   const className = CONTAINER_LABELS.SERVERS;
   const header = <h2>{SERVERS}</h2>;
-  const content = (
-    <ul className={bemClasses.element(`${className}-list`)}>
+
+  const serverList = (
+    <ul>
       {Object.entries(servers).map(([serverName, server]) => (
-        <li
-          key={serverName}
-          className={bemClasses.element(`${className}-list-item`)}
-        >
-          <ServerComponent
-            key={serverName}
-            serverName={serverName}
-            server={server}
-            toggleExpand={expand && expand.elements}
-          />
+        <li key={serverName}>
+          <Server serverName={serverName} server={server} key={serverName} />
         </li>
       ))}
     </ul>
@@ -49,11 +35,12 @@ export const ServersComponent: React.FunctionComponent<Props> = ({
       <Toggle
         header={header}
         className={className}
-        expanded={expand && expand.root}
+        expanded={true}
+        // expanded={expand && expand.root}
         label={CONTAINER_LABELS.SERVERS}
         toggleInState={true}
       >
-        {content}
+        {serverList}
       </Toggle>
     </section>
   );
