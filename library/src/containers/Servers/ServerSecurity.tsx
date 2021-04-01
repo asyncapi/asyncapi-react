@@ -175,11 +175,15 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
                   <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
                     Scopes:
                   </span>
-                  <ul>
+                  <ul style={{ display: 'inline-block' }}>
                     {scopes &&
                       Object.entries(scopes).map(([scopeName, scopeDesc]) => (
                         <li
                           className="font-bold no-underline bg-indigo-400 text-white text-xs rounded"
+                          style={{
+                            display: 'inline-block',
+                            marginRight: '6px',
+                          }}
                           title={scopeDesc}
                           key={scopeName}
                         >
