@@ -7,11 +7,12 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { parser, bemClasses, stateHelpers } from '../../helpers';
+import { Parser, bemClasses, stateHelpers } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
+import { Sidebar } from '../Sidebar/Sidebar';
 import { Info } from '../Info/Info';
 import { Servers } from '../Servers/Servers';
 import { Operations } from '../Operations/Operations';
@@ -101,9 +102,12 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
               {concatenatedConfig.showErrors && !!error && (
                 <ErrorComponent error={error} />
               )}
+              {concatenatedConfig.show.sidebar && (
+                <Sidebar config={concatenatedConfig.sidebar} />
+              )}
               {concatenatedConfig.show.info && <Info />}
               {concatenatedConfig.show.servers && <Servers />}
-              {concatenatedConfig.show.channels && <Operations />}
+              {concatenatedConfig.show.operations && <Operations />}
               {concatenatedConfig.show.messages && <Messages />}
             </main>
           </useChangeHashContext.Provider>
@@ -122,7 +126,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
     if (isFetchingSchemaInterface(schema)) {
-      const parsedFromUrl = await parser.parseFromUrl(schema, parserOptions);
+      const parsedFromUrl = await Parser.parseFromUrl(schema, parserOptions);
       this.setState({
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
@@ -130,7 +134,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return;
     }
 
-    const parsed = await parser.parse(schema, parserOptions);
+    const parsed = await Parser.parse(schema, parserOptions);
     this.setState({
       asyncapi: parsed.asyncapi,
       error: parsed.error,

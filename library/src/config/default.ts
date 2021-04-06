@@ -3,11 +3,11 @@ import { ConfigInterface } from './config';
 export const defaultConfig: ConfigInterface = {
   schemaID: '',
   show: {
+    sidebar: true,
     info: true,
-    channels: true,
+    operations: true,
     servers: true,
     messages: true,
-    schemas: true,
   },
   expand: {
     channels: {
@@ -28,4 +28,7 @@ export const defaultConfig: ConfigInterface = {
     },
   },
   showErrors: true,
+  sidebar: {
+    showOperations: 'byOperationsTags',
+  },
 };

@@ -47,10 +47,7 @@ export const Operations: React.FunctionComponent = () => {
   });
 
   return (
-    <section
-      className={bemClasses.element(className)}
-      id={bemClasses.identifier([className])}
-    >
+    <section className={bemClasses.element(className)} id="operations">
       <Toggle
         header={header}
         className={className}
