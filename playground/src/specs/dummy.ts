@@ -109,11 +109,6 @@ channels:
       operationId: receiveSystemInfo
       message:
         $ref: '#/components/messages/dummyInfo'
-      tags:
-        - name: root-tag1
-          externalDocs:
-            description: External docs description 1
-            url: https://www.asyncapi.com/
 
 components:
   messages:

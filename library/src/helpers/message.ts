@@ -4,11 +4,7 @@ import { sample } from 'openapi-sampler';
 export class MessageHelpers {
   static generateExample(schema: any, options: any = {}) {
     try {
-      return JSON.stringify(
-        this.sanitizeExample(sample(schema, options)) || '',
-        null,
-        2,
-      );
+      return this.sanitizeExample(sample(schema, options)) || '';
     } catch (e) {
       return '';
     }
@@ -39,7 +35,7 @@ export class MessageHelpers {
     if (payload && payload.examples()) {
       return payload.examples();
     }
-    return [];
+    return;
   }
 
   static getHeadersExamples(msg: Message): any[] | undefined {

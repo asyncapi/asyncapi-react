@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
-  const showOperations = config?.showOperations || 'default';
+  const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
@@ -167,14 +167,19 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
     <div>
       <ul>
         {tags &&
-          tags.map(tag => (
-            <li key={tag.name()}>
-              <OperationsByTagItem tagName={tag.name()}>
-                {taggedOperations(tag)}
-              </OperationsByTagItem>
-            </li>
-          ))}
-        {SidebarHelpers.containNoTags(channels, tags) && (
+          tags.map(tag => {
+            const ops = taggedOperations(tag);
+            return (
+              ops.length > 0 && (
+                <li key={tag.name()}>
+                  <OperationsByTagItem tagName={tag.name()}>
+                    {taggedOperations(tag)}
+                  </OperationsByTagItem>
+                </li>
+              )
+            );
+          })}
+        {untaggedOperations.length > 0 && (
           <li>
             <OperationsByTagItem tagName="Untagged">
               {untaggedOperations}
@@ -232,14 +237,19 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
     <div>
       <ul>
         {operationsTags &&
-          operationsTags.map(tag => (
-            <li key={tag.name()}>
-              <OperationsByTagItem tagName={tag.name()}>
-                {taggedOperations(tag)}
-              </OperationsByTagItem>
-            </li>
-          ))}
-        {SidebarHelpers.containNoTags(channels, operationsTags) && (
+          operationsTags.map(tag => {
+            const ops = taggedOperations(tag);
+            return (
+              ops.length > 0 && (
+                <li key={tag.name()}>
+                  <OperationsByTagItem tagName={tag.name()}>
+                    {taggedOperations(tag)}
+                  </OperationsByTagItem>
+                </li>
+              )
+            );
+          })}
+        {untaggedOperations.length > 0 && (
           <li>
             <OperationsByTagItem tagName="Untagged">
               {untaggedOperations}

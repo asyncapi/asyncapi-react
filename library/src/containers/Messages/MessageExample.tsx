@@ -74,7 +74,13 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
       ) : (
         <div>
           <pre className="hljs mb-4 border border-gray-800 rounded">
-            <code>{MessageHelpers.generateExample(schema.json())}</code>
+            <code>
+              {JSON.stringify(
+                MessageHelpers.generateExample(schema.json()),
+                null,
+                2,
+              )}
+            </code>
           </pre>
           <h6 className="text-xs font-bold text-gray-700 italic">
             This example has been generated automatically.

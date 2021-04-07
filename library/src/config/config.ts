@@ -30,5 +30,5 @@ export interface ExpandConfig {
 }
 
 export interface SideBarConfig {
-  showOperations?: 'default' | 'bySpecTags' | 'byOperationsTags';
+  showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
 }
