@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Channel, Tag } from '@asyncapi/parser';
+import { Tag } from '@asyncapi/parser';
 
 import { Chevron } from '../../components';
 import { SideBarConfig } from '../../config/config';
@@ -19,7 +19,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   const allMessages = asyncapi.allMessages();
 
   let Operations = OperationsList;
-  if (showOperations === 'byRootTags') {
+  if (showOperations === 'bySpecTags') {
     Operations = OperationsByRootTags;
   } else if (showOperations === 'byOperationsTags') {
     Operations = OperationsByOperationsTags;
@@ -144,6 +144,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
     });
     return operationsList;
   };
+
   const untaggedOperations: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (
@@ -208,6 +209,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
     });
     return operationsList;
   };
+
   const untaggedOperations: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (
