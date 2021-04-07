@@ -24,10 +24,9 @@ export interface ExpandNestedConfig {
 }
 
 export interface ExpandConfig {
-  channels?: ExpandNestedConfig;
+  operations?: ExpandNestedConfig;
   servers?: ExpandNestedConfig;
   messages?: ExpandNestedConfig;
-  schemas?: ExpandNestedConfig;
 }
 
 export interface SideBarConfig {

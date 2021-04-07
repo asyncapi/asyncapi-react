@@ -40,13 +40,12 @@ describe('stateHelpers', () => {
   };
   const showConfig: ShowConfig = {
     info: true,
-    channels: true,
+    operations: true,
     servers: true,
     messages: true,
-    schemas: true,
   };
   const expandConfig: ExpandConfig = {
-    channels: {
+    operations: {
       root: true,
       elements: false,
     },
@@ -58,10 +57,6 @@ describe('stateHelpers', () => {
       root: false,
       elements: false,
     },
-    schemas: {
-      root: false,
-      elements: false,
-    },
   };
 
   test('should return correctly number of elements', () => {
@@ -70,7 +65,7 @@ describe('stateHelpers', () => {
       showConfig,
     });
 
-    expect(result).toEqual(16);
+    expect(result).toEqual(7);
   });
 
   test('should return correctly number of initial expanded elements', () => {
@@ -80,6 +75,6 @@ describe('stateHelpers', () => {
       expandConfig,
     });
 
-    expect(result).toEqual(4);
+    expect(result).toEqual(3);
   });
 });
