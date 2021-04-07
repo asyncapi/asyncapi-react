@@ -20,7 +20,7 @@ export const Messages: React.FunctionComponent = () => {
   const messagesList = (
     <ul>
       {Array.from(messages).map(([messageName, message], idx) => (
-        <li key={messageName}>
+        <li key={messageName} id={`message-${message.uid()}`}>
           <Message message={message} index={idx + 1} key={messageName} />
         </li>
       ))}
@@ -28,10 +28,7 @@ export const Messages: React.FunctionComponent = () => {
   );
 
   return (
-    <section
-      className={bemClasses.element(className)}
-      id={bemClasses.identifier([className])}
-    >
+    <section className={bemClasses.element(className)} id="messages">
       <Toggle
         header={header}
         className={className}

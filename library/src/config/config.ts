@@ -4,17 +4,18 @@ export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
   expand?: ExpandConfig;
+  sidebar?: SideBarConfig;
   showErrors?: boolean;
   parserOptions?: any;
   pushStateBehavior?: PushStateBehavior;
 }
 
 export interface ShowConfig {
+  sidebar?: boolean;
   info?: boolean;
-  channels?: boolean;
+  operations?: boolean;
   servers?: boolean;
   messages?: boolean;
-  schemas?: boolean;
 }
 
 export interface ExpandNestedConfig {
@@ -23,8 +24,11 @@ export interface ExpandNestedConfig {
 }
 
 export interface ExpandConfig {
-  channels?: ExpandNestedConfig;
+  operations?: ExpandNestedConfig;
   servers?: ExpandNestedConfig;
   messages?: ExpandNestedConfig;
-  schemas?: ExpandNestedConfig;
+}
+
+export interface SideBarConfig {
+  showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
 }

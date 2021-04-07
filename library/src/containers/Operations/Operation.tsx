@@ -24,7 +24,7 @@ export const Operation: React.FunctionComponent<Props> = ({
   const operationSummary = operation.summary();
 
   return (
-    <div className="center-block p-8">
+    <div className="center-block p-8" id={`operation-${type}-${channelName}`}>
       <div className="operation pt-8 pb-8">
         <h3 className="font-mono text-base">
           <span
@@ -57,13 +57,13 @@ export const Operation: React.FunctionComponent<Props> = ({
             Accepts <strong>one of</strong> the following messages:
           </p>
           {operation.messages().map((msg, idx) => (
-            <Message message={msg} index={idx} key={idx} />
+            <Message message={msg} index={idx} showExamples={true} key={idx} />
           ))}
         </div>
       ) : (
         <div>
           <p>Accepts the following message:</p>
-          <Message message={operation.message()} />
+          <Message message={operation.message()} showExamples={true} />
         </div>
       )}
 

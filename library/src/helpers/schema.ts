@@ -171,7 +171,7 @@ export class SchemaHelpers {
       (obj, [extName, ext]) => {
         if (
           !extName.startsWith('x-parser-') &&
-          !extName.startsWith('x-schema-private')
+          !extName.startsWith('x-schema-private-')
         ) {
           obj[extName] = ext;
         }

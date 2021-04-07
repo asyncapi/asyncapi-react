@@ -9,8 +9,8 @@ import { VALIDATION_ERRORS_TYPE } from '../constants';
 registerSchemaParser(openapiSchemaParser);
 registerSchemaParser(avroSchemaParser);
 
-class Parser {
-  async parse(
+export class Parser {
+  static async parse(
     content: string | any,
     parserOptions?: any,
   ): Promise<ParserReturn> {
@@ -22,7 +22,7 @@ class Parser {
     }
   }
 
-  async parseFromUrl(
+  static async parseFromUrl(
     arg: FetchingSchemaInterface,
     parserOptions?: any,
   ): Promise<ParserReturn> {
@@ -38,7 +38,7 @@ class Parser {
     }
   }
 
-  private handleError = (err: ErrorObject): ParserReturn => {
+  private static handleError = (err: ErrorObject): ParserReturn => {
     if (err.type === VALIDATION_ERRORS_TYPE) {
       return {
         error: err,
@@ -47,5 +47,3 @@ class Parser {
     return { error: err };
   };
 }
-
-export const parser = new Parser();

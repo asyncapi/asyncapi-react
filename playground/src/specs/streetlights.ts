@@ -111,10 +111,12 @@ components:
       name: turnOnOff
       title: Turn on/off
       summary: Command a particular streetlight to turn the lights on or off.
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
       payload:
         $ref: "#/components/schemas/turnOnOffPayload"
+      headers: 
+        type: object
+        properties:
+          $ref: '#/components/schemas/streamHeaders'
     dimLight:
       name: dimLight
       title: Dim light
@@ -280,6 +282,21 @@ components:
             - name
       required:
         - event
+
+    streamHeaders:
+      Etag:
+        type: string
+        description: |
+          The RFC7232 ETag header field in a response provides the current entity-
+          tag for the selected resource. An entity-tag is an opaque identifier for
+          different versions of a resource over time, regardless whether multiple
+          versions are valid at the same time. An entity-tag consists of an opaque
+          quoted string, possibly prefixed by a weakness indicator.
+        example: 411a
+      Cache-Control:
+        description: The Cache-Control HTTP header holds directives (instructions) for caching in request.
+        type: string
+        example: no-cache, no-store, must-revalidate
 
   securitySchemes:
     apiKey:

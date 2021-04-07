@@ -20,7 +20,7 @@ export const Info: React.FunctionComponent = () => {
     defaultContentType || termsOfService || license || contact;
 
   return (
-    <div className="center-block text-left p-8">
+    <div className="center-block text-left p-8" id="introduction">
       <span className="text-3xl">
         {info.title()}&nbsp;{info.version()}
       </span>
