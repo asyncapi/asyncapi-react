@@ -10,7 +10,7 @@ export const defaultConfig: ConfigInterface = {
     messages: true,
   },
   expand: {
-    channels: {
+    operations: {
       root: true,
       elements: false,
     },
@@ -19,10 +19,6 @@ export const defaultConfig: ConfigInterface = {
       elements: false,
     },
     messages: {
-      root: false,
-      elements: false,
-    },
-    schemas: {
       root: false,
       elements: false,
     },
