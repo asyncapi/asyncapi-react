@@ -3,7 +3,6 @@ import React from 'react';
 import { Operation } from './Operation';
 import { Toggle } from '../../components';
 
-import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
 import { PayloadType } from '../../types';
 import { CONTAINER_LABELS, CHANNELS_TEXT } from '../../constants';
@@ -15,14 +14,12 @@ export const Operations: React.FunctionComponent = () => {
     return null;
   }
 
-  const className = CONTAINER_LABELS.CHANNELS;
   const header = <h2>{CHANNELS_TEXT}</h2>;
-
   const operationsList: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
       operationsList.push(
-        <li key={channelName}>
+        <li className="ai-operations__list-item" key={channelName}>
           <Operation
             type={PayloadType.PUBLISH}
             operation={channel.publish()}
@@ -34,7 +31,7 @@ export const Operations: React.FunctionComponent = () => {
     }
     if (channel.hasSubscribe()) {
       operationsList.push(
-        <li key={channelName}>
+        <li className="ai-operations__list-item" key={channelName}>
           <Operation
             type={PayloadType.SUBSCRIBE}
             operation={channel.subscribe()}
@@ -47,18 +44,16 @@ export const Operations: React.FunctionComponent = () => {
   });
 
   return (
-    <section className={bemClasses.element(className)} id="operations">
+    <section className="ai-operations" id="operations">
       <Toggle
         header={header}
-        className={className}
+        className="ai-operations"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.CHANNELS}
         toggleInState={true}
       >
-        <div className="operations pb-8">
-          <ul>{operationsList}</ul>
-        </div>
+        <ul className="ai-operations__list">{operationsList}</ul>
       </Toggle>
     </section>
   );

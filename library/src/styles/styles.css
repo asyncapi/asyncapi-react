@@ -54,6 +54,60 @@
   .ai-server__bindings {
   }
 
+  .ai-operations {
+  }
+  .ai-operations__list {
+  }
+  .ai-operations__list-item {
+    @apply mb-12;
+  }
+  .ai-operation {
+  }
+  .ai-operation__type {
+    @apply font-mono border uppercase p-1 rounded mr-2;
+  }
+  .ai-operation__type--publish {
+    @apply border-blue-600 text-blue-500;
+  }
+  .ai-operation__type--subscribe {
+    @apply border-green-600 text-green-600;
+  }
+  .ai-operation__channel-name {
+    @apply font-mono text-base;
+  }
+  .ai-operation__channel-description {
+    @apply mt-2;
+  }
+  .ai-operation__summary {
+    @apply text-gray-600 text-sm mt-2;
+  }
+  .ai-operation__description {
+    @apply mt-2;
+  }
+  .ai-operation__channel-parameters {
+    @apply mt-2;
+  }
+  .ai-operation__multiple-messages {
+    @apply mt-2;
+  }
+  .ai-operation__multiple-messages__list {
+  }
+  .ai-operation__single-message {
+    @apply mt-2;
+  }
+  .ai-operation__message {
+    @apply mt-2;
+  }
+  .ai-operation__bindings {
+    @apply mt-2;
+  }
+  .ai-operation__channel-bindings {
+    @apply mt-2;
+  }
+  .ai-operation__tags {
+    @apply mt-2;
+  }
+
   .ai-messages {
   }
   .ai-messages__list {
