@@ -6,26 +6,16 @@ interface Props {
 }
 
 export const Tag: React.FunctionComponent<Props> = ({ tag }) => {
+  const name = `#${tag.name()}`;
+  const description = tag.description() || '';
   const externalDocs = tag.externalDocs();
 
   if (externalDocs) {
     return (
-      <a
-        href={externalDocs.url()}
-        target="_blank"
-        className="border text-blue-400 font-normal text-sm rounded lowercase mr-2 px-2 py-1"
-        title={tag.description() || ''}
-      >
-        {tag.name()}
+      <a href={externalDocs.url()} target="_blank" title={description}>
+        {name}
       </a>
     );
   }
-  return (
-    <span
-      className="border font-normal text-sm no-underline text-blue-400 rounded lowercase mr-2 px-2 py-1"
-      title={tag.description() || ''}
-    >
-      {tag.name()}
-    </span>
-  );
+  return <span title={description}>{name}</span>;
 };

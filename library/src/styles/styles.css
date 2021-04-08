@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .ai-info {
+    @apply text-left p-8;
+  }
+  .ai-info__title {
+    @apply text-3xl;
+  }
+  .ai-info__links {
+    @apply leading-normal my-4 space-x-2;
+  }
+  .ai-info__links-item {
+    @apply inline-block;
+  }
+  .ai-info__links-item > a {
+    @apply border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1;
+  }
+  .ai-info__links-item--reverse > a {
+    @apply border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500;
+  }
+  .ai-info__tags {
+    @apply mt-4;
+  }
+  .ai-info__description {
+  }
+
+  .ai-markdown {
+    @apply prose;
+  }
+
+  .ai-tags {
+    @apply leading-normal space-x-2;
+  }
+  .ai-tags-item {
+    @apply inline-block border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1;
+  }
+  .ai-tags-item > a {
+    @apply underline;
+  }
+}

@@ -30,6 +30,7 @@ export const LICENSE_TEXT = 'License';
 export const TERMS_OF_SERVICE_TEXT = 'Terms of service';
 export const URL_SUPPORT_TEXT = 'Support';
 export const EMAIL_SUPPORT_TEXT = 'Email support';
+export const EXTERAL_DOCUMENTATION_TEXT = 'External Docs';
 export const LOCATION_TEXT = 'Location';
 export const TYPE_TEXT = 'Type';
 export const SPECIFICATION_TEXT = 'Specification';

@@ -1,44 +1,99 @@
 import React from 'react';
 
-import { TermsOfServiceComponent } from './TermsOfService';
-import { LicenseComponent } from './License';
-import { ContactComponent } from './Contact';
-
-import { Markdown } from '../../components';
+import { Href, Markdown, Tags } from '../../components';
 import { useSpec } from '../../store';
+
+import {
+  TERMS_OF_SERVICE_TEXT,
+  CONTENT_TYPES_SITE,
+  URL_SUPPORT_TEXT,
+  EMAIL_SUPPORT_TEXT,
+  EXTERAL_DOCUMENTATION_TEXT,
+} from '../../constants';
 
 export const Info: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const info = asyncapi.info();
+  const externalDocs = asyncapi.externalDocs();
 
-  const termsOfService = info.termsOfService();
-  const contact = info.contact();
   const license = info.license();
+  const termsOfService = info.termsOfService();
   const defaultContentType = asyncapi.defaultContentType();
+  const contact = info.contact();
 
   const showInfoList =
-    defaultContentType || termsOfService || license || contact;
+    license || termsOfService || defaultContentType || contact;
 
   return (
-    <div className="center-block text-left p-8" id="introduction">
-      <span className="text-3xl">
+    <div className="ai-info" id="introduction">
+      <span className="ai-info__title">
         {info.title()}&nbsp;{info.version()}
       </span>
       {showInfoList && (
-        <span className="leading-normal mb-4">
-          {termsOfService && <TermsOfServiceComponent url={termsOfService} />}
+        <ul className="ai-info__links">
           {license && (
-            <LicenseComponent name={license.name()} url={license.url()} />
+            <li className="ai-info__links-item">
+              {license.url() ? (
+                <Href href={license.url()}>
+                  <span>{license.name()}</span>
+                </Href>
+              ) : (
+                <span>{license.name()}</span>
+              )}
+            </li>
+          )}
+          {termsOfService && (
+            <li className="ai-info__links-item">
+              <Href href={termsOfService}>
+                <span>{TERMS_OF_SERVICE_TEXT}</span>
+              </Href>
+            </li>
+          )}
+          {defaultContentType && (
+            <li className="ai-info__links-item">
+              <Href href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}>
+                <span>{defaultContentType}</span>
+              </Href>
+            </li>
+          )}
+          {externalDocs && (
+            <li className="ai-info__links-item">
+              <Href href={externalDocs.url()}>
+                <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+              </Href>
+            </li>
           )}
           {contact && (
-            <ContactComponent url={contact.url()} email={contact.email()} />
+            <>
+              {contact.url() && (
+                <li className="ai-info__links-item ai-info__links-item--reverse">
+                  <Href href={contact.url()}>
+                    <span>{URL_SUPPORT_TEXT}</span>
+                  </Href>
+                </li>
+              )}
+              {contact.email() && (
+                <li className="ai-info__links-item ai-info__links-item--reverse">
+                  <Href href={`mailto:${contact.email()}`}>
+                    <span>{EMAIL_SUPPORT_TEXT}</span>
+                  </Href>
+                </li>
+              )}
+            </>
           )}
-        </span>
+        </ul>
       )}
+
       {info.hasDescription() && (
-        <span className="prose">
+        <div className="ai-info__description">
           <Markdown>{info.description()}</Markdown>
-        </span>
+        </div>
+      )}
+
+      {asyncapi.hasTags() && (
+        <div className="ai-info__tags">
+          <Tags tags={asyncapi.tags()} />
+        </div>
       )}
     </div>
   );
