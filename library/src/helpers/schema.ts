@@ -287,7 +287,7 @@ export class SchemaHelpers {
     if (typeof value !== 'object') {
       return {
         type: 'string',
-        const: value,
+        const: typeof value.toString === 'function' ? value.toString() : value,
         [this.extRawValue]: true,
       };
     }

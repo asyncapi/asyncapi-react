@@ -3,7 +3,6 @@ import React from 'react';
 import { Message } from './Message';
 import { Toggle } from '../../components';
 
-import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
 import { CONTAINER_LABELS, MESSAGES_TEXT } from '../../constants';
 
@@ -14,13 +13,15 @@ export const Messages: React.FunctionComponent = () => {
     return null;
   }
 
-  const className = CONTAINER_LABELS.SCHEMAS;
   const header = <h2>{MESSAGES_TEXT}</h2>;
-
   const messagesList = (
-    <ul>
+    <ul className="ai-messages__list">
       {Array.from(messages).map(([messageName, message], idx) => (
-        <li key={messageName} id={`message-${message.uid()}`}>
+        <li
+          className="ai-messages__list-item"
+          key={messageName}
+          id={`message-${message.uid()}`}
+        >
           <Message message={message} index={idx + 1} key={messageName} />
         </li>
       ))}
@@ -28,16 +29,16 @@ export const Messages: React.FunctionComponent = () => {
   );
 
   return (
-    <section className={bemClasses.element(className)} id="messages">
+    <section className="ai-messages" id="messages">
       <Toggle
         header={header}
-        className={className}
+        className="ai-messages"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.MESSAGES}
         toggleInState={true}
       >
-        <div className="all-messages pb-8">{messagesList}</div>
+        {messagesList}
       </Toggle>
     </section>
   );

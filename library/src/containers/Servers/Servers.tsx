@@ -3,7 +3,6 @@ import React from 'react';
 import { Server } from './Server';
 import { Toggle } from '../../components';
 
-import { bemClasses } from '../../helpers';
 import { useSpec } from '../../store';
 import { SERVERS, CONTAINER_LABELS } from '../../constants';
 
@@ -14,13 +13,11 @@ export const Servers: React.FunctionComponent = () => {
     return null;
   }
 
-  const className = CONTAINER_LABELS.SERVERS;
   const header = <h2>{SERVERS}</h2>;
-
   const serverList = (
-    <ul>
+    <ul className="ai-servers__list">
       {Object.entries(servers).map(([serverName, server]) => (
-        <li key={serverName}>
+        <li className="ai-servers__list-item" key={serverName}>
           <Server serverName={serverName} server={server} key={serverName} />
         </li>
       ))}
@@ -28,10 +25,10 @@ export const Servers: React.FunctionComponent = () => {
   );
 
   return (
-    <section className={bemClasses.element(className)} id="servers">
+    <section className="ai-servers" id="servers">
       <Toggle
         header={header}
-        className={className}
+        className="ai-servers"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.SERVERS}

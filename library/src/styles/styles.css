@@ -4,13 +4,13 @@
 
 @layer components {
   .ai-info {
-    @apply text-left p-8;
+    @apply text-left p-4;
   }
   .ai-info__title {
     @apply text-3xl;
   }
   .ai-info__links {
-    @apply leading-normal my-4 space-x-2;
+    @apply leading-normal mt-2 mb-4 space-x-2 space-y-2;
   }
   .ai-info__links-item {
     @apply inline-block;
@@ -27,12 +27,172 @@
   .ai-info__description {
   }
 
+  .ai-servers {
+  }
+  .ai-servers__list {
+  }
+  .ai-servers__list-item {
+    @apply mb-4;
+  }
+  .ai-server {
+    @apply shadow rounded bg-gray-200 p-4;
+  }
+  .ai-server__url {
+    @apply font-mono text-base;
+  }
+  .ai-server__protocol {
+    @apply bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm;
+  }
+  .ai-server__name {
+    @apply bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm;
+  }
+  .ai-server__description {
+    @apply my-2;
+  }
+  .ai-server__url-variables {
+  }
+  .ai-server__bindings {
+  }
+
+  .ai-messages {
+  }
+  .ai-messages__list {
+  }
+  .ai-messages__list-item {
+    @apply mb-4;
+  }
+  .ai-message {
+    @apply shadow rounded bg-gray-200 p-4;
+  }
+  .ai-message__index {
+    @apply text-gray-700 font-bold mr-2;
+  }
+  .ai-message__title {
+    @apply text-gray-700 mr-2;
+  }
+  .ai-message__uid {
+    @apply border text-orange-600 rounded text-xs py-0 px-2;
+  }
+  .ai-message__summary {
+    @apply text-gray-600 text-sm;
+  }
+  .ai-message__correlation-id {
+    @apply border bg-gray-100 rounded px-4 py-2 mt-2;
+  }
+  .ai-message__correlation-id__title {
+    @apply text-sm text-gray-700;
+  }
+  .ai-message__correlation-id__location {
+    @apply border text-orange-600 rounded text-xs ml-2 py-0 px-2;
+  }
+  .ai-message__correlation-id__description {
+  }
+  .ai-message__info {
+    @apply leading-normal mt-2 mb-4 space-x-2 space-y-2;
+  }
+  .ai-message__info-item {
+    @apply inline-block;
+  }
+  .ai-message__info-item > a {
+    @apply border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1;
+  }
+  .ai-message__description {
+    @apply mt-2;
+  }
+  .ai-message__payload {
+    @apply mt-2;
+  }
+  .ai-message__headers {
+    @apply mt-2;
+  }
+  .ai-message__bindings {
+    @apply mt-2;
+  }
+  .ai-message__tags {
+    @apply mt-2;
+  }
+
+  .ai-schema {
+  }
+  .ai-schema__property {
+    @apply flex py-2;
+  }
+  .ai-schema__property__left {
+    @apply pr-2;
+    min-width: 25%;
+  }
+  .ai-schema__property__right {
+  }
+  .ai-schema__property__name {
+    @apply break-words;
+  }
+  .ai-schema__property__pattern-property {
+    @apply text-gray-500 text-xs italic;
+  }
+  .ai-schema__property__required {
+    @apply text-red-600 text-xs;
+  }
+  .ai-schema__property__deprecated {
+    @apply text-red-600 text-xs;
+  }
+  .ai-schema__property__write-only {
+    @apply text-gray-500 text-xs;
+  }
+  .ai-schema__property__read-only {
+    @apply text-gray-500 text-xs;
+  }
+  .ai-schema__property__uid {
+    @apply border text-orange-600 rounded ml-2 p-1 text-xs;
+  }
+  .ai-schema__property__raw-value {
+    @apply text-sm font-bold;
+  }
+  .ai-schema__property__type {
+    @apply capitalize text-sm text-teal-500 font-bold inline-block;
+  }
+  .ai-schema__property__constraints {
+    @apply inline-block;
+  }
+  .ai-schema__property__constraint {
+    @apply bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2 p-1 text-xs;
+  }
+  .ai-schema__property__constraint--reverse {
+    @apply bg-yellow-600;
+  }
+  .ai-schema__property__default {
+    @apply text-xs;
+  }
+  .ai-schema__property__const {
+    @apply text-xs;
+  }
+  .ai-schema__property__enum {
+    @apply text-xs;
+  }
+  .ai-schema__property__enum-item {
+    @apply border inline-block text-orange-600 rounded ml-1 py-0 px-2;
+  }
+  .ai-schema__property__examples {
+    @apply text-xs;
+  }
+  .ai-schema__property__examples-item {
+    @apply border inline-block text-orange-600 rounded ml-1 py-0 px-2;
+  }
+  .ai-schema__children {
+    @apply rounded p-4 py-2 bg-gray-100;
+  }
+  .ai-schema__children--reverse {
+    @apply bg-gray-200;
+  }
+  .ai-schema__additional-info {
+    @apply mt-2 text-xs text-gray-700;
+  }
+
   .ai-markdown {
-    @apply prose;
+    @apply prose text-sm;
   }
 
   .ai-tags {
-    @apply leading-normal space-x-2;
+    @apply leading-normal space-x-2 space-y-2;
   }
   .ai-tags-item {
     @apply inline-block border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1;

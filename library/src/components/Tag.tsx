@@ -12,7 +12,12 @@ export const Tag: React.FunctionComponent<Props> = ({ tag }) => {
 
   if (externalDocs) {
     return (
-      <a href={externalDocs.url()} target="_blank" title={description}>
+      <a
+        href={externalDocs.url()}
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        title={description}
+      >
         {name}
       </a>
     );

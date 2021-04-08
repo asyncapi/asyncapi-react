@@ -22,13 +22,14 @@ export const Info: React.FunctionComponent = () => {
   const contact = info.contact();
 
   const showInfoList =
-    license || termsOfService || defaultContentType || contact;
+    license || termsOfService || defaultContentType || contact || externalDocs;
 
   return (
     <div className="ai-info" id="introduction">
       <span className="ai-info__title">
         {info.title()}&nbsp;{info.version()}
       </span>
+
       {showInfoList && (
         <ul className="ai-info__links">
           {license && (

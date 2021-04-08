@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
 import { Extensions } from './Extensions';
-import { Chevron, Markdown, Href } from './index';
+import { Chevron, Markdown } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
@@ -15,6 +15,8 @@ interface Props {
   expanded?: boolean;
 }
 
+const SchemaContext = React.createContext({ reverse: false });
+
 export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
@@ -24,6 +26,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   isProperty = false,
   expanded = false,
 }) => {
+  const { reverse } = useContext(SchemaContext);
   const [expand, setExpand] = useState(expanded);
 
   if (!schema) {
@@ -37,217 +40,225 @@ export const Schema: React.FunctionComponent<Props> = ({
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
 
+  const uid = schema.uid();
+
   return (
-    <div
-      className={`json-schema pl-8 pr-8 py-2 rounded ${
-        expand ? 'json-schema-open' : ''
-      }`}
-    >
-      <div className="flex property">
-        <div className="pr-4" style={{ minWidth: '25%' }}>
-          <span
-            className={`text-sm text-gray-500 ${isProperty ? 'italic' : ''}`}
-          >
-            {schemaName || schema.uid()}
-          </span>
-          {isExpandable && (
-            <span onClick={() => setExpand(prev => !prev)}>
-              <Chevron />
+    <SchemaContext.Provider value={{ reverse: !reverse }}>
+      <div className={`ai-schema ${expand ? 'ai-schema--open' : ''}`}>
+        <div className="ai-schema__property">
+          <div className="ai-schema__property__left">
+            <span
+              className={`ai-schema__property__name ${
+                isProperty ? 'italic' : ''
+              }`}
+            >
+              {schemaName}
             </span>
-          )}
-          {isPatternProperty && (
-            <div className="text-teal-500 text-xs">(pattern property)</div>
-          )}
-          {required && <div className="text-red-600 text-xs">required</div>}
-          {schema.deprecated() && (
-            <div className="text-red-600 text-xs">deprecated</div>
-          )}
-          {schema.writeOnly() && (
-            <div className="text-teal-500 text-xs">write-only</div>
-          )}
-          {schema.readOnly() && (
-            <div className="text-teal-500 text-xs">read-only</div>
-          )}
-        </div>
-        {isCircular ? (
-          <div>
-            <div className="capitalize text-sm text-teal-500 font-bold">
-              [CIRCULAR]
-            </div>
+            {isExpandable && !isCircular && (
+              <span onClick={() => setExpand(prev => !prev)}>
+                <Chevron />
+              </span>
+            )}
+            {isPatternProperty && (
+              <div className="ai-schema__property__pattern-property">
+                (pattern property)
+              </div>
+            )}
+            {required && (
+              <div className="ai-schema__property__required">required</div>
+            )}
+            {schema.deprecated() && (
+              <div className="ai-schema__property__deprecated">deprecated</div>
+            )}
+            {schema.writeOnly() && (
+              <div className="ai-schema__property__write-only">write-only</div>
+            )}
+            {schema.readOnly() && (
+              <div className="ai-schema__property__read-only">read-only</div>
+            )}
           </div>
-        ) : rawValue ? (
-          <div>
-            <div className="text-sm text-teal-500 font-bold">
-              {schema.const()}
+          {rawValue ? (
+            <div className="ai-schema__property__right">
+              <div className="ai-schema__property__raw-value">
+                {schema.const()}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div>
-            <div className="capitalize text-sm text-teal-500 font-bold">
-              {renderType && SchemaHelpers.toSchemaType(schema)}
-              <div className="inline-block">
-                {schema.format() && (
-                  <span
-                    className="bg-yellow-600 font-bold no-underline text-black rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    format: {schema.format()}
-                  </span>
+          ) : (
+            <div className="ai-schema__property__right">
+              <div>
+                {renderType && (
+                  <div className="ai-schema__property__type">
+                    {isCircular
+                      ? '[CIRCULAR]'
+                      : SchemaHelpers.toSchemaType(schema)}
+                  </div>
+                )}
+                <div className="ai-schema__property__constraints">
+                  {schema.format() && (
+                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
+                      format: {schema.format()}
+                    </span>
+                  )}
+
+                  {/* constraints */}
+                  {!!constraints.length &&
+                    constraints.map(c => (
+                      <span className="ai-schema__property__constraint" key={c}>
+                        {c}
+                      </span>
+                    ))}
+
+                  {/* related to string */}
+                  {schema.pattern() !== undefined && (
+                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
+                      must match: {schema.pattern()}
+                    </span>
+                  )}
+                  {schema.contentMediaType() !== undefined && (
+                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
+                      media type: {schema.contentMediaType()}
+                    </span>
+                  )}
+                  {schema.contentEncoding() !== undefined && (
+                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
+                      encoding: {schema.contentEncoding()}
+                    </span>
+                  )}
+                  {uid && !uid.startsWith('<anonymous-') && (
+                    <span className="ai-schema__property__uid">uid: {uid}</span>
+                  )}
+                </div>
+
+                {schema.hasDescription() && (
+                  <div className="ai-schema__property__description">
+                    <Markdown>{schema.description()}</Markdown>
+                  </div>
                 )}
 
-                {/* constraints */}
-                {!!constraints.length && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {constraints.join(', ')}
-                  </span>
+                {schema.default() !== undefined && (
+                  <div className="ai-schema__property__default">
+                    Default value: {schema.default()}
+                  </div>
                 )}
-
-                {/* related to string */}
-                {schema.pattern() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    must match: {schema.pattern()}
-                  </span>
+                {schema.const() !== undefined && (
+                  <div className="ai-schema__property__const">
+                    Const: {schema.const()}
+                  </div>
                 )}
-                {schema.contentMediaType() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    media type: {schema.contentMediaType()}
-                  </span>
+                {schema.enum() && (
+                  <ul className="ai-schema__property__enum">
+                    Allowed values:{' '}
+                    {schema.enum().map((e, idx) => (
+                      <li key={idx} className="ai-schema__property__enum-item">
+                        <span>{e}</span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
-                {schema.contentEncoding() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
+                {schema.examples() && (
+                  <ul className="ai-schema__property__examples">
+                    Examples values:{' '}
+                    {schema.examples().map((e, idx) => (
+                      <li
+                        key={idx}
+                        className="ai-schema__property__examples-item"
+                      >
+                        <span>{e}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {externalDocs && (
+                  <a
+                    href={externalDocs.url()}
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    title={externalDocs.description() || ''}
                   >
-                    encoding: {schema.contentEncoding()}
-                  </span>
+                    Documentation
+                  </a>
                 )}
               </div>
-
-              <Markdown>{schema.description()}</Markdown>
-
-              {schema.default() !== undefined && (
-                <div className="text-xs">Default value: {schema.default()}</div>
-              )}
-              {schema.const() !== undefined && (
-                <div className="text-xs">Const: {schema.const()}</div>
-              )}
-              {schema.enum() && (
-                <div className="text-xs">
-                  Allowed values:{' '}
-                  {schema.enum().map((e, idx) => (
-                    <span
-                      key={idx}
-                      className="border text-orange-600 rounded ml-1 py-0 px-2"
-                    >
-                      {e}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {schema.examples() && (
-                <div className="text-xs">
-                  Examples values:{' '}
-                  {schema.examples().map((e, idx) => (
-                    <span
-                      key={idx}
-                      className="border text-orange-600 rounded ml-1 py-0 px-2"
-                    >
-                      {e}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {externalDocs && (
-                <Href href={externalDocs.url()}>
-                  {externalDocs.hasDescription() ? (
-                    <Markdown>{externalDocs.description()}</Markdown>
-                  ) : (
-                    'Documentation'
-                  )}
-                </Href>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {isCircular || !isExpandable
-        ? null
-        : expand && (
-            <div className="json-schema">
-              <SchemaProperties schema={schema} />
-              <SchemaItems schema={schema} />
-
-              {schema.oneOf() &&
-                schema
-                  .oneOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.anyOf() &&
-                schema
-                  .anyOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.allOf() &&
-                schema
-                  .allOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.not() && (
-                <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
-              )}
-
-              {schema.propertyNames() && (
-                <Schema
-                  schema={schema.propertyNames()}
-                  schemaName="Property names must adhere to:"
-                />
-              )}
-              {schema.contains() && (
-                <Schema
-                  schema={schema.contains()}
-                  schemaName="Array must contain at least one of:"
-                />
-              )}
-
-              {schema.if() && (
-                <Schema
-                  schema={schema.if()}
-                  schemaName="If schema adheres to:"
-                />
-              )}
-              {schema.then() && (
-                <Schema
-                  schema={schema.then()}
-                  schemaName="Then it must adhere to:"
-                />
-              )}
-              {schema.else() && (
-                <Schema
-                  schema={schema.else()}
-                  schemaName="Otherwise it must adhere to:"
-                />
-              )}
-
-              <AdditionalProperties schema={schema} />
-              <AdditionalItems schema={schema} />
-
-              <Extensions item={schema} />
             </div>
           )}
-    </div>
+        </div>
+
+        {isCircular || !isExpandable
+          ? null
+          : expand && (
+              <div
+                className={`ai-schema__children ${
+                  reverse ? 'ai-schema__children--reverse' : ''
+                }`}
+              >
+                <SchemaProperties schema={schema} />
+                <SchemaItems schema={schema} />
+
+                {schema.oneOf() &&
+                  schema
+                    .oneOf()
+                    .map((s, idx) => (
+                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
+                    ))}
+                {schema.anyOf() &&
+                  schema
+                    .anyOf()
+                    .map((s, idx) => (
+                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
+                    ))}
+                {schema.allOf() &&
+                  schema
+                    .allOf()
+                    .map((s, idx) => (
+                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
+                    ))}
+                {schema.not() && (
+                  <Schema
+                    schema={schema.not()}
+                    schemaName="Cannot adhere to:"
+                  />
+                )}
+
+                {schema.propertyNames() && (
+                  <Schema
+                    schema={schema.propertyNames()}
+                    schemaName="Property names must adhere to:"
+                  />
+                )}
+                {schema.contains() && (
+                  <Schema
+                    schema={schema.contains()}
+                    schemaName="Array must contain at least one of:"
+                  />
+                )}
+
+                {schema.if() && (
+                  <Schema
+                    schema={schema.if()}
+                    schemaName="If schema adheres to:"
+                  />
+                )}
+                {schema.then() && (
+                  <Schema
+                    schema={schema.then()}
+                    schemaName="Then it must adhere to:"
+                  />
+                )}
+                {schema.else() && (
+                  <Schema
+                    schema={schema.else()}
+                    schemaName="Otherwise it must adhere to:"
+                  />
+                )}
+
+                <AdditionalProperties schema={schema} />
+                <AdditionalItems schema={schema} />
+
+                <Extensions item={schema} />
+              </div>
+            )}
+      </div>
+    </SchemaContext.Provider>
   );
 };
 
@@ -313,14 +324,14 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   const additionalProperties = schema.additionalProperties();
   if (additionalProperties === true || additionalProperties === undefined) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="ai-schema__additional-info">
         Additional properties are allowed.
       </p>
     );
   }
   if (additionalProperties === false) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="ai-schema__additional-info">
         Additional properties are <strong>NOT</strong> allowed.
       </p>
     );
@@ -383,14 +394,14 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="ai-schema__additional-info">
         Additional items are allowed.
       </p>
     );
   }
   if (additionalItems === false) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="ai-schema__additional-info">
         Additional items are <strong>NOT</strong> allowed.
       </p>
     );

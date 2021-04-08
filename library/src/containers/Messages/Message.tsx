@@ -2,7 +2,12 @@ import React from 'react';
 import { Message as MessageType } from '@asyncapi/parser';
 
 import { MessageExample } from './MessageExample';
-import { Markdown, Schema, Bindings, Tags } from '../../components';
+import { Href, Markdown, Schema, Bindings, Tags } from '../../components';
+
+import {
+  CONTENT_TYPES_SITE,
+  EXTERAL_DOCUMENTATION_TEXT,
+} from '../../constants';
 
 interface Props {
   message: MessageType;
@@ -17,48 +22,93 @@ export const Message: React.FunctionComponent<Props> = ({
 }) => {
   const title = message.title();
   const summary = message.summary();
-
   const payload = message.payload();
   const headers = message.headers();
-
   const correlationId = message.correlationId();
+
+  const contentType = message.contentType();
+  const externalDocs = message.externalDocs();
+  const showInfoList = contentType || externalDocs;
 
   return (
     <div>
-      <div className="bg-gray-200 rounded p-4 mt-2">
-        <div className="text-sm text-gray-700 mb-2">
+      <div className="ai-message">
+        <div>
           {index !== undefined && (
-            <span className="text-gray-700 font-bold mr-2">#{index}</span>
+            <span className="ai-message__index">#{index}</span>
           )}
-          {title && <span>{title}</span>}
-          <span className="border text-orange-600 rounded text-s py-0 px-2">
-            {message.uid()}
-          </span>
+          {title && <span className="ai-message__title">{title}</span>}
+          <span className="ai-message__uid">{message.uid()}</span>
         </div>
 
-        {summary && <p className="text-gray-600 text-sm">{summary}</p>}
+        {summary && <p className="ai-message__summary">{summary}</p>}
+
+        {showInfoList && (
+          <ul className="ai-message__info">
+            {contentType && (
+              <li className="ai-info__links-item">
+                <Href href={`${CONTENT_TYPES_SITE}/${contentType}`}>
+                  <span>{contentType}</span>
+                </Href>
+              </li>
+            )}
+            {externalDocs && (
+              <li className="ai-info__links-item">
+                <Href href={externalDocs.url()}>
+                  <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+                </Href>
+              </li>
+            )}
+          </ul>
+        )}
 
         {correlationId && (
-          <div className="border border-gray-400 bg-gray-200 rounded p-4 mt-2">
-            <div className="text-sm text-gray-700 mb-2">
+          <div className="ai-message__correlation-id">
+            <div className="ai-message__correlation-id__title">
               Correlation ID
-              <span className="border text-orange-600 rounded text-xs ml-3 py-0 px-2">
+              <span className="ai-message__correlation-id__location">
                 {correlationId.location()}
               </span>
             </div>
-            <Markdown>{correlationId.description()}</Markdown>
+
+            {correlationId.hasDescription() && (
+              <div className="ai-message__correlation-id__description">
+                <Markdown>{correlationId.description()}</Markdown>
+              </div>
+            )}
           </div>
         )}
 
-        <Markdown>{message.description()}</Markdown>
+        {message.hasDescription() && (
+          <div className="ai-message__description">
+            <Markdown>{message.description()}</Markdown>
+          </div>
+        )}
 
-        {payload && <Schema schemaName="Payload" schema={payload} />}
-        {headers && <Schema schemaName="Headers" schema={headers} />}
+        {payload && (
+          <div className="ai-message__payload">
+            <Schema schemaName="Payload" schema={payload} />
+          </div>
+        )}
+        {headers && (
+          <div className="ai-message__headers">
+            <Schema schemaName="Headers" schema={headers} />
+          </div>
+        )}
 
-        {message.hasBindings() && <Bindings bindings={message.bindings()} />}
+        {message.hasBindings() && (
+          <div className="ai-message__bindings">
+            <Bindings bindings={message.bindings()} />
+          </div>
+        )}
 
-        <Tags tags={message.tags()} />
+        {message.hasTags() && (
+          <div className="ai-message__tags">
+            <Tags tags={message.tags()} />
+          </div>
+        )}
       </div>
+
       {showExamples && (
         <div>
           <MessageExample message={message} />
