@@ -7,7 +7,6 @@ import {
   TERMS_OF_SERVICE_TEXT,
   CONTENT_TYPES_SITE,
   URL_SUPPORT_TEXT,
-  EMAIL_SUPPORT_TEXT,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
 
@@ -76,7 +75,7 @@ export const Info: React.FunctionComponent = () => {
               {contact.email() && (
                 <li className="ai-info__links-item ai-info__links-item--reverse">
                   <Href href={`mailto:${contact.email()}`}>
-                    <span>{EMAIL_SUPPORT_TEXT}</span>
+                    <span>{contact.email()}</span>
                   </Href>
                 </li>
               )}
