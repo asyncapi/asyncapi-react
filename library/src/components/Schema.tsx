@@ -29,9 +29,15 @@ export const Schema: React.FunctionComponent<Props> = ({
   const { reverse } = useContext(SchemaContext);
   const [expand, setExpand] = useState(expanded);
 
-  if (!schema) {
+  if (
+    !schema ||
+    schemaName?.startsWith('x-parser-') ||
+    schemaName?.startsWith('x-schema-private-')
+  ) {
     return null;
   }
+
+  const uid = schema.uid();
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema);
@@ -39,12 +45,11 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
-
-  const uid = schema.uid();
+  const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
 
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
-      <div className={`ai-schema ${expand ? 'ai-schema--open' : ''}`}>
+      <div className="ai-schema">
         <div className="ai-schema__property">
           <div className="ai-schema__property__left">
             <span
@@ -155,6 +160,26 @@ export const Schema: React.FunctionComponent<Props> = ({
                     ))}
                   </ul>
                 )}
+                {parameterLocation && (
+                  <div className="ai-schema__property__parameter-location">
+                    Parameter location:{' '}
+                    <span className="ai-operation__channel-paremeter-location">
+                      {parameterLocation}
+                    </span>
+                  </div>
+                )}
+                {externalDocs && (
+                  <span className="ai-schema__property__documentation">
+                    <a
+                      href={externalDocs.url()}
+                      target="_blank"
+                      rel="nofollow noopener noreferrer"
+                      title={externalDocs.description() || ''}
+                    >
+                      Documentation
+                    </a>
+                  </span>
+                )}
                 {schema.examples() && (
                   <ul className="ai-schema__property__examples">
                     Examples values:{' '}
@@ -168,95 +193,89 @@ export const Schema: React.FunctionComponent<Props> = ({
                     ))}
                   </ul>
                 )}
-                {externalDocs && (
-                  <a
-                    href={externalDocs.url()}
-                    target="_blank"
-                    rel="nofollow noopener noreferrer"
-                    title={externalDocs.description() || ''}
-                  >
-                    Documentation
-                  </a>
-                )}
               </div>
             </div>
           )}
         </div>
 
-        {isCircular || !isExpandable
-          ? null
-          : expand && (
-              <div
-                className={`ai-schema__children ${
-                  reverse ? 'ai-schema__children--reverse' : ''
-                }`}
-              >
-                <SchemaProperties schema={schema} />
-                <SchemaItems schema={schema} />
+        {isCircular || !isExpandable ? null : (
+          <div
+            className={`ai-schema__children ${
+              reverse ? 'ai-schema__children--reverse' : ''
+            } ${expand ? 'ai-schema__children--open' : ''}`}
+          >
+            <SchemaProperties schema={schema} />
+            <SchemaItems schema={schema} />
 
-                {schema.oneOf() &&
-                  schema
-                    .oneOf()
-                    .map((s, idx) => (
-                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                    ))}
-                {schema.anyOf() &&
-                  schema
-                    .anyOf()
-                    .map((s, idx) => (
-                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                    ))}
-                {schema.allOf() &&
-                  schema
-                    .allOf()
-                    .map((s, idx) => (
-                      <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                    ))}
-                {schema.not() && (
+            {schema.oneOf() &&
+              schema
+                .oneOf()
+                .map((s, idx) => (
                   <Schema
-                    schema={schema.not()}
-                    schemaName="Cannot adhere to:"
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Adheres to' : 'Or to'}
                   />
-                )}
-
-                {schema.propertyNames() && (
+                ))}
+            {schema.anyOf() &&
+              schema
+                .anyOf()
+                .map((s, idx) => (
                   <Schema
-                    schema={schema.propertyNames()}
-                    schemaName="Property names must adhere to:"
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Can adhere to' : 'Or to'}
                   />
-                )}
-                {schema.contains() && (
+                ))}
+            {schema.allOf() &&
+              schema
+                .allOf()
+                .map((s, idx) => (
                   <Schema
-                    schema={schema.contains()}
-                    schemaName="Array must contain at least one of:"
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Consists of' : 'And with'}
                   />
-                )}
-
-                {schema.if() && (
-                  <Schema
-                    schema={schema.if()}
-                    schemaName="If schema adheres to:"
-                  />
-                )}
-                {schema.then() && (
-                  <Schema
-                    schema={schema.then()}
-                    schemaName="Then it must adhere to:"
-                  />
-                )}
-                {schema.else() && (
-                  <Schema
-                    schema={schema.else()}
-                    schemaName="Otherwise it must adhere to:"
-                  />
-                )}
-
-                <AdditionalProperties schema={schema} />
-                <AdditionalItems schema={schema} />
-
-                <Extensions item={schema} />
-              </div>
+                ))}
+            {schema.not() && (
+              <Schema schema={schema.not()} schemaName="Cannot adhere to" />
             )}
+
+            {schema.propertyNames() && (
+              <Schema
+                schema={schema.propertyNames()}
+                schemaName="Property names must adhere to"
+              />
+            )}
+            {schema.contains() && (
+              <Schema
+                schema={schema.contains()}
+                schemaName="Array must contain at least one of"
+              />
+            )}
+
+            {schema.if() && (
+              <Schema schema={schema.if()} schemaName="If schema adheres to" />
+            )}
+            {schema.then() && (
+              <Schema
+                schema={schema.then()}
+                schemaName="Then it must adhere to"
+              />
+            )}
+            {schema.else() && (
+              <Schema
+                schema={schema.else()}
+                schemaName="Otherwise it must adhere to"
+              />
+            )}
+
+            <Extensions item={schema} />
+
+            <AdditionalProperties schema={schema} />
+            <AdditionalItems schema={schema} />
+          </div>
+        )}
       </div>
     </SchemaContext.Provider>
   );

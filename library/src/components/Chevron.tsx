@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Chevron: React.FunctionComponent = () => (
   <svg
-    className="expand inline align-baseline"
+    className="ai__chevron"
     version="1.1"
     viewBox="0 0 24 24"
     x="0"

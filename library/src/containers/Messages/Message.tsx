@@ -109,11 +109,7 @@ export const Message: React.FunctionComponent<Props> = ({
         )}
       </div>
 
-      {showExamples && (
-        <div>
-          <MessageExample message={message} />
-        </div>
-      )}
+      {showExamples && <MessageExample message={message} />}
     </div>
   );
 };

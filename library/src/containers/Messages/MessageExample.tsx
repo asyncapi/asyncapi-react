@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
 
 import { Chevron } from '../../components';
@@ -13,8 +13,8 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   const headers = message.headers();
 
   return (
-    <div>
-      <h5 className="examples-uid text-orange-600 mt-4">{message.uid()}</h5>
+    <div className="ai-message__examples">
+      <h4>Examples</h4>
       {payload && (
         <Example
           type="Payload"
@@ -43,50 +43,58 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   type = 'Payload',
   schema,
   examples = [],
-}) => (
-  <div>
-    <div className="payload-examples mb-4">
-      <span className="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none cursor-pointer">
-        {type}
-      </span>
-      <Chevron />
+}) => {
+  const [expand, setExpand] = useState(false);
+
+  return (
+    <div className="ai-message__examples__item">
+      <div>
+        <span className="ai-message__examples__type">{type}</span>
+        <span onClick={() => setExpand(prev => !prev)}>
+          <Chevron />
+        </span>
+      </div>
+      <div
+        className={`ai-message__examples__content ${
+          expand ? 'ai-message__examples__content--opened' : ''
+        }`}
+      >
+        {examples && examples.length > 0 ? (
+          <ul className="ai-message__examples__list">
+            {examples.map((example, idx) => (
+              <li className="ai-message__examples__example" key={idx}>
+                <h5 className="text-xs font-bold text-gray-700">
+                  Example #{idx + 1}
+                </h5>
+                <pre className="hljs">
+                  <code>
+                    {JSON.stringify(
+                      MessageHelpers.sanitizeExample(example),
+                      null,
+                      2,
+                    )}
+                  </code>
+                </pre>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="ai-message__examples__example">
+            <pre className="hljs">
+              <code>
+                {JSON.stringify(
+                  MessageHelpers.generateExample(schema.json()),
+                  null,
+                  2,
+                )}
+              </code>
+            </pre>
+            <h6 className="text-xs font-bold text-gray-700 italic">
+              This example has been generated automatically.
+            </h6>
+          </div>
+        )}
+      </div>
     </div>
-    <div className="children payload-examples mt-4">
-      {examples && examples.length > 0 ? (
-        <ul>
-          {examples.map((example, idx) => (
-            <li key={idx}>
-              <h6 className="text-xs font-bold text-gray-700">
-                Example #{idx + 1}
-              </h6>
-              <pre className="hljs mb-4 border border-gray-800 rounded">
-                <code>
-                  {JSON.stringify(
-                    MessageHelpers.sanitizeExample(example),
-                    null,
-                    2,
-                  )}
-                </code>
-              </pre>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          <pre className="hljs mb-4 border border-gray-800 rounded">
-            <code>
-              {JSON.stringify(
-                MessageHelpers.generateExample(schema.json()),
-                null,
-                2,
-              )}
-            </code>
-          </pre>
-          <h6 className="text-xs font-bold text-gray-700 italic">
-            This example has been generated automatically.
-          </h6>
-        </div>
-      )}
-    </div>
-  </div>
-);
+  );
+};

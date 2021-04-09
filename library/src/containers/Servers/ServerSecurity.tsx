@@ -1,7 +1,7 @@
 import React from 'react';
 import { ServerSecurityRequirement, SecurityScheme } from '@asyncapi/parser';
 
-import { Markdown } from '../../components';
+import { Href, Markdown } from '../../components';
 
 import { ServerHelpers } from '../../helpers';
 import { useSpec } from '../../store';
@@ -42,11 +42,13 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <div>
-      <h5 className="text-sm text-gray-500 mt-1">Security:</h5>
-      <ul>
+    <div className="ai-server__security">
+      <h5>Security:</h5>
+      <ul className="ai-server__security__list">
         {serverSecurities.map((security, idx) => (
-          <li key={idx}>{security}</li>
+          <li className="ai-server__security__list-item" key={idx}>
+            {security}
+          </li>
         ))}
       </ul>
     </div>
@@ -60,142 +62,109 @@ interface ServerSecurityItemProps {
 const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
   securitySchema,
 }) => {
+  const schemas: React.ReactNodeArray = [];
+  if (securitySchema.name()) {
+    schemas.push(<span>Name: {securitySchema.name()}</span>);
+  }
+  if (securitySchema.in()) {
+    schemas.push(<span>In: {securitySchema.in()}</span>);
+  }
+  if (securitySchema.scheme()) {
+    schemas.push(<span>Scheme: {securitySchema.scheme()}</span>);
+  }
+  if (securitySchema.bearerFormat()) {
+    schemas.push(<span>Bearer format: {securitySchema.bearerFormat()}</span>);
+  }
+  if (securitySchema.openIdConnectUrl()) {
+    schemas.push(
+      <Href href={securitySchema.openIdConnectUrl()}>Connect URL</Href>,
+    );
+  }
+
   const flows = securitySchema.flows();
+  const renderedFlows =
+    flows &&
+    Object.entries(flows).map(([flowName, flow]) => {
+      const authorizationUrl = flow.authorizationUrl();
+      const tokenUrl = flow.tokenUrl();
+      const refreshUrl = flow.refreshUrl();
+      const scopes = flow.scopes();
+
+      return (
+        <div
+          className="ai-security__security__security-schema__flow"
+          key={flowName}
+        >
+          <div>
+            <span>Flow:</span>
+            <span>{ServerHelpers.flowName(flowName)}</span>
+          </div>
+
+          {authorizationUrl && (
+            <div>
+              <span>Auth URL:</span>
+              <Href href={authorizationUrl}>{authorizationUrl}</Href>
+            </div>
+          )}
+          {tokenUrl && (
+            <div>
+              <span>Token URL:</span>
+              <Href href={tokenUrl}>{tokenUrl}</Href>
+            </div>
+          )}
+          {refreshUrl && (
+            <div>
+              <span>Refresh URL:</span>
+              <Href href={refreshUrl}>{refreshUrl}</Href>
+            </div>
+          )}
+          {scopes && (
+            <div>
+              <span>Scopes:</span>
+              <ul className="ai-security__security__security-schema__flow__scopes">
+                {scopes &&
+                  Object.entries(scopes).map(([scopeName, scopeDesc]) => (
+                    <li title={scopeDesc} key={scopeName}>
+                      {scopeName}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      );
+    });
 
   return (
-    <div>
-      <span className="font-bold no-underline text-gray-600 text-xs uppercase mr-1">
-        {ServerHelpers.securityType(securitySchema.type())}
-      </span>
-      <Markdown>{securitySchema.description()}</Markdown>
+    <div className="ai-security__security__security-schema">
+      <div>
+        <span>
+          {ServerHelpers.securityType(securitySchema.type())}
+          {schemas.length > 0 && (
+            <ul className="ai-security__security__security-schema__schemas-list">
+              {schemas.map(schema => (
+                <li className="ai-security__security__security-schema__schemas-list-item">
+                  {schema}
+                </li>
+              ))}
+            </ul>
+          )}
+        </span>
+      </div>
 
-      {securitySchema.name() && (
-        <span className="font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded">
-          Name: {securitySchema.name()}
-        </span>
-      )}
-      {securitySchema.in() && (
-        <span className="font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded">
-          In: {securitySchema.in()}
-        </span>
-      )}
-      {securitySchema.scheme() && (
-        <span className="font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded">
-          Scheme: {securitySchema.scheme()}
-        </span>
-      )}
-      {securitySchema.bearerFormat() && (
-        <span className="font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded">
-          Bearer format: {securitySchema.bearerFormat()}
-        </span>
-      )}
-
-      {securitySchema.openIdConnectUrl() && (
-        <div className="px-4 py-2 ml-4 mb-3 border border-gray-400 bg-gray-100 rounded">
-          <div>
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-              Connect URL:
-            </span>
-            <a
-              href="{{def.openIdConnectUrl()}}"
-              className="text-gray-600 text-xs font-normal"
-              target="_blank"
-            >
-              {securitySchema.openIdConnectUrl()}
-            </a>
-          </div>
+      {securitySchema.hasDescription() && (
+        <div className="ai-security__security__security-schema__description">
+          <Markdown>{securitySchema.description()}</Markdown>
         </div>
       )}
 
-      {flows &&
-        Object.entries(flows).map(([flowName, flow]) => {
-          const authorizationUrl = flow.authorizationUrl();
-          const tokenUrl = flow.tokenUrl();
-          const refreshUrl = flow.refreshUrl();
-          const scopes = flow.scopes();
-
-          return (
-            <div
-              className="px-4 py-2 ml-4 mb-3 border border-gray-400 bg-gray-100 rounded"
-              key={flowName}
-            >
-              <div>
-                <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-                  Flow:
-                </span>
-                <span className="text-gray-600 text-xs font-normal capitalize">
-                  {ServerHelpers.flowName(flowName)}
-                </span>
-              </div>
-
-              {authorizationUrl && (
-                <div>
-                  <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-                    Auth URL:
-                  </span>
-                  <a
-                    className="text-gray-600 text-xs font-normal"
-                    href={authorizationUrl}
-                    target="_blank"
-                  >
-                    {authorizationUrl}
-                  </a>
-                </div>
-              )}
-              {tokenUrl && (
-                <div>
-                  <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-                    Token URL:
-                  </span>
-                  <a
-                    className="text-gray-600 text-xs font-normal"
-                    href={tokenUrl}
-                    target="_blank"
-                  >
-                    {tokenUrl}
-                  </a>
-                </div>
-              )}
-              {refreshUrl && (
-                <div>
-                  <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-                    Refresh URL:
-                  </span>
-                  <a
-                    className="text-gray-600 text-xs font-normal"
-                    href={refreshUrl}
-                    target="_blank"
-                  >
-                    {refreshUrl}
-                  </a>
-                </div>
-              )}
-              {scopes && (
-                <div>
-                  <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
-                    Scopes:
-                  </span>
-                  <ul style={{ display: 'inline-block' }}>
-                    {scopes &&
-                      Object.entries(scopes).map(([scopeName, scopeDesc]) => (
-                        <li
-                          className="font-bold no-underline bg-indigo-400 text-white text-xs rounded"
-                          style={{
-                            display: 'inline-block',
-                            marginRight: '6px',
-                          }}
-                          title={scopeDesc}
-                          key={scopeName}
-                        >
-                          {scopeName}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          );
-        })}
+      {renderedFlows && renderedFlows.length > 0 && (
+        <ul className="ai-security__security__security-schema__flows-list">
+          <li className="ai-security__security__security-schema__flows-list-item">
+            {renderedFlows}
+          </li>
+        </ul>
+      )}
     </div>
   );
 };

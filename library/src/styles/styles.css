@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @layer components {
+  .ai {
+  }
+  .ai__chevron {
+    @apply inline align-baseline cursor-pointer -mb-1;
+    width: 20px;
+    transform: rotate(-90deg);
+  }
+
   .ai-info {
     @apply text-left p-4;
   }
@@ -10,7 +18,7 @@
     @apply text-3xl;
   }
   .ai-info__links {
-    @apply leading-normal mt-2 mb-4 space-x-2 space-y-2;
+    @apply leading-normal mt-2 space-x-2 space-y-2;
   }
   .ai-info__links-item {
     @apply inline-block;
@@ -25,6 +33,7 @@
     @apply mt-4;
   }
   .ai-info__description {
+    @apply mt-4;
   }
 
   .ai-servers {
@@ -47,11 +56,63 @@
     @apply bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm;
   }
   .ai-server__description {
-    @apply my-2;
+    @apply mt-2;
   }
   .ai-server__url-variables {
+    @apply mt-2;
+  }
+  .ai-server__security {
+    @apply mt-2;
+  }
+  .ai-server__security {
+    @apply text-sm mt-4;
+  }
+  .ai-server__security > h5 {
+    @apply text-gray-700 text-base;
+  }
+  .ai-server__security__list {
+  }
+  .ai-server__security__list-item {
+    @apply mt-2;
+  }
+  .ai-security__security__security-schema {
+  }
+  .ai-security__security__security-schema__schemas-list {
+    @apply inline-block ml-2;
+  }
+  .ai-security__security__security-schema__schemas-list-item {
+    @apply inline-block font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded px-2 py-0 ml-1;
+  }
+  .ai-security__security__security-schema__description {
+  }
+  .ai-security__security__security-schema__flows-list {
+    @apply my-2;
+  }
+  .ai-security__security__security-schema__flows-list-item {
+  }
+  .ai-security__security__security-schema__flow {
+    @apply px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded;
+  }
+  .ai-security__security__security-schema__flow > div {
+    @apply mt-1;
+  }
+  .ai-security__security__security-schema__flow > div:first-child {
+    @apply mt-0;
+  }
+  .ai-security__security__security-schema__flow > div > span {
+    @apply text-xs font-bold text-gray-600 mt-1 mr-1 uppercase;
+  }
+  .ai-security__security__security-schema__flow > div > a {
+    @apply underline;
+  }
+  .ai-security__security__security-schema__flow__scopes {
+    @apply inline-block;
+  }
+  .ai-security__security__security-schema__flow__scopes > li {
+    @apply inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1;
   }
   .ai-server__bindings {
+    @apply mt-2;
   }
 
   .ai-operations {
@@ -62,6 +123,9 @@
     @apply mb-12;
   }
   .ai-operation {
+  }
+  .ai-operation > div:first-child {
+    @apply mb-4;
   }
   .ai-operation__type {
     @apply font-mono border uppercase p-1 rounded mr-2;
@@ -86,6 +150,9 @@
   }
   .ai-operation__channel-parameters {
     @apply mt-2;
+  }
+  .ai-operation__channel-paremeter-location {
+    @apply border text-orange-600 rounded mr-2 p-1 text-xs;
   }
   .ai-operation__multiple-messages {
     @apply mt-2;
@@ -140,6 +207,7 @@
     @apply border text-orange-600 rounded text-xs ml-2 py-0 px-2;
   }
   .ai-message__correlation-id__description {
+    @apply mt-2;
   }
   .ai-message__info {
     @apply leading-normal mt-2 mb-4 space-x-2 space-y-2;
@@ -164,6 +232,42 @@
   }
   .ai-message__tags {
     @apply mt-2;
+  }
+  .ai-message__examples {
+    @apply p-8 mt-4 bg-gray-800 rounded;
+    background-color: #263238;
+  }
+  .ai-message__examples .ai__chevron > polygon {
+    fill: #fff;
+  }
+  .ai-message__examples h4 {
+    @apply text-white text-lg;
+  }
+  .ai-message__examples__item {
+    @apply mt-4;
+  }
+  .ai-message__examples__content {
+    @apply hidden;
+  }
+  .ai-message__examples__content--opened {
+    @apply block;
+  }
+  .ai-message__examples__type {
+    @apply px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none;
+  }
+  .ai-message__examples__list {
+  }
+  .ai-message__examples__example {
+    @apply mt-4;
+  }
+  .ai-message__examples__example pre {
+    @apply border border-gray-900 rounded;
+  }
+  .ai-message__examples__example h5 {
+    @apply text-xs font-bold text-gray-700 mb-1;
+  }
+  .ai-message__examples__example h6 {
+    @apply text-xs font-bold text-gray-700 italic mt-2;
   }
 
   .ai-schema {
@@ -196,19 +300,19 @@
     @apply text-gray-500 text-xs;
   }
   .ai-schema__property__uid {
-    @apply border text-orange-600 rounded ml-2 p-1 text-xs;
+    @apply border text-orange-600 rounded mr-2 p-1 text-xs;
   }
   .ai-schema__property__raw-value {
     @apply text-sm font-bold;
   }
   .ai-schema__property__type {
-    @apply capitalize text-sm text-teal-500 font-bold inline-block;
+    @apply capitalize text-sm text-teal-500 font-bold inline-block mr-2;
   }
   .ai-schema__property__constraints {
     @apply inline-block;
   }
   .ai-schema__property__constraint {
-    @apply bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2 p-1 text-xs;
+    @apply bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs;
   }
   .ai-schema__property__constraint--reverse {
     @apply bg-yellow-600;
@@ -225,6 +329,12 @@
   .ai-schema__property__enum-item {
     @apply border inline-block text-orange-600 rounded ml-1 py-0 px-2;
   }
+  .ai-schema__property__documentation {
+    @apply border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0;
+  }
+  .ai-schema__property__parameter-location {
+    @apply text-xs;
+  }
   .ai-schema__property__examples {
     @apply text-xs;
   }
@@ -232,10 +342,13 @@
     @apply border inline-block text-orange-600 rounded ml-1 py-0 px-2;
   }
   .ai-schema__children {
-    @apply rounded p-4 py-2 bg-gray-100;
+    @apply rounded p-4 py-2 bg-gray-100 hidden;
   }
   .ai-schema__children--reverse {
     @apply bg-gray-200;
+  }
+  .ai-schema__children--open {
+    @apply block;
   }
   .ai-schema__additional-info {
     @apply mt-2 text-xs text-gray-700;
@@ -243,6 +356,7 @@
 
   .ai-markdown {
     @apply prose text-sm;
+    max-width: 100ch;
   }
 
   .ai-tags {

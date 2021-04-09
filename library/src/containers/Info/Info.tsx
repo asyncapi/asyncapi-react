@@ -26,9 +26,9 @@ export const Info: React.FunctionComponent = () => {
 
   return (
     <div className="ai-info" id="introduction">
-      <span className="ai-info__title">
+      <div className="ai-info__title">
         {info.title()}&nbsp;{info.version()}
-      </span>
+      </div>
 
       {showInfoList && (
         <ul className="ai-info__links">
@@ -69,7 +69,7 @@ export const Info: React.FunctionComponent = () => {
               {contact.url() && (
                 <li className="ai-info__links-item ai-info__links-item--reverse">
                   <Href href={contact.url()}>
-                    <span>{URL_SUPPORT_TEXT}</span>
+                    <span>{contact.name() || URL_SUPPORT_TEXT}</span>
                   </Href>
                 </li>
               )}
