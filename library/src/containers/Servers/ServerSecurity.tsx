@@ -142,8 +142,11 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
           {ServerHelpers.securityType(securitySchema.type())}
           {schemas.length > 0 && (
             <ul className="ai-security__security__security-schema__schemas-list">
-              {schemas.map(schema => (
-                <li className="ai-security__security__security-schema__schemas-list-item">
+              {schemas.map((schema, idx) => (
+                <li
+                  className="ai-security__security__security-schema__schemas-list-item"
+                  key={idx}
+                >
                   {schema}
                 </li>
               ))}

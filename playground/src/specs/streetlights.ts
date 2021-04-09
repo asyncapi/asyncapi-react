@@ -202,14 +202,17 @@ components:
       properties:
         lumens:
           type: integer
-          minimum: 0
           description: Light intensity measured in lumens.
           writeOnly: true
+          oneOf: 
+            - minimum: 0
+              maximum: 5
+            - minimum: 10
+              maximum: 20
           externalDocs:
             url: "https://www.asyncapi.com/"
         sentAt:
           $ref: "#/components/schemas/sentAt"
-        lol: {}
         ifElseThen:
           type: integer
           minimum: 1
@@ -395,6 +398,7 @@ components:
       description: The ID of the streetlight.
       schema:
         type: string
+      location: "$message.payload#/user/id"
 
   correlationIds:
     sentAtCorrelator:
