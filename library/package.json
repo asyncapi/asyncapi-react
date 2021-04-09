@@ -38,11 +38,11 @@
   ],
   "scripts": {
     "start": "tsc --watch",
-    "build": "npm run build:code && npm run build:styles",
+    "build": "npm run build:code && npm run build:styles:dev",
     "build:prod": "npm run build:code && npm run build:styles:prod",
     "build:code": "tsc",
     "build:styles": "postcss src/styles/styles.css -o lib/styles/styles.css",
-    "build:styles:dev": "NODE_ENV=development postcss src/styles/styles.css -o lib/styles/styles.css",
+    "build:styles:dev": "postcss src/styles/styles.css -o lib/styles/styles.css",
     "build:styles:prod": "NODE_ENV=production postcss src/styles/styles.css -o lib/styles/styles.css",
     "test": "jest --detectOpenHandles",
     "testWatch": "jest --detectOpenHandles --watch",
