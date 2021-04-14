@@ -42,11 +42,11 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <div className="ai-server__security">
-      <h5>Security:</h5>
-      <ul className="ai-server__security__list">
+    <div className="text-sm mt-4">
+      <h5 className="text-gray-700 text-base">Security:</h5>
+      <ul>
         {serverSecurities.map((security, idx) => (
-          <li className="ai-server__security__list-item" key={idx}>
+          <li className="mt-2" key={idx}>
             {security}
           </li>
         ))}
@@ -92,39 +92,55 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
 
       return (
         <div
-          className="ai-security__security__security-schema__flow"
+          className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded"
           key={flowName}
         >
           <div>
-            <span>Flow:</span>
-            <span>{ServerHelpers.flowName(flowName)}</span>
+            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              Flow:
+            </span>
+            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              {ServerHelpers.flowName(flowName)}
+            </span>
           </div>
 
           {authorizationUrl && (
-            <div>
-              <span>Auth URL:</span>
+            <div className="mt-1">
+              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+                Auth URL:
+              </span>
               <Href href={authorizationUrl}>{authorizationUrl}</Href>
             </div>
           )}
           {tokenUrl && (
-            <div>
-              <span>Token URL:</span>
+            <div className="mt-1">
+              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+                Token URL:
+              </span>
               <Href href={tokenUrl}>{tokenUrl}</Href>
             </div>
           )}
           {refreshUrl && (
-            <div>
-              <span>Refresh URL:</span>
+            <div className="mt-1">
+              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+                Refresh URL:
+              </span>
               <Href href={refreshUrl}>{refreshUrl}</Href>
             </div>
           )}
           {scopes && (
-            <div>
-              <span>Scopes:</span>
-              <ul className="ai-security__security__security-schema__flow__scopes">
+            <div className="mt-1">
+              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+                Scopes:
+              </span>
+              <ul className="inline-block">
                 {scopes &&
                   Object.entries(scopes).map(([scopeName, scopeDesc]) => (
-                    <li title={scopeDesc} key={scopeName}>
+                    <li
+                      className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1"
+                      title={scopeDesc}
+                      key={scopeName}
+                    >
                       {scopeName}
                     </li>
                   ))}
@@ -141,10 +157,10 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
         <span>
           {ServerHelpers.securityType(securitySchema.type())}
           {schemas.length > 0 && (
-            <ul className="ai-security__security__security-schema__schemas-list">
+            <ul className="inline-block ml-2">
               {schemas.map((schema, idx) => (
                 <li
-                  className="ai-security__security__security-schema__schemas-list-item"
+                  className="inline-block font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded px-2 py-0 ml-1"
                   key={idx}
                 >
                   {schema}
@@ -156,16 +172,14 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
       </div>
 
       {securitySchema.hasDescription() && (
-        <div className="ai-security__security__security-schema__description">
+        <div>
           <Markdown>{securitySchema.description()}</Markdown>
         </div>
       )}
 
       {renderedFlows && renderedFlows.length > 0 && (
-        <ul className="ai-security__security__security-schema__flows-list">
-          <li className="ai-security__security__security-schema__flows-list-item">
-            {renderedFlows}
-          </li>
+        <ul className="my-2">
+          <li>{renderedFlows}</li>
         </ul>
       )}
     </div>

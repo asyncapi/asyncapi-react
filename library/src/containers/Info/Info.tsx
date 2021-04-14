@@ -24,41 +24,55 @@ export const Info: React.FunctionComponent = () => {
     license || termsOfService || defaultContentType || contact || externalDocs;
 
   return (
-    <div className="ai-info" id="introduction">
-      <div className="ai-info__title">
+    <div className="text-left p-4" id="introduction">
+      <div className="text-3xl">
         {info.title()}&nbsp;{info.version()}
       </div>
 
       {showInfoList && (
-        <ul className="ai-info__links">
+        <ul className="leading-normal mt-2 space-x-2 space-y-2">
           {license && (
-            <li className="ai-info__links-item">
+            <li className="inline-block">
               {license.url() ? (
-                <Href href={license.url()}>
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={license.url()}
+                >
                   <span>{license.name()}</span>
                 </Href>
               ) : (
-                <span>{license.name()}</span>
+                <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                  {license.name()}
+                </span>
               )}
             </li>
           )}
           {termsOfService && (
-            <li className="ai-info__links-item">
-              <Href href={termsOfService}>
+            <li className="inline-block">
+              <Href
+                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                href={termsOfService}
+              >
                 <span>{TERMS_OF_SERVICE_TEXT}</span>
               </Href>
             </li>
           )}
           {defaultContentType && (
-            <li className="ai-info__links-item">
-              <Href href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}>
+            <li className="inline-block">
+              <Href
+                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}
+              >
                 <span>{defaultContentType}</span>
               </Href>
             </li>
           )}
           {externalDocs && (
-            <li className="ai-info__links-item">
-              <Href href={externalDocs.url()}>
+            <li className="inline-block">
+              <Href
+                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                href={externalDocs.url()}
+              >
                 <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
               </Href>
             </li>
@@ -66,15 +80,21 @@ export const Info: React.FunctionComponent = () => {
           {contact && (
             <>
               {contact.url() && (
-                <li className="ai-info__links-item ai-info__links-item--reverse">
-                  <Href href={contact.url()}>
+                <li className="inline-block">
+                  <Href
+                    className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    href={contact.url()}
+                  >
                     <span>{contact.name() || URL_SUPPORT_TEXT}</span>
                   </Href>
                 </li>
               )}
               {contact.email() && (
-                <li className="ai-info__links-item ai-info__links-item--reverse">
-                  <Href href={`mailto:${contact.email()}`}>
+                <li className="inline-block">
+                  <Href
+                    className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    href={`mailto:${contact.email()}`}
+                  >
                     <span>{contact.email()}</span>
                   </Href>
                 </li>
@@ -85,13 +105,13 @@ export const Info: React.FunctionComponent = () => {
       )}
 
       {info.hasDescription() && (
-        <div className="ai-info__description">
+        <div className="mt-4">
           <Markdown>{info.description()}</Markdown>
         </div>
       )}
 
       {asyncapi.hasTags() && (
-        <div className="ai-info__tags">
+        <div className="mt-4">
           <Tags tags={asyncapi.tags()} />
         </div>
       )}

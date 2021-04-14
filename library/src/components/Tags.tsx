@@ -13,9 +13,12 @@ export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
   }
 
   return (
-    <ul className="ai-tags">
+    <ul className="leading-normal space-x-2 space-y-2">
       {tags.map(tag => (
-        <li className="ai-tags-item" key={tag.name()}>
+        <li
+          className="inline-block border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1"
+          key={tag.name()}
+        >
           <Tag tag={tag} />
         </li>
       ))}

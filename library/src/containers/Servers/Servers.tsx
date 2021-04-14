@@ -15,9 +15,9 @@ export const Servers: React.FunctionComponent = () => {
 
   const header = <h2>{SERVERS}</h2>;
   const serverList = (
-    <ul className="ai-servers__list">
+    <ul>
       {Object.entries(servers).map(([serverName, server]) => (
-        <li className="ai-servers__list-item" key={serverName}>
+        <li className="mb-4" key={serverName}>
           <Server serverName={serverName} server={server} key={serverName} />
         </li>
       ))}
@@ -25,10 +25,9 @@ export const Servers: React.FunctionComponent = () => {
   );
 
   return (
-    <section className="ai-servers" id="servers">
+    <section id="servers">
       <Toggle
         header={header}
-        className="ai-servers"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.SERVERS}

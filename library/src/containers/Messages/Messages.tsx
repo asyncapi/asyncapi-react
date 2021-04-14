@@ -15,13 +15,9 @@ export const Messages: React.FunctionComponent = () => {
 
   const header = <h2>{MESSAGES_TEXT}</h2>;
   const messagesList = (
-    <ul className="ai-messages__list">
+    <ul>
       {Array.from(messages).map(([messageName, message], idx) => (
-        <li
-          className="ai-messages__list-item"
-          key={messageName}
-          id={`message-${message.uid()}`}
-        >
+        <li className="mb-4" key={messageName} id={`message-${message.uid()}`}>
           <Message message={message} index={idx + 1} key={messageName} />
         </li>
       ))}
@@ -29,10 +25,9 @@ export const Messages: React.FunctionComponent = () => {
   );
 
   return (
-    <section className="ai-messages" id="messages">
+    <section id="messages">
       <Toggle
         header={header}
-        className="ai-messages"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.MESSAGES}

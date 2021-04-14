@@ -24,78 +24,78 @@ export const Operation: React.FunctionComponent<Props> = ({
   const operationSummary = operation.summary();
 
   return (
-    <div className="ai-operation" id={`operation-${type}-${channelName}`}>
-      <div>
+    <div id={`operation-${type}-${channelName}`}>
+      <div className="mb-4">
         <h3>
           <span
-            className={`ai-operation__type ${
+            className={`font-mono border uppercase p-1 rounded mr-2 ${
               type === PayloadType.PUBLISH
-                ? 'ai-operation__type--publish'
-                : 'ai-operation__type--subscribe'
+                ? 'border-blue-600 text-blue-500'
+                : 'border-green-600 text-green-600'
             }`}
             title={type}
           >
             {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
           </span>{' '}
-          <span className="ai-operation__channel-name">{channelName}</span>
+          <span className="font-mono text-base">{channelName}</span>
         </h3>
       </div>
 
       {channel.hasDescription() && (
-        <div className="ai-operation__channel-description">
+        <div className="mt-2">
           <Markdown>{channel.description()}</Markdown>
         </div>
       )}
       {operationSummary && (
-        <p className="ai-operation__summary">{operationSummary}</p>
+        <p className="text-gray-600 text-sm mt-2">{operationSummary}</p>
       )}
       {operation.hasDescription() && (
-        <div className="ai-operation__description">
+        <div className="mt-2">
           <Markdown>{operation.description()}</Markdown>
         </div>
       )}
 
       {parameters && (
-        <div className="ai-operation__channel-parameters">
+        <div className="mt-2">
           <Schema schemaName="Parameters" schema={parameters} expanded={true} />
         </div>
       )}
 
       {operation.hasMultipleMessages() ? (
-        <div className="ai-operation__multiple-messages">
+        <div className="mt-2">
           <p>
             Accepts <strong>one of</strong> the following messages:
           </p>
-          <ul className="ai-operation__multiple-messages__list">
+          <ul>
             {operation.messages().map((msg, idx) => (
-              <li className="ai-operation__message" key={idx}>
+              <li className="mt-2" key={idx}>
                 <Message message={msg} index={idx} showExamples={true} />
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="ai-operation__single-message">
+        <div className="mt-2">
           <p>Accepts the following message:</p>
-          <div className="ai-operation__message">
+          <div className="mt-2">
             <Message message={operation.message()} showExamples={true} />
           </div>
         </div>
       )}
 
       {operation.hasBindings() && (
-        <div className="ai-operation__bindings">
+        <div className="mt-2">
           <Bindings name="Operation Bindings" bindings={operation.bindings()} />
         </div>
       )}
       {channel.hasBindings() && (
-        <div className="ai-operation__channel-bindings">
+        <div className="mt-2">
           <Bindings name="Channel Bindings" bindings={channel.bindings()} />
         </div>
       )}
 
       {operation.hasTags() && (
-        <div className="ai-operation__tags">
+        <div className="mt-2">
           <Tags tags={operation.tags()} />
         </div>
       )}

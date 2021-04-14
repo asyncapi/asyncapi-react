@@ -22,25 +22,27 @@ export const Server: React.FunctionComponent<Props> = ({
   const serverRequirements = server.security();
 
   return (
-    <div className="ai-server">
+    <div className="shadow rounded bg-gray-200 p-4">
       <div>
-        <span className="ai-server__url">{server.url()}</span>
-        <span className="ai-server__protocol">
+        <span className="font-mono text-base">{server.url()}</span>
+        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
           {protocolVersion
             ? `${server.protocol()} ${protocolVersion}`
             : server.protocol()}
         </span>
-        <span className="ai-server__name">{serverName}</span>
+        <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
+          {serverName}
+        </span>
       </div>
 
       {server.hasDescription() && (
-        <div className="ai-server__description">
+        <div className="mt-2">
           <Markdown>{server.description()}</Markdown>
         </div>
       )}
 
       {urlVariables && (
-        <div className="ai-server__url-variables">
+        <div className="mt-2">
           <Schema
             schemaName="URL Variables"
             schema={urlVariables}
@@ -54,7 +56,7 @@ export const Server: React.FunctionComponent<Props> = ({
       )}
 
       {server.hasBindings() && (
-        <div className="ai-server__bindings">
+        <div className="mt-2">
           <Bindings bindings={server.bindings()} />
         </div>
       )}

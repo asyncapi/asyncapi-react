@@ -32,29 +32,37 @@ export const Message: React.FunctionComponent<Props> = ({
 
   return (
     <div>
-      <div className="ai-message">
+      <div className="shadow rounded bg-gray-200 p-4">
         <div>
           {index !== undefined && (
-            <span className="ai-message__index">#{index}</span>
+            <span className="text-gray-700 font-bold mr-2">#{index}</span>
           )}
-          {title && <span className="ai-message__title">{title}</span>}
-          <span className="ai-message__uid">{message.uid()}</span>
+          {title && <span className="text-gray-700 mr-2">{title}</span>}
+          <span className="border text-orange-600 rounded text-xs py-0 px-2">
+            {message.uid()}
+          </span>
         </div>
 
-        {summary && <p className="ai-message__summary">{summary}</p>}
+        {summary && <p className="text-gray-600 text-sm">{summary}</p>}
 
         {showInfoList && (
-          <ul className="ai-message__info">
+          <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
             {contentType && (
-              <li className="ai-info__links-item">
-                <Href href={`${CONTENT_TYPES_SITE}/${contentType}`}>
+              <li className="inline-block">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={`${CONTENT_TYPES_SITE}/${contentType}`}
+                >
                   <span>{contentType}</span>
                 </Href>
               </li>
             )}
             {externalDocs && (
-              <li className="ai-info__links-item">
-                <Href href={externalDocs.url()}>
+              <li className="inline-block">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={externalDocs.url()}
+                >
                   <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
                 </Href>
               </li>
@@ -63,16 +71,16 @@ export const Message: React.FunctionComponent<Props> = ({
         )}
 
         {correlationId && (
-          <div className="ai-message__correlation-id">
-            <div className="ai-message__correlation-id__title">
+          <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+            <div className="text-sm text-gray-700">
               Correlation ID
-              <span className="ai-message__correlation-id__location">
+              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
                 {correlationId.location()}
               </span>
             </div>
 
             {correlationId.hasDescription() && (
-              <div className="ai-message__correlation-id__description">
+              <div className="mt-2">
                 <Markdown>{correlationId.description()}</Markdown>
               </div>
             )}
@@ -80,30 +88,30 @@ export const Message: React.FunctionComponent<Props> = ({
         )}
 
         {message.hasDescription() && (
-          <div className="ai-message__description">
+          <div className="mt-2">
             <Markdown>{message.description()}</Markdown>
           </div>
         )}
 
         {payload && (
-          <div className="ai-message__payload">
+          <div className="mt-2">
             <Schema schemaName="Payload" schema={payload} />
           </div>
         )}
         {headers && (
-          <div className="ai-message__headers">
+          <div className="mt-2">
             <Schema schemaName="Headers" schema={headers} />
           </div>
         )}
 
         {message.hasBindings() && (
-          <div className="ai-message__bindings">
+          <div className="mt-2">
             <Bindings bindings={message.bindings()} />
           </div>
         )}
 
         {message.hasTags() && (
-          <div className="ai-message__tags">
+          <div className="mt-2">
             <Tags tags={message.tags()} />
           </div>
         )}

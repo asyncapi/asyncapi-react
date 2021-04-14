@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
-import { Extensions } from './Extensions';
-import { Chevron, Markdown } from './index';
+import { Href, Chevron, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
@@ -49,14 +48,10 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
-      <div className="ai-schema">
-        <div className="ai-schema__property">
-          <div className="ai-schema__property__left">
-            <span
-              className={`ai-schema__property__name ${
-                isProperty ? 'italic' : ''
-              }`}
-            >
+      <div>
+        <div className="flex py-2">
+          <div className="w-3/12 min-w-min">
+            <span className={`break-words ${isProperty ? 'italic' : ''}`}>
               {schemaName}
             </span>
             {isExpandable && !isCircular && (
@@ -65,128 +60,129 @@ export const Schema: React.FunctionComponent<Props> = ({
               </span>
             )}
             {isPatternProperty && (
-              <div className="ai-schema__property__pattern-property">
+              <div className="text-gray-500 text-xs italic">
                 (pattern property)
               </div>
             )}
-            {required && (
-              <div className="ai-schema__property__required">required</div>
-            )}
+            {required && <div className="text-red-600 text-xs">required</div>}
             {schema.deprecated() && (
-              <div className="ai-schema__property__deprecated">deprecated</div>
+              <div className="text-red-600 text-xs">deprecated</div>
             )}
             {schema.writeOnly() && (
-              <div className="ai-schema__property__write-only">write-only</div>
+              <div className="text-gray-500 text-xs">write-only</div>
             )}
             {schema.readOnly() && (
-              <div className="ai-schema__property__read-only">read-only</div>
+              <div className="text-gray-500 text-xs">read-only</div>
             )}
           </div>
           {rawValue ? (
-            <div className="ai-schema__property__right">
-              <div className="ai-schema__property__raw-value">
-                {schema.const()}
-              </div>
+            <div>
+              <div className="text-sm font-bold">{schema.const()}</div>
             </div>
           ) : (
-            <div className="ai-schema__property__right">
+            <div>
               <div>
                 {renderType && (
-                  <div className="ai-schema__property__type">
+                  <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
                     {isCircular
                       ? '[CIRCULAR]'
                       : SchemaHelpers.toSchemaType(schema)}
                   </div>
                 )}
-                <div className="ai-schema__property__constraints">
+                <div className="inline-block">
                   {schema.format() && (
-                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                       format: {schema.format()}
+                    </span>
+                  )}
+
+                  {/* related to string */}
+                  {schema.pattern() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      must match: {schema.pattern()}
+                    </span>
+                  )}
+                  {schema.contentMediaType() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      media type: {schema.contentMediaType()}
+                    </span>
+                  )}
+                  {schema.contentEncoding() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      encoding: {schema.contentEncoding()}
                     </span>
                   )}
 
                   {/* constraints */}
                   {!!constraints.length &&
                     constraints.map(c => (
-                      <span className="ai-schema__property__constraint" key={c}>
+                      <span
+                        className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
+                        key={c}
+                      >
                         {c}
                       </span>
                     ))}
 
-                  {/* related to string */}
-                  {schema.pattern() !== undefined && (
-                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
-                      must match: {schema.pattern()}
-                    </span>
-                  )}
-                  {schema.contentMediaType() !== undefined && (
-                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
-                      media type: {schema.contentMediaType()}
-                    </span>
-                  )}
-                  {schema.contentEncoding() !== undefined && (
-                    <span className="ai-schema__property__constraint ai-schema__property__constraint--reverse">
-                      encoding: {schema.contentEncoding()}
-                    </span>
-                  )}
                   {uid && !uid.startsWith('<anonymous-') && (
-                    <span className="ai-schema__property__uid">uid: {uid}</span>
+                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                      uid: {uid}
+                    </span>
                   )}
                 </div>
 
                 {schema.hasDescription() && (
-                  <div className="ai-schema__property__description">
+                  <div>
                     <Markdown>{schema.description()}</Markdown>
                   </div>
                 )}
 
                 {schema.default() !== undefined && (
-                  <div className="ai-schema__property__default">
+                  <div className="text-xs">
                     Default value: {schema.default()}
                   </div>
                 )}
                 {schema.const() !== undefined && (
-                  <div className="ai-schema__property__const">
-                    Const: {schema.const()}
-                  </div>
+                  <div className="text-xs">Const: {schema.const()}</div>
                 )}
                 {schema.enum() && (
-                  <ul className="ai-schema__property__enum">
+                  <ul className="text-xs">
                     Allowed values:{' '}
                     {schema.enum().map((e, idx) => (
-                      <li key={idx} className="ai-schema__property__enum-item">
+                      <li
+                        key={idx}
+                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                      >
                         <span>{e}</span>
                       </li>
                     ))}
                   </ul>
                 )}
                 {parameterLocation && (
-                  <div className="ai-schema__property__parameter-location">
+                  <div className="text-xs">
                     Parameter location:{' '}
-                    <span className="ai-operation__channel-paremeter-location">
+                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
                       {parameterLocation}
                     </span>
                   </div>
                 )}
                 {externalDocs && (
-                  <span className="ai-schema__property__documentation">
-                    <a
+                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0">
+                    <Href
                       href={externalDocs.url()}
-                      target="_blank"
-                      rel="nofollow noopener noreferrer"
                       title={externalDocs.description() || ''}
                     >
                       Documentation
-                    </a>
+                    </Href>
                   </span>
                 )}
                 {schema.examples() && (
-                  <ul className="ai-schema__property__examples">
+                  <ul className="text-xs">
                     Examples values:{' '}
                     {schema.examples().map((e, idx) => (
                       <li
                         key={idx}
-                        className="ai-schema__property__examples-item"
+                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
                       >
                         <span>{e}</span>
                       </li>
@@ -200,9 +196,9 @@ export const Schema: React.FunctionComponent<Props> = ({
 
         {isCircular || !isExpandable ? null : (
           <div
-            className={`ai-schema__children ${
-              reverse ? 'ai-schema__children--reverse' : ''
-            } ${expand ? 'ai-schema__children--open' : ''}`}
+            className={`rounded p-4 py-2 bg-gray-100 ${
+              reverse ? 'bg-gray-200' : ''
+            } ${expand ? 'block' : 'hidden'}`}
           >
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
@@ -343,14 +339,14 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   const additionalProperties = schema.additionalProperties();
   if (additionalProperties === true || additionalProperties === undefined) {
     return (
-      <p className="ai-schema__additional-info">
+      <p className="mt-2 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
     );
   }
   if (additionalProperties === false) {
     return (
-      <p className="ai-schema__additional-info">
+      <p className="mt-2 text-xs text-gray-700">
         Additional properties are <strong>NOT</strong> allowed.
       </p>
     );
@@ -413,14 +409,14 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
-      <p className="ai-schema__additional-info">
+      <p className="mt-2 text-xs text-gray-700">
         Additional items are allowed.
       </p>
     );
   }
   if (additionalItems === false) {
     return (
-      <p className="ai-schema__additional-info">
+      <p className="mt-2 text-xs text-gray-700">
         Additional items are <strong>NOT</strong> allowed.
       </p>
     );

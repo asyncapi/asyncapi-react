@@ -19,7 +19,7 @@ export const Operations: React.FunctionComponent = () => {
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
       operationsList.push(
-        <li className="ai-operations__list-item" key={channelName}>
+        <li className="mb-12" key={channelName}>
           <Operation
             type={PayloadType.PUBLISH}
             operation={channel.publish()}
@@ -31,7 +31,7 @@ export const Operations: React.FunctionComponent = () => {
     }
     if (channel.hasSubscribe()) {
       operationsList.push(
-        <li className="ai-operations__list-item" key={channelName}>
+        <li className="mb-12" key={channelName}>
           <Operation
             type={PayloadType.SUBSCRIBE}
             operation={channel.subscribe()}
@@ -44,16 +44,15 @@ export const Operations: React.FunctionComponent = () => {
   });
 
   return (
-    <section className="ai-operations" id="operations">
+    <section id="operations">
       <Toggle
         header={header}
-        className="ai-operations"
         expanded={true}
         // expanded={expand && expand.root}
         label={CONTAINER_LABELS.CHANNELS}
         toggleInState={true}
       >
-        <ul className="ai-operations__list">{operationsList}</ul>
+        <ul>{operationsList}</ul>
       </Toggle>
     </section>
   );

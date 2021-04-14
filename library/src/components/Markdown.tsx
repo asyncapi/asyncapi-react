@@ -15,7 +15,7 @@ export const Markdown: React.FunctionComponent = ({ children }) => {
   const html = markdownIt.render(children);
   return (
     <div
-      className="ai-markdown"
+      className="prose text-sm max-w-max"
       dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
     />
   );

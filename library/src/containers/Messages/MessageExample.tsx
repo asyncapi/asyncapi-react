@@ -13,8 +13,8 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   const headers = message.headers();
 
   return (
-    <div className="ai-message__examples">
-      <h4>Examples</h4>
+    <div className="p-8 mt-4 bg-gray-800 rounded">
+      <h4 className="text-white text-lg">Examples</h4>
       {payload && (
         <Example
           type="Payload"
@@ -47,26 +47,24 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   const [expand, setExpand] = useState(false);
 
   return (
-    <div className="ai-message__examples__item">
+    <div className="mt-4">
       <div>
-        <span className="ai-message__examples__type">{type}</span>
+        <span className="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none">
+          {type}
+        </span>
         <span onClick={() => setExpand(prev => !prev)}>
           <Chevron />
         </span>
       </div>
-      <div
-        className={`ai-message__examples__content ${
-          expand ? 'ai-message__examples__content--opened' : ''
-        }`}
-      >
+      <div className={expand ? 'block' : 'hidden'}>
         {examples && examples.length > 0 ? (
-          <ul className="ai-message__examples__list">
+          <ul>
             {examples.map((example, idx) => (
-              <li className="ai-message__examples__example" key={idx}>
-                <h5 className="text-xs font-bold text-gray-700">
+              <li className="mt-4" key={idx}>
+                <h5 className="text-xs font-bold text-gray-700 mb-1">
                   Example #{idx + 1}
                 </h5>
-                <pre className="hljs">
+                <pre className="border border-gray-900 rounded hljs">
                   <code>
                     {JSON.stringify(
                       MessageHelpers.sanitizeExample(example),
@@ -80,7 +78,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
           </ul>
         ) : (
           <div className="ai-message__examples__example">
-            <pre className="hljs">
+            <pre className="border border-gray-900 rounded hljs">
               <code>
                 {JSON.stringify(
                   MessageHelpers.generateExample(schema.json()),
@@ -89,7 +87,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
                 )}
               </code>
             </pre>
-            <h6 className="text-xs font-bold text-gray-700 italic">
+            <h6 className="text-xs font-bold text-gray-700 italic mt-2">
               This example has been generated automatically.
             </h6>
           </div>

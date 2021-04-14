@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Chevron: React.FunctionComponent = () => (
   <svg
-    className="ai__chevron"
+    className="inline align-baseline cursor-pointer -mb-1 w-5 transform -rotate-90"
     version="1.1"
     viewBox="0 0 24 24"
     x="0"
