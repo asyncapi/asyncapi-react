@@ -77,7 +77,9 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
   }
   if (securitySchema.openIdConnectUrl()) {
     schemas.push(
-      <Href href={securitySchema.openIdConnectUrl()}>Connect URL</Href>,
+      <Href href={securitySchema.openIdConnectUrl()} className="underline">
+        Connect URL
+      </Href>,
     );
   }
 
@@ -109,7 +111,9 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
               <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
                 Auth URL:
               </span>
-              <Href href={authorizationUrl}>{authorizationUrl}</Href>
+              <Href href={authorizationUrl} className="underline">
+                {authorizationUrl}
+              </Href>
             </div>
           )}
           {tokenUrl && (
@@ -117,7 +121,9 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
               <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
                 Token URL:
               </span>
-              <Href href={tokenUrl}>{tokenUrl}</Href>
+              <Href href={tokenUrl} className="underline">
+                {tokenUrl}
+              </Href>
             </div>
           )}
           {refreshUrl && (
@@ -125,7 +131,9 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
               <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
                 Refresh URL:
               </span>
-              <Href href={refreshUrl}>{refreshUrl}</Href>
+              <Href href={refreshUrl} className="underline">
+                {refreshUrl}
+              </Href>
             </div>
           )}
           {scopes && (

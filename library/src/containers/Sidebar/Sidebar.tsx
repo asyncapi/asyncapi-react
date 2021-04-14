@@ -26,44 +26,38 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   }
 
   return (
-    <div className="sidebar-panel w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
-      <div className="sidebar-panel__content">
+    <div className="w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
+      <div>
         {logo ? (
           <img
             src={logo}
             alt={`${info.title()} logo, ${info.version()} version`}
           />
         ) : (
-          <h1 className="text-2xl font-thin">
+          <h1 className="text-2xl font-light">
             {info.title()} {info.version()}
           </h1>
         )}
       </div>
 
-      <ul className="text-sm mt-10 mt-2">
+      <ul className="text-sm mt-10">
         <li className="mb-3">
-          <a
-            className="js-menu-item text-gray-700 no-underline"
-            href="#introduction"
-          >
+          <a className="text-gray-700 no-underline" href="#introduction">
             Introduction
           </a>
         </li>
         {asyncapi.hasServers() && (
           <li className="mb-3">
-            <a
-              className="js-menu-item text-gray-700 no-underline"
-              href="#servers"
-            >
+            <a className="text-gray-700 no-underline" href="#servers">
               Servers
             </a>
           </li>
         )}
         {asyncapi.hasChannels() && (
           <>
-            <li className="mb-3">
+            <li className="mb-3 mt-9">
               <a
-                className="js-menu-item text-gray-700 no-underline"
+                className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
                 href="#operations"
               >
                 Operations
@@ -71,9 +65,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
               <Operations />
             </li>
             {allMessages.size > 0 && (
-              <li className="mb-3">
+              <li className="mb-3 mt-9">
                 <a
-                  className="js-menu-item text-gray-700 no-underline"
+                  className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
                   href="#messages"
                 >
                   Messages
@@ -82,13 +76,10 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                   {Array.from(allMessages.keys()).map(messageName => (
                     <li key={messageName}>
                       <a
-                        className="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+                        className="flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
                         href={`#message-${messageName}`}
                       >
-                        <div
-                          className="string-chunk"
-                          style={{ display: 'inline-block' }}
-                        >
+                        <div className="break-all inline-block">
                           {messageName}
                         </div>
                       </a>
@@ -274,10 +265,12 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
   return (
     <div>
       <div onClick={() => setOpen(!open)}>
-        <span>{tagName}</span>
+        <span className="text-sm inline-block mt-1 font-extralight">
+          {tagName}
+        </span>
         <Chevron />
       </div>
-      {open && <ul className="text-sm mt-2">{children}</ul>}
+      {open && <ul className="text-sm mt-2 font-light">{children}</ul>}
     </div>
   );
 };
@@ -291,16 +284,16 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 }) => (
   <li key={channelName}>
     <a
-      className="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
       href={`#operation-publish-${channelName}`}
     >
       <span
-        className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
+        className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
         title="Publish"
       >
         Pub
       </span>
-      <span className="string-chunk">{channelName}</span>
+      <span className="break-all inline-block">{channelName}</span>
     </a>
   </li>
 );
@@ -310,16 +303,16 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 }) => (
   <li key={channelName}>
     <a
-      className="js-menu-item flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
       href={`#operation-subscribe-${channelName}`}
     >
       <span
-        className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
+        className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
         title="Subscribe"
       >
         SUB
       </span>
-      <span className="string-chunk">{channelName}</span>
+      <span className="break-all inline-block">{channelName}</span>
     </a>
   </li>
 );

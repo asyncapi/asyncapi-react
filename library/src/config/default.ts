@@ -25,6 +25,6 @@ export const defaultConfig: ConfigInterface = {
   },
   showErrors: true,
   sidebar: {
-    showOperations: 'byDefault',
+    showOperations: 'bySpecTags',
   },
 };
