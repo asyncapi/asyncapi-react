@@ -2,7 +2,12 @@ import React from 'react';
 import { Message as MessageType } from '@asyncapi/parser';
 
 import { MessageExample } from './MessageExample';
-import { Markdown, Schema, Bindings, Tags } from '../../components';
+import { Href, Markdown, Schema, Bindings, Tags } from '../../components';
+
+import {
+  CONTENT_TYPES_SITE,
+  EXTERAL_DOCUMENTATION_TEXT,
+} from '../../constants';
 
 interface Props {
   message: MessageType;
@@ -17,53 +22,102 @@ export const Message: React.FunctionComponent<Props> = ({
 }) => {
   const title = message.title();
   const summary = message.summary();
-
   const payload = message.payload();
   const headers = message.headers();
-
   const correlationId = message.correlationId();
+
+  const contentType = message.contentType();
+  const externalDocs = message.externalDocs();
+  const showInfoList = contentType || externalDocs;
 
   return (
     <div>
-      <div className="bg-gray-200 rounded p-4 mt-2">
-        <div className="text-sm text-gray-700 mb-2">
+      <div className="shadow rounded bg-gray-200 p-4">
+        <div>
           {index !== undefined && (
             <span className="text-gray-700 font-bold mr-2">#{index}</span>
           )}
-          {title && <span>{title}</span>}
-          <span className="border text-orange-600 rounded text-s py-0 px-2">
+          {title && <span className="text-gray-700 mr-2">{title}</span>}
+          <span className="border text-orange-600 rounded text-xs py-0 px-2">
             {message.uid()}
           </span>
         </div>
 
         {summary && <p className="text-gray-600 text-sm">{summary}</p>}
 
+        {showInfoList && (
+          <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+            {contentType && (
+              <li className="inline-block">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={`${CONTENT_TYPES_SITE}/${contentType}`}
+                >
+                  <span>{contentType}</span>
+                </Href>
+              </li>
+            )}
+            {externalDocs && (
+              <li className="inline-block">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={externalDocs.url()}
+                >
+                  <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+                </Href>
+              </li>
+            )}
+          </ul>
+        )}
+
         {correlationId && (
-          <div className="border border-gray-400 bg-gray-200 rounded p-4 mt-2">
-            <div className="text-sm text-gray-700 mb-2">
+          <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+            <div className="text-sm text-gray-700">
               Correlation ID
-              <span className="border text-orange-600 rounded text-xs ml-3 py-0 px-2">
+              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
                 {correlationId.location()}
               </span>
             </div>
-            <Markdown>{correlationId.description()}</Markdown>
+
+            {correlationId.hasDescription() && (
+              <div className="mt-2">
+                <Markdown>{correlationId.description()}</Markdown>
+              </div>
+            )}
           </div>
         )}
 
-        <Markdown>{message.description()}</Markdown>
+        {message.hasDescription() && (
+          <div className="mt-2">
+            <Markdown>{message.description()}</Markdown>
+          </div>
+        )}
 
-        {payload && <Schema schemaName="Payload" schema={payload} />}
-        {headers && <Schema schemaName="Headers" schema={headers} />}
+        {payload && (
+          <div className="mt-2">
+            <Schema schemaName="Payload" schema={payload} />
+          </div>
+        )}
+        {headers && (
+          <div className="mt-2">
+            <Schema schemaName="Headers" schema={headers} />
+          </div>
+        )}
 
-        {message.hasBindings() && <Bindings bindings={message.bindings()} />}
+        {message.hasBindings() && (
+          <div className="mt-2">
+            <Bindings bindings={message.bindings()} />
+          </div>
+        )}
 
-        <Tags tags={message.tags()} />
+        {message.hasTags() && (
+          <div className="mt-2">
+            <Tags tags={message.tags()} />
+          </div>
+        )}
       </div>
-      {showExamples && (
-        <div>
-          <MessageExample message={message} />
-        </div>
-      )}
+
+      {showExamples && <MessageExample message={message} />}
     </div>
   );
 };

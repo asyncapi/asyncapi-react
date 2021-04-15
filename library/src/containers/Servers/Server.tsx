@@ -22,32 +22,44 @@ export const Server: React.FunctionComponent<Props> = ({
   const serverRequirements = server.security();
 
   return (
-    <div className="bg-gray-200 rounded p-4 mt-2">
-      <div className="pr-4 font-mono">
-        <span>{server.url()}</span>
-        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded ml-2">
+    <div className="shadow rounded bg-gray-200 p-4">
+      <div>
+        <span className="font-mono text-base">{server.url()}</span>
+        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
           {protocolVersion
             ? `${server.protocol()} ${protocolVersion}`
             : server.protocol()}
         </span>
-        <span>{serverName}</span>
+        <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
+          {serverName}
+        </span>
       </div>
 
-      <Markdown>{server.description()}</Markdown>
+      {server.hasDescription() && (
+        <div className="mt-2">
+          <Markdown>{server.description()}</Markdown>
+        </div>
+      )}
 
       {urlVariables && (
-        <Schema
-          schemaName="URL Variables"
-          schema={urlVariables}
-          expanded={true}
-        />
+        <div className="mt-2">
+          <Schema
+            schemaName="URL Variables"
+            schema={urlVariables}
+            expanded={true}
+          />
+        </div>
       )}
 
       {serverRequirements && (
         <ServerSecurity serverRequirements={serverRequirements} />
       )}
 
-      {server.hasBindings() && <Bindings bindings={server.bindings()} />}
+      {server.hasBindings() && (
+        <div className="mt-2">
+          <Bindings bindings={server.bindings()} />
+        </div>
+      )}
     </div>
   );
 };

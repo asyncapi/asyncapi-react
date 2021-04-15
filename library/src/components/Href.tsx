@@ -2,14 +2,22 @@ import React from 'react';
 
 interface Props {
   href: string;
+  title?: string;
+  className?: string;
 }
 
-export const Href: React.FunctionComponent<Props> = ({ href, children }) => (
+export const Href: React.FunctionComponent<Props> = ({
+  href,
+  title,
+  className,
+  children,
+}) => (
   <a
     href={href}
+    title={title}
+    className={className}
     target="_blank"
     rel="nofollow noopener noreferrer"
-    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 font-bold no-underline text-orange-500 text-xs uppercase rounded mr-2 px-3 py-1"
   >
     {children}
   </a>

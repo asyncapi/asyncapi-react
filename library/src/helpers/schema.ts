@@ -6,6 +6,7 @@ export class SchemaHelpers {
   static extRenderType = 'x-schema-private-render-type';
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
   static extRawValue = 'x-schema-private-raw-value';
+  static extParameterLocation = 'x-schema-private-parameter-location';
 
   static toSchemaType(schema: Schema | boolean): string {
     if (schema === true) {
@@ -147,6 +148,7 @@ export class SchemaHelpers {
           obj[paramaterName] = Object.assign({}, parameter.schema().json());
           obj[paramaterName].description =
             parameter.description() || obj[paramaterName].description;
+          obj[paramaterName][this.extParameterLocation] = parameter.location();
           return obj;
         },
         {},
@@ -287,7 +289,7 @@ export class SchemaHelpers {
     if (typeof value !== 'object') {
       return {
         type: 'string',
-        const: value,
+        const: typeof value.toString === 'function' ? value.toString() : value,
         [this.extRawValue]: true,
       };
     }

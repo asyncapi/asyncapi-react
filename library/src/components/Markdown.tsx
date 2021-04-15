@@ -13,5 +13,10 @@ export const Markdown: React.FunctionComponent = ({ children }) => {
   }
 
   const html = markdownIt.render(children);
-  return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />;
+  return (
+    <div
+      className="prose text-sm max-w-max"
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
+    />
+  );
 };

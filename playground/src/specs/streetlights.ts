@@ -12,9 +12,33 @@ info:
     * Turn a specific streetlight on/off 🌃
     * Dim a specific streetlight 😎
     * Receive real-time information about environmental lighting conditions 📈
+  termsOfService: http://asyncapi.org/terms/
+  contact:
+    name: API Support
+    url: http://www.asyncapi.org/support
+    email: support@asyncapi.org
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: root-tag1
+    externalDocs:
+      description: External docs description 1
+      url: https://www.asyncapi.com/
+  - name: root-tag2
+    description: Description 2
+    externalDocs:
+      url: "https://www.asyncapi.com/"
+  - name: root-tag3
+  - name: root-tag4
+    description: Description 4
+  - name: root-tag5
+    externalDocs:
+      url: "https://www.asyncapi.com/"
+externalDocs:
+  description: Find more info here
+  url: https://example.com
+defaultContentType: application/json
 
 servers:
   production:
@@ -35,8 +59,31 @@ servers:
         - streetlights:off
         - streetlights:dim
       - openIdConnectWellKnown: []
-
-defaultContentType: application/json
+  dummy-mqtt:
+    url: mqtt://localhost
+    protocol: mqtt
+    description: dummy MQTT broker
+    bindings:
+        mqtt:
+          clientId: guest
+          cleanSession: true
+  dummy-amqp:
+    url: amqp://localhost:{port}
+    protocol: amqp
+    description: dummy AMQP broker
+    protocolVersion: "0.9.1"
+    variables:
+      port:
+        enum:
+          - '15672'
+          - '5672'
+  dommy-kafka:
+    url: http://localhost:{port}
+    protocol: kafka
+    description: dummy Kafka broker
+    variables:
+      port:
+        default: '9092'
 
 channels:
   smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
@@ -92,6 +139,10 @@ components:
       title: Light measured
       summary: Inform about environmental lighting conditions for a particular streetlight.
       contentType: application/json
+      correlationId:
+        $ref: "#/components/correlationIds/sentAtCorrelator"
+      externalDocs:
+        url: "https://www.asyncapi.com/"
       traits:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
@@ -123,6 +174,8 @@ components:
       summary: Command a particular streetlight to dim the lights.
       correlationId:
         $ref: "#/components/correlationIds/sentAtCorrelator"
+      externalDocs:
+        url: "https://www.asyncapi.com/"
       tags:
         - name: oparation-tag1
           externalDocs:
@@ -149,14 +202,17 @@ components:
       properties:
         lumens:
           type: integer
-          minimum: 0
           description: Light intensity measured in lumens.
           writeOnly: true
+          oneOf: 
+            - minimum: 0
+              maximum: 5
+            - minimum: 10
+              maximum: 20
           externalDocs:
             url: "https://www.asyncapi.com/"
         sentAt:
           $ref: "#/components/schemas/sentAt"
-        lol: {}
         ifElseThen:
           type: integer
           minimum: 1
@@ -342,6 +398,7 @@ components:
       description: The ID of the streetlight.
       schema:
         type: string
+      location: "$message.payload#/user/id"
 
   correlationIds:
     sentAtCorrelator:

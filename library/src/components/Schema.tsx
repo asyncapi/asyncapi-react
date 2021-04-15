@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
-import { Extensions } from './Extensions';
-import { Chevron, Markdown, Href } from './index';
+import { Href, Chevron, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
@@ -15,6 +14,8 @@ interface Props {
   expanded?: boolean;
 }
 
+const SchemaContext = React.createContext({ reverse: false });
+
 export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
@@ -24,11 +25,18 @@ export const Schema: React.FunctionComponent<Props> = ({
   isProperty = false,
   expanded = false,
 }) => {
+  const { reverse } = useContext(SchemaContext);
   const [expand, setExpand] = useState(expanded);
 
-  if (!schema) {
+  if (
+    !schema ||
+    schemaName?.startsWith('x-parser-') ||
+    schemaName?.startsWith('x-schema-private-')
+  ) {
     return null;
   }
+
+  const uid = schema.uid();
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema);
@@ -36,218 +44,236 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
+  const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
 
   return (
-    <div
-      className={`json-schema pl-8 pr-8 py-2 rounded ${
-        expand ? 'json-schema-open' : ''
-      }`}
-    >
-      <div className="flex property">
-        <div className="pr-4" style={{ minWidth: '25%' }}>
-          <span
-            className={`text-sm text-gray-500 ${isProperty ? 'italic' : ''}`}
-          >
-            {schemaName || schema.uid()}
-          </span>
-          {isExpandable && (
-            <span onClick={() => setExpand(prev => !prev)}>
-              <Chevron />
+    <SchemaContext.Provider value={{ reverse: !reverse }}>
+      <div>
+        <div className="flex py-2">
+          <div className="w-3/12 min-w-min">
+            <span className={`break-words ${isProperty ? 'italic' : ''}`}>
+              {schemaName}
             </span>
-          )}
-          {isPatternProperty && (
-            <div className="text-teal-500 text-xs">(pattern property)</div>
-          )}
-          {required && <div className="text-red-600 text-xs">required</div>}
-          {schema.deprecated() && (
-            <div className="text-red-600 text-xs">deprecated</div>
-          )}
-          {schema.writeOnly() && (
-            <div className="text-teal-500 text-xs">write-only</div>
-          )}
-          {schema.readOnly() && (
-            <div className="text-teal-500 text-xs">read-only</div>
-          )}
-        </div>
-        {isCircular ? (
-          <div>
-            <div className="capitalize text-sm text-teal-500 font-bold">
-              [CIRCULAR]
-            </div>
+            {isExpandable && !isCircular && (
+              <span onClick={() => setExpand(prev => !prev)}>
+                <Chevron />
+              </span>
+            )}
+            {isPatternProperty && (
+              <div className="text-gray-500 text-xs italic">
+                (pattern property)
+              </div>
+            )}
+            {required && <div className="text-red-600 text-xs">required</div>}
+            {schema.deprecated() && (
+              <div className="text-red-600 text-xs">deprecated</div>
+            )}
+            {schema.writeOnly() && (
+              <div className="text-gray-500 text-xs">write-only</div>
+            )}
+            {schema.readOnly() && (
+              <div className="text-gray-500 text-xs">read-only</div>
+            )}
           </div>
-        ) : rawValue ? (
-          <div>
-            <div className="text-sm text-teal-500 font-bold">
-              {schema.const()}
+          {rawValue ? (
+            <div>
+              <div className="text-sm font-bold">{schema.const()}</div>
             </div>
-          </div>
-        ) : (
-          <div>
-            <div className="capitalize text-sm text-teal-500 font-bold">
-              {renderType && SchemaHelpers.toSchemaType(schema)}
-              <div className="inline-block">
-                {schema.format() && (
-                  <span
-                    className="bg-yellow-600 font-bold no-underline text-black rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    format: {schema.format()}
-                  </span>
+          ) : (
+            <div>
+              <div>
+                {renderType && (
+                  <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
+                    {isCircular
+                      ? '[CIRCULAR]'
+                      : SchemaHelpers.toSchemaType(schema)}
+                  </div>
+                )}
+                <div className="inline-block">
+                  {schema.format() && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      format: {schema.format()}
+                    </span>
+                  )}
+
+                  {/* related to string */}
+                  {schema.pattern() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      must match: {schema.pattern()}
+                    </span>
+                  )}
+                  {schema.contentMediaType() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      media type: {schema.contentMediaType()}
+                    </span>
+                  )}
+                  {schema.contentEncoding() !== undefined && (
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      encoding: {schema.contentEncoding()}
+                    </span>
+                  )}
+
+                  {/* constraints */}
+                  {!!constraints.length &&
+                    constraints.map(c => (
+                      <span
+                        className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
+                        key={c}
+                      >
+                        {c}
+                      </span>
+                    ))}
+
+                  {uid && !uid.startsWith('<anonymous-') && (
+                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                      uid: {uid}
+                    </span>
+                  )}
+                </div>
+
+                {schema.hasDescription() && (
+                  <div>
+                    <Markdown>{schema.description()}</Markdown>
+                  </div>
                 )}
 
-                {/* constraints */}
-                {!!constraints.length && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    {constraints.join(', ')}
+                {schema.default() !== undefined && (
+                  <div className="text-xs">
+                    Default value: {schema.default()}
+                  </div>
+                )}
+                {schema.const() !== undefined && (
+                  <div className="text-xs">Const: {schema.const()}</div>
+                )}
+                {schema.enum() && (
+                  <ul className="text-xs">
+                    Allowed values:{' '}
+                    {schema.enum().map((e, idx) => (
+                      <li
+                        key={idx}
+                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                      >
+                        <span>{e}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {parameterLocation && (
+                  <div className="text-xs">
+                    Parameter location:{' '}
+                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                      {parameterLocation}
+                    </span>
+                  </div>
+                )}
+                {externalDocs && (
+                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0">
+                    <Href
+                      href={externalDocs.url()}
+                      title={externalDocs.description() || ''}
+                    >
+                      Documentation
+                    </Href>
                   </span>
                 )}
-
-                {/* related to string */}
-                {schema.pattern() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    must match: {schema.pattern()}
-                  </span>
-                )}
-                {schema.contentMediaType() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    media type: {schema.contentMediaType()}
-                  </span>
-                )}
-                {schema.contentEncoding() !== undefined && (
-                  <span
-                    className="bg-purple-600 font-bold no-underline text-white rounded lowercase ml-2"
-                    style={{ height: '20px', fontSize: '11px', padding: '3px' }}
-                  >
-                    encoding: {schema.contentEncoding()}
-                  </span>
+                {schema.examples() && (
+                  <ul className="text-xs">
+                    Examples values:{' '}
+                    {schema.examples().map((e, idx) => (
+                      <li
+                        key={idx}
+                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                      >
+                        <span>{e}</span>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </div>
-
-              <Markdown>{schema.description()}</Markdown>
-
-              {schema.default() !== undefined && (
-                <div className="text-xs">Default value: {schema.default()}</div>
-              )}
-              {schema.const() !== undefined && (
-                <div className="text-xs">Const: {schema.const()}</div>
-              )}
-              {schema.enum() && (
-                <div className="text-xs">
-                  Allowed values:{' '}
-                  {schema.enum().map((e, idx) => (
-                    <span
-                      key={idx}
-                      className="border text-orange-600 rounded ml-1 py-0 px-2"
-                    >
-                      {e}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {schema.examples() && (
-                <div className="text-xs">
-                  Examples values:{' '}
-                  {schema.examples().map((e, idx) => (
-                    <span
-                      key={idx}
-                      className="border text-orange-600 rounded ml-1 py-0 px-2"
-                    >
-                      {e}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {externalDocs && (
-                <Href href={externalDocs.url()}>
-                  {externalDocs.hasDescription() ? (
-                    <Markdown>{externalDocs.description()}</Markdown>
-                  ) : (
-                    'Documentation'
-                  )}
-                </Href>
-              )}
             </div>
+          )}
+        </div>
+
+        {isCircular || !isExpandable ? null : (
+          <div
+            className={`rounded p-4 py-2 bg-gray-100 ${
+              reverse ? 'bg-gray-200' : ''
+            } ${expand ? 'block' : 'hidden'}`}
+          >
+            <SchemaProperties schema={schema} />
+            <SchemaItems schema={schema} />
+
+            {schema.oneOf() &&
+              schema
+                .oneOf()
+                .map((s, idx) => (
+                  <Schema
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Adheres to' : 'Or to'}
+                  />
+                ))}
+            {schema.anyOf() &&
+              schema
+                .anyOf()
+                .map((s, idx) => (
+                  <Schema
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Can adhere to' : 'Or to'}
+                  />
+                ))}
+            {schema.allOf() &&
+              schema
+                .allOf()
+                .map((s, idx) => (
+                  <Schema
+                    key={idx}
+                    schema={s}
+                    schemaName={idx === 0 ? 'Consists of' : 'And with'}
+                  />
+                ))}
+            {schema.not() && (
+              <Schema schema={schema.not()} schemaName="Cannot adhere to" />
+            )}
+
+            {schema.propertyNames() && (
+              <Schema
+                schema={schema.propertyNames()}
+                schemaName="Property names must adhere to"
+              />
+            )}
+            {schema.contains() && (
+              <Schema
+                schema={schema.contains()}
+                schemaName="Array must contain at least one of"
+              />
+            )}
+
+            {schema.if() && (
+              <Schema schema={schema.if()} schemaName="If schema adheres to" />
+            )}
+            {schema.then() && (
+              <Schema
+                schema={schema.then()}
+                schemaName="Then it must adhere to"
+              />
+            )}
+            {schema.else() && (
+              <Schema
+                schema={schema.else()}
+                schemaName="Otherwise it must adhere to"
+              />
+            )}
+
+            <Extensions item={schema} />
+
+            <AdditionalProperties schema={schema} />
+            <AdditionalItems schema={schema} />
           </div>
         )}
       </div>
-
-      {isCircular || !isExpandable
-        ? null
-        : expand && (
-            <div className="json-schema">
-              <SchemaProperties schema={schema} />
-              <SchemaItems schema={schema} />
-
-              {schema.oneOf() &&
-                schema
-                  .oneOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.anyOf() &&
-                schema
-                  .anyOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.allOf() &&
-                schema
-                  .allOf()
-                  .map((s, idx) => (
-                    <Schema key={idx} schema={s} schemaName={`${idx}`} />
-                  ))}
-              {schema.not() && (
-                <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
-              )}
-
-              {schema.propertyNames() && (
-                <Schema
-                  schema={schema.propertyNames()}
-                  schemaName="Property names must adhere to:"
-                />
-              )}
-              {schema.contains() && (
-                <Schema
-                  schema={schema.contains()}
-                  schemaName="Array must contain at least one of:"
-                />
-              )}
-
-              {schema.if() && (
-                <Schema
-                  schema={schema.if()}
-                  schemaName="If schema adheres to:"
-                />
-              )}
-              {schema.then() && (
-                <Schema
-                  schema={schema.then()}
-                  schemaName="Then it must adhere to:"
-                />
-              )}
-              {schema.else() && (
-                <Schema
-                  schema={schema.else()}
-                  schemaName="Otherwise it must adhere to:"
-                />
-              )}
-
-              <AdditionalProperties schema={schema} />
-              <AdditionalItems schema={schema} />
-
-              <Extensions item={schema} />
-            </div>
-          )}
-    </div>
+    </SchemaContext.Provider>
   );
 };
 
@@ -313,14 +339,14 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   const additionalProperties = schema.additionalProperties();
   if (additionalProperties === true || additionalProperties === undefined) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="mt-2 text-xs text-gray-700">
         Additional properties are allowed.
       </p>
     );
   }
   if (additionalProperties === false) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="mt-2 text-xs text-gray-700">
         Additional properties are <strong>NOT</strong> allowed.
       </p>
     );
@@ -383,14 +409,14 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="mt-2 text-xs text-gray-700">
         Additional items are allowed.
       </p>
     );
   }
   if (additionalItems === false) {
     return (
-      <p className="pl-6 pb-2 mb-2 mt-4 text-xs text-gray-700">
+      <p className="mt-2 text-xs text-gray-700">
         Additional items are <strong>NOT</strong> allowed.
       </p>
     );
