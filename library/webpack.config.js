@@ -1,16 +1,19 @@
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
 module.exports = {
-  entry: './src/index.ts',
-  mode: 'development',
+  entry: {
+    'asyncapi-ui': './src/index.ts',
+    'asyncapi-ui.wp': './src/without-parser.ts',
+  },
+  mode: 'production',
 
   output: {
-    path: path.resolve(__dirname, 'lib'),
-    filename: 'index.js',
-    library: {
-      name: 'AsyncApiUI',
-      type: 'umd',
-    },
+    path: path.resolve(__dirname, 'bundles/umd'),
+    filename: '[name].js',
+    library: 'AsyncApiUI',
+    libraryTarget: 'umd',
     libraryExport: 'default',
     umdNamedDefine: true,
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
@@ -23,6 +26,7 @@ module.exports = {
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
+          configFile: 'tsconfig.esm.json',
           transpileOnly: true,
         },
       },
@@ -30,10 +34,17 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    fallback: {
-      path: require.resolve('path-browserify'),
-      http: require.resolve('stream-http'),
-      https: require.resolve('https-browserify'),
+  },
+  externals: {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react',
     },
   },
+
+  plugins: [
+    // new BundleAnalyzerPlugin(),
+  ],
 };

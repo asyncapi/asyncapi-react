@@ -6,6 +6,7 @@
 
 # production
 /**/lib
+/**/bundles
 /**/build
 /**/dist
 

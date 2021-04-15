@@ -3,13 +3,9 @@ import { AsyncAPIDocument } from '@asyncapi/parser';
 // @ts-ignore
 import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
 
-import {
-  isFetchingSchemaInterface,
-  ErrorObject,
-  PropsSchema,
-} from '../../types';
+import { ErrorObject, PropsSchema } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { Parser, bemClasses, stateHelpers } from '../../helpers';
+import { bemClasses, stateHelpers } from '../../helpers';
 import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
@@ -58,7 +54,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   async componentDidMount() {
     if (!this.state.asyncapi) {
-      this.updateState(this.props.schema, this.props.config);
+      this.updateState(this.props.schema);
     }
   }
 
@@ -67,7 +63,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const newSchema = this.props.schema;
 
     if (oldSchema !== newSchema) {
-      this.updateState(newSchema, this.props.config);
+      this.updateState(newSchema);
     }
   }
 
@@ -136,7 +132,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private updateState(schema: PropsSchema, config?: Partial<ConfigInterface>) {
+  private updateState(schema: PropsSchema) {
     if (
       schema &&
       schema.constructor &&
@@ -152,24 +148,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     ) {
       this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
     }
-    this.parseSchema(schema, config && config.parserOptions);
-  }
-
-  private async parseSchema(schema: PropsSchema, parserOptions?: any) {
-    if (isFetchingSchemaInterface(schema)) {
-      const parsedFromUrl = await Parser.parseFromUrl(schema, parserOptions);
-      this.setState({
-        asyncapi: parsedFromUrl.asyncapi,
-        error: parsedFromUrl.error,
-      });
-      return;
-    }
-
-    const parsed = await Parser.parse(schema, parserOptions);
-    this.setState({
-      asyncapi: parsed.asyncapi,
-      error: parsed.error,
-    });
   }
 }
 
