@@ -9,6 +9,7 @@
 /**/bundles
 /**/build
 /**/dist
+/library/styles
 
 # misc
 .DS_Store
