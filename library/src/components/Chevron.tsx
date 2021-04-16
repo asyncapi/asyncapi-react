@@ -2,19 +2,21 @@ import React, { SVGAttributes } from 'react';
 
 export const Chevron: React.FunctionComponent<SVGAttributes<
   SVGElement
->> = props => (
-  <span>
-    <svg
-      version="1.1"
-      viewBox="0 0 24 24"
-      x="0"
-      xmlns="http://www.w3.org/2000/svg"
-      y="0"
-      {...props}
-      className={`chevron inline align-baseline cursor-pointer -mb-1 w-5 transform transition-transform duration-150 ease-linear -rotate-${props.rotate ||
-        '90'} ${props.className || ''}`}
-    >
-      <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 " />
-    </svg>
-  </span>
-);
+>> = props => {
+  return (
+    <span className="chevron">
+      <svg
+        version="1.1"
+        viewBox="0 0 24 24"
+        x="0"
+        xmlns="http://www.w3.org/2000/svg"
+        y="0"
+        {...props}
+        className={`inline-block align-baseline cursor-pointer -mb-1 w-5 transform transition-transform duration-150 ease-linear ${props.className ||
+          ''}`}
+      >
+        <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 " />
+      </svg>
+    </span>
+  );
+};

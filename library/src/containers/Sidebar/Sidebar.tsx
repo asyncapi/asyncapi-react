@@ -288,7 +288,7 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
         </span>
         <Chevron
           onClick={() => setExpand(prev => !prev)}
-          rotate={expand ? '180' : ''}
+          className={expand ? '-rotate-180' : '-rotate-90'}
         />
       </div>
       {expand && <ul className="text-sm mt-2 font-light">{children}</ul>}

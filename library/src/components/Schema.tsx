@@ -59,7 +59,7 @@ export const Schema: React.FunctionComponent<Props> = ({
             {isExpandable && !isCircular && (
               <Chevron
                 onClick={() => setExpand(prev => !prev)}
-                rotate={expand ? '180' : ''}
+                className={expand ? '-rotate-180' : '-rotate-90'}
               />
             )}
             {isPatternProperty && (

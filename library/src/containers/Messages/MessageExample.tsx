@@ -56,7 +56,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
         </span>
         <Chevron
           onClick={() => setExpand(prev => !prev)}
-          rotate={expand ? '180' : ''}
+          className={expand ? '-rotate-180' : '-rotate-90'}
         />
       </div>
       <div className={expand ? 'block' : 'hidden'}>

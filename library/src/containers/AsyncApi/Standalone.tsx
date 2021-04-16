@@ -6,7 +6,6 @@ import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
 import { ErrorObject, PropsSchema } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 import { bemClasses, stateHelpers } from '../../helpers';
-import { CSS_PREFIX } from '../../constants';
 import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
@@ -42,6 +41,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
       this.state = { asyncapi: schema };
+      return;
     }
     if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
       this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
@@ -143,7 +143,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return;
     }
     if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
-      this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
+      this.setState({ asyncapi: new AsyncAPIDocumentClass(schema) });
     }
   }
 }

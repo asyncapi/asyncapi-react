@@ -38,14 +38,10 @@ class AsyncApiComponent extends PureComponent<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { config } = this.props;
+    const { schema, config } = this.props;
     const { asyncapi } = this.state;
 
-    if (!asyncapi) {
-      return null;
-    }
-
-    return <AsyncApiUIStandalone schema={asyncapi} config={config} />;
+    return <AsyncApiUIStandalone schema={asyncapi || schema} config={config} />;
   }
 
   private updateState(schema: PropsSchema, config?: Partial<ConfigInterface>) {
