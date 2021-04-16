@@ -1,5 +1,7 @@
 import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
+// @ts-ignore
 import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
+// @ts-ignore
 import avroSchemaParser from '@asyncapi/avro-schema-parser';
 
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';

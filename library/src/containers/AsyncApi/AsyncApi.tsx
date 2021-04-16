@@ -1,22 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
+
+import AsyncApiUIStandalone from './Standalone';
 
 import {
   isFetchingSchemaInterface,
   ErrorObject,
   PropsSchema,
 } from '../../types';
-import { ConfigInterface, defaultConfig } from '../../config';
-import { Parser, bemClasses, stateHelpers } from '../../helpers';
-import { CSS_PREFIX } from '../../constants';
-import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
-
-import { ErrorComponent } from '../Error/Error';
-import { Sidebar } from '../Sidebar/Sidebar';
-import { Info } from '../Info/Info';
-import { Servers } from '../Servers/Servers';
-import { Operations } from '../Operations/Operations';
-import { Messages } from '../Messages/Messages';
+import { ConfigInterface } from '../../config';
+import { Parser } from '../../helpers';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -28,7 +21,7 @@ interface AsyncAPIState {
   error?: ErrorObject;
 }
 
-class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+class AsyncApiComponent extends PureComponent<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
@@ -39,88 +32,23 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   async componentDidMount() {
-    this.updateState(this.props.schema, this.props.config);
-  }
-
-  async componentDidUpdate(prevProps: AsyncApiProps) {
-    const oldSchema = prevProps.schema;
-    const newSchema = this.props.schema;
-
-    if (oldSchema !== newSchema) {
-      this.updateState(newSchema, this.props.config);
+    if (this.props.schema) {
+      this.updateState(this.props.schema, this.props.config);
     }
   }
 
   render() {
     const { config } = this.props;
-    const { asyncapi, error } = this.state;
-    const concatenatedConfig: ConfigInterface = {
-      ...defaultConfig,
-      ...config,
-      show: {
-        ...defaultConfig.show,
-        ...(!!config && config.show),
-      },
-      expand: {
-        ...defaultConfig.expand,
-        ...(!!config && config.expand),
-      },
-    };
+    const { asyncapi } = this.state;
 
-    if (asyncapi === undefined) {
-      if (!error) {
-        return null;
-      }
-      return concatenatedConfig.showErrors && <ErrorComponent error={error} />;
-    }
-
-    if (!concatenatedConfig.show) {
+    if (!asyncapi) {
       return null;
     }
 
-    bemClasses.setSchemaID(concatenatedConfig.schemaID);
-    const numberOfElement = stateHelpers.calculateNumberOfElements({
-      spec: asyncapi.json(),
-      showConfig: concatenatedConfig.show,
-    });
-    const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
-      {
-        spec: asyncapi.json(),
-        showConfig: concatenatedConfig.show,
-        expandConfig: concatenatedConfig.expand || {},
-      },
-    );
-
-    return (
-      <useSpec.Provider spec={asyncapi}>
-        <useExpandedContext.Provider
-          numberOfElements={numberOfElement}
-          numberOfExpandedElement={initialExpandedElements}
-        >
-          <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
-            <main className={CSS_PREFIX} id={bemClasses.getSchemaID()}>
-              {concatenatedConfig.showErrors && !!error && (
-                <ErrorComponent error={error} />
-              )}
-              {concatenatedConfig.show.sidebar && (
-                <Sidebar config={concatenatedConfig.sidebar} />
-              )}
-              {concatenatedConfig.show.info && <Info />}
-              {concatenatedConfig.show.servers && <Servers />}
-              {concatenatedConfig.show.operations && <Operations />}
-              {concatenatedConfig.show.messages && <Messages />}
-            </main>
-          </useChangeHashContext.Provider>
-        </useExpandedContext.Provider>
-      </useSpec.Provider>
-    );
+    return <AsyncApiUIStandalone schema={asyncapi} config={config} />;
   }
 
   private updateState(schema: PropsSchema, config?: Partial<ConfigInterface>) {
-    if (typeof schema === 'function' && schema.name === 'AsyncAPIDocument') {
-      this.setState({ asyncapi: schema });
-      return;
-    }
     this.parseSchema(schema, config && config.parserOptions);
   }
 

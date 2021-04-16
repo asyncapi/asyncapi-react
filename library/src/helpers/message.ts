@@ -1,4 +1,5 @@
 import { Message } from '@asyncapi/parser';
+// @ts-ignore
 import { sample } from 'openapi-sampler';
 
 export class MessageHelpers {
@@ -12,12 +13,12 @@ export class MessageHelpers {
 
   static sanitizeExample(schema: any): any {
     if (typeof schema === 'object' && schema && !Array.isArray(schema)) {
-      return Object.entries(schema).reduce((obj, [propertyNAme, property]) => {
+      return Object.entries(schema).reduce((obj, [propertyName, property]) => {
         if (
-          !propertyNAme.startsWith('x-parser-') &&
-          !propertyNAme.startsWith('x-schema-private-')
+          !propertyName.startsWith('x-parser-') &&
+          !propertyName.startsWith('x-schema-private-')
         ) {
-          obj[propertyNAme] = this.sanitizeExample(property);
+          obj[propertyName] = this.sanitizeExample(property);
         }
         return obj;
       }, {});

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "ESNext",
     "target": "es5",
     "lib": ["es5", "es6", "dom", "es2017", "es2019"],
     "sourceMap": true,

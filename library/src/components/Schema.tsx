@@ -139,11 +139,19 @@ export const Schema: React.FunctionComponent<Props> = ({
 
                 {schema.default() !== undefined && (
                   <div className="text-xs">
-                    Default value: {schema.default()}
+                    Default value:
+                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                      {SchemaHelpers.prettifyValue(schema.default())}
+                    </span>
                   </div>
                 )}
                 {schema.const() !== undefined && (
-                  <div className="text-xs">Const: {schema.const()}</div>
+                  <div className="text-xs">
+                    Const:
+                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                      {SchemaHelpers.prettifyValue(schema.const())}
+                    </span>
+                  </div>
                 )}
                 {schema.enum() && (
                   <ul className="text-xs">
@@ -153,7 +161,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
                       >
-                        <span>{e}</span>
+                        <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
                     ))}
                   </ul>
@@ -184,7 +192,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
                       >
-                        <span>{e}</span>
+                        <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
                     ))}
                   </ul>
