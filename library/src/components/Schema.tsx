@@ -141,7 +141,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <div className="text-xs">
                     Default value:
                     <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
-                      {JSON.stringify(schema.default())}
+                      {SchemaHelpers.prettifyValue(schema.default())}
                     </span>
                   </div>
                 )}
@@ -149,7 +149,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <div className="text-xs">
                     Const:
                     <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
-                      {JSON.stringify(schema.const())}
+                      {SchemaHelpers.prettifyValue(schema.const())}
                     </span>
                   </div>
                 )}
@@ -161,7 +161,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
                       >
-                        <span>{JSON.stringify(e)}</span>
+                        <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
                     ))}
                   </ul>
@@ -192,7 +192,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
                       >
-                        <span>{JSON.stringify(e)}</span>
+                        <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
                     ))}
                   </ul>

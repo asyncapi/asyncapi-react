@@ -30,6 +30,20 @@ export class SchemaHelpers {
     return type;
   }
 
+  static prettifyValue(value: any) {
+    const typeOf = typeof value;
+    if (typeOf === 'string') {
+      return `"${value}"`;
+    }
+    if (typeOf === 'number' || typeOf === 'bigint' || typeOf === 'boolean') {
+      return value;
+    }
+    if (Array.isArray(value)) {
+      return `[${value.toString()}]`;
+    }
+    return JSON.stringify(value);
+  }
+
   static humanizeConstraints(schema: Schema): string[] {
     const constraints: string[] = [];
 
