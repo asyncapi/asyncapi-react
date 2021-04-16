@@ -35,19 +35,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   constructor(props: AsyncApiProps) {
     super(props);
 
-    const { schema } = props;
-    if (
-      schema &&
-      schema.constructor &&
-      schema.constructor.name === 'AsyncAPIDocument'
-    ) {
+    const schema = props.schema;
+    if (!schema) {
+      return;
+    }
+
+    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
       this.state = { asyncapi: schema };
     }
-    if (
-      schema &&
-      typeof schema === 'object' &&
-      schema['x-parser-parsed'] === true
-    ) {
+    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
       this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
     }
   }
@@ -133,19 +129,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   private updateState(schema: PropsSchema) {
-    if (
-      schema &&
-      schema.constructor &&
-      schema.constructor.name === 'AsyncAPIDocument'
-    ) {
+    if (!schema) {
+      return;
+    }
+
+    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
       this.setState({ asyncapi: schema });
       return;
     }
-    if (
-      schema &&
-      typeof schema === 'object' &&
-      schema['x-parser-parsed'] === true
-    ) {
+    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
       this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
     }
   }

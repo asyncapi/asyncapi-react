@@ -4,8 +4,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 
 module.exports = {
   entry: {
-    'asyncapi-ui': './src/index.ts',
-    'asyncapi-ui.wp': './src/without-parser.ts',
+    'asyncapi-ui.min': './src/index.ts',
+    'asyncapi-ui.without-parser.min': './src/standalone.ts',
   },
   mode: 'production',
 
