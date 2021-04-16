@@ -27,70 +27,72 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
 
   return (
     <div className="w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
-      <div>
-        {logo ? (
-          <img
-            src={logo}
-            alt={`${info.title()} logo, ${info.version()} version`}
-          />
-        ) : (
-          <h1 className="text-2xl font-light">
-            {info.title()} {info.version()}
-          </h1>
-        )}
-      </div>
+      <div className="fixed">
+        <div>
+          {logo ? (
+            <img
+              src={logo}
+              alt={`${info.title()} logo, ${info.version()} version`}
+            />
+          ) : (
+            <h1 className="text-2xl font-light">
+              {info.title()} {info.version()}
+            </h1>
+          )}
+        </div>
 
-      <ul className="text-sm mt-10">
-        <li className="mb-3">
-          <a className="text-gray-700 no-underline" href="#introduction">
-            Introduction
-          </a>
-        </li>
-        {asyncapi.hasServers() && (
+        <ul className="text-sm mt-10 relative w-56">
           <li className="mb-3">
-            <a className="text-gray-700 no-underline" href="#servers">
-              Servers
+            <a className="text-gray-700 no-underline" href="#introduction">
+              Introduction
             </a>
           </li>
-        )}
-        {asyncapi.hasChannels() && (
-          <>
-            <li className="mb-3 mt-9">
-              <a
-                className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                href="#operations"
-              >
-                Operations
+          {asyncapi.hasServers() && (
+            <li className="mb-3">
+              <a className="text-gray-700 no-underline" href="#servers">
+                Servers
               </a>
-              <Operations />
             </li>
-            {allMessages.size > 0 && (
+          )}
+          {asyncapi.hasChannels() && (
+            <>
               <li className="mb-3 mt-9">
                 <a
                   className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                  href="#messages"
+                  href="#operations"
                 >
-                  Messages
+                  Operations
                 </a>
-                <ul className="text-sm mt-2">
-                  {Array.from(allMessages.keys()).map(messageName => (
-                    <li key={messageName}>
-                      <a
-                        className="flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
-                        href={`#message-${messageName}`}
-                      >
-                        <div className="break-all inline-block">
-                          {messageName}
-                        </div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <Operations />
               </li>
-            )}
-          </>
-        )}
-      </ul>
+              {allMessages.size > 0 && (
+                <li className="mb-3 mt-9">
+                  <a
+                    className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                    href="#messages"
+                  >
+                    Messages
+                  </a>
+                  <ul className="text-sm mt-2">
+                    {Array.from(allMessages.keys()).map(messageName => (
+                      <li key={messageName}>
+                        <a
+                          className="flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+                          href={`#message-${messageName}`}
+                        >
+                          <div className="break-all inline-block">
+                            {messageName}
+                          </div>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )}
+            </>
+          )}
+        </ul>
+      </div>
     </div>
   );
 };
@@ -124,13 +126,17 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         channel.hasPublish() &&
         SidebarHelpers.containTags(channel.publish(), tag)
       ) {
-        operationsList.push(<OperationsPubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsPubItem channelName={channelName} key={channelName} />,
+        );
       }
       if (
         channel.hasSubscribe() &&
         SidebarHelpers.containTags(channel.subscribe(), tag)
       ) {
-        operationsList.push(<OperationsSubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsSubItem channelName={channelName} key={channelName} />,
+        );
       }
     });
     return operationsList;
@@ -143,14 +149,18 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
       (!channel.publish().hasTags() ||
         !SidebarHelpers.containTags(channel.publish(), tags))
     ) {
-      untaggedOperations.push(<OperationsPubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsPubItem channelName={channelName} key={channelName} />,
+      );
     }
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
         !SidebarHelpers.containTags(channel.subscribe(), tags))
     ) {
-      untaggedOperations.push(<OperationsSubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsSubItem channelName={channelName} key={channelName} />,
+      );
     }
   });
 
@@ -194,13 +204,17 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         channel.hasPublish() &&
         SidebarHelpers.containTags(channel.publish(), tag)
       ) {
-        operationsList.push(<OperationsPubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsPubItem channelName={channelName} key={channelName} />,
+        );
       }
       if (
         channel.hasSubscribe() &&
         SidebarHelpers.containTags(channel.subscribe(), tag)
       ) {
-        operationsList.push(<OperationsSubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsSubItem channelName={channelName} key={channelName} />,
+        );
       }
     });
     return operationsList;
@@ -213,14 +227,18 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
       (!channel.publish().hasTags() ||
         !SidebarHelpers.containTags(channel.publish(), operationsTags))
     ) {
-      untaggedOperations.push(<OperationsPubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsPubItem channelName={channelName} key={channelName} />,
+      );
     }
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
         !SidebarHelpers.containTags(channel.subscribe(), operationsTags))
     ) {
-      untaggedOperations.push(<OperationsSubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsSubItem channelName={channelName} key={channelName} />,
+      );
     }
   });
 
@@ -260,17 +278,20 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
   tagName,
   children,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [expand, setExpand] = useState(false);
 
   return (
     <div>
-      <div onClick={() => setOpen(!open)}>
+      <div>
         <span className="text-sm inline-block mt-1 font-extralight">
           {tagName}
         </span>
-        <Chevron />
+        <Chevron
+          onClick={() => setExpand(prev => !prev)}
+          rotate={expand ? '180' : ''}
+        />
       </div>
-      {open && <ul className="text-sm mt-2 font-light">{children}</ul>}
+      {expand && <ul className="text-sm mt-2 font-light">{children}</ul>}
     </div>
   );
 };

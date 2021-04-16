@@ -24,7 +24,7 @@ export const Info: React.FunctionComponent = () => {
     license || termsOfService || defaultContentType || contact || externalDocs;
 
   return (
-    <div className="text-left p-4" id="introduction">
+    <div className="text-left" id="introduction">
       <div className="text-3xl">
         {info.title()}&nbsp;{info.version()}
       </div>

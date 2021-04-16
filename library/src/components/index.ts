@@ -1,4 +1,3 @@
-export * from './Badge';
 export * from './Bindings';
 export * from './Chevron';
 export * from './Code';

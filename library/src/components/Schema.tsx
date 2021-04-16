@@ -51,13 +51,16 @@ export const Schema: React.FunctionComponent<Props> = ({
       <div>
         <div className="flex py-2">
           <div className="w-3/12 min-w-min">
-            <span className={`break-words ${isProperty ? 'italic' : ''}`}>
+            <span
+              className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
+            >
               {schemaName}
             </span>
             {isExpandable && !isCircular && (
-              <span onClick={() => setExpand(prev => !prev)}>
-                <Chevron />
-              </span>
+              <Chevron
+                onClick={() => setExpand(prev => !prev)}
+                rotate={expand ? '180' : ''}
+              />
             )}
             {isPatternProperty && (
               <div className="text-gray-500 text-xs italic">

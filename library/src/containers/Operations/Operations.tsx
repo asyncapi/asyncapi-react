@@ -44,7 +44,7 @@ export const Operations: React.FunctionComponent = () => {
   });
 
   return (
-    <section id="operations">
+    <section id="operations" className="mt-16">
       <Toggle
         header={header}
         expanded={true}

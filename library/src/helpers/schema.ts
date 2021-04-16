@@ -300,10 +300,13 @@ export class SchemaHelpers {
   }
 
   private static jsonFieldToSchema(value: any): any {
-    if (typeof value !== 'object') {
+    const isArray = Array.isArray(value);
+    if (typeof value !== 'object' || isArray) {
+      const str =
+        typeof value.toString === 'function' ? value.toString() : value;
       return {
         type: 'string',
-        const: typeof value.toString === 'function' ? value.toString() : value,
+        const: isArray ? `[${str}]` : str,
         [this.extRawValue]: true,
       };
     }

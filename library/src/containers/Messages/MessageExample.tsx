@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
+// @ts-ignore
+import formatHighlight from 'json-format-highlight';
 
-import { Chevron } from '../../components';
+import { Chevron, PreCode } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
 
 interface Props {
@@ -49,44 +51,39 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   return (
     <div className="mt-4">
       <div>
-        <span className="px-2 mr-2 text-gray-200 text-sm border rounded focus:outline-none">
+        <span className="px-2 py-1 mr-2 text-gray-200 text-sm border rounded focus:outline-none">
           {type}
         </span>
-        <span onClick={() => setExpand(prev => !prev)}>
-          <Chevron />
-        </span>
+        <Chevron
+          onClick={() => setExpand(prev => !prev)}
+          rotate={expand ? '180' : ''}
+        />
       </div>
       <div className={expand ? 'block' : 'hidden'}>
         {examples && examples.length > 0 ? (
           <ul>
             {examples.map((example, idx) => (
               <li className="mt-4" key={idx}>
-                <h5 className="text-xs font-bold text-gray-700 mb-1">
+                <h5 className="text-xs font-bold text-gray-700">
                   Example #{idx + 1}
                 </h5>
-                <pre className="border border-gray-900 rounded hljs">
-                  <code>
-                    {JSON.stringify(
+                <div className="mt-1">
+                  <PreCode
+                    code={formatHighlight(
                       MessageHelpers.sanitizeExample(example),
-                      null,
-                      2,
                     )}
-                  </code>
-                </pre>
+                  />
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          <div className="ai-message__examples__example">
-            <pre className="border border-gray-900 rounded hljs">
-              <code>
-                {JSON.stringify(
-                  MessageHelpers.generateExample(schema.json()),
-                  null,
-                  2,
-                )}
-              </code>
-            </pre>
+          <div className="mt-4">
+            <PreCode
+              code={formatHighlight(
+                MessageHelpers.generateExample(schema.json()),
+              )}
+            />
             <h6 className="text-xs font-bold text-gray-700 italic mt-2">
               This example has been generated automatically.
             </h6>

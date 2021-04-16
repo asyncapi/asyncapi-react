@@ -110,17 +110,22 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
           numberOfExpandedElement={initialExpandedElements}
         >
           <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
-            <main className={CSS_PREFIX} id={bemClasses.getSchemaID()}>
-              {concatenatedConfig.showErrors && !!error && (
-                <ErrorComponent error={error} />
-              )}
+            <main
+              className="relative md:flex bg-white"
+              id={bemClasses.getSchemaID()}
+            >
               {concatenatedConfig.show.sidebar && (
                 <Sidebar config={concatenatedConfig.sidebar} />
               )}
-              {concatenatedConfig.show.info && <Info />}
-              {concatenatedConfig.show.servers && <Servers />}
-              {concatenatedConfig.show.operations && <Operations />}
-              {concatenatedConfig.show.messages && <Messages />}
+              <div className="content-panel flex-1 leading-loose p-8">
+                {concatenatedConfig.showErrors && !!error && (
+                  <ErrorComponent error={error} />
+                )}
+                {concatenatedConfig.show.info && <Info />}
+                {concatenatedConfig.show.servers && <Servers />}
+                {concatenatedConfig.show.operations && <Operations />}
+                {concatenatedConfig.show.messages && <Messages />}
+              </div>
             </main>
           </useChangeHashContext.Provider>
         </useExpandedContext.Provider>

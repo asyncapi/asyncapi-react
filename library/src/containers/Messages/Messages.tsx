@@ -25,7 +25,7 @@ export const Messages: React.FunctionComponent = () => {
   );
 
   return (
-    <section id="messages">
+    <section id="messages" className="mt-16">
       <Toggle
         header={header}
         expanded={true}
