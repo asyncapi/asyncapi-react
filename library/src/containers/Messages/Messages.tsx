@@ -13,7 +13,7 @@ export const Messages: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2>{MESSAGES_TEXT}</h2>;
+  const header = <h2 className="lg:w-5/7 px-8">{MESSAGES_TEXT}</h2>;
   const messagesList = (
     <ul>
       {Array.from(messages).map(([messageName, message], idx) => (

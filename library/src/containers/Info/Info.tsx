@@ -24,15 +24,15 @@ export const Info: React.FunctionComponent = () => {
     license || termsOfService || defaultContentType || contact || externalDocs;
 
   return (
-    <div className="text-left" id="introduction">
+    <div className="2xl:w-7/12 px-8 text-left" id="introduction">
       <div className="text-3xl">
         {info.title()}&nbsp;{info.version()}
       </div>
 
       {showInfoList && (
-        <ul className="leading-normal mt-2 space-x-2 space-y-2">
+        <ul className="flex flex-wrap mt-2 leading-normal">
           {license && (
-            <li className="inline-block">
+            <li className="inline-block mt-2 mr-2">
               {license.url() ? (
                 <Href
                   className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
@@ -48,7 +48,7 @@ export const Info: React.FunctionComponent = () => {
             </li>
           )}
           {termsOfService && (
-            <li className="inline-block">
+            <li className="inline-block mt-2 mr-2">
               <Href
                 className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                 href={termsOfService}
@@ -58,7 +58,7 @@ export const Info: React.FunctionComponent = () => {
             </li>
           )}
           {defaultContentType && (
-            <li className="inline-block">
+            <li className="inline-block mt-2 mr-2">
               <Href
                 className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                 href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}
@@ -68,7 +68,7 @@ export const Info: React.FunctionComponent = () => {
             </li>
           )}
           {externalDocs && (
-            <li className="inline-block">
+            <li className="inline-block mt-2 mr-2">
               <Href
                 className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                 href={externalDocs.url()}
@@ -80,7 +80,7 @@ export const Info: React.FunctionComponent = () => {
           {contact && (
             <>
               {contact.url() && (
-                <li className="inline-block">
+                <li className="inline-block mt-2 mr-2">
                   <Href
                     className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                     href={contact.url()}
@@ -90,7 +90,7 @@ export const Info: React.FunctionComponent = () => {
                 </li>
               )}
               {contact.email() && (
-                <li className="inline-block">
+                <li className="inline-block mt-2 mr-2">
                   <Href
                     className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                     href={`mailto:${contact.email()}`}

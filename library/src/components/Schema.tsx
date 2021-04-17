@@ -265,15 +265,12 @@ export const Schema: React.FunctionComponent<Props> = ({
               <Schema schema={schema.if()} schemaName="If schema adheres to" />
             )}
             {schema.then() && (
-              <Schema
-                schema={schema.then()}
-                schemaName="Then it must adhere to"
-              />
+              <Schema schema={schema.then()} schemaName="Then must adhere to" />
             )}
             {schema.else() && (
               <Schema
                 schema={schema.else()}
-                schemaName="Otherwise it must adhere to"
+                schemaName="Otherwise must adhere to"
               />
             )}
 
@@ -363,10 +360,7 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
     );
   }
   return (
-    <Schema
-      schemaName="Additional properties must adhere to:"
-      schema={additionalProperties}
-    />
+    <Schema schemaName="Additional properties" schema={additionalProperties} />
   );
 };
 
@@ -389,12 +383,12 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     return (
       <>
         {items.map((item, idx) => (
-          <Schema schema={item} schemaName={`${idx + 1} item:`} key={idx} />
+          <Schema schema={item} schemaName={`${idx + 1} item`} key={idx} />
         ))}
       </>
     );
   }
-  return <Schema schema={items} schemaName="Items:" />;
+  return <Schema schema={items} schemaName="Items" />;
 };
 
 interface AdditionalItemsProps {
@@ -432,10 +426,5 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
       </p>
     );
   }
-  return (
-    <Schema
-      schemaName="Additional items must adhere to:"
-      schema={additionalItems}
-    />
-  );
+  return <Schema schemaName="Additional items" schema={additionalItems} />;
 };

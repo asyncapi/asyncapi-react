@@ -2,6 +2,7 @@ export * from './bemClasses';
 export * from './extractHashData';
 export * from './scrollIntoViewOfAnchor';
 export * from './inContainer';
+export * from './formatHighlight';
 export * from './stateHelpers';
 export * from './parser';
 export * from './removeSpecialChars';

@@ -117,14 +117,17 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
               {concatenatedConfig.show.sidebar && (
                 <Sidebar config={concatenatedConfig.sidebar} />
               )}
-              <div className="content-panel flex-1 leading-loose p-8">
-                {concatenatedConfig.showErrors && !!error && (
-                  <ErrorComponent error={error} />
-                )}
-                {concatenatedConfig.show.info && <Info />}
-                {concatenatedConfig.show.servers && <Servers />}
-                {concatenatedConfig.show.operations && <Operations />}
-                {concatenatedConfig.show.messages && <Messages />}
+              <div className="relative py-8 flex-1">
+                <div className="relative z-10">
+                  {concatenatedConfig.showErrors && !!error && (
+                    <ErrorComponent error={error} />
+                  )}
+                  {concatenatedConfig.show.info && <Info />}
+                  {concatenatedConfig.show.servers && <Servers />}
+                  {concatenatedConfig.show.operations && <Operations />}
+                  {concatenatedConfig.show.messages && <Messages />}
+                </div>
+                <div className="hidden 2xl:block 2xl:w-5/12 absolute top-0 right-0 h-full bg-gray-800"></div>
               </div>
             </main>
           </useChangeHashContext.Provider>

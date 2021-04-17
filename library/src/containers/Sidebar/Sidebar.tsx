@@ -11,6 +11,8 @@ interface Props {
 }
 
 export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
 
@@ -26,74 +28,86 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   }
 
   return (
-    <div className="w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
-      <div className="fixed">
-        <div>
-          {logo ? (
-            <img
-              src={logo}
-              alt={`${info.title()} logo, ${info.version()} version`}
-            />
-          ) : (
-            <h1 className="text-2xl font-light">
-              {info.title()} {info.version()}
-            </h1>
-          )}
-        </div>
+    <>
+      <div
+        className="lg:hidden rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow bg-teal-500"
+        onClick={() => setShowSidebar(prev => !prev)}
+      >
+        s
+      </div>
+      <div
+        className={`${
+          showSidebar ? 'block fixed w-full h-full' : 'hidden'
+        } lg:relative lg:block lg:w-64 lg:h-auto bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow`}
+      >
+        <div className="m-auto max-w-xl lg:fixed">
+          <div className="lg:w-56">
+            {logo ? (
+              <img
+                src={logo}
+                alt={`${info.title()} logo, ${info.version()} version`}
+              />
+            ) : (
+              <h1 className="text-2xl font-light">
+                {info.title()} {info.version()}
+              </h1>
+            )}
+          </div>
 
-        <ul className="text-sm mt-10 relative w-56">
-          <li className="mb-3">
-            <a className="text-gray-700 no-underline" href="#introduction">
-              Introduction
-            </a>
-          </li>
-          {asyncapi.hasServers() && (
+          <ul className="text-sm mt-10 relative lg:w-56">
             <li className="mb-3">
-              <a className="text-gray-700 no-underline" href="#servers">
-                Servers
+              <a className="text-gray-700 no-underline" href="#introduction">
+                Introduction
               </a>
             </li>
-          )}
-          {asyncapi.hasChannels() && (
-            <>
-              <li className="mb-3 mt-9">
-                <a
-                  className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                  href="#operations"
-                >
-                  Operations
+            {asyncapi.hasServers() && (
+              <li className="mb-3">
+                <a className="text-gray-700 no-underline" href="#servers">
+                  Servers
                 </a>
-                <Operations />
               </li>
-              {allMessages.size > 0 && (
+            )}
+            {asyncapi.hasChannels() && (
+              <>
                 <li className="mb-3 mt-9">
                   <a
                     className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                    href="#messages"
+                    href="#operations"
                   >
-                    Messages
+                    Operations
                   </a>
-                  <ul className="text-sm mt-2">
-                    {Array.from(allMessages.keys()).map(messageName => (
-                      <li key={messageName}>
-                        <a
-                          className="flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
-                          href={`#message-${messageName}`}
-                        >
-                          <div className="break-all inline-block">
-                            {messageName}
-                          </div>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                  <Operations />
                 </li>
-              )}
-            </>
-          )}
-        </ul>
+                {allMessages.size > 0 && (
+                  <li className="mb-3 mt-9">
+                    <a
+                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                      href="#messages"
+                    >
+                      Messages
+                    </a>
+                    <ul className="text-sm mt-2">
+                      {Array.from(allMessages.keys()).map(messageName => (
+                        <li key={messageName}>
+                          <a
+                            className="flex break-words no-underline text-gray-700 mt-4"
+                            href={`#message-${messageName}`}
+                          >
+                            <div className="break-all inline-block">
+                              {messageName}
+                            </div>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                )}
+              </>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -309,7 +323,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 }) => (
   <li key={channelName}>
     <a
-      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+      className="flex no-underline text-gray-700 mt-4"
       href={`#operation-publish-${channelName}`}
     >
       <span
@@ -328,7 +342,7 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 }) => (
   <li key={channelName}>
     <a
-      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
+      className="flex no-underline text-gray-700 mt-4"
       href={`#operation-subscribe-${channelName}`}
     >
       <span

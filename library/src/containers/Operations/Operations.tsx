@@ -14,7 +14,7 @@ export const Operations: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2>{CHANNELS_TEXT}</h2>;
+  const header = <h2 className="lg:w-5/7 px-8">{CHANNELS_TEXT}</h2>;
   const operationsList: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {

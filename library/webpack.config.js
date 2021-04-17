@@ -45,6 +45,9 @@ module.exports = {
   },
 
   plugins: [
+    /**
+     * Uncomment plugin when you wanna see dependency map of bundled package
+     */
     // new BundleAnalyzerPlugin(),
   ],
 };

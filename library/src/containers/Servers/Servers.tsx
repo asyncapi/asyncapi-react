@@ -25,7 +25,7 @@ export const Servers: React.FunctionComponent = () => {
   );
 
   return (
-    <section id="servers" className="mt-16">
+    <section id="servers" className="mt-16 2xl:w-7/12 px-8">
       <Toggle
         header={header}
         expanded={true}

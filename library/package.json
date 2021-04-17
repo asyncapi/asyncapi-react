@@ -62,14 +62,12 @@
     "@asyncapi/parser": "^1.4.5",
     "constate": "^1.2.0",
     "isomorphic-dompurify": "^0.13.0",
-    "json-format-highlight": "^1.0.4",
     "marked": "^2.0.3",
     "openapi-sampler": "^1.0.0-beta.18",
     "react-use": "^12.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.0",
-    "@types/dompurify": "^2.0.4",
     "@types/jest": "^24.0.18",
     "@types/marked": "^2.0.2",
     "@types/node": "^12.7.2",

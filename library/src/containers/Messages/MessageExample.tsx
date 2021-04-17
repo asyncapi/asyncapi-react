@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
-// @ts-ignore
-import formatHighlight from 'json-format-highlight';
 
 import { Chevron, PreCode } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
@@ -14,8 +12,9 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   const payload = message.payload();
   const headers = message.headers();
 
+  //p-8
   return (
-    <div className="p-8 mt-4 bg-gray-800 rounded">
+    <div className="bg-gray-800 rounded p-4 mt-4 2xl:p-0 2xl:mt-0">
       <h4 className="text-white text-lg">Examples</h4>
       {payload && (
         <Example
@@ -47,6 +46,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   examples = [],
 }) => {
   const [expand, setExpand] = useState(false);
+  const className = expand ? '-rotate-180' : '-rotate-90';
 
   return (
     <div className="mt-4">
@@ -56,7 +56,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
         </span>
         <Chevron
           onClick={() => setExpand(prev => !prev)}
-          className={expand ? '-rotate-180' : '-rotate-90'}
+          className={`fill-current text-gray-200 ${className}`}
         />
       </div>
       <div className={expand ? 'block' : 'hidden'}>
@@ -68,22 +68,14 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
                   Example #{idx + 1}
                 </h5>
                 <div className="mt-1">
-                  <PreCode
-                    code={formatHighlight(
-                      MessageHelpers.sanitizeExample(example),
-                    )}
-                  />
+                  <PreCode code={MessageHelpers.sanitizeExample(example)} />
                 </div>
               </li>
             ))}
           </ul>
         ) : (
           <div className="mt-4">
-            <PreCode
-              code={formatHighlight(
-                MessageHelpers.generateExample(schema.json()),
-              )}
-            />
+            <PreCode code={MessageHelpers.generateExample(schema.json())} />
             <h6 className="text-xs font-bold text-gray-700 italic mt-2">
               This example has been generated automatically.
             </h6>
