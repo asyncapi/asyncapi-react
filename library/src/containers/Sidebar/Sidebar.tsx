@@ -36,10 +36,19 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   return (
     <SidebarContext.Provider value={{ setShowSidebar }}>
       <div
-        className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow bg-teal-500"
+        className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
         onClick={() => setShowSidebar(prev => !prev)}
       >
-        s
+        <svg
+          viewBox="0 0 100 70"
+          width="40"
+          height="30"
+          className="fill-current text-gray-200"
+        >
+          <rect width="100" height="10"></rect>
+          <rect y="30" width="100" height="10"></rect>
+          <rect y="60" width="100" height="10"></rect>
+        </svg>
       </div>
       <div
         className={`${
