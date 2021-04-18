@@ -49,7 +49,7 @@
     "build:umd": "webpack --colors",
     "build:types": "tsc -p tsconfig.types.json",
     "build:styles": "postcss src/styles/default.css -o styles/default.css",
-    "build:styles:prod": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.min.css",
+    "build:styles:prod": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.min.css --verbose",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --detectOpenHandles --watch",
     "prepare": "npm run build:prod",

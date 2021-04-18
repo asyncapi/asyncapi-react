@@ -8,6 +8,7 @@ module.exports = {
     'asyncapi-ui.without-parser.min': './src/standalone.ts',
   },
   mode: 'production',
+  target: 'web',
 
   output: {
     path: path.resolve(__dirname, 'bundles/umd'),

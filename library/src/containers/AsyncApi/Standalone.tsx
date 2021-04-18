@@ -41,6 +41,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
       this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
     }
+    if (
+      typeof schema.version === 'function' &&
+      schema._json &&
+      schema._json.asyncapi
+    ) {
+      this.state = { asyncapi: schema };
+    }
   }
 
   async componentDidMount() {
@@ -89,6 +96,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   private updateState(schema: PropsSchema) {
+    console.log(schema);
     if (!schema) {
       return;
     }
@@ -99,6 +107,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
     if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
       this.setState({ asyncapi: new AsyncAPIDocumentClass(schema) });
+      return;
+    }
+    if (
+      typeof schema.version === 'function' &&
+      schema._json &&
+      schema._json.asyncapi
+    ) {
+      this.setState({ asyncapi: schema });
     }
   }
 }
