@@ -14,7 +14,7 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
 
   //p-8
   return (
-    <div className="bg-gray-800 rounded p-4 mt-4 2xl:p-0 2xl:mt-0">
+    <div className="bg-gray-800 rounded p-4 mt-4 examples">
       <h4 className="text-white text-lg">Examples</h4>
       {payload && (
         <Example

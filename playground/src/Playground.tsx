@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AsyncApi, { ConfigInterface } from '@asyncapi/react-component';
+import AsyncApiUI, { ConfigInterface } from '@asyncapi/react-component';
 
 import {
   Navigation,
@@ -89,7 +89,7 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi schema={schema} config={parsedConfig} />
+            <AsyncApiUI schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </ContentWrapper>
       </PlaygroundWrapper>

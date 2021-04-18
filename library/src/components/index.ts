@@ -1,7 +1,6 @@
 export * from './Bindings';
 export * from './Chevron';
 export * from './Code';
-export * from './CollapseButton';
 export * from './Extensions';
 export * from './Href';
 export * from './Markdown';

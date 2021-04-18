@@ -9,6 +9,8 @@ export const EXPAND_ALL_TEXT = 'Expand All';
 export const VALIDATION_ERRORS_TYPE =
   'https://github.com/asyncapi/parser-js/validation-errors';
 export const SERVERS = 'Servers';
+export const OPERATIONS = 'Operations';
+export const MESSAGES = 'Messages';
 
 export const ONE_OF_PAYLOADS_TEXT = 'One of those payloads:';
 export const ANY_OF_PAYLOADS_TEXT = 'Any of those payloads:';

@@ -1,5 +1,6 @@
 export const defaultConfig: string = `{
   "show": {
+    "sidebar": true,
     "info": true,
     "servers": true,
     "security": false,

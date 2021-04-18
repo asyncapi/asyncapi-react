@@ -1,11 +1,10 @@
 import React from 'react';
 
 import { Operation } from './Operation';
-import { Toggle } from '../../components';
 
 import { useSpec } from '../../store';
 import { PayloadType } from '../../types';
-import { CONTAINER_LABELS, CHANNELS_TEXT } from '../../constants';
+import { OPERATIONS } from '../../constants';
 
 export const Operations: React.FunctionComponent = () => {
   const channels = useSpec().channels();
@@ -14,7 +13,6 @@ export const Operations: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2 className="lg:w-5/7 px-8">{CHANNELS_TEXT}</h2>;
   const operationsList: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
@@ -45,15 +43,8 @@ export const Operations: React.FunctionComponent = () => {
 
   return (
     <section id="operations" className="mt-16">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.CHANNELS}
-        toggleInState={true}
-      >
-        <ul>{operationsList}</ul>
-      </Toggle>
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">{OPERATIONS}</h2>
+      <ul>{operationsList}</ul>
     </section>
   );
 };

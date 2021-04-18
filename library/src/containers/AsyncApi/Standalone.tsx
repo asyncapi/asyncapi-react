@@ -5,15 +5,10 @@ import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
 
 import { ErrorObject, PropsSchema } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { bemClasses, stateHelpers } from '../../helpers';
-import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
 import { ErrorComponent } from '../Error/Error';
-import { Sidebar } from '../Sidebar/Sidebar';
-import { Info } from '../Info/Info';
-import { Servers } from '../Servers/Servers';
-import { Operations } from '../Operations/Operations';
-import { Messages } from '../Messages/Messages';
+
+import AsyncApiContent from './Content';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -90,50 +85,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return null;
     }
 
-    bemClasses.setSchemaID(concatenatedConfig.schemaID);
-    const numberOfElement = stateHelpers.calculateNumberOfElements({
-      spec: asyncapi.json(),
-      showConfig: concatenatedConfig.show,
-    });
-    const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
-      {
-        spec: asyncapi.json(),
-        showConfig: concatenatedConfig.show,
-        expandConfig: concatenatedConfig.expand || {},
-      },
-    );
-
-    return (
-      <useSpec.Provider spec={asyncapi}>
-        <useExpandedContext.Provider
-          numberOfElements={numberOfElement}
-          numberOfExpandedElement={initialExpandedElements}
-        >
-          <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
-            <main
-              className="relative md:flex bg-white"
-              id={bemClasses.getSchemaID()}
-            >
-              {concatenatedConfig.show.sidebar && (
-                <Sidebar config={concatenatedConfig.sidebar} />
-              )}
-              <div className="relative py-8 flex-1">
-                <div className="relative z-10">
-                  {concatenatedConfig.showErrors && !!error && (
-                    <ErrorComponent error={error} />
-                  )}
-                  {concatenatedConfig.show.info && <Info />}
-                  {concatenatedConfig.show.servers && <Servers />}
-                  {concatenatedConfig.show.operations && <Operations />}
-                  {concatenatedConfig.show.messages && <Messages />}
-                </div>
-                <div className="hidden 2xl:block 2xl:w-5/12 absolute top-0 right-0 h-full bg-gray-800"></div>
-              </div>
-            </main>
-          </useChangeHashContext.Provider>
-        </useExpandedContext.Provider>
-      </useSpec.Provider>
-    );
+    return <AsyncApiContent asyncapi={asyncapi} config={concatenatedConfig} />;
   }
 
   private updateState(schema: PropsSchema) {

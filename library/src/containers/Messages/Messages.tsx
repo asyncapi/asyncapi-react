@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Message } from './Message';
-import { Toggle } from '../../components';
 
 import { useSpec } from '../../store';
-import { CONTAINER_LABELS, MESSAGES_TEXT } from '../../constants';
+import { MESSAGES } from '../../constants';
 
 export const Messages: React.FunctionComponent = () => {
   const messages = useSpec().allMessages();
@@ -13,28 +12,20 @@ export const Messages: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2 className="lg:w-5/7 px-8">{MESSAGES_TEXT}</h2>;
-  const messagesList = (
-    <ul>
-      {Array.from(messages).map(([messageName, message], idx) => (
-        <li className="mb-4" key={messageName} id={`message-${message.uid()}`}>
-          <Message message={message} index={idx + 1} key={messageName} />
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
     <section id="messages" className="mt-16">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.MESSAGES}
-        toggleInState={true}
-      >
-        {messagesList}
-      </Toggle>
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">{MESSAGES}</h2>
+      <ul>
+        {Array.from(messages).map(([messageName, message], idx) => (
+          <li
+            className="mb-4"
+            key={messageName}
+            id={`message-${message.uid()}`}
+          >
+            <Message message={message} index={idx + 1} key={messageName} />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

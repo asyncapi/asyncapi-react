@@ -25,7 +25,7 @@ export const Operation: React.FunctionComponent<Props> = ({
 
   return (
     <div id={`operation-${type}-${channelName}`}>
-      <div className="2xl:w-7/12 px-8">
+      <div className="panel-item--center px-8">
         <div className="mb-4">
           <h3>
             <span

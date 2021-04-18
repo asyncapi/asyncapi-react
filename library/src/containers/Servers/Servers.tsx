@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Server } from './Server';
-import { Toggle } from '../../components';
 
 import { useSpec } from '../../store';
-import { SERVERS, CONTAINER_LABELS } from '../../constants';
+import { SERVERS } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {
   const servers = useSpec().servers();
@@ -13,28 +12,16 @@ export const Servers: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2>{SERVERS}</h2>;
-  const serverList = (
-    <ul>
-      {Object.entries(servers).map(([serverName, server]) => (
-        <li className="mb-4" key={serverName}>
-          <Server serverName={serverName} server={server} key={serverName} />
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
-    <section id="servers" className="mt-16 2xl:w-7/12 px-8">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.SERVERS}
-        toggleInState={true}
-      >
-        {serverList}
-      </Toggle>
+    <section id="servers" className="mt-16">
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">{SERVERS}</h2>
+      <ul>
+        {Object.entries(servers).map(([serverName, server]) => (
+          <li className="mb-4" key={serverName}>
+            <Server serverName={serverName} server={server} key={serverName} />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

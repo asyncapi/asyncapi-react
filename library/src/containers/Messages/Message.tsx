@@ -38,8 +38,8 @@ export const Message: React.FunctionComponent<Props> = ({
   const showInfoList = contentType || externalDocs;
 
   return (
-    <div className="2xl:flex">
-      <div className="2xl:w-7/12 px-8">
+    <div className="panel-item">
+      <div className="panel-item--center px-8">
         <div className="shadow rounded bg-gray-200 p-4">
           <div>
             {index !== undefined && (
@@ -129,7 +129,7 @@ export const Message: React.FunctionComponent<Props> = ({
       </div>
 
       {showExamples && (
-        <div className="2xl:w-5/12 px-8">
+        <div className="panel-item--right px-8">
           <MessageExample message={message} />
         </div>
       )}

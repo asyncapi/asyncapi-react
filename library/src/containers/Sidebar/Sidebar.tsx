@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Tag } from '@asyncapi/parser';
 
 import { Chevron } from '../../components';
 import { SideBarConfig } from '../../config/config';
 import { useSpec } from '../../store';
 import { SidebarHelpers } from '../../helpers';
+
+const SidebarContext = React.createContext<{
+  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  setShowSidebar: (value: boolean | ((prevValue: boolean) => boolean)) => value,
+});
 
 interface Props {
   config?: SideBarConfig;
@@ -28,9 +34,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   }
 
   return (
-    <>
+    <SidebarContext.Provider value={{ setShowSidebar }}>
       <div
-        className="lg:hidden rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow bg-teal-500"
+        className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow bg-teal-500"
         onClick={() => setShowSidebar(prev => !prev)}
       >
         s
@@ -38,76 +44,89 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       <div
         className={`${
           showSidebar ? 'block fixed w-full h-full' : 'hidden'
-        } lg:relative lg:block lg:w-64 lg:h-auto bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow`}
+        } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow`}
       >
-        <div className="m-auto max-w-xl lg:fixed">
-          <div className="lg:w-56">
-            {logo ? (
-              <img
-                src={logo}
-                alt={`${info.title()} logo, ${info.version()} version`}
-              />
-            ) : (
-              <h1 className="text-2xl font-light">
-                {info.title()} {info.version()}
-              </h1>
-            )}
-          </div>
+        <div>
+          <div className="sidebar--content lg:fixed">
+            <div>
+              {logo ? (
+                <img
+                  src={logo}
+                  alt={`${info.title()} logo, ${info.version()} version`}
+                />
+              ) : (
+                <h1 className="text-2xl font-light">
+                  {info.title()} {info.version()}
+                </h1>
+              )}
+            </div>
 
-          <ul className="text-sm mt-10 relative lg:w-56">
-            <li className="mb-3">
-              <a className="text-gray-700 no-underline" href="#introduction">
-                Introduction
-              </a>
-            </li>
-            {asyncapi.hasServers() && (
+            <ul className="text-sm mt-10 relative">
               <li className="mb-3">
-                <a className="text-gray-700 no-underline" href="#servers">
-                  Servers
+                <a
+                  className="text-gray-700 no-underline"
+                  href="#introduction"
+                  onClick={() => setShowSidebar(false)}
+                >
+                  Introduction
                 </a>
               </li>
-            )}
-            {asyncapi.hasChannels() && (
-              <>
-                <li className="mb-3 mt-9">
+              {asyncapi.hasServers() && (
+                <li className="mb-3">
                   <a
-                    className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                    href="#operations"
+                    className="text-gray-700 no-underline"
+                    href="#servers"
+                    onClick={() => setShowSidebar(false)}
                   >
-                    Operations
+                    Servers
                   </a>
-                  <Operations />
                 </li>
-                {allMessages.size > 0 && (
+              )}
+              {asyncapi.hasChannels() && (
+                <>
                   <li className="mb-3 mt-9">
                     <a
                       className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                      href="#messages"
+                      href="#operations"
+                      onClick={() => setShowSidebar(false)}
                     >
-                      Messages
+                      Operations
                     </a>
-                    <ul className="text-sm mt-2">
-                      {Array.from(allMessages.keys()).map(messageName => (
-                        <li key={messageName}>
-                          <a
-                            className="flex break-words no-underline text-gray-700 mt-4"
-                            href={`#message-${messageName}`}
-                          >
-                            <div className="break-all inline-block">
-                              {messageName}
-                            </div>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                    <Operations />
                   </li>
-                )}
-              </>
-            )}
-          </ul>
+                  {allMessages.size > 0 && (
+                    <li className="mb-3 mt-9">
+                      <a
+                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                        href="#messages"
+                        onClick={() => setShowSidebar(false)}
+                      >
+                        Messages
+                      </a>
+                      <ul className="text-sm mt-2">
+                        {Array.from(allMessages.keys()).map(messageName => (
+                          <li key={messageName}>
+                            <a
+                              className="flex break-words no-underline text-gray-700 mt-4"
+                              href={`#message-${messageName}`}
+                              onClick={() => setShowSidebar(false)}
+                            >
+                              <div className="break-all inline-block">
+                                {messageName}
+                              </div>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  )}
+                </>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
-    </>
+    </SidebarContext.Provider>
   );
 };
 
@@ -320,38 +339,48 @@ interface OperationsPubItemProps {
 
 const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
-}) => (
-  <li key={channelName}>
-    <a
-      className="flex no-underline text-gray-700 mt-4"
-      href={`#operation-publish-${channelName}`}
-    >
-      <span
-        className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-        title="Publish"
+}) => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  return (
+    <li key={channelName}>
+      <a
+        className="flex no-underline text-gray-700 mt-4"
+        href={`#operation-publish-${channelName}`}
+        onClick={() => setShowSidebar(false)}
       >
-        Pub
-      </span>
-      <span className="break-all inline-block">{channelName}</span>
-    </a>
-  </li>
-);
+        <span
+          className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          title="Publish"
+        >
+          Pub
+        </span>
+        <span className="break-all inline-block">{channelName}</span>
+      </a>
+    </li>
+  );
+};
 
 const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
-}) => (
-  <li key={channelName}>
-    <a
-      className="flex no-underline text-gray-700 mt-4"
-      href={`#operation-subscribe-${channelName}`}
-    >
-      <span
-        className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-        title="Subscribe"
+}) => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  return (
+    <li key={channelName}>
+      <a
+        className="flex no-underline text-gray-700 mt-4"
+        href={`#operation-subscribe-${channelName}`}
+        onClick={() => setShowSidebar(false)}
       >
-        SUB
-      </span>
-      <span className="break-all inline-block">{channelName}</span>
-    </a>
-  </li>
-);
+        <span
+          className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          title="Subscribe"
+        >
+          SUB
+        </span>
+        <span className="break-all inline-block">{channelName}</span>
+      </a>
+    </li>
+  );
+};

@@ -50,7 +50,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
         <div className="flex py-2">
-          <div className="w-3/12 min-w-min">
+          <div className="w-3/12 min-w-min mr-2">
             <span
               className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
             >
