@@ -15,20 +15,22 @@ This repository has the following structure:
 ```
   ├── .github                     # Pull request and issue templates
   ├── docs                        # Directory with project-related documents
-  ├── library                     # Source code of the AsyncAPI React component
-  │    ├── src                    # Source code of the AsyncAPI React component
+  ├── library                     # Source code of the component
+  │    ├── src                    # Source code of the component
   │    │    ├── components        # Source code of shared components used in the "containers" directory
-  │    │    ├── config            # Configuration of the AsyncAPI React component
-  │    │    ├── containers        # Subcomponents for specific parts of the AsyncAPI React component
+  │    │    ├── config            # Configuration of the component
+  │    │    ├── containers        # Subcomponents for specific parts of the component
   │    │    ├── helpers           # Various helper functions
-  │    │    ├── store             # Global store of the AsyncAPI React component
-  │    │    └── styles            # Style-related files for the AsyncAPI React component
-  │    └── test                   # Tests for the AsyncAPI React component
-  └── playground                  # Source code of the Playground application for the AsyncAPI React component
-       ├── public                 # Fonts, images, and icons used in the Playground application
-       └── src                    # Source code of the Playground application
-            ├── common            # Various helper functions including mocks
-            └── components        # Components used in the Playground application
+  │    │    ├── store             # Global store of the component
+  │    │    └── styles            # Style-related files for the component
+  │    └── test                   # Tests for the component
+  ├── playground                  # Source code of the Playground application for the component
+  │    ├── public                 # Fonts, images, and icons used in the Playground application
+  │    └── src                    # Source code of the Playground application
+  │         ├── common            # Various helper functions including mocks
+  │         ├── components        # Components used in the Playground application
+  │         └── specs             # Various specifications of AsyncAPI used to test the component
+  └── web-component               # Source code of the web-component
 ```
 
 <!-- markdownlint-enable MD040 -->
@@ -79,13 +81,11 @@ See the rules for naming functions and components, and the architecture conventi
 - Each line should contain no more than one statement.
 - Always put the opening brace in the same line as the previous statement.
 - Avoid using the ternary operator (`statement ? true : false`). Use the guard (`&&`) instead.
-- Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `AsyncApiInterface`, `ConfigInterface`, and `ThemeInterface`.
+- Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `AsyncApiInterface` and `ConfigInterface`.
 - Do not use public statements before any properties and methods of classes.
-- Always capitalize the first letter in the name of the new React component.
-- Use one definition of the React component per one file.
+- Try to use only one definition of the React component per one file.
 - Use `export const` for all components.
 - Use `Props` and `State` names for props and state types for components. Always keep their definitions above the component definition.
-- Create new styled components in `styled.ts` files.
 - Create generic components that are used in multiple places in the `components` directory. It does not apply to the Playground application.
 
 The maintainers of the repository reserve the right to change these rules.

@@ -56,9 +56,9 @@ Check out this simple sandbox application that uses the React component:
 
 The list of props for the AsyncAPI React component includes:
 
-- **schema: string | AsyncApiInterface | FetchingSchemaInterface**
+- **schema: string | AsyncAPIDocument | object | FetchingSchemaInterface**
 
-  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncAPIDocument`](https://github.com/asyncapi/parser-js/blob/master/lib/models/asyncapi.js) type, parsed specification as JS object from [AsyncAPI Parser](https://github.com/asyncapi/parser-js) or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
 - **config?: Partial<ConfigInterface\>**
 
@@ -76,10 +76,8 @@ For a list and description of features offered by the AsyncAPI React component, 
 To use default styles import them as follows:
 
 ``` js
-import "@asyncapi/react-component/lib/styles/fiori.css";
+import "@asyncapi/react-component/styles/default.min.css";
 ```
-
-For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
 
 ## Playground
 
@@ -197,23 +195,9 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 
 ## Missing features
 
-See the list of features that are still missing in the component:
-
-- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#fixed-fields-19)
-- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#tagsObject)
-- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#externalDocumentationObject)
-- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#properties) 
-- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#correlationIdObject)
+To see features we don't support, please check [issues](https://github.com/asyncapi/asyncapi-react/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
 
 If you want to help us develop them, feel free to contribute.
-
-## Credits
-
-<p align="center">
- <a href="https://kyma-project.io/" target="_blank">
-  <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
- </a>
-</p>
 
 ## Contributors
 
