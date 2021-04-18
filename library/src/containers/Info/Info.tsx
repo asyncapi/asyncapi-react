@@ -26,7 +26,7 @@ export const Info: React.FunctionComponent = () => {
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8 text-left" id="introduction">
-        <div className="text-3xl">
+        <div className="text-4xl">
           {info.title()}&nbsp;{info.version()}
         </div>
 
