@@ -58,7 +58,7 @@ Check a simple example which shows passing the inline AsyncAPI specification wit
 ```tsx
 import * as React from "react";
 import { render } from "react-dom";
-import AsyncApiUI, { ConfigInterface } from "@asyncapi/react-component";
+import AsyncApiComponent, { ConfigInterface } from "@asyncapi/react-component";
 
 const schema = `
 asyncapi: '2.0.0'
@@ -89,7 +89,7 @@ const config: ConfigInterface = {
   },
 };
 
-const App = () => <AsyncApiUI schema={schema} config={config} />;
+const App = () => <AsyncApiComponent schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
 ```
