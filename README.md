@@ -21,17 +21,16 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-  * [Props](#props)
-  * [Features](#features)
-  * [Styles](#styles)
+- [Usage](#usage)
+  * [Another examples](#another-examples)
+- [Props](#props)
+- [Features](#features)
+- [Styles](#styles)
 - [Playground](#playground)
-- [Web Component](#web-component)
-  * [Installation](#installation-1)
-  * [Using in Angular](#using-in-angular)
+- [Modules](#modules)
 - [Development](#development)
 - [Contribution](#contribution)
 - [Missing features](#missing-features)
-- [Credits](#credits)
 - [Contributors](#contributors)
 
 <!-- tocstop -->
@@ -122,7 +121,7 @@ The list of props for the AsyncAPI React component includes:
 
 For a list and description of features offered by the AsyncAPI React component, see [this](./docs/features) directory.
 
-### Styles
+## Styles
 
 To use default styles import them as follows:
 
