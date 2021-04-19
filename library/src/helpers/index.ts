@@ -10,4 +10,4 @@ export * from './toKebabCase';
 export * from './server';
 export * from './schema';
 export * from './message';
-export * from './sidebar';
+export * from './specification';

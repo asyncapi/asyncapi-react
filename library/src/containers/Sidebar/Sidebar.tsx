@@ -4,7 +4,7 @@ import { Tag } from '@asyncapi/parser';
 import { Chevron } from '../../components';
 import { SideBarConfig } from '../../config/config';
 import { useSpec } from '../../store';
-import { SidebarHelpers } from '../../helpers';
+import { SpecificationHelpers } from '../../helpers';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -170,7 +170,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
     Object.entries(channels).forEach(([channelName, channel]) => {
       if (
         channel.hasPublish() &&
-        SidebarHelpers.containTags(channel.publish(), tag)
+        SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
         operationsList.push(
           <OperationsPubItem channelName={channelName} key={channelName} />,
@@ -178,7 +178,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
       }
       if (
         channel.hasSubscribe() &&
-        SidebarHelpers.containTags(channel.subscribe(), tag)
+        SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
         operationsList.push(
           <OperationsSubItem channelName={channelName} key={channelName} />,
@@ -193,7 +193,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
     if (
       channel.hasPublish() &&
       (!channel.publish().hasTags() ||
-        !SidebarHelpers.containTags(channel.publish(), tags))
+        !SpecificationHelpers.containTags(channel.publish(), tags))
     ) {
       untaggedOperations.push(
         <OperationsPubItem channelName={channelName} key={channelName} />,
@@ -202,7 +202,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
-        !SidebarHelpers.containTags(channel.subscribe(), tags))
+        !SpecificationHelpers.containTags(channel.subscribe(), tags))
     ) {
       untaggedOperations.push(
         <OperationsSubItem channelName={channelName} key={channelName} />,
@@ -241,14 +241,14 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
 export const OperationsByOperationsTags: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const channels = asyncapi.channels();
-  const operationsTags = SidebarHelpers.operationsTags(asyncapi);
+  const operationsTags = SpecificationHelpers.operationsTags(asyncapi);
 
   const taggedOperations = (tag: Tag) => {
     const operationsList: React.ReactNodeArray = [];
     Object.entries(channels).forEach(([channelName, channel]) => {
       if (
         channel.hasPublish() &&
-        SidebarHelpers.containTags(channel.publish(), tag)
+        SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
         operationsList.push(
           <OperationsPubItem channelName={channelName} key={channelName} />,
@@ -256,7 +256,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
       }
       if (
         channel.hasSubscribe() &&
-        SidebarHelpers.containTags(channel.subscribe(), tag)
+        SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
         operationsList.push(
           <OperationsSubItem channelName={channelName} key={channelName} />,
@@ -271,7 +271,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
     if (
       channel.hasPublish() &&
       (!channel.publish().hasTags() ||
-        !SidebarHelpers.containTags(channel.publish(), operationsTags))
+        !SpecificationHelpers.containTags(channel.publish(), operationsTags))
     ) {
       untaggedOperations.push(
         <OperationsPubItem channelName={channelName} key={channelName} />,
@@ -280,7 +280,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
-        !SidebarHelpers.containTags(channel.subscribe(), operationsTags))
+        !SpecificationHelpers.containTags(channel.subscribe(), operationsTags))
     ) {
       untaggedOperations.push(
         <OperationsSubItem channelName={channelName} key={channelName} />,

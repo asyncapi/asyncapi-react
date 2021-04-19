@@ -1,6 +1,33 @@
 import { AsyncAPIDocument, Tag } from '@asyncapi/parser';
+// @ts-ignore
+import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
 
-export class SidebarHelpers {
+export class SpecificationHelpers {
+  /**
+   * Returns parsed AsyncAPI specification.
+   */
+  static retrieveParsedSpec(schema: any) {
+    // check if schema is an instance of AsyncAPIDocument (model from AsyncAPI Parser)
+    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
+      return schema;
+    }
+
+    // then check if schema is a parsed JS object (as output from AsyncAPI Parser)
+    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
+      return new AsyncAPIDocumentClass(schema);
+    }
+
+    // at the end check if schema is an instance of AsyncAPIDocument (model from AsyncAPI Parser)
+    // this check is used for security in case of code mangling (unification)
+    if (
+      typeof schema.version === 'function' &&
+      schema._json &&
+      schema._json.asyncapi
+    ) {
+      return schema;
+    }
+  }
+
   /**
    * Check if given schema have one of the specified tags.
    */

@@ -1,4 +1,4 @@
-import { SidebarHelpers } from '../sidebar';
+import { SpecificationHelpers } from '../specification';
 
 // @ts-ignore
 import AsyncAPIDocument from '@asyncapi/parser/lib/models/asyncapi';
@@ -7,14 +7,31 @@ import Operation from '@asyncapi/parser/lib/models/operation';
 // @ts-ignore
 import Tag from '@asyncapi/parser/lib/models/tag';
 
-describe('SidebarHelpers', () => {
+describe('SpecificationHelpers', () => {
+  describe('.retrieveParsedSpec', () => {
+    test('should return parsed specification when is passed AsyncAPIDocument instance', () => {
+      const doc = new AsyncAPIDocument({ asyncapi: '2.0.0' });
+
+      const result = SpecificationHelpers.retrieveParsedSpec(doc);
+      expect(result).toEqual(doc);
+    });
+
+    test('should return parsed specification when is passed parsed JS object', () => {
+      const doc = { asyncapi: '2.0.0', 'x-parser-parsed': true };
+      const expected = new AsyncAPIDocument(doc);
+
+      const result = SpecificationHelpers.retrieveParsedSpec(doc);
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('.containTags', () => {
     test('should return false if no tag in the object match with the given tags to check', () => {
       const foo = new Tag({ name: 'foo' });
       const bar = new Tag({ name: 'bar' });
       const operation = new Operation({ tags: [{ name: 'anotherTag' }] });
 
-      const result = SidebarHelpers.containTags(operation, [foo, bar]);
+      const result = SpecificationHelpers.containTags(operation, [foo, bar]);
       expect(result).toEqual(false);
     });
 
@@ -23,7 +40,7 @@ describe('SidebarHelpers', () => {
       const bar = new Tag({ name: 'bar' });
       const operation = new Operation({ tags: [{ name: 'foo' }] });
 
-      const result = SidebarHelpers.containTags(operation, [foo, bar]);
+      const result = SpecificationHelpers.containTags(operation, [foo, bar]);
       expect(result).toEqual(true);
     });
   });
@@ -46,7 +63,7 @@ describe('SidebarHelpers', () => {
       };
       const doc = new AsyncAPIDocument(input);
 
-      const result = SidebarHelpers.operationsTags(doc);
+      const result = SpecificationHelpers.operationsTags(doc);
       expect(result).toEqual([
         new Tag({ name: 'smartylighting' }),
         new Tag({ name: 'measure' }),
@@ -71,7 +88,7 @@ describe('SidebarHelpers', () => {
       };
       const doc = new AsyncAPIDocument(input);
 
-      const result = SidebarHelpers.operationsTags(doc);
+      const result = SpecificationHelpers.operationsTags(doc);
       expect(result).toEqual([]);
     });
   });

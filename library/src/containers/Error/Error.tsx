@@ -38,7 +38,7 @@ interface Props {
   error: ErrorObject;
 }
 
-export const ErrorComponent: React.FunctionComponent<Props> = ({ error }) => {
+export const Error: React.FunctionComponent<Props> = ({ error }) => {
   if (!error) {
     return null;
   }

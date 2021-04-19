@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
 
 import AsyncApiUIStandalone from './Standalone';
@@ -9,7 +9,7 @@ import {
   PropsSchema,
 } from '../../types';
 import { ConfigInterface } from '../../config';
-import { Parser } from '../../helpers';
+import { SpecificationHelpers, Parser } from '../../helpers';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -21,7 +21,7 @@ interface AsyncAPIState {
   error?: ErrorObject;
 }
 
-class AsyncApiComponent extends PureComponent<AsyncApiProps, AsyncAPIState> {
+class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
@@ -33,7 +33,8 @@ class AsyncApiComponent extends PureComponent<AsyncApiProps, AsyncAPIState> {
 
   async componentDidMount() {
     if (this.props.schema) {
-      this.updateState(this.props.schema, this.props.config);
+      const { schema, config } = this.props;
+      this.parseSchema(schema, config && config.parserOptions);
     }
   }
 
@@ -44,11 +45,16 @@ class AsyncApiComponent extends PureComponent<AsyncApiProps, AsyncAPIState> {
     return <AsyncApiUIStandalone schema={asyncapi || schema} config={config} />;
   }
 
-  private updateState(schema: PropsSchema, config?: Partial<ConfigInterface>) {
-    this.parseSchema(schema, config && config.parserOptions);
-  }
-
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
+    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
+    if (parsedSpec) {
+      this.setState({
+        asyncapi: parsedSpec,
+        error: undefined,
+      });
+      return;
+    }
+
     if (isFetchingSchemaInterface(schema)) {
       const parsedFromUrl = await Parser.parseFromUrl(schema, parserOptions);
       this.setState({
