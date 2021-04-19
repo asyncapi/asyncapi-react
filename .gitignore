@@ -15,5 +15,5 @@
 .DS_Store
 npm-debug.log*
 lerna-debug.log*
-/**/*.tgz
+# /**/*.tgz
 /.idea/
