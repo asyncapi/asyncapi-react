@@ -47,11 +47,11 @@ See exemplary component configuration in TypeScript and JavaScript.
 ```tsx
 import * as React from "react";
 import { render } from "react-dom";
-import AsyncApiComponent, { ConfigInterface } from "asyncapi-react";
+import AsyncApiUI, { ConfigInterface } from "@asyncapi/react-component";
 
 import { schema } from "./mock";
 
-const config: Partial<ConfigInterface> = {
+const config: ConfigInterface = {
   schemaID: 'custom-spec',
   show: {
     operations: false,
@@ -59,7 +59,7 @@ const config: Partial<ConfigInterface> = {
   },
 };
 
-const App = () => <AsyncApiComponent schema={schema} config={config} />;
+const App = () => <AsyncApiUI schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
 ```
@@ -69,7 +69,7 @@ render(<App />, document.getElementById("root"));
 ```jsx
 import * as React from "react";
 import { render } from "react-dom";
-import AsyncApiComponent from "asyncapi-react";
+import AsyncApiUI from "@asyncapi/react-component";
 
 import { schema } from "./mock";
 
@@ -81,7 +81,7 @@ const config = {
   },
 };
 
-const App = () => <AsyncApiComponent schema={schema} config={config} />;
+const App = () => <AsyncApiUI schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
 ```
