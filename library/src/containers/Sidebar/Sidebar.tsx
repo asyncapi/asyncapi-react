@@ -3,7 +3,7 @@ import { Tag } from '@asyncapi/parser';
 
 import { Chevron } from '../../components';
 import { SideBarConfig } from '../../config/config';
-import { useSpec } from '../../store';
+import { useSpec } from '../../contexts';
 import { SpecificationHelpers } from '../../helpers';
 
 const SidebarContext = React.createContext<{

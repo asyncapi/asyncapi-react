@@ -3,8 +3,8 @@ import { ServerSecurityRequirement, SecurityScheme } from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
 
+import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
-import { useSpec } from '../../store';
 
 interface Props {
   serverRequirements: ServerSecurityRequirement[];

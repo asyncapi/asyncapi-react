@@ -7,4 +7,3 @@ export * from './Markdown';
 export * from './Schema';
 export * from './Tag';
 export * from './Tags';
-export * from './Toggle';

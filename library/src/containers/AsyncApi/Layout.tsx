@@ -11,7 +11,7 @@ import { Error } from '../Error/Error';
 
 import { ConfigInterface } from '../../config';
 import { bemClasses } from '../../helpers';
-import { useSpec } from '../../store';
+import { SpecificationContext } from '../../contexts';
 import { ErrorObject } from '../../types';
 
 interface Props {
@@ -29,7 +29,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   bemClasses.setSchemaID(config.schemaID);
 
   return (
-    <useSpec.Provider spec={asyncapi}>
+    <SpecificationContext.Provider value={{ asyncapi }}>
       <section
         className={`${
           width <= 1280 ? 'container:xl' : 'container:base'
@@ -49,7 +49,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
           <div className="panel--right absolute top-0 right-0 h-full bg-gray-800"></div>
         </div>
       </section>
-    </useSpec.Provider>
+    </SpecificationContext.Provider>
   );
 };
 

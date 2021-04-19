@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Server } from './Server';
 
-import { useSpec } from '../../store';
+import { useSpec } from '../../contexts';
 import { SERVERS } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {

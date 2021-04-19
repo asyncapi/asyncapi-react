@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Message } from './Message';
 
-import { useSpec } from '../../store';
+import { useSpec } from '../../contexts';
 import { MESSAGES } from '../../constants';
 
 export const Messages: React.FunctionComponent = () => {

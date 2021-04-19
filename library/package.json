@@ -61,11 +61,9 @@
     "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
     "@asyncapi/parser": "^1.4.5",
-    "constate": "^1.2.0",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^2.0.3",
     "openapi-sampler": "^1.0.0-beta.18",
-    "react-use": "^12.2.0",
     "use-resize-observer": "^7.0.0"
   },
   "devDependencies": {

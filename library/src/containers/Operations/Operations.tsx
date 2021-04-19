@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Operation } from './Operation';
 
-import { useSpec } from '../../store';
+import { useSpec } from '../../contexts';
 import { PayloadType } from '../../types';
 import { OPERATIONS } from '../../constants';
 
