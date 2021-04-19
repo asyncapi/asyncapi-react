@@ -112,25 +112,6 @@ export const Operation: React.FunctionComponent<Props> = ({
           </div>
         )}
       </div>
-
-      {/* <div className="w-7/12 px-8">
-        {operation.hasBindings() && (
-          <div className="mt-2">
-            <Bindings name="Operation Bindings" bindings={operation.bindings()} />
-          </div>
-        )}
-        {channel.hasBindings() && (
-          <div className="mt-2">
-            <Bindings name="Channel Bindings" bindings={channel.bindings()} />
-          </div>
-        )}
-
-        {operation.hasTags() && (
-          <div className="mt-2">
-            <Tags tags={operation.tags()} />
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };

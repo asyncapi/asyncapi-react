@@ -25,7 +25,7 @@ interface Props {
 export const Message: React.FunctionComponent<Props> = ({
   message,
   index,
-  showExamples = true,
+  showExamples = false,
 }) => {
   const title = message.title();
   const summary = message.summary();

@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
