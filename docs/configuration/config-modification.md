@@ -19,6 +19,9 @@ interface ConfigInterface {
     sidebar?: boolean;
     errors?: boolean;
   };
+  sidebar?: {
+    showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+  },
   parserOptions?: ParserOptions;
 }
 ```
@@ -32,6 +35,11 @@ interface ConfigInterface {
 
   This field contains configuration responsible for rendering specific parts of the AsyncAPI component.
   All except the `sidebar` fields are set to `true` by default.
+
+- **sidebar?: Partial<SideBarConfig>**
+
+  This field contains configuration responsible for the way of working of the sidebar.
+  `showOperations` field is set to `byDefault` by default.
 
 - **parserOptions?: ParserOptions**
 
@@ -47,7 +55,7 @@ See exemplary component configuration in TypeScript and JavaScript.
 ```tsx
 import * as React from "react";
 import { render } from "react-dom";
-import AsyncApiUI, { ConfigInterface } from "@asyncapi/react-component";
+import AsyncAPIComponent, { ConfigInterface } from "@asyncapi/react-component";
 
 import { schema } from "./mock";
 
@@ -57,9 +65,12 @@ const config: ConfigInterface = {
     operations: false,
     errors: false,
   },
+  sidebar: {
+    showOperations: 'bySpecTags',
+  },
 };
 
-const App = () => <AsyncApiUI schema={schema} config={config} />;
+const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
 ```
@@ -69,7 +80,7 @@ render(<App />, document.getElementById("root"));
 ```jsx
 import * as React from "react";
 import { render } from "react-dom";
-import AsyncApiUI from "@asyncapi/react-component";
+import AsyncAPIComponent from "@asyncapi/react-component";
 
 import { schema } from "./mock";
 
@@ -79,9 +90,12 @@ const config = {
     operations: false,
     errors: false,
   },
+  sidebar: {
+    showOperations: 'bySpecTags',
+  },
 };
 
-const App = () => <AsyncApiUI schema={schema} config={config} />;
+const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
 ```
@@ -98,6 +112,9 @@ In the above examples, after concatenation with the default configuration, the r
     messages: true,
     sidebar: false,
     errors: false,
+  },
+  sidebar: {
+    showOperations: 'bySpecTags',
   },
 }
 ```

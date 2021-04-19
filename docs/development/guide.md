@@ -81,7 +81,7 @@ See the rules for naming functions and components, and the architecture conventi
 - Each line should contain no more than one statement.
 - Always put the opening brace in the same line as the previous statement.
 - Avoid using the ternary operator (`statement ? true : false`). Use the guard (`&&`) instead.
-- Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `AsyncApiInterface` and `ConfigInterface`.
+- Do not use a prefix or a suffix on an interface like `IVariable` or `VariableInterface`. That does not apply to `ConfigInterface`.
 - Do not use public statements before any properties and methods of classes.
 - Try to use only one definition of the React component per one file.
 - Use `export const` for all components.

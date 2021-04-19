@@ -21,8 +21,8 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Usage](#usage)
-  * [Another examples](#another-examples)
+- [Using in React](#using-in-react)
+- [Using in other technologies](#using-in-other-technologies)
 - [Props](#props)
 - [Features](#features)
 - [Styles](#styles)
@@ -30,7 +30,7 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 - [Modules](#modules)
 - [Development](#development)
 - [Contribution](#contribution)
-- [Missing features](#missing-features)
+- [Credits](#credits)
 - [Contributors](#contributors)
 
 <!-- tocstop -->
@@ -51,7 +51,7 @@ Check out this simple sandbox application that uses the React component:
 
 [![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-react-component-in-action-wvdy2)
 
-## Usage
+## Using in React
 
 Check a simple example which shows passing the inline AsyncAPI specification with custom configurations:
 
@@ -94,7 +94,7 @@ const App = () => <AsyncApiUI schema={schema} config={config} />;
 render(<App />, document.getElementById("root"));
 ```
 
-### Another examples
+## Using in other technologies
 
 To check how to use web-component or use a component in Angular or in NextJS see:
 
@@ -158,11 +158,9 @@ If you create a feature request, use the dedicated **Feature request** issue tem
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
 
-## Missing features
+## Credits
 
-To see features we don't support, please check [issues](https://github.com/asyncapi/asyncapi-react/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).
-
-If you want to help us develop them, feel free to contribute.
+The project was originally developed under the [Kyma project](https://kyma-project.io/), in 2020 it was transferred to the AsyncAPI Initiative.
 
 ## Contributors
 
