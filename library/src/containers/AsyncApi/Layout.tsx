@@ -25,7 +25,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   config,
   error = null,
 }) => {
-  const { ref, width = 1 } = useResizeObserver<HTMLDivElement>();
+  const { ref, width = 1281 } = useResizeObserver<HTMLDivElement>();
   bemClasses.setSchemaID(config.schemaID);
 
   return (
