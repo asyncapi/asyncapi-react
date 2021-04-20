@@ -54,7 +54,9 @@
     "test:watch": "jest --detectOpenHandles --watch",
     "prepare": "npm run build:prod",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
+    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
+    "get:name": "echo $npm_package_name",
+    "get:version": "echo $npm_package_version"
   },
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.2.0",
