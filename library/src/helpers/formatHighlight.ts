@@ -18,9 +18,7 @@ const entityMap = {
 };
 
 function escapeHtml(html: any) {
-  return String(html).replace(/[&<>"'`=]/g, function(s) {
-    return entityMap[s];
-  });
+  return String(html).replace(/[&<>"'`=]/g, s => entityMap[s]);
 }
 
 export function formatHighlight(json: any, colorOptions = {}): string {
@@ -28,7 +26,7 @@ export function formatHighlight(json: any, colorOptions = {}): string {
   if (valueType !== 'string') {
     json = JSON.stringify(json, null, 2) || valueType;
   }
-  let colors = Object.assign({}, defaultColors, colorOptions);
+  const colors = Object.assign({}, defaultColors, colorOptions);
   json = json
     .replace(/&/g, '&')
     .replace(/</g, '<')

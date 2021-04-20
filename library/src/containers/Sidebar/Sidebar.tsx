@@ -45,9 +45,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
           height="30"
           className="fill-current text-gray-200"
         >
-          <rect width="100" height="10"></rect>
-          <rect y="30" width="100" height="10"></rect>
-          <rect y="60" width="100" height="10"></rect>
+          <rect width="100" height="10" />
+          <rect y="30" width="100" height="10" />
+          <rect y="60" width="100" height="10" />
         </svg>
       </div>
       <div

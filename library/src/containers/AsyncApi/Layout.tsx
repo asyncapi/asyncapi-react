@@ -46,7 +46,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
             {config.show?.operations && <Operations />}
             {config.show?.messages && <Messages />}
           </div>
-          <div className="panel--right absolute top-0 right-0 h-full bg-gray-800"></div>
+          <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
         </div>
       </section>
     </SpecificationContext.Provider>

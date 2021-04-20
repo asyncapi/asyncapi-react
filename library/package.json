@@ -32,14 +32,14 @@
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/types/index.d.ts",
+  "sideEffects": false,
   "files": [
     "/lib",
-    "/bundles",
+    "/browser",
     "/styles",
     "./README.md",
     "./LICENSE"
   ],
-  "sideEffects": false,
   "scripts": {
     "start": "tsc -p tsconfig.esm.json --watch",
     "build:dev": "npm run build:esm && npm run build:styles",
@@ -53,8 +53,8 @@
     "build:styles:prod": "cross-env NODE_ENV=production MINIFY_STYLES=true postcss src/styles/default.css -o styles/default.min.css --verbose",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --detectOpenHandles --watch",
-    "prepare": "npm run build:prod",
-    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "prepare": "npm run build:dev",
+    "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {

@@ -12,7 +12,6 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   const payload = message.payload();
   const headers = message.headers();
 
-  //p-8
   return (
     <div className="bg-gray-800 px-8 py-4 mt-4 -mx-8 2xl:mx-0 examples">
       <h4 className="text-white text-lg">Examples</h4>

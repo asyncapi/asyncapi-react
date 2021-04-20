@@ -6,5 +6,5 @@
     "outDir": "lib/cjs"
   },
   "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
-  "exclude": ["lib/**/*", "bundles/**/*", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["lib/**/*", "browser/**/*", "**/*.test.ts", "**/*.test.tsx"]
 }

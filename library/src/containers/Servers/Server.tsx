@@ -65,7 +65,7 @@ export const Server: React.FunctionComponent<Props> = ({
         </div>
       </div>
 
-      <div className="panel-item--right"></div>
+      <div className="panel-item--right" />
     </div>
   );
 };

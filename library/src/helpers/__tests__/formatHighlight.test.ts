@@ -79,7 +79,9 @@ describe('formatHighlight', () => {
   });
 
   test('It works with function', () => {
-    const out = formatHighlight(() => {});
+    const out = formatHighlight(() => {
+      // is intended
+    });
     expect(out).toBe('function');
   });
 });

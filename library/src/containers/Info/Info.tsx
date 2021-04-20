@@ -118,7 +118,7 @@ export const Info: React.FunctionComponent = () => {
         )}
       </div>
 
-      <div className="panel-item--right"></div>
+      <div className="panel-item--right" />
     </div>
   );
 };
