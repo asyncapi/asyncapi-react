@@ -160,7 +160,7 @@ If you have a bug to report, reproduce it in an online code editor. For example,
 
 ## Credits
 
-The project was originally developed under the [Kyma project](https://kyma-project.io/), in 2020 it was transferred to the AsyncAPI Initiative.
+The project was originally developed under the [Kyma project](https://kyma-project.io/), in 2019 it was moved under AsyncAPI Initiative.
 
 ## Contributors
 
