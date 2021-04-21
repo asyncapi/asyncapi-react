@@ -10,12 +10,16 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
 
   return errors
     .map((singleError: ValidationError, index: number) => {
-      if (!singleError || !singleError.title) {
+      console.log(singleError);
+      if (!singleError || !singleError.title || !singleError.location) {
         return null;
       }
       return (
-        <div key={index}>
-          <code key={index}>{singleError.title}</code>
+        <div key={index} className="flex">
+          <span>{`${singleError.location.startLine}.`}</span>
+          <code className="break-words whitespace-pre-wrap ml-2">
+            {singleError.title}
+          </code>
         </div>
       );
     })
@@ -30,15 +34,11 @@ export const Error: React.FunctionComponent<Props> = ({ error }) => {
   if (!error) {
     return null;
   }
-
   const { title, validationErrors } = error;
-  if (!validationErrors) {
-    return null;
-  }
 
   return (
     <div className="panel-item">
-      <div className="panel-item--center pt-8 px-8">
+      <div className="panel-item--center p-8">
         <section className="shadow rounded bg-gray-200 border-red-500 border-l-8">
           <h2 className="p-2">
             {title ? `${ERROR_TEXT}: ${title}` : ERROR_TEXT}
