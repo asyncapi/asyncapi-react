@@ -10,7 +10,6 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
 
   return errors
     .map((singleError: ValidationError, index: number) => {
-      console.log(singleError);
       if (!singleError || !singleError.title || !singleError.location) {
         return null;
       }
