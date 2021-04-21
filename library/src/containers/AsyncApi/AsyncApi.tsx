@@ -38,6 +38,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
   }
 
+  async componentDidUpdate(prevProps: AsyncApiProps) {
+    const oldSchema = prevProps.schema;
+    const newSchema = this.props.schema;
+
+    if (oldSchema !== newSchema) {
+      const { config } = this.props;
+      this.parseSchema(newSchema, config && config.parserOptions);
+    }
+  }
+
   render() {
     const { schema, config } = this.props;
     const { asyncapi } = this.state;

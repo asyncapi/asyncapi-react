@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Tag } from '@asyncapi/parser';
 
-import { Chevron } from '../../components';
+import { CollapseButton } from '../../components';
 import { SideBarConfig } from '../../config/config';
 import { useSpec } from '../../contexts';
 import { SpecificationHelpers } from '../../helpers';
+
+const SidebarContext = React.createContext<{
+  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  setShowSidebar: (value: boolean | ((prevValue: boolean) => boolean)) => value,
+});
 
 interface Props {
   config?: SideBarConfig;
 }
 
 export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
 
@@ -26,72 +34,108 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   }
 
   return (
-    <div className="w-64 bg-gray-200 font-sans pt-8 pr-4 pb-4 pl-4">
-      <div>
-        {logo ? (
-          <img
-            src={logo}
-            alt={`${info.title()} logo, ${info.version()} version`}
-          />
-        ) : (
-          <h1 className="text-2xl font-light">
-            {info.title()} {info.version()}
-          </h1>
-        )}
+    <SidebarContext.Provider value={{ setShowSidebar }}>
+      <div
+        className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
+        onClick={() => setShowSidebar(prev => !prev)}
+      >
+        <svg
+          viewBox="0 0 100 70"
+          width="40"
+          height="30"
+          className="fill-current text-gray-200"
+        >
+          <rect width="100" height="10" />
+          <rect y="30" width="100" height="10" />
+          <rect y="60" width="100" height="10" />
+        </svg>
       </div>
+      <div
+        className={`${
+          showSidebar ? 'block fixed w-full h-full' : 'hidden'
+        } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow`}
+      >
+        <div>
+          <div className="sidebar--content lg:fixed">
+            <div>
+              {logo ? (
+                <img
+                  src={logo}
+                  alt={`${info.title()} logo, ${info.version()} version`}
+                />
+              ) : (
+                <h1 className="text-2xl font-light">
+                  {info.title()} {info.version()}
+                </h1>
+              )}
+            </div>
 
-      <ul className="text-sm mt-10">
-        <li className="mb-3">
-          <a className="text-gray-700 no-underline" href="#introduction">
-            Introduction
-          </a>
-        </li>
-        {asyncapi.hasServers() && (
-          <li className="mb-3">
-            <a className="text-gray-700 no-underline" href="#servers">
-              Servers
-            </a>
-          </li>
-        )}
-        {asyncapi.hasChannels() && (
-          <>
-            <li className="mb-3 mt-9">
-              <a
-                className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                href="#operations"
-              >
-                Operations
-              </a>
-              <Operations />
-            </li>
-            {allMessages.size > 0 && (
-              <li className="mb-3 mt-9">
+            <ul className="text-sm mt-10 relative">
+              <li className="mb-3">
                 <a
-                  className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
-                  href="#messages"
+                  className="text-gray-700 no-underline"
+                  href="#introduction"
+                  onClick={() => setShowSidebar(false)}
                 >
-                  Messages
+                  Introduction
                 </a>
-                <ul className="text-sm mt-2">
-                  {Array.from(allMessages.keys()).map(messageName => (
-                    <li key={messageName}>
-                      <a
-                        className="flex break-words no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
-                        href={`#message-${messageName}`}
-                      >
-                        <div className="break-all inline-block">
-                          {messageName}
-                        </div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               </li>
-            )}
-          </>
-        )}
-      </ul>
-    </div>
+              {asyncapi.hasServers() && (
+                <li className="mb-3">
+                  <a
+                    className="text-gray-700 no-underline"
+                    href="#servers"
+                    onClick={() => setShowSidebar(false)}
+                  >
+                    Servers
+                  </a>
+                </li>
+              )}
+              {asyncapi.hasChannels() && (
+                <>
+                  <li className="mb-3 mt-9">
+                    <a
+                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                      href="#operations"
+                      onClick={() => setShowSidebar(false)}
+                    >
+                      Operations
+                    </a>
+                    <Operations />
+                  </li>
+                  {allMessages.size > 0 && (
+                    <li className="mb-3 mt-9">
+                      <a
+                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                        href="#messages"
+                        onClick={() => setShowSidebar(false)}
+                      >
+                        Messages
+                      </a>
+                      <ul className="text-sm mt-2">
+                        {Array.from(allMessages.keys()).map(messageName => (
+                          <li key={messageName}>
+                            <a
+                              className="flex break-words no-underline text-gray-700 mt-4"
+                              href={`#message-${messageName}`}
+                              onClick={() => setShowSidebar(false)}
+                            >
+                              <div className="break-all inline-block">
+                                {messageName}
+                              </div>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  )}
+                </>
+              )}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </SidebarContext.Provider>
   );
 };
 
@@ -102,10 +146,14 @@ export const OperationsList: React.FunctionComponent = () => {
   const operationsList: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
-      operationsList.push(<OperationsPubItem channelName={channelName} />);
+      operationsList.push(
+        <OperationsPubItem channelName={channelName} key={channelName} />,
+      );
     }
     if (channel.hasSubscribe()) {
-      operationsList.push(<OperationsSubItem channelName={channelName} />);
+      operationsList.push(
+        <OperationsSubItem channelName={channelName} key={channelName} />,
+      );
     }
   });
 
@@ -124,13 +172,17 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         channel.hasPublish() &&
         SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
-        operationsList.push(<OperationsPubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsPubItem channelName={channelName} key={channelName} />,
+        );
       }
       if (
         channel.hasSubscribe() &&
         SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
-        operationsList.push(<OperationsSubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsSubItem channelName={channelName} key={channelName} />,
+        );
       }
     });
     return operationsList;
@@ -143,14 +195,18 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
       (!channel.publish().hasTags() ||
         !SpecificationHelpers.containTags(channel.publish(), tags))
     ) {
-      untaggedOperations.push(<OperationsPubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsPubItem channelName={channelName} key={channelName} />,
+      );
     }
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
         !SpecificationHelpers.containTags(channel.subscribe(), tags))
     ) {
-      untaggedOperations.push(<OperationsSubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsSubItem channelName={channelName} key={channelName} />,
+      );
     }
   });
 
@@ -194,13 +250,17 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         channel.hasPublish() &&
         SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
-        operationsList.push(<OperationsPubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsPubItem channelName={channelName} key={channelName} />,
+        );
       }
       if (
         channel.hasSubscribe() &&
         SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
-        operationsList.push(<OperationsSubItem channelName={channelName} />);
+        operationsList.push(
+          <OperationsSubItem channelName={channelName} key={channelName} />,
+        );
       }
     });
     return operationsList;
@@ -213,14 +273,18 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
       (!channel.publish().hasTags() ||
         !SpecificationHelpers.containTags(channel.publish(), operationsTags))
     ) {
-      untaggedOperations.push(<OperationsPubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsPubItem channelName={channelName} key={channelName} />,
+      );
     }
     if (
       channel.hasSubscribe() &&
       (!channel.subscribe().hasTags() ||
         !SpecificationHelpers.containTags(channel.subscribe(), operationsTags))
     ) {
-      untaggedOperations.push(<OperationsSubItem channelName={channelName} />);
+      untaggedOperations.push(
+        <OperationsSubItem channelName={channelName} key={channelName} />,
+      );
     }
   });
 
@@ -260,17 +324,23 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
   tagName,
   children,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [expand, setExpand] = useState(false);
 
   return (
     <div>
-      <div onClick={() => setOpen(!open)}>
+      <CollapseButton
+        onClick={() => setExpand(prev => !prev)}
+        chevronProps={{
+          className: expand ? '-rotate-180' : '-rotate-90',
+        }}
+      >
         <span className="text-sm inline-block mt-1 font-extralight">
           {tagName}
         </span>
-        <Chevron />
-      </div>
-      {open && <ul className="text-sm mt-2 font-light">{children}</ul>}
+      </CollapseButton>
+      <ul className={`${expand ? 'block' : 'hidden'} text-sm mt-2 font-light`}>
+        {children}
+      </ul>
     </div>
   );
 };
@@ -281,38 +351,48 @@ interface OperationsPubItemProps {
 
 const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
-}) => (
-  <li key={channelName}>
-    <a
-      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
-      href={`#operation-publish-${channelName}`}
-    >
-      <span
-        className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-        title="Publish"
+}) => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  return (
+    <li key={channelName}>
+      <a
+        className="flex no-underline text-gray-700 mt-4"
+        href={`#operation-publish-${channelName}`}
+        onClick={() => setShowSidebar(false)}
       >
-        Pub
-      </span>
-      <span className="break-all inline-block">{channelName}</span>
-    </a>
-  </li>
-);
+        <span
+          className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          title="Publish"
+        >
+          Pub
+        </span>
+        <span className="break-all inline-block">{channelName}</span>
+      </a>
+    </li>
+  );
+};
 
 const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
-}) => (
-  <li key={channelName}>
-    <a
-      className="flex no-underline text-gray-700 mt-8 sm:mt-8 md:mt-3"
-      href={`#operation-subscribe-${channelName}`}
-    >
-      <span
-        className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-        title="Subscribe"
+}) => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  return (
+    <li key={channelName}>
+      <a
+        className="flex no-underline text-gray-700 mt-4"
+        href={`#operation-subscribe-${channelName}`}
+        onClick={() => setShowSidebar(false)}
       >
-        SUB
-      </span>
-      <span className="break-all inline-block">{channelName}</span>
-    </a>
-  </li>
-);
+        <span
+          className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          title="Subscribe"
+        >
+          SUB
+        </span>
+        <span className="break-all inline-block">{channelName}</span>
+      </a>
+    </li>
+  );
+};

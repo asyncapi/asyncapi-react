@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
-import { Href, Chevron, Markdown, Extensions } from './index';
+import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
@@ -50,13 +50,27 @@ export const Schema: React.FunctionComponent<Props> = ({
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
         <div className="flex py-2">
-          <div className="w-3/12 min-w-min">
-            <span className={`break-words ${isProperty ? 'italic' : ''}`}>
-              {schemaName}
-            </span>
-            {isExpandable && !isCircular && (
-              <span onClick={() => setExpand(prev => !prev)}>
-                <Chevron />
+          <div className="w-3/12 min-w-min mr-2">
+            {isExpandable && !isCircular ? (
+              <CollapseButton
+                onClick={() => setExpand(prev => !prev)}
+                chevronProps={{
+                  className: expand ? '-rotate-180' : '-rotate-90',
+                }}
+              >
+                <span
+                  className={`break-words text-sm ${
+                    isProperty ? 'italic' : ''
+                  }`}
+                >
+                  {schemaName}
+                </span>
+              </CollapseButton>
+            ) : (
+              <span
+                className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
+              >
+                {schemaName}
               </span>
             )}
             {isPatternProperty && (
@@ -218,7 +232,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Adheres to' : 'Or to'}
+                    schemaName={idx === 0 ? 'Adheres to:' : 'Or to:'}
                   />
                 ))}
             {schema.anyOf() &&
@@ -228,7 +242,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Can adhere to' : 'Or to'}
+                    schemaName={idx === 0 ? 'Can adhere to:' : 'Or to:'}
                   />
                 ))}
             {schema.allOf() &&
@@ -238,40 +252,37 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Consists of' : 'And with'}
+                    schemaName={idx === 0 ? 'Consists of:' : 'And with:'}
                   />
                 ))}
             {schema.not() && (
-              <Schema schema={schema.not()} schemaName="Cannot adhere to" />
+              <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
             )}
 
             {schema.propertyNames() && (
               <Schema
                 schema={schema.propertyNames()}
-                schemaName="Property names must adhere to"
+                schemaName="Property names must adhere to:"
               />
             )}
             {schema.contains() && (
               <Schema
                 schema={schema.contains()}
-                schemaName="Array must contain at least one of"
+                schemaName="Array must contain at least one of:"
               />
             )}
 
             {schema.if() && (
-              <Schema schema={schema.if()} schemaName="If schema adheres to" />
+              <Schema schema={schema.if()} schemaName="If schema adheres to:" />
             )}
             {schema.then() && (
               <Schema
                 schema={schema.then()}
-                schemaName="Then it must adhere to"
+                schemaName="Then must adhere to:"
               />
             )}
             {schema.else() && (
-              <Schema
-                schema={schema.else()}
-                schemaName="Otherwise it must adhere to"
-              />
+              <Schema schema={schema.else()} schemaName="Otherwise:" />
             )}
 
             <Extensions item={schema} />
@@ -360,10 +371,7 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
     );
   }
   return (
-    <Schema
-      schemaName="Additional properties must adhere to:"
-      schema={additionalProperties}
-    />
+    <Schema schemaName="Additional properties:" schema={additionalProperties} />
   );
 };
 
@@ -429,10 +437,5 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
       </p>
     );
   }
-  return (
-    <Schema
-      schemaName="Additional items must adhere to:"
-      schema={additionalItems}
-    />
-  );
+  return <Schema schemaName="Additional items:" schema={additionalItems} />;
 };

@@ -28,10 +28,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     super(props);
 
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
-    if (!parsedSpec) {
-      return;
+    if (parsedSpec) {
+      this.state = { asyncapi: parsedSpec };
     }
-    this.state = { asyncapi: parsedSpec };
+    return;
   }
 
   async componentDidMount() {

@@ -12,6 +12,7 @@ info:
     * Turn a specific streetlight on/off 🌃
     * Dim a specific streetlight 😎
     * Receive real-time information about environmental lighting conditions 📈
+
   termsOfService: http://asyncapi.org/terms/
   contact:
     name: API Support
@@ -64,9 +65,16 @@ servers:
     protocol: mqtt
     description: dummy MQTT broker
     bindings:
-        mqtt:
-          clientId: guest
-          cleanSession: true
+      mqtt:
+        clientId: guest        
+        cleanSession: false
+        keepAlive: 60
+        bindingVersion: 0.1.0
+        lastWill:
+          topic: smartylighting/streetlights/1/0/lastwill
+          qos: 1
+          message: so long and thanks for all the fish
+          retain: false
   dummy-amqp:
     url: amqp://localhost:{port}
     protocol: amqp
@@ -98,6 +106,23 @@ channels:
         - $ref: '#/components/operationTraits/kafka'
       message:
         $ref: '#/components/messages/lightMeasured'
+      bindings:
+        mqtt:
+          qos: 1
+          bindingVersion: 0.1.0
+        http:
+          type: request
+          method: GET
+          query:
+            type: object
+            required:
+            - companyId
+            properties:
+              companyId:
+                type: number
+                minimum: 1
+                description: The Id of the company.
+            additionalProperties: false
 
   smartylighting/streetlights/1/0/action/{streetlightId}/turn/on:
     parameters:
@@ -147,17 +172,40 @@ components:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
         $ref: "#/components/schemas/lightMeasuredPayload"
+      bindings:
+        mqtt:
+          bindingVersion: 0.1.0
       examples:
         - headers:
             my-app-header: 12
           payload:
             lumens: 1
-            sentAt: 2020-01-31T13:24:53Z
+            sentAt: "2020-01-31T13:24:53Z"
         - headers:
             my-app-header: 13
         - payload:
             lumens: 3
-            sentAt: 2020-10-31T13:24:53Z
+            sentAt: "2020-10-31T13:24:53Z"
+      x-schema-extensions-as-object:
+        type: object
+        properties:
+          prop1:
+            type: string
+          prop2:
+            type: integer
+            minimum: 0
+      x-schema-extensions-as-primitive: dummy
+      x-schema-extensions-as-array: 
+        - "item1"
+        - "item2"
+    LwM2mOjbects:
+      payload:
+        type: object
+        properties:
+          objectLinks:
+            type: string
+        example:
+          objectLinks: "lwm2m=1.1, </0/0>, </1/1>;ssid=1, </2>, </3/0>"
     turnOnOff:
       name: turnOnOff
       title: Turn on/off
