@@ -2,9 +2,9 @@ export const defaultConfig: string = `{
   "show": {
     "sidebar": true,
     "info": true,
-    "operations": true
+    "operations": true,
     "servers": true,
     "messages": true,
-    "errors": true,
-  },
+    "errors": true
+  }
 }`;

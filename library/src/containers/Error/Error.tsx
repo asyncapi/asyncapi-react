@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { bemClasses } from '../../helpers';
 import { ERROR_TEXT } from '../../constants';
 import { ErrorObject, ValidationError } from '../../types';
 
@@ -11,27 +10,17 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
 
   return errors
     .map((singleError: ValidationError, index: number) => {
-      const formattedError = formatError(singleError);
-
-      if (!formattedError) {
+      if (!singleError || !singleError.title) {
         return null;
       }
       return (
         <div key={index}>
-          <code
-            className={bemClasses.element(`error-content-code`)}
-            key={index}
-          >
-            {formattedError}
-          </code>
+          <code key={index}>{singleError.title}</code>
         </div>
       );
     })
     .filter(Boolean);
 };
-
-export const formatError = (singleError: ValidationError): string =>
-  singleError.title;
 
 interface Props {
   error: ErrorObject;
@@ -41,25 +30,27 @@ export const Error: React.FunctionComponent<Props> = ({ error }) => {
   if (!error) {
     return null;
   }
-  const className = `error`;
-  const { title, validationErrors } = error;
 
-  const header = (
-    <h2>
-      {ERROR_TEXT}: {title}
-    </h2>
-  );
+  const { title, validationErrors } = error;
+  if (!validationErrors) {
+    return null;
+  }
 
   return (
-    <section className={bemClasses.element(className)}>
-      {header}
-      {validationErrors && validationErrors.length && (
-        <div className={bemClasses.element(`${className}-body`)}>
-          <pre className={bemClasses.element(`${className}-body-pre`)}>
-            {renderErrors(validationErrors)}
-          </pre>
-        </div>
-      )}
-    </section>
+    <div className="panel-item">
+      <div className="panel-item--center pt-8 px-8">
+        <section className="shadow rounded bg-gray-200 border-red-500 border-l-8">
+          <h2 className="p-2">
+            {title ? `${ERROR_TEXT}: ${title}` : ERROR_TEXT}
+          </h2>
+          {validationErrors && validationErrors.length ? (
+            <div className="bg-gray-800 text-white text-xs p-2">
+              <pre>{renderErrors(validationErrors)}</pre>
+            </div>
+          ) : null}
+        </section>
+      </div>
+      <div className="panel-item--right" />
+    </div>
   );
 };

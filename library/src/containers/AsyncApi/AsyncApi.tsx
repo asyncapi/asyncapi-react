@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
 
-import AsyncApiUIStandalone from './Standalone';
+import AsyncApiStandalone from './Standalone';
 
 import {
   isFetchingSchemaInterface,
@@ -50,9 +50,16 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   render() {
     const { schema, config } = this.props;
-    const { asyncapi } = this.state;
+    const { asyncapi, error } = this.state;
 
-    return <AsyncApiUIStandalone schema={asyncapi || schema} config={config} />;
+    console.log(error);
+    return (
+      <AsyncApiStandalone
+        schema={asyncapi || schema}
+        config={config}
+        error={error}
+      />
+    );
   }
 
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
@@ -60,7 +67,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (parsedSpec) {
       this.setState({
         asyncapi: parsedSpec,
-        error: undefined,
       });
       return;
     }

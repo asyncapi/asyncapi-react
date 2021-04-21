@@ -3,7 +3,7 @@ import { ConfigInterface } from './config';
 export const defaultConfig: ConfigInterface = {
   schemaID: '',
   show: {
-    sidebar: true,
+    sidebar: false,
     info: true,
     servers: true,
     operations: true,
@@ -11,6 +11,6 @@ export const defaultConfig: ConfigInterface = {
     errors: true,
   },
   sidebar: {
-    showOperations: 'bySpecTags',
+    showOperations: 'byDefault',
   },
 };

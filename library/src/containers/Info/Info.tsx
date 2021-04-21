@@ -12,9 +12,13 @@ import {
 
 export const Info: React.FunctionComponent = () => {
   const asyncapi = useSpec();
-  const info = asyncapi.info();
-  const externalDocs = asyncapi.externalDocs();
 
+  const info = asyncapi.info();
+  if (!info) {
+    return null;
+  }
+
+  const externalDocs = asyncapi.externalDocs();
   const license = info.license();
   const termsOfService = info.termsOfService();
   const defaultContentType = asyncapi.defaultContentType();
