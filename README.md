@@ -144,8 +144,8 @@ The `@asyncapi/react-component` package has 3 crafted JS modules to be used in v
 - `esm` (ECMAScript Modules) is intended for use in a single-page applications with predefined environments like [`create-react-app`](https://github.com/facebook/create-react-app) that are capable of resolving dependencies (via Webpack, Browserify, etc). It can also be used on the server side (for tasks like Server Side Rendering) when the application is using `esm`.
 - `cjs` (CommonJS Modules) similar uses as for `esm` modules, but using CommonJS modules.
 - `umd` (Universal Module Definition) is a dependency-free module that includes everything you need to serve AsyncAPI documentation (however [React](https://github.com/facebook/react/tree/master/packages/react) and [ReactDOM](https://github.com/facebook/react/tree/master/packages/react-dom) dependencies must be served separately) on a single-page application that can't resolve npm module dependencies or in normal HTML page. We have 2 types of minified `umd` bundles, with and without [AsyncAPI Parser](https://github.com/asyncapi/parser-js) in paths:
-  - `@asyncapi/react-component/bundles/umd/asyncapi-ui.min.js`
-  - `@asyncapi/react-component/bundles/umd/asyncapi-ui.without-parser.min.js`
+  - `@asyncapi/react-component/browser/index.js`
+  - `@asyncapi/react-component/browser/without-parser.js`
 
 ## Development
 
