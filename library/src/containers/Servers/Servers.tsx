@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Server } from './Server';
-import { Toggle } from '../../components';
 
-import { useSpec } from '../../store';
-import { SERVERS, CONTAINER_LABELS } from '../../constants';
+import { useSpec } from '../../contexts';
+import { SERVERS } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {
   const servers = useSpec().servers();
@@ -26,15 +25,8 @@ export const Servers: React.FunctionComponent = () => {
 
   return (
     <section id="servers">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.SERVERS}
-        toggleInState={true}
-      >
-        {serverList}
-      </Toggle>
+      {header}
+      {serverList}
     </section>
   );
 };

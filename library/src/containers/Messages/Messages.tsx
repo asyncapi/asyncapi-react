@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Message } from './Message';
-import { Toggle } from '../../components';
 
-import { useSpec } from '../../store';
-import { CONTAINER_LABELS, MESSAGES_TEXT } from '../../constants';
+import { useSpec } from '../../contexts';
+import { MESSAGES_TEXT } from '../../constants';
 
 export const Messages: React.FunctionComponent = () => {
   const messages = useSpec().allMessages();
@@ -26,15 +25,8 @@ export const Messages: React.FunctionComponent = () => {
 
   return (
     <section id="messages">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.MESSAGES}
-        toggleInState={true}
-      >
-        {messagesList}
-      </Toggle>
+      {header}
+      {messagesList}
     </section>
   );
 };

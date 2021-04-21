@@ -34,7 +34,7 @@
   "types": "lib/types/index.d.ts",
   "files": [
     "/lib",
-    "/bundles",
+    "/browser",
     "/styles",
     "./README.md",
     "./LICENSE"
@@ -42,18 +42,19 @@
   "sideEffects": false,
   "scripts": {
     "start": "tsc -p tsconfig.esm.json --watch",
-    "build:dev": "npm run build:esm && npm run build:styles",
-    "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:types && npm run build:styles && npm run build:styles:prod",
+    "build:dev": "npm run build:esm && npm run build:types && npm run build:styles",
+    "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:types && npm run build:styles",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:umd": "webpack --colors",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:styles": "postcss src/styles/default.css -o styles/default.css",
-    "build:styles:prod": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.min.css",
+    "build:styles": "npm run build:styles:dev && npm run build:styles:prod",
+    "build:styles:dev": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.css --verbose",
+    "build:styles:prod": "cross-env NODE_ENV=production MINIFY_STYLES=true postcss src/styles/default.css -o styles/default.min.css --verbose",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --detectOpenHandles --watch",
-    "prepare": "npm run build:prod",
-    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "prepare": "npm run build:dev",
+    "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
     "get:name": "echo $npm_package_name",
     "get:version": "echo $npm_package_version"
@@ -62,11 +63,10 @@
     "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
     "@asyncapi/parser": "^1.4.5",
-    "constate": "^1.2.0",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^2.0.3",
     "openapi-sampler": "^1.0.0-beta.18",
-    "react-use": "^12.2.0"
+    "use-resize-observer": "^7.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.0",
@@ -81,7 +81,7 @@
     "jest": "^24.9.0",
     "postcss": "^8.2.10",
     "postcss-cli": "^8.3.1",
-    "react": "^16.9.0",
+    "react": "^16.8.0",
     "tailwindcss": "^2.1.1",
     "ts-jest": "^26.4.1",
     "ts-loader": "^8.1.0",

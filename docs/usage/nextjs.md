@@ -21,12 +21,13 @@ The `@asyncapi/react-component` package has a special `umd` bundle that can be u
 import dynamic from 'next/dynamic';
 import "@asyncapi/react-component/styles/default.min.css";
 
+// Import component without SSR/SSG
+const AsyncAPIComponent = dynamic(() => import('@asyncapi/react-component/browser'), { ssr: false });
+
 export default function AsyncAPIPreview ({ schema, config }) {
   // Render on the browser only
   if (typeof navigator === 'undefined') return null;
-  // Import component only in the browser
-  const AsyncAPIUI = dynamic(() => import('@asyncapi/react-component/bundles/umd/asyncapi-ui.min'));
 
-  return schema && <AsyncAPIUI schema={code} config={config} />;
+  return schema && <AsyncAPIComponent schema={code} config={config} />;
 }
 ```

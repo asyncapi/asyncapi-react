@@ -4,15 +4,16 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 
 module.exports = {
   entry: {
-    'asyncapi-ui.min': './src/index.ts',
-    'asyncapi-ui.without-parser.min': './src/standalone.ts',
+    index: './src/index.ts',
+    'without-parser': './src/without-parser.ts',
   },
+  target: 'web',
   mode: 'production',
 
   output: {
-    path: path.resolve(__dirname, 'bundles/umd'),
+    path: path.resolve(__dirname, 'browser'),
     filename: '[name].js',
-    library: 'AsyncApiUI',
+    library: 'AsyncApiComponent',
     libraryTarget: 'umd',
     libraryExport: 'default',
     umdNamedDefine: true,

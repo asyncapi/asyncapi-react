@@ -1,11 +1,10 @@
 import React from 'react';
 
 import { Operation } from './Operation';
-import { Toggle } from '../../components';
 
-import { useSpec } from '../../store';
+import { useSpec } from '../../contexts';
 import { PayloadType } from '../../types';
-import { CONTAINER_LABELS, CHANNELS_TEXT } from '../../constants';
+import { CHANNELS_TEXT } from '../../constants';
 
 export const Operations: React.FunctionComponent = () => {
   const channels = useSpec().channels();
@@ -45,15 +44,8 @@ export const Operations: React.FunctionComponent = () => {
 
   return (
     <section id="operations">
-      <Toggle
-        header={header}
-        expanded={true}
-        // expanded={expand && expand.root}
-        label={CONTAINER_LABELS.CHANNELS}
-        toggleInState={true}
-      >
-        <ul>{operationsList}</ul>
-      </Toggle>
+      {header}
+      <ul>{operationsList}</ul>
     </section>
   );
 };
