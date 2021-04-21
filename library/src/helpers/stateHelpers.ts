@@ -1,4 +1,4 @@
-import { ShowConfig, ExpandNestedConfig, ExpandConfig } from '../config';
+import { ShowConfig } from '../config';
 import { AsyncAPI, Servers, Server } from '../types';
 
 class StateHelpers {
@@ -48,7 +48,7 @@ class StateHelpers {
   }: {
     spec: AsyncAPI;
     showConfig: ShowConfig;
-    expandConfig: ExpandConfig;
+    expandConfig: any;
   }): number => {
     const showConfigKeys = Object.keys(showConfig);
     const collapseConfigKeys = Object.keys(showConfig);
@@ -66,7 +66,7 @@ class StateHelpers {
         );
 
         if (condition) {
-          const field: ExpandNestedConfig = expandConfig[key];
+          const field: any = expandConfig[key];
           if (field.root) {
             numberOfElements += 1;
           }

@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
-// @ts-ignore
-import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
 
+import { SpecificationHelpers } from '../../helpers';
 import { ErrorObject, PropsSchema } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
-import { bemClasses, stateHelpers } from '../../helpers';
-import { CSS_PREFIX } from '../../constants';
-import { useSpec, useExpandedContext, useChangeHashContext } from '../../store';
 
-import { ErrorComponent } from '../Error/Error';
-import { Sidebar } from '../Sidebar/Sidebar';
-import { Info } from '../Info/Info';
-import { Servers } from '../Servers/Servers';
-import { Operations } from '../Operations/Operations';
-import { Messages } from '../Messages/Messages';
+import AsyncApiLayout from './Layout';
+import { Error } from '../Error/Error';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -35,17 +27,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   constructor(props: AsyncApiProps) {
     super(props);
 
-    const schema = props.schema;
-    if (!schema) {
+    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
+    if (!parsedSpec) {
       return;
     }
-
-    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
-      this.state = { asyncapi: schema };
-    }
-    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
-      this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
-    }
+    this.state = { asyncapi: parsedSpec };
   }
 
   async componentDidMount() {
@@ -73,73 +59,35 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.show,
         ...(!!config && config.show),
       },
-      expand: {
-        ...defaultConfig.expand,
-        ...(!!config && config.expand),
+      sidebar: {
+        ...defaultConfig.sidebar,
+        ...(!!config && config.sidebar),
       },
     };
 
-    if (asyncapi === undefined) {
+    if (!asyncapi) {
       if (!error) {
         return null;
       }
-      return concatenatedConfig.showErrors && <ErrorComponent error={error} />;
+      return concatenatedConfig.show?.errors && <Error error={error} />;
     }
-
-    if (!concatenatedConfig.show) {
-      return null;
-    }
-
-    bemClasses.setSchemaID(concatenatedConfig.schemaID);
-    const numberOfElement = stateHelpers.calculateNumberOfElements({
-      spec: asyncapi.json(),
-      showConfig: concatenatedConfig.show,
-    });
-    const initialExpandedElements = stateHelpers.calculateInitialExpandedElements(
-      {
-        spec: asyncapi.json(),
-        showConfig: concatenatedConfig.show,
-        expandConfig: concatenatedConfig.expand || {},
-      },
-    );
 
     return (
-      <useSpec.Provider spec={asyncapi}>
-        <useExpandedContext.Provider
-          numberOfElements={numberOfElement}
-          numberOfExpandedElement={initialExpandedElements}
-        >
-          <useChangeHashContext.Provider schemaName={bemClasses.getSchemaID()}>
-            <main className={CSS_PREFIX} id={bemClasses.getSchemaID()}>
-              {concatenatedConfig.showErrors && !!error && (
-                <ErrorComponent error={error} />
-              )}
-              {concatenatedConfig.show.sidebar && (
-                <Sidebar config={concatenatedConfig.sidebar} />
-              )}
-              {concatenatedConfig.show.info && <Info />}
-              {concatenatedConfig.show.servers && <Servers />}
-              {concatenatedConfig.show.operations && <Operations />}
-              {concatenatedConfig.show.messages && <Messages />}
-            </main>
-          </useChangeHashContext.Provider>
-        </useExpandedContext.Provider>
-      </useSpec.Provider>
+      <AsyncApiLayout
+        asyncapi={asyncapi}
+        config={concatenatedConfig}
+        error={error}
+      />
     );
   }
 
   private updateState(schema: PropsSchema) {
-    if (!schema) {
+    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
+    if (!parsedSpec) {
+      this.setState({ asyncapi: undefined });
       return;
     }
-
-    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
-      this.setState({ asyncapi: schema });
-      return;
-    }
-    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
-      this.state = { asyncapi: new AsyncAPIDocumentClass(schema) };
-    }
+    this.setState({ asyncapi: parsedSpec });
   }
 }
 

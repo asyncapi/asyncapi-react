@@ -6,9 +6,9 @@
 
 # production
 /**/lib
-/**/bundles
 /**/build
 /**/dist
+/library/browser
 /library/styles
 
 # misc

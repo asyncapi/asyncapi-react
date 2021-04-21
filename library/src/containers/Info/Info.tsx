@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Href, Markdown, Tags } from '../../components';
-import { useSpec } from '../../store';
 
+import { useSpec } from '../../contexts';
 import {
   TERMS_OF_SERVICE_TEXT,
   CONTENT_TYPES_SITE,
