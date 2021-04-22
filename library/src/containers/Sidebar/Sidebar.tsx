@@ -124,7 +124,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                         {Array.from(allMessages.keys()).map(messageName => (
                           <li key={messageName}>
                             <a
-                              className="flex break-words no-underline text-gray-700 mt-4 hover:text-gray-900"
+                              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
                               href={`#message-${messageName}`}
                               onClick={() => setShowSidebar(false)}
                             >
