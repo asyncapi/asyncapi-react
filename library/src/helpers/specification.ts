@@ -36,7 +36,7 @@ export class SpecificationHelpers {
     }
 
     // at the end check if schema is a parsed JS object (as output from AsyncAPI Parser)
-    if (typeof schema === 'object' && schema['x-parser-parsed'] === true) {
+    if (typeof schema === 'object' && schema['x-parser-spec-parsed'] === true) {
       return new AsyncAPIDocumentClass(schema) as AsyncAPIDocument;
     }
 

@@ -52,12 +52,18 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         </svg>
       </div>
       <div
-        className="relative w-64 max-h-screen h-full bg-gray-200"
+        className={`${
+          showSidebar ? 'block fixed w-full' : 'hidden'
+        } sidebar relative w-64 max-h-screen h-full bg-gray-200 shadow z-20`}
         // className={`${
         //   showSidebar ? 'block fixed w-full' : 'hidden'
         // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
       >
-        <div className="block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200">
+        <div
+          className={`${
+            showSidebar ? 'w-full' : ''
+          } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
+        >
           <div className="sidebar--content">
             <div>
               {logo ? (
