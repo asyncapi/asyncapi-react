@@ -300,18 +300,25 @@ export class SchemaHelpers {
   }
 
   private static jsonFieldToSchema(value: any): any {
-    const isArray = Array.isArray(value);
-    if (typeof value !== 'object' || isArray) {
+    if (typeof value !== 'object') {
       const str =
         typeof value.toString === 'function' ? value.toString() : value;
       return {
         type: 'string',
-        const: isArray ? `[${str}]` : str,
+        const: str,
         [this.extRawValue]: true,
       };
     }
     if (this.isJSONSchema(value)) {
       return value;
+    }
+    if (Array.isArray(value)) {
+      return {
+        type: 'array',
+        items: value.map(v => this.jsonFieldToSchema(v)),
+        [this.extRenderType]: false,
+        [this.extRenderAdditionalInfo]: false,
+      };
     }
     return {
       type: 'object',

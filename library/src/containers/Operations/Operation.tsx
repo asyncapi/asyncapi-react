@@ -97,7 +97,7 @@ export const Operation: React.FunctionComponent<Props> = ({
             </p>
             <ul>
               {operation.messages().map((msg, idx) => (
-                <li className="mt-2" key={idx}>
+                <li className="mt-4" key={idx}>
                   <Message message={msg} index={idx} showExamples={true} />
                 </li>
               ))}

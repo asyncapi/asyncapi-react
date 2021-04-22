@@ -38,6 +38,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       <div
         className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
         onClick={() => setShowSidebar(prev => !prev)}
+        data-lol={showSidebar}
       >
         <svg
           viewBox="0 0 100 70"
@@ -51,12 +52,12 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         </svg>
       </div>
       <div
-        className="relative w-64 max-h-screen"
+        className="relative w-64 max-h-screen h-full bg-gray-200"
         // className={`${
         //   showSidebar ? 'block fixed w-full' : 'hidden'
         // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
       >
-        <div className="block fixed max-h-screen bg-gray-200 font-sans px-4 pt-8 pb-16 shadow overflow-y-auto">
+        <div className="block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200">
           <div className="sidebar--content">
             <div>
               {logo ? (
@@ -74,7 +75,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
             <ul className="text-sm mt-10 relative">
               <li className="mb-3">
                 <a
-                  className="text-gray-700 no-underline"
+                  className="text-gray-700 no-underline hover:text-gray-900"
                   href="#introduction"
                   onClick={() => setShowSidebar(false)}
                 >
@@ -84,7 +85,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
               {asyncapi.hasServers() && (
                 <li className="mb-3">
                   <a
-                    className="text-gray-700 no-underline"
+                    className="text-gray-700 no-underline hover:text-gray-900"
                     href="#servers"
                     onClick={() => setShowSidebar(false)}
                   >
@@ -96,7 +97,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                 <>
                   <li className="mb-3 mt-9">
                     <a
-                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
                       href="#operations"
                       onClick={() => setShowSidebar(false)}
                     >
@@ -107,7 +108,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                   {allMessages.size > 0 && (
                     <li className="mb-3 mt-9">
                       <a
-                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin"
+                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
                         href="#messages"
                         onClick={() => setShowSidebar(false)}
                       >
@@ -117,7 +118,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                         {Array.from(allMessages.keys()).map(messageName => (
                           <li key={messageName}>
                             <a
-                              className="flex break-words no-underline text-gray-700 mt-4"
+                              className="flex break-words no-underline text-gray-700 mt-4 hover:text-gray-900"
                               href={`#message-${messageName}`}
                               onClick={() => setShowSidebar(false)}
                             >
@@ -148,12 +149,18 @@ export const OperationsList: React.FunctionComponent = () => {
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
       operationsList.push(
-        <OperationsPubItem channelName={channelName} key={channelName} />,
+        <OperationsPubItem
+          channelName={channelName}
+          key={`pub-${channelName}`}
+        />,
       );
     }
     if (channel.hasSubscribe()) {
       operationsList.push(
-        <OperationsSubItem channelName={channelName} key={channelName} />,
+        <OperationsSubItem
+          channelName={channelName}
+          key={`sub-${channelName}`}
+        />,
       );
     }
   });
@@ -174,7 +181,10 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
         operationsList.push(
-          <OperationsPubItem channelName={channelName} key={channelName} />,
+          <OperationsPubItem
+            channelName={channelName}
+            key={`pub-${channelName}`}
+          />,
         );
       }
       if (
@@ -182,7 +192,10 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
         operationsList.push(
-          <OperationsSubItem channelName={channelName} key={channelName} />,
+          <OperationsSubItem
+            channelName={channelName}
+            key={`sub-${channelName}`}
+          />,
         );
       }
     });
@@ -197,7 +210,10 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         !SpecificationHelpers.containTags(channel.publish(), tags))
     ) {
       untaggedOperations.push(
-        <OperationsPubItem channelName={channelName} key={channelName} />,
+        <OperationsPubItem
+          channelName={channelName}
+          key={`pub-${channelName}`}
+        />,
       );
     }
     if (
@@ -206,7 +222,10 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         !SpecificationHelpers.containTags(channel.subscribe(), tags))
     ) {
       untaggedOperations.push(
-        <OperationsSubItem channelName={channelName} key={channelName} />,
+        <OperationsSubItem
+          channelName={channelName}
+          key={`sub-${channelName}`}
+        />,
       );
     }
   });
@@ -252,7 +271,10 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         SpecificationHelpers.containTags(channel.publish(), tag)
       ) {
         operationsList.push(
-          <OperationsPubItem channelName={channelName} key={channelName} />,
+          <OperationsPubItem
+            channelName={channelName}
+            key={`pub-${channelName}`}
+          />,
         );
       }
       if (
@@ -260,7 +282,10 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         SpecificationHelpers.containTags(channel.subscribe(), tag)
       ) {
         operationsList.push(
-          <OperationsSubItem channelName={channelName} key={channelName} />,
+          <OperationsSubItem
+            channelName={channelName}
+            key={`sub-${channelName}`}
+          />,
         );
       }
     });
@@ -275,7 +300,10 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         !SpecificationHelpers.containTags(channel.publish(), operationsTags))
     ) {
       untaggedOperations.push(
-        <OperationsPubItem channelName={channelName} key={channelName} />,
+        <OperationsPubItem
+          channelName={channelName}
+          key={`pub-${channelName}`}
+        />,
       );
     }
     if (
@@ -284,7 +312,10 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         !SpecificationHelpers.containTags(channel.subscribe(), operationsTags))
     ) {
       untaggedOperations.push(
-        <OperationsSubItem channelName={channelName} key={channelName} />,
+        <OperationsSubItem
+          channelName={channelName}
+          key={`sub-${channelName}`}
+        />,
       );
     }
   });
@@ -356,9 +387,9 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   const { setShowSidebar } = useContext(SidebarContext);
 
   return (
-    <li key={channelName}>
+    <li>
       <a
-        className="flex no-underline text-gray-700 mb-2"
+        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
         href={`#operation-publish-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >
@@ -380,9 +411,9 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   const { setShowSidebar } = useContext(SidebarContext);
 
   return (
-    <li key={channelName}>
+    <li>
       <a
-        className="flex no-underline text-gray-700 mb-2"
+        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
         href={`#operation-subscribe-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >

@@ -17,7 +17,7 @@ export const Operations: React.FunctionComponent = () => {
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
       operationsList.push(
-        <li className="mb-12" key={channelName}>
+        <li className="mb-12" key={`pub-${channelName}`}>
           <Operation
             type={PayloadType.PUBLISH}
             operation={channel.publish()}
@@ -29,7 +29,7 @@ export const Operations: React.FunctionComponent = () => {
     }
     if (channel.hasSubscribe()) {
       operationsList.push(
-        <li className="mb-12" key={channelName}>
+        <li className="mb-12" key={`sub-${channelName}`}>
           <Operation
             type={PayloadType.SUBSCRIBE}
             operation={channel.subscribe()}
