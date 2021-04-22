@@ -62,17 +62,17 @@ export class SpecificationHelpers {
    * Return all tags from operations
    */
   static operationsTags(spec: AsyncAPIDocument) {
-    const tags = new Set<Tag>();
+    const tags = new Map<string, Tag>();
     Object.entries(spec.channels()).forEach(([_, channel]) => {
       const publish = channel.publish();
       if (publish && publish.hasTags()) {
-        publish.tags().forEach(tag => tags.add(tag));
+        publish.tags().forEach(tag => tags.set(tag.name(), tag));
       }
       const subscribe = channel.subscribe();
       if (subscribe && subscribe.hasTags()) {
-        subscribe.tags().forEach(tag => tags.add(tag));
+        subscribe.tags().forEach(tag => tags.set(tag.name(), tag));
       }
     });
-    return Array.from(tags);
+    return Array.from(tags.values());
   }
 }

@@ -51,11 +51,12 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         </svg>
       </div>
       <div
-        className={`${
-          showSidebar ? 'block fixed w-full' : 'hidden'
-        } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
+        className="relative w-64 max-h-screen"
+        // className={`${
+        //   showSidebar ? 'block fixed w-full' : 'hidden'
+        // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
       >
-        <div>
+        <div className="block fixed max-h-screen bg-gray-200 font-sans px-4 pt-8 pb-16 shadow overflow-y-auto">
           <div className="sidebar--content">
             <div>
               {logo ? (
@@ -357,7 +358,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   return (
     <li key={channelName}>
       <a
-        className="flex no-underline text-gray-700 mt-4"
+        className="flex no-underline text-gray-700 mb-2"
         href={`#operation-publish-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >
@@ -381,7 +382,7 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   return (
     <li key={channelName}>
       <a
-        className="flex no-underline text-gray-700 mt-4"
+        className="flex no-underline text-gray-700 mb-2"
         href={`#operation-subscribe-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >
