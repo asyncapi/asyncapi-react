@@ -52,11 +52,11 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       </div>
       <div
         className={`${
-          showSidebar ? 'block fixed w-full h-full' : 'hidden'
-        } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow`}
+          showSidebar ? 'block fixed w-full' : 'hidden'
+        } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
       >
         <div>
-          <div className="sidebar--content lg:fixed">
+          <div className="sidebar--content">
             <div>
               {logo ? (
                 <img

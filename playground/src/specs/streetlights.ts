@@ -204,7 +204,6 @@ components:
         properties:
           objectLinks:
             type: string
-          lol: true
         example:
           objectLinks: "lwm2m=1.1, </0/0>, </1/1>;ssid=1, </2>, </3/0>"
     turnOnOff:
