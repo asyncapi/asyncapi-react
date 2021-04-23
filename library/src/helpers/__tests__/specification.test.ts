@@ -17,7 +17,7 @@ describe('SpecificationHelpers', () => {
     });
 
     test('should return parsed specification when is passed parsed JS object', () => {
-      const doc = { asyncapi: '2.0.0', 'x-parser-parsed': true };
+      const doc = { asyncapi: '2.0.0', 'x-parser-spec-parsed': true };
       const expected = new AsyncAPIDocument(doc);
 
       const result = SpecificationHelpers.retrieveParsedSpec(doc);
@@ -25,7 +25,7 @@ describe('SpecificationHelpers', () => {
     });
 
     test('should return parsed specification when is passed parsed stringified spec', () => {
-      const doc = { asyncapi: '2.0.0', 'x-parser-parsed': true };
+      const doc = { asyncapi: '2.0.0', 'x-parser-spec-parsed': true };
       const stringified = JSON.stringify(doc);
       const expected = new AsyncAPIDocument(doc);
 
