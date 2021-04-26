@@ -73,23 +73,13 @@ export const NavigationLinksItem = styled.li`
 
 export const NavigationLink = styled.a``;
 
-export const ContentWrapper = styled.div`
-  width: 100%;
-  height: calc(100vh - 50px);
-  min-height: calc(100vh - 50px);
-  display: flex;
-  justify-content: space-between;
-  background: #f3f4f5;
-`;
-
 export const CodeEditorsWrapper = styled.div`
   width: 40%;
   background: rgb(38, 50, 56);
-  display: none;
 `;
 
 export const AsyncApiWrapper = styled.div`
-  width: 100%;
+  width: 60%;
   height: calc(100vh - 50px);
   min-height: calc(100vh - 50px);
   overflow: auto;

@@ -7,14 +7,8 @@
     @apply lg:hidden;
   }
 
-  .container\:xl .burger-menu {
-  }
-
   .container\:base .sidebar {
     @apply lg:relative lg:block lg:w-64 lg:h-auto;
-  }
-
-  .container\:xl .sidebar {
   }
 
   .container\:base .sidebar--content {
@@ -53,9 +47,6 @@
 
   .container\:base .examples {
     @apply 2xl:p-0 2xl:mt-0;
-  }
-
-  .container\:xl .examples {
   }
 
   .container\:base .panel--right {
