@@ -11,6 +11,6 @@ export const defaultConfig: ConfigInterface = {
     errors: true,
   },
   sidebar: {
-    showOperations: 'bySpecTags',
+    showOperations: 'byOperationsTags',
   },
 };

@@ -11,6 +11,7 @@ import { Error } from '../Error/Error';
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
+  error?: ErrorObject;
 }
 
 interface AsyncAPIState {
@@ -28,10 +29,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     super(props);
 
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
-    if (!parsedSpec) {
-      return;
+    if (parsedSpec) {
+      this.state = { asyncapi: parsedSpec };
     }
-    this.state = { asyncapi: parsedSpec };
+    return;
   }
 
   async componentDidMount() {
@@ -50,8 +51,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { config } = this.props;
-    const { asyncapi, error } = this.state;
+    const { config, error: propError } = this.props;
+    const { asyncapi, error: stateError } = this.state;
+
+    const error = propError || stateError;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,

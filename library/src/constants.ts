@@ -41,9 +41,9 @@ export const SUBSCRIBE_TEXT = 'Subscribe';
 export const REQUIRED_TEXT = 'Required';
 export const GENERATED_TEXT = 'Generated';
 
+export const SERVERS_TEXT = 'Servers';
+export const OPERATIONS_TEXT = 'Operations';
 export const MESSAGES_TEXT = 'Messages';
-export const SCHEMAS_TEXT = 'Schemas';
-export const MESSAGE_TEXT = 'Message';
 
 export const CHANNELS_TEXT = 'Channels';
 export const PARAMETERS_TEXT = 'Parameters';

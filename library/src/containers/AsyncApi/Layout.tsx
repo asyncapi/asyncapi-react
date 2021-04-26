@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AsyncAPIDocument } from '@asyncapi/parser';
 import useResizeObserver from 'use-resize-observer';
 
@@ -25,14 +25,22 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   config,
   error = null,
 }) => {
-  const { ref, width = 1281 } = useResizeObserver<HTMLDivElement>();
+  const [divWidth, setDivWidth] = useState(1281);
+
+  const { ref } = useResizeObserver<HTMLDivElement>({
+    onResize: ({ width }) => {
+      if (divWidth !== width) {
+        width && setDivWidth(width);
+      }
+    },
+  });
   bemClasses.setSchemaID(config.schemaID);
 
   return (
     <SpecificationContext.Provider value={{ asyncapi }}>
       <section
         className={`${
-          width <= 1280 ? 'container:xl' : 'container:base'
+          divWidth <= 1280 ? 'container:xl' : 'container:base'
         } relative md:flex bg-white`}
         id={bemClasses.getSchemaID()}
         ref={ref}

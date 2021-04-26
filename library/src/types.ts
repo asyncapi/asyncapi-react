@@ -410,13 +410,15 @@ export interface Identifier {
 
 export interface ValidationError {
   title: string;
-  jsonPointer: string;
-  startLine: number;
-  startColumn: number;
-  startOffset: number;
-  endLine: number;
-  endColumn: number;
-  endOffset: number;
+  location: {
+    jsonPointer: string;
+    startLine: number;
+    startColumn: number;
+    startOffset: number;
+    endLine: number;
+    endColumn: number;
+    endOffset: number;
+  };
 }
 
 export interface ErrorObject {

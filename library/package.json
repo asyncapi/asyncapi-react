@@ -62,7 +62,7 @@
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
-    "@asyncapi/parser": "^1.4.5",
+    "@asyncapi/parser": "^1.5.0",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^2.0.3",
     "openapi-sampler": "^1.0.0-beta.18",

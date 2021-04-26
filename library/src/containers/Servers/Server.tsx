@@ -22,44 +22,50 @@ export const Server: React.FunctionComponent<Props> = ({
   const serverRequirements = server.security();
 
   return (
-    <div className="shadow rounded bg-gray-200 p-4">
-      <div>
-        <span className="font-mono text-base">{server.url()}</span>
-        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
-          {protocolVersion
-            ? `${server.protocol()} ${protocolVersion}`
-            : server.protocol()}
-        </span>
-        <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
-          {serverName}
-        </span>
+    <div className="panel-item">
+      <div className="panel-item--center px-8">
+        <div className="shadow rounded bg-gray-200 p-4">
+          <div>
+            <span className="font-mono text-base">{server.url()}</span>
+            <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
+              {protocolVersion
+                ? `${server.protocol()} ${protocolVersion}`
+                : server.protocol()}
+            </span>
+            <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
+              {serverName}
+            </span>
+          </div>
+
+          {server.hasDescription() && (
+            <div className="mt-2">
+              <Markdown>{server.description()}</Markdown>
+            </div>
+          )}
+
+          {urlVariables && (
+            <div className="mt-2">
+              <Schema
+                schemaName="URL Variables"
+                schema={urlVariables}
+                expanded={true}
+              />
+            </div>
+          )}
+
+          {serverRequirements && (
+            <ServerSecurity serverRequirements={serverRequirements} />
+          )}
+
+          {server.hasBindings() && (
+            <div className="mt-2">
+              <Bindings bindings={server.bindings()} />
+            </div>
+          )}
+        </div>
       </div>
 
-      {server.hasDescription() && (
-        <div className="mt-2">
-          <Markdown>{server.description()}</Markdown>
-        </div>
-      )}
-
-      {urlVariables && (
-        <div className="mt-2">
-          <Schema
-            schemaName="URL Variables"
-            schema={urlVariables}
-            expanded={true}
-          />
-        </div>
-      )}
-
-      {serverRequirements && (
-        <ServerSecurity serverRequirements={serverRequirements} />
-      )}
-
-      {server.hasBindings() && (
-        <div className="mt-2">
-          <Bindings bindings={server.bindings()} />
-        </div>
-      )}
+      <div className="panel-item--right" />
     </div>
   );
 };

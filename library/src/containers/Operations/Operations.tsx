@@ -4,7 +4,7 @@ import { Operation } from './Operation';
 
 import { useSpec } from '../../contexts';
 import { PayloadType } from '../../types';
-import { CHANNELS_TEXT } from '../../constants';
+import { OPERATIONS_TEXT } from '../../constants';
 
 export const Operations: React.FunctionComponent = () => {
   const channels = useSpec().channels();
@@ -13,12 +13,11 @@ export const Operations: React.FunctionComponent = () => {
     return null;
   }
 
-  const header = <h2>{CHANNELS_TEXT}</h2>;
   const operationsList: React.ReactNodeArray = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
       operationsList.push(
-        <li className="mb-12" key={channelName}>
+        <li className="mb-12" key={`pub-${channelName}`}>
           <Operation
             type={PayloadType.PUBLISH}
             operation={channel.publish()}
@@ -30,7 +29,7 @@ export const Operations: React.FunctionComponent = () => {
     }
     if (channel.hasSubscribe()) {
       operationsList.push(
-        <li className="mb-12" key={channelName}>
+        <li className="mb-12" key={`sub-${channelName}`}>
           <Operation
             type={PayloadType.SUBSCRIBE}
             operation={channel.subscribe()}
@@ -43,8 +42,10 @@ export const Operations: React.FunctionComponent = () => {
   });
 
   return (
-    <section id="operations">
-      {header}
+    <section id="operations" className="mt-16">
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+        {OPERATIONS_TEXT}
+      </h2>
       <ul>{operationsList}</ul>
     </section>
   );

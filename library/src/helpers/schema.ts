@@ -301,14 +301,24 @@ export class SchemaHelpers {
 
   private static jsonFieldToSchema(value: any): any {
     if (typeof value !== 'object') {
+      const str =
+        typeof value.toString === 'function' ? value.toString() : value;
       return {
         type: 'string',
-        const: typeof value.toString === 'function' ? value.toString() : value,
+        const: str,
         [this.extRawValue]: true,
       };
     }
     if (this.isJSONSchema(value)) {
       return value;
+    }
+    if (Array.isArray(value)) {
+      return {
+        type: 'array',
+        items: value.map(v => this.jsonFieldToSchema(v)),
+        [this.extRenderType]: false,
+        [this.extRenderAdditionalInfo]: false,
+      };
     }
     return {
       type: 'object',

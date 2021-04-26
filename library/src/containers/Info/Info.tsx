@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Href, Markdown, Tags } from '../../components';
-
 import { useSpec } from '../../contexts';
+
 import {
   TERMS_OF_SERVICE_TEXT,
   CONTENT_TYPES_SITE,
@@ -12,9 +12,13 @@ import {
 
 export const Info: React.FunctionComponent = () => {
   const asyncapi = useSpec();
-  const info = asyncapi.info();
-  const externalDocs = asyncapi.externalDocs();
 
+  const info = asyncapi.info();
+  if (!info) {
+    return null;
+  }
+
+  const externalDocs = asyncapi.externalDocs();
   const license = info.license();
   const termsOfService = info.termsOfService();
   const defaultContentType = asyncapi.defaultContentType();
@@ -24,97 +28,101 @@ export const Info: React.FunctionComponent = () => {
     license || termsOfService || defaultContentType || contact || externalDocs;
 
   return (
-    <div className="text-left p-4" id="introduction">
-      <div className="text-3xl">
-        {info.title()}&nbsp;{info.version()}
-      </div>
+    <div className="panel-item">
+      <div className="panel-item--center px-8 text-left" id="introduction">
+        <div className="text-4xl">
+          {info.title()}&nbsp;{info.version()}
+        </div>
 
-      {showInfoList && (
-        <ul className="leading-normal mt-2 space-x-2 space-y-2">
-          {license && (
-            <li className="inline-block">
-              {license.url() ? (
+        {showInfoList && (
+          <ul className="flex flex-wrap mt-2 leading-normal">
+            {license && (
+              <li className="inline-block mt-2 mr-2">
+                {license.url() ? (
+                  <Href
+                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    href={license.url()}
+                  >
+                    <span>{license.name()}</span>
+                  </Href>
+                ) : (
+                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                    {license.name()}
+                  </span>
+                )}
+              </li>
+            )}
+            {termsOfService && (
+              <li className="inline-block mt-2 mr-2">
                 <Href
                   className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                  href={license.url()}
+                  href={termsOfService}
                 >
-                  <span>{license.name()}</span>
+                  <span>{TERMS_OF_SERVICE_TEXT}</span>
                 </Href>
-              ) : (
-                <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
-                  {license.name()}
-                </span>
-              )}
-            </li>
-          )}
-          {termsOfService && (
-            <li className="inline-block">
-              <Href
-                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                href={termsOfService}
-              >
-                <span>{TERMS_OF_SERVICE_TEXT}</span>
-              </Href>
-            </li>
-          )}
-          {defaultContentType && (
-            <li className="inline-block">
-              <Href
-                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}
-              >
-                <span>{defaultContentType}</span>
-              </Href>
-            </li>
-          )}
-          {externalDocs && (
-            <li className="inline-block">
-              <Href
-                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                href={externalDocs.url()}
-              >
-                <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
-              </Href>
-            </li>
-          )}
-          {contact && (
-            <>
-              {contact.url() && (
-                <li className="inline-block">
-                  <Href
-                    className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                    href={contact.url()}
-                  >
-                    <span>{contact.name() || URL_SUPPORT_TEXT}</span>
-                  </Href>
-                </li>
-              )}
-              {contact.email() && (
-                <li className="inline-block">
-                  <Href
-                    className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                    href={`mailto:${contact.email()}`}
-                  >
-                    <span>{contact.email()}</span>
-                  </Href>
-                </li>
-              )}
-            </>
-          )}
-        </ul>
-      )}
+              </li>
+            )}
+            {defaultContentType && (
+              <li className="inline-block mt-2 mr-2">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}
+                >
+                  <span>{defaultContentType}</span>
+                </Href>
+              </li>
+            )}
+            {externalDocs && (
+              <li className="inline-block mt-2 mr-2">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={externalDocs.url()}
+                >
+                  <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+                </Href>
+              </li>
+            )}
+            {contact && (
+              <>
+                {contact.url() && (
+                  <li className="inline-block mt-2 mr-2">
+                    <Href
+                      className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                      href={contact.url()}
+                    >
+                      <span>{contact.name() || URL_SUPPORT_TEXT}</span>
+                    </Href>
+                  </li>
+                )}
+                {contact.email() && (
+                  <li className="inline-block mt-2 mr-2">
+                    <Href
+                      className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                      href={`mailto:${contact.email()}`}
+                    >
+                      <span>{contact.email()}</span>
+                    </Href>
+                  </li>
+                )}
+              </>
+            )}
+          </ul>
+        )}
 
-      {info.hasDescription() && (
-        <div className="mt-4">
-          <Markdown>{info.description()}</Markdown>
-        </div>
-      )}
+        {info.hasDescription() && (
+          <div className="mt-4">
+            <Markdown>{info.description()}</Markdown>
+          </div>
+        )}
 
-      {asyncapi.hasTags() && (
-        <div className="mt-4">
-          <Tags tags={asyncapi.tags()} />
-        </div>
-      )}
+        {asyncapi.hasTags() && (
+          <div className="mt-4">
+            <Tags tags={asyncapi.tags()} />
+          </div>
+        )}
+      </div>
+
+      <div className="panel-item--right" />
     </div>
   );
 };
