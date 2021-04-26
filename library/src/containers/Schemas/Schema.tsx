@@ -65,7 +65,7 @@ export const SchemaComponent: React.FunctionComponent<Props> = ({
   examples = [],
   required = false,
 }) => {
-  if (!schema) {
+  if (!schema || typeof schema !== 'object') {
     return null;
   }
   schema.description = schema.description || description || '';

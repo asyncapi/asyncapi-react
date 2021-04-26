@@ -27,7 +27,7 @@ export const BindingFieldComponent: React.FunctionComponent<Props> = ({
     bindingType,
   );
 
-  if (isSchemaObject) {
+  if (isSchemaObject && isObject) {
     return (
       <>
         <div className="flex py-2">
