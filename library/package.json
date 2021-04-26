@@ -43,7 +43,7 @@
     "testWatch": "jest --detectOpenHandles --watch",
     "copyCss": "cp -r ./src/styles ./lib",
     "prepare": "npm run build",
-    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "prepack": "npm run build && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
   },
   "dependencies": {
