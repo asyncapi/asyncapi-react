@@ -24,7 +24,7 @@
     "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
-    "release": "semantic-release",
+    "release": "semantic-release --dry-run",
     "postinstall": "npm run bootstrap",
     "prepublishOnly": "npm run build",
     "gen-readme-toc": "markdown-toc -i README.md",

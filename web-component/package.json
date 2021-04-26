@@ -40,12 +40,13 @@
     "start": "tsc --watch",
     "bundle": "webpack",
     "prepare": "npm run bundle",
-    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "prepublishOnly": "npm run prepack",
+    "prepack": "npm run bundle && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
     "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^0.20.1",
+    "@asyncapi/react-component": "^0.23.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "web-react-components": "^1.4.2"
