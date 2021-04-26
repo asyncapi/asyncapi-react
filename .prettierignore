@@ -8,6 +8,8 @@
 /**/lib
 /**/build
 /**/dist
+/library/browser
+/library/styles
 
 # misc
 .DS_Store

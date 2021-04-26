@@ -8,12 +8,12 @@
 /**/lib
 /**/build
 /**/dist
-/library/LICENSE
-/library/Readme.md
+/library/browser
+/library/styles
 
 # misc
 .DS_Store
 npm-debug.log*
 lerna-debug.log*
-/**/*.tgz
+# /**/*.tgz
 /.idea/

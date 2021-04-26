@@ -1,25 +1,24 @@
 import React from 'react';
 
-import { bemClasses } from '../helpers';
-
 interface Props {
   href: string;
+  title?: string;
+  className?: string;
 }
 
-export const Href: React.FunctionComponent<Props> = ({ href, children }) => {
-  const className = `anchor`;
-
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="nofollow noopener noreferrer"
-      className={bemClasses.element(className)}
-    >
-      <div className={bemClasses.element(`${className}-content`)}>
-        {children}
-      </div>
-      <span className={bemClasses.element(`${className}-icon`)} />
-    </a>
-  );
-};
+export const Href: React.FunctionComponent<Props> = ({
+  href,
+  title,
+  className,
+  children,
+}) => (
+  <a
+    href={href}
+    title={title}
+    className={className}
+    target="_blank"
+    rel="nofollow noopener noreferrer"
+  >
+    {children}
+  </a>
+);

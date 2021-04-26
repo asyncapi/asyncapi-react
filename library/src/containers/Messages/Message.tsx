@@ -1,229 +1,138 @@
 import React from 'react';
+import { Message as MessageType } from '@asyncapi/parser';
 
-import { SchemaComponent } from '../Schemas/Schema';
-import { PayloadComponent } from './Payload';
-import { BindingsComponent } from '../Bindings/Bindings';
+import { MessageExample } from './MessageExample';
+import {
+  Href,
+  Markdown,
+  Schema,
+  Bindings,
+  Tags,
+  Extensions,
+} from '../../components';
 
 import {
-  bemClasses,
-  removeSpecialChars,
-  getExamplesFromSpec,
-} from '../../helpers';
-import { Message, isRawMessage } from '../../types';
-
-import { Markdown, Badge, BadgeType, Toggle } from '../../components';
-
-import {
-  DEPRECATED_TEXT,
-  HEADERS_TEXT,
-  MESSAGE_HEADERS_TEXT,
-  HEADERS_EXAMPLE_TEXT,
-  CONTAINER_LABELS,
-  ITEM_LABELS,
-  MESSAGE_BINDINGS_TEXT,
+  CONTENT_TYPES_SITE,
+  EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
 
 interface Props {
-  title?: string;
-  message: Message;
-  hideTags?: boolean;
-  inChannel?: boolean;
-  toggleExpand?: boolean;
-  oneOf?: boolean;
+  message: MessageType;
+  index?: number | string;
+  showExamples?: boolean;
 }
 
-export const MessageComponent: React.FunctionComponent<Props> = ({
-  title,
+export const Message: React.FunctionComponent<Props> = ({
   message,
-  hideTags,
-  inChannel = false,
-  toggleExpand = false,
-  oneOf = false,
+  index,
+  showExamples = false,
 }) => {
-  if (!message) {
-    return null;
-  }
-  const className = ITEM_LABELS.MESSAGE;
-  const messageID =
-    title && title.length
-      ? bemClasses.identifier([CONTAINER_LABELS.MESSAGES, title])
-      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
-  const messageDataID =
-    title && title.length
-      ? bemClasses.identifier([
-          CONTAINER_LABELS.MESSAGES,
-          removeSpecialChars(title),
-        ])
-      : bemClasses.identifier([CONTAINER_LABELS.MESSAGES]);
+  const title = message.title();
+  const summary = message.summary();
+  const payload = message.payload();
+  const headers = message.headers();
+  const correlationId = message.correlationId();
 
-  if (!isRawMessage(message)) {
-    return (
-      <ul className={bemClasses.element(`${className}-raw-list`)}>
-        {message.oneOf.map((elem, index) => (
-          <li
-            key={index}
-            className={bemClasses.element(`${className}-raw-list-item`)}
-          >
-            <MessageComponent
-              message={elem}
-              key={index}
-              title={elem.title}
-              inChannel={inChannel}
-              oneOf={true}
-            />
-          </li>
-        ))}
-      </ul>
-    );
-  }
+  const contentType = message.contentType();
+  const externalDocs = message.externalDocs();
+  const showInfoList = contentType || externalDocs;
 
-  title = title || message.title || message.name;
-  const examples = message.examples;
+  return (
+    <div className="panel-item">
+      <div className="panel-item--center px-8">
+        <div className="shadow rounded bg-gray-200 p-4">
+          <div>
+            {index !== undefined && (
+              <span className="text-gray-700 font-bold mr-2">#{index}</span>
+            )}
+            {title && <span className="text-gray-700 mr-2">{title}</span>}
+            <span className="border text-orange-600 rounded text-xs py-0 px-2">
+              {message.uid()}
+            </span>
+          </div>
 
-  const summary = message.summary && (
-    <div className={bemClasses.element(`${className}-summary`)}>
-      <Markdown>{message.summary}</Markdown>
-    </div>
-  );
+          {summary && <p className="text-gray-600 text-sm">{summary}</p>}
 
-  const description = message.description && (
-    <div className={bemClasses.element(`${className}-description`)}>
-      <Markdown>{message.description}</Markdown>
-    </div>
-  );
+          {showInfoList && (
+            <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+              {contentType && (
+                <li className="inline-block">
+                  <Href
+                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    href={`${CONTENT_TYPES_SITE}/${contentType}`}
+                  >
+                    <span>{contentType}</span>
+                  </Href>
+                </li>
+              )}
+              {externalDocs && (
+                <li className="inline-block">
+                  <Href
+                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    href={externalDocs.url()}
+                  >
+                    <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+                  </Href>
+                </li>
+              )}
+            </ul>
+          )}
 
-  const header = !(title || summary) ? null : (
-    <section className={bemClasses.element(`${className}-header`)}>
-      {message.deprecated && (
-        <div
-          className={bemClasses.element(`${className}-header-deprecated-badge`)}
-        >
-          <Badge type={BadgeType.DEPRECATED}>{DEPRECATED_TEXT}</Badge>
+          {correlationId && (
+            <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+              <div className="text-sm text-gray-700">
+                Correlation ID
+                <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                  {correlationId.location()}
+                </span>
+              </div>
+
+              {correlationId.hasDescription() && (
+                <div className="mt-2">
+                  <Markdown>{correlationId.description()}</Markdown>
+                </div>
+              )}
+            </div>
+          )}
+
+          {message.hasDescription() && (
+            <div className="mt-2">
+              <Markdown>{message.description()}</Markdown>
+            </div>
+          )}
+
+          {payload && (
+            <div className="mt-2">
+              <Schema schemaName="Payload" schema={payload} />
+            </div>
+          )}
+          {headers && (
+            <div className="mt-2">
+              <Schema schemaName="Headers" schema={headers} />
+            </div>
+          )}
+
+          {message.hasBindings() && (
+            <div className="mt-2">
+              <Bindings bindings={message.bindings()} />
+            </div>
+          )}
+
+          <Extensions item={message} />
+
+          {message.hasTags() && (
+            <div className="mt-2">
+              <Tags tags={message.tags()} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {showExamples && (
+        <div className="panel-item--right px-8">
+          <MessageExample message={message} />
         </div>
       )}
-      {title ? (
-        <header className={bemClasses.element(`${className}-header-title`)}>
-          <h3>{title}</h3>
-        </header>
-      ) : null}
-    </section>
-  );
-
-  const headersID = !inChannel
-    ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'headers'])
-    : undefined;
-
-  const headers = message.headers && (
-    <section
-      className={bemClasses.element(`${className}-headers`)}
-      id={headersID}
-      data-asyncapi-id={headersID}
-    >
-      <header className={bemClasses.element(`${className}-headers-header`)}>
-        <h4>{HEADERS_TEXT}</h4>
-      </header>
-      <div className={bemClasses.element(`${className}-headers-schema`)}>
-        <SchemaComponent
-          name={MESSAGE_HEADERS_TEXT}
-          schema={message.headers}
-          exampleTitle={HEADERS_EXAMPLE_TEXT}
-          hideTitle={true}
-          examples={examples && getExamplesFromSpec(examples, 'headers')}
-        />
-      </div>
-    </section>
-  );
-
-  const payloadID = !inChannel
-    ? bemClasses.identifier([{ id: messageID, toKebabCase: false }, 'payload'])
-    : undefined;
-  const payloadDataID = !inChannel
-    ? bemClasses.identifier([
-        { id: messageDataID, toKebabCase: false },
-        'payload',
-      ])
-    : undefined;
-  const payload = message.payload && (
-    <PayloadComponent
-      payload={message.payload}
-      identifier={payloadID}
-      dataIdentifier={payloadDataID}
-      examples={examples && getExamplesFromSpec(examples, 'payload')}
-    />
-  );
-
-  // TAGS IS NOT SUPPORTED YET - please don't remove code!
-  // const tags = !hideTags && message.tags && (
-  //   <section className={bemClasses.element(`${className}-tags`)}>
-  //     <header className={bemClasses.element(`${className}-tags-header`)}>
-  //       <h4>{TAGS_TEXT}</h4>
-  //     </header>
-  //     <ul className={bemClasses.element(`${className}-tags-list`)}>
-  //       {message.tags.map(tag => (
-  //         <li
-  //           key={tag.name}
-  //           className={bemClasses.element(`${className}-tags-list-item`)}
-  //         >
-  //           <Tag>{tag.name}</Tag>
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </section>
-  // );
-
-  const content = (
-    <>
-      {headers}
-      {payload}
-      {message.bindings && (
-        <BindingsComponent
-          bindings={message.bindings}
-          title={MESSAGE_BINDINGS_TEXT}
-        />
-      )}
-    </>
-  );
-
-  const isBody = !!(
-    message.description ||
-    message.headers ||
-    message.payload ||
-    (!hideTags && message.tags)
-  );
-
-  const identifier = !inChannel ? messageID : undefined;
-  const dataIdentifier = !inChannel ? messageDataID : undefined;
-  return (
-    <section
-      className={bemClasses.element(className)}
-      id={identifier}
-      data-asyncapi-id={dataIdentifier}
-    >
-      {!inChannel ? (
-        <Toggle
-          header={header}
-          className={className}
-          expanded={toggleExpand}
-          label={ITEM_LABELS.MESSAGE}
-          itemName={title}
-          toggleInState={true}
-        >
-          {!isBody ? null : (
-            <>
-              {summary}
-              {description}
-              {content}
-            </>
-          )}
-        </Toggle>
-      ) : (
-        <>
-          {header}
-          {summary}
-          {description}
-          {content}
-        </>
-      )}
-    </section>
+    </div>
   );
 };

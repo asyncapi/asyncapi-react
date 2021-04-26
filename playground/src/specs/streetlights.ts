@@ -12,9 +12,34 @@ info:
     * Turn a specific streetlight on/off 🌃
     * Dim a specific streetlight 😎
     * Receive real-time information about environmental lighting conditions 📈
+
+  termsOfService: http://asyncapi.org/terms/
+  contact:
+    name: API Support
+    url: http://www.asyncapi.org/support
+    email: support@asyncapi.org
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: root-tag1
+    externalDocs:
+      description: External docs description 1
+      url: https://www.asyncapi.com/
+  - name: root-tag2
+    description: Description 2
+    externalDocs:
+      url: "https://www.asyncapi.com/"
+  - name: root-tag3
+  - name: root-tag4
+    description: Description 4
+  - name: root-tag5
+    externalDocs:
+      url: "https://www.asyncapi.com/"
+externalDocs:
+  description: Find more info here
+  url: https://example.com
+defaultContentType: application/json
 
 servers:
   production:
@@ -35,6 +60,10 @@ servers:
         - streetlights:off
         - streetlights:dim
       - openIdConnectWellKnown: []
+  dummy-mqtt:
+    url: mqtt://localhost
+    protocol: mqtt
+    description: dummy MQTT broker
     bindings:
       mqtt:
         clientId: guest        
@@ -46,8 +75,23 @@ servers:
           qos: 1
           message: so long and thanks for all the fish
           retain: false
-
-defaultContentType: application/json
+  dummy-amqp:
+    url: amqp://localhost:{port}
+    protocol: amqp
+    description: dummy AMQP broker
+    protocolVersion: "0.9.1"
+    variables:
+      port:
+        enum:
+          - '15672'
+          - '5672'
+  dommy-kafka:
+    url: http://localhost:{port}
+    protocol: kafka
+    description: dummy Kafka broker
+    variables:
+      port:
+        default: '9092'
 
 channels:
   smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
@@ -55,13 +99,8 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    bindings:
-      ws:
-        method: 'POST'
-        bindingVersion: '0.1.0'
     subscribe:
-      summary: Receive lighting conditions of a streetlight.
-      description: Receive information about environmental lighting conditions of a particular streetlight.
+      summary: Receive information about environmental lighting conditions of a particular streetlight.
       operationId: receiveLightMeasurement
       traits:
         - $ref: '#/components/operationTraits/kafka'
@@ -84,13 +123,6 @@ channels:
                 minimum: 1
                 description: The Id of the company.
             additionalProperties: false
-    publish:
-      summary: Send information about environmental lighting conditions of a particular streetlight.
-      operationId: sendLightMeasurement
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/lightMeasured'
 
   smartylighting/streetlights/1/0/action/{streetlightId}/turn/on:
     parameters:
@@ -102,10 +134,6 @@ channels:
         - $ref: '#/components/operationTraits/kafka'
       message:
         $ref: '#/components/messages/turnOnOff'
-      bindings:
-        mqtt:
-          qos: 1
-          bindingVersion: 0.1.0
 
   smartylighting/streetlights/1/0/action/{streetlightId}/turn/off:
     parameters:
@@ -134,39 +162,83 @@ components:
     lightMeasured:
       name: lightMeasured
       title: Light measured
-      summary: Lighting conditions for a streetlight.
-      description: Inform about environmental lighting conditions for a particular streetlight.
+      summary: Inform about environmental lighting conditions for a particular streetlight.
       contentType: application/json
-      bindings:
-        mqtt:
-          bindingVersion: 0.1.0
+      correlationId:
+        $ref: "#/components/correlationIds/sentAtCorrelator"
+      externalDocs:
+        url: "https://www.asyncapi.com/"
       traits:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
         $ref: "#/components/schemas/lightMeasuredPayload"
+      bindings:
+        mqtt:
+          bindingVersion: 0.1.0
       examples:
         - headers:
             my-app-header: 12
           payload:
             lumens: 1
-            sentAt: 2020-01-31T13:24:53Z
+            sentAt: "2020-01-31T13:24:53Z"
         - headers:
             my-app-header: 13
         - payload:
             lumens: 3
-            sentAt: 2020-10-31T13:24:53Z
+            sentAt: "2020-10-31T13:24:53Z"
+      x-schema-extensions-as-object:
+        type: object
+        properties:
+          prop1:
+            type: string
+          prop2:
+            type: integer
+            minimum: 0
+      x-schema-extensions-as-primitive: dummy
+      x-schema-extensions-as-array: 
+        - "item1"
+        - "item2"
+    LwM2mOjbects:
+      payload:
+        type: object
+        properties:
+          objectLinks:
+            type: string
+        example:
+          objectLinks: "lwm2m=1.1, </0/0>, </1/1>;ssid=1, </2>, </3/0>"
     turnOnOff:
       name: turnOnOff
       title: Turn on/off
       summary: Command a particular streetlight to turn the lights on or off.
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
       payload:
         $ref: "#/components/schemas/turnOnOffPayload"
+      headers: 
+        type: object
+        properties:
+          $ref: '#/components/schemas/streamHeaders'
     dimLight:
       name: dimLight
       title: Dim light
       summary: Command a particular streetlight to dim the lights.
+      correlationId:
+        $ref: "#/components/correlationIds/sentAtCorrelator"
+      externalDocs:
+        url: "https://www.asyncapi.com/"
+      tags:
+        - name: oparation-tag1
+          externalDocs:
+            description: External docs description 1
+            url: https://www.asyncapi.com/
+        - name: oparation-tag2
+          description: Description 2
+          externalDocs:
+            url: "https://www.asyncapi.com/"
+        - name: oparation-tag3
+        - name: oparation-tag4
+          description: Description 4
+        - name: oparation-tag5
+          externalDocs:
+            url: "https://www.asyncapi.com/"
       traits:
         - $ref: '#/components/messageTraits/commonHeaders'
       payload:
@@ -178,12 +250,44 @@ components:
       properties:
         lumens:
           type: integer
-          minimum: 0
           description: Light intensity measured in lumens.
+          writeOnly: true
+          oneOf: 
+            - minimum: 0
+              maximum: 5
+            - minimum: 10
+              maximum: 20
+          externalDocs:
+            url: "https://www.asyncapi.com/"
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        ifElseThen:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          if:
+            minimum: 100
+          then: 
+            multipleOf: 100
+          else:
+            if: 
+              minimum: 10
+            then: 
+              multipleOf: 10
       required:
         - lumens
+      x-schema-extensions-as-object:
+        type: object
+        properties:
+          prop1:
+            type: string
+          prop2:
+            type: integer
+            minimum: 0
+      x-schema-extensions-as-primitive: dummy
+      x-schema-extensions-as-array: 
+        - "item1"
+        - "item2"
     turnOnOffPayload:
       type: object
       properties:
@@ -195,6 +299,9 @@ components:
           description: Whether to turn on or off the light.
         sentAt:
           $ref: "#/components/schemas/sentAt"
+      additionalProperties:
+        type: string
+
     dimLightPayload:
       type: object
       properties:
@@ -203,12 +310,97 @@ components:
           description: Percentage to which the light should be dimmed to.
           minimum: 0
           maximum: 100
+          readOnly: true
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        key:
+          type: integer
+          not:
+            minimum: 3
+      patternProperties:
+        ^S_:
+          type: string
+        ^I_:
+          type: integer
+      additionalProperties: false
     sentAt:
       type: string
       format: date-time
       description: Date and time when the message was sent.
+    union:
+      type: [string, number]
+    objectWithKey:
+      type: object
+      propertyNames:
+        format: email
+      properties:
+        key:
+          type: string
+    objectWithKey2:
+      type: object
+      properties:
+        key2:
+          type: string
+    oneOfSchema:
+      oneOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    anyOfSchema:
+      anyOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    allOfSchema:
+      allOf:
+        - $ref: "#/components/schemas/objectWithKey"
+        - $ref: "#/components/schemas/objectWithKey2"
+    arrayContains: 
+      type: array
+      contains:
+        type: integer
+
+    subscriptionStatus:
+      type: object
+      oneOf:
+        - properties:
+            channelID:
+              type: integer
+              description: ChannelID on successful subscription, applicable to public messages only.
+            channelName:
+              type: string
+              description: Channel Name on successful subscription. For payloads 'ohlc' and 'book', respective interval or depth will be added as suffix.
+        - properties:
+            errorMessage:
+              type: string
+      properties:
+        event:
+          type: string
+          const: subscriptionStatus
+        subscription:
+          type: object
+          properties:
+            depth:
+              type: string
+            interval:
+              type: string
+          required:
+            - name
+      required:
+        - event
+
+    streamHeaders:
+      Etag:
+        type: string
+        description: |
+          The RFC7232 ETag header field in a response provides the current entity-
+          tag for the selected resource. An entity-tag is an opaque identifier for
+          different versions of a resource over time, regardless whether multiple
+          versions are valid at the same time. An entity-tag consists of an opaque
+          quoted string, possibly prefixed by a weakness indicator.
+        example: 411a
+      Cache-Control:
+        description: The Cache-Control HTTP header holds directives (instructions) for caching in request.
+        type: string
+        example: no-cache, no-store, must-revalidate
 
   securitySchemes:
     apiKey:
@@ -254,6 +446,12 @@ components:
       description: The ID of the streetlight.
       schema:
         type: string
+      location: "$message.payload#/user/id"
+
+  correlationIds:
+    sentAtCorrelator:
+      description: Data from message payload used as correlation ID
+      location: $message.payload#/sentAt
 
   messageTraits:
     commonHeaders:
@@ -271,8 +469,5 @@ components:
     kafka:
       bindings:
         kafka:
-          clientId:
-            type: string
-            enum: ['my-app-id']
-          bindingVersion: '0.1.0'
+          clientId: my-app-id
 `;

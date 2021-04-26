@@ -1,24 +1,15 @@
 import React from 'react';
 
-import { bemClasses } from '../helpers';
+import { formatJsonHighlight } from '../helpers';
 
 interface Props {
-  title?: any;
   code: string;
 }
 
-export const CodeComponent: React.FunctionComponent<Props> = ({
-  title,
-  code,
-}) => (
-  <div className={bemClasses.element(`code`)}>
-    {title && (
-      <header className={bemClasses.element(`code-header`)}>
-        <h4>{title}</h4>
-      </header>
-    )}
-    <pre className={bemClasses.element(`code-pre`)}>
-      <code className={bemClasses.element(`code-body`)}>{code}</code>
+export const PreCode: React.FunctionComponent<Props> = ({ code }) => (
+  <div className="border border-gray-900 bg-gray-900 rounded">
+    <pre className="p-2 text-gray-200 text-xs">
+      <code dangerouslySetInnerHTML={{ __html: formatJsonHighlight(code) }} />
     </pre>
   </div>
 );

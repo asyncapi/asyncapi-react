@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .container\:base .burger-menu {
+    @apply lg:hidden;
+  }
+
+  .container\:xl .burger-menu {
+  }
+
+  .container\:base .sidebar {
+    @apply lg:relative lg:block lg:w-64 lg:h-auto;
+  }
+
+  .container\:xl .sidebar {
+  }
+
+  .container\:base .sidebar--content {
+    @apply lg:w-56;
+  }
+
+  .container\:xl .sidebar--content {
+    @apply absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  .container\:base .panel-item {
+    @apply 2xl:flex;
+  }
+
+  .container\:xl .panel-item {
+    @apply block;
+  }
+
+  .container\:base .panel--center .panel-item--center {
+    @apply 2xl:w-7/12;
+  }
+
+  .container\:base .panel--center .panel-item--right {
+    @apply 2xl:w-5/12;
+  }
+
+  .container\:xl .panel--center .panel-item--center {
+    @apply w-full;
+  }
+
+  .container\:xl .panel--center .panel-item--right {
+    @apply w-full;
+  }
+
+  .container\:base .examples {
+    @apply 2xl:p-0 2xl:mt-0;
+  }
+
+  .container\:xl .examples {
+  }
+
+  .container\:base .panel--right {
+    @apply hidden 2xl:block 2xl:w-5/12;
+  }
+
+  .container\:xl .panel--right {
+    @apply hidden;
+  }
+}

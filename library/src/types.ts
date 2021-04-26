@@ -1,4 +1,4 @@
-import { ConfigInterface } from './config';
+import { AsyncAPIDocument } from '@asyncapi/parser';
 
 // Helpers
 export type PrimitiveType = number | boolean | string | null;
@@ -47,10 +47,6 @@ export enum BindingsType {
 }
 export type Bindings = keyof typeof BindingsType;
 
-export interface BaseBindings {
-  [key: string]: any;
-}
-
 export interface AsyncAPI {
   asyncapi: AsyncAPIVersion;
   id?: UniqueID;
@@ -94,7 +90,7 @@ export interface Server {
   description?: DescriptionHTML;
   variables?: ServerVariables;
   security?: SecurityRequirement[];
-  bindings?: BaseBindings[];
+  bindings?: ServerBindings[];
 }
 
 export interface ServerVariables {
@@ -112,6 +108,10 @@ export interface SecurityRequirement {
   [key: string]: string[];
 }
 
+export interface ServerBindings {
+  [key: string]: any;
+}
+
 export interface Channels {
   [key: string]: Channel;
 }
@@ -123,7 +123,6 @@ export interface Channel {
   subscribe?: Operation;
   deprecated?: boolean;
   protocolInfo?: ProtocolInfo;
-  bindings?: BaseBindings;
 }
 
 export interface OperationTrait {
@@ -146,7 +145,6 @@ export interface Operation {
   operationId?: string;
   protocolInfo?: ProtocolInfo;
   message?: Message;
-  bindings?: BaseBindings[];
 }
 
 export interface ProtocolInfo {
@@ -214,7 +212,6 @@ export interface RawMessage {
   examples?: Example[];
   protocolInfo?: any;
   traits?: MessageTrait | [MessageTrait, any];
-  bindings?: BaseBindings;
 }
 
 export interface Tag {
@@ -373,12 +370,11 @@ export interface Schema {
   // defaultProperties?: string[];
 }
 
-export type PropsSchema = string | FetchingSchemaInterface | any; // any for JSON input
-
-export interface AsyncApiProps {
-  schema: PropsSchema;
-  config?: Partial<ConfigInterface>;
-}
+export type PropsSchema =
+  | string
+  | FetchingSchemaInterface
+  | AsyncAPIDocument
+  | any; // any for JSON input
 
 export type NullableAsyncApi = AsyncAPI | null;
 
@@ -399,7 +395,7 @@ export interface FetchingSchemaInterface {
 }
 
 export interface ParserReturn {
-  data: NullableAsyncApi;
+  asyncapi?: AsyncAPIDocument;
   error?: ErrorObject;
 }
 
@@ -414,13 +410,15 @@ export interface Identifier {
 
 export interface ValidationError {
   title: string;
-  jsonPointer: string;
-  startLine: number;
-  startColumn: number;
-  startOffset: number;
-  endLine: number;
-  endColumn: number;
-  endOffset: number;
+  location: {
+    jsonPointer: string;
+    startLine: number;
+    startColumn: number;
+    startOffset: number;
+    endLine: number;
+    endColumn: number;
+    endOffset: number;
+  };
 }
 
 export interface ErrorObject {

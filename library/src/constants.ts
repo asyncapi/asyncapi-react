@@ -21,9 +21,6 @@ export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_TEXT =
   'You can subscribe to one of the following messages:';
 export const ONE_OF_FOLLOWING_MESSAGES_SUBSCRIBE_SINGLE_TEXT =
   'You can subscribe to the following message:';
-export const RAW_MESSAGE_SUBSCRIBE_TEXT =
-  'You can subscribe to the following message:';
-export const RAW_MESSAGE_PUBLISH_TEXT = 'You can send the following message:';
 
 export const CONTACT_TEXT = 'Contact';
 export const NAM_TEXTE = 'Name';
@@ -33,6 +30,7 @@ export const LICENSE_TEXT = 'License';
 export const TERMS_OF_SERVICE_TEXT = 'Terms of service';
 export const URL_SUPPORT_TEXT = 'Support';
 export const EMAIL_SUPPORT_TEXT = 'Email support';
+export const EXTERAL_DOCUMENTATION_TEXT = 'External Docs';
 export const LOCATION_TEXT = 'Location';
 export const TYPE_TEXT = 'Type';
 export const SPECIFICATION_TEXT = 'Specification';
@@ -43,9 +41,9 @@ export const SUBSCRIBE_TEXT = 'Subscribe';
 export const REQUIRED_TEXT = 'Required';
 export const GENERATED_TEXT = 'Generated';
 
+export const SERVERS_TEXT = 'Servers';
+export const OPERATIONS_TEXT = 'Operations';
 export const MESSAGES_TEXT = 'Messages';
-export const SCHEMAS_TEXT = 'Schemas';
-export const MESSAGE_TEXT = 'Message';
 
 export const CHANNELS_TEXT = 'Channels';
 export const PARAMETERS_TEXT = 'Parameters';
@@ -57,13 +55,6 @@ export const PAYLOAD_TEXT = 'Payload';
 export const MESSAGE_PAYLOAD_TEXT = 'Message Payload';
 export const PAYLOAD_EXAMPLE_TEXT = 'Example of payload';
 export const SCHEMA_EXAMPLE_TEXT = 'Example';
-
-export const SERVER_BINDINGS_TEXT = 'Server Bindings';
-export const CHANNEL_BINDINGS_TEXT = 'Channel Bindings';
-export const OPERATION_BINDINGS_TEXT = 'Operation Bindings';
-export const MESSAGE_BINDINGS_TEXT = 'Message Bindings';
-
-export const BINDINGS_SCHEMA_OBJECT_TEXT = 'Schema Object';
 
 export const NONE_TEXT = 'None';
 export const ANY_TEXT = 'Any';
@@ -106,22 +97,6 @@ export const SERVER_SECURITY_COLUMN_NAMES: TableColumnName[] = [
   'In',
   'Scheme',
   'Header',
-  'Description',
-];
-
-export const SCHEMA_COLUMN_NAMES: TableColumnName[] = [
-  'Name',
-  'Title',
-  'Type',
-  'Format',
-  'Default',
-  'Description',
-];
-
-export const SERVER_VARIABLES_COLUMN_NAMES: TableColumnName[] = [
-  'Name',
-  'Default value',
-  'Possible values',
   'Description',
 ];
 

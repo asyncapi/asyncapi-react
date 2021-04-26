@@ -1,87 +1,33 @@
 import React from 'react';
 
-import { MessageComponent } from './Message';
+import { Message } from './Message';
 
-import { ExpandNestedConfig } from '../../config';
-import { bemClasses } from '../../helpers';
-import { Toggle } from '../../components';
-import { Message, RawMessage } from '../../types';
-import { MESSAGES_TEXT, CONTAINER_LABELS } from '../../constants';
+import { useSpec } from '../../contexts';
+import { MESSAGES_TEXT } from '../../constants';
 
-interface Props {
-  messages?: Record<string, Message>;
-  expand?: ExpandNestedConfig;
-  inChannel?: boolean;
-}
+export const Messages: React.FunctionComponent = () => {
+  const messages = useSpec().allMessages();
 
-export const MessagesComponent: React.FunctionComponent<Props> = ({
-  messages,
-  expand,
-  inChannel = false,
-}) => {
-  if (!messages) {
+  if (!messages.size) {
     return null;
   }
-  const className = CONTAINER_LABELS.MESSAGES;
-  const messagesLength = Object.keys(messages).length;
 
-  const wrapper = (children: React.ReactNode) => (
-    <section
-      className={bemClasses.element(className)}
-      id={bemClasses.identifier([className])}
-    >
-      {children}
-    </section>
-  );
-  const header = <h2>{MESSAGES_TEXT}</h2>;
-  const content = (
-    <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(messages).map(([key, message]) => {
-        const msg = message as RawMessage;
-        let inferredName = (msg['x-parser-message-name'] as string) || '';
-        inferredName = inferredName.includes('anonymous-message')
-          ? ''
-          : inferredName;
-
-        const title =
-          messagesLength < 2 && inChannel
-            ? ''
-            : (message as RawMessage).title ||
-              (message as RawMessage).name ||
-              inferredName ||
-              key;
-
-        return (
+  return (
+    <section id="messages" className="mt-16">
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+        {MESSAGES_TEXT}
+      </h2>
+      <ul>
+        {Array.from(messages).map(([messageName, message], idx) => (
           <li
-            key={key}
-            className={bemClasses.element(`${className}-list-item`)}
+            className="mb-4"
+            key={messageName}
+            id={`message-${message.uid()}`}
           >
-            <MessageComponent
-              title={title}
-              message={message}
-              hideTags={true}
-              inChannel={false}
-              toggleExpand={expand && expand.elements}
-            />
+            <Message message={message} index={idx + 1} key={messageName} />
           </li>
-        );
-      })}
-    </ul>
-  );
-
-  if (inChannel) {
-    return wrapper(content);
-  }
-
-  return wrapper(
-    <Toggle
-      header={header}
-      className={className}
-      expanded={expand && expand.root}
-      label={CONTAINER_LABELS.MESSAGES}
-      toggleInState={true}
-    >
-      {content}
-    </Toggle>,
+        ))}
+      </ul>
+    </section>
   );
 };

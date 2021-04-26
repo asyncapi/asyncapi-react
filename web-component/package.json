@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/web-component",
-  "version": "0.23.0",
+  "version": "0.20.1",
   "private": false,
   "description": "A web component for AsyncAPI specification. Based on @asyncapi/react-component.",
   "repository": {
@@ -8,8 +8,8 @@
     "url": "git+https://github.com/asyncapi/asyncapi-react"
   },
   "author": {
-    "name": "The Kyma project authors",
-    "url": "http://kyma-project.io"
+    "name": "The AsyncAPI maintainers",
+    "url": "https://www.asyncapi.com"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -45,7 +45,7 @@
     "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^0.23.0",
+    "@asyncapi/react-component": "^0.20.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "web-react-components": "^1.4.2"

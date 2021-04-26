@@ -1,120 +1,71 @@
 import React from 'react';
+import { Server as ServerType } from '@asyncapi/parser';
 
-import { ServerVariablesComponent } from './Variables';
-import { ServerSecurityComponent } from './Security';
-import { BindingsComponent } from '../Bindings/Bindings';
+import { ServerSecurity } from './ServerSecurity';
+import { Markdown, Schema, Bindings } from '../../components';
 
-import { bemClasses, removeSpecialChars } from '../../helpers';
-import { Toggle, Markdown } from '../../components';
-import { Server, SecurityScheme } from '../../types';
-import {
-  ITEM_LABELS,
-  CONTAINER_LABELS,
-  SERVER_BINDINGS_TEXT,
-} from '../../constants';
+import { SchemaHelpers } from '../../helpers';
 
 interface Props {
-  server: Server;
-  stage: string;
-  securitySchemes?: Record<string, SecurityScheme>;
-  toggleExpand?: boolean;
+  serverName: string;
+  server: ServerType;
 }
 
-export const ServerComponent: React.FunctionComponent<Props> = ({
+export const Server: React.FunctionComponent<Props> = ({
+  serverName,
   server,
-  stage,
-  securitySchemes,
-  toggleExpand = false,
 }) => {
-  const className = ITEM_LABELS.SERVER;
-
-  const variables = server.variables
-    ? Object.entries(server.variables).map(([key, variable]) => ({
-        key,
-        content: variable,
-      }))
-    : [];
-
-  const header = (
-    <>
-      <h4>
-        <span
-          className={bemClasses.concatenate([
-            bemClasses.element(`${className}-header-protocol`),
-            bemClasses.element(`badge`),
-          ])}
-        >{`${server.protocol}${
-          server.protocolVersion ? ` ${server.protocolVersion}` : ``
-        }`}</span>
-        <span
-          className={bemClasses.concatenate([
-            bemClasses.element(`${className}-header-stage`),
-            bemClasses.element(`badge`),
-          ])}
-        >
-          {stage}
-        </span>
-        <span>{server.url}</span>
-      </h4>
-    </>
+  const urlVariables = SchemaHelpers.serverVariablesToSchema(
+    server.variables(),
   );
-
-  const identifier = bemClasses.identifier([
-    CONTAINER_LABELS.SERVERS,
-    server.url,
-  ]);
-  const dataIdentifier = bemClasses.identifier([
-    CONTAINER_LABELS.SERVERS,
-    removeSpecialChars(server.url),
-  ]);
-  const content = (
-    <>
-      {server.description && (
-        <div className={bemClasses.element(`${className}-description`)}>
-          <Markdown>{server.description}</Markdown>
-        </div>
-      )}
-      <ServerVariablesComponent
-        variables={variables}
-        identifier={identifier}
-        dataIdentifier={dataIdentifier}
-      />
-      {server.security && securitySchemes && (
-        <ServerSecurityComponent
-          requirements={server.security}
-          schemes={securitySchemes}
-          identifier={identifier}
-          dataIdentifier={dataIdentifier}
-        />
-      )}
-      {server.bindings && (
-        <BindingsComponent
-          bindings={server.bindings}
-          title={SERVER_BINDINGS_TEXT}
-        />
-      )}
-    </>
-  );
-
-  const body =
-    (server.description || server.security || server.variables) && content;
+  const protocolVersion = server.protocolVersion();
+  const serverRequirements = server.security();
 
   return (
-    <section
-      className={bemClasses.element(className)}
-      id={identifier}
-      data-asyncapi-id={dataIdentifier}
-    >
-      <Toggle
-        header={header}
-        className={className}
-        expanded={toggleExpand}
-        label={ITEM_LABELS.SERVER}
-        itemName={server.url}
-        toggleInState={!!body}
-      >
-        {body}
-      </Toggle>
-    </section>
+    <div className="panel-item">
+      <div className="panel-item--center px-8">
+        <div className="shadow rounded bg-gray-200 p-4">
+          <div>
+            <span className="font-mono text-base">{server.url()}</span>
+            <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
+              {protocolVersion
+                ? `${server.protocol()} ${protocolVersion}`
+                : server.protocol()}
+            </span>
+            <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
+              {serverName}
+            </span>
+          </div>
+
+          {server.hasDescription() && (
+            <div className="mt-2">
+              <Markdown>{server.description()}</Markdown>
+            </div>
+          )}
+
+          {urlVariables && (
+            <div className="mt-2">
+              <Schema
+                schemaName="URL Variables"
+                schema={urlVariables}
+                expanded={true}
+              />
+            </div>
+          )}
+
+          {serverRequirements && (
+            <ServerSecurity serverRequirements={serverRequirements} />
+          )}
+
+          {server.hasBindings() && (
+            <div className="mt-2">
+              <Bindings bindings={server.bindings()} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="panel-item--right" />
+    </div>
   );
 };

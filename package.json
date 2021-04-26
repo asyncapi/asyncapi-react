@@ -5,8 +5,8 @@
     "url": "git+https://github.com/asyncapi/asyncapi-react.git"
   },
   "author": {
-    "name": "The Kyma project authors",
-    "url": "http://kyma-project.io"
+    "name": "The AsyncAPI maintainers",
+    "url": "https://www.asyncapi.com"
   },
   "bugs": {
     "url": "https://github.com/asyncapi/asyncapi-react/issues"
@@ -34,13 +34,16 @@
     "bump:lib:version": "cd library && npm --no-git-tag-version --allow-same-version version $VERSION",
     "bump:version": "npm run bump:lib:version && npm run bump:webcomp:version && npm run bump:playground:version && npm run install:reactcomp:webcomponent && npm run install:reactcomp:playground",
     "install:reactcomp:playground": "cd playground && npm run install:reactcomp",
-    "install:reactcomp:webcomponent": "cd web-component && npm run install:reactcomp"
+    "install:reactcomp:webcomponent": "cd web-component && npm run install:reactcomp",
+    "get:name": "cd library && npm run get:name",
+    "get:version": "cd library && npm run get:version"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
     "@semantic-release/github": "^7.0.4",
     "@semantic-release/npm": "^7.0.3",
     "@semantic-release/release-notes-generator": "^9.0.1",
+    "concurrently": "^6.0.1",
     "conventional-changelog-conventionalcommits": "^4.4.0",
     "husky": "^2.4.1",
     "lerna": "^3.22.1",
@@ -48,7 +51,6 @@
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
-    "react-split": "^2.0.9",
     "semantic-release": "^17.0.4",
     "tslib": "^1.10.0",
     "tslint": "^5.17.0",

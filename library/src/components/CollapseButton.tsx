@@ -1,41 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { ButtonHTMLAttributes, SVGAttributes } from 'react';
 
-import { bemClasses } from '../helpers';
-import { COLLAPSE_ALL_TEXT, EXPAND_ALL_TEXT } from '../constants';
-import { useExpandedContext } from '../store';
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  chevronProps?: SVGAttributes<SVGElement>;
+}
 
-export const CollapseButton = () => {
-  const {
-    expanded,
-    setExpanded,
-    numberOfElements,
-    numberOfExpanded,
-  } = useExpandedContext();
-  const [initial, setInitial] = useState<boolean>(false);
-
-  useEffect(() => {
-    setInitial(true);
-  }, []);
-
-  useEffect(() => {
-    if (!initial) {
-      return;
-    }
-
-    if (numberOfExpanded === 0 && expanded) {
-      setExpanded(false);
-    }
-    if (numberOfExpanded === numberOfElements && !expanded) {
-      setExpanded(true);
-    }
-  }, [numberOfExpanded]);
-
-  return (
-    <button
-      className={bemClasses.element(`collapse-button`)}
-      onClick={() => setExpanded(state => !state)}
+export const CollapseButton: React.FunctionComponent<Props> = ({
+  chevronProps,
+  children,
+  ...rest
+}) => (
+  <button {...rest} className={`focus:outline-none ${rest.className}`}>
+    {children}
+    <svg
+      version="1.1"
+      viewBox="0 0 24 24"
+      x="0"
+      xmlns="http://www.w3.org/2000/svg"
+      y="0"
+      {...chevronProps}
+      className={`inline-block align-baseline cursor-pointer -mb-1 w-5 transform transition-transform duration-150 ease-linear ${chevronProps?.className ||
+        ''}`}
     >
-      <span>{expanded ? COLLAPSE_ALL_TEXT : EXPAND_ALL_TEXT}</span>
-    </button>
-  );
-};
+      <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 " />
+    </svg>
+  </button>
+);

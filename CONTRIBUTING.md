@@ -13,10 +13,8 @@ The contributing process in this project relies on the [GitHub flow](https://gui
    - [Naming and architecture convention](./DEVELOPMENT.md#naming--architecture-convention)
    - [Project structure](./development-guide.md/#project-structure)
    - Tests
-   - Updating relevant documents if you add, remove, update props, configuration, or themes
+   - Updating relevant documents if you add, remove, update props or configuration.
 1. Create a PR.
-
-> **NOTE:** When you add content to the `asyncapi-react` repository, follow the [guidelines](https://github.com/kyma-project/community/tree/master/guidelines/content-guidelines) from the `kyma-project` organization.
 
 PRs are very welcome. However, if you want to add a new feature, use GitHub issues to discuss your ideas first.
 
