@@ -2,8 +2,6 @@ name: Release Web-component and Playground
 
 on: 
   release:
-    branches:
-      - master
     types: 
       - published
 
@@ -16,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ github.event.release.target_commitish }}
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -40,6 +38,7 @@ jobs:
 
   playground:
     name: Release Playground
+    if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -64,5 +63,3 @@ jobs:
           FOLDER: playground/build
           GIT_CONFIG_NAME: asyncapi-bot
           GIT_CONFIG_EMAIL: info@asyncapi.io
-
-

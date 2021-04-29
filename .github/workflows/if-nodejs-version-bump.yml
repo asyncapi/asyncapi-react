@@ -5,8 +5,6 @@ name: Version bump - if Node.js project
 
 on: 
   release:
-    branches:
-      - master
     types: 
       - published
 
@@ -18,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: ${{ github.event.release.target_commitish }}
       - name: Check if Node.js project and has package.json
         id: packagejson
         run: test -e ./package.json && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
