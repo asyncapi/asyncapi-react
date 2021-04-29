@@ -1,12 +1,11 @@
-#This action is centrally managed in https://github.com/asyncapi/.github/
-#Don't make changes to this file in this repo as they will be overwritten with changes made to the same file in above mentioned repo
-#It does magic only if there is package.json file in the root of the project
+# This action is a copy of `if-nodejs-version-bump` workflow for the purpose of the` next` branch only. 
+# We don't want to get changes from .github repo.
 name: Version bump - if Node.js project
 
 on: 
   release:
     branches:
-      - master
+      - next
     types: 
       - published
 
@@ -18,7 +17,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: next
       - name: Check if Node.js project and has package.json
         id: packagejson
         run: test -e ./package.json && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
