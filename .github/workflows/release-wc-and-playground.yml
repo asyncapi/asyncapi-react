@@ -14,6 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
+          # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
           ref: ${{ github.event.release.target_commitish }}
       - name: Setup Node.js
         uses: actions/setup-node@v1
@@ -38,6 +39,7 @@ jobs:
 
   playground:
     name: Release Playground
+    # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
     if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
