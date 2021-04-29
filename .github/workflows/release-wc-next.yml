@@ -1,9 +1,10 @@
-name: Release Web-component and Playground
+# This action is a copy of `release-wc-and-playground` workflow for the purpose of the` next` branch only. 
+name: Release Web-component
 
 on: 
   release:
     branches:
-      - master
+      - next
     types: 
       - published
 
@@ -16,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: next
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -37,32 +38,3 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./web-component/package.json
           access: public
-
-  playground:
-    name: Release Playground
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Use latest version of react component in the playground
-        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
-        working-directory: ./playground
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-        working-directory: ./playground
-      - name: Deploy GH page
-        uses: JamesIves/github-pages-deploy-action@3.4.2
-        with:
-          ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: playground/build
-          GIT_CONFIG_NAME: asyncapi-bot
-          GIT_CONFIG_EMAIL: info@asyncapi.io
-
-
