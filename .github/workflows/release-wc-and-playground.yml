@@ -14,7 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: master
+          # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
+          ref: ${{ github.event.release.target_commitish }}
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
@@ -29,15 +30,27 @@ jobs:
         # When adding "bump:version" script in package.json, make sure no tags are added by default (--no-git-tag-version) as they are already added by release workflow
         # When adding "bump:version" script in package.json, make sure --allow-same-version is set in case someone forgot and updated package.json manually and we want to avoide this action to fail and raise confusion
         run: VERSION=${{github.event.release.tag_name}} npm run bump:webcomp:version
-      - name: Release web-component to NPM
+      - name: Release web-component to NPM (@latest tag)
+        if: github.event.release.target_commitish == 'master'
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./web-component/package.json
           access: public
+      - name: Release web-component to NPM (@next tag)
+        if: github.event.release.target_commitish == 'next'
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./web-component/package.json
+          access: public
+          tag: next
+
 
   playground:
     name: Release Playground
+    # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
+    if: github.event.release.target_commitish == 'master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -62,5 +75,3 @@ jobs:
           FOLDER: playground/build
           GIT_CONFIG_NAME: asyncapi-bot
           GIT_CONFIG_EMAIL: info@asyncapi.io
-
-
