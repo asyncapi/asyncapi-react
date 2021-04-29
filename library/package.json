@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "0.20.1",
+  "version": "0.23.0",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -54,6 +54,7 @@
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --detectOpenHandles --watch",
     "prepare": "npm run build:dev",
+    "prepublishOnly": "npm run prepack",
     "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
     "get:name": "echo $npm_package_name",

@@ -18,7 +18,7 @@ export class AsyncApiWebComponent extends React.Component<
 
   render() {
     const finalCssImportPath =
-      this.props.cssImportPath || 'assets/asyncapi.css';
+      this.props.cssImportPath || 'assets/default.min.css';
 
     /* Angular 11.0.7 running in 'production mode + enforced stricter type
     checking and stricter bundle budgets' mode showed requirement of explicit
