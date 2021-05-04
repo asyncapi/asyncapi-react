@@ -13,11 +13,16 @@ jobs:
     name: Generate assets and bump
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository (@latest tag -> master branch)
+        if: "!contains(github.event.release.tag_name, 'next')"
         uses: actions/checkout@v2
         with:
-          # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
-          ref: ${{ github.event.release.target_commitish }}
+          ref: master
+      - name: Checkout repository (@next tag -> next branch)
+        if: "contains(github.event.release.tag_name, 'next')"
+        uses: actions/checkout@v2
+        with:
+          ref: next
       - name: Check if Node.js project and has package.json
         id: packagejson
         run: test -e ./package.json && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
