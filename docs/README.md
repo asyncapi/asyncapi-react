@@ -11,5 +11,6 @@ This directory contains the following documents that relate to the project:
 - usage:
   - [Using in Angular](./usage/angular.md) describes how to use the AsyncAPI component in Angular project.
   - [Using in Vue](./usage/vue.md) describes how to use the AsyncAPI component in Vue project.
+  - [Using in GatsbyJS](./usage/gatsbyjs.md) describes how to use the AsyncAPI component in GatsbyJS project.
   - [Using in NextJS](./usage/nextjs.md) describes how to use the AsyncAPI component in NextJS project.
   - [Web Component usage](./usage/web-component.md) describes how to use the `web-component`.

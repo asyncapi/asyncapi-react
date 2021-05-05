@@ -1,6 +1,6 @@
-# Using in NextJS
+# Using in GatsbyJS
 
-Read the document to find out how to use React AsyncAPI component in the NextJS project. You can generate static documentation using the component or embed a dynamic component (for dynamic data) in your application.
+Read the document to find out how to use React AsyncAPI component in the GatsbyJS project. You can generate static documentation using the component or embed a dynamic component (for dynamic data) in your application.
 
 ## Prerequisites
 
@@ -14,17 +14,14 @@ npm install --save @asyncapi/react-component
 
 As mentioned in the introduction, the component can generate static documentation or be embedded in the application as a dynamic component for dynamic data.
 
-The `@asyncapi/react-component` package has a special `umd` bundle that can be used in the NextJS project. Unfortunately, it only works in the browser itself (due to some dependencies). Due to the universal/isomorphic nature (JS code can run on the server and client side) of NextJS, it is recommended to use the component as below:
+The `@asyncapi/react-component` package has a special `umd` bundle that can be used in the GatsbyJS project. Unfortunately, it only works in the browser itself (due to some dependencies). Due to the universal/isomorphic nature (JS code can run on the server and client side) of GatsbyJS, it is recommended to use the component as below:
 
 ```jsx
-// Import component using `dynamic` helper
-import dynamic from 'next/dynamic';
+import React from "react"
+import AsyncApiComponent from '@asyncapi/react-component/browser';
 
 // Import styles
-import "@asyncapi/react-component/styles/default.min.css";
-
-// Import component without SSR/SSG
-const AsyncApiComponent = dynamic(() => import('@asyncapi/react-component/browser'), { ssr: false });
+require('@asyncapi/react-component/styles/default.min.css');
 
 // `schema` and `config` are these same properties as for normal AsyncAPI React component
 export default function AsyncApiDocs({ schema, config }) {
@@ -45,34 +42,22 @@ npm install --save @asyncapi/parser
 Then we need to use the parser and component as follows:
 
 ```js
-import { parse } from "@asyncapi/parser";
+/** 
+ * In `src/asyncapi-doc.js` file (example file)
+ */
+
+import React from "react"
 // import component without parser onboard
 import { AsyncApiComponentWP } from "@asyncapi/react-component";
 
 // Import styles
-import "@asyncapi/react-component/styles/default.min.css";
+require('@asyncapi/react-component/styles/default.min.css');
 
-export default function AsyncApiDocsPage({ asyncapi }) {
+export default function AsyncApiDocsPage({ pageContext: { asyncapi } }) {
   const config = {}; // Configuration for component. This same as for normal React component
   return (
     <AsyncApiComponentWP schema={asyncapi} config={config} />
   )
-}
-
-// This function gets called at build time
-export async function getStaticProps() {
-  const schema = `...`; // AsyncAPI specification, fetched or pasted.
-
-  // validate and parse
-  const parsed = await parse(schema);
-  // Circular references are not supported. See https://github.com/asyncapi/parser-js/issues/293
-  const stringified = JSON.stringify(parsed.json());
-
-  return {
-    props: {
-      asyncapi: stringified,
-    },
-  }
 }
 ```
 
@@ -81,6 +66,31 @@ export async function getStaticProps() {
 > ```js
 > import AsyncApiComponentWP from "@asyncapi/react-component/browser/without-parser";
 > ```
+
+```js
+/** 
+ * In `gatsby-node.js` file
+ */
+
+const path = require('path');
+const { parse } = require('@asyncapi/parser');
+
+// This function gets called at build time to generate pages
+exports.createPages = async ({ actions }) => {
+  const schema = `...`; // AsyncAPI specification, fetched or pasted.
+
+  // validate and parse
+  const parsed = await parse(schema);
+  // Circular references are not supported. See https://github.com/asyncapi/parser-js/issues/293
+  const stringified = JSON.stringify(parsed.json());
+
+  actions.createPage({
+    path: '/asyncapi-doc', // path of page
+    component: path.resolve(__dirname, 'src/asyncapi-doc.js'), // path to the page's component
+    context: { asyncapi: stringified },
+  })
+}
+```
 
 Some benefits using above solution:
 
