@@ -217,6 +217,24 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.humanizeConstraints(schema);
       expect(result).toEqual(['<= 2 properties']);
     });
+
+    test('should handle not empty string', () => {
+      const schema = new Schema({ minLength: 1 });
+      const result = SchemaHelpers.humanizeConstraints(schema);
+      expect(result).toEqual(['non-empty']);
+    });
+
+    test('should handle not empty array', () => {
+      const schema = new Schema({ minItems: 1 });
+      const result = SchemaHelpers.humanizeConstraints(schema);
+      expect(result).toEqual(['non-empty']);
+    });
+
+    test('should handle not empty object', () => {
+      const schema = new Schema({ minProperties: 1 });
+      const result = SchemaHelpers.humanizeConstraints(schema);
+      expect(result).toEqual(['non-empty']);
+    });
   });
 
   describe('.isExpandable', () => {
