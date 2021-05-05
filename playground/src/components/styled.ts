@@ -85,11 +85,10 @@ export const ContentWrapper = styled.div`
 export const CodeEditorsWrapper = styled.div`
   width: 40%;
   background: rgb(38, 50, 56);
-  display: none;
 `;
 
 export const AsyncApiWrapper = styled.div`
-  width: 100%;
+  width: 60%;
   height: calc(100vh - 50px);
   min-height: calc(100vh - 50px);
   overflow: auto;

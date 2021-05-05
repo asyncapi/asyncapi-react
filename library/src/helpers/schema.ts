@@ -10,12 +10,16 @@ export class SchemaHelpers {
 
   static toSchemaType(schema: Schema | boolean): string {
     if (schema === true) {
-      return 'Any';
-    } else if (schema === false) {
-      return 'Never';
+      return 'any';
+    }
+    if (schema === false) {
+      return 'never';
     }
 
-    let type = schema.type();
+    let type = this.inferType(schema);
+    if (type === true) {
+      return 'any';
+    }
     if (Array.isArray(type)) {
       return type.map(t => this.toType(t, schema)).join(' | ');
     }
@@ -24,7 +28,8 @@ export class SchemaHelpers {
 
     if (type && combinedType) {
       return `${type} ${combinedType}`;
-    } else if (combinedType) {
+    }
+    if (combinedType) {
       return combinedType;
     }
     return type;
@@ -206,32 +211,109 @@ export class SchemaHelpers {
     'object',
     'null',
   ];
+  private static jsonSchemaKeywordTypes: Record<string, string> = {
+    // string
+    maxLength: 'string',
+    minLength: 'string',
+    pattern: 'string',
+    contentMediaType: 'string',
+    contentEncoding: 'string',
+    // number
+    multipleOf: 'number',
+    maximum: 'number',
+    exclusiveMaximum: 'number',
+    minimum: 'number',
+    exclusiveMinimum: 'number',
+    // array
+    items: 'array',
+    maxItems: 'array',
+    minItems: 'array',
+    uniqueItems: 'array',
+    contains: 'array',
+    maxContains: 'array',
+    minContains: 'array',
+    prefixItems: 'array',
+    additionalItems: 'array',
+    unevaluatedItems: 'array',
+    // object
+    maxProperties: 'object',
+    minProperties: 'object',
+    required: 'object',
+    properties: 'object',
+    patternProperties: 'object',
+    propertyNames: 'object',
+    dependencies: 'object',
+    dependentRequired: 'object',
+    dependentSchemas: 'object',
+    additionalProperties: 'object',
+    unevaluatedProperties: 'object',
+  };
 
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
       const items = schema.items();
-      let types = 'Unknown';
+      let types = undefined;
       if (Array.isArray(items)) {
         types = items.map(item => this.toSchemaType(item)).join(', ');
+        types = types.length ? types : 'unknown';
       } else if (items) {
         types = this.toSchemaType(items);
+        types = types || 'unknown';
       }
-      return `Array<${types}>`;
+      return `array<${types}>`;
     }
     return type;
   }
 
   private static toCombinedType(schema: Schema): string | undefined {
     if (schema.oneOf()) {
-      return 'OneOf';
+      return 'oneOf';
     }
     if (schema.anyOf()) {
-      return 'AnyOf';
+      return 'anyOf';
     }
     if (schema.allOf()) {
-      return 'AllOf';
+      return 'allOf';
     }
     return;
+  }
+
+  private static inferType(schema: Schema): string[] | string | true {
+    const jsonSchema = schema.json();
+    const keywords = Object.keys(this.jsonSchemaKeywordTypes);
+    const keywordsLength = keywords.length;
+
+    const possibleTypes: Record<string, undefined> = {};
+
+    const type = jsonSchema.type;
+    if (type !== undefined) {
+      if (Array.isArray(type)) {
+        for (var i = 0, l = type.length; i < l; i++) {
+          possibleTypes[type[i]] = undefined;
+        }
+      } else {
+        possibleTypes[type] = undefined;
+      }
+    }
+    const hasIntegerType = Object(possibleTypes).hasOwnProperty('integer');
+
+    for (var i = 0; i < keywordsLength; i++) {
+      let keyword = keywords[i];
+      if (jsonSchema[keyword] !== undefined) {
+        possibleTypes[this.jsonSchemaKeywordTypes[keyword]] = undefined;
+      }
+    }
+    if (jsonSchema.enum) {
+      for (let value of jsonSchema.enum) {
+        possibleTypes[typeof value] = undefined;
+      }
+    }
+
+    const types = Object.keys(possibleTypes);
+    if (types.length === 0) {
+      return true;
+    }
+    return types.length === 1 ? types[0] : types;
   }
 
   private static humanizeNumberRangeConstraint(
