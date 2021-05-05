@@ -104,7 +104,7 @@ export class SchemaHelpers {
   }
 
   static isExpandable(schema: Schema): boolean {
-    let type = schema.type();
+    let type = this.inferType(schema);
     type = Array.isArray(type) ? type : [type];
     if (type.includes('object') || type.includes('array')) {
       return true;
@@ -115,11 +115,9 @@ export class SchemaHelpers {
       schema.anyOf() ||
       schema.allOf() ||
       schema.not() ||
-      Object.keys(schema.properties()).length ||
-      schema.additionalProperties() ||
-      schema.items() ||
-      schema.additionalItems() ||
-      schema.if()
+      schema.if() ||
+      schema.then() ||
+      schema.else()
     ) {
       return true;
     }
@@ -130,6 +128,24 @@ export class SchemaHelpers {
     }
 
     return false;
+  }
+
+  static getCustomExtensions(value: any) {
+    if (!value || typeof value.extensions !== 'function') {
+      return;
+    }
+    return Object.entries(value.extensions() || {}).reduce(
+      (obj, [extName, ext]) => {
+        if (
+          !extName.startsWith('x-parser-') &&
+          !extName.startsWith('x-schema-private-')
+        ) {
+          obj[extName] = ext;
+        }
+        return obj;
+      },
+      {},
+    );
   }
 
   static serverVariablesToSchema(
@@ -182,24 +198,6 @@ export class SchemaHelpers {
   static jsonToSchema(value: any): any {
     const json = this.jsonFieldToSchema(value);
     return new SchemaClass(json);
-  }
-
-  static getCustomExtensions(value: any) {
-    if (!value || typeof value.extensions !== 'function') {
-      return;
-    }
-    return Object.entries(value.extensions() || {}).reduce(
-      (obj, [extName, ext]) => {
-        if (
-          !extName.startsWith('x-parser-') &&
-          !extName.startsWith('x-schema-private-')
-        ) {
-          obj[extName] = ext;
-        }
-        return obj;
-      },
-      {},
-    );
   }
 
   private static jsonSchemaTypes = [

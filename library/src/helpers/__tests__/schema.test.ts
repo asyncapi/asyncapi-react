@@ -2,6 +2,10 @@ import { SchemaHelpers } from '../schema';
 
 // @ts-ignore
 import Schema from '@asyncapi/parser/lib/models/schema';
+// @ts-ignore
+import ServerVariable from '@asyncapi/parser/lib/models/server-variable';
+// @ts-ignore
+import ChannelParameter from '@asyncapi/parser/lib/models/channel-parameter';
 
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
@@ -200,6 +204,150 @@ describe('SchemaHelpers', () => {
       const schema = new Schema({ maxProperties: 2 });
       const result = SchemaHelpers.humanizeConstraints(schema);
       expect(result).toEqual(['<= 2 properties']);
+    });
+  });
+
+  describe('.isExpandable', () => {
+    test('object should be expandable', () => {
+      const schema = new Schema({ type: 'object' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('array should be expandable', () => {
+      const schema = new Schema({ type: 'array' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('oneOf should be expandable', () => {
+      const schema = new Schema({ oneOf: [] });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('anyOf should be expandable', () => {
+      const schema = new Schema({ anyOf: [] });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('allOf should be expandable', () => {
+      const schema = new Schema({ allOf: [] });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('not should be expandable', () => {
+      const schema = new Schema({ not: {} });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('if should be expandable', () => {
+      const schema = new Schema({ if: {} });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('then should be expandable', () => {
+      const schema = new Schema({ then: {} });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+
+    test('else should be expandable', () => {
+      const schema = new Schema({ else: {} });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(true);
+    });
+  });
+
+  describe('.getCustomExtensions', () => {
+    test('should return extensions', () => {
+      const schema = new Schema({ 'x-foo': true, 'x-bar': false });
+      const result = SchemaHelpers.getCustomExtensions(schema);
+      expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
+    });
+
+    test('should skip private extensions', () => {
+      const schema = new Schema({
+        'x-foo': true,
+        'x-bar': false,
+        'x-parser-foo': true,
+        'x-schema-private-bar': false,
+      });
+      const result = SchemaHelpers.getCustomExtensions(schema);
+      expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
+    });
+  });
+
+  describe('.serverVariablesToSchema', () => {
+    test('should transform variables to schema', () => {
+      const variables = {
+        foo: new ServerVariable({ enum: ['foo', 'bar'], default: 'foo' }),
+        bar: new ServerVariable({
+          enum: ['foo', 'bar'],
+          default: 'bar',
+          examples: ['foo', 'bar'],
+          description: 'Some description',
+        }),
+      };
+      const schema = new Schema({
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
+            default: 'foo',
+            enum: ['foo', 'bar'],
+          },
+          bar: {
+            type: 'string',
+            default: 'bar',
+            enum: ['foo', 'bar'],
+            examples: ['foo', 'bar'],
+            description: 'Some description',
+          },
+        },
+        required: ['foo', 'bar'],
+        'x-schema-private-render-additional-info': false,
+        'x-schema-private-render-type': false,
+      });
+      const result = SchemaHelpers.serverVariablesToSchema(variables);
+      expect(result).toEqual(schema);
+    });
+  });
+
+  describe('.parametersToSchema', () => {
+    test('should transform parameters to schema', () => {
+      const variables = {
+        foo: new ChannelParameter({ schema: { type: 'string' } }),
+        bar: new ChannelParameter({
+          schema: { type: 'string' },
+          location: '$message.payload#/user/id',
+          description: 'Some description',
+        }),
+      };
+      const schema = new Schema({
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
+            description: undefined,
+            'x-schema-private-parameter-location': undefined,
+          },
+          bar: {
+            type: 'string',
+            description: 'Some description',
+            'x-schema-private-parameter-location': '$message.payload#/user/id',
+          },
+        },
+        required: ['foo', 'bar'],
+        'x-schema-private-render-additional-info': false,
+        'x-schema-private-render-type': false,
+      });
+      const result = SchemaHelpers.parametersToSchema(variables);
+      expect(result).toEqual(schema);
     });
   });
 });
