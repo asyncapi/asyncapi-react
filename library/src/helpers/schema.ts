@@ -15,11 +15,11 @@ export class SchemaHelpers {
     if (schema === false) {
       return 'never';
     }
-
-    let type = this.inferType(schema);
-    if (type === true) {
+    if (Object.keys(schema.json()).length === 0) {
       return 'any';
     }
+
+    let type = this.inferType(schema);
     if (Array.isArray(type)) {
       return type.map(t => this.toType(t, schema)).join(' | ');
     }
@@ -278,24 +278,23 @@ export class SchemaHelpers {
     return;
   }
 
-  private static inferType(schema: Schema): string[] | string | true {
+  private static inferType(schema: Schema): string[] | string {
     const jsonSchema = schema.json();
     const keywords = Object.keys(this.jsonSchemaKeywordTypes);
     const keywordsLength = keywords.length;
 
     const possibleTypes: Record<string, undefined> = {};
 
-    const type = jsonSchema.type;
-    if (type !== undefined) {
-      if (Array.isArray(type)) {
-        for (var i = 0, l = type.length; i < l; i++) {
-          possibleTypes[type[i]] = undefined;
+    const jsonTypes = jsonSchema.type;
+    if (jsonTypes !== undefined) {
+      if (Array.isArray(jsonTypes)) {
+        for (var i = 0, l = jsonTypes.length; i < l; i++) {
+          possibleTypes[jsonTypes[i]] = undefined;
         }
       } else {
-        possibleTypes[type] = undefined;
+        possibleTypes[jsonTypes] = undefined;
       }
     }
-    const hasIntegerType = Object(possibleTypes).hasOwnProperty('integer');
 
     for (var i = 0; i < keywordsLength; i++) {
       let keyword = keywords[i];
@@ -310,10 +309,25 @@ export class SchemaHelpers {
     }
 
     const types = Object.keys(possibleTypes);
-    if (types.length === 0) {
-      return true;
+    if (types.length === 1) {
+      return types[0];
     }
-    return types.length === 1 ? types[0] : types;
+    // we cannot infer `number` type when schema has explicit defined `integer` type
+    if (jsonTypes === 'integer') {
+      return types.filter(t => t !== 'number');
+    }
+    if (
+      Array.isArray(jsonTypes) &&
+      jsonTypes.includes('integer') &&
+      !jsonTypes.includes('number')
+    ) {
+      return types.filter(t => t !== 'number');
+    }
+    // if types have inferred `integer` and `number` types, `integer` is unnecessary
+    if (types.includes('integer') && types.includes('number')) {
+      return types.filter(t => t !== 'integer');
+    }
+    return types;
   }
 
   private static humanizeNumberRangeConstraint(
@@ -336,10 +350,10 @@ export class SchemaHelpers {
       numberRange += hasExclusiveMax ? ' )' : ' ]';
     } else if (hasMin) {
       numberRange = hasExclusiveMin ? '> ' : '>= ';
-      numberRange += min;
+      numberRange += hasExclusiveMin ? exclusiveMin : min;
     } else if (hasMax) {
       numberRange = hasExclusiveMax ? '< ' : '<= ';
-      numberRange += max;
+      numberRange += hasExclusiveMax ? exclusiveMax : max;
     }
     return numberRange;
   }
