@@ -1,13 +1,8 @@
 # Using in Angular
 
-If you wanna use the React AsyncAPI component in your Angular project, you have two options:
+If you wanna use the React AsyncAPI component in your Vue project, you may want to use the `AsyncApiStandalone` bundle with `React` and `ReactDom` onboard.
 
-- you may want to use the `AsyncApiStandalone` bundle with `React` and `ReactDom` onboard (preferred option).
-- you may want to use the `@asyncapi/web-component` component as a plain web component.
-
-## AsyncApi standalone bundle
-
-### Prerequisites
+## Prerequisites
 
 First read the [Readme](../../Readme.md) document and install the React AsyncAPI component by:
 
@@ -15,7 +10,7 @@ First read the [Readme](../../Readme.md) document and install the React AsyncAPI
 npm install --save @asyncapi/react-component
 ```
 
-### Usage
+## Usage
 
 To use component in Angular, follow these steps:
 
@@ -29,8 +24,8 @@ To use component in Angular, follow these steps:
   <script>
   import AsyncApiStandalone from '@asyncapi/react-component/browser/standalone';
 
-  const schema = `...`; // AsyncAPI specification
-  const config = {}; // Configuration for component. This same as for normal React component
+  const schema = `...`; // AsyncAPI specification, fetched or pasted.
+  const config = {}; // Configuration for component. This same as for normal React component.
 
   export default {
     name: 'AsyncApiComponent',

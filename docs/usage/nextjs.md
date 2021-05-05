@@ -55,9 +55,7 @@ import "@asyncapi/react-component/styles/default.min.css";
 export default function AsyncApiDocsPage({ asyncapi }) {
   const config = {}; // Configuration for component. This same as for normal React component
   return (
-    <div className="container">
-      <AsyncApiComponentWP schema={asyncapi} config={config} />
-    </div>
+    <AsyncApiComponentWP schema={asyncapi} config={config} />
   )
 }
 

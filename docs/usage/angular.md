@@ -36,7 +36,7 @@ To use component in Angular, follow these steps:
     constructor(private element: ElementRef) {}
 
     ngAfterViewInit() {
-      const schema = `...`; // AsyncAPI specification
+      const schema = `...`; // AsyncAPI specification, fetched or pasted.
       const config = {}; // Configuration for component. This same as for normal React component
       const container = this.element.nativeElement.querySelector('#asyncapi-doc');
       AsyncApiStandalone.render({ schema, config }, container);
