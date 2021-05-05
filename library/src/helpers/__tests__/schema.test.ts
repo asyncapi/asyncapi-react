@@ -86,6 +86,12 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`number`);
     });
+
+    test(`should handle enum`, () => {
+      const schema = new Schema({ enum: [1.5, 'foobar', true] });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`number | string | boolean`);
+    });
   });
 
   describe('.prettifyValue', () => {
@@ -162,6 +168,12 @@ describe('SchemaHelpers', () => {
       const schema = new Schema({ multipleOf: 1.5 });
       const result = SchemaHelpers.humanizeConstraints(schema);
       expect(result).toEqual(['multiple of 1.5']);
+    });
+
+    test('should handle decimal multipleOf', () => {
+      const schema = new Schema({ multipleOf: 0.0001 });
+      const result = SchemaHelpers.humanizeConstraints(schema);
+      expect(result).toEqual(['decimal places <= 4']);
     });
 
     test('should handle min length', () => {
