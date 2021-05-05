@@ -250,7 +250,7 @@ export class SchemaHelpers {
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
       const items = schema.items();
-      let types = undefined;
+      let types;
       if (Array.isArray(items)) {
         types = items.map(item => this.toSchemaType(item)).join(', ');
         types = types.length ? types : 'unknown';
@@ -286,7 +286,7 @@ export class SchemaHelpers {
     const jsonTypes = jsonSchema.type;
     if (jsonTypes !== undefined) {
       if (Array.isArray(jsonTypes)) {
-        for (var i = 0, l = jsonTypes.length; i < l; i++) {
+        for (let i = 0, l = jsonTypes.length; i < l; i++) {
           possibleTypes[jsonTypes[i]] = undefined;
         }
       } else {
@@ -294,14 +294,14 @@ export class SchemaHelpers {
       }
     }
 
-    for (var i = 0; i < keywordsLength; i++) {
-      let keyword = keywords[i];
+    for (let i = 0; i < keywordsLength; i++) {
+      const keyword = keywords[i];
       if (jsonSchema[keyword] !== undefined) {
         possibleTypes[this.jsonSchemaKeywordTypes[keyword]] = undefined;
       }
     }
     if (jsonSchema.enum) {
-      for (let value of jsonSchema.enum) {
+      for (const value of jsonSchema.enum) {
         possibleTypes[typeof value] = undefined;
       }
     }
