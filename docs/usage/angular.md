@@ -1,16 +1,70 @@
 # Using in Angular
 
-If you wanna use the React AsyncAPI component in your Angular project you may want to use the `@asyncapi/web-component` component as a plain web component.
+If you wanna use the React AsyncAPI component in your Angular project, you have two options:
 
-## Overview
+- you may want to use the `AsyncApiStandalone` bundle with `React` and `ReactDom` onboard (preferred option).
+- you may want to use the `@asyncapi/web-component` component as a plain web component.
 
-Read the document to find out how to use React AsyncAPI component in the Angular project.
+## AsyncApi standalone bundle
 
-## Prerequisites
+### Prerequisites
+
+First read the [Readme](../../Readme.md) document and install the React AsyncAPI component by:
+
+```sh
+npm install --save @asyncapi/react-component
+```
+
+### Usage
+
+To use component in Angular, follow these steps:
+
+1. Import `@asyncapi/react-component/browser/standalone` bundle and create similar component as below:
+
+  ```ts
+  import { Component, ElementRef, OnDestroy, AfterViewInit, } from '@angular/core';
+  import AsyncApiStandalone from "@asyncapi/react-component/browser/standalone";
+
+  @Component({
+    selector: 'asyncapi',
+    template: `
+      <div id="asyncapi-doc"></div>
+    `,
+    styleUrls: ['./asyncapi.component.scss']
+  })
+  export class AsyncApiComponent implements OnDestroy, AfterViewInit {
+    constructor(private element: ElementRef) {}
+
+    ngAfterViewInit() {
+      const schema = `...`; // AsyncAPI specification
+      const config = {}; // Configuration for component. This same as for normal React component
+      const container = this.element.nativeElement.querySelector('#asyncapi-doc');
+      AsyncApiStandalone.render({ schema, config }, container);
+    }
+
+    ngOnDestroy(): void {
+      this.element.nativeElement.querySelector('#asyncapi-doc').remove();
+    }
+  }
+  ```
+
+2. Update given `NgModule` in which you want to use the component by importing component into the `declarations` array.
+
+3. Import styles from `@asyncapi/react-component/styles/default.min.css`:
+
+   - import styles in main style file by `@import @asyncapi/react-component/styles/default.min.css`.
+   - or import styles using path `node_modules/@asyncapi/react-component/styles/default.min.css` in `angular.json` file.
+   - or copy content from `@asyncapi/react-component/styles/default.min.css` to `assets/asyncapi.min.css` and import file like above.
+
+4. Use component in your application.
+
+## Web component
+
+### Prerequisites
 
 First read the [Web Component usage](./web-component.md) document and install the `web-component` as described in the mentioned document.
 
-## Usage
+### Usage
 
 To use component in Angular, follow these steps:
 

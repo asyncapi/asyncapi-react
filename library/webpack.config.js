@@ -2,7 +2,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
-module.exports = {
+const umdBundle = {
   entry: {
     index: './src/index.ts',
     'without-parser': './src/without-parser.ts',
@@ -52,3 +52,40 @@ module.exports = {
     // new BundleAnalyzerPlugin(),
   ],
 };
+
+const standaloneBundle = {
+  entry: {
+    index: './src/standalone.ts',
+  },
+  target: 'web',
+  mode: 'production',
+
+  output: {
+    path: path.resolve(__dirname, 'browser/standalone'),
+    filename: '[name].js',
+    library: 'AsyncApiStandalone',
+    libraryTarget: 'umd',
+    libraryExport: 'default',
+    umdNamedDefine: true,
+    globalObject: `(typeof self !== 'undefined' ? self : this)`,
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          configFile: 'tsconfig.esm.json',
+          transpileOnly: true,
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
+};
+
+module.exports = [umdBundle, standaloneBundle];
