@@ -77,7 +77,10 @@
   "release": {
     "branches": [
       "master",
-      {"name": "next", "prerelease": true}
+      {
+        "name": "next",
+        "prerelease": true
+      }
     ],
     "plugins": [
       [
