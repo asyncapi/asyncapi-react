@@ -76,12 +76,6 @@ export async function getStaticProps() {
 }
 ```
 
-> **NOTE**: If you have bundling problems with importing `AsyncApiComponentWP` from `@asyncapi/react-component` you can use:
->
-> ```js
-> import AsyncApiComponentWP from "@asyncapi/react-component/browser/without-parser";
-> ```
-
 Some benefits using above solution:
 
 - specification is validated and parsed in build time of page, thus avoiding unnecessary operations on the browser side. Finally rendering is faster.

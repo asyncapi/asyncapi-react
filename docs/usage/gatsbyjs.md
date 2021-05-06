@@ -61,12 +61,6 @@ export default function AsyncApiDocsPage({ pageContext: { asyncapi } }) {
 }
 ```
 
-> **NOTE**: If you have bundling problems with importing `AsyncApiComponentWP` from `@asyncapi/react-component` you can use:
->
-> ```js
-> import AsyncApiComponentWP from "@asyncapi/react-component/browser/without-parser";
-> ```
-
 ```js
 /** 
  * In `gatsby-node.js` file
