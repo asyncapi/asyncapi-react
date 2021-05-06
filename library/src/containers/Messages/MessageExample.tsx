@@ -9,6 +9,10 @@ interface Props {
 }
 
 export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
+  if (!message) {
+    return null;
+  }
+
   const payload = message.payload();
   const headers = message.headers();
 

@@ -20,6 +20,10 @@ export const Operation: React.FunctionComponent<Props> = ({
   channelName,
   channel,
 }) => {
+  if (!operation) {
+    return null;
+  }
+
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
   const operationSummary = operation.summary();
 

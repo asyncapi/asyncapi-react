@@ -15,6 +15,10 @@ export const Server: React.FunctionComponent<Props> = ({
   serverName,
   server,
 }) => {
+  if (!server) {
+    return null;
+  }
+
   const urlVariables = SchemaHelpers.serverVariablesToSchema(
     server.variables(),
   );
