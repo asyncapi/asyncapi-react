@@ -30,3 +30,4 @@ jobs:
           commit_message_prod: 'fix: update ${{ steps.extractname.outputs.packname }} to ${{ steps.extractver.outputs.version }} version'
           #This is commit message and PR title for repos where this package is in devDependencies
           commit_message_dev: 'chore: update ${{ steps.extractname.outputs.packname }} to ${{ steps.extractver.outputs.version }} version'
+          packagejson_path: ./library
