@@ -27,6 +27,10 @@ export const Message: React.FunctionComponent<Props> = ({
   index,
   showExamples = false,
 }) => {
+  if (!message) {
+    return null;
+  }
+
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();

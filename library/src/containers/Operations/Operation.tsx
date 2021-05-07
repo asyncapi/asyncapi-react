@@ -20,6 +20,10 @@ export const Operation: React.FunctionComponent<Props> = ({
   channelName,
   channel,
 }) => {
+  if (!operation) {
+    return null;
+  }
+
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
   const operationSummary = operation.summary();
 
@@ -107,7 +111,10 @@ export const Operation: React.FunctionComponent<Props> = ({
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message message={operation.message()} showExamples={true} />
+              <Message
+                message={(operation.message as any)(0)}
+                showExamples={true}
+              />
             </div>
           </div>
         )}
