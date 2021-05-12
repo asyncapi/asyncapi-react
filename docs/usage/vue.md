@@ -1,4 +1,4 @@
-# Using in Angular
+# Using in Vue
 
 If you wanna use the React AsyncAPI component in your Vue project, you may want to use the `AsyncApiStandalone` bundle with `React` and `ReactDom` onboard.
 
