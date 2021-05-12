@@ -46,4 +46,4 @@ To use component in Angular, follow these steps:
    <style scope src="@/assets/asyncapi.min.css"></style>
    ```
 
-3. Use component in your application.
+3. Use the component in your application.

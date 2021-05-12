@@ -101,7 +101,6 @@ To check how to use web-component or use a component in other technologies see:
 - [Using in Angular](./docs/usage/angular.md)
 - [Using in Vue](./docs/usage/vue.md)
 - [Using in NextJS](./docs/usage/nextjs.md)
-- [Using in GatsbyJS](./docs/usage/gatsbyjs.md)
 - [Web Component usage](./docs/usage/web-component.md)
 
 ## Props

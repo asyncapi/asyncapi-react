@@ -48,15 +48,15 @@ To use component in Angular, follow these steps:
   }
   ```
 
-2. Update given `NgModule` in which you want to use the component by importing component into the `declarations` array.
+2. Update given `NgModule` in which you want to use the component by importing the component into the `declarations` array.
 
 3. Import styles from `@asyncapi/react-component/styles/default.min.css`:
 
-   - import styles in main style file by `@import @asyncapi/react-component/styles/default.min.css`.
+   - import styles in main `css` file by `@import @asyncapi/react-component/styles/default.min.css`.
    - or import styles using path `node_modules/@asyncapi/react-component/styles/default.min.css` in `angular.json` file.
-   - or copy content from `@asyncapi/react-component/styles/default.min.css` to `assets/asyncapi.min.css` and import file like above.
+   - or copy content from `@asyncapi/react-component/styles/default.min.css` to `assets/asyncapi.min.css` and import file like in the second point.
 
-4. Use component in your application.
+4. Use the component in your application.
 
 ## Web component
 
@@ -66,7 +66,7 @@ First read the [Web Component usage](./web-component.md) document and install th
 
 ### Usage
 
-To use component in Angular, follow these steps:
+To use the component in Angular, follow these steps:
 
 1. Update `AppModule` by adding the `CUSTOM_ELEMENTS_SCHEMA` to the `schemas` array in the `NgModule` metadata:
 
@@ -115,4 +115,4 @@ To use component in Angular, follow these steps:
   - `schema`, `config`, `schemaUrl`, `schemaFetchOptions` are Web Component's properties used in any valid combination, as described in [Web Component specification](#web-component),
   - `cssImportPath` is the path to styles. By default it is `assets/default.min.css`
 
-  > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/styles/default.min.css` file to a `assets/default.min.css` file.
+  > **NOTE**: The easiest way to use the default `css` is to copy the content of the `@asyncapi/react-component/styles/default.min.css` file to a `assets/default.min.css` file.
