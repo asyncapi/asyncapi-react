@@ -291,17 +291,60 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.isExpandable(schema);
       expect(result).toEqual(true);
     });
+
+    test('string should not be expandable', () => {
+      const schema = new Schema({ type: 'string' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
+
+    test('number should not be expandable', () => {
+      const schema = new Schema({ type: 'number' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
+
+    test('integer should not be expandable', () => {
+      const schema = new Schema({ type: 'integer' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
+
+    test('boolean should not be expandable', () => {
+      const schema = new Schema({ type: 'boolean' });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
+
+    test('union type should not be expandable', () => {
+      const schema = new Schema({ type: ['string', 'number'] });
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
+
+    test('empty schema should not be expandable', () => {
+      const schema = new Schema({});
+      const result = SchemaHelpers.isExpandable(schema);
+      expect(result).toEqual(false);
+    });
   });
 
   describe('.getCustomExtensions', () => {
     test('should return extensions', () => {
-      const schema = new Schema({ 'x-foo': true, 'x-bar': false });
+      const schema = new Schema({
+        type: 'string',
+        minLength: 1,
+        'x-foo': true,
+        'x-bar': false,
+      });
       const result = SchemaHelpers.getCustomExtensions(schema);
       expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
     });
 
     test('should skip private extensions', () => {
       const schema = new Schema({
+        type: 'object',
+        additionalProperties: false,
         'x-foo': true,
         'x-bar': false,
         'x-parser-foo': true,

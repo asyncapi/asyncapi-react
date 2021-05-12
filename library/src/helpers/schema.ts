@@ -228,11 +228,7 @@ export class SchemaHelpers {
     minItems: 'array',
     uniqueItems: 'array',
     contains: 'array',
-    maxContains: 'array',
-    minContains: 'array',
-    prefixItems: 'array',
     additionalItems: 'array',
-    unevaluatedItems: 'array',
     // object
     maxProperties: 'object',
     minProperties: 'object',
@@ -241,10 +237,7 @@ export class SchemaHelpers {
     patternProperties: 'object',
     propertyNames: 'object',
     dependencies: 'object',
-    dependentRequired: 'object',
-    dependentSchemas: 'object',
     additionalProperties: 'object',
-    unevaluatedProperties: 'object',
   };
 
   private static toType(type: string, schema: Schema): string {
