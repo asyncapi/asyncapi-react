@@ -9,6 +9,8 @@
 /**/bundles
 /**/build
 /**/dist
+/library/browser
+/library/lib
 /library/styles
 
 # misc
