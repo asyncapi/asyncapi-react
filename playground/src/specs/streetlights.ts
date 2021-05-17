@@ -373,14 +373,21 @@ components:
       required:
         - name
       dependencies:
-        credit_card: [billing_address]
-        billing_address: [credit_card]
-        schema_dependency:
+        credit_card:
           properties:
-            additionalProp:
+            billing_address:
+              type: string
+            billing_address2:
               type: string
           required:
-            - name
+          - billing_address
+          dependencies:
+            billing_address2:
+              properties:
+                billing_address3:
+                  type: string
+              required:
+              - billing_address3    
 
     subscriptionStatus:
       type: object

@@ -182,6 +182,12 @@ export class SchemaHelpers {
     return new SchemaClass(json);
   }
 
+  /**
+   * Retrieves from given value all custom extensions (value with key started by `x-`).
+   * However, it skips those private extensions that begin with `x-parser-` and `x-schema-private-`.
+   *
+   * @param value
+   */
   static getCustomExtensions(value: any) {
     if (!value || typeof value.extensions !== 'function') {
       return;
@@ -200,6 +206,12 @@ export class SchemaHelpers {
     );
   }
 
+  /**
+   * Retrieves from given schema all dependent required requires by given propertyName from `dependencies` object.
+   *
+   * @param propertyName
+   * @param schema
+   */
   static getDependentRequired(
     propertyName: string,
     schema: Schema,
@@ -218,6 +230,11 @@ export class SchemaHelpers {
     return dependentRequired.length ? dependentRequired : undefined;
   }
 
+  /**
+   * Retrieves from given schema all dependent schemas from `dependencies` object.
+   *
+   * @param schema
+   */
   static getDependentSchemas(schema: Schema): Schema | undefined {
     const dependencies = schema.dependencies();
     if (!dependencies) {
