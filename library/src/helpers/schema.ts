@@ -10,12 +10,16 @@ export class SchemaHelpers {
 
   static toSchemaType(schema: Schema | boolean): string {
     if (schema === true) {
-      return 'Any';
-    } else if (schema === false) {
-      return 'Never';
+      return 'any';
+    }
+    if (schema === false) {
+      return 'never';
+    }
+    if (Object.keys(schema.json()).length === 0) {
+      return 'any';
     }
 
-    let type = schema.type();
+    let type = this.inferType(schema);
     if (Array.isArray(type)) {
       return type.map(t => this.toType(t, schema)).join(' | ');
     }
@@ -24,7 +28,8 @@ export class SchemaHelpers {
 
     if (type && combinedType) {
       return `${type} ${combinedType}`;
-    } else if (combinedType) {
+    }
+    if (combinedType) {
       return combinedType;
     }
     return type;
@@ -99,7 +104,7 @@ export class SchemaHelpers {
   }
 
   static isExpandable(schema: Schema): boolean {
-    let type = schema.type();
+    let type = this.inferType(schema);
     type = Array.isArray(type) ? type : [type];
     if (type.includes('object') || type.includes('array')) {
       return true;
@@ -110,11 +115,9 @@ export class SchemaHelpers {
       schema.anyOf() ||
       schema.allOf() ||
       schema.not() ||
-      Object.keys(schema.properties()).length ||
-      schema.additionalProperties() ||
-      schema.items() ||
-      schema.additionalItems() ||
-      schema.if()
+      schema.if() ||
+      schema.then() ||
+      schema.else()
     ) {
       return true;
     }
@@ -125,6 +128,24 @@ export class SchemaHelpers {
     }
 
     return false;
+  }
+
+  static getCustomExtensions(value: any) {
+    if (!value || typeof value.extensions !== 'function') {
+      return;
+    }
+    return Object.entries(value.extensions() || {}).reduce(
+      (obj, [extName, ext]) => {
+        if (
+          !extName.startsWith('x-parser-') &&
+          !extName.startsWith('x-schema-private-')
+        ) {
+          obj[extName] = ext;
+        }
+        return obj;
+      },
+      {},
+    );
   }
 
   static serverVariablesToSchema(
@@ -179,24 +200,6 @@ export class SchemaHelpers {
     return new SchemaClass(json);
   }
 
-  static getCustomExtensions(value: any) {
-    if (!value || typeof value.extensions !== 'function') {
-      return;
-    }
-    return Object.entries(value.extensions() || {}).reduce(
-      (obj, [extName, ext]) => {
-        if (
-          !extName.startsWith('x-parser-') &&
-          !extName.startsWith('x-schema-private-')
-        ) {
-          obj[extName] = ext;
-        }
-        return obj;
-      },
-      {},
-    );
-  }
-
   private static jsonSchemaTypes = [
     'string',
     'number',
@@ -206,32 +209,116 @@ export class SchemaHelpers {
     'object',
     'null',
   ];
+  private static jsonSchemaKeywordTypes: Record<string, string> = {
+    // string
+    maxLength: 'string',
+    minLength: 'string',
+    pattern: 'string',
+    contentMediaType: 'string',
+    contentEncoding: 'string',
+    // number
+    multipleOf: 'number',
+    maximum: 'number',
+    exclusiveMaximum: 'number',
+    minimum: 'number',
+    exclusiveMinimum: 'number',
+    // array
+    items: 'array',
+    maxItems: 'array',
+    minItems: 'array',
+    uniqueItems: 'array',
+    contains: 'array',
+    additionalItems: 'array',
+    // object
+    maxProperties: 'object',
+    minProperties: 'object',
+    required: 'object',
+    properties: 'object',
+    patternProperties: 'object',
+    propertyNames: 'object',
+    dependencies: 'object',
+    additionalProperties: 'object',
+  };
 
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
       const items = schema.items();
-      let types = 'Unknown';
+      let types;
       if (Array.isArray(items)) {
         types = items.map(item => this.toSchemaType(item)).join(', ');
+        types = types.length ? types : 'unknown';
       } else if (items) {
         types = this.toSchemaType(items);
+        types = types || 'unknown';
       }
-      return `Array<${types}>`;
+      return `array<${types}>`;
     }
     return type;
   }
 
   private static toCombinedType(schema: Schema): string | undefined {
     if (schema.oneOf()) {
-      return 'OneOf';
+      return 'oneOf';
     }
     if (schema.anyOf()) {
-      return 'AnyOf';
+      return 'anyOf';
     }
     if (schema.allOf()) {
-      return 'AllOf';
+      return 'allOf';
     }
     return;
+  }
+
+  private static inferType(schema: Schema): string[] | string {
+    const jsonSchema = schema.json();
+    const keywords = Object.keys(this.jsonSchemaKeywordTypes);
+    const keywordsLength = keywords.length;
+
+    const possibleTypes: Record<string, undefined> = {};
+
+    const jsonTypes = jsonSchema.type;
+    if (jsonTypes !== undefined) {
+      if (Array.isArray(jsonTypes)) {
+        for (let i = 0, l = jsonTypes.length; i < l; i++) {
+          possibleTypes[jsonTypes[i]] = undefined;
+        }
+      } else {
+        possibleTypes[jsonTypes] = undefined;
+      }
+    }
+
+    for (let i = 0; i < keywordsLength; i++) {
+      const keyword = keywords[i];
+      if (jsonSchema[keyword] !== undefined) {
+        possibleTypes[this.jsonSchemaKeywordTypes[keyword]] = undefined;
+      }
+    }
+    if (jsonSchema.enum) {
+      for (const value of jsonSchema.enum) {
+        possibleTypes[typeof value] = undefined;
+      }
+    }
+
+    const types = Object.keys(possibleTypes);
+    if (types.length === 1) {
+      return types[0];
+    }
+    // we cannot infer `number` type when schema has explicit defined `integer` type
+    if (jsonTypes === 'integer') {
+      return types.filter(t => t !== 'number');
+    }
+    if (
+      Array.isArray(jsonTypes) &&
+      jsonTypes.includes('integer') &&
+      !jsonTypes.includes('number')
+    ) {
+      return types.filter(t => t !== 'number');
+    }
+    // if types have inferred `integer` and `number` types, `integer` is unnecessary
+    if (types.includes('integer') && types.includes('number')) {
+      return types.filter(t => t !== 'integer');
+    }
+    return types;
   }
 
   private static humanizeNumberRangeConstraint(
@@ -254,10 +341,10 @@ export class SchemaHelpers {
       numberRange += hasExclusiveMax ? ' )' : ' ]';
     } else if (hasMin) {
       numberRange = hasExclusiveMin ? '> ' : '>= ';
-      numberRange += min;
+      numberRange += hasExclusiveMin ? exclusiveMin : min;
     } else if (hasMax) {
       numberRange = hasExclusiveMax ? '< ' : '<= ';
-      numberRange += max;
+      numberRange += hasExclusiveMax ? exclusiveMax : max;
     }
     return numberRange;
   }

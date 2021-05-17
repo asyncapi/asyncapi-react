@@ -91,7 +91,7 @@ export const Schema: React.FunctionComponent<Props> = ({
           </div>
           {rawValue ? (
             <div>
-              <div className="text-sm font-bold">{schema.const()}</div>
+              <div className="text-sm">{schema.const()}</div>
             </div>
           ) : (
             <div>
