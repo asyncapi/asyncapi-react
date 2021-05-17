@@ -442,7 +442,27 @@ describe('SchemaHelpers', () => {
       expect(zorResult).toEqual(undefined);
     });
 
-    test('should return dependent required', () => {
+    test('should return dependent required (simple case)', () => {
+      const schema = new Schema({
+        properties: {
+          foo: { type: 'string' },
+          bar: { type: 'string' },
+          zor: { type: 'string' },
+        },
+        dependencies: {
+          foo: ['bar'],
+        },
+      });
+
+      const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
+      expect(fooResult).toEqual(undefined);
+      const barResult = SchemaHelpers.getDependentRequired('bar', schema);
+      expect(barResult).toEqual(['foo']);
+      const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
+      expect(zorResult).toEqual(undefined);
+    });
+
+    test('should return dependent required (complex case)', () => {
       const schema = new Schema({
         properties: {
           foo: { type: 'string' },
@@ -486,7 +506,7 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(undefined);
     });
 
-    test('should return dependent schemas', () => {
+    test('should return dependent schemas (simple case)', () => {
       const jsonSchema = {
         type: 'object',
         properties: {
@@ -516,6 +536,58 @@ describe('SchemaHelpers', () => {
               billing_address: { type: 'string' },
             },
             required: ['billing_address'],
+          },
+        },
+        'x-schema-private-render-additional-info': false,
+        'x-schema-private-render-type': false,
+      });
+
+      const result = SchemaHelpers.getDependentSchemas(schema);
+      expect(result).toEqual(expected);
+    });
+
+    test('should return dependent schemas (complex case)', () => {
+      const jsonSchema = {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          credit_card: {
+            type: 'string',
+          },
+        },
+        required: ['name'],
+        dependencies: {
+          credit_card: {
+            properties: {
+              billing_address: { type: 'string' },
+            },
+            required: ['billing_address'],
+          },
+          billing_address: {
+            properties: {
+              account: { type: 'string' },
+            },
+            required: ['account'],
+          },
+        },
+      };
+      const schema = new Schema(jsonSchema);
+      const expected = new Schema({
+        type: 'object',
+        properties: {
+          credit_card: {
+            properties: {
+              billing_address: { type: 'string' },
+            },
+            required: ['billing_address'],
+          },
+          billing_address: {
+            properties: {
+              account: { type: 'string' },
+            },
+            required: ['account'],
           },
         },
         'x-schema-private-render-additional-info': false,
