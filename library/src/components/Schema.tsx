@@ -11,6 +11,7 @@ interface Props {
   isCircular?: boolean;
   isPatternProperty?: boolean;
   isProperty?: boolean;
+  dependentRequired?: string[];
   expanded?: boolean;
 }
 
@@ -23,6 +24,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   isCircular = false,
   isPatternProperty = false,
   isProperty = false,
+  dependentRequired,
   expanded = false,
 }) => {
   const { reverse } = useContext(SchemaContext);
@@ -37,9 +39,10 @@ export const Schema: React.FunctionComponent<Props> = ({
   }
 
   const uid = schema.uid();
+  const dependentSchemas = SchemaHelpers.getDependentSchemas(schema);
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
-  const isExpandable = SchemaHelpers.isExpandable(schema);
+  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
   const externalDocs = schema.externalDocs();
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
@@ -79,6 +82,16 @@ export const Schema: React.FunctionComponent<Props> = ({
               </div>
             )}
             {required && <div className="text-red-600 text-xs">required</div>}
+            {dependentRequired && (
+              <>
+                <div className="text-gray-500 text-xs">
+                  required when defined:
+                </div>
+                <div className="text-red-600 text-xs">
+                  {dependentRequired.join(', ')}
+                </div>
+              </>
+            )}
             {schema.deprecated() && (
               <div className="text-red-600 text-xs">deprecated</div>
             )}
@@ -285,6 +298,13 @@ export const Schema: React.FunctionComponent<Props> = ({
               <Schema schema={schema.else()} schemaName="Otherwise:" />
             )}
 
+            {dependentSchemas && (
+              <Schema
+                schema={dependentSchemas}
+                schemaName="Dependent schemas:"
+              />
+            )}
+
             <Extensions item={schema} />
 
             <AdditionalProperties schema={schema} />
@@ -321,6 +341,10 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           required={required.includes(propertyName)}
           isCircular={circularProps.includes(propertyName)}
           isProperty={true}
+          dependentRequired={SchemaHelpers.getDependentRequired(
+            propertyName,
+            schema,
+          )}
           key={propertyName}
         />
       ))}

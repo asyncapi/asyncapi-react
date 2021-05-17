@@ -130,24 +130,6 @@ export class SchemaHelpers {
     return false;
   }
 
-  static getCustomExtensions(value: any) {
-    if (!value || typeof value.extensions !== 'function') {
-      return;
-    }
-    return Object.entries(value.extensions() || {}).reduce(
-      (obj, [extName, ext]) => {
-        if (
-          !extName.startsWith('x-parser-') &&
-          !extName.startsWith('x-schema-private-')
-        ) {
-          obj[extName] = ext;
-        }
-        return obj;
-      },
-      {},
-    );
-  }
-
   static serverVariablesToSchema(
     urlVariables?: Record<string, ServerVariable>,
   ): Schema | undefined {
@@ -197,6 +179,90 @@ export class SchemaHelpers {
 
   static jsonToSchema(value: any): any {
     const json = this.jsonFieldToSchema(value);
+    return new SchemaClass(json);
+  }
+
+  /**
+   * Retrieves from given value all custom extensions (value with key started by `x-`).
+   * However, it skips those private extensions that begin with `x-parser-` and `x-schema-private-`.
+   *
+   * @param value
+   */
+  static getCustomExtensions(value: any) {
+    if (!value || typeof value.extensions !== 'function') {
+      return;
+    }
+    return Object.entries(value.extensions() || {}).reduce(
+      (obj, [extName, ext]) => {
+        if (
+          !extName.startsWith('x-parser-') &&
+          !extName.startsWith('x-schema-private-')
+        ) {
+          obj[extName] = ext;
+        }
+        return obj;
+      },
+      {},
+    );
+  }
+
+  /**
+   * Retrieves from given schema all dependent required requires by given propertyName from `dependencies` object.
+   *
+   * @param propertyName
+   * @param schema
+   */
+  static getDependentRequired(
+    propertyName: string,
+    schema: Schema,
+  ): string[] | undefined {
+    const dependentRequired: string[] = [];
+    const dependencies = schema.dependencies();
+    if (!dependencies) {
+      return;
+    }
+
+    for (const [prop, array] of Object.entries(dependencies)) {
+      if (Array.isArray(array) && array.includes(propertyName)) {
+        dependentRequired.push(prop);
+      }
+    }
+    return dependentRequired.length ? dependentRequired : undefined;
+  }
+
+  /**
+   * Retrieves from given schema all dependent schemas from `dependencies` object.
+   *
+   * @param schema
+   */
+  static getDependentSchemas(schema: Schema): Schema | undefined {
+    const dependencies = schema.dependencies();
+    if (!dependencies) {
+      return;
+    }
+
+    const records: Record<string, Schema> = {};
+    for (const [prop, propSchema] of Object.entries(dependencies)) {
+      if (typeof propSchema === 'object' && !Array.isArray(propSchema)) {
+        records[prop] = propSchema;
+      }
+    }
+    if (!Object.keys(records).length) {
+      return undefined;
+    }
+
+    const json = {
+      type: 'object',
+      properties: Object.entries(records).reduce(
+        (obj, [propertyName, propertySchema]) => {
+          obj[propertyName] = Object.assign({}, propertySchema.json());
+          return obj;
+        },
+        {},
+      ),
+      [this.extRenderType]: false,
+      [this.extRenderAdditionalInfo]: false,
+    };
     return new SchemaClass(json);
   }
 

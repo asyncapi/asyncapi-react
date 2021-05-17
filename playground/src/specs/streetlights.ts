@@ -274,6 +274,8 @@ components:
               minimum: 10
             then: 
               multipleOf: 10
+        dependencies:
+          $ref: "#/components/schemas/dependenciesObject"
       required:
         - lumens
       x-schema-extensions-as-object:
@@ -357,6 +359,35 @@ components:
       type: array
       contains:
         type: integer
+    dependenciesObject:
+      type: object
+      properties:
+        name:
+          type: string
+        credit_card:
+          type: integer
+        billing_address:
+          type: string
+        schema_dependency:
+          type: string
+      required:
+        - name
+      dependencies:
+        credit_card:
+          properties:
+            billing_address:
+              type: string
+            billing_address2:
+              type: string
+          required:
+          - billing_address
+          dependencies:
+            billing_address2:
+              properties:
+                billing_address3:
+                  type: string
+              required:
+              - billing_address3    
 
     subscriptionStatus:
       type: object
