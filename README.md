@@ -7,7 +7,7 @@
 
 ---
 
-> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. Current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch.
+> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. The current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch. Check out releases with `next` suffix in the release tag or the `next` tag on NPM.
 
 ---
 
