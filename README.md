@@ -7,6 +7,10 @@
 
 ---
 
+> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. Current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch.
+
+---
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component)
 
 ## Overview
