@@ -231,7 +231,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
         {isCircular || !isExpandable ? null : (
           <div
-            className={`rounded p-4 py-2 bg-gray-100 ${
+            className={`rounded p-4 py-2 bg-gray-100 border bg-gray-100 ${
               reverse ? 'bg-gray-200' : ''
             } ${expand ? 'block' : 'hidden'}`}
           >

@@ -44,7 +44,7 @@ export const Message: React.FunctionComponent<Props> = ({
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8">
-        <div className="shadow rounded bg-gray-200 p-4">
+        <div className="shadow rounded bg-gray-200 p-4 border bg-gray-100">
           <div>
             {index !== undefined && (
               <span className="text-gray-700 font-bold mr-2">#{index}</span>

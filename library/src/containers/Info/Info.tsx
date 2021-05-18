@@ -18,6 +18,7 @@ export const Info: React.FunctionComponent = () => {
     return null;
   }
 
+  const specId = asyncapi.id();
   const externalDocs = asyncapi.externalDocs();
   const license = info.license();
   const termsOfService = info.termsOfService();
@@ -105,6 +106,13 @@ export const Info: React.FunctionComponent = () => {
                   </li>
                 )}
               </>
+            )}
+            {specId && (
+              <li className="inline-block mt-2 mr-2">
+                <span className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                  ID: {specId}
+                </span>
+              </li>
             )}
           </ul>
         )}
