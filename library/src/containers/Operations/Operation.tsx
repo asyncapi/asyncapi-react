@@ -2,9 +2,17 @@ import React from 'react';
 import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
 import { Message } from '../Messages/Message';
-import { Markdown, Schema, Bindings, Tags, Extensions } from '../../components';
+import {
+  Href,
+  Markdown,
+  Schema,
+  Bindings,
+  Tags,
+  Extensions,
+} from '../../components';
 
 import { SchemaHelpers } from '../../helpers';
+import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
 
 interface Props {
@@ -23,6 +31,9 @@ export const Operation: React.FunctionComponent<Props> = ({
   if (!operation) {
     return null;
   }
+
+  const operationId = operation.id();
+  const externalDocs = operation.externalDocs();
 
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
   const operationSummary = operation.summary();
@@ -57,6 +68,32 @@ export const Operation: React.FunctionComponent<Props> = ({
         {operation.hasDescription() && (
           <div className="mt-2">
             <Markdown>{operation.description()}</Markdown>
+          </div>
+        )}
+
+        {externalDocs && (
+          <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+            {externalDocs && (
+              <li className="inline-block">
+                <Href
+                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  href={externalDocs.url()}
+                >
+                  <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+                </Href>
+              </li>
+            )}
+          </ul>
+        )}
+
+        {operationId && (
+          <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+            <div className="text-sm text-gray-700">
+              Operation ID
+              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                {operationId}
+              </span>
+            </div>
           </div>
         )}
 

@@ -102,6 +102,9 @@ channels:
     subscribe:
       summary: Receive information about environmental lighting conditions of a particular streetlight.
       operationId: receiveLightMeasurement
+      externalDocs:
+        description: Find more info here
+        url: https://example.com
       traits:
         - $ref: '#/components/operationTraits/kafka'
       message:
@@ -130,6 +133,9 @@ channels:
         $ref: '#/components/parameters/streetlightId'
     publish:
       operationId: turnOn
+      externalDocs:
+        description: Find more info here
+        url: https://example.com
       traits:
         - $ref: '#/components/operationTraits/kafka'
       message:
@@ -140,7 +146,6 @@ channels:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
     publish:
-      operationId: turnOff
       traits:
         - $ref: '#/components/operationTraits/kafka'
       message:
