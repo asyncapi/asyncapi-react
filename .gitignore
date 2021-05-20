@@ -10,6 +10,8 @@
 /**/dist
 /library/browser
 /library/styles
+/library/LICENSE
+/library/README.md
 
 # misc
 .DS_Store
