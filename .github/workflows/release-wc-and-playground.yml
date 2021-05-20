@@ -11,7 +11,7 @@ jobs:
     name: Release Web-component
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository (@latest tag -> master branch)
+      - name: Checkout repository
         uses: actions/checkout@v2
         with:
           # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
