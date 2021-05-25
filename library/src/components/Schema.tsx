@@ -42,12 +42,14 @@ export const Schema: React.FunctionComponent<Props> = ({
   const dependentSchemas = SchemaHelpers.getDependentSchemas(schema);
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
-  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
   const externalDocs = schema.externalDocs();
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
   const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
+
+  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
+  isCircular = isCircular || schema.ext('x-parser-circular') || false;
 
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
