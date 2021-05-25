@@ -3,6 +3,7 @@ export * from './application-headers';
 export * from './correlation-id';
 export * from './dummy';
 export * from './gitter-streaming';
+export * from './invalid';
 export * from './not';
 export * from './oneOf';
 export * from './rpc-client';

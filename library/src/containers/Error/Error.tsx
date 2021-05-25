@@ -16,7 +16,7 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
       return (
         <div key={index} className="flex">
           <span>{`${singleError.location.startLine}.`}</span>
-          <code className="break-words whitespace-pre-wrap ml-2">
+          <code className="whitespace-pre-wrap break-all ml-2">
             {singleError.title}
           </code>
         </div>

@@ -9,15 +9,15 @@ import {
   Tabs,
   Tab,
   PlaygroundWrapper,
-  ContentWrapper,
   CodeEditorsWrapper,
   AsyncApiWrapper,
+  SplitWrapper,
 } from './components';
 
 import { defaultConfig, parse, debounce } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.streetlights;
+const defaultSchema = specs.invalid;
 
 interface State {
   schema: string;
@@ -60,7 +60,7 @@ class Playground extends Component<{}, State> {
     return (
       <PlaygroundWrapper>
         <Navigation />
-        <ContentWrapper>
+        <SplitWrapper>
           <CodeEditorsWrapper>
             <Tabs
               additionalHeaderContent={this.renderAdditionalHeaderContent()}
@@ -91,7 +91,7 @@ class Playground extends Component<{}, State> {
           <AsyncApiWrapper>
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
-        </ContentWrapper>
+        </SplitWrapper>
       </PlaygroundWrapper>
     );
   }
