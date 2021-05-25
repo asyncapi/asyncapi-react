@@ -348,6 +348,7 @@ components:
       properties:
         key2:
           type: string
+          format: time
     oneOfSchema:
       oneOf:
         - $ref: "#/components/schemas/objectWithKey"
