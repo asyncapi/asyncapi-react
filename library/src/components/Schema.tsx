@@ -38,16 +38,34 @@ export const Schema: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const uid = schema.uid();
   const dependentSchemas = SchemaHelpers.getDependentSchemas(schema);
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
-  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
   const externalDocs = schema.externalDocs();
 
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
   const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
+
+  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
+  isCircular = isCircular || schema.ext('x-parser-circular') || false;
+
+  let uid = schema.uid();
+
+  /**
+   * checking uid for circular items
+   * after fixing https://github.com/asyncapi/parser-js/issues/293 statement should be removed
+   * `x-parser-circular` extension is added to every schema which has circular `items` field,
+   * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
+   */
+  if (
+    isCircular &&
+    !uid &&
+    schema.items() &&
+    typeof (schema.items() as SchemaType).uid === 'function'
+  ) {
+    uid = (schema.items() as SchemaType).uid();
+  }
 
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
@@ -112,7 +130,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {renderType && (
                   <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
                     {isCircular
-                      ? '[CIRCULAR]'
+                      ? `${SchemaHelpers.toSchemaType(schema)} [CIRCULAR]`
                       : SchemaHelpers.toSchemaType(schema)}
                   </div>
                 )}
