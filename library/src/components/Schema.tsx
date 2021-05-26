@@ -52,8 +52,12 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   let uid = schema.uid();
 
-  // checking uid for circular items
-  // after fixing https://github.com/asyncapi/parser-js/issues/293 statement should be removed
+  /**
+   * checking uid for circular items
+   * after fixing https://github.com/asyncapi/parser-js/issues/293 statement should be removed
+   * `x-parser-circular` extension is added to every schema which has circular `items` field,
+   * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
+   */
   if (
     isCircular &&
     !uid &&
