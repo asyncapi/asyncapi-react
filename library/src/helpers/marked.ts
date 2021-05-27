@@ -23,7 +23,7 @@ hljs.registerLanguage('sh', bash);
 
 const markedOptions: marked.MarkedOptions = {
   langPrefix: 'hljs language-',
-  highlight: function(code, lang) {
+  highlight: (code, lang) => {
     const language = hljs.getLanguage(lang) ? lang : 'javascript';
     return hljs.highlight(code, { language }).value;
   },
