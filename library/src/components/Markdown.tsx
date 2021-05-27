@@ -1,6 +1,7 @@
 import React from 'react';
 import { sanitize } from 'isomorphic-dompurify';
-import marked from 'marked';
+
+import { renderMarkdown } from '../helpers';
 
 export const Markdown: React.FunctionComponent = ({ children }) => {
   if (!children) {
@@ -10,11 +11,10 @@ export const Markdown: React.FunctionComponent = ({ children }) => {
     return <>{children}</>;
   }
 
-  const html = marked(children);
   return (
     <div
-      className="prose max-w-max text-sm"
-      dangerouslySetInnerHTML={{ __html: sanitize(html) }}
+      className="prose max-w-full text-sm"
+      dangerouslySetInnerHTML={{ __html: sanitize(renderMarkdown(children)) }}
     />
   );
 };

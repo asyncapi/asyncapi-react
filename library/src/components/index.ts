@@ -1,6 +1,6 @@
 export * from './Bindings';
 export * from './CollapseButton';
-export * from './Code';
+export * from './JSONSnippet';
 export * from './Extensions';
 export * from './Href';
 export * from './Markdown';

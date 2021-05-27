@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
 
-import { CollapseButton, PreCode } from '../../components';
+import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
 
 interface Props {
@@ -75,14 +75,18 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
                   Example #{idx + 1}
                 </h5>
                 <div className="mt-1">
-                  <PreCode code={MessageHelpers.sanitizeExample(example)} />
+                  <JSONSnippet
+                    snippet={MessageHelpers.sanitizeExample(example)}
+                  />
                 </div>
               </li>
             ))}
           </ul>
         ) : (
           <div className="mt-4">
-            <PreCode code={MessageHelpers.generateExample(schema.json())} />
+            <JSONSnippet
+              snippet={MessageHelpers.generateExample(schema.json())}
+            />
             <h6 className="text-xs font-bold text-gray-700 italic mt-2">
               This example has been generated automatically.
             </h6>

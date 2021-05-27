@@ -45,7 +45,31 @@ servers:
   production:
     url: api.streetlights.smartylighting.com:{port}
     protocol: mqtt
-    description: Test broker
+    description: |
+      Private server that requires authorization.
+      Once the socket is open you can subscribe to private-data channels by sending an authenticated subscribe request message.
+
+      The API client must request an authentication "token" via the following REST API endpoint "GetWebSocketsToken" to connect to WebSockets Private endpoints. For more details read https://support.kraken.com/hc/en-us/articles/360034437672-How-to-retrieve-a-WebSocket-authentication-token-Example-code-in-Python-3
+
+      The resulting token must be provided in the "token" field of any new private WebSocket feed subscription: 
+      \`\`\`json
+      {
+        "event": "subscribe",
+        "subscription":
+        {
+          "name": "ownTrades",
+          "token": "WW91ciBhdXRoZW50aWNhdGlvbiB0b2tlbiBnb2VzIGhlcmUu"
+        }
+      }
+      \`\`\`
+
+      \`\`\`elixir
+      defmodule Hello do
+        def world do
+          IO.puts("hello")
+        end
+      end
+      \`\`\`
     variables:
       port:
         description: Secure connection (TLS) is available through port 8883.
@@ -63,7 +87,23 @@ servers:
   dummy-mqtt:
     url: mqtt://localhost
     protocol: mqtt
-    description: dummy MQTT broker
+    description: |
+      Private server
+
+      \`\`\`csharp
+      using System;
+
+      namespace HelloWorld
+      {
+        class Program
+        {
+          static void Main(string[] args)
+          {
+            Console.WriteLine("Hello World!");    
+          }
+        }
+      }
+      \`\`\`
     bindings:
       mqtt:
         clientId: guest        
