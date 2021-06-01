@@ -56,6 +56,7 @@ const umdBundle = {
 const standaloneBundle = {
   entry: {
     index: './src/standalone.ts',
+    'without-parser': './src/standalone-without-parser.ts',
   },
   target: 'web',
   mode: 'production',
