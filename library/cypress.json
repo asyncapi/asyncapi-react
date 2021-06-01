@@ -1,0 +1,11 @@
+{
+  "ignoreTestFiles": "*.js.map",
+  "integrationFolder": "e2e/integration",
+  "pluginsFile": "e2e/plugins/index.js",
+  "fixturesFolder": false,
+  "supportFile": false,
+  "fileServerFolder": ".",
+  "video": false,
+  "viewportWidth": 1440,
+  "viewportHeight": 720
+}

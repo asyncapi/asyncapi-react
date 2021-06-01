@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <div id="spec"></div>
+
+    <script src="../browser/standalone/index.js"></script>
+
+    <script>
+      const schema = {
+        url:
+          'https://raw.githubusercontent.com/asyncapi/spec/master/examples/2.0.0/streetlights.yml',
+      };
+      AsyncApiStandalone.render({ schema }, document.getElementById('spec'));
+    </script>
+  </body>
+</html>
