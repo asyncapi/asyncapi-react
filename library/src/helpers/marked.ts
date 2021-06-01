@@ -6,6 +6,7 @@ import hljs from 'highlight.js/lib/core';
 // @ts-ignore
 import javascript from 'highlight.js/lib/languages/javascript';
 hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('js', javascript);
 
 // @ts-ignore
 import json from 'highlight.js/lib/languages/json';
