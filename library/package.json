@@ -43,7 +43,7 @@
   "scripts": {
     "start": "tsc -p tsconfig.esm.json --watch",
     "build:dev": "npm run build:esm && npm run build:types && npm run build:styles",
-    "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && build:standalone && npm run build:types && npm run build:styles",
+    "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:standalone && npm run build:types && npm run build:styles",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:umd": "cross-env BUILD_MODE=umd webpack --colors",
