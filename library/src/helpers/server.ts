@@ -19,6 +19,12 @@ export class ServerHelpers {
         return 'Asymmetric Encription';
       case 'httpApiKey':
         return 'HTTP API key';
+      case 'scramSha256':
+        return 'ScramSha256';
+      case 'scramSha512':
+        return 'ScramSha512';
+      case 'gssapi':
+        return 'GSSAPI';
       default:
         return 'API key';
     }
