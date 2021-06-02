@@ -11,6 +11,11 @@ function querySelector(selector: string): Element | DocumentFragment | null {
   return null;
 }
 
+/**
+ * A factory that creates the rendering function of the given React component of any kind.
+ *
+ * @param {Any} component of any kind
+ */
 export function createRender<P>(component: any) {
   return (
     props: P,
@@ -26,6 +31,11 @@ export function createRender<P>(component: any) {
   };
 }
 
+/**
+ * A factory that creates the hydration function of the given React component of any kind.
+ *
+ * @param {Any} component of any kind
+ */
 export function createHydrate<P>(component: any) {
   return (
     props: P,
