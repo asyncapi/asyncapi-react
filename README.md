@@ -96,11 +96,12 @@ render(<App />, document.getElementById("root"));
 
 ## Using in other technologies
 
-To check how to use web-component or use a component in Angular or in NextJS see:
+To check how to use web-component or use a component in other technologies see:
 
-- [Web Component usage](./docs/usage/web-component.md)
 - [Using in Angular](./docs/usage/angular.md)
+- [Using in Vue](./docs/usage/vue.md)
 - [Using in NextJS](./docs/usage/nextjs.md)
+- [Web Component usage](./docs/usage/web-component.md)
 
 ## Props
 

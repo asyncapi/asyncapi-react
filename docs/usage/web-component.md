@@ -2,10 +2,6 @@
 
 If you are not using React you may want to use the `@asyncapi/web-component` component as a plain web component in any other web framework of your choice or as an element of a static HTML webpage. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
 
-## Overview
-
-Read the document to find out how to install dependencies and attach `web-component` in your project.
-
 ## Installation
 
 Run this command to install the component in your project:

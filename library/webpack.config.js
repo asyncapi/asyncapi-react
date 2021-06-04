@@ -2,7 +2,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
-module.exports = {
+const umdBundle = {
   entry: {
     index: './src/index.ts',
     'without-parser': './src/without-parser.ts',
@@ -52,3 +52,53 @@ module.exports = {
     // new BundleAnalyzerPlugin(),
   ],
 };
+
+const standaloneBundle = {
+  entry: {
+    index: './src/standalone.ts',
+    'without-parser': './src/standalone-without-parser.ts',
+  },
+  target: 'web',
+  mode: 'production',
+
+  output: {
+    path: path.resolve(__dirname, 'browser/standalone'),
+    filename: '[name].js',
+    library: 'AsyncApiStandalone',
+    libraryTarget: 'umd',
+    libraryExport: 'default',
+    umdNamedDefine: true,
+    globalObject: `(typeof self !== 'undefined' ? self : this)`,
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          configFile: 'tsconfig.esm.json',
+          transpileOnly: true,
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
+
+  plugins: [
+    /**
+     * Uncomment plugin when you wanna see dependency map of bundled package
+     */
+    // new BundleAnalyzerPlugin(),
+  ],
+};
+
+const bundles = [];
+
+process.env['BUILD_MODE'] === 'umd' && bundles.push(umdBundle);
+process.env['BUILD_MODE'] === 'standalone' && bundles.push(standaloneBundle);
+
+module.exports = bundles;
