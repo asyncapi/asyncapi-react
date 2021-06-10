@@ -4,32 +4,33 @@ import marked from 'marked';
 import hljs from 'highlight.js/lib/core';
 
 // @ts-ignore
-import javascript from 'highlight.js/lib/languages/javascript';
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('js', javascript);
-
-// @ts-ignore
 import json from 'highlight.js/lib/languages/json';
 hljs.registerLanguage('json', json);
 
 // @ts-ignore
 import yaml from 'highlight.js/lib/languages/yaml';
 hljs.registerLanguage('yaml', yaml);
-hljs.registerLanguage('yml', yaml);
 
 // @ts-ignore
 import bash from 'highlight.js/lib/languages/bash';
 hljs.registerLanguage('bash', bash);
-hljs.registerLanguage('sh', bash);
 
 const markedOptions: marked.MarkedOptions = {
   langPrefix: 'hljs language-',
-  highlight: (code, lang) => {
-    const language = hljs.getLanguage(lang) ? lang : 'javascript';
-    return hljs.highlight(code, { language }).value;
+  highlight: (code, language) => {
+    if (!hljs.getLanguage(language)) {
+      return code;
+    }
+    try {
+      return hljs.highlight(code, { language }).value;
+    } catch (e) {
+      return code;
+    }
   },
 };
 
 export function renderMarkdown(content: string): string {
   return marked(content, markedOptions);
 }
+
+export { hljs };

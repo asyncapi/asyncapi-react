@@ -5,5 +5,7 @@ export { AsyncApiProps } from './containers/AsyncApi/AsyncApi';
 export { ConfigInterface } from './config/config';
 export { FetchingSchemaInterface } from './types';
 
-export { AsyncApiComponentWP };
+import { hljs } from './helpers';
+
+export { AsyncApiComponentWP, hljs };
 export default AsyncApiComponent;
