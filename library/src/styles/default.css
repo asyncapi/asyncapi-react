@@ -1,3 +1,5 @@
+@import 'highlight.js/styles/night-owl.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

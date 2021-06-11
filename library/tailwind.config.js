@@ -137,7 +137,17 @@ module.exports = {
       ...theme('colors'),
       DEFAULT: theme('colors.gray.400', 'currentColor'),
     }),
-    extend: {},
+    extend: {
+      typography: theme => ({
+        DEFAULT: {
+          css: {
+            pre: {
+              backgroundColor: theme('colors.gray.900'),
+            },
+          },
+        },
+      }),
+    },
   },
   variants: {
     extend: {},
