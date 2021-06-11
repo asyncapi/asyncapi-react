@@ -2,7 +2,7 @@
 
 ## Overview
 
-The component uses internally to highlight the markdown's code blocks an instance of [`highlight.js`](https://highlightjs.org/). To reduce the size of the component, it only uses the configuration for 3 languages: `json`, `yaml` and `bash`. The rest are rendered as plain text. However, the package provides the instance of the [`highlight.js`](https://highlightjs.org/) outside the package with which you can, for example, add a custom language configuration.
+The component internally uses [`highlight.js`](https://highlightjs.org/) to highlight the markdown code blocks. To reduce the size of the component, it only uses the configuration for 3 languages: `json`, `yaml` and `bash`. The rest are rendered as plain text. However, the package provides the instance of the [`highlight.js`](https://highlightjs.org/) outside the package with which you can, for example, add a custom language configuration.
 
 ## Usage
 
