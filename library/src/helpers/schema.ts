@@ -8,15 +8,21 @@ export class SchemaHelpers {
   static extRawValue = 'x-schema-private-raw-value';
   static extParameterLocation = 'x-schema-private-parameter-location';
 
-  static toSchemaType(schema: Schema | boolean): string {
-    if (schema === true) {
-      return 'any';
+  static toSchemaType(schema: Schema): string {
+    if (schema.isBooleanSchema()) {
+      if (schema.booleanValue() === true) {
+        return 'any';
+      } else {
+        return 'never';
+      }
     }
-    if (schema === false) {
-      return 'never';
-    }
+    // handle case with `{}`
     if (Object.keys(schema.json()).length === 0) {
       return 'any';
+    }
+    // handle case with `{ not: {} }`
+    if (schema.not() && Object.keys(schema.not().json()).length === 0) {
+      return 'never';
     }
 
     let type = this.inferType(schema);

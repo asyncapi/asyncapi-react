@@ -10,7 +10,8 @@ import ChannelParameter from '@asyncapi/parser/lib/models/channel-parameter';
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
     test('should handle true schemas', () => {
-      const result = SchemaHelpers.toSchemaType(true);
+      const schema = new Schema(true);
+      const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`any`);
     });
 
@@ -21,7 +22,14 @@ describe('SchemaHelpers', () => {
     });
 
     test('should handle false schemas', () => {
-      const result = SchemaHelpers.toSchemaType(false);
+      const schema = new Schema(false);
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`never`);
+    });
+
+    test('should handle empty not schemas', () => {
+      const schema = new Schema({ not: {} });
+      const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`never`);
     });
 
