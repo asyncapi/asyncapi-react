@@ -10,7 +10,7 @@ module.exports = {
 
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.esm.json',
+      tsconfig: 'tsconfig.json',
     },
   },
 };
