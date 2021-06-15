@@ -21,7 +21,8 @@ export class SchemaHelpers {
       return 'any';
     }
     // handle case with `{ not: {} }`
-    if (schema.not() && Object.keys(schema.not().json()).length === 0) {
+    const not = schema.not();
+    if (not && Object.keys(not.json()).length === 0) {
       return 'never';
     }
 
@@ -281,41 +282,11 @@ export class SchemaHelpers {
     'object',
     'null',
   ];
-  private static jsonSchemaKeywordTypes: Record<string, string> = {
-    // string
-    maxLength: 'string',
-    minLength: 'string',
-    pattern: 'string',
-    contentMediaType: 'string',
-    contentEncoding: 'string',
-    // number
-    multipleOf: 'number',
-    maximum: 'number',
-    exclusiveMaximum: 'number',
-    minimum: 'number',
-    exclusiveMinimum: 'number',
-    // array
-    items: 'array',
-    maxItems: 'array',
-    minItems: 'array',
-    uniqueItems: 'array',
-    contains: 'array',
-    additionalItems: 'array',
-    // object
-    maxProperties: 'object',
-    minProperties: 'object',
-    required: 'object',
-    properties: 'object',
-    patternProperties: 'object',
-    propertyNames: 'object',
-    dependencies: 'object',
-    additionalProperties: 'object',
-  };
 
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
       const items = schema.items();
-      let types;
+      let types: string = 'unknown';
       if (Array.isArray(items)) {
         types = items.map(item => this.toSchemaType(item)).join(', ');
         types = types.length ? types : 'unknown';
@@ -342,53 +313,26 @@ export class SchemaHelpers {
   }
 
   private static inferType(schema: Schema): string[] | string {
-    const jsonSchema = schema.json();
-    const keywords = Object.keys(this.jsonSchemaKeywordTypes);
-    const keywordsLength = keywords.length;
-
-    const possibleTypes: Record<string, undefined> = {};
-
-    const jsonTypes = jsonSchema.type;
-    if (jsonTypes !== undefined) {
-      if (Array.isArray(jsonTypes)) {
-        for (let i = 0, l = jsonTypes.length; i < l; i++) {
-          possibleTypes[jsonTypes[i]] = undefined;
-        }
-      } else {
-        possibleTypes[jsonTypes] = undefined;
+    const types = schema.type();
+    if (types === undefined) {
+      const constValue = schema.const();
+      if (constValue !== undefined) {
+        return typeof constValue;
       }
+      const enumValue = schema.enum();
+      if (Array.isArray(enumValue) && enumValue.length) {
+        const inferredType = Array.from(new Set(enumValue.map(e => typeof e)));
+        return inferredType.length === 1 ? inferredType[0] : inferredType;
+      }
+      return 'restricted any';
     }
 
-    for (let i = 0; i < keywordsLength; i++) {
-      const keyword = keywords[i];
-      if (jsonSchema[keyword] !== undefined) {
-        possibleTypes[this.jsonSchemaKeywordTypes[keyword]] = undefined;
+    // if types have `integer` and `number` types, `integer` is unnecessary
+    if (Array.isArray(types)) {
+      if (types.includes('integer') && types.includes('number')) {
+        return types.filter(t => t !== 'integer');
       }
-    }
-    if (jsonSchema.enum) {
-      for (const value of jsonSchema.enum) {
-        possibleTypes[typeof value] = undefined;
-      }
-    }
-
-    const types = Object.keys(possibleTypes);
-    if (types.length === 1) {
-      return types[0];
-    }
-    // we cannot infer `number` type when schema has explicit defined `integer` type
-    if (jsonTypes === 'integer') {
-      return types.filter(t => t !== 'number');
-    }
-    if (
-      Array.isArray(jsonTypes) &&
-      jsonTypes.includes('integer') &&
-      !jsonTypes.includes('number')
-    ) {
-      return types.filter(t => t !== 'number');
-    }
-    // if types have inferred `integer` and `number` types, `integer` is unnecessary
-    if (types.includes('integer') && types.includes('number')) {
-      return types.filter(t => t !== 'integer');
+      return types.length === 1 ? types[0] : types;
     }
     return types;
   }

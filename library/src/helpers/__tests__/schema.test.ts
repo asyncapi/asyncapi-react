@@ -52,26 +52,22 @@ describe('SchemaHelpers', () => {
         items: { multipleOf: 2 },
       });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`string | array<number> | object`);
+      expect(result).toEqual(`restricted any`);
     });
 
     test('should handle union types in array', () => {
-      const schema = new Schema({ items: { multipleOf: 2, type: 'string' } });
+      const schema = new Schema({
+        type: 'array',
+        items: { type: ['string', 'number'] },
+      });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`array<string | number>`);
     });
 
     test('should handle tuple types', () => {
       const schema = new Schema({
-        items: [{ properties: {} }, { pattern: '^foo' }, {}],
-      });
-      const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`array<object, string, any>`);
-    });
-
-    test('should handle tuple types', () => {
-      const schema = new Schema({
-        items: [{ properties: {} }, { pattern: '^foo' }, {}],
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
       });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`array<object, string, any>`);
@@ -83,16 +79,16 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(`string oneOf`);
     });
 
-    test(`shouldn't infer number type when explicit is defined only integer type`, () => {
-      const schema = new Schema({ type: 'integer', multipleOf: 2 });
-      const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`integer`);
-    });
-
     test(`should handle integer and number types together`, () => {
       const schema = new Schema({ type: ['integer', 'number'] });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`number`);
+    });
+
+    test(`should handle const`, () => {
+      const schema = new Schema({ const: 'foobar' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`string`);
     });
 
     test(`should handle enum`, () => {
