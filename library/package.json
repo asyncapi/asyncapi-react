@@ -67,7 +67,7 @@
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
-    "@asyncapi/parser": "^1.5.0",
+    "@asyncapi/parser": "file:../../parser-js",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "2.0.7",
