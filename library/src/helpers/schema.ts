@@ -10,7 +10,7 @@ export class SchemaHelpers {
 
   static toSchemaType(schema: Schema): string {
     if (schema.isBooleanSchema()) {
-      if (schema.booleanValue() === true) {
+      if (schema.json() === true) {
         return 'any';
       } else {
         return 'never';
@@ -313,7 +313,7 @@ export class SchemaHelpers {
   }
 
   private static inferType(schema: Schema): string[] | string {
-    const types = schema.type();
+    let types = schema.type();
     if (types === undefined) {
       const constValue = schema.const();
       if (constValue !== undefined) {
@@ -330,7 +330,7 @@ export class SchemaHelpers {
     if (Array.isArray(types)) {
       // if types have `integer` and `number` types, `integer` is unnecessary
       if (types.includes('integer') && types.includes('number')) {
-        return types.filter(t => t !== 'integer');
+        types = types.filter(t => t !== 'integer');
       }
       return types.length === 1 ? types[0] : types;
     }
