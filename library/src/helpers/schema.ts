@@ -327,8 +327,8 @@ export class SchemaHelpers {
       return 'restricted any';
     }
 
-    // if types have `integer` and `number` types, `integer` is unnecessary
     if (Array.isArray(types)) {
+      // if types have `integer` and `number` types, `integer` is unnecessary
       if (types.includes('integer') && types.includes('number')) {
         return types.filter(t => t !== 'integer');
       }
