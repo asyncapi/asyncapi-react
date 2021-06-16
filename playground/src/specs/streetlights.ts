@@ -321,6 +321,11 @@ components:
               multipleOf: 10
         dependencies:
           $ref: "#/components/schemas/dependenciesObject"
+        anySchema: true
+        cannotBeDefined: false
+        restrictedAny: 
+          minimum: 1
+          maximum: 1000
       required:
         - lumens
       x-schema-extensions-as-object:
