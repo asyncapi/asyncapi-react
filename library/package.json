@@ -36,6 +36,7 @@
     "/lib",
     "/browser",
     "/styles",
+    "/tools",
     "./README.md",
     "./LICENSE"
   ],
@@ -49,9 +50,7 @@
     "build:umd": "cross-env BUILD_MODE=umd webpack --colors",
     "build:standalone": "cross-env BUILD_MODE=standalone webpack --colors",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:styles": "npm run build:styles:dev && npm run build:styles:prod",
-    "build:styles:dev": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.css --verbose",
-    "build:styles:prod": "cross-env NODE_ENV=production MINIFY_STYLES=true postcss src/styles/default.css -o styles/default.min.css --verbose",
+    "build:styles": "cross-env NODE_ENV=production node ./tools/styles/script.js ./styles/default.css",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest --detectOpenHandles",
     "test:unit:watch": "jest --detectOpenHandles --watch",
