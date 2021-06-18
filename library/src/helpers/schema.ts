@@ -2,6 +2,47 @@ import { ChannelParameter, ServerVariable, Schema } from '@asyncapi/parser';
 // @ts-ignore
 import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
+const jsonSchemaTypes = [
+  'string',
+  'number',
+  'integer',
+  'boolean',
+  'array',
+  'object',
+  'null',
+];
+const jsonSchemaKeywordTypes: Record<string, string> = {
+  // string
+  maxLength: 'string',
+  minLength: 'string',
+  pattern: 'string',
+  contentMediaType: 'string',
+  contentEncoding: 'string',
+  // number
+  multipleOf: 'number',
+  maximum: 'number',
+  exclusiveMaximum: 'number',
+  minimum: 'number',
+  exclusiveMinimum: 'number',
+  // array
+  items: 'array',
+  maxItems: 'array',
+  minItems: 'array',
+  uniqueItems: 'array',
+  contains: 'array',
+  additionalItems: 'array',
+  // object
+  maxProperties: 'object',
+  minProperties: 'object',
+  required: 'object',
+  properties: 'object',
+  patternProperties: 'object',
+  propertyNames: 'object',
+  dependencies: 'object',
+  additionalProperties: 'object',
+};
+const jsonSchemaKeywords = Object.keys(jsonSchemaKeywordTypes);
+
 export class SchemaHelpers {
   static extRenderType = 'x-schema-private-render-type';
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
@@ -22,7 +63,7 @@ export class SchemaHelpers {
     }
     // handle case with `{ not: {} }`
     const not = schema.not();
-    if (not && Object.keys(not.json()).length === 0) {
+    if (not && this.inferType(not) === 'any') {
       return 'never';
     }
 
@@ -273,34 +314,29 @@ export class SchemaHelpers {
     return new SchemaClass(json);
   }
 
-  private static jsonSchemaTypes = [
-    'string',
-    'number',
-    'integer',
-    'boolean',
-    'array',
-    'object',
-    'null',
-  ];
-
   private static toType(type: string, schema: Schema): string {
     if (type === 'array') {
       const items = schema.items();
-      let types: string = 'unknown';
       if (Array.isArray(items)) {
-        types = items.map(item => this.toSchemaType(item)).join(', ');
-        types = types.length ? types : 'unknown';
-      } else if (items) {
-        types = this.toSchemaType(items);
-        types = types || 'unknown';
+        const types = items.map(item => this.toSchemaType(item)).join(', ');
+        const additionalItems = schema.additionalItems() as any;
+        if (additionalItems === undefined || additionalItems.json()) {
+          const additionalType =
+            additionalItems === undefined || additionalItems.json() === true
+              ? 'any'
+              : this.toSchemaType(additionalItems);
+          return `tuple<${types || 'unknown'}, ...optional<${additionalType}>>`;
+        }
+        return `tuple<${types || 'unknown'}>`;
       }
-      return `array<${types}>`;
+      return `array<${this.toSchemaType(items) || 'unknown'}>`;
     }
     return type;
   }
 
   private static toCombinedType(schema: Schema): string | undefined {
-    if (schema.oneOf()) {
+    const oneOf = schema.oneOf();
+    if (oneOf) {
       return 'oneOf';
     }
     if (schema.anyOf()) {
@@ -314,27 +350,47 @@ export class SchemaHelpers {
 
   private static inferType(schema: Schema): string[] | string {
     let types = schema.type();
-    if (types === undefined) {
-      const constValue = schema.const();
-      if (constValue !== undefined) {
-        return typeof constValue;
+
+    if (types !== undefined) {
+      if (Array.isArray(types)) {
+        // if types have `integer` and `number` types, `integer` is unnecessary
+        if (types.includes('integer') && types.includes('number')) {
+          types = types.filter(t => t !== 'integer');
+        }
+        return types.length === 1 ? types[0] : types;
       }
-      const enumValue = schema.enum();
-      if (Array.isArray(enumValue) && enumValue.length) {
-        const inferredType = Array.from(new Set(enumValue.map(e => typeof e)));
-        return inferredType.length === 1 ? inferredType[0] : inferredType;
-      }
-      return 'restricted any';
+      return types;
     }
 
-    if (Array.isArray(types)) {
-      // if types have `integer` and `number` types, `integer` is unnecessary
-      if (types.includes('integer') && types.includes('number')) {
-        types = types.filter(t => t !== 'integer');
-      }
-      return types.length === 1 ? types[0] : types;
+    const constValue = schema.const();
+    if (constValue !== undefined) {
+      return typeof constValue;
     }
-    return types;
+    const enumValue = schema.enum();
+    if (Array.isArray(enumValue) && enumValue.length) {
+      const inferredType = Array.from(new Set(enumValue.map(e => typeof e)));
+      return inferredType.length === 1 ? inferredType[0] : inferredType;
+    }
+
+    const jsonSchema = schema.json();
+
+    let hasInferredTypes = false;
+    const lentgh = jsonSchemaKeywords.length;
+    for (let i = 0; i < lentgh; i++) {
+      const keyword = jsonSchemaKeywords[i];
+      if (jsonSchema[keyword] !== undefined) {
+        hasInferredTypes = true;
+        break;
+      }
+    }
+
+    if (hasInferredTypes === true) {
+      return 'restricted any';
+    }
+    if (this.toCombinedType(schema)) {
+      return '';
+    }
+    return 'any';
   }
 
   private static humanizeNumberRangeConstraint(
@@ -438,9 +494,9 @@ export class SchemaHelpers {
     if (
       value &&
       typeof value === 'object' &&
-      (this.jsonSchemaTypes.includes(value.type) ||
+      (jsonSchemaTypes.includes(value.type) ||
         (Array.isArray(value.type) &&
-          value.type.some((t: string) => !this.jsonSchemaTypes.includes(t))))
+          value.type.some((t: string) => !jsonSchemaTypes.includes(t))))
     ) {
       return true;
     }

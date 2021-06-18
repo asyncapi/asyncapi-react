@@ -21,6 +21,12 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(`any`);
     });
 
+    test('should handle schema with non JSON Schema keywords ', () => {
+      const schema = new Schema({ foo: 'bar', 'x-ext': 'someExt' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`any`);
+    });
+
     test('should handle false schemas', () => {
       const schema = new Schema(false);
       const result = SchemaHelpers.toSchemaType(schema);
@@ -28,7 +34,13 @@ describe('SchemaHelpers', () => {
     });
 
     test('should handle empty not schemas', () => {
-      const schema = new Schema({ not: {} });
+      const schema = new Schema({ not: {}, type: 'string' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`never`);
+    });
+
+    test('should handle not schemas with non JSON Schema keywords', () => {
+      const schema = new Schema({ not: { foo: 'bar', 'x-ext': 'someExt' } });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`never`);
     });
@@ -70,13 +82,49 @@ describe('SchemaHelpers', () => {
         items: [{ type: 'object' }, { type: 'string' }, {}],
       });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`array<object, string, any>`);
+      expect(result).toEqual(`tuple<object, string, any, ...optional<any>>`);
+    });
+
+    test('should handle tuple types with custom additionalItems', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: { type: 'string' },
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`tuple<object, string, any, ...optional<string>>`);
+    });
+
+    test('should handle tuple types with additionalItems set to true', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: true,
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`tuple<object, string, any, ...optional<any>>`);
+    });
+
+    test('should handle tuple types with additionalItems set to false', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: false,
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`tuple<object, string, any>`);
     });
 
     test('should handle combined types', () => {
       const schema = new Schema({ type: 'string', oneOf: [] });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`string oneOf`);
+    });
+
+    test('should handle combined types without type', () => {
+      const schema = new Schema({ oneOf: [] });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`oneOf`);
     });
 
     test(`should handle integer and number types together`, () => {

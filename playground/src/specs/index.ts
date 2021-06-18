@@ -10,3 +10,4 @@ export * from './rpc-client';
 export * from './rpc-server';
 export * from './slack-rtm';
 export * from './streetlights';
+export * from './tuple';
