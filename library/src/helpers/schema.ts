@@ -372,18 +372,10 @@ export class SchemaHelpers {
       return inferredType.length === 1 ? inferredType[0] : inferredType;
     }
 
-    const jsonSchema = schema.json();
-
-    let hasInferredTypes = false;
-    const lentgh = jsonSchemaKeywords.length;
-    for (let i = 0; i < lentgh; i++) {
-      const keyword = jsonSchemaKeywords[i];
-      if (jsonSchema[keyword] !== undefined) {
-        hasInferredTypes = true;
-        break;
-      }
-    }
-
+    const schemaKeys = Object.keys(schema.json() || {}) || [];
+    const hasInferredTypes = jsonSchemaKeywords.some(key =>
+      schemaKeys.includes(key),
+    );
     if (hasInferredTypes === true) {
       return 'restricted any';
     }
