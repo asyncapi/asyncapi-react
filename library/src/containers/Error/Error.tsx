@@ -14,9 +14,9 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
         return null;
       }
       return (
-        <div key={index} className="flex">
+        <div key={index} className="aui-flex">
           <span>{`${singleError.location.startLine}.`}</span>
-          <code className="whitespace-pre-wrap break-all ml-2">
+          <code className="aui-whitespace-pre-wrap aui-break-all aui-ml-2">
             {singleError.title}
           </code>
         </div>
@@ -37,13 +37,13 @@ export const Error: React.FunctionComponent<Props> = ({ error }) => {
 
   return (
     <div className="panel-item">
-      <div className="panel-item--center p-8">
-        <section className="shadow rounded bg-gray-200 border-red-500 border-l-8">
-          <h2 className="p-2">
+      <div className="panel-item--center aui-p-8">
+        <section className="aui-shadow aui-rounded aui-bg-gray-200 aui-border-red-500 aui-border-l-8">
+          <h2 className="aui-p-2">
             {title ? `${ERROR_TEXT}: ${title}` : ERROR_TEXT}
           </h2>
           {validationErrors && validationErrors.length ? (
-            <div className="bg-gray-800 text-white text-xs p-2">
+            <div className="aui-bg-gray-800 aui-text-white aui-text-xs aui-p-2">
               <pre>{renderErrors(validationErrors)}</pre>
             </div>
           ) : null}

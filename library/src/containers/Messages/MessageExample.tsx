@@ -17,8 +17,8 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   const headers = message.headers();
 
   return (
-    <div className="bg-gray-800 px-8 py-4 mt-4 -mx-8 2xl:mx-0 2xl:px-4 2xl:rounded examples">
-      <h4 className="text-white text-lg">Examples</h4>
+    <div className="aui-bg-gray-800 aui-px-8 aui-py-4 aui-mt-4 aui--mx-8 2xl:aui-mx-0 2xl:aui-px-4 2xl:aui-rounded examples">
+      <h4 className="aui-text-white aui-text-lg">Examples</h4>
       {payload && (
         <Example
           type="Payload"
@@ -51,30 +51,30 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   const [expand, setExpand] = useState(false);
 
   return (
-    <div className="mt-4">
+    <div className="aui-mt-4">
       <div>
         <CollapseButton
           onClick={() => setExpand(prev => !prev)}
           chevronProps={{
-            className: `fill-current text-gray-200 ${
-              expand ? '-rotate-180' : '-rotate-90'
+            className: `aui-fill-current aui-text-gray-200 ${
+              expand ? 'aui--rotate-180' : 'aui--rotate-90'
             }`,
           }}
         >
-          <span className="px-2 py-1 mr-2 text-gray-200 text-sm border rounded focus:outline-none">
+          <span className="aui-px-2 aui-py-1 aui-mr-2 aui-text-gray-200 aui-text-sm aui-border aui-rounded focus:aui-outline-none">
             {type}
           </span>
         </CollapseButton>
       </div>
-      <div className={expand ? 'block' : 'hidden'}>
+      <div className={expand ? 'aui-block' : 'aui-hidden'}>
         {examples && examples.length > 0 ? (
           <ul>
             {examples.map((example, idx) => (
-              <li className="mt-4" key={idx}>
-                <h5 className="text-xs font-bold text-gray-700">
+              <li className="aui-mt-4" key={idx}>
+                <h5 className="aui-text-xs aui-font-bold aui-text-gray-700">
                   Example #{idx + 1}
                 </h5>
-                <div className="mt-1">
+                <div className="aui-mt-1">
                   <JSONSnippet
                     snippet={MessageHelpers.sanitizeExample(example)}
                   />
@@ -83,11 +83,11 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
             ))}
           </ul>
         ) : (
-          <div className="mt-4">
+          <div className="aui-mt-4">
             <JSONSnippet
               snippet={MessageHelpers.generateExample(schema.json())}
             />
-            <h6 className="text-xs font-bold text-gray-700 italic mt-2">
+            <h6 className="aui-text-xs aui-font-bold aui-text-gray-700 aui-italic aui-mt-2">
               This example has been generated automatically.
             </h6>
           </div>

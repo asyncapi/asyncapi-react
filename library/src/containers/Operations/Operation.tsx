@@ -40,43 +40,45 @@ export const Operation: React.FunctionComponent<Props> = ({
 
   return (
     <div id={`operation-${type}-${channelName}`}>
-      <div className="panel-item--center px-8">
-        <div className="mb-4">
+      <div className="panel-item--center aui-px-8">
+        <div className="aui-mb-4">
           <h3>
             <span
-              className={`font-mono border uppercase p-1 rounded mr-2 ${
+              className={`aui-font-mono aui-border aui-uppercase aui-p-1 aui-rounded aui-mr-2 ${
                 type === PayloadType.PUBLISH
-                  ? 'border-blue-600 text-blue-500'
-                  : 'border-green-600 text-green-600'
+                  ? 'aui-border-blue-600 aui-text-blue-500'
+                  : 'aui-border-green-600 aui-text-green-600'
               }`}
               title={type}
             >
               {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
             </span>{' '}
-            <span className="font-mono text-base">{channelName}</span>
+            <span className="aui-font-mono aui-text-base">{channelName}</span>
           </h3>
         </div>
 
         {channel.hasDescription() && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Markdown>{channel.description()}</Markdown>
           </div>
         )}
         {operationSummary && (
-          <p className="text-gray-600 text-sm mt-2">{operationSummary}</p>
+          <p className="aui-text-gray-600 aui-text-sm aui-mt-2">
+            {operationSummary}
+          </p>
         )}
         {operation.hasDescription() && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Markdown>{operation.description()}</Markdown>
           </div>
         )}
 
         {externalDocs && (
-          <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+          <ul className="aui-leading-normal aui-mt-2 aui-mb-4 aui-space-x-2 aui-space-y-2">
             {externalDocs && (
-              <li className="inline-block">
+              <li className="aui-inline-block">
                 <Href
-                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                   href={externalDocs.url()}
                 >
                   <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
@@ -87,10 +89,10 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
 
         {operationId && (
-          <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-            <div className="text-sm text-gray-700">
+          <div className="aui-border aui-bg-gray-100 aui-rounded aui-px-4 aui-py-2 aui-mt-2">
+            <div className="aui-text-sm aui-text-gray-700">
               Operation ID
-              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+              <span className="aui-border aui-text-orange-600 aui-rounded aui-text-xs aui-ml-2 aui-py-0 aui-px-2">
                 {operationId}
               </span>
             </div>
@@ -98,7 +100,7 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
 
         {parameters && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Schema
               schemaName="Parameters"
               schema={parameters}
@@ -108,7 +110,7 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
 
         {operation.hasBindings() && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Bindings
               name="Operation Bindings"
               bindings={operation.bindings()}
@@ -116,7 +118,7 @@ export const Operation: React.FunctionComponent<Props> = ({
           </div>
         )}
         {channel.hasBindings() && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Bindings name="Channel Bindings" bindings={channel.bindings()} />
           </div>
         )}
@@ -124,30 +126,30 @@ export const Operation: React.FunctionComponent<Props> = ({
         <Extensions item={operation} />
 
         {operation.hasTags() && (
-          <div className="mt-2">
+          <div className="aui-mt-2">
             <Tags tags={operation.tags()} />
           </div>
         )}
       </div>
 
-      <div className="w-full mt-4">
+      <div className="aui-w-full aui-mt-4">
         {operation.hasMultipleMessages() ? (
-          <div className="mt-2">
-            <p className="px-8">
+          <div className="aui-mt-2">
+            <p className="aui-px-8">
               Accepts <strong>one of</strong> the following messages:
             </p>
             <ul>
               {operation.messages().map((msg, idx) => (
-                <li className="mt-4" key={idx}>
+                <li className="aui-mt-4" key={idx}>
                   <Message message={msg} index={idx} showExamples={true} />
                 </li>
               ))}
             </ul>
           </div>
         ) : (
-          <div className="mt-2">
-            <p className="px-8">Accepts the following message:</p>
-            <div className="mt-2">
+          <div className="aui-mt-2">
+            <p className="aui-px-8">Accepts the following message:</p>
+            <div className="aui-mt-2">
               <Message
                 message={(operation.message as any)(0)}
                 showExamples={true}

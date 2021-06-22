@@ -70,18 +70,18 @@ export const Schema: React.FunctionComponent<Props> = ({
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
-        <div className="flex py-2">
-          <div className="w-3/12 min-w-min mr-2">
+        <div className="aui-flex aui-py-2">
+          <div className="aui-w-3/12 aui-min-w-min aui-mr-2">
             {isExpandable && !isCircular ? (
               <CollapseButton
                 onClick={() => setExpand(prev => !prev)}
                 chevronProps={{
-                  className: expand ? '-rotate-180' : '-rotate-90',
+                  className: expand ? 'aui--rotate-180' : 'aui--rotate-90',
                 }}
               >
                 <span
-                  className={`break-words text-sm ${
-                    isProperty ? 'italic' : ''
+                  className={`aui-break-words aui-text-sm ${
+                    isProperty ? 'aui-italic' : ''
                   }`}
                 >
                   {schemaName}
@@ -89,71 +89,75 @@ export const Schema: React.FunctionComponent<Props> = ({
               </CollapseButton>
             ) : (
               <span
-                className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
+                className={`aui-break-words aui-text-sm ${
+                  isProperty ? 'aui-italic' : ''
+                }`}
               >
                 {schemaName}
               </span>
             )}
             {isPatternProperty && (
-              <div className="text-gray-500 text-xs italic">
+              <div className="aui-text-gray-500 aui-text-xs aui-italic">
                 (pattern property)
               </div>
             )}
-            {required && <div className="text-red-600 text-xs">required</div>}
+            {required && (
+              <div className="aui-text-red-600 aui-text-xs">required</div>
+            )}
             {dependentRequired && (
               <>
-                <div className="text-gray-500 text-xs">
+                <div className="aui-text-gray-500 aui-text-xs">
                   required when defined:
                 </div>
-                <div className="text-red-600 text-xs">
+                <div className="aui-text-red-600 aui-text-xs">
                   {dependentRequired.join(', ')}
                 </div>
               </>
             )}
             {schema.deprecated() && (
-              <div className="text-red-600 text-xs">deprecated</div>
+              <div className="aui-text-red-600 aui-text-xs">deprecated</div>
             )}
             {schema.writeOnly() && (
-              <div className="text-gray-500 text-xs">write-only</div>
+              <div className="aui-text-gray-500 aui-text-xs">write-only</div>
             )}
             {schema.readOnly() && (
-              <div className="text-gray-500 text-xs">read-only</div>
+              <div className="aui-text-gray-500 aui-text-xs">read-only</div>
             )}
           </div>
           {rawValue ? (
             <div>
-              <div className="text-sm">{schema.const()}</div>
+              <div className="aui-text-sm">{schema.const()}</div>
             </div>
           ) : (
             <div>
               <div>
                 {renderType && (
-                  <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
+                  <div className="aui-capitalize aui-text-sm aui-text-teal-500 aui-font-bold aui-inline-block aui-mr-2">
                     {isCircular
                       ? `${SchemaHelpers.toSchemaType(schema)} [CIRCULAR]`
                       : SchemaHelpers.toSchemaType(schema)}
                   </div>
                 )}
-                <div className="inline-block">
+                <div className="aui-inline-block">
                   {schema.format() && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="aui-bg-yellow-600 aui-font-bold aui-no-underline aui-text-white aui-rounded aui-lowercase aui-mr-2 aui-p-1 aui-text-xs">
                       format: {schema.format()}
                     </span>
                   )}
 
                   {/* related to string */}
                   {schema.pattern() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="aui-bg-yellow-600 aui-font-bold aui-no-underline aui-text-white aui-rounded aui-lowercase aui-mr-2 aui-p-1 aui-text-xs">
                       must match: {schema.pattern()}
                     </span>
                   )}
                   {schema.contentMediaType() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="aui-bg-yellow-600 aui-font-bold aui-no-underline aui-text-white aui-rounded aui-lowercase aui-mr-2 aui-p-1 aui-text-xs">
                       media type: {schema.contentMediaType()}
                     </span>
                   )}
                   {schema.contentEncoding() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="aui-bg-yellow-600 aui-font-bold aui-no-underline aui-text-white aui-rounded aui-lowercase aui-mr-2 aui-p-1 aui-text-xs">
                       encoding: {schema.contentEncoding()}
                     </span>
                   )}
@@ -162,7 +166,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   {!!constraints.length &&
                     constraints.map(c => (
                       <span
-                        className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
+                        className="aui-bg-purple-600 aui-font-bold aui-no-underline aui-text-white aui-rounded aui-lowercase aui-mr-2 aui-p-1 aui-text-xs"
                         key={c}
                       >
                         {c}
@@ -170,7 +174,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     ))}
 
                   {uid && !uid.startsWith('<anonymous-') && (
-                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                    <span className="aui-border aui-text-orange-600 aui-rounded aui-mr-2 aui-p-1 aui-text-xs">
                       uid: {uid}
                     </span>
                   )}
@@ -183,28 +187,28 @@ export const Schema: React.FunctionComponent<Props> = ({
                 )}
 
                 {schema.default() !== undefined && (
-                  <div className="text-xs">
+                  <div className="aui-text-xs">
                     Default value:
-                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                    <span className="aui-border aui-inline-block aui-text-orange-600 aui-rounded aui-ml-1 aui-py-0 aui-px-2">
                       {SchemaHelpers.prettifyValue(schema.default())}
                     </span>
                   </div>
                 )}
                 {schema.const() !== undefined && (
-                  <div className="text-xs">
+                  <div className="aui-text-xs">
                     Const:
-                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                    <span className="aui-border aui-inline-block aui-text-orange-600 aui-rounded aui-ml-1 aui-py-0 aui-px-2">
                       {SchemaHelpers.prettifyValue(schema.const())}
                     </span>
                   </div>
                 )}
                 {schema.enum() && (
-                  <ul className="text-xs">
+                  <ul className="aui-text-xs">
                     Allowed values:{' '}
                     {schema.enum().map((e, idx) => (
                       <li
                         key={idx}
-                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                        className="aui-border aui-inline-block aui-text-orange-600 aui-rounded aui-ml-1 aui-py-0 aui-px-2"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
@@ -212,15 +216,15 @@ export const Schema: React.FunctionComponent<Props> = ({
                   </ul>
                 )}
                 {parameterLocation && (
-                  <div className="text-xs">
+                  <div className="aui-text-xs">
                     Parameter location:{' '}
-                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                    <span className="aui-border aui-text-orange-600 aui-rounded aui-mr-2 aui-p-1 aui-text-xs">
                       {parameterLocation}
                     </span>
                   </div>
                 )}
                 {externalDocs && (
-                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0">
+                  <span className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-2 aui-py-0">
                     <Href
                       href={externalDocs.url()}
                       title={externalDocs.description() || ''}
@@ -230,12 +234,12 @@ export const Schema: React.FunctionComponent<Props> = ({
                   </span>
                 )}
                 {schema.examples() && (
-                  <ul className="text-xs">
+                  <ul className="aui-text-xs">
                     Examples values:{' '}
                     {schema.examples().map((e, idx) => (
                       <li
                         key={idx}
-                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                        className="aui-border aui-inline-block aui-text-orange-600 aui-rounded aui-ml-1 aui-py-0 aui-px-2"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
@@ -249,9 +253,9 @@ export const Schema: React.FunctionComponent<Props> = ({
 
         {isCircular || !isExpandable ? null : (
           <div
-            className={`rounded p-4 py-2 bg-gray-100 border bg-gray-100 ${
-              reverse ? 'bg-gray-200' : ''
-            } ${expand ? 'block' : 'hidden'}`}
+            className={`aui-rounded aui-p-4 aui-py-2 aui-bg-gray-100 aui-border aui-bg-gray-100 ${
+              reverse ? 'aui-bg-gray-200' : ''
+            } ${expand ? 'aui-block' : 'aui-hidden'}`}
           >
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
@@ -400,14 +404,14 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   const additionalProperties = schema.additionalProperties();
   if (additionalProperties === true || additionalProperties === undefined) {
     return (
-      <p className="mt-2 text-xs text-gray-700">
+      <p className="aui-mt-2 aui-text-xs aui-text-gray-700">
         Additional properties are allowed.
       </p>
     );
   }
   if (additionalProperties === false) {
     return (
-      <p className="mt-2 text-xs text-gray-700">
+      <p className="aui-mt-2 aui-text-xs aui-text-gray-700">
         Additional properties are <strong>NOT</strong> allowed.
       </p>
     );
@@ -471,14 +475,14 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
-      <p className="mt-2 text-xs text-gray-700">
+      <p className="aui-mt-2 aui-text-xs aui-text-gray-700">
         Additional items are allowed.
       </p>
     );
   }
   if (additionalItems === false) {
     return (
-      <p className="mt-2 text-xs text-gray-700">
+      <p className="aui-mt-2 aui-text-xs aui-text-gray-700">
         Additional items are <strong>NOT</strong> allowed.
       </p>
     );

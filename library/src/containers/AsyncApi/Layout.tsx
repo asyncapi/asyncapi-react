@@ -41,20 +41,20 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
       <section
         className={`${
           divWidth <= 1280 ? 'container:xl' : 'container:base'
-        } relative md:flex bg-white`}
+        } aui-relative md:aui-flex aui-bg-white`}
         id={bemClasses.getSchemaID()}
         ref={ref}
       >
         {config.show?.sidebar && <Sidebar config={config.sidebar} />}
-        <div className="panel--center relative py-8 flex-1">
-          <div className="relative z-10">
+        <div className="panel--center aui-relative aui-py-8 aui-flex-1">
+          <div className="aui-relative aui-z-10">
             {config.show?.errors && error && <Error error={error} />}
             {config.show?.info && <Info />}
             {config.show?.servers && <Servers />}
             {config.show?.operations && <Operations />}
             {config.show?.messages && <Messages />}
           </div>
-          <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
+          <div className="panel--right aui-absolute aui-top-0 aui-right-0 aui-h-full aui-bg-gray-800" />
         </div>
       </section>
     </SpecificationContext.Provider>

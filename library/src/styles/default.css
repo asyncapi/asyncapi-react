@@ -6,65 +6,65 @@
 
 @layer components {
   .container\:base .burger-menu {
-    @apply lg:hidden;
+    @apply lg:aui-hidden;
   }
 
   .container\:xl .burger-menu {
   }
 
   .container\:base .sidebar {
-    @apply lg:relative lg:block lg:w-64 lg:h-auto;
+    @apply lg:aui-relative lg:aui-block lg:aui-w-64 lg:aui-h-auto;
   }
 
   .container\:xl .sidebar {
   }
 
   .container\:base .sidebar--content {
-    @apply lg:w-56;
+    @apply lg:aui-w-56;
   }
 
   .container\:xl .sidebar--content {
-    @apply absolute;
+    @apply aui-absolute;
     left: 50%;
     transform: translate(-50%, 0);
   }
 
   .container\:base .panel-item {
-    @apply 2xl:flex;
+    @apply 2xl:aui-flex;
   }
 
   .container\:xl .panel-item {
-    @apply block;
+    @apply aui-block;
   }
 
   .container\:base .panel--center .panel-item--center {
-    @apply 2xl:w-7/12;
+    @apply 2xl:aui-w-7/12;
   }
 
   .container\:base .panel--center .panel-item--right {
-    @apply 2xl:w-5/12;
+    @apply 2xl:aui-w-5/12;
   }
 
   .container\:xl .panel--center .panel-item--center {
-    @apply w-full;
+    @apply aui-w-full;
   }
 
   .container\:xl .panel--center .panel-item--right {
-    @apply w-full;
+    @apply aui-w-full;
   }
 
   .container\:base .examples {
-    @apply 2xl:p-0 2xl:mt-0;
+    @apply 2xl:aui-p-0 2xl:aui-mt-0;
   }
 
   .container\:xl .examples {
   }
 
   .container\:base .panel--right {
-    @apply hidden 2xl:block 2xl:w-5/12;
+    @apply aui-hidden 2xl:aui-block 2xl:aui-w-5/12;
   }
 
   .container\:xl .panel--right {
-    @apply hidden;
+    @apply aui-hidden;
   }
 }

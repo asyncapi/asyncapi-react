@@ -27,28 +27,28 @@ export const Server: React.FunctionComponent<Props> = ({
 
   return (
     <div className="panel-item">
-      <div className="panel-item--center px-8">
-        <div className="shadow rounded bg-gray-200 p-4 border bg-gray-100">
+      <div className="panel-item--center aui-px-8">
+        <div className="aui-shadow aui-rounded aui-bg-gray-200 aui-p-4 aui-border aui-bg-gray-100">
           <div>
-            <span className="font-mono text-base">{server.url()}</span>
-            <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
+            <span className="aui-font-mono aui-text-base">{server.url()}</span>
+            <span className="aui-bg-teal-500 aui-font-bold aui-no-underline aui-text-white aui-uppercase aui-rounded aui-mx-2 aui-px-2 aui-py-1 aui-text-sm">
               {protocolVersion
                 ? `${server.protocol()} ${protocolVersion}`
                 : server.protocol()}
             </span>
-            <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
+            <span className="aui-bg-blue-500 aui-font-bold aui-no-underline aui-text-white aui-uppercase aui-rounded aui-px-2 aui-py-1 aui-text-sm">
               {serverName}
             </span>
           </div>
 
           {server.hasDescription() && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Markdown>{server.description()}</Markdown>
             </div>
           )}
 
           {urlVariables && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Schema
                 schemaName="URL Variables"
                 schema={urlVariables}
@@ -62,7 +62,7 @@ export const Server: React.FunctionComponent<Props> = ({
           )}
 
           {server.hasBindings() && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Bindings bindings={server.bindings()} />
             </div>
           )}
