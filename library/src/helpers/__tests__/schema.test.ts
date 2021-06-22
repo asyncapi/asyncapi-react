@@ -1,4 +1,4 @@
-import { SchemaHelpers } from '../schema';
+import { SchemaHelpers, SchemaCustomTypes } from '../schema';
 
 // @ts-ignore
 import Schema from '@asyncapi/parser/lib/models/schema';
@@ -9,20 +9,50 @@ import ChannelParameter from '@asyncapi/parser/lib/models/channel-parameter';
 
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
+    test('should handle falsy value', () => {
+      const result = SchemaHelpers.toSchemaType(null as any);
+      expect(result).toEqual(SchemaCustomTypes.UNKNOWN);
+    });
+
+    test('should handle object without .json() function', () => {
+      const result = SchemaHelpers.toSchemaType({} as any);
+      expect(result).toEqual(SchemaCustomTypes.UNKNOWN);
+    });
+
     test('should handle true schemas', () => {
-      const result = SchemaHelpers.toSchemaType(true);
-      expect(result).toEqual(`any`);
+      const schema = new Schema(true);
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(SchemaCustomTypes.ANY);
     });
 
     test('should handle empty schema', () => {
       const schema = new Schema({});
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`any`);
+      expect(result).toEqual(SchemaCustomTypes.ANY);
+    });
+
+    test('should handle schema with non JSON Schema keywords ', () => {
+      const schema = new Schema({ foo: 'bar', 'x-ext': 'someExt' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(SchemaCustomTypes.ANY);
     });
 
     test('should handle false schemas', () => {
-      const result = SchemaHelpers.toSchemaType(false);
-      expect(result).toEqual(`never`);
+      const schema = new Schema(false);
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(SchemaCustomTypes.NEVER);
+    });
+
+    test('should handle empty not schemas', () => {
+      const schema = new Schema({ not: {}, type: 'string' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(SchemaCustomTypes.NEVER);
+    });
+
+    test('should handle not schemas with non JSON Schema keywords', () => {
+      const schema = new Schema({ not: { foo: 'bar', 'x-ext': 'someExt' } });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(SchemaCustomTypes.NEVER);
     });
 
     test('should handle flat types', () => {
@@ -44,29 +74,69 @@ describe('SchemaHelpers', () => {
         items: { multipleOf: 2 },
       });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`string | array<number> | object`);
+      expect(result).toEqual(SchemaCustomTypes.RESTRICTED_ANY);
     });
 
     test('should handle union types in array', () => {
-      const schema = new Schema({ items: { multipleOf: 2, type: 'string' } });
+      const schema = new Schema({
+        type: 'array',
+        items: { type: ['string', 'number'] },
+      });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`array<string | number>`);
     });
 
-    test('should handle tuple types', () => {
+    test('should handle empty array type', () => {
       const schema = new Schema({
-        items: [{ properties: {} }, { pattern: '^foo' }, {}],
+        type: 'array',
       });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`array<object, string, any>`);
+      expect(result).toEqual(`array<${SchemaCustomTypes.ANY}>`);
     });
 
     test('should handle tuple types', () => {
       const schema = new Schema({
-        items: [{ properties: {} }, { pattern: '^foo' }, {}],
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
       });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`array<object, string, any>`);
+      expect(result).toEqual(
+        `tuple<object, string, ${SchemaCustomTypes.ANY}, ...optional<${SchemaCustomTypes.ANY}>>`,
+      );
+    });
+
+    test('should handle tuple types with custom additionalItems', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: { type: 'string' },
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(
+        `tuple<object, string, ${SchemaCustomTypes.ANY}, ...optional<string>>`,
+      );
+    });
+
+    test('should handle tuple types with additionalItems set to true', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: true,
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(
+        `tuple<object, string, ${SchemaCustomTypes.ANY}, ...optional<${SchemaCustomTypes.ANY}>>`,
+      );
+    });
+
+    test('should handle tuple types with additionalItems set to false', () => {
+      const schema = new Schema({
+        type: 'array',
+        items: [{ type: 'object' }, { type: 'string' }, {}],
+        additionalItems: false,
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`tuple<object, string, ${SchemaCustomTypes.ANY}>`);
     });
 
     test('should handle combined types', () => {
@@ -75,16 +145,22 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(`string oneOf`);
     });
 
-    test(`shouldn't infer number type when explicit is defined only integer type`, () => {
-      const schema = new Schema({ type: 'integer', multipleOf: 2 });
+    test('should handle combined types without type', () => {
+      const schema = new Schema({ oneOf: [] });
       const result = SchemaHelpers.toSchemaType(schema);
-      expect(result).toEqual(`integer`);
+      expect(result).toEqual(`oneOf`);
     });
 
     test(`should handle integer and number types together`, () => {
       const schema = new Schema({ type: ['integer', 'number'] });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`number`);
+    });
+
+    test(`should handle const`, () => {
+      const schema = new Schema({ const: 'foobar' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual(`string`);
     });
 
     test(`should handle enum`, () => {
