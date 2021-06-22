@@ -20,7 +20,7 @@ node ./tools/styles/script.js <output-file> <config-file-path>
 
 where:
 - `<output-file>` is a relative path for the output css file. It must contains the name of the css file. Example: `./output/custom-theme.css`
-- `<output-file>` is a relative path to the custom [TailwindCSS configuration file](https://tailwindcss.com/docs/configuration).
+- `<config-file-path>` is a relative path to the custom [TailwindCSS configuration file](https://tailwindcss.com/docs/configuration).
 
 Important notes:
 
