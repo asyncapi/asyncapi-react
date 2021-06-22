@@ -43,26 +43,32 @@ export const Message: React.FunctionComponent<Props> = ({
 
   return (
     <div className="panel-item">
-      <div className="panel-item--center px-8">
-        <div className="shadow rounded bg-gray-200 p-4 border bg-gray-100">
+      <div className="panel-item--center aui-px-8">
+        <div className="aui-shadow aui-rounded aui-bg-gray-200 aui-p-4 aui-border aui-bg-gray-100">
           <div>
             {index !== undefined && (
-              <span className="text-gray-700 font-bold mr-2">#{index}</span>
+              <span className="aui-text-gray-700 aui-font-bold aui-mr-2">
+                #{index}
+              </span>
             )}
-            {title && <span className="text-gray-700 mr-2">{title}</span>}
-            <span className="border text-orange-600 rounded text-xs py-0 px-2">
+            {title && (
+              <span className="aui-text-gray-700 aui-mr-2">{title}</span>
+            )}
+            <span className="aui-border aui-text-orange-600 aui-rounded aui-text-xs aui-py-0 aui-px-2">
               {message.uid()}
             </span>
           </div>
 
-          {summary && <p className="text-gray-600 text-sm">{summary}</p>}
+          {summary && (
+            <p className="aui-text-gray-600 aui-text-sm">{summary}</p>
+          )}
 
           {showInfoList && (
-            <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+            <ul className="aui-leading-normal aui-mt-2 aui-mb-4 aui-space-x-2 aui-space-y-2">
               {contentType && (
-                <li className="inline-block">
+                <li className="aui-inline-block">
                   <Href
-                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                     href={`${CONTENT_TYPES_SITE}/${contentType}`}
                   >
                     <span>{contentType}</span>
@@ -70,9 +76,9 @@ export const Message: React.FunctionComponent<Props> = ({
                 </li>
               )}
               {externalDocs && (
-                <li className="inline-block">
+                <li className="aui-inline-block">
                   <Href
-                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                     href={externalDocs.url()}
                   >
                     <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
@@ -83,16 +89,16 @@ export const Message: React.FunctionComponent<Props> = ({
           )}
 
           {correlationId && (
-            <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-              <div className="text-sm text-gray-700">
+            <div className="aui-border aui-bg-gray-100 aui-rounded aui-px-4 aui-py-2 aui-mt-2">
+              <div className="aui-text-sm aui-text-gray-700">
                 Correlation ID
-                <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                <span className="aui-border aui-text-orange-600 aui-rounded aui-text-xs aui-ml-2 aui-py-0 aui-px-2">
                   {correlationId.location()}
                 </span>
               </div>
 
               {correlationId.hasDescription() && (
-                <div className="mt-2">
+                <div className="aui-mt-2">
                   <Markdown>{correlationId.description()}</Markdown>
                 </div>
               )}
@@ -100,24 +106,24 @@ export const Message: React.FunctionComponent<Props> = ({
           )}
 
           {message.hasDescription() && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Markdown>{message.description()}</Markdown>
             </div>
           )}
 
           {payload && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Schema schemaName="Payload" schema={payload} />
             </div>
           )}
           {headers && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Schema schemaName="Headers" schema={headers} />
             </div>
           )}
 
           {message.hasBindings() && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Bindings bindings={message.bindings()} />
             </div>
           )}
@@ -125,7 +131,7 @@ export const Message: React.FunctionComponent<Props> = ({
           <Extensions item={message} />
 
           {message.hasTags() && (
-            <div className="mt-2">
+            <div className="aui-mt-2">
               <Tags tags={message.tags()} />
             </div>
           )}
@@ -133,7 +139,7 @@ export const Message: React.FunctionComponent<Props> = ({
       </div>
 
       {showExamples && (
-        <div className="panel-item--right px-8">
+        <div className="panel-item--right aui-px-8">
           <MessageExample message={message} />
         </div>
       )}

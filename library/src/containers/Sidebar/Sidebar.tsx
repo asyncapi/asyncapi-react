@@ -36,7 +36,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   return (
     <SidebarContext.Provider value={{ setShowSidebar }}>
       <div
-        className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
+        className="burger-menu aui-rounded-full aui-h-16 aui-w-16 aui-bg-white aui-fixed aui-bottom-16 aui-right-8 aui-flex aui-items-center aui-justify-center aui-z-30 aui-cursor-pointer aui-shadow-md aui-bg-teal-500"
         onClick={() => setShowSidebar(prev => !prev)}
         data-lol={showSidebar}
       >
@@ -44,7 +44,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
           viewBox="0 0 100 70"
           width="40"
           height="30"
-          className="fill-current text-gray-200"
+          className="aui-fill-current aui-text-gray-200"
         >
           <rect width="100" height="10" />
           <rect y="30" width="100" height="10" />
@@ -53,16 +53,13 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       </div>
       <div
         className={`${
-          showSidebar ? 'block fixed w-full' : 'hidden'
-        } sidebar relative w-64 max-h-screen h-full bg-gray-200 shadow z-20`}
-        // className={`${
-        //   showSidebar ? 'block fixed w-full' : 'hidden'
-        // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
+          showSidebar ? 'aui-block aui-fixed aui-w-full' : 'aui-hidden'
+        } sidebar aui-relative aui-w-64 aui-max-h-screen aui-h-full aui-bg-gray-200 aui-shadow aui-z-20`}
       >
         <div
           className={`${
-            showSidebar ? 'w-full' : ''
-          } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
+            showSidebar ? 'aui-w-full' : ''
+          } aui-block aui-fixed aui-max-h-screen aui-h-full aui-font-sans aui-px-4 aui-pt-8 aui-pb-16 aui-overflow-y-auto aui-bg-gray-200`}
         >
           <div className="sidebar--content">
             <div>
@@ -72,16 +69,16 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                   alt={`${info.title()} logo, ${info.version()} version`}
                 />
               ) : (
-                <h1 className="text-2xl font-light">
+                <h1 className="aui-text-2xl aui-font-light">
                   {info.title()} {info.version()}
                 </h1>
               )}
             </div>
 
-            <ul className="text-sm mt-10 relative">
-              <li className="mb-3">
+            <ul className="aui-text-sm aui-mt-10 aui-relative">
+              <li className="aui-mb-3">
                 <a
-                  className="text-gray-700 no-underline hover:text-gray-900"
+                  className="aui-text-gray-700 aui-no-underline hover:aui-text-gray-900"
                   href="#introduction"
                   onClick={() => setShowSidebar(false)}
                 >
@@ -89,9 +86,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                 </a>
               </li>
               {asyncapi.hasServers() && (
-                <li className="mb-3">
+                <li className="aui-mb-3">
                   <a
-                    className="text-gray-700 no-underline hover:text-gray-900"
+                    className="aui-text-gray-700 aui-no-underline hover:aui-text-gray-900"
                     href="#servers"
                     onClick={() => setShowSidebar(false)}
                   >
@@ -101,9 +98,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
               )}
               {asyncapi.hasChannels() && (
                 <>
-                  <li className="mb-3 mt-9">
+                  <li className="aui-mb-3 aui-mt-9">
                     <a
-                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+                      className="aui-text-xs aui-uppercase aui-text-gray-700 aui-mt-10 aui-mb-4 aui-font-thin hover:aui-text-gray-900"
                       href="#operations"
                       onClick={() => setShowSidebar(false)}
                     >
@@ -112,23 +109,23 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                     <Operations />
                   </li>
                   {allMessages.size > 0 && (
-                    <li className="mb-3 mt-9">
+                    <li className="aui-mb-3 aui-mt-9">
                       <a
-                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+                        className="aui-text-xs aui-uppercase aui-text-gray-700 aui-mt-10 aui-mb-4 aui-font-thin hover:aui-text-gray-900"
                         href="#messages"
                         onClick={() => setShowSidebar(false)}
                       >
                         Messages
                       </a>
-                      <ul className="text-sm mt-2">
+                      <ul className="aui-text-sm aui-mt-2">
                         {Array.from(allMessages.keys()).map(messageName => (
                           <li key={messageName}>
                             <a
-                              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
+                              className="aui-flex aui-break-words aui-no-underline aui-text-gray-700 aui-mt-2 hover:aui-text-gray-900"
                               href={`#message-${messageName}`}
                               onClick={() => setShowSidebar(false)}
                             >
-                              <div className="break-all inline-block">
+                              <div className="aui-break-all aui-inline-block">
                                 {messageName}
                               </div>
                             </a>
@@ -171,7 +168,7 @@ export const OperationsList: React.FunctionComponent = () => {
     }
   });
 
-  return <ul className="text-sm mt-2">{operationsList}</ul>;
+  return <ul className="aui-text-sm aui-mt-2">{operationsList}</ul>;
 };
 
 export const OperationsByRootTags: React.FunctionComponent = () => {
@@ -369,14 +366,18 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
       <CollapseButton
         onClick={() => setExpand(prev => !prev)}
         chevronProps={{
-          className: expand ? '-rotate-180' : '-rotate-90',
+          className: expand ? 'aui--rotate-180' : 'aui--rotate-90',
         }}
       >
-        <span className="text-sm inline-block mt-1 font-extralight">
+        <span className="aui-text-sm aui-inline-block aui-mt-1 aui-font-extralight">
           {tagName}
         </span>
       </CollapseButton>
-      <ul className={`${expand ? 'block' : 'hidden'} text-sm mt-2 font-light`}>
+      <ul
+        className={`${
+          expand ? 'aui-block' : 'aui-hidden'
+        } aui-text-sm aui-mt-2 aui-font-light`}
+      >
         {children}
       </ul>
     </div>
@@ -395,17 +396,17 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   return (
     <li>
       <a
-        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+        className="aui-flex aui-no-underline aui-text-gray-700 aui-mb-2 hover:aui-text-gray-900"
         href={`#operation-publish-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >
         <span
-          className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          className="aui-bg-blue-600 aui-font-bold aui-h-6 aui-no-underline aui-text-white aui-uppercase aui-p-1 mr-2 aui-rounded aui-text-xs"
           title="Publish"
         >
           Pub
         </span>
-        <span className="break-all inline-block">{channelName}</span>
+        <span className="aui-break-all aui-inline-block">{channelName}</span>
       </a>
     </li>
   );
@@ -419,17 +420,17 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   return (
     <li>
       <a
-        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+        className="aui-flex aui-no-underline aui-text-gray-700 aui-mb-2 hover:aui-text-gray-900"
         href={`#operation-subscribe-${channelName}`}
         onClick={() => setShowSidebar(false)}
       >
         <span
-          className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
+          className="aui-bg-green-600 aui-font-bold aui-h-6 aui-no-underline aui-text-white aui-uppercase aui-p-1 mr-2 aui-rounded aui-text-xs"
           title="Subscribe"
         >
           SUB
         </span>
-        <span className="break-all inline-block">{channelName}</span>
+        <span className="aui-break-all aui-inline-block">{channelName}</span>
       </a>
     </li>
   );

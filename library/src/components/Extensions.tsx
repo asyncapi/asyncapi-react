@@ -20,7 +20,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
 
   const schema = SchemaHelpers.jsonToSchema(extensions);
   return (
-    <div className="mt-2">
+    <div className="aui-mt-2">
       <Schema schemaName={name} schema={schema} />
     </div>
   );

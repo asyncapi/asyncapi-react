@@ -42,11 +42,11 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <div className="text-sm mt-4">
-      <h5 className="text-gray-700 text-base">Security:</h5>
+    <div className="aui-text-sm aui-mt-4">
+      <h5 className="aui-text-gray-700 aui-text-base">Security:</h5>
       <ul>
         {serverSecurities.map((security, idx) => (
-          <li className="mt-2" key={idx}>
+          <li className="aui-mt-2" key={idx}>
             {security}
           </li>
         ))}
@@ -77,7 +77,7 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
   }
   if (securitySchema.openIdConnectUrl()) {
     schemas.push(
-      <Href href={securitySchema.openIdConnectUrl()} className="underline">
+      <Href href={securitySchema.openIdConnectUrl()} className="aui-underline">
         Connect URL
       </Href>,
     );
@@ -94,58 +94,58 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
 
       return (
         <div
-          className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded"
+          className="aui-px-4 aui-py-2 aui-ml-2 aui-mb-2 aui-border aui-border-gray-400 aui-bg-gray-100 aui-rounded"
           key={flowName}
         >
           <div>
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
               Flow:
             </span>
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
               {ServerHelpers.flowName(flowName)}
             </span>
           </div>
 
           {authorizationUrl && (
-            <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <div className="aui-mt-1">
+              <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
                 Auth URL:
               </span>
-              <Href href={authorizationUrl} className="underline">
+              <Href href={authorizationUrl} className="aui-underline">
                 {authorizationUrl}
               </Href>
             </div>
           )}
           {tokenUrl && (
-            <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <div className="aui-mt-1">
+              <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
                 Token URL:
               </span>
-              <Href href={tokenUrl} className="underline">
+              <Href href={tokenUrl} className="aui-underline">
                 {tokenUrl}
               </Href>
             </div>
           )}
           {refreshUrl && (
-            <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <div className="aui-mt-1">
+              <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
                 Refresh URL:
               </span>
-              <Href href={refreshUrl} className="underline">
+              <Href href={refreshUrl} className="aui-underline">
                 {refreshUrl}
               </Href>
             </div>
           )}
           {scopes && (
-            <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <div className="aui-mt-1">
+              <span className="aui-text-xs aui-font-bold aui-text-gray-600 aui-mt-1 aui-mr-1 aui-uppercase">
                 Scopes:
               </span>
-              <ul className="inline-block">
+              <ul className="aui-inline-block">
                 {scopes &&
                   Object.entries(scopes).map(([scopeName, scopeDesc]) => (
                     <li
-                      className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1"
+                      className="aui-inline-block aui-font-bold aui-no-underline aui-bg-indigo-400 aui-text-white aui-text-xs aui-rounded aui-py-0 aui-px-1 aui-ml-1"
                       title={scopeDesc}
                       key={scopeName}
                     >
@@ -165,10 +165,10 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
         <span>
           {ServerHelpers.securityType(securitySchema.type())}
           {schemas.length > 0 && (
-            <ul className="inline-block ml-2">
+            <ul className="aui-inline-block aui-ml-2">
               {schemas.map((schema, idx) => (
                 <li
-                  className="inline-block font-bold no-underline bg-blue-400 text-white text-xs uppercase rounded px-2 py-0 ml-1"
+                  className="aui-inline-block aui-font-bold aui-no-underline aui-bg-blue-400 aui-text-white aui-text-xs aui-uppercase aui-rounded aui-px-2 aui-py-0 aui-ml-1"
                   key={idx}
                 >
                   {schema}
@@ -186,7 +186,7 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
       )}
 
       {renderedFlows && renderedFlows.length > 0 && (
-        <ul className="my-2">
+        <ul className="aui-my-2">
           <li>{renderedFlows}</li>
         </ul>
       )}

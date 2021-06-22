@@ -1,4 +1,5 @@
 module.exports = {
+  prefix: 'aui-',
   // Purge works on production env
   purge: ['./src/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'

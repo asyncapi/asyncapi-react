@@ -13,9 +13,9 @@ export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
   }
 
   return (
-    <ul className="flex flex-wrap leading-normal">
+    <ul className="aui-flex aui-flex-wrap aui-leading-normal">
       {tags.map(tag => (
-        <li className="inline-block mt-2 mr-2" key={tag.name()}>
+        <li className="aui-inline-block aui-mt-2 aui-mr-2" key={tag.name()}>
           <Tag tag={tag} />
         </li>
       ))}

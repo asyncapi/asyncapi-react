@@ -13,13 +13,13 @@ export const Servers: React.FunctionComponent = () => {
   }
 
   return (
-    <section id="servers" className="mt-16">
-      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+    <section id="servers" className="aui-mt-16">
+      <h2 className="2xl:aui-w-7/12 aui-text-3xl aui-font-light aui-mb-4 aui-px-8">
         {SERVERS_TEXT}
       </h2>
       <ul>
         {Object.entries(servers).map(([serverName, server]) => (
-          <li className="mb-4" key={serverName}>
+          <li className="aui-mb-4" key={serverName}>
             <Server serverName={serverName} server={server} key={serverName} />
           </li>
         ))}

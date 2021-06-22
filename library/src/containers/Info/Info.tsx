@@ -30,33 +30,36 @@ export const Info: React.FunctionComponent = () => {
 
   return (
     <div className="panel-item">
-      <div className="panel-item--center px-8 text-left" id="introduction">
-        <div className="text-4xl">
+      <div
+        className="panel-item--center aui-px-8 aui-text-left"
+        id="introduction"
+      >
+        <div className="aui-text-4xl">
           {info.title()}&nbsp;{info.version()}
         </div>
 
         {showInfoList && (
-          <ul className="flex flex-wrap mt-2 leading-normal">
+          <ul className="aui-flex aui-flex-wrap aui-mt-2 aui-leading-normal">
             {license && (
-              <li className="inline-block mt-2 mr-2">
+              <li className="aui-inline-block aui-mt-2 aui-mr-2">
                 {license.url() ? (
                   <Href
-                    className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                    className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                     href={license.url()}
                   >
                     <span>{license.name()}</span>
                   </Href>
                 ) : (
-                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                  <span className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1">
                     {license.name()}
                   </span>
                 )}
               </li>
             )}
             {termsOfService && (
-              <li className="inline-block mt-2 mr-2">
+              <li className="aui-inline-block aui-mt-2 aui-mr-2">
                 <Href
-                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                   href={termsOfService}
                 >
                   <span>{TERMS_OF_SERVICE_TEXT}</span>
@@ -64,9 +67,9 @@ export const Info: React.FunctionComponent = () => {
               </li>
             )}
             {defaultContentType && (
-              <li className="inline-block mt-2 mr-2">
+              <li className="aui-inline-block aui-mt-2 aui-mr-2">
                 <Href
-                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                   href={`${CONTENT_TYPES_SITE}/${defaultContentType}`}
                 >
                   <span>{defaultContentType}</span>
@@ -74,9 +77,9 @@ export const Info: React.FunctionComponent = () => {
               </li>
             )}
             {externalDocs && (
-              <li className="inline-block mt-2 mr-2">
+              <li className="aui-inline-block aui-mt-2 aui-mr-2">
                 <Href
-                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                  className="aui-border aui-border-solid aui-border-orange-300 hover:aui-bg-orange-300 hover:aui-text-orange-600 aui-text-orange-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                   href={externalDocs.url()}
                 >
                   <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
@@ -86,9 +89,9 @@ export const Info: React.FunctionComponent = () => {
             {contact && (
               <>
                 {contact.url() && (
-                  <li className="inline-block mt-2 mr-2">
+                  <li className="aui-inline-block aui-mt-2 aui-mr-2">
                     <Href
-                      className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                      className="aui-border aui-border-solid aui-border-purple-300 hover:aui-bg-purple-300 hover:aui-text-purple-600 aui-text-purple-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                       href={contact.url()}
                     >
                       <span>{contact.name() || URL_SUPPORT_TEXT}</span>
@@ -96,9 +99,9 @@ export const Info: React.FunctionComponent = () => {
                   </li>
                 )}
                 {contact.email() && (
-                  <li className="inline-block mt-2 mr-2">
+                  <li className="aui-inline-block aui-mt-2 aui-mr-2">
                     <Href
-                      className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                      className="aui-border aui-border-solid aui-border-purple-300 hover:aui-bg-purple-300 hover:aui-text-purple-600 aui-text-purple-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1"
                       href={`mailto:${contact.email()}`}
                     >
                       <span>{contact.email()}</span>
@@ -108,8 +111,8 @@ export const Info: React.FunctionComponent = () => {
               </>
             )}
             {specId && (
-              <li className="inline-block mt-2 mr-2">
-                <span className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+              <li className="aui-inline-block aui-mt-2 aui-mr-2">
+                <span className="aui-border aui-border-solid aui-border-blue-300 hover:aui-bg-blue-300 hover:aui-text-blue-600 aui-text-blue-500 aui-font-bold aui-no-underline aui-text-xs aui-uppercase aui-rounded aui-px-3 aui-py-1">
                   ID: {specId}
                 </span>
               </li>
@@ -118,13 +121,13 @@ export const Info: React.FunctionComponent = () => {
         )}
 
         {info.hasDescription() && (
-          <div className="mt-4">
+          <div className="aui-mt-4">
             <Markdown>{info.description()}</Markdown>
           </div>
         )}
 
         {asyncapi.hasTags() && (
-          <div className="mt-4">
+          <div className="aui-mt-4">
             <Tags tags={asyncapi.tags()} />
           </div>
         )}

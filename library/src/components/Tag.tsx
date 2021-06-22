@@ -15,7 +15,7 @@ export const Tag: React.FunctionComponent<Props> = ({ tag }) => {
   const element = (
     <div
       title={description}
-      className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1"
+      className="aui-border aui-border-solid aui-border-blue-300 hover:aui-bg-blue-300 hover:aui-text-blue-600 aui-text-blue-500 aui-font-bold aui-no-underline aui-text-xs aui-rounded aui-px-3 aui-py-1"
     >
       <span className={externalDocs ? 'underline' : ''}>{name}</span>
     </div>
