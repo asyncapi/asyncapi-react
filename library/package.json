@@ -67,6 +67,7 @@
     "@asyncapi/avro-schema-parser": "^0.2.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
     "@asyncapi/parser": "^1.5.0",
+    "@tailwindcss/typography": "^0.4.0",
     "autoprefixer": "^10.2.5",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
@@ -81,7 +82,6 @@
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
-    "@tailwindcss/typography": "^0.4.0",
     "@types/dompurify": "^2.0.4",
     "@types/highlight.js": "^10.1.0",
     "@types/jest": "^26.0.23",
