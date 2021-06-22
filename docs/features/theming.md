@@ -19,14 +19,14 @@ node ./tools/styles/script.js <output-file> <config-file-path>
 ```
 
 where:
-- `<output-file>` is a relative path for the output css file. It must contains the name of the css file. Example: `./output/custom-theme.css`
+- `<output-file>` is a relative path for the output CSS file. It must contains the name of the CSS file. Example: `./output/custom-theme.css`
 - `<config-file-path>` is a relative path to the custom [TailwindCSS configuration file](https://tailwindcss.com/docs/configuration).
 
 Important notes:
 
 - The custom configuration is deeply merged with the [default configuration file](../../library/tools/styles/tailwind.config.js).
 
-- To generate the production-ready, tree-skahable, css styles you should run the script with `NODE_ENV=production` environment:
+- To generate the production-ready, tree-skahable, CSS styles you should run the script with `NODE_ENV=production` environment:
   
   ```bash
   NODE_ENV=production node ./tools/styles/script.js ./output/custom-theme.css ./custom-config.js
@@ -34,7 +34,7 @@ Important notes:
 
   Generating production styles will add a `.min.css` suffix to the generated files.
 
-- Script will generate two separate css files, one with `.reset.css` suffix with [Preflight](https://tailwindcss.com/docs/preflight) styles onboard and second without `Preflight` onboard. If you use your own base styles in your project, you should use this one with the `.reset.css` suffix.
+- Script will generate two separate CSS files, one with `.reset.css` suffix with [Preflight](https://tailwindcss.com/docs/preflight) styles onboard and second without `Preflight` onboard. If you use your own base styles in your project, you should use this one with the `.reset.css` suffix.
 
 - If you installed the `@asyncapi/react-component` package in your project, script should be run with the `./node_modules/@asyncapi/react-component/tools/styles/script.js` path in a root of project.
 
@@ -42,7 +42,7 @@ Important notes:
 
 > **NOTE:** This is not the recommended method - better to use the [configuration file](#generate-theme-from-configuration-file).
 
-To manually change the style you can write your own css properties for appropriate TailwindCSS class. For example, to change the a very frequently used color, you can override it by css class:
+To manually change the style you can write your own CSS properties for appropriate TailwindCSS class. For example, to change the a very frequently used color, you can override it by CSS class:
 
 ```css
 .text-gray-700 {
