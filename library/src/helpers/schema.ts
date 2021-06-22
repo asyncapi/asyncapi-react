@@ -2,6 +2,17 @@ import { ChannelParameter, ServerVariable, Schema } from '@asyncapi/parser';
 // @ts-ignore
 import SchemaClass from '@asyncapi/parser/lib/models/schema';
 
+export enum SchemaCustomTypes {
+  // for `true` and `{}` schemas
+  ANY = 'any',
+  // for schemas without `type` keyword
+  RESTRICTED_ANY = 'restricted any',
+  // for `false` and `{ not: {}, ... }` schemas
+  NEVER = 'never',
+  // for types that we cannot infer
+  UNKNOWN = 'unknown',
+}
+
 const jsonSchemaTypes = [
   'string',
   'number',
@@ -50,21 +61,24 @@ export class SchemaHelpers {
   static extParameterLocation = 'x-schema-private-parameter-location';
 
   static toSchemaType(schema: Schema): string {
+    if (!schema || typeof schema.json !== 'function') {
+      return SchemaCustomTypes.UNKNOWN;
+    }
     if (schema.isBooleanSchema()) {
       if (schema.json() === true) {
-        return 'any';
+        return SchemaCustomTypes.ANY;
       } else {
-        return 'never';
+        return SchemaCustomTypes.NEVER;
       }
     }
-    // handle case with `{}`
+    // handle case with `{}` schemas
     if (Object.keys(schema.json()).length === 0) {
-      return 'any';
+      return SchemaCustomTypes.ANY;
     }
-    // handle case with `{ not: {} }`
+    // handle case with `{ not: {}, ... }` schemas
     const not = schema.not();
-    if (not && this.inferType(not) === 'any') {
-      return 'never';
+    if (not && this.inferType(not) === SchemaCustomTypes.ANY) {
+      return SchemaCustomTypes.NEVER;
     }
 
     let type = this.inferType(schema);
@@ -323,13 +337,17 @@ export class SchemaHelpers {
         if (additionalItems === undefined || additionalItems.json()) {
           const additionalType =
             additionalItems === undefined || additionalItems.json() === true
-              ? 'any'
+              ? SchemaCustomTypes.ANY
               : this.toSchemaType(additionalItems);
-          return `tuple<${types || 'unknown'}, ...optional<${additionalType}>>`;
+          return `tuple<${types ||
+            SchemaCustomTypes.UNKNOWN}, ...optional<${additionalType}>>`;
         }
-        return `tuple<${types || 'unknown'}>`;
+        return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
       }
-      return `array<${this.toSchemaType(items) || 'unknown'}>`;
+      if (!items) {
+        return `array<${SchemaCustomTypes.ANY}>`;
+      }
+      return `array<${this.toSchemaType(items) || SchemaCustomTypes.UNKNOWN}>`;
     }
     return type;
   }
@@ -377,12 +395,12 @@ export class SchemaHelpers {
       schemaKeys.includes(key),
     );
     if (hasInferredTypes === true) {
-      return 'restricted any';
+      return SchemaCustomTypes.RESTRICTED_ANY;
     }
     if (this.toCombinedType(schema)) {
       return '';
     }
-    return 'any';
+    return SchemaCustomTypes.ANY;
   }
 
   private static humanizeNumberRangeConstraint(
