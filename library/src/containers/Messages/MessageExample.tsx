@@ -3,6 +3,7 @@ import { Message, Schema } from '@asyncapi/parser';
 
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
+import { MessageExample as MessageExampleType } from '../../types';
 
 interface Props {
   message: Message;
@@ -40,7 +41,7 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
 interface ExampleProps {
   type: 'Payload' | 'Headers';
   schema: Schema;
-  examples?: any[];
+  examples?: MessageExampleType[];
 }
 
 export const Example: React.FunctionComponent<ExampleProps> = ({
@@ -72,11 +73,18 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
             {examples.map((example, idx) => (
               <li className="mt-4" key={idx}>
                 <h5 className="text-xs font-bold text-gray-700">
-                  Example #{idx + 1}
+                  {example.name
+                    ? `#${idx + 1} Example - ${example.name}`
+                    : `#${idx + 1} Example`}
                 </h5>
+                {example.summary && (
+                  <p className="text-xs font-bold text-gray-700">
+                    {example.summary}
+                  </p>
+                )}
                 <div className="mt-1">
                   <JSONSnippet
-                    snippet={MessageHelpers.sanitizeExample(example)}
+                    snippet={MessageHelpers.sanitizeExample(example.example)}
                   />
                 </div>
               </li>
