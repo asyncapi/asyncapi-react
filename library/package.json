@@ -50,7 +50,7 @@
     "build:umd": "cross-env BUILD_MODE=umd webpack --colors",
     "build:standalone": "cross-env BUILD_MODE=standalone webpack --colors",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:styles": "cross-env NODE_ENV=production node ./tools/styles/script.js ./styles/default.css",
+    "build:styles": "cross-env NODE_ENV=production node ./tools/styles/theme-generator.js ./styles/default.css",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest --detectOpenHandles",
     "test:unit:watch": "jest --detectOpenHandles --watch",
