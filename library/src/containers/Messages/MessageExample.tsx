@@ -72,13 +72,13 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
           <ul>
             {examples.map((example, idx) => (
               <li className="mt-4" key={idx}>
-                <h5 className="text-xs font-bold text-gray-700">
+                <h5 className="text-xs font-bold text-gray-500">
                   {example.name
                     ? `#${idx + 1} Example - ${example.name}`
                     : `#${idx + 1} Example`}
                 </h5>
                 {example.summary && (
-                  <p className="text-xs font-bold text-gray-700">
+                  <p className="text-xs font-bold text-gray-500">
                     {example.summary}
                   </p>
                 )}
@@ -95,7 +95,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
             <JSONSnippet
               snippet={MessageHelpers.generateExample(schema.json())}
             />
-            <h6 className="text-xs font-bold text-gray-700 italic mt-2">
+            <h6 className="text-xs font-bold text-gray-600 italic mt-2">
               This example has been generated automatically.
             </h6>
           </div>
