@@ -64,13 +64,13 @@ export class SchemaHelpers {
     if (!schema || typeof schema.json !== 'function') {
       return SchemaCustomTypes.UNKNOWN;
     }
-    // if (schema.isBooleanSchema()) {
-    //   if (schema.json() === true) {
-    //     return SchemaCustomTypes.ANY;
-    //   } else {
-    //     return SchemaCustomTypes.NEVER;
-    //   }
-    // }
+    if (schema.isBooleanSchema()) {
+      if (schema.json() === true) {
+        return SchemaCustomTypes.ANY;
+      } else {
+        return SchemaCustomTypes.NEVER;
+      }
+    }
     // handle case with `{}` schemas
     if (Object.keys(schema.json()).length === 0) {
       return SchemaCustomTypes.ANY;
@@ -176,6 +176,8 @@ export class SchemaHelpers {
       schema.oneOf() ||
       schema.anyOf() ||
       schema.allOf() ||
+      Object.keys(schema.properties()).length ||
+      schema.items() ||
       schema.not() ||
       schema.if() ||
       schema.then() ||

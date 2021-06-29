@@ -33,7 +33,9 @@ export class MessageHelpers {
     if (Array.isArray(examples) && examples.some(e => e.payload)) {
       const messageExamples = examples
         .flatMap(e => {
-          if (!e.payload) return;
+          if (!e.payload) {
+            return;
+          }
           return {
             name: e.name,
             summary: e.summary,
@@ -60,7 +62,9 @@ export class MessageHelpers {
     if (Array.isArray(examples) && examples.some(e => e.headers)) {
       const messageExamples = examples
         .flatMap(e => {
-          if (!e.headers) return;
+          if (!e.headers) {
+            return;
+          }
           return {
             name: e.name,
             summary: e.summary,

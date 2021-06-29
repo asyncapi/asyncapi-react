@@ -112,7 +112,7 @@ describe('MessageHelpers', () => {
       ]);
     });
 
-    test('should return examples from payload schema - case when headers examples are defined in `examples` field', () => {
+    test('should return examples from payload schema - case when only headers examples are defined in `examples` field', () => {
       const result = MessageHelpers.getPayloadExamples(
         new Message({
           payload: {
@@ -137,6 +137,35 @@ describe('MessageHelpers', () => {
           example: { foo: 'bar' },
         },
         {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples for payload - case when at least one item in `examples` array has `payload` field with existing `payload.examples`', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        new Message({
+          payload: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
           example: { bar: 'foo' },
         },
       ]);
@@ -213,7 +242,7 @@ describe('MessageHelpers', () => {
       ]);
     });
 
-    test('should return examples from headers schema - case when payload examples are defined in `examples` field', () => {
+    test('should return examples from headers schema - case when only payload examples are defined in `examples` field', () => {
       const result = MessageHelpers.getHeadersExamples(
         new Message({
           headers: {
@@ -238,6 +267,35 @@ describe('MessageHelpers', () => {
           example: { foo: 'bar' },
         },
         {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples for headers - case when at least one item in `examples` array has `headers` field with existing `headers.examples`', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        new Message({
+          headers: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
           example: { bar: 'foo' },
         },
       ]);
