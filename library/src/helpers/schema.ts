@@ -176,6 +176,8 @@ export class SchemaHelpers {
       schema.oneOf() ||
       schema.anyOf() ||
       schema.allOf() ||
+      Object.keys(schema.properties()).length ||
+      schema.items() ||
       schema.not() ||
       schema.if() ||
       schema.then() ||

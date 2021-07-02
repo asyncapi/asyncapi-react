@@ -48,9 +48,13 @@ describe('MessageHelpers', () => {
         new Message({
           examples: [
             {
+              name: 'example name',
+              summary: 'example summary',
               headers: { foo: 'bar' },
             },
             {
+              name: 'example name',
+              summary: 'example summary',
               headers: { bar: 'foo' },
             },
           ],
@@ -64,15 +68,30 @@ describe('MessageHelpers', () => {
         new Message({
           examples: [
             {
+              name: 'example name',
+              summary: 'example summary',
               payload: { foo: 'bar' },
             },
             {
+              name: 'example name',
+              summary: 'example summary',
               payload: { bar: 'foo' },
             },
           ],
         }),
       );
-      expect(result).toEqual([{ foo: 'bar' }, { bar: 'foo' }]);
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { bar: 'foo' },
+        },
+      ]);
     });
 
     test('should return examples from payload schema', () => {
@@ -83,7 +102,73 @@ describe('MessageHelpers', () => {
           },
         }),
       );
-      expect(result).toEqual([{ foo: 'bar' }, { bar: 'foo' }]);
+      expect(result).toEqual([
+        {
+          example: { foo: 'bar' },
+        },
+        {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples from payload schema - case when only headers examples are defined in `examples` field', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        new Message({
+          payload: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          example: { foo: 'bar' },
+        },
+        {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples for payload - case when at least one item in `examples` array has `payload` field with existing `payload.examples`', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        new Message({
+          payload: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { bar: 'foo' },
+        },
+      ]);
     });
   });
 
@@ -93,9 +178,13 @@ describe('MessageHelpers', () => {
         new Message({
           examples: [
             {
+              name: 'example name',
+              summary: 'example summary',
               payload: { foo: 'bar' },
             },
             {
+              name: 'example name',
+              summary: 'example summary',
               payload: { bar: 'foo' },
             },
           ],
@@ -104,23 +193,38 @@ describe('MessageHelpers', () => {
       expect(result).toEqual(undefined);
     });
 
-    test('should return payload examples', () => {
+    test('should return headers examples', () => {
       const result = MessageHelpers.getHeadersExamples(
         new Message({
           examples: [
             {
+              name: 'example name',
+              summary: 'example summary',
               headers: { foo: 'bar' },
             },
             {
+              name: 'example name',
+              summary: 'example summary',
               headers: { bar: 'foo' },
             },
           ],
         }),
       );
-      expect(result).toEqual([{ foo: 'bar' }, { bar: 'foo' }]);
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { bar: 'foo' },
+        },
+      ]);
     });
 
-    test('should return examples from heaers schema', () => {
+    test('should return examples from headers schema', () => {
       const result = MessageHelpers.getHeadersExamples(
         new Message({
           headers: {
@@ -128,7 +232,73 @@ describe('MessageHelpers', () => {
           },
         }),
       );
-      expect(result).toEqual([{ foo: 'bar' }, { bar: 'foo' }]);
+      expect(result).toEqual([
+        {
+          example: { foo: 'bar' },
+        },
+        {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples from headers schema - case when only payload examples are defined in `examples` field', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        new Message({
+          headers: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          example: { foo: 'bar' },
+        },
+        {
+          example: { bar: 'foo' },
+        },
+      ]);
+    });
+
+    test('should return examples for headers - case when at least one item in `examples` array has `headers` field with existing `headers.examples`', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        new Message({
+          headers: {
+            examples: [{ foo: 'bar' }, { bar: 'foo' }],
+          },
+          examples: [
+            {
+              name: 'example name',
+              summary: 'example summary',
+              payload: { foo: 'bar' },
+            },
+            {
+              name: 'example name',
+              summary: 'example summary',
+              headers: { bar: 'foo' },
+            },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { bar: 'foo' },
+        },
+      ]);
     });
   });
 });

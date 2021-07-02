@@ -399,6 +399,12 @@ export interface ParserReturn {
   error?: ErrorObject;
 }
 
+export interface MessageExample {
+  name?: string;
+  summary?: string;
+  example: any;
+}
+
 export type TableColumnName = string;
 
 export type PushStateBehavior = (hash: string) => void;
