@@ -1,6 +1,8 @@
+const path = require('path');
+
 module.exports = {
   // Purge works on production env
-  purge: ['./src/**/*.tsx'],
+  purge: [path.resolve(__dirname, '../../lib/esm/**/*.js')],
   darkMode: false, // or 'media' or 'class'
   theme: {
     // use default styles of tailwind v1: https://tailwindcss.com/docs/upgrading-to-v2#configure-your-color-palette-explicitly
@@ -10,6 +12,7 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
+
       gray: {
         100: '#f7fafc',
         200: '#edf2f7',

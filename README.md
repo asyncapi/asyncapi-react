@@ -124,13 +124,15 @@ For a list and description of features offered by the AsyncAPI React component, 
 
 ## Styles
 
-To use default styles import them as follows:
+To use the default styles import them as follows:
 
 ``` js
-import "@asyncapi/react-component/styles/default.css";
-// or minified version
 import "@asyncapi/react-component/styles/default.min.css";
 ```
+
+The above file hasn't built-in [TailwindCSS Preflight](https://tailwindcss.com/docs/preflight) styles which reset the base styles for the main HTML tags. If you want to add styles with the CSS reset, you should import the `@asyncapi/react-component/styles/default.reset.min.css` styles.
+
+If you want to add custom styles (especially colors) to the component, see [theming](./docs/features/theming.md) documentation.
 
 ## Playground
 
