@@ -220,17 +220,6 @@ components:
       bindings:
         mqtt:
           bindingVersion: 0.1.0
-      examples:
-        - headers:
-            my-app-header: 12
-          payload:
-            lumens: 1
-            sentAt: "2020-01-31T13:24:53Z"
-        - headers:
-            my-app-header: 13
-        - payload:
-            lumens: 3
-            sentAt: "2020-10-31T13:24:53Z"
       x-schema-extensions-as-object:
         type: object
         properties:
@@ -326,6 +315,8 @@ components:
         restrictedAny: 
           minimum: 1
           maximum: 1000
+        arrayRank:
+          $ref: '#/components/schemas/arrayRank'
       required:
         - lumens
       x-schema-extensions-as-object:
@@ -468,6 +459,40 @@ components:
             - name
       required:
         - event
+
+    arrayRank:
+      type: object
+      properties:
+        valueRank: 
+          $ref: '#/components/schemas/arrayValueRank'
+        arrayDimensions: 
+          $ref: '#/components/schemas/arrayArrayDimensions'
+
+    arrayValueRank:
+      description: >
+        This Attribute indicates whether the val Attribute of the datapoint is an
+        array and how many dimensions the array has.
+      type: integer
+      default: -1
+      examples:
+        - 2
+      oneOf:
+        - const: -1
+          description: 'Scalar: The value is not an array.'
+        - const: 0
+          description: 'OneOrMoreDimensions: The value is an array with one or more dimensions.'
+        - const: 1
+          description: 'OneDimension: The value is an array with one dimension.'
+        - const: 2
+          description: 'The value is an array with two dimensions.'
+
+    arrayArrayDimensions:
+      type: array
+      items:
+        type: integer
+        minimum: 0
+      examples:
+        - [3, 5]
 
     streamHeaders:
       Etag:

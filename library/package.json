@@ -71,7 +71,7 @@
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^2.1.1",
-    "openapi-sampler": "^1.0.0",
+    "openapi-sampler": "^1.1.0",
     "use-resize-observer": "^7.0.0"
   },
   "devDependencies": {
