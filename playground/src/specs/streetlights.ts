@@ -220,6 +220,17 @@ components:
       bindings:
         mqtt:
           bindingVersion: 0.1.0
+      examples:
+        - headers:
+            my-app-header: 12
+          payload:
+            lumens: 1
+            sentAt: "2020-01-31T13:24:53Z"
+        - headers:
+            my-app-header: 13
+        - payload:
+            lumens: 3
+            sentAt: "2020-10-31T13:24:53Z"
       x-schema-extensions-as-object:
         type: object
         properties:
@@ -315,8 +326,6 @@ components:
         restrictedAny: 
           minimum: 1
           maximum: 1000
-        arrayRank:
-          $ref: '#/components/schemas/arrayRank'
       required:
         - lumens
       x-schema-extensions-as-object:
@@ -342,6 +351,8 @@ components:
           description: Whether to turn on or off the light.
         sentAt:
           $ref: "#/components/schemas/sentAt"
+        arrayRank:
+          $ref: '#/components/schemas/arrayRank'
       additionalProperties:
         type: string
 
