@@ -107,6 +107,14 @@ export const Operation: React.FunctionComponent<Props> = ({
           </div>
         )}
 
+        {channel.hasBindings() && (
+          <div className="mt-2">
+            <Bindings name="Channel Bindings" bindings={channel.bindings()} />
+          </div>
+        )}
+
+        <Extensions name="Channel Extensions" item={channel} />
+
         {operation.hasBindings() && (
           <div className="mt-2">
             <Bindings
@@ -115,13 +123,8 @@ export const Operation: React.FunctionComponent<Props> = ({
             />
           </div>
         )}
-        {channel.hasBindings() && (
-          <div className="mt-2">
-            <Bindings name="Channel Bindings" bindings={channel.bindings()} />
-          </div>
-        )}
 
-        <Extensions item={operation} />
+        <Extensions name="Operation Extensions" item={operation} />
 
         {operation.hasTags() && (
           <div className="mt-2">
