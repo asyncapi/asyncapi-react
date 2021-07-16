@@ -12,7 +12,7 @@ npm install --save @asyncapi/react-component
 
 ## Usage in frameworks
 
-Check how to use the bundle in:
+Check how to use the Standalone bundle in:
 
 - [Angular](./angular.md#standalone-bundle)
 - [Vue](./vue.md)
