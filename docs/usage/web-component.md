@@ -16,7 +16,7 @@ Check out this simple sandbox application that uses the Web Component in Angular
 
 ## Usage in frameworks
 
-Check how to use the bundle in:
+Check how to use the web-component in:
 
 - [Angular](./angular.md#web-component)
 
