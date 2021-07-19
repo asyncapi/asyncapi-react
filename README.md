@@ -101,6 +101,7 @@ To check how to use web-component or use a component in other technologies see:
 - [Using in Angular](./docs/usage/angular.md)
 - [Using in Vue](./docs/usage/vue.md)
 - [Using in NextJS](./docs/usage/nextjs.md)
+- [Standalone bundle usage](./docs/usage/standalone-bundle.md)
 - [Web Component usage](./docs/usage/web-component.md)
 
 ## Props

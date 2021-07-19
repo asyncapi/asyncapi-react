@@ -5,7 +5,7 @@ If you wanna use the React AsyncAPI component in your Angular project, you have 
 - you may want to use the `AsyncApiStandalone` bundle with `React` and `ReactDom` onboard (preferred option).
 - you may want to use the `@asyncapi/web-component` component as a plain web component.
 
-## AsyncApi standalone bundle
+## Standalone Bundle
 
 ### Prerequisites
 
