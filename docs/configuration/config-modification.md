@@ -12,11 +12,12 @@ See the definition of the object that you must pass to props to modify the compo
 interface ConfigInterface {
   schemaID?: string;
   show?: {
+    sidebar?: boolean;
     info?: boolean;
     servers?: boolean;
     operations?: boolean;
     messages?: boolean;
-    sidebar?: boolean;
+    schemas?: boolean;
     errors?: boolean;
   };
   sidebar?: {
@@ -106,11 +107,12 @@ In the above examples, after concatenation with the default configuration, the r
 {
   schemaID: 'custom-spec',
   show: {
+    sidebar: false,
     info: true,
     servers: true,
     operations: false,
     messages: true,
-    sidebar: false,
+    schemas: true,
     errors: false,
   },
   sidebar: {

@@ -4,7 +4,8 @@ import { Server as ServerType } from '@asyncapi/parser';
 import { ServerSecurity } from './ServerSecurity';
 import { Markdown, Schema, Bindings } from '../../components';
 
-import { SchemaHelpers } from '../../helpers';
+import { useConfig } from '../../contexts';
+import { CommonHelpers, SchemaHelpers } from '../../helpers';
 
 interface Props {
   serverName: string;
@@ -15,6 +16,8 @@ export const Server: React.FunctionComponent<Props> = ({
   serverName,
   server,
 }) => {
+  const config = useConfig();
+
   if (!server) {
     return null;
   }
@@ -48,7 +51,13 @@ export const Server: React.FunctionComponent<Props> = ({
           )}
 
           {urlVariables && (
-            <div className="mt-2">
+            <div
+              className="mt-2"
+              id={`${CommonHelpers.getIdentifier(
+                `server-${serverName}-url-variables`,
+                config,
+              )}`}
+            >
               <Schema
                 schemaName="URL Variables"
                 schema={urlVariables}
@@ -58,7 +67,14 @@ export const Server: React.FunctionComponent<Props> = ({
           )}
 
           {serverRequirements && (
-            <ServerSecurity serverRequirements={serverRequirements} />
+            <div
+              id={`${CommonHelpers.getIdentifier(
+                `server-${serverName}-security`,
+                config,
+              )}`}
+            >
+              <ServerSecurity serverRequirements={serverRequirements} />
+            </div>
           )}
 
           {server.hasBindings() && (

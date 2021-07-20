@@ -11,7 +11,8 @@ import {
   Extensions,
 } from '../../components';
 
-import { SchemaHelpers } from '../../helpers';
+import { useConfig } from '../../contexts';
+import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
 
@@ -28,6 +29,8 @@ export const Operation: React.FunctionComponent<Props> = ({
   channelName,
   channel,
 }) => {
+  const config = useConfig();
+
   if (!operation) {
     return null;
   }
@@ -39,7 +42,7 @@ export const Operation: React.FunctionComponent<Props> = ({
   const operationSummary = operation.summary();
 
   return (
-    <div id={`operation-${type}-${channelName}`}>
+    <div>
       <div className="panel-item--center px-8">
         <div className="mb-4">
           <h3>
@@ -98,7 +101,13 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
 
         {parameters && (
-          <div className="mt-2">
+          <div
+            className="mt-2"
+            id={CommonHelpers.getIdentifier(
+              `operation-${type}-${channelName}-parameters`,
+              config,
+            )}
+          >
             <Schema
               schemaName="Parameters"
               schema={parameters}
@@ -133,7 +142,13 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
       </div>
 
-      <div className="w-full mt-4">
+      <div
+        className="w-full mt-4"
+        id={CommonHelpers.getIdentifier(
+          `operation-${type}-${channelName}-message`,
+          config,
+        )}
+      >
         {operation.hasMultipleMessages() ? (
           <div className="mt-2">
             <p className="px-8">
