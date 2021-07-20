@@ -25,6 +25,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   const info = asyncapi.info();
   const logo = info.ext('x-logo');
   const allMessages = asyncapi.allMessages();
+  const allSchemas = asyncapi.allSchemas();
 
   let Operations = OperationsList;
   if (showOperations === 'bySpecTags') {
@@ -32,6 +33,56 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   } else if (showOperations === 'byOperationsTags') {
     Operations = OperationsByOperationsTags;
   }
+
+  const messagesList = allMessages.size > 0 && (
+    <li className="mb-3 mt-9">
+      <a
+        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+        href="#messages"
+        onClick={() => setShowSidebar(false)}
+      >
+        Messages
+      </a>
+      <ul className="text-sm mt-2">
+        {Array.from(allMessages.keys()).map(messageName => (
+          <li key={messageName}>
+            <a
+              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
+              href={`#message-${messageName}`}
+              onClick={() => setShowSidebar(false)}
+            >
+              <div className="break-all inline-block">{messageName}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </li>
+  );
+
+  const schemasList = allSchemas.size > 0 && (
+    <li className="mb-3 mt-9">
+      <a
+        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+        href="#messages"
+        onClick={() => setShowSidebar(false)}
+      >
+        Schemas
+      </a>
+      <ul className="text-sm mt-2">
+        {Array.from(allSchemas.keys()).map(schemaName => (
+          <li key={schemaName}>
+            <a
+              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
+              href={`#schema-${schemaName}`}
+              onClick={() => setShowSidebar(false)}
+            >
+              <div className="break-all inline-block">{schemaName}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </li>
+  );
 
   return (
     <SidebarContext.Provider value={{ setShowSidebar }}>
@@ -111,32 +162,8 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                     </a>
                     <Operations />
                   </li>
-                  {allMessages.size > 0 && (
-                    <li className="mb-3 mt-9">
-                      <a
-                        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-                        href="#messages"
-                        onClick={() => setShowSidebar(false)}
-                      >
-                        Messages
-                      </a>
-                      <ul className="text-sm mt-2">
-                        {Array.from(allMessages.keys()).map(messageName => (
-                          <li key={messageName}>
-                            <a
-                              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-                              href={`#message-${messageName}`}
-                              onClick={() => setShowSidebar(false)}
-                            >
-                              <div className="break-all inline-block">
-                                {messageName}
-                              </div>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  )}
+                  {messagesList}
+                  {schemasList}
                 </>
               )}
             </ul>

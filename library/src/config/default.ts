@@ -8,6 +8,7 @@ export const defaultConfig: ConfigInterface = {
     servers: true,
     operations: true,
     messages: true,
+    schemas: true,
     errors: true,
   },
   sidebar: {

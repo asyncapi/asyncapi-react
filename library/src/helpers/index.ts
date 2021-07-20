@@ -1,6 +1,5 @@
-export * from './bemClasses';
+export * from './common';
 export * from './marked';
-export * from './toKebabCase';
 export * from './parser';
 export * from './specification';
 export * from './server';

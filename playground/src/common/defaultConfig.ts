@@ -5,6 +5,7 @@ export const defaultConfig: string = `{
     "operations": true,
     "servers": true,
     "messages": true,
+    "schemas": true,
     "errors": true
   }
 }`;

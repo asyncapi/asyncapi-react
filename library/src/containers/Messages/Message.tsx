@@ -11,6 +11,8 @@ import {
   Extensions,
 } from '../../components';
 
+import { useConfig } from '../../contexts';
+import { CommonHelpers } from '../../helpers';
 import {
   CONTENT_TYPES_SITE,
   EXTERAL_DOCUMENTATION_TEXT,
@@ -27,10 +29,13 @@ export const Message: React.FunctionComponent<Props> = ({
   index,
   showExamples = false,
 }) => {
+  const config = useConfig();
+
   if (!message) {
     return null;
   }
 
+  const messageName = message.uid();
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();
@@ -44,14 +49,14 @@ export const Message: React.FunctionComponent<Props> = ({
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8">
-        <div className="shadow rounded bg-gray-200 p-4 border bg-gray-100">
+        <div className="shadow rounded bg-gray-200 p-4 border">
           <div>
             {index !== undefined && (
               <span className="text-gray-700 font-bold mr-2">#{index}</span>
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
             <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {message.uid()}
+              {messageName}
             </span>
           </div>
 
@@ -106,12 +111,24 @@ export const Message: React.FunctionComponent<Props> = ({
           )}
 
           {payload && (
-            <div className="mt-2">
+            <div
+              className="mt-2"
+              id={CommonHelpers.getIdentifier(
+                `message-${messageName}-payload`,
+                config,
+              )}
+            >
               <Schema schemaName="Payload" schema={payload} />
             </div>
           )}
           {headers && (
-            <div className="mt-2">
+            <div
+              className="mt-2"
+              id={CommonHelpers.getIdentifier(
+                `message-${messageName}-headers`,
+                config,
+              )}
+            >
               <Schema schemaName="Headers" schema={headers} />
             </div>
           )}
