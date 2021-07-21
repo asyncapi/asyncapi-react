@@ -7,10 +7,11 @@ import { CommonHelpers } from '../../helpers';
 import { SCHEMAS_TEXT } from '../../constants';
 
 export const Schemas: React.FunctionComponent = () => {
-  const schemas = useSpec().allSchemas();
+  const asyncapi = useSpec();
   const config = useConfig();
+  const schemas = asyncapi.hasComponents() && asyncapi.components().schemas();
 
-  if (!schemas.size) {
+  if (!schemas || Object.keys(schemas).length === 0) {
     return null;
   }
 
@@ -23,7 +24,7 @@ export const Schemas: React.FunctionComponent = () => {
         {SCHEMAS_TEXT}
       </h2>
       <ul>
-        {Array.from(schemas).map(([schemaName, schema]) => (
+        {Object.entries(schemas).map(([schemaName, schema]) => (
           <li
             className="mb-4"
             key={schemaName}
