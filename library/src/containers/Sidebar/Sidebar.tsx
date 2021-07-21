@@ -24,8 +24,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
 
   const info = asyncapi.info();
   const logo = info.ext('x-logo');
-  const allMessages = asyncapi.allMessages();
-  const allSchemas = asyncapi.allSchemas();
+  const components = asyncapi.hasComponents() && asyncapi.components();
+  const messages = components && components.messages();
+  const schemas = components && components.schemas();
 
   let Operations = OperationsList;
   if (showOperations === 'bySpecTags') {
@@ -34,7 +35,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     Operations = OperationsByOperationsTags;
   }
 
-  const messagesList = allMessages.size > 0 && (
+  const messagesList = Object.keys(messages).length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -44,7 +45,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         Messages
       </a>
       <ul className="text-sm mt-2">
-        {Array.from(allMessages.keys()).map(messageName => (
+        {Object.keys(messages).map(messageName => (
           <li key={messageName}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
@@ -59,7 +60,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     </li>
   );
 
-  const schemasList = allSchemas.size > 0 && (
+  const schemasList = Object.keys(schemas).length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -69,7 +70,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         Schemas
       </a>
       <ul className="text-sm mt-2">
-        {Array.from(allSchemas.keys()).map(schemaName => (
+        {Object.keys(schemas).map(schemaName => (
           <li key={schemaName}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"

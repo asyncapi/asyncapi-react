@@ -7,10 +7,11 @@ import { CommonHelpers } from '../../helpers';
 import { MESSAGES_TEXT } from '../../constants';
 
 export const Messages: React.FunctionComponent = () => {
-  const messages = useSpec().allMessages();
+  const asyncapi = useSpec();
   const config = useConfig();
+  const messages = asyncapi.hasComponents() && asyncapi.components().messages();
 
-  if (!messages.size) {
+  if (!messages || Object.keys(messages).length === 0) {
     return null;
   }
 
@@ -23,7 +24,7 @@ export const Messages: React.FunctionComponent = () => {
         {MESSAGES_TEXT}
       </h2>
       <ul>
-        {Array.from(messages).map(([messageName, message], idx) => (
+        {Object.entries(messages).map(([messageName, message], idx) => (
           <li
             className="mb-4"
             key={messageName}
