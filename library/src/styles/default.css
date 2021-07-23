@@ -67,4 +67,8 @@
   .container\:xl .panel--right {
     @apply hidden;
   }
+
+  .prose pre {
+    @apply whitespace-pre-wrap;
+  }
 }

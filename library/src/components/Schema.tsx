@@ -235,7 +235,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     {schema.examples().map((e, idx) => (
                       <li
                         key={idx}
-                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2 break-all"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
