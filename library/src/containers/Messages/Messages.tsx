@@ -28,10 +28,7 @@ export const Messages: React.FunctionComponent = () => {
           <li
             className="mb-4"
             key={messageName}
-            id={`${CommonHelpers.getIdentifier(
-              `message-${messageName}`,
-              config,
-            )}`}
+            id={CommonHelpers.getIdentifier(`message-${messageName}`, config)}
           >
             <Message
               messageName={messageName}
