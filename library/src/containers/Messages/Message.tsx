@@ -20,12 +20,14 @@ import {
 
 interface Props {
   message: MessageType;
+  messageName?: string;
   index?: number | string;
   showExamples?: boolean;
 }
 
 export const Message: React.FunctionComponent<Props> = ({
   message,
+  messageName,
   index,
   showExamples = false,
 }) => {
@@ -35,7 +37,6 @@ export const Message: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const messageName = message.uid();
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();
@@ -56,7 +57,7 @@ export const Message: React.FunctionComponent<Props> = ({
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
             <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {messageName}
+              {message.uid()}
             </span>
           </div>
 
@@ -113,10 +114,14 @@ export const Message: React.FunctionComponent<Props> = ({
           {payload && (
             <div
               className="mt-2"
-              id={CommonHelpers.getIdentifier(
-                `message-${messageName}-payload`,
-                config,
-              )}
+              id={
+                messageName
+                  ? CommonHelpers.getIdentifier(
+                      `message-${messageName}-payload`,
+                      config,
+                    )
+                  : undefined
+              }
             >
               <Schema schemaName="Payload" schema={payload} />
             </div>
@@ -124,10 +129,14 @@ export const Message: React.FunctionComponent<Props> = ({
           {headers && (
             <div
               className="mt-2"
-              id={CommonHelpers.getIdentifier(
-                `message-${messageName}-headers`,
-                config,
-              )}
+              id={
+                messageName
+                  ? CommonHelpers.getIdentifier(
+                      `message-${messageName}-headers`,
+                      config,
+                    )
+                  : undefined
+              }
             >
               <Schema schemaName="Headers" schema={headers} />
             </div>

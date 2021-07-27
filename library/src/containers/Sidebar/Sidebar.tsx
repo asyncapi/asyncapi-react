@@ -35,7 +35,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     Operations = OperationsByOperationsTags;
   }
 
-  const messagesList = Object.keys(messages).length > 0 && (
+  const messagesList = messages && Object.keys(messages).length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -45,14 +45,14 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         Messages
       </a>
       <ul className="text-sm mt-2">
-        {Object.keys(messages).map(messageName => (
+        {Object.entries(messages).map(([messageName, message]) => (
           <li key={messageName}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
               href={`#message-${messageName}`}
               onClick={() => setShowSidebar(false)}
             >
-              <div className="break-all inline-block">{messageName}</div>
+              <div className="break-all inline-block">{message.uid()}</div>
             </a>
           </li>
         ))}
@@ -60,11 +60,11 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     </li>
   );
 
-  const schemasList = Object.keys(schemas).length > 0 && (
+  const schemasList = schemas && Object.keys(schemas).length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-        href="#messages"
+        href="#schemas"
         onClick={() => setShowSidebar(false)}
       >
         Schemas
