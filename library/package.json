@@ -39,7 +39,10 @@
     "./README.md",
     "./LICENSE"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./style/default.css",
+    "./style/default.min.css"
+  ],
   "scripts": {
     "start": "tsc -p tsconfig.esm.json --watch",
     "build:dev": "npm run build:esm && npm run build:types && npm run build:styles",

@@ -105,9 +105,5 @@
       ],
       "@semantic-release/github"
     ]
-  },
-  "sideEffects": [
-    "./style/default.css",
-    "./style/default.min.css"
-  ]
+  }
 }
