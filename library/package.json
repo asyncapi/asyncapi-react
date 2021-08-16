@@ -40,8 +40,8 @@
     "./LICENSE"
   ],
   "sideEffects": [
-    "./style/default.css",
-    "./style/default.min.css"
+    "./styles/default.css",
+    "./styles/default.min.css"
   ],
   "scripts": {
     "start": "tsc -p tsconfig.esm.json --watch",
