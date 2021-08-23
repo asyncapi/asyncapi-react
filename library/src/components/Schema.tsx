@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+
 import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
