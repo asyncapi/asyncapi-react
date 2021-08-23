@@ -17,9 +17,7 @@ interface Props {
 
 const SchemaContext = React.createContext({ reverse: false });
 
-/* eslint-disable sonarjs/cognitive-complexity */
 export const Schema: React.FunctionComponent<Props> = ({
-  // NOSONAR
   schemaName,
   schema,
   required = false,
