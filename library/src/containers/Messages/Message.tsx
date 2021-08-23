@@ -144,7 +144,10 @@ export const Message: React.FunctionComponent<Props> = ({
 
           {message.hasBindings() && (
             <div className="mt-2">
-              <Bindings bindings={message.bindings()} />
+              <Bindings
+                name="Message specific information"
+                bindings={message.bindings()}
+              />
             </div>
           )}
 

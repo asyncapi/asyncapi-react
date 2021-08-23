@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const Bindings: React.FunctionComponent<Props> = ({
-  name = 'Binding',
+  name = 'Binding specific information',
   bindings,
 }) => {
   if (!bindings || !Object.keys(bindings).length) {
