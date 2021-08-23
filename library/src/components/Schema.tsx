@@ -5,7 +5,7 @@ import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
-  schemaName?: string;
+  schemaName?: React.ReactNode;
   schema?: SchemaType;
   required?: boolean;
   isCircular?: boolean;
@@ -32,8 +32,9 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   if (
     !schema ||
-    schemaName?.startsWith('x-parser-') ||
-    schemaName?.startsWith('x-schema-private-')
+    (typeof schemaName === 'string' &&
+      (schemaName?.startsWith('x-parser-') ||
+        schemaName?.startsWith('x-schema-private-')))
   ) {
     return null;
   }
@@ -79,13 +80,17 @@ export const Schema: React.FunctionComponent<Props> = ({
                   className: expand ? '-rotate-180' : '-rotate-90',
                 }}
               >
-                <span
-                  className={`break-words text-sm ${
-                    isProperty ? 'italic' : ''
-                  }`}
-                >
-                  {schemaName}
-                </span>
+                {typeof schemaName === 'string' ? (
+                  <span
+                    className={`break-words text-sm ${
+                      isProperty ? 'italic' : ''
+                    }`}
+                  >
+                    {schemaName}
+                  </span>
+                ) : (
+                  schemaName
+                )}
               </CollapseButton>
             ) : (
               <span
