@@ -68,6 +68,15 @@ export const Schema: React.FunctionComponent<Props> = ({
     uid = (schema.items() as SchemaType).uid();
   }
 
+  const renderedSchemaName =
+    typeof schemaName === 'string' ? (
+      <span className={`break-words text-sm ${isProperty ? 'italic' : ''}`}>
+        {schemaName}
+      </span>
+    ) : (
+      schemaName
+    );
+
   return (
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
@@ -80,17 +89,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   className: expand ? '-rotate-180' : '-rotate-90',
                 }}
               >
-                {typeof schemaName === 'string' ? (
-                  <span
-                    className={`break-words text-sm ${
-                      isProperty ? 'italic' : ''
-                    }`}
-                  >
-                    {schemaName}
-                  </span>
-                ) : (
-                  schemaName
-                )}
+                {renderedSchemaName}
               </CollapseButton>
             ) : (
               <span
