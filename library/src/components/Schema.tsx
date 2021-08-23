@@ -68,9 +68,10 @@ export const Schema: React.FunctionComponent<Props> = ({
     uid = (schema.items() as SchemaType).uid();
   }
 
+  const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
     typeof schemaName === 'string' ? (
-      <span className={`break-words text-sm ${isProperty ? 'italic' : ''}`}>
+      <span className={`break-words text-sm ${styledSchemaName}`}>
         {schemaName}
       </span>
     ) : (
