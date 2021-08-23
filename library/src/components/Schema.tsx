@@ -18,7 +18,7 @@ interface Props {
 const SchemaContext = React.createContext({ reverse: false });
 
 export const Schema: React.FunctionComponent<Props> = ({
-  //NOSONAR
+  // NOSONAR
   schemaName,
   schema,
   required = false,
