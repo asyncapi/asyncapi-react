@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-
 import React, { useState, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
@@ -19,6 +17,7 @@ interface Props {
 
 const SchemaContext = React.createContext({ reverse: false });
 
+/* eslint-disable sonarjs/cognitive-complexity */
 export const Schema: React.FunctionComponent<Props> = ({
   // NOSONAR
   schemaName,
