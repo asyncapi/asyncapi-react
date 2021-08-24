@@ -79,7 +79,10 @@ export const Server: React.FunctionComponent<Props> = ({
 
           {server.hasBindings() && (
             <div className="mt-2">
-              <Bindings bindings={server.bindings()} />
+              <Bindings
+                name="Server specific information"
+                bindings={server.bindings()}
+              />
             </div>
           )}
         </div>
