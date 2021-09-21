@@ -109,7 +109,7 @@ export const Operation: React.FunctionComponent<Props> = ({
                 <li className="inline-block mt-2 mr-2" key={server as string}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
-                      `server-${server}`,
+                      'server-' + server,
                       config,
                     )}`}
                     className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
