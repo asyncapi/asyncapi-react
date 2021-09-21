@@ -37,9 +37,10 @@ export const Operation: React.FunctionComponent<Props> = ({
 
   const operationId = operation.id();
   const externalDocs = operation.externalDocs();
+  const servers = channel.servers();
 
-  const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
   const operationSummary = operation.summary();
+  const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
 
   return (
     <div>
@@ -99,6 +100,27 @@ export const Operation: React.FunctionComponent<Props> = ({
             </div>
           </div>
         )}
+
+        {servers.length > 0 ? (
+          <div className="mt-2 text-sm">
+            <p>Available only on servers:</p>
+            <ul className="flex flex-wrap leading-normal">
+              {servers.map(server => (
+                <li className="inline-block mt-2 mr-2" key={server as string}>
+                  <a
+                    href={`#${CommonHelpers.getIdentifier(
+                      `server-${server}`,
+                      config,
+                    )}`}
+                    className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
+                  >
+                    <span className="underline">{server}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         {parameters && (
           <div

@@ -1,5 +1,5 @@
 export const streetlights = `
-asyncapi: '2.0.0'
+asyncapi: '2.2.0'
 id: 'urn:com:smartylighting:streetlights:server'
 info:
   title: Streetlights API
@@ -141,6 +141,9 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
+    servers:
+      - production
+      - dommy-kafka
     subscribe:
       summary: Receive information about environmental lighting conditions of a particular streetlight.
       operationId: receiveLightMeasurement
@@ -173,6 +176,9 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
+    servers:
+      - production
+      - dummy-amqp
     publish:
       operationId: turnOn
       externalDocs:
@@ -197,6 +203,9 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
+    servers:
+      - production
+      - dummy-amqp
     publish:
       operationId: dimLight
       traits:
