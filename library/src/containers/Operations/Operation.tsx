@@ -31,13 +31,14 @@ export const Operation: React.FunctionComponent<Props> = ({
 }) => {
   const config = useConfig();
 
-  if (!operation) {
+  if (!operation || !channel) {
     return null;
   }
 
   const operationId = operation.id();
   const externalDocs = operation.externalDocs();
-  const servers = channel.servers();
+  // check typeof as fallback for older version that `2.2.0`
+  const servers = typeof channel.servers === 'function' && channel.servers();
 
   const operationSummary = operation.summary();
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
@@ -101,7 +102,7 @@ export const Operation: React.FunctionComponent<Props> = ({
           </div>
         )}
 
-        {servers.length > 0 ? (
+        {servers && servers.length > 0 ? (
           <div className="mt-2 text-sm">
             <p>Available only on servers:</p>
             <ul className="flex flex-wrap leading-normal">
