@@ -37,7 +37,7 @@ export const Operation: React.FunctionComponent<Props> = ({
 
   const operationId = operation.id();
   const externalDocs = operation.externalDocs();
-  // check typeof as fallback for older version that `2.2.0`
+  // check typeof as fallback for older version than `2.2.0`
   const servers = typeof channel.servers === 'function' && channel.servers();
 
   const operationSummary = operation.summary();
