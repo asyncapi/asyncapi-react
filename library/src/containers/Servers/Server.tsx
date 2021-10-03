@@ -66,16 +66,19 @@ export const Server: React.FunctionComponent<Props> = ({
             </div>
           )}
 
-          {serverRequirements && (
+          {
             <div
               id={`${CommonHelpers.getIdentifier(
                 `server-${serverName}-security`,
                 config,
               )}`}
             >
-              <ServerSecurity serverRequirements={serverRequirements} />
+              <ServerSecurity
+                protocol={server.protocol()}
+                serverRequirements={serverRequirements}
+              />
             </div>
-          )}
+          }
 
           {server.hasBindings() && (
             <div className="mt-2">
