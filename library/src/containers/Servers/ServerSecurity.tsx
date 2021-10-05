@@ -113,22 +113,22 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
       <div className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded">
         {securityProtocol && (
           <div className="mt-1">
-            <span className="text-xs text-gray-600 mt-1 mr-1">
-              security.protocol:
-            </span>
-            <span className="text-xs text-gray-600 mt-1 mr-1 uppercase">
-              {securityProtocol}
-            </span>
-          </div>
-        )}
-        {saslMechanism && (
-          <div className="mt-1">
-            <span className="text-xs text-gray-600 mt-1 mr-1">
-              sasl.mechanism:
-            </span>
-            <span className="text-xs text-gray-600 mt-1 mr-1 uppercase">
-              {saslMechanism}
-            </span>
+           <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+             security.protocol:
+           </span>
+           <span className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
+             {securityProtocol}
+           </span>
+         </div>
+       )}
+       {saslMechanism && (
+         <div className="mt-1">
+           <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+             sasl.mechanism:
+           </span>
+           <span className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
+             {saslMechanism}
+           </span>
           </div>
         )}
       </div>
