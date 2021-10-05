@@ -28,7 +28,7 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
   ) {
     if (protocol === 'kafka' || protocol === 'kafka-secure') {
       renderedServerSecurities = (
-        <ServerSecurityItem protocol={protocol} securitySchema={null} key="" />
+        <ServerSecurityItem protocol={protocol} securitySchema={null} />
       );
     }
   } else {
@@ -80,65 +80,34 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
   protocol,
 }) => {
   const schemas: React.ReactNodeArray = [];
-  if (securitySchema && securitySchema.name()) {
-    schemas.push(<span>Name: {securitySchema.name()}</span>);
-  }
-  if (securitySchema && securitySchema.in()) {
-    schemas.push(<span>In: {securitySchema.in()}</span>);
-  }
-  if (securitySchema && securitySchema.scheme()) {
-    schemas.push(<span>Scheme: {securitySchema.scheme()}</span>);
-  }
-  if (securitySchema && securitySchema.bearerFormat()) {
-    schemas.push(<span>Bearer format: {securitySchema.bearerFormat()}</span>);
-  }
-  if (securitySchema && securitySchema.openIdConnectUrl()) {
-    schemas.push(
-      <Href href={securitySchema.openIdConnectUrl()} className="underline">
-        Connect URL
-      </Href>,
-    );
+  if (securitySchema) {
+    if (securitySchema.name()) {
+      schemas.push(<span>Name: {securitySchema.name()}</span>);
+    }
+    if (securitySchema.in()) {
+      schemas.push(<span>In: {securitySchema.in()}</span>);
+    }
+    if (securitySchema.scheme()) {
+      schemas.push(<span>Scheme: {securitySchema.scheme()}</span>);
+    }
+    if (securitySchema.bearerFormat()) {
+      schemas.push(<span>Bearer format: {securitySchema.bearerFormat()}</span>);
+    }
+    if (securitySchema.openIdConnectUrl()) {
+      schemas.push(
+        <Href href={securitySchema.openIdConnectUrl()} className="underline">
+          Connect URL
+        </Href>,
+      );
+    }
   }
 
   let renderedKafkaSecurity;
   if (protocol === 'kafka' || protocol === 'kafka-secure') {
-    let securityProtocol;
-    let saslMechanism;
-    if (protocol === 'kafka') {
-      if (securitySchema) {
-        securityProtocol = 'SASL_PLAINTEXT';
-      } else {
-        securityProtocol = 'PLAINTEXT';
-      }
-    } else {
-      if (securitySchema) {
-        securityProtocol = 'SASL_SSL';
-      } else {
-        securityProtocol = 'SSL';
-      }
-    }
-    if (securitySchema) {
-      switch (securitySchema.type()) {
-        case 'plain':
-          saslMechanism = 'PLAIN';
-          break;
-        case 'scramSha256':
-          saslMechanism = 'SCRAM-SHA-256';
-          break;
-        case 'scramSha512':
-          saslMechanism = 'SCRAM-SHA-512';
-          break;
-        case 'oauth2':
-          saslMechanism = 'OAUTHBEARER';
-          break;
-        case 'gssapi':
-          saslMechanism = 'GSSAPI';
-          break;
-        case 'X509':
-          securityProtocol = 'SSL';
-          break;
-      }
-    }
+    const { securityProtocol, saslMechanism } = ServerHelpers.getKafkaSecurity(
+      protocol,
+      securitySchema,
+    );
 
     renderedKafkaSecurity = (
       <div className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded">
