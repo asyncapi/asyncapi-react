@@ -60,11 +60,13 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
     );
   }
 
+  if (!renderedServerSecurities) {
+    return null;
+  }
+
   return (
     <div className="text-sm mt-4">
-      {renderedServerSecurities && (
-        <h5 className="text-gray-700 text-base">Security:</h5>
-      )}
+      <h5 className="text-gray-700 text-base">Security:</h5>
       {renderedServerSecurities}
     </div>
   );
