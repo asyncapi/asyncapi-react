@@ -184,7 +184,7 @@ To use component in Angular, follow these steps:
   where:
   
   - `schema`, `config`, `schemaUrl`, `schemaFetchOptions` are Web Component's properties used in any valid combination, as described in [Web Component specification](#web-component),
-  - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
+  - `cssImportPath` is the path to styles. By default it is `assets/asyncapi.css`
 
   > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
 
