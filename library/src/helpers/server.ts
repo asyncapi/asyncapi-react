@@ -1,3 +1,5 @@
+import { SecurityScheme } from '@asyncapi/parser';
+
 export class ServerHelpers {
   static securityType(value: string) {
     switch (value) {
@@ -43,5 +45,50 @@ export class ServerHelpers {
       default:
         return 'Implicit';
     }
+  }
+
+  static getKafkaSecurity(
+    protocol: string,
+    securitySchema: SecurityScheme | null,
+  ) {
+    let securityProtocol;
+    let saslMechanism;
+    if (protocol === 'kafka') {
+      if (securitySchema) {
+        securityProtocol = 'SASL_PLAINTEXT';
+      } else {
+        securityProtocol = 'PLAINTEXT';
+      }
+    } else {
+      if (securitySchema) {
+        securityProtocol = 'SASL_SSL';
+      } else {
+        securityProtocol = 'SSL';
+      }
+    }
+    if (securitySchema) {
+      switch (securitySchema.type()) {
+        case 'plain':
+          saslMechanism = 'PLAIN';
+          break;
+        case 'scramSha256':
+          saslMechanism = 'SCRAM-SHA-256';
+          break;
+        case 'scramSha512':
+          saslMechanism = 'SCRAM-SHA-512';
+          break;
+        case 'oauth2':
+          saslMechanism = 'OAUTHBEARER';
+          break;
+        case 'gssapi':
+          saslMechanism = 'GSSAPI';
+          break;
+        case 'X509':
+          securityProtocol = 'SSL';
+          break;
+      }
+    }
+
+    return { securityProtocol, saslMechanism };
   }
 }
