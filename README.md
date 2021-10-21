@@ -184,7 +184,7 @@ To use component in Angular, follow these steps:
   where:
   
   - `schema`, `config`, `schemaUrl`, `schemaFetchOptions` are Web Component's properties used in any valid combination, as described in [Web Component specification](#web-component),
-  - `cssImportPath` is the path to styles. By default it is `assets/fiori.css`
+  - `cssImportPath` is the path to styles. By default it is `assets/asyncapi.css`
 
   > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
 
@@ -251,6 +251,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     <td align="center"><a href="https://github.com/aeworxet"><img src="https://avatars.githubusercontent.com/u/16149591?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Viacheslav Turovskyi</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Documentation">📖</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/195858"><img src="https://avatars.githubusercontent.com/u/3858485?v=4?s=100" width="100px;" alt=""/><br /><sub><b>195858</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=195858" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/aayushmau5"><img src="https://avatars.githubusercontent.com/u/54525741?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aayush Kumar Sahu</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aayushmau5" title="Code">💻</a></td>
+    <td align="center"><a href="http://dalelane.co.uk/"><img src="https://avatars.githubusercontent.com/u/1444788?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dale Lane</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=dalelane" title="Code">💻</a> <a href="#ideas-dalelane" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
