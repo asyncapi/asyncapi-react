@@ -8,9 +8,9 @@ interface Props {
   schemaName?: React.ReactNode;
   schema?: SchemaType;
   required?: boolean;
-  isCircular?: boolean;
   isPatternProperty?: boolean;
   isProperty?: boolean;
+  isCircular?: boolean;
   dependentRequired?: string[];
   expanded?: boolean;
 }
@@ -21,9 +21,9 @@ export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
   required = false,
-  isCircular = false,
   isPatternProperty = false,
   isProperty = false,
+  isCircular = false,
   dependentRequired,
   expanded = false,
 }) => {
@@ -47,25 +47,37 @@ export const Schema: React.FunctionComponent<Props> = ({
   const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
   const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
   const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
-
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
-  isCircular = isCircular || schema.ext('x-parser-circular') || false;
 
+  let schemaType = SchemaHelpers.toSchemaType(schema);
+  isCircular =
+    isCircular ||
+    schema.isCircular() ||
+    schema.ext('x-parser-circular') ||
+    false;
   let uid = schema.uid();
 
-  /**
-   * checking uid for circular items
-   * after fixing https://github.com/asyncapi/parser-js/issues/293 statement should be removed
-   * `x-parser-circular` extension is added to every schema which has circular `items` field,
-   * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
-   */
-  if (
+  const schemaItems = schema.items();
+  if (schemaItems && !Array.isArray(schemaItems)) {
+    isCircular =
+      isCircular ||
+      schemaItems.isCircular() ||
+      schema.ext('x-parser-circular') ||
+      false;
+    uid = schemaItems.uid();
+    if (
+      isCircular &&
+      typeof (schemaItems as any).circularSchema === 'function'
+    ) {
+      schemaType = SchemaHelpers.toSchemaType(
+        (schemaItems as any).circularSchema(),
+      );
+    }
+  } else if (
     isCircular &&
-    !uid &&
-    schema.items() &&
-    typeof (schema.items() as SchemaType).uid === 'function'
+    typeof (schema as any).circularSchema === 'function'
   ) {
-    uid = (schema.items() as SchemaType).uid();
+    schemaType = SchemaHelpers.toSchemaType((schema as any).circularSchema());
   }
 
   const styledSchemaName = isProperty ? 'italic' : '';
@@ -134,9 +146,7 @@ export const Schema: React.FunctionComponent<Props> = ({
               <div>
                 {renderType && (
                   <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
-                    {isCircular
-                      ? `${SchemaHelpers.toSchemaType(schema)} [CIRCULAR]`
-                      : SchemaHelpers.toSchemaType(schema)}
+                    {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
                   </div>
                 )}
                 <div className="inline-block">
@@ -353,7 +363,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
   const required = schema.required() || [];
   const patternProperties = schema.patternProperties();
-  const circularProps = schema.circularProps() || [];
+  const circularProps = schema.ext('x-parser-circular-props') || [];
 
   return (
     <>
@@ -362,8 +372,8 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schema={property}
           schemaName={propertyName}
           required={required.includes(propertyName)}
-          isCircular={circularProps.includes(propertyName)}
           isProperty={true}
+          isCircular={circularProps.includes(propertyName)}
           dependentRequired={SchemaHelpers.getDependentRequired(
             propertyName,
             schema,
@@ -375,9 +385,9 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
         <Schema
           schema={property}
           schemaName={propertyName}
-          isCircular={circularProps.includes(propertyName)}
           isPatternProperty={true}
           isProperty={true}
+          isCircular={circularProps.includes(propertyName)}
           key={propertyName}
         />
       ))}

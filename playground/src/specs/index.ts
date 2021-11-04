@@ -1,5 +1,6 @@
 export * from './anyOf';
 export * from './application-headers';
+export * from './circular';
 export * from './correlation-id';
 export * from './dummy';
 export * from './gitter-streaming';

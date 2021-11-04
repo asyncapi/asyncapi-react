@@ -331,6 +331,7 @@ export class SchemaHelpers {
   }
 
   private static toType(type: string, schema: Schema): string {
+    if (schema.isCircular()) return type;
     if (type === 'array') {
       const items = schema.items();
       if (Array.isArray(items)) {
