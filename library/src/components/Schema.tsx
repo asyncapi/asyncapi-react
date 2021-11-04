@@ -62,7 +62,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     isCircular =
       isCircular ||
       schemaItems.isCircular() ||
-      schema.ext('x-parser-circular') ||
+      schemaItems.ext('x-parser-circular') ||
       false;
     uid = schemaItems.uid();
     if (
