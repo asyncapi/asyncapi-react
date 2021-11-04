@@ -57,6 +57,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     false;
   let uid = schema.uid();
 
+  // ane logic and fallback for older logic for circular references
   const schemaItems = schema.items();
   if (schemaItems && !Array.isArray(schemaItems)) {
     isCircular =
