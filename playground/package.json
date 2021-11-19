@@ -4,12 +4,12 @@
   "description": "Playground app for AsyncApi React Component",
   "homepage": "https://asyncapi.github.io/asyncapi-react",
   "dependencies": {
-    "@asyncapi/react-component": "^0.24.12",
+    "@asyncapi/react-component": "^0.24.15",
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-brands-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "codemirror": "^5.48.4",
+    "codemirror": "^5.58.2",
     "re-resizable": "^6.0.0",
     "react": "^16.9.0",
     "react-codemirror2": "^6.0.0",
@@ -44,5 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "version": "0.24.12"
+  "version": "0.24.15"
 }
