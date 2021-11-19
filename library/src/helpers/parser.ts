@@ -34,7 +34,7 @@ export class Parser {
       const data = await this.parseSchema(content, parserOptions);
       return this.extractDocument(data);
     } catch (err) {
-      return this.handleError(err);
+      return this.handleError(err as ErrorObject);
     }
   }
 
@@ -50,7 +50,7 @@ export class Parser {
       );
       return this.extractDocument(data);
     } catch (err) {
-      return this.handleError(err);
+      return this.handleError(err as ErrorObject);
     }
   }
 
