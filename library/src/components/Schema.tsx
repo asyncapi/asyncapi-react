@@ -59,7 +59,13 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   const schemaItems = schema.items();
   if (schemaItems && !Array.isArray(schemaItems)) {
-    // fallback for older logic for circular references
+    /**
+     * fallback for older logic for circular references:
+     *
+     * checking uid for circular items
+     * `x-parser-circular` extension is added to every schema which has circular `items` field,
+     * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
+     */
     isCircular =
       isCircular ||
       schemaItems.isCircular() ||
