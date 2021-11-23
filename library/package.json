@@ -70,7 +70,7 @@
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^0.3.0",
     "@asyncapi/openapi-schema-parser": "^2.0.0",
-    "@asyncapi/parser": "1.10.0",
+    "@asyncapi/parser": "^1.11.1",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^2.1.1",
@@ -80,6 +80,9 @@
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
     "@tailwindcss/typography": "^0.4.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
     "@types/dompurify": "^2.0.4",
     "@types/highlight.js": "^10.1.0",
     "@types/jest": "^26.0.23",
@@ -91,7 +94,7 @@
     "cross-env": "^7.0.3",
     "cssnano": "^4.1.11",
     "cypress": "^7.4.0",
-    "jest": "^24.9.0",
+    "jest": "^26.0.0",
     "postcss": "^8.2.10",
     "postcss-cli": "^8.3.1",
     "postcss-import": "^14.0.2",
