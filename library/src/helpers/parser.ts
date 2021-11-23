@@ -20,7 +20,7 @@ export class Parser {
       const asyncapi = await parse(content, parserOptions);
       return { asyncapi };
     } catch (err) {
-      return this.handleError(err);
+      return this.handleError(err as ErrorObject);
     }
   }
 
@@ -36,7 +36,7 @@ export class Parser {
       );
       return { asyncapi };
     } catch (err) {
-      return this.handleError(err);
+      return this.handleError(err as ErrorObject);
     }
   }
 
