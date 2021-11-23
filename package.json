@@ -1,6 +1,4 @@
 {
-  "name": "@asyncapi/react-mono-repo",
-  "version": "0.0.1",
   "private": true,
   "repository": {
     "type": "git",
