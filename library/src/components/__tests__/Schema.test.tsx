@@ -10,8 +10,8 @@ import SchemaModel from '@asyncapi/parser/lib/models/schema';
 
 import { Schema } from '../Schema';
 
-describe('Schema component', function() {
-  test('should work with circular references in schema - using `x-parser-circular-props` extensions', async function() {
+describe('Schema component', () => {
+  test('should work with circular references in schema - using `x-parser-circular-props` extensions', async () => {
     const schema = {
       type: 'object',
       properties: {
