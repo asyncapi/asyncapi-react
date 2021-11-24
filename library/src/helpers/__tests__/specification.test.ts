@@ -24,8 +24,33 @@ describe('SpecificationHelpers', () => {
       expect(result).toEqual(expected);
     });
 
-    test('should return parsed specification when is passed parsed stringified spec', () => {
+    test('should return parsed specification when is passed parsed string', () => {
       const doc = { asyncapi: '2.0.0', 'x-parser-spec-parsed': true };
+      const stringified = JSON.stringify(doc);
+      const expected = new AsyncAPIDocument(doc);
+
+      const result = SpecificationHelpers.retrieveParsedSpec(stringified);
+      expect(result).toEqual(expected);
+    });
+
+    test('should return parsed specification when is passed parsed stringified spec ', () => {
+      const doc = {
+        asyncapi: '2.0.0',
+        'x-parser-spec-parsed': true,
+        'x-parser-stringified-spec': true,
+      };
+      const expected = new AsyncAPIDocument(doc);
+
+      const result = SpecificationHelpers.retrieveParsedSpec(doc);
+      expect(result).toEqual(expected);
+    });
+
+    test('should return parsed specification when is passed parsed stringified spec (by string) ', () => {
+      const doc = {
+        asyncapi: '2.0.0',
+        'x-parser-spec-parsed': true,
+        'x-parser-stringified-spec': true,
+      };
       const stringified = JSON.stringify(doc);
       const expected = new AsyncAPIDocument(doc);
 

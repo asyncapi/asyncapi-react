@@ -1,6 +1,6 @@
 import { AsyncAPIDocument, Tag } from '@asyncapi/parser';
 // @ts-ignore
-import AsyncAPIDocumentClass from '@asyncapi/parser/lib/models/asyncapi';
+import AsyncAPIDocumentModel from '@asyncapi/parser/lib/models/asyncapi';
 
 export class SpecificationHelpers {
   /**
@@ -37,7 +37,11 @@ export class SpecificationHelpers {
 
     // at the end check if schema is a parsed JS object (as output from AsyncAPI Parser)
     if (typeof schema === 'object' && schema['x-parser-spec-parsed'] === true) {
-      return new AsyncAPIDocumentClass(schema) as AsyncAPIDocument;
+      // if schema is stringified by `AsyncAPIDocument.stringify` function
+      if (schema['x-parser-spec-stringified'] === true) {
+        return AsyncAPIDocumentModel.parse(schema);
+      }
+      return new AsyncAPIDocumentModel(schema) as AsyncAPIDocument;
     }
 
     return undefined;
