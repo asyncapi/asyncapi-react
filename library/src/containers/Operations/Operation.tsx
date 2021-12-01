@@ -24,7 +24,6 @@ interface Props {
 }
 
 export const Operation: React.FunctionComponent<Props> = ({
-  // NOSONAR
   type = PayloadType.PUBLISH,
   operation,
   channelName,

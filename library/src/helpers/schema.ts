@@ -331,7 +331,6 @@ export class SchemaHelpers {
   }
 
   private static toType(type: string, schema: Schema): string {
-    // NOSONAR
     if (schema.isCircular()) {
       return type;
     }
