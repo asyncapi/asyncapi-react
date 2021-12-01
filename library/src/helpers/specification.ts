@@ -41,7 +41,7 @@ export class SpecificationHelpers {
       if (schema['x-parser-spec-stringified'] === true) {
         return AsyncAPIDocumentModel.parse(schema);
       }
-      return new AsyncAPIDocumentModel(schema) as AsyncAPIDocument;
+      return new AsyncAPIDocumentModel(schema);
     }
 
     return undefined;

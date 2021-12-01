@@ -78,6 +78,7 @@ interface ServerSecurityItemProps {
 }
 
 const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
+  // NOSONAR
   securitySchema,
   protocol,
 }) => {
