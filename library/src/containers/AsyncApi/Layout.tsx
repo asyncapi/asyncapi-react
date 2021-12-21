@@ -25,13 +25,21 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   config,
   error = null,
 }) => {
-  const [divWidth, setDivWidth] = useState(1281);
+  const [observerClassName, setObserverClassName] = useState('container:xl');
 
   const { ref } = useResizeObserver<HTMLDivElement>({
     onResize: ({ width }) => {
-      if (divWidth !== width) {
-        width && setDivWidth(width);
-      }
+      requestAnimationFrame(() => {
+        if (width === undefined) {
+          return;
+        }
+
+        const possibleClassName =
+          width <= 1280 ? 'container:xl' : 'container:base';
+        if (possibleClassName !== observerClassName) {
+          setObserverClassName(possibleClassName);
+        }
+      });
     },
   });
 
@@ -40,9 +48,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
       <SpecificationContext.Provider value={asyncapi}>
         <section className="aui-root">
           <div
-            className={`${
-              divWidth <= 1280 ? 'container:xl' : 'container:base'
-            } relative md:flex bg-white leading-normal`}
+            className={`${observerClassName} relative md:flex bg-white leading-normal`}
             id={config.schemaID || undefined}
             ref={ref}
           >
