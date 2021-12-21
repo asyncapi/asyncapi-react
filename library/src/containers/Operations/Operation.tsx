@@ -131,7 +131,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
               <Message
-                message={(operation.message as any)(0)}
+                message={(operation.message as (index: number) => any)(0)}
                 showExamples={true}
               />
             </div>
