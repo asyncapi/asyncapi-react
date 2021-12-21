@@ -29,15 +29,17 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
 
   const { ref } = useResizeObserver<HTMLDivElement>({
     onResize: ({ width }) => {
-      if (width === undefined) {
-        return;
-      }
+      requestAnimationFrame(() => {
+        if (width === undefined) {
+          return;
+        }
 
-      const possibleClassName =
-        width <= 1280 ? 'container:xl' : 'container:base';
-      if (possibleClassName !== observerClassName) {
-        setObserverClassName(possibleClassName);
-      }
+        const possibleClassName =
+          width <= 1280 ? 'container:xl' : 'container:base';
+        if (possibleClassName !== observerClassName) {
+          setObserverClassName(possibleClassName);
+        }
+      });
     },
   });
 
