@@ -72,15 +72,9 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
   );
 };
 
-interface ServerSecurityItemProps {
-  securitySchema: SecurityScheme | null;
-  protocol: string;
-}
-
-const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
-  securitySchema,
-  protocol,
-}) => {
+function collectSecuritySchemas(
+  securitySchema: SecurityScheme | null,
+): React.ReactNodeArray {
   const schemas: React.ReactNodeArray = [];
   if (securitySchema) {
     if (securitySchema.name()) {
@@ -103,9 +97,22 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
       );
     }
   }
+  return schemas;
+}
+
+interface ServerSecurityItemProps {
+  securitySchema: SecurityScheme | null;
+  protocol: string;
+}
+
+const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
+  securitySchema,
+  protocol,
+}) => {
+  const schemas: React.ReactNodeArray = collectSecuritySchemas(securitySchema);
 
   let renderedKafkaSecurity;
-  if (protocol === 'kafka' || protocol === 'kafka-secure') {
+  if (['kafka', 'kafka-secure'].includes(protocol)) {
     const { securityProtocol, saslMechanism } = ServerHelpers.getKafkaSecurity(
       protocol,
       securitySchema,
@@ -214,7 +221,7 @@ const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
     });
 
   return (
-    <div className="ai-security__security__security-schema">
+    <div>
       {securitySchema && schemas && (
         <div>
           <span>

@@ -23,84 +23,22 @@ interface Props {
   channel: Channel;
 }
 
-export const Operation: React.FunctionComponent<Props> = ({
-  type = PayloadType.PUBLISH,
-  operation,
-  channelName,
-  channel,
-}) => {
+export const Operation: React.FunctionComponent<Props> = props => {
   const config = useConfig();
+  const { type = PayloadType.PUBLISH, operation, channelName, channel } = props;
 
   if (!operation || !channel) {
     return null;
   }
 
-  const operationId = operation.id();
-  const externalDocs = operation.externalDocs();
   // check typeof as fallback for older version than `2.2.0`
   const servers = typeof channel.servers === 'function' && channel.servers();
-
-  const operationSummary = operation.summary();
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
 
   return (
     <div>
       <div className="panel-item--center px-8">
-        <div className="mb-4">
-          <h3>
-            <span
-              className={`font-mono border uppercase p-1 rounded mr-2 ${
-                type === PayloadType.PUBLISH
-                  ? 'border-blue-600 text-blue-500'
-                  : 'border-green-600 text-green-600'
-              }`}
-              title={type}
-            >
-              {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
-            </span>{' '}
-            <span className="font-mono text-base">{channelName}</span>
-          </h3>
-        </div>
-
-        {channel.hasDescription() && (
-          <div className="mt-2">
-            <Markdown>{channel.description()}</Markdown>
-          </div>
-        )}
-        {operationSummary && (
-          <p className="text-gray-600 text-sm mt-2">{operationSummary}</p>
-        )}
-        {operation.hasDescription() && (
-          <div className="mt-2">
-            <Markdown>{operation.description()}</Markdown>
-          </div>
-        )}
-
-        {externalDocs && (
-          <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
-            {externalDocs && (
-              <li className="inline-block">
-                <Href
-                  className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                  href={externalDocs.url()}
-                >
-                  <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
-                </Href>
-              </li>
-            )}
-          </ul>
-        )}
-
-        {operationId && (
-          <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-            <div className="text-sm text-gray-700">
-              Operation ID
-              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                {operationId}
-              </span>
-            </div>
-          </div>
-        )}
+        <OperationInfo {...props} />
 
         {servers && servers.length > 0 ? (
           <div className="mt-2 text-sm">
@@ -201,5 +139,76 @@ export const Operation: React.FunctionComponent<Props> = ({
         )}
       </div>
     </div>
+  );
+};
+
+export const OperationInfo: React.FunctionComponent<Props> = ({
+  type = PayloadType.PUBLISH,
+  operation,
+  channelName,
+  channel,
+}) => {
+  const operationSummary = operation.summary();
+  const externalDocs = operation.externalDocs();
+  const operationId = operation.id();
+
+  return (
+    <>
+      <div className="mb-4">
+        <h3>
+          <span
+            className={`font-mono border uppercase p-1 rounded mr-2 ${
+              type === PayloadType.PUBLISH
+                ? 'border-blue-600 text-blue-500'
+                : 'border-green-600 text-green-600'
+            }`}
+            title={type}
+          >
+            {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
+          </span>{' '}
+          <span className="font-mono text-base">{channelName}</span>
+        </h3>
+      </div>
+
+      {channel.hasDescription() && (
+        <div className="mt-2">
+          <Markdown>{channel.description()}</Markdown>
+        </div>
+      )}
+      {operationSummary && (
+        <p className="text-gray-600 text-sm mt-2">{operationSummary}</p>
+      )}
+      {operation.hasDescription() && (
+        <div className="mt-2">
+          <Markdown>{operation.description()}</Markdown>
+        </div>
+      )}
+
+      {externalDocs && (
+        <ul className="leading-normal mt-2 mb-4 space-x-2 space-y-2">
+          {externalDocs && (
+            <li className="inline-block">
+              <Href
+                className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
+                href={externalDocs.url()}
+              >
+                <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
+              </Href>
+            </li>
+          )}
+        </ul>
+      )}
+
+      {operationId && (
+        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+          <div className="text-sm text-gray-700">
+            Operation ID
+            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+              {operationId}
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
