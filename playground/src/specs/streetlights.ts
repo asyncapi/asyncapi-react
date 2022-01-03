@@ -132,9 +132,6 @@ servers:
     variables:
       port:
         default: '9092'
-    bindings:
-      dupa: 
-        lol: string
 
 channels:
   smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
