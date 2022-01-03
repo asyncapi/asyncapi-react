@@ -29,7 +29,9 @@ export const Bindings: React.FunctionComponent<Props> = ({
         </div>
       );
       return (
-        <Schema schemaName={schemaName} schema={schema} key={bindingName} />
+        schema && (
+          <Schema schemaName={schemaName} schema={schema} key={bindingName} />
+        )
       );
     },
   );
