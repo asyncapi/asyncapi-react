@@ -241,7 +241,7 @@ export class SchemaHelpers {
     return new SchemaClass(json);
   }
 
-  static jsonToSchema(value: any): any {
+  static jsonToSchema(value: any): SchemaClass {
     const json = this.jsonFieldToSchema(value);
     return new SchemaClass(json);
   }
@@ -478,6 +478,13 @@ export class SchemaHelpers {
   }
 
   private static jsonFieldToSchema(value: any): any {
+    if (value === undefined || value === null) {
+      return {
+        type: 'string',
+        const: '',
+        [this.extRawValue]: true,
+      };
+    }
     if (typeof value !== 'object') {
       const str =
         typeof value.toString === 'function' ? value.toString() : value;
