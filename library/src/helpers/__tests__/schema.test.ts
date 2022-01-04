@@ -508,18 +508,35 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(schema);
     });
 
-    test('should transform boolean to schema', () => {
-      const json = true;
+    test('should transform array to schema', () => {
+      const json = ['bar', 2137, true];
       const schema = new Schema({
-        type: 'string',
-        const: 'true',
-        'x-schema-private-raw-value': true,
+        type: 'array',
+        items: [
+          {
+            type: 'string',
+            const: 'bar',
+            'x-schema-private-raw-value': true,
+          },
+          {
+            type: 'string',
+            const: '2137',
+            'x-schema-private-raw-value': true,
+          },
+          {
+            type: 'string',
+            const: 'true',
+            'x-schema-private-raw-value': true,
+          },
+        ],
+        'x-schema-private-render-additional-info': false,
+        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.jsonToSchema(json);
       expect(result).toEqual(schema);
     });
 
-    test('should transform boolean to schema', () => {
+    test('should transform object to schema', () => {
       const json = {
         bar: 'foo',
       };
