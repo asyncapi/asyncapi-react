@@ -61,6 +61,12 @@ npm start
 
 You can access the live development server at [localhost:3000](http://localhost:3000/).
 
+## Launch a development environment with Gitpod
+
+To spin up with Gitpod development environment, we configured our workspace through a [.gitpod.yml](/.gitpod.yml) file.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
+
 ## Tests
 
 To launch tests for the [`library`](../../library) package, run this command:
