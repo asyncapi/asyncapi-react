@@ -4,6 +4,7 @@
     "target": "es5",
     "lib": ["es5", "es6", "dom", "es2017", "es2019"],
     "sourceMap": true,
+    "inlineSources": true,
     "allowJs": false,
     "jsx": "react",
     "removeComments": true,
