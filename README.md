@@ -7,7 +7,7 @@
 
 ---
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
 
 
 ## Overview
