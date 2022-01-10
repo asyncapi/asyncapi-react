@@ -59,6 +59,12 @@ Launch the development server with the hot reloading functionality that allows a
 npm start
 ```
 
+## Launch a development environment with Gitpod
+
+To spin up with Gitpod development environment, we configured our workspace through a [.gitpod.yml](/.gitpod.yml) file.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/)
+
 You can access the live development server at [localhost:3000](http://localhost:3000/).
 
 ## Tests
