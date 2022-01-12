@@ -103,10 +103,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
         <div className="flex py-2">
-          <div
-            className="mr-2"
-            style={onlyTitle ? undefined : { minWidth: '25%' }}
-          >
+          <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
             {isExpandable && !isCircular ? (
               <CollapseButton
                 onClick={() => setExpand(prev => !prev)}

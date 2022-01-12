@@ -121,6 +121,9 @@ module.exports = {
         900: '#702459',
       },
     },
+    minWidth: {
+      '1/4': '25%',
+    },
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
