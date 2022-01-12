@@ -22,7 +22,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
   return (
     schema && (
       <div className="mt-2">
-        <Schema schemaName={name} schema={schema} />
+        <Schema schemaName={name} schema={schema} withStandaloneTitle={true} />
       </div>
     )
   );

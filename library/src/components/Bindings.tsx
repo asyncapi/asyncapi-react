@@ -30,7 +30,12 @@ export const Bindings: React.FunctionComponent<Props> = ({
       );
       return (
         schema && (
-          <Schema schemaName={schemaName} schema={schema} key={bindingName} />
+          <Schema
+            schemaName={schemaName}
+            schema={schema}
+            key={bindingName}
+            withStandaloneTitle={true}
+          />
         )
       );
     },

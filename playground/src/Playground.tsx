@@ -17,7 +17,7 @@ import {
 import { defaultConfig, parse, debounce } from './common';
 import * as specs from './specs';
 
-const defaultSchema = specs.streetlights;
+const defaultSchema = specs.weather;
 
 interface State {
   schema: string;

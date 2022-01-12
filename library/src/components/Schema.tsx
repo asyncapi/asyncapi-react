@@ -13,6 +13,7 @@ interface Props {
   isCircular?: boolean;
   dependentRequired?: string[];
   expanded?: boolean;
+  withStandaloneTitle?: boolean;
 }
 
 const SchemaContext = React.createContext({ reverse: false });
@@ -26,6 +27,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   isCircular = false,
   dependentRequired,
   expanded = false,
+  withStandaloneTitle = false,
 }) => {
   const { reverse } = useContext(SchemaContext);
   const [expand, setExpand] = useState(expanded);
@@ -101,7 +103,10 @@ export const Schema: React.FunctionComponent<Props> = ({
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
         <div className="flex py-2">
-          <div className="w-3/12 min-w-min mr-2">
+          <div
+            className="mr-2"
+            style={withStandaloneTitle ? undefined : { minWidth: '25%' }}
+          >
             {isExpandable && !isCircular ? (
               <CollapseButton
                 onClick={() => setExpand(prev => !prev)}
