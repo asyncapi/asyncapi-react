@@ -51,7 +51,7 @@
     "@asyncapi/parser": "^1.13.0",
     "constate": "^1.2.0",
     "dompurify": "^2.1.1",
-    "markdown-it": "^11.0.1",
+    "markdown-it": "^12.3.2",
     "merge": "^2.1.0",
     "openapi-sampler": "1.0.0",
     "react-use": "^12.2.0"
