@@ -7,9 +7,10 @@ import { useSpec } from '../../contexts';
 import { SpecificationHelpers } from '../../helpers';
 
 const SidebarContext = React.createContext<{
-  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMobileSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
-  setShowSidebar: (value: boolean | ((prevValue: boolean) => boolean)) => value,
+  setShowMobileSidebar: (value: boolean | ((prevValue: boolean) => boolean)) =>
+    value,
 });
 
 interface Props {
@@ -17,7 +18,8 @@ interface Props {
 }
 
 export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [collapsedSidebar, setCollapsedSidebar] = useState(false);
 
   const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
@@ -40,7 +42,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
         href="#messages"
-        onClick={() => setShowSidebar(false)}
+        onClick={() => setShowMobileSidebar(false)}
       >
         Messages
       </a>
@@ -50,7 +52,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
               href={`#message-${messageName}`}
-              onClick={() => setShowSidebar(false)}
+              onClick={() => setShowMobileSidebar(false)}
             >
               <div className="break-all inline-block">{message.uid()}</div>
             </a>
@@ -65,7 +67,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
         href="#schemas"
-        onClick={() => setShowSidebar(false)}
+        onClick={() => setShowMobileSidebar(false)}
       >
         Schemas
       </a>
@@ -75,7 +77,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
               href={`#schema-${schemaName}`}
-              onClick={() => setShowSidebar(false)}
+              onClick={() => setShowMobileSidebar(false)}
             >
               <div className="break-all inline-block">{schemaName}</div>
             </a>
@@ -86,11 +88,10 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   );
 
   return (
-    <SidebarContext.Provider value={{ setShowSidebar }}>
+    <SidebarContext.Provider value={{ setShowMobileSidebar }}>
       <div
         className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
-        onClick={() => setShowSidebar(prev => !prev)}
-        data-lol={showSidebar}
+        onClick={() => setShowMobileSidebar(prev => !prev)}
       >
         <svg
           viewBox="0 0 100 70"
@@ -105,16 +106,27 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       </div>
       <div
         className={`${
-          showSidebar ? 'block fixed w-full' : 'hidden'
-        } sidebar relative w-64 max-h-screen h-full bg-gray-200 shadow z-20`}
-        // className={`${
-        //   showSidebar ? 'block fixed w-full' : 'hidden'
-        // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
+          showMobileSidebar ? 'block fixed w-full' : 'hidden'
+        } sidebar relative ${
+          collapsedSidebar ? 'w-0' : 'w-64'
+        } max-h-screen h-full bg-gray-200 shadow z-20`}
       >
         <div
+          onClick={() => setCollapsedSidebar(prev => !prev)}
+          className={`hidden xl:block text-xs text-white cursor-pointer z-10 absolute leading-8 px-0.5 font-bold top-1/2 bg-gray-600 ${
+            collapsedSidebar ? '-right-4.5' : 'right-0'
+          }`}
+          style={{
+            transform: 'translate(0,-50%)',
+            borderRadius: collapsedSidebar ? '0 4px 4px 0' : '4px 0 0 4px',
+          }}
+        >
+          {`<>`}
+        </div>
+        <div
           className={`${
-            showSidebar ? 'w-full' : ''
-          } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
+            showMobileSidebar ? 'w-full' : collapsedSidebar ? 'hidden' : 'block'
+          } fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
           <div className="sidebar--content">
             <div>
@@ -135,7 +147,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                 <a
                   className="text-gray-700 no-underline hover:text-gray-900"
                   href="#introduction"
-                  onClick={() => setShowSidebar(false)}
+                  onClick={() => setShowMobileSidebar(false)}
                 >
                   Introduction
                 </a>
@@ -145,7 +157,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                   <a
                     className="text-gray-700 no-underline hover:text-gray-900"
                     href="#servers"
-                    onClick={() => setShowSidebar(false)}
+                    onClick={() => setShowMobileSidebar(false)}
                   >
                     Servers
                   </a>
@@ -157,7 +169,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                     <a
                       className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
                       href="#operations"
-                      onClick={() => setShowSidebar(false)}
+                      onClick={() => setShowMobileSidebar(false)}
                     >
                       Operations
                     </a>
@@ -418,14 +430,14 @@ interface OperationsPubItemProps {
 const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
 }) => {
-  const { setShowSidebar } = useContext(SidebarContext);
+  const { setShowMobileSidebar } = useContext(SidebarContext);
 
   return (
     <li>
       <a
         className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
         href={`#operation-publish-${channelName}`}
-        onClick={() => setShowSidebar(false)}
+        onClick={() => setShowMobileSidebar(false)}
       >
         <span
           className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
@@ -442,14 +454,14 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
 }) => {
-  const { setShowSidebar } = useContext(SidebarContext);
+  const { setShowMobileSidebar } = useContext(SidebarContext);
 
   return (
     <li>
       <a
         className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
         href={`#operation-subscribe-${channelName}`}
-        onClick={() => setShowSidebar(false)}
+        onClick={() => setShowMobileSidebar(false)}
       >
         <span
           className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"

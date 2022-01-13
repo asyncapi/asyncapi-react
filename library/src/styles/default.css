@@ -13,7 +13,7 @@
   }
 
   .container\:base .sidebar {
-    @apply lg:relative lg:block lg:w-64 lg:h-auto;
+    @apply lg:relative lg:block lg:h-auto;
   }
 
   .container\:xl .sidebar {
