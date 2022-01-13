@@ -60,8 +60,8 @@ export class AsyncApiWebComponent extends React.Component<
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {
     const prevSchema = retrieveSchemaProp(
       this.props,
-    ) as FetchingSchemaInterface;
-    const nextSchema = retrieveSchemaProp(nextProps) as FetchingSchemaInterface;
+    ) as FetchingSchemaInterface; // NOSONAR
+    const nextSchema = retrieveSchemaProp(nextProps) as FetchingSchemaInterface; // NOSONAR
 
     if (!prevSchema || !nextSchema || !prevSchema.url || !nextSchema.url) {
       return true;
