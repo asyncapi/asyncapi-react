@@ -4,7 +4,7 @@ export type PropsSchema =
   | string
   | FetchingSchemaInterface
   | AsyncAPIDocument
-  | any; // any for JSON input
+  | object;
 
 export type NullableAsyncApi = AsyncAPIDocument | null;
 
