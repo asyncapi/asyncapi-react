@@ -1,7 +1,10 @@
 import * as React from 'react';
 // @ts-ignore
 import { register } from 'web-react-components';
-import AsyncApiComponent, { AsyncApiProps } from '@asyncapi/react-component';
+import AsyncApiComponent, {
+  AsyncApiProps,
+  FetchingSchemaInterface,
+} from '@asyncapi/react-component';
 
 /**
  * Angular 11.0.7 running in 'production mode + enforced stricter type
@@ -32,7 +35,7 @@ function retrieveSchemaProp(
   if (schemaUrl) {
     const schemaRequestOptions = schemaFetchOptions
       ? JSON.parse(JSON.stringify(schemaFetchOptions))
-      : schema.requestOptions || {};
+      : (schema as FetchingSchemaInterface).requestOptions || {};
     schema = { url: schemaUrl, requestOptions: schemaRequestOptions };
   }
 
@@ -55,8 +58,10 @@ export class AsyncApiWebComponent extends React.Component<
   }
 
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {
-    const prevSchema = retrieveSchemaProp(this.props);
-    const nextSchema = retrieveSchemaProp(nextProps);
+    const prevSchema = retrieveSchemaProp(
+      this.props,
+    ) as FetchingSchemaInterface;
+    const nextSchema = retrieveSchemaProp(nextProps) as FetchingSchemaInterface;
 
     if (!prevSchema || !nextSchema || !prevSchema.url || !nextSchema.url) {
       return true;
