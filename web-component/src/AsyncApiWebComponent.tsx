@@ -39,7 +39,7 @@ function retrieveSchemaProp(
     schema = { url: schemaUrl, requestOptions: schemaRequestOptions };
   }
 
-  return schema;
+  return schema as FetchingSchemaInterface; // NOSONAR
 }
 
 export interface AsyncApiWebComponentProps extends AsyncApiProps {
