@@ -63,8 +63,8 @@ export class AsyncApiWebComponent extends React.Component<
     }
     if (prevSchema.url === nextSchema.url) {
       const dateNow = Date.now();
-      // if the difference between updates of the same urls occurred less or equal than 10 milliseconds, consider no change.
-      if (this.lastUrlCheck <= dateNow - 10) {
+      // if the difference between updates of the same urls occurred less or equal than 25 milliseconds, consider no change.
+      if (this.lastUrlCheck <= dateNow - 25) {
         this.lastUrlCheck = dateNow;
         return true;
       }
