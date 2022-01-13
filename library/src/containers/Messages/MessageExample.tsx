@@ -57,9 +57,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
         <CollapseButton
           onClick={() => setExpand(prev => !prev)}
           chevronProps={{
-            className: `fill-current text-gray-200 ${
-              expand ? '-rotate-180' : '-rotate-90'
-            }`,
+            className: `text-gray-200 ${expand ? '-rotate-180' : '-rotate-90'}`,
           }}
         >
           <span className="px-2 py-1 mr-2 text-gray-200 text-sm border rounded focus:outline-none">

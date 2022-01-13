@@ -1,7 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
-import { Href, CollapseButton, Markdown, Extensions } from './index';
+import {
+  Href,
+  CollapseButton,
+  DoubleCollapseButton,
+  Markdown,
+  Extensions,
+} from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
@@ -16,7 +22,10 @@ interface Props {
   onlyTitle?: boolean;
 }
 
-const SchemaContext = React.createContext({ reverse: false });
+const SchemaContext = React.createContext({
+  reverse: false,
+  deepExpanded: false,
+});
 
 export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
@@ -29,8 +38,17 @@ export const Schema: React.FunctionComponent<Props> = ({
   expanded = false,
   onlyTitle = false,
 }) => {
-  const { reverse } = useContext(SchemaContext);
+  const { reverse, deepExpanded } = useContext(SchemaContext);
+  const [deepExpand, setDeepExpand] = useState(false);
   const [expand, setExpand] = useState(expanded);
+
+  useEffect(() => {
+    setDeepExpand(deepExpanded);
+  }, [deepExpanded, setDeepExpand]);
+
+  useEffect(() => {
+    setExpand(deepExpand);
+  }, [deepExpand, setExpand]);
 
   if (
     !schema ||
@@ -100,19 +118,32 @@ export const Schema: React.FunctionComponent<Props> = ({
     );
 
   return (
-    <SchemaContext.Provider value={{ reverse: !reverse }}>
+    <SchemaContext.Provider
+      value={{ reverse: !reverse, deepExpanded: deepExpand }}
+    >
       <div>
         <div className="flex py-2">
           <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
             {isExpandable && !isCircular ? (
-              <CollapseButton
-                onClick={() => setExpand(prev => !prev)}
-                chevronProps={{
-                  className: expand ? '-rotate-180' : '-rotate-90',
-                }}
-              >
-                {renderedSchemaName}
-              </CollapseButton>
+              <>
+                <CollapseButton
+                  onClick={() => setExpand(prev => !prev)}
+                  chevronProps={{
+                    className: expand ? '-rotate-180' : '-rotate-90',
+                  }}
+                >
+                  {renderedSchemaName}
+                </CollapseButton>
+                <DoubleCollapseButton
+                  onClick={() => setDeepExpand(prev => !prev)}
+                  className="ml-2"
+                  chevronProps={{
+                    className: `${
+                      deepExpand ? '-rotate-180' : '-rotate-90'
+                    } -ml-2`,
+                  }}
+                />
+              </>
             ) : (
               <span
                 className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
