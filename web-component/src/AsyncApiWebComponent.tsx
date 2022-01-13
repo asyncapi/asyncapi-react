@@ -20,7 +20,7 @@ import AsyncApiComponent, {
  */
 function retrieveSchemaProp(
   props: AsyncApiWebComponentProps,
-): AsyncApiProps['schema'] {
+): FetchingSchemaInterface {
   let schemaUrl = props.schemaUrl;
   let schemaFetchOptions = props.schemaFetchOptions;
 
@@ -58,11 +58,8 @@ export class AsyncApiWebComponent extends React.Component<
   }
 
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {
-    const prevSchema = retrieveSchemaProp(
-      // NOSONAR
-      this.props,
-    ) as FetchingSchemaInterface;
-    const nextSchema = retrieveSchemaProp(nextProps) as FetchingSchemaInterface; // NOSONAR
+    const prevSchema = retrieveSchemaProp(this.props);
+    const nextSchema = retrieveSchemaProp(nextProps);
 
     if (!prevSchema || !nextSchema || !prevSchema.url || !nextSchema.url) {
       return true;
