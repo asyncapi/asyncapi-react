@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 
 // @ts-ignore
 import hljs from 'highlight.js/lib/core';
