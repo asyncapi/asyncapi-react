@@ -241,7 +241,7 @@ export class SchemaHelpers {
     return new SchemaClass(json);
   }
 
-  static jsonToSchema(value: any): SchemaClass {
+  static jsonToSchema(value: any): any {
     const json = this.jsonFieldToSchema(value);
     return new SchemaClass(json);
   }
