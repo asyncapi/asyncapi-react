@@ -126,6 +126,7 @@ For a list and description of features offered by the AsyncAPI React component, 
 
 ## Styles
 
+### Default styles
 To use default styles import them as follows:
 
 ``` js
@@ -133,6 +134,91 @@ import "@asyncapi/react-component/styles/default.css";
 // or minified version
 import "@asyncapi/react-component/styles/default.min.css";
 ```
+
+### Custom styles
+The asyncapi react-component does not set any global fonts, to allow you to define your own custom font-family and related font styling.
+This can be done by defining the styles in a file or inline using by adding the <style> section in the <head> of the page where you are using asyncapi react-component.
+
+Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
+```css
+  html {
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji
+}
+```
+
+If you are using the component in React or another front-end framework, don't forget to import the custom style
+``` js
+import "@asyncapi/react-component/styles/default.min.css";
+import "styles/custom.css";
+```
+  
+If you are using the standalone bunlde, you can put the custom font styling as a style sheet link or as an inline style in the <head>.
+  
+```html
+  <!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/styles/default.min.css">
+    
+    // Custom style sheet
+    <link rel="stylesheet" href="./styles/custom.css">
+    
+    // OR as inline style
+     <style>
+      html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
+       body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
+    </style>
+  </head>
+  <body>
+    
+    <div id="asyncapi"></div>
+
+    <script src="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/browser/standalone/index.js"></script>
+    <script>
+      AsyncApiStandalone.render({
+        schema: {
+          url: 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml',
+          options: { method: "GET", mode: "cors" },
+        },
+        config: {
+          show: {
+            sidebar: true,
+          }
+        },
+      }, document.getElementById('asyncapi'));
+    </script>
+
+  </body>
+</html>
+```
+  
+### Custom logo
+
+The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the InfoObject, a logo will be shown in the top left corner.
+  
+```yaml
+asyncapi: 2.2.0
+info:
+  title: Account Service
+  version: 1.0.0
+  description": This service is in charge of processing user signups
+  x-logo: 'https://raw.githubusercontent.com/asyncapi/spec/master/assets/logo.png'
+channels:
+  ...
+```
+
+Example:
+![2022-01-25 at 15 18 23](https://user-images.githubusercontent.com/952446/150993843-8fbf5c90-50ed-4aed-8268-01ce27ecf173.png)  
+
 
 ## Playground
 
