@@ -137,7 +137,7 @@ import "@asyncapi/react-component/styles/default.min.css";
 
 ### Custom styles
 The asyncapi react-component does not set any global fonts, to allow you to define your own custom font-family and related font styling.
-This can be done by defining the styles in a file or inline using by adding the <style> section in the <head> of the page where you are using asyncapi react-component.
+This can be done by defining the styles in a file or inline using by adding a `<style>` tag in the `<head>` section of the page where you are using asyncapi react-component.
 
 Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
 ```css
@@ -146,16 +146,16 @@ Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
   -o-tab-size: 4;
   tab-size: 4;
   line-height: 1.15;
-  -webkit-text-size-adjust: 100%
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 ```
 
-If you are using the component in React or another front-end framework, don't forget to import the custom style
+If you are using the component in React or another front-end framework, don't forget to import the custom style.
 ``` js
 import "@asyncapi/react-component/styles/default.min.css";
 import "styles/custom.css";
