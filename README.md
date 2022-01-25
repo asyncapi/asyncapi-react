@@ -136,7 +136,7 @@ import "@asyncapi/react-component/styles/default.min.css";
 ```
 
 ### Custom styles
-The asyncapi react-component does not set any global fonts, to allow you to define your own custom font-family and related font styling.
+The asyncapi react-component does not set any global fonts. This provides the option to define your custom font-family and related font styling.
 This can be done by defining the styles in a file or inline using by adding a `<style>` tag in the `<head>` section of the page where you are using asyncapi react-component.
 
 Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
