@@ -167,7 +167,7 @@ If you are using the standalone bunlde, you can put the custom font styling as a
   <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/styles/default.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
     
     // Custom style sheet
     <link rel="stylesheet" href="./styles/custom.css">
@@ -175,14 +175,14 @@ If you are using the standalone bunlde, you can put the custom font styling as a
     // OR as inline style
      <style>
       html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
-       body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
+      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
     </style>
   </head>
   <body>
     
     <div id="asyncapi"></div>
 
-    <script src="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/browser/standalone/index.js"></script>
+    <script src="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/browser/standalone/index.js"></script>
     <script>
       AsyncApiStandalone.render({
         schema: {
