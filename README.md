@@ -195,8 +195,6 @@ channels:
   ...
 ```
 
-Example:
-![2022-01-25 at 15 18 23](https://user-images.githubusercontent.com/952446/150993843-8fbf5c90-50ed-4aed-8268-01ce27ecf173.png)  
 
 ## Playground
 
