@@ -140,7 +140,7 @@ The AsyncAPI React component does not set any global fonts and any global reset 
 
 This can be done by defining the styles in a file or inline using by adding a `<style>` tag in the `<head>` section of the page where you are using AsyncAPI React component.
 
-Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
+Example custom styles (defined in the `styles/custom.css` file):
 ```css
 html {
   -moz-tab-size: 4;
