@@ -162,45 +162,23 @@ If you are using the component in project project that uses bundler like Webpack
 import "styles/custom.css";
 import "@asyncapi/react-component/styles/default.min.css";
   
-If you are using the standalone bundle, you can put the custom font styling as a style sheet link or as an inline style in the `<head>` section of the HTML code.
-  
+If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you can put the custom styles as a style sheet link or as an inline style in the `<head>` section of the HTML code:
+
 ```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
-    
-    <!-- Custom style sheet -->
-    <link rel="stylesheet" href="./styles/custom.css">
-    
-    <!-- OR as inline style -->
-    <style>
-      html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
-      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
-    </style>
-  </head>
-  <body>
-    
-    <div id="asyncapi"></div>
+ <head>
+   <!-- Custom style sheet -->
+   <link rel="stylesheet" href="./styles/custom.css">
 
-    <script src="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/browser/standalone/index.js"></script>
-    <script>
-      AsyncApiStandalone.render({
-        schema: {
-          url: 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml',
-          options: { method: "GET", mode: "cors" },
-        },
-        config: {
-          show: {
-            sidebar: true,
-          }
-        },
-      }, document.getElementById('asyncapi'));
-    </script>
-
-  </body>
-</html>
-```
+   <!-- OR as inline style -->
+   <style>
+     html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
+     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
+   </style>
+   
+   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
+   
+   ...
+ </head>
   
 ### Custom logo
 
