@@ -189,7 +189,7 @@ asyncapi: 2.2.0
 info:
   title: Account Service
   version: 1.0.0
-  description": This service is in charge of processing user signups
+  description: This service is in charge of processing user signups.
   x-logo: 'https://raw.githubusercontent.com/asyncapi/spec/master/assets/logo.png'
 channels:
   ...
