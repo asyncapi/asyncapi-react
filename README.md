@@ -182,7 +182,9 @@ If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you
   
 ### Custom logo
 
-The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the InfoObject, a logo will be shown in the top left corner.
+The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the [InfoObject](https://github.com/asyncapi/spec/blob/master/spec/asyncapi.md#infoObject), a logo will be shown in the top left corner.
+
+> **NOTE**: The logo will only appear if the [sidebar option](./docs/configuration/config-modification.md#definition) is enabled.
   
 ```yaml
 asyncapi: 2.2.0
