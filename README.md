@@ -156,11 +156,11 @@ body {
 }
 ```
 
-If you are using the component in React or another front-end framework, don't forget to import the custom style.
+If you are using the component in project project that uses bundler like Webpack don't forget to import the custom styles.
+
 ``` js
-import "@asyncapi/react-component/styles/default.min.css";
 import "styles/custom.css";
-```
+import "@asyncapi/react-component/styles/default.min.css";
   
 If you are using the standalone bundle, you can put the custom font styling as a style sheet link or as an inline style in the `<head>` section of the HTML code.
   
