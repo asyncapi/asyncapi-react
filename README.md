@@ -161,7 +161,7 @@ import "@asyncapi/react-component/styles/default.min.css";
 import "styles/custom.css";
 ```
   
-If you are using the standalone bunlde, you can put the custom font styling as a style sheet link or as an inline style in the `<head>` section of the HTML code.
+If you are using the standalone bundle, you can put the custom font styling as a style sheet link or as an inline style in the `<head>` section of the HTML code.
   
 ```html
   <!DOCTYPE html>
