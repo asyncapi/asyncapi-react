@@ -141,7 +141,7 @@ This can be done by defining the styles in a file or inline using by adding a `<
 
 Custom font styling (like used in AsyncAPI studio): `styles/custom.css` >>
 ```css
-  html {
+html {
   -moz-tab-size: 4;
   -o-tab-size: 4;
   tab-size: 4;
@@ -164,16 +164,16 @@ import "styles/custom.css";
 If you are using the standalone bundle, you can put the custom font styling as a style sheet link or as an inline style in the `<head>` section of the HTML code.
   
 ```html
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
     
-    // Custom style sheet
+    <!-- Custom style sheet -->
     <link rel="stylesheet" href="./styles/custom.css">
     
-    // OR as inline style
-     <style>
+    <!-- OR as inline style -->
+    <style>
       html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
       body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
     </style>
@@ -218,7 +218,6 @@ channels:
 
 Example:
 ![2022-01-25 at 15 18 23](https://user-images.githubusercontent.com/952446/150993843-8fbf5c90-50ed-4aed-8268-01ce27ecf173.png)  
-
 
 ## Playground
 
