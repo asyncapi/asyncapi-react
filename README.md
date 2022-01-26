@@ -161,7 +161,8 @@ If you are using the component in a project that uses bundler like Webpack don't
 ``` js
 import "styles/custom.css";
 import "@asyncapi/react-component/styles/default.min.css";
-  
+```
+
 If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you can put the custom styles as a style sheet link or as an inline style in the `<head>` section of the HTML code:
 
 ```html
@@ -179,7 +180,8 @@ If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you
    
    ...
  </head>
-  
+```
+
 ### Custom logo
 
 The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the [InfoObject](https://github.com/asyncapi/spec/blob/master/spec/asyncapi.md#infoObject), a logo will be shown in the top left corner.
@@ -196,7 +198,6 @@ info:
 channels:
   ...
 ```
-
 
 ## Playground
 
