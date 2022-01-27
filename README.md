@@ -156,7 +156,7 @@ body {
 }
 ```
 
-If you are using the component in a project that uses bundler like Webpack don't forget to import the custom styles.
+If you are using the component in a project that uses a bundler like Webpack, don't forget to import the custom styles.
 
 ``` js
 import "styles/custom.css";
