@@ -136,7 +136,7 @@ import "@asyncapi/react-component/styles/default.min.css";
 ```
 
 ### Custom styles
-The AsyncAPI React component does not set any global fonts and any global reset styles. This provides the option to define your custom `font-family` and other styling.
+The AsyncAPI React component reset a number of styles and does not set any global fonts. This component provides the option to define your custom `font-family` and other styling.
 
 This can be done by defining the styles in a file or inline using a `<style>` tag in the `<head>` section of the page where you are using AsyncAPI React component.
 
