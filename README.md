@@ -126,12 +126,77 @@ For a list and description of features offered by the AsyncAPI React component, 
 
 ## Styles
 
+### Default styles
 To use default styles import them as follows:
 
 ``` js
 import "@asyncapi/react-component/styles/default.css";
 // or minified version
 import "@asyncapi/react-component/styles/default.min.css";
+```
+
+### Custom styles
+The AsyncAPI React component does not set any global fonts. This component allows the usage of your custom `font-family` and other styling.
+
+This can be done by defining the styles in a file or inline using a `<style>` tag in the `<head>` section of the page where you are using AsyncAPI React component.
+
+Example custom styles (defined in the `styles/custom.css` file):
+```css
+html {
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+```
+
+If you are using the component in a project that uses a bundler like Webpack, don't forget to import the custom styles.
+
+``` js
+import "styles/custom.css";
+import "@asyncapi/react-component/styles/default.min.css";
+```
+
+If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you can put the custom styles as a style sheet link or as an inline style in the `<head>` section of the HTML code:
+
+```html
+ <head>
+   <!-- Custom style sheet -->
+   <link rel="stylesheet" href="./styles/custom.css">
+
+   <!-- OR as inline style -->
+   <style>
+     html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
+     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
+   </style>
+   
+   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
+   
+   ...
+ </head>
+```
+
+### Custom logo
+
+The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the [InfoObject](https://github.com/asyncapi/spec/blob/master/spec/asyncapi.md#infoObject), a logo will be shown in the top left corner.
+
+> **NOTE**: The logo will only appear if the [sidebar option](./docs/configuration/config-modification.md#definition) is enabled.
+  
+```yaml
+asyncapi: 2.2.0
+info:
+  title: Account Service
+  version: 1.0.0
+  description: This service is in charge of processing user signups.
+  x-logo: 'https://raw.githubusercontent.com/asyncapi/spec/master/assets/logo.png'
+channels:
+  ...
 ```
 
 ## Playground
