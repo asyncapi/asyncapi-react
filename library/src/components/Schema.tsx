@@ -167,7 +167,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
                   {/* related to string */}
                   {schema.pattern() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded mr-2 p-1 text-xs">
                       must match: {schema.pattern()}
                     </span>
                   )}
