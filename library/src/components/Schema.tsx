@@ -13,6 +13,7 @@ interface Props {
   isCircular?: boolean;
   dependentRequired?: string[];
   expanded?: boolean;
+  onlyTitle?: boolean;
 }
 
 const SchemaContext = React.createContext({ reverse: false });
@@ -26,6 +27,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   isCircular = false,
   dependentRequired,
   expanded = false,
+  onlyTitle = false,
 }) => {
   const { reverse } = useContext(SchemaContext);
   const [expand, setExpand] = useState(expanded);
@@ -101,7 +103,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     <SchemaContext.Provider value={{ reverse: !reverse }}>
       <div>
         <div className="flex py-2">
-          <div className="w-3/12 min-w-min mr-2">
+          <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
             {isExpandable && !isCircular ? (
               <CollapseButton
                 onClick={() => setExpand(prev => !prev)}
@@ -165,7 +167,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
                   {/* related to string */}
                   {schema.pattern() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <span className="bg-yellow-600 font-bold no-underline text-white rounded mr-2 p-1 text-xs">
                       must match: {schema.pattern()}
                     </span>
                   )}

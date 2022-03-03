@@ -337,17 +337,7 @@ export class SchemaHelpers {
     if (type === 'array') {
       const items = schema.items();
       if (Array.isArray(items)) {
-        const types = items.map(item => this.toSchemaType(item)).join(', ');
-        const additionalItems = schema.additionalItems() as any;
-        if (additionalItems === undefined || additionalItems.json()) {
-          const additionalType =
-            additionalItems === undefined || additionalItems.json() === true
-              ? SchemaCustomTypes.ANY
-              : this.toSchemaType(additionalItems);
-          return `tuple<${types ||
-            SchemaCustomTypes.UNKNOWN}, ...optional<${additionalType}>>`;
-        }
-        return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
+        return this.toItemsType(items, schema);
       }
       if (!items) {
         return `array<${SchemaCustomTypes.ANY}>`;
@@ -355,6 +345,20 @@ export class SchemaHelpers {
       return `array<${this.toSchemaType(items) || SchemaCustomTypes.UNKNOWN}>`;
     }
     return type;
+  }
+
+  private static toItemsType(items: Schema[], schema: Schema): string {
+    const types = items.map(item => this.toSchemaType(item)).join(', ');
+    const additionalItems = schema.additionalItems() as any;
+    if (additionalItems === undefined || additionalItems.json()) {
+      const additionalType =
+        additionalItems === undefined || additionalItems.json() === true
+          ? SchemaCustomTypes.ANY
+          : this.toSchemaType(additionalItems);
+      return `tuple<${types ||
+        SchemaCustomTypes.UNKNOWN}, ...optional<${additionalType}>>`;
+    }
+    return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
   }
 
   private static toCombinedType(schema: Schema): string | undefined {
@@ -474,6 +478,13 @@ export class SchemaHelpers {
   }
 
   private static jsonFieldToSchema(value: any): any {
+    if (value === undefined || value === null) {
+      return {
+        type: 'string',
+        const: '',
+        [this.extRawValue]: true,
+      };
+    }
     if (typeof value !== 'object') {
       const str =
         typeof value.toString === 'function' ? value.toString() : value;
