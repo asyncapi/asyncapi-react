@@ -1,5 +1,7 @@
 <h5 align="center">
+  <a href="https://www.asyncapi.com">
   <img src="./.github/assets/logo.png" alt="AsyncAPI logo">
+  </a>
   <br>
 </h5>
 <h4 align="left">
