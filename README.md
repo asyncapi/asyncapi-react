@@ -1,9 +1,11 @@
 <h5 align="center">
-  <img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200">
+  <img src="./.github/assets/logo.png" alt="AsyncAPI logo">
   <br>
-  React Component
 </h5>
-<h4 align="center">React component for AsyncAPI 2.0 specification. Available also as a Web Component.</h4>
+<h4 align="left">
+React Component
+<br>
+React component for AsyncAPI 2.0 specification. Available also as a Web Component.</h4>
 
 ---
 
