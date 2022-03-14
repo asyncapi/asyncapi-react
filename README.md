@@ -1,4 +1,4 @@
-[![AsyncAPI logo](./.github/assets/logo.png)](https://www.asyncapi.com)
+[![AsyncAPI React Component](./.github/assets/logo.png)](https://www.asyncapi.com)
 
 **React Component**
 
