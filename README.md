@@ -1,7 +1,5 @@
 [![AsyncAPI React Component](./.github/assets/logo.png)](https://www.asyncapi.com)
 
-**React Component**
-
 React component for AsyncAPI 2.0 specification. Available also as a Web Component.
 
 ---
