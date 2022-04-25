@@ -37,6 +37,8 @@ export const Message: React.FunctionComponent<Props> = ({
     return null;
   }
 
+  // check typeof as fallback for older version than `2.4.0`
+  const messageId = typeof message.id === 'function' && message.id();
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();
@@ -86,6 +88,17 @@ export const Message: React.FunctionComponent<Props> = ({
                 </li>
               )}
             </ul>
+          )}
+
+          {messageId && (
+            <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+              <div className="text-sm text-gray-700">
+                Message ID
+                <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                  {messageId}
+                </span>
+              </div>
+            </div>
           )}
 
           {correlationId && (

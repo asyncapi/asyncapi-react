@@ -1,5 +1,4 @@
-export const streetlights = `
-asyncapi: '2.2.0'
+export const streetlights = `asyncapi: '2.4.0'
 id: 'urn:com:smartylighting:streetlights:server'
 info:
   title: Streetlights API
@@ -181,6 +180,9 @@ channels:
       - dummy-amqp
     publish:
       operationId: turnOn
+      security:
+        - supportedOauthFlows:
+          - streetlights:on
       externalDocs:
         description: Find more info here
         url: https://example.com
@@ -216,6 +218,7 @@ channels:
 components:
   messages:
     lightMeasured:
+      messageId: lightMeasured Message ID
       name: lightMeasured
       title: Light measured
       summary: Inform about environmental lighting conditions for a particular streetlight.

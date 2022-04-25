@@ -7,13 +7,15 @@ import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
 
 interface Props {
-  serverRequirements: ServerSecurityRequirement[];
-  protocol: string;
+  security: ServerSecurityRequirement[];
+  protocol?: string;
+  header?: string;
 }
 
-export const ServerSecurity: React.FunctionComponent<Props> = ({
-  serverRequirements = [],
+export const Security: React.FunctionComponent<Props> = ({
+  security = [],
   protocol = '',
+  header = 'Security',
 }) => {
   const asyncapi = useSpec();
   const securitySchemes =
@@ -21,8 +23,8 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
 
   let renderedServerSecurities;
   if (
-    !serverRequirements ||
-    !serverRequirements.length ||
+    !security ||
+    !security.length ||
     !securitySchemes ||
     !Object.keys(securitySchemes).length
   ) {
@@ -32,7 +34,7 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
       );
     }
   } else {
-    const serverSecurities: React.ReactNodeArray = serverRequirements
+    const serverSecurities: React.ReactNodeArray = security
       .map(requirement => {
         const def: SecurityScheme =
           securitySchemes[Object.keys(requirement.json())[0]];
@@ -66,7 +68,7 @@ export const ServerSecurity: React.FunctionComponent<Props> = ({
 
   return (
     <div className="text-sm mt-4">
-      <h5 className="text-gray-700 text-base">Security:</h5>
+      <h5 className="text-gray-800">{header}:</h5>
       {renderedServerSecurities}
     </div>
   );

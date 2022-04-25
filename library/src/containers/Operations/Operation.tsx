@@ -2,6 +2,7 @@ import React from 'react';
 import { Channel, Operation as OperationType } from '@asyncapi/parser';
 
 import { Message } from '../Messages/Message';
+import { Security } from '../Servers/Security';
 import {
   Href,
   Markdown,
@@ -33,6 +34,9 @@ export const Operation: React.FunctionComponent<Props> = props => {
 
   // check typeof as fallback for older version than `2.2.0`
   const servers = typeof channel.servers === 'function' && channel.servers();
+  // check typeof as fallback for older version than `2.4.0`
+  const security =
+    typeof operation.security === 'function' && operation.security();
   const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
 
   return (
@@ -73,6 +77,21 @@ export const Operation: React.FunctionComponent<Props> = props => {
               schemaName="Parameters"
               schema={parameters}
               expanded={true}
+            />
+          </div>
+        )}
+
+        {security && (
+          <div
+            className="mt-2"
+            id={CommonHelpers.getIdentifier(
+              `operation-${type}-${channelName}-security`,
+              config,
+            )}
+          >
+            <Security
+              security={security}
+              header="Additional security requirements"
             />
           </div>
         )}
