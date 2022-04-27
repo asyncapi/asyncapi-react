@@ -50,10 +50,10 @@ Check how to use the Standalone bundle in:
 
 The Standalone Bundle exports two functions: 
 
-- `render`, which works like [ReactDOM.render](https://reactjs.org/docs/react-dom.html#render) function, where first argument is the [props for component](../../Readme.md#props) and the second is the HTML Node,
-- `hydrate`, which works like [ReactDOM.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) function, where first argument is the [props for component](../../Readme.md#props) and the second is the HTML Node.
+- `render`, which works like [ReactDOM.render](https://reactjs.org/docs/react-dom.html#render) function, where first argument is the [props for component](../../README.md#props) and the second is the HTML Node,
+- `hydrate`, which works like [ReactDOM.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) function, where first argument is the [props for component](../../README.md#props) and the second is the HTML Node.
 
-> **NOTE**: The Standalone Bundle takes this [same props](../../Readme.md#props) as the normal React component.
+> **NOTE**: The Standalone Bundle takes this [same props](../../README.md#props) as the normal React component.
 
 > **NOTE**: If there are several components on one page, each one will be rendered using its own properties.
 
