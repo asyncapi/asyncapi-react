@@ -1,7 +1,7 @@
 import React from 'react';
 import { Server as ServerType } from '@asyncapi/parser';
 
-import { ServerSecurity } from './ServerSecurity';
+import { Security } from './Security';
 import { Markdown, Schema, Bindings } from '../../components';
 
 import { useConfig } from '../../contexts';
@@ -26,7 +26,7 @@ export const Server: React.FunctionComponent<Props> = ({
     server.variables(),
   );
   const protocolVersion = server.protocolVersion();
-  const serverRequirements = server.security();
+  const security = server.security();
 
   return (
     <div className="panel-item">
@@ -73,10 +73,7 @@ export const Server: React.FunctionComponent<Props> = ({
                 config,
               )}`}
             >
-              <ServerSecurity
-                protocol={server.protocol()}
-                serverRequirements={serverRequirements}
-              />
+              <Security protocol={server.protocol()} security={security} />
             </div>
           }
 

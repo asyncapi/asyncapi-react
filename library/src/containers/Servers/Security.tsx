@@ -7,73 +7,80 @@ import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
 
 interface Props {
-  serverRequirements: ServerSecurityRequirement[];
-  protocol: string;
+  security: ServerSecurityRequirement[];
+  protocol?: string;
+  header?: string;
 }
 
-export const ServerSecurity: React.FunctionComponent<Props> = ({
-  serverRequirements = [],
+export const Security: React.FunctionComponent<Props> = ({
+  security = [],
   protocol = '',
+  header = 'Security',
 }) => {
   const asyncapi = useSpec();
   const securitySchemes =
     asyncapi.hasComponents() && asyncapi.components().securitySchemes();
 
-  let renderedServerSecurities;
+  let renderedSecurities;
   if (
-    !serverRequirements ||
-    !serverRequirements.length ||
+    !security ||
+    !security.length ||
     !securitySchemes ||
     !Object.keys(securitySchemes).length
   ) {
     if (protocol === 'kafka' || protocol === 'kafka-secure') {
-      renderedServerSecurities = (
-        <ServerSecurityItem protocol={protocol} securitySchema={null} />
+      renderedSecurities = (
+        <SecurityItem protocol={protocol} securitySchema={null} />
       );
     }
   } else {
-    const serverSecurities: React.ReactNodeArray = serverRequirements
+    const securities: React.ReactNodeArray = security
       .map(requirement => {
-        const def: SecurityScheme =
-          securitySchemes[Object.keys(requirement.json())[0]];
+        const requirements = requirement.json();
+        const key = Object.keys(requirements)[0];
+        const def = securitySchemes[String(key)];
+        const requiredScopes: string[] = requirements[String(key)];
 
         if (!def) {
           return null;
         }
         return (
-          <ServerSecurityItem
+          <SecurityItem
             protocol={protocol}
             securitySchema={def}
+            requiredScopes={requiredScopes}
             key={def.type()}
           />
         );
       })
       .filter(Boolean);
-    renderedServerSecurities = (
+
+    renderedSecurities = (
       <ul>
-        {serverSecurities.map((security, idx) => (
+        {securities.map((s, idx) => (
           <li className="mt-2" key={idx}>
-            {security}
+            {s}
           </li>
         ))}
       </ul>
     );
   }
 
-  if (!renderedServerSecurities) {
+  if (!renderedSecurities) {
     return null;
   }
 
   return (
     <div className="text-sm mt-4">
-      <h5 className="text-gray-700 text-base">Security:</h5>
-      {renderedServerSecurities}
+      <h5 className="text-gray-800">{header}:</h5>
+      {renderedSecurities}
     </div>
   );
 };
 
 function collectSecuritySchemas(
   securitySchema: SecurityScheme | null,
+  requiredScopes: string[] = [],
 ): React.ReactNodeArray {
   const schemas: React.ReactNodeArray = [];
   if (securitySchema) {
@@ -96,20 +103,28 @@ function collectSecuritySchemas(
         </Href>,
       );
     }
+    if (requiredScopes.length) {
+      schemas.push(<span>Required scopes: {requiredScopes.join(', ')}</span>);
+    }
   }
   return schemas;
 }
 
-interface ServerSecurityItemProps {
+interface SecurityItemProps {
   securitySchema: SecurityScheme | null;
   protocol: string;
+  requiredScopes?: string[];
 }
 
-const ServerSecurityItem: React.FunctionComponent<ServerSecurityItemProps> = ({
+const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   securitySchema,
   protocol,
+  requiredScopes,
 }) => {
-  const schemas: React.ReactNodeArray = collectSecuritySchemas(securitySchema);
+  const schemas: React.ReactNodeArray = collectSecuritySchemas(
+    securitySchema,
+    requiredScopes,
+  );
 
   let renderedKafkaSecurity;
   if (['kafka', 'kafka-secure'].includes(protocol)) {
