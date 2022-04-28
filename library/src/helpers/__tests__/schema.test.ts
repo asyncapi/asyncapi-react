@@ -443,7 +443,7 @@ describe('SchemaHelpers', () => {
 
   describe('.parametersToSchema', () => {
     test('should transform parameters to schema', () => {
-      const variables = {
+      const parameters = {
         foo: new ChannelParameter({ schema: { type: 'string' } }),
         bar: new ChannelParameter({
           schema: { type: 'string' },
@@ -469,7 +469,36 @@ describe('SchemaHelpers', () => {
         'x-schema-private-render-additional-info': false,
         'x-schema-private-render-type': false,
       });
-      const result = SchemaHelpers.parametersToSchema(variables);
+      const result = SchemaHelpers.parametersToSchema(parameters);
+      expect(result).toEqual(schema);
+    });
+
+    test('should handle empty schema of parameter', () => {
+      const parameters = {
+        foo: new ChannelParameter({
+          description: 'Some description',
+        }),
+        bar: new ChannelParameter({
+          location: '$message.payload#/user/id',
+        }),
+      };
+      const schema = new Schema({
+        type: 'object',
+        properties: {
+          foo: {
+            description: 'Some description',
+            'x-schema-private-parameter-location': undefined,
+          },
+          bar: {
+            description: undefined,
+            'x-schema-private-parameter-location': '$message.payload#/user/id',
+          },
+        },
+        required: ['foo', 'bar'],
+        'x-schema-private-render-additional-info': false,
+        'x-schema-private-render-type': false,
+      });
+      const result = SchemaHelpers.parametersToSchema(parameters);
       expect(result).toEqual(schema);
     });
   });

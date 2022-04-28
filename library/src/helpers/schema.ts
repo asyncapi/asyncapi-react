@@ -203,11 +203,14 @@ export class SchemaHelpers {
 
     const json = {
       type: 'object',
-      properties: Object.entries(urlVariables).reduce((obj, [urlName, url]) => {
-        obj[urlName] = Object.assign({}, url.json());
-        obj[urlName].type = 'string';
-        return obj;
-      }, {}),
+      properties: Object.entries(urlVariables).reduce(
+        (obj, [variableName, variable]) => {
+          obj[variableName] = Object.assign({}, variable.json() || {});
+          obj[variableName].type = 'string';
+          return obj;
+        },
+        {},
+      ),
       required: Object.keys(urlVariables),
       [this.extRenderType]: false,
       [this.extRenderAdditionalInfo]: false,
@@ -226,7 +229,11 @@ export class SchemaHelpers {
       type: 'object',
       properties: Object.entries(parameters).reduce(
         (obj, [paramaterName, parameter]) => {
-          obj[paramaterName] = Object.assign({}, parameter.schema().json());
+          const parameterSchema = parameter.schema();
+          obj[paramaterName] = Object.assign(
+            {},
+            parameterSchema ? parameterSchema.json() : {},
+          );
           obj[paramaterName].description =
             parameter.description() || obj[paramaterName].description;
           obj[paramaterName][this.extParameterLocation] = parameter.location();
