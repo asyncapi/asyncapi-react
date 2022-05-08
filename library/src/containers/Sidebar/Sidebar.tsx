@@ -185,6 +185,7 @@ export const OperationsList: React.FunctionComponent = () => {
       operationsList.push(
         <OperationsPubItem
           channelName={channelName}
+          displayName={channel.publish().summary() || channelName}
           key={`pub-${channelName}`}
         />,
       );
@@ -193,6 +194,7 @@ export const OperationsList: React.FunctionComponent = () => {
       operationsList.push(
         <OperationsSubItem
           channelName={channelName}
+          displayName={channel.subscribe().summary() || channelName}
           key={`sub-${channelName}`}
         />,
       );
@@ -217,6 +219,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         operationsList.push(
           <OperationsPubItem
             channelName={channelName}
+            displayName={channel.publish().summary() || channelName}
             key={`pub-${channelName}`}
           />,
         );
@@ -228,6 +231,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
         operationsList.push(
           <OperationsSubItem
             channelName={channelName}
+            displayName={channel.subscribe().summary() || channelName}
             key={`sub-${channelName}`}
           />,
         );
@@ -246,6 +250,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
       untaggedOperations.push(
         <OperationsPubItem
           channelName={channelName}
+          displayName={channel.publish().summary() || channelName}
           key={`pub-${channelName}`}
         />,
       );
@@ -258,6 +263,7 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
       untaggedOperations.push(
         <OperationsSubItem
           channelName={channelName}
+          displayName={channel.subscribe().summary() || channelName}
           key={`sub-${channelName}`}
         />,
       );
@@ -307,6 +313,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         operationsList.push(
           <OperationsPubItem
             channelName={channelName}
+            displayName={channel.publish().summary() || channelName}
             key={`pub-${channelName}`}
           />,
         );
@@ -318,6 +325,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
         operationsList.push(
           <OperationsSubItem
             channelName={channelName}
+            displayName={channel.subscribe().summary() || channelName}
             key={`sub-${channelName}`}
           />,
         );
@@ -336,6 +344,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
       untaggedOperations.push(
         <OperationsPubItem
           channelName={channelName}
+          displayName={channel.publish().summary() || channelName}
           key={`pub-${channelName}`}
         />,
       );
@@ -348,6 +357,7 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
       untaggedOperations.push(
         <OperationsSubItem
           channelName={channelName}
+          displayName={channel.subscribe().summary() || channelName}
           key={`sub-${channelName}`}
         />,
       );
@@ -413,10 +423,12 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
 
 interface OperationsPubItemProps {
   channelName: string;
+  displayName: string;
 }
 
 const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
+  displayName,
 }) => {
   const { setShowSidebar } = useContext(SidebarContext);
 
@@ -433,7 +445,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
         >
           Pub
         </span>
-        <span className="break-all inline-block">{channelName}</span>
+        <span className="break-all inline-block">{displayName}</span>
       </a>
     </li>
   );
@@ -441,6 +453,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
 
 const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
+  displayName,
 }) => {
   const { setShowSidebar } = useContext(SidebarContext);
 
@@ -457,7 +470,7 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
         >
           SUB
         </span>
-        <span className="break-all inline-block">{channelName}</span>
+        <span className="break-all inline-block">{displayName}</span>
       </a>
     </li>
   );
