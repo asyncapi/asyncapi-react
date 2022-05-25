@@ -48,7 +48,7 @@
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^1.0.0",
     "@asyncapi/openapi-schema-parser": "^2.0.1",
-    "@asyncapi/parser": "^1.15.0",
+    "@asyncapi/parser": "^1.15.1",
     "constate": "^1.2.0",
     "dompurify": "^2.1.1",
     "markdown-it": "^12.3.2",
