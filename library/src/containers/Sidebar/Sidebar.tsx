@@ -117,30 +117,32 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
             showMobileSidebar ? 'w-full' : collapsedSidebar ? 'block' : 'hidden'
           } fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto`}
         >
-          <div
+          <button
             onClick={() => setCollapsedSidebar(prev => !prev)}
             className="hidden xl:block text-xs text-white cursor-pointer z-10 absolute leading-8 py-2 font-bold bg-gray-600 left-0"
             style={{
               borderRadius: '0 4px 4px 0',
             }}
+            type="button"
           >
             <HiChevronRight className="w-5 h-5" />
-          </div>
+          </button>
         </div>
         <div
           className={`${
             showMobileSidebar ? 'w-full' : collapsedSidebar ? 'hidden' : 'block'
           } fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
-          <div
+          <button
             onClick={() => setCollapsedSidebar(prev => !prev)}
             className="hidden xl:block text-xs text-white cursor-pointer z-10 absolute leading-8 py-2 font-bold bg-gray-600 right-0"
             style={{
               borderRadius: '4px 0 0 4px',
             }}
+            type="button"
           >
             <HiChevronLeft className="w-5 h-5" />
-          </div>
+          </button>
           <div className="sidebar--content">
             <div>
               {logo ? (

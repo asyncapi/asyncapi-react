@@ -13,7 +13,10 @@ export const AnchorWrapper: React.FunctionComponent<Props> = ({
   ...rest
 }) => (
   <div {...rest} className={`anchor-wrapper relative ${rest.className || ''}`}>
-    <a className="anchor block px-2 duration-150" href={`#${anchor}`}>
+    <a
+      className="anchor block px-2 duration-150 text-gray-500"
+      href={`#${anchor}`}
+    >
       <HiLink
         {...iconProps}
         className={`absolute inline-block w-5 h-5 ${iconProps?.className ||
