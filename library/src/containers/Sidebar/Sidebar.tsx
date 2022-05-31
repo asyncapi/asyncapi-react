@@ -88,6 +88,9 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     </li>
   );
 
+  const collapsedSidebarStyles = collapsedSidebar ? 'block' : 'hidden';
+  const expandedSidebarStyles = collapsedSidebar ? 'hidden' : 'block';
+
   return (
     <SidebarContext.Provider value={{ setShowMobileSidebar }}>
       <div
@@ -114,7 +117,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
       >
         <div
           className={`${
-            showMobileSidebar ? 'w-full' : collapsedSidebar ? 'block' : 'hidden'
+            showMobileSidebar ? 'w-full' : collapsedSidebarStyles
           } fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto`}
         >
           <button
@@ -130,7 +133,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
         </div>
         <div
           className={`${
-            showMobileSidebar ? 'w-full' : collapsedSidebar ? 'hidden' : 'block'
+            showMobileSidebar ? 'w-full' : expandedSidebarStyles
           } fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
           <button
