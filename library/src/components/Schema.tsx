@@ -130,7 +130,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   onClick={() => setDeepExpand(prev => !prev)}
                   className="ml-1 text-sm text-gray-500"
                 >
-                  {expanded ? 'Collapse all' : 'Expand all'}
+                  {deepExpand ? 'Collapse all' : 'Expand all'}
                 </button>
               </>
             ) : (
