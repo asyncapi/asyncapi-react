@@ -26,11 +26,11 @@ export const Schema: React.FunctionComponent<Props> = ({
   isProperty = false,
   isCircular = false,
   dependentRequired,
-  expanded = false,
+  expanded: _expanded = false,
   onlyTitle = false,
 }) => {
   const { reverse } = useContext(SchemaContext);
-  const [expand, setExpand] = useState(expanded);
+  const [expanded, setExpanded] = useState(_expanded);
 
   if (
     !schema ||
@@ -106,10 +106,8 @@ export const Schema: React.FunctionComponent<Props> = ({
           <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
             {isExpandable && !isCircular ? (
               <CollapseButton
-                onClick={() => setExpand(prev => !prev)}
-                chevronProps={{
-                  className: expand ? '-rotate-180' : '-rotate-90',
-                }}
+                onClick={() => setExpanded(prev => !prev)}
+                expanded={expanded}
               >
                 {renderedSchemaName}
               </CollapseButton>
@@ -275,7 +273,7 @@ export const Schema: React.FunctionComponent<Props> = ({
           <div
             className={`rounded p-4 py-2 border bg-gray-100 ${
               reverse ? 'bg-gray-200' : ''
-            } ${expand ? 'block' : 'hidden'}`}
+            } ${expanded ? 'block' : 'hidden'}`}
           >
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />

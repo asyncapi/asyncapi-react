@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Operation } from './Operation';
+import { AnchorWrapper } from '../../components';
 
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers } from '../../helpers';
@@ -27,12 +28,22 @@ export const Operations: React.FunctionComponent = () => {
             config,
           )}
         >
-          <Operation
-            type={PayloadType.PUBLISH}
-            operation={channel.publish()}
-            channelName={channelName}
-            channel={channel}
-          />
+          <AnchorWrapper
+            anchor={CommonHelpers.getIdentifier(
+              `operation-${PayloadType.PUBLISH}-${channelName}`,
+              config,
+            )}
+            iconProps={{
+              className: 'top-0.5',
+            }}
+          >
+            <Operation
+              type={PayloadType.PUBLISH}
+              operation={channel.publish()}
+              channelName={channelName}
+              channel={channel}
+            />
+          </AnchorWrapper>
         </li>,
       );
     }
@@ -46,12 +57,22 @@ export const Operations: React.FunctionComponent = () => {
             config,
           )}
         >
-          <Operation
-            type={PayloadType.SUBSCRIBE}
-            operation={channel.subscribe()}
-            channelName={channelName}
-            channel={channel}
-          />
+          <AnchorWrapper
+            anchor={CommonHelpers.getIdentifier(
+              `operation-${PayloadType.SUBSCRIBE}-${channelName}`,
+              config,
+            )}
+            iconProps={{
+              className: 'top-0.5',
+            }}
+          >
+            <Operation
+              type={PayloadType.SUBSCRIBE}
+              operation={channel.subscribe()}
+              channelName={channelName}
+              channel={channel}
+            />
+          </AnchorWrapper>
         </li>,
       );
     }
@@ -62,9 +83,16 @@ export const Operations: React.FunctionComponent = () => {
       id={`${CommonHelpers.getIdentifier('operations', config)}`}
       className="mt-16"
     >
-      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
-        {OPERATIONS_TEXT}
-      </h2>
+      <AnchorWrapper
+        anchor={CommonHelpers.getIdentifier('operations', config)}
+        iconProps={{
+          className: 'top-3.5',
+        }}
+      >
+        <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+          {OPERATIONS_TEXT}
+        </h2>
+      </AnchorWrapper>
       <ul>{operationsList}</ul>
     </section>
   );

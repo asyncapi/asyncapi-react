@@ -1,3 +1,4 @@
+export * from './AnchorWrapper';
 export * from './Bindings';
 export * from './CollapseButton';
 export * from './JSONSnippet';

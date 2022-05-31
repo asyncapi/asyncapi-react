@@ -13,7 +13,7 @@
   }
 
   .container\:base .sidebar {
-    @apply lg:relative lg:block lg:w-64 lg:h-auto;
+    @apply lg:relative lg:block lg:h-auto;
   }
 
   .container\:xl .sidebar {
@@ -66,6 +66,14 @@
 
   .container\:xl .panel--right {
     @apply hidden;
+  }
+
+  .anchor-wrapper .anchor {
+    opacity: 0;
+  }
+
+  .anchor-wrapper:hover .anchor {
+    opacity: 1;
   }
 
   .prose pre {

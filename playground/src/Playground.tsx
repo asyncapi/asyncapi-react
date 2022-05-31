@@ -57,6 +57,8 @@ class Playground extends Component<{}, State> {
     const { schema, config, schemaFromExternalResource } = this.state;
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
 
+    return <AsyncApi schema={schema} config={parsedConfig} />;
+
     return (
       <PlaygroundWrapper>
         <Navigation />
