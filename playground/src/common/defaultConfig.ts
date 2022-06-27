@@ -1,11 +1,15 @@
 export const defaultConfig: string = `{
   "show": {
-    "sidebar": false,
+    "sidebar": true,
     "info": true,
     "operations": true,
     "servers": true,
     "messages": true,
     "schemas": true,
     "errors": true
+  },
+  "sidebar": {
+    "showOperations": "byOperationsTags",
+    "collapsed": false
   }
 }`;

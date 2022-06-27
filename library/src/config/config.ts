@@ -17,4 +17,5 @@ export interface ShowConfig {
 
 export interface SideBarConfig {
   showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+  collapsed?: boolean;
 }

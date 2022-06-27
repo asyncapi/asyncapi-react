@@ -3,8 +3,7 @@ import { HiChevronRight, HiChevronLeft } from 'react-icons/hi';
 import { Tag } from '@asyncapi/parser';
 
 import { CollapseButton } from '../../components';
-import { SideBarConfig } from '../../config/config';
-import { useSpec } from '../../contexts';
+import { useSpec, useConfig } from '../../contexts';
 import { SpecificationHelpers } from '../../helpers';
 
 const SidebarContext = React.createContext<{
@@ -14,16 +13,15 @@ const SidebarContext = React.createContext<{
     value,
 });
 
-interface Props {
-  config?: SideBarConfig;
-}
-
-export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const [collapsedSidebar, setCollapsedSidebar] = useState(false);
-
-  const showOperations = config?.showOperations || 'byDefault';
+export const Sidebar: React.FunctionComponent = () => {
   const asyncapi = useSpec();
+  const config = useConfig();
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [collapsedSidebar, setCollapsedSidebar] = useState(
+    config.sidebar?.collapsed || false,
+  );
+
+  const showOperations = config.sidebar?.showOperations || 'byDefault';
 
   const info = asyncapi.info();
   const logo = info.ext('x-logo');
@@ -38,55 +36,96 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     Operations = OperationsByOperationsTags;
   }
 
-  const messagesList = messages && Object.keys(messages).length > 0 && (
-    <li className="mb-3 mt-9">
+  const infoList = config.show?.info && (
+    <li className="mb-3">
       <a
-        className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-        href="#messages"
+        className="text-gray-700 no-underline hover:text-gray-900"
+        href="#introduction"
         onClick={() => setShowMobileSidebar(false)}
       >
-        Messages
+        Introduction
       </a>
-      <ul className="text-sm mt-2">
-        {Object.entries(messages).map(([messageName, message]) => (
-          <li key={messageName}>
-            <a
-              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#message-${messageName}`}
-              onClick={() => setShowMobileSidebar(false)}
-            >
-              <div className="break-all inline-block">{message.uid()}</div>
-            </a>
-          </li>
-        ))}
-      </ul>
     </li>
   );
 
-  const schemasList = schemas && Object.keys(schemas).length > 0 && (
+  const serversList = config.show?.servers && asyncapi.hasServers() && (
+    <li className="mb-3">
+      <a
+        className="text-gray-700 no-underline hover:text-gray-900"
+        href="#servers"
+        onClick={() => setShowMobileSidebar(false)}
+      >
+        Servers
+      </a>
+    </li>
+  );
+
+  const operationsList = config.show?.operations && asyncapi.hasChannels() && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-        href="#schemas"
+        href="#operations"
         onClick={() => setShowMobileSidebar(false)}
       >
-        Schemas
+        Operations
       </a>
-      <ul className="text-sm mt-2">
-        {Object.keys(schemas).map(schemaName => (
-          <li key={schemaName}>
-            <a
-              className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#schema-${schemaName}`}
-              onClick={() => setShowMobileSidebar(false)}
-            >
-              <div className="break-all inline-block">{schemaName}</div>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <Operations />
     </li>
   );
+
+  const messagesList = config.show?.messages &&
+    messages &&
+    Object.keys(messages).length > 0 && (
+      <li className="mb-3 mt-9">
+        <a
+          className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+          href="#messages"
+          onClick={() => setShowMobileSidebar(false)}
+        >
+          Messages
+        </a>
+        <ul className="text-sm mt-2">
+          {Object.entries(messages).map(([messageName, message]) => (
+            <li key={messageName}>
+              <a
+                className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
+                href={`#message-${messageName}`}
+                onClick={() => setShowMobileSidebar(false)}
+              >
+                <div className="break-all inline-block">{message.uid()}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+
+  const schemasList = config.show?.schemas &&
+    schemas &&
+    Object.keys(schemas).length > 0 && (
+      <li className="mb-3 mt-9">
+        <a
+          className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+          href="#schemas"
+          onClick={() => setShowMobileSidebar(false)}
+        >
+          Schemas
+        </a>
+        <ul className="text-sm mt-2">
+          {Object.keys(schemas).map(schemaName => (
+            <li key={schemaName}>
+              <a
+                className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
+                href={`#schema-${schemaName}`}
+                onClick={() => setShowMobileSidebar(false)}
+              >
+                <div className="break-all inline-block">{schemaName}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
 
   const collapsedSidebarStyles = collapsedSidebar ? 'block' : 'hidden';
   const expandedSidebarStyles = collapsedSidebar ? 'hidden' : 'block';
@@ -161,42 +200,11 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
             </div>
 
             <ul className="text-sm mt-10 relative">
-              <li className="mb-3">
-                <a
-                  className="text-gray-700 no-underline hover:text-gray-900"
-                  href="#introduction"
-                  onClick={() => setShowMobileSidebar(false)}
-                >
-                  Introduction
-                </a>
-              </li>
-              {asyncapi.hasServers() && (
-                <li className="mb-3">
-                  <a
-                    className="text-gray-700 no-underline hover:text-gray-900"
-                    href="#servers"
-                    onClick={() => setShowMobileSidebar(false)}
-                  >
-                    Servers
-                  </a>
-                </li>
-              )}
-              {asyncapi.hasChannels() && (
-                <>
-                  <li className="mb-3 mt-9">
-                    <a
-                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-                      href="#operations"
-                      onClick={() => setShowMobileSidebar(false)}
-                    >
-                      Operations
-                    </a>
-                    <Operations />
-                  </li>
-                  {messagesList}
-                  {schemasList}
-                </>
-              )}
+              {infoList}
+              {serversList}
+              {operationsList}
+              {messagesList}
+              {schemasList}
             </ul>
           </div>
         </div>

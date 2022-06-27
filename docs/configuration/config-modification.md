@@ -22,6 +22,7 @@ interface ConfigInterface {
   };
   sidebar?: {
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+    collapsed?: boolean;
   },
   parserOptions?: ParserOptions;
 }
@@ -41,6 +42,7 @@ interface ConfigInterface {
 
   This field contains configuration responsible for the way of working of the sidebar.
   `showOperations` field is set to `byDefault` by default.
+  `collapsed` is set to `false` by default.
 
 - **parserOptions?: ParserOptions**
 
@@ -117,6 +119,7 @@ In the above examples, after concatenation with the default configuration, the r
   },
   sidebar: {
     showOperations: 'bySpecTags',
+    collapsed: false,
   },
 }
 ```

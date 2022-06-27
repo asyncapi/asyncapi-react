@@ -13,5 +13,6 @@ export const defaultConfig: ConfigInterface = {
   },
   sidebar: {
     showOperations: 'byOperationsTags',
+    collapsed: false,
   },
 };

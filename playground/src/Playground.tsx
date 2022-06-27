@@ -58,6 +58,12 @@ class Playground extends Component<{}, State> {
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
 
     return (
+      <AsyncApiWrapper>
+        <AsyncApi schema={schema} config={parsedConfig} />
+      </AsyncApiWrapper>
+    );
+
+    return (
       <PlaygroundWrapper>
         <Navigation />
         <SplitWrapper>
