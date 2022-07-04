@@ -9,6 +9,6 @@ export const defaultConfig: string = `{
     "errors": true
   },
   "expanded":{
-    "examples": true,
+    "messageExamples": false,
   }
 }`;

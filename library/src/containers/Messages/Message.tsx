@@ -175,7 +175,7 @@ export const Message: React.FunctionComponent<Props> = ({
 
       {showExamples && (
         <div className="panel-item--right px-8">
-          <MessageExample message={message} config={config} />
+          <MessageExample message={message} />
         </div>
       )}
     </div>

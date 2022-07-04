@@ -21,6 +21,6 @@ export const defaultConfig: ConfigInterface = {
   publishLabel: PUBLISH_LABEL_DEFAULT_TEXT,
   subscribeLabel: SUBSCRIBE_LABEL_DEFAULT_TEXT,
   expanded: {
-    examples: true,
+    messageExamples: false,
   },
 };

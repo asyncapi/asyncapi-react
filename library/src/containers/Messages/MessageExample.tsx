@@ -4,20 +4,17 @@ import { Message, Schema } from '@asyncapi/parser';
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
 import { MessageExample as MessageExampleType } from '../../types';
+import { useConfig } from '../../contexts';
 
 interface Props {
   message: Message;
-  config: Object;
 }
 
-export const MessageExample: React.FunctionComponent<Props> = ({
-  message,
-  config,
-}) => {
+export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   if (!message) {
     return null;
   }
-  console.log(config);
+
   const payload = message.payload();
   const headers = message.headers();
 
@@ -53,7 +50,10 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   schema,
   examples = [],
 }) => {
-  const [expand, setExpand] = useState(true);
+  const config = useConfig();
+  const [expand, setExpand] = useState(
+    config && config.expanded && config.expanded.messageExamples,
+  );
 
   return (
     <div className="mt-4">

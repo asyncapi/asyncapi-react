@@ -19,7 +19,7 @@ export interface ShowConfig {
 }
 
 export interface ExpandedConfig {
-  examples?: boolean;
+  messageExamples?: boolean;
 }
 
 export interface SideBarConfig {
