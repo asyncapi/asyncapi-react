@@ -7,13 +7,17 @@ import { MessageExample as MessageExampleType } from '../../types';
 
 interface Props {
   message: Message;
+  config: Object;
 }
 
-export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
+export const MessageExample: React.FunctionComponent<Props> = ({
+  message,
+  config,
+}) => {
   if (!message) {
     return null;
   }
-
+  console.log(config);
   const payload = message.payload();
   const headers = message.headers();
 

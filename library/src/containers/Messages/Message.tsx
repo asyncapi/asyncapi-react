@@ -32,8 +32,6 @@ export const Message: React.FunctionComponent<Props> = ({
   showExamples = false,
 }) => {
   const config = useConfig();
-  console.log(config);
-
   if (!message) {
     return null;
   }
@@ -177,7 +175,7 @@ export const Message: React.FunctionComponent<Props> = ({
 
       {showExamples && (
         <div className="panel-item--right px-8">
-          <MessageExample message={message} />
+          <MessageExample message={message} config={config} />
         </div>
       )}
     </div>
