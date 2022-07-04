@@ -5,7 +5,7 @@ export interface ConfigInterface {
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;
-  expanded?: ExpandedConfig;
+  expand?: ExpandConfig;
 }
 
 export interface ShowConfig {
@@ -18,7 +18,7 @@ export interface ShowConfig {
   errors?: boolean;
 }
 
-export interface ExpandedConfig {
+export interface ExpandConfig {
   messageExamples?: boolean;
 }
 

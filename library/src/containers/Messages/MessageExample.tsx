@@ -52,7 +52,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
 }) => {
   const config = useConfig();
   const [expand, setExpand] = useState(
-    config && config.expanded && config.expanded.messageExamples,
+    config && config.expand && config.expand.messageExamples,
   );
 
   return (
