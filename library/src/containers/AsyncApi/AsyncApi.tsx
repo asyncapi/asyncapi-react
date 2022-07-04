@@ -51,7 +51,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   render() {
     const { schema, config } = this.props;
     const { asyncapi, error } = this.state;
-
     return (
       <AsyncApiStandalone
         schema={asyncapi || schema}

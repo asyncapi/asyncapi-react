@@ -32,6 +32,7 @@ export const Message: React.FunctionComponent<Props> = ({
   showExamples = false,
 }) => {
   const config = useConfig();
+  console.log(config);
 
   if (!message) {
     return null;

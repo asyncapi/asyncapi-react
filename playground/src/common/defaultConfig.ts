@@ -7,5 +7,8 @@ export const defaultConfig: string = `{
     "messages": true,
     "schemas": true,
     "errors": true
+  },
+  "expanded":{
+    "examples": true,
   }
 }`;

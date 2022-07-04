@@ -5,6 +5,7 @@ export interface ConfigInterface {
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;
+  expanded?: ExpandedConfig;
 }
 
 export interface ShowConfig {
@@ -15,6 +16,10 @@ export interface ShowConfig {
   messages?: boolean;
   schemas?: boolean;
   errors?: boolean;
+}
+
+export interface ExpandedConfig {
+  examples?: boolean;
 }
 
 export interface SideBarConfig {
