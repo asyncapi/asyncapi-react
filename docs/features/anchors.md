@@ -10,12 +10,12 @@ Each component has a unique anchor in the `http://{URL}/#{SCHEMA_NAME}-{CONTAINE
 
 - `{URL}` is the website URL.
 - `{SCHEMA_NAME}` is the name of the schema. It is passed to the component by configuration with the [`schemaID`](../configuration/config-modification.md#definition) field. By default, the value of `schemaID` is set to an empty string.
-- `{CONTAINER}` is the name of the container. The possible values are: `info`, `servers`, `operations`, `messages`, `schemas`. If `ITEM_NAME` is also present then container has singular form like `operation`, `message` etc.
+- `{CONTAINER}` is the name of the container. The possible values are: `introduction`, `servers`, `operations`, `messages`, `schemas`. If `ITEM_NAME` is also present then container has singular form like `operation`, `message` etc.
 - `{ITEM_NAME}` is the name of the item: 
-    - there are no defined items for the `info` container
+    - there are no defined items for the `introduction` container
     - for `operations` container, each item has includes type of operation (`publish` or `subscribe`) like `operation-publish-{ITEM_NAME}-...`
 - `{ITEM_PROPERTY}` is the name of a particular part of the item. The possible values are:
-    - for the `info` container: there are no defined properties
+    - for the `introduction` container: there are no defined properties
     - for the `servers` container: `url-variables`, `security`
     - for the `operations` container: `parameters`, `message`
     - for the `messages` container: `payload`, `headers`
