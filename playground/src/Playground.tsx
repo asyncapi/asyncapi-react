@@ -56,9 +56,6 @@ class Playground extends Component<{}, State> {
   render() {
     const { schema, config, schemaFromExternalResource } = this.state;
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
-    // console.log(parsedConfig)
-    // console.log(defaultConfig)
-    // console.log(config)
 
     return (
       <PlaygroundWrapper>
