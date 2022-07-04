@@ -32,7 +32,7 @@ export const Server: React.FunctionComponent<Props> = ({
     <div className="panel-item">
       <div className="panel-item--center px-8">
         <div className="shadow rounded bg-gray-200 p-4 border bg-gray-100">
-          <div>
+          <h3>
             <span className="font-mono text-base">{server.url()}</span>
             <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-sm">
               {protocolVersion
@@ -42,7 +42,7 @@ export const Server: React.FunctionComponent<Props> = ({
             <span className="bg-blue-500 font-bold no-underline text-white uppercase rounded px-2 py-1 text-sm">
               {serverName}
             </span>
-          </div>
+          </h3>
 
           {server.hasDescription() && (
             <div className="mt-2">

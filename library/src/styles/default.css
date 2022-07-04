@@ -71,4 +71,12 @@
   .prose pre {
     @apply whitespace-pre-wrap;
   }
+
+  .anchor-wrapper .anchor {
+    opacity: 0;
+  }
+
+  .anchor-wrapper:hover .anchor {
+    opacity: 1;
+  }
 }

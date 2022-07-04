@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Schema } from './Schema';
+import { AnchorWrapper } from '../../components';
 
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers } from '../../helpers';
@@ -20,9 +21,16 @@ export const Schemas: React.FunctionComponent = () => {
       id={`${CommonHelpers.getIdentifier('schemas', config)}`}
       className="mt-16"
     >
-      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
-        {SCHEMAS_TEXT}
-      </h2>
+      <AnchorWrapper
+        anchor={CommonHelpers.getIdentifier('schemas', config)}
+        iconProps={{
+          className: 'top-3.5',
+        }}
+      >
+        <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+          {SCHEMAS_TEXT}
+        </h2>
+      </AnchorWrapper>
       <ul>
         {Object.entries(schemas).map(([schemaName, schema]) => (
           <li
@@ -30,7 +38,17 @@ export const Schemas: React.FunctionComponent = () => {
             key={schemaName}
             id={CommonHelpers.getIdentifier(`schema-${schemaName}`, config)}
           >
-            <Schema schemaName={schemaName} schema={schema} />
+            <AnchorWrapper
+              anchor={CommonHelpers.getIdentifier(
+                `schema-${schemaName}`,
+                config,
+              )}
+              iconProps={{
+                className: 'top-4',
+              }}
+            >
+              <Schema schemaName={schemaName} schema={schema} />
+            </AnchorWrapper>
           </li>
         ))}
       </ul>

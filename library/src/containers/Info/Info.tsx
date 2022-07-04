@@ -31,9 +31,9 @@ export const Info: React.FunctionComponent = () => {
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8 text-left" id="introduction">
-        <div className="text-4xl">
+        <h2 className="text-4xl">
           {info.title()}&nbsp;{info.version()}
-        </div>
+        </h2>
 
         {showInfoList && (
           <ul className="flex flex-wrap mt-2 leading-normal">
