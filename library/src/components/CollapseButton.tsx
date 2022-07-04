@@ -1,27 +1,28 @@
 import React, { ButtonHTMLAttributes, SVGAttributes } from 'react';
+import { HiChevronRight } from 'react-icons/hi';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   chevronProps?: SVGAttributes<SVGElement>;
+  expanded?: boolean;
 }
 
 export const CollapseButton: React.FunctionComponent<Props> = ({
   chevronProps,
+  expanded = false,
   children,
   ...rest
 }) => (
-  <button {...rest} className={`focus:outline-none ${rest.className}`}>
-    {children}
-    <svg
-      version="1.1"
-      viewBox="0 0 24 24"
-      x="0"
-      xmlns="http://www.w3.org/2000/svg"
-      y="0"
+  <button
+    {...rest}
+    className={`focus:outline-none ${rest.className}`}
+    type="button"
+  >
+    <div className="inline-block">{children}</div>
+    <HiChevronRight
       {...chevronProps}
-      className={`inline-block align-baseline cursor-pointer -mb-1 w-5 transform transition-transform duration-150 ease-linear ${chevronProps?.className ||
-        ''}`}
-    >
-      <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 " />
-    </svg>
+      className={`inline-block align-baseline cursor-pointer ml-0.5 -mb-1 w-5 h-5 transform transition-transform duration-150 ease-linear ${
+        expanded ? '-rotate-90' : ''
+      } ${chevronProps?.className || ''}`}
+    />
   </button>
 );
