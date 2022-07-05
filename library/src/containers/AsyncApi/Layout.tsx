@@ -52,7 +52,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
             id={config.schemaID || undefined}
             ref={ref}
           >
-            {config.show?.sidebar && <Sidebar config={config.sidebar} />}
+            {config.show?.sidebar && <Sidebar />}
             <div className="panel--center relative py-8 flex-1">
               <div className="relative z-10">
                 {config.show?.errors && error && <Error error={error} />}

@@ -75,6 +75,7 @@
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
     "openapi-sampler": "^1.2.1",
+    "react-icons": "^4.4.0",
     "use-resize-observer": "^8.0.0"
   },
   "peerDependencies": {
