@@ -53,6 +53,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   render() {
     const { config, error: propError } = this.props;
     const { asyncapi, error: stateError } = this.state;
+
     const error = propError || stateError;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,

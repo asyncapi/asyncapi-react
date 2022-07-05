@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
 
 import { CollapseButton, JSONSnippet } from '../../components';
@@ -52,9 +52,13 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
 }) => {
   const config = useConfig();
   const [expand, setExpand] = useState(
-    config && config.expand && config.expand.messageExamples,
+    (config && config.expand && config.expand.messageExamples) || false,
   );
-
+  useEffect(() => {
+    if (config && config.expand && config.expand.messageExamples) {
+      setExpand(config.expand.messageExamples);
+    }
+  }, [config.expand]);
   return (
     <div className="mt-4">
       <div>
