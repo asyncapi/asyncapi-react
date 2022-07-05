@@ -77,6 +77,10 @@
     "openapi-sampler": "^1.2.1",
     "use-resize-observer": "^8.0.0"
   },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
     "@tailwindcss/typography": "^0.4.0",
