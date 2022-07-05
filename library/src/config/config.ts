@@ -1,11 +1,11 @@
 export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
+  expand?: ExpandConfig;
   sidebar?: SideBarConfig;
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;
-  expand?: ExpandConfig;
 }
 
 export interface ShowConfig {
