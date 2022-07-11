@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "1.0.0-next.38",
+  "version": "1.0.0-next.39",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -77,6 +77,10 @@
     "openapi-sampler": "^1.2.1",
     "react-icons": "^4.4.0",
     "use-resize-observer": "^8.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
