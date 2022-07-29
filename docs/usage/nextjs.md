@@ -7,7 +7,7 @@ Read the document to find out how to use React AsyncAPI component in the NextJS 
 First read the [Readme](../../Readme.md) document and install the React AsyncAPI component by:
 
 ```sh
-npm install --save @asyncapi/react-component
+npm install --save @asyncapi/react-component@next
 ```
 
 ## Usage without SSR/SSG (dynamic documentation)

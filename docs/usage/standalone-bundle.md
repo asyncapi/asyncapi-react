@@ -7,7 +7,7 @@ If you are not using React you may want to use the Standalone Bundle of AsyncAPI
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/react-component
+npm install --save @asyncapi/react-component@next
 ```
 
 ## Usage in frameworks

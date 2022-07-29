@@ -20,6 +20,7 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 <!-- toc -->
 
+- [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Using in React](#using-in-react)
@@ -27,9 +28,9 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 - [Props](#props)
 - [Features](#features)
 - [Styles](#styles)
-  * [Default styles](#default-styles)
-  * [Custom styles](#custom-styles)
-  * [Custom logo](#custom-logo)
+  - [Default styles](#default-styles)
+  - [Custom styles](#custom-styles)
+  - [Custom logo](#custom-logo)
 - [Playground](#playground)
 - [Modules](#modules)
 - [Development](#development)
@@ -48,7 +49,7 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/react-component
+npm install --save @asyncapi/react-component@next
 ```
 
 Check out this simple sandbox application that uses the React component:
