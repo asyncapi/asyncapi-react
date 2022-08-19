@@ -24,6 +24,8 @@ interface ConfigInterface {
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
   },
   parserOptions?: ParserOptions;
+  publishLabel?: string;
+  subscribeLabel?: string;
 }
 ```
 
@@ -46,6 +48,16 @@ interface ConfigInterface {
 
   This field contains configuration for [`asyncapi-parser`](https://github.com/asyncapi/parser). See available options [here](https://github.com/asyncapi/parser-js/blob/master/API.md#module_@asyncapi/parser..parse).
   This field is set to `null` by default.
+
+- **publishLabel?: string**
+
+  This field contains configuration responsible for customizing the "PUB" label for operations.
+  This field is set to `PUB` by default.
+
+- **subscribeLabel?: string**
+
+  This field contains configuration responsible for customizing the "SUB" label for operations.
+  This field is set to `SUB` by default.
 
 ## Examples
 
@@ -118,5 +130,7 @@ In the above examples, after concatenation with the default configuration, the r
   sidebar: {
     showOperations: 'bySpecTags',
   },
+  publishLabel: 'PUB',
+  subscribeLabel: 'SUB',
 }
 ```

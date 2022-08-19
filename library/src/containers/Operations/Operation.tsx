@@ -14,7 +14,11 @@ import {
 
 import { useConfig } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
-import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
+import {
+  EXTERAL_DOCUMENTATION_TEXT,
+  PUBLISH_LABEL_DEFAULT_TEXT,
+  SUBSCRIBE_LABEL_DEFAULT_TEXT,
+} from '../../constants';
 import { PayloadType } from '../../types';
 
 interface Props {
@@ -185,8 +189,8 @@ export const OperationInfo: React.FunctionComponent<Props> = ({
             title={type}
           >
             {type === PayloadType.PUBLISH
-              ? config.publishLabel || 'PUB'
-              : config.subscribeLabel || 'SUB'}
+              ? config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT
+              : config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT}
           </span>{' '}
           <span className="font-mono text-base">{channelName}</span>
         </h3>
