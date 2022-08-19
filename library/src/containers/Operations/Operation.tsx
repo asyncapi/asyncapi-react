@@ -167,6 +167,7 @@ export const OperationInfo: React.FunctionComponent<Props> = ({
   channelName,
   channel,
 }) => {
+  const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
@@ -183,7 +184,9 @@ export const OperationInfo: React.FunctionComponent<Props> = ({
             }`}
             title={type}
           >
-            {type === PayloadType.PUBLISH ? 'PUB' : 'SUB'}
+            {type === PayloadType.PUBLISH
+              ? config.publishLabel || 'PUB'
+              : config.subscribeLabel || 'SUB'}
           </span>{' '}
           <span className="font-mono text-base">{channelName}</span>
         </h3>
