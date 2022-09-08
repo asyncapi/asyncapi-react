@@ -1,4 +1,8 @@
 import { ConfigInterface } from './config';
+import {
+  PUBLISH_LABEL_DEFAULT_TEXT,
+  SUBSCRIBE_LABEL_DEFAULT_TEXT,
+} from '../constants';
 
 export const defaultConfig: ConfigInterface = {
   schemaID: '',
@@ -14,4 +18,6 @@ export const defaultConfig: ConfigInterface = {
   sidebar: {
     showOperations: 'byOperationsTags',
   },
+  publishLabel: PUBLISH_LABEL_DEFAULT_TEXT,
+  subscribeLabel: SUBSCRIBE_LABEL_DEFAULT_TEXT,
 };

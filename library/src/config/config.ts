@@ -3,6 +3,8 @@ export interface ConfigInterface {
   show?: ShowConfig;
   sidebar?: SideBarConfig;
   parserOptions?: any;
+  publishLabel?: string;
+  subscribeLabel?: string;
 }
 
 export interface ShowConfig {

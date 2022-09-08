@@ -35,7 +35,9 @@ export const SPECIFICATION_TEXT = 'Specification';
 
 export const DEPRECATED_TEXT = 'Deprecated';
 export const PUBLISH_TEXT = 'Publish';
+export const PUBLISH_LABEL_DEFAULT_TEXT = 'PUB';
 export const SUBSCRIBE_TEXT = 'Subscribe';
+export const SUBSCRIBE_LABEL_DEFAULT_TEXT = 'SUB';
 export const REQUIRED_TEXT = 'Required';
 export const GENERATED_TEXT = 'Generated';
 
