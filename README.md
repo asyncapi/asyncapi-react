@@ -20,7 +20,6 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 <!-- toc -->
 
-- [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Using in React](#using-in-react)
@@ -28,9 +27,9 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 - [Props](#props)
 - [Features](#features)
 - [Styles](#styles)
-  - [Default styles](#default-styles)
-  - [Custom styles](#custom-styles)
-  - [Custom logo](#custom-logo)
+  * [Default styles](#default-styles)
+  * [Custom styles](#custom-styles)
+  * [Custom logo](#custom-logo)
 - [Playground](#playground)
 - [Modules](#modules)
 - [Development](#development)
