@@ -51,12 +51,12 @@ interface ConfigInterface {
 
 - **publishLabel?: string**
 
-  This field contains configuration responsible for customizing the "PUB" label for operations.
+  This field contains configuration responsible for customizing the label for publish operations.
   This field is set to `PUB` by default.
 
 - **subscribeLabel?: string**
 
-  This field contains configuration responsible for customizing the "SUB" label for operations.
+  This field contains configuration responsible for customizing the label for subscribe operations.
   This field is set to `SUB` by default.
 
 ## Examples
