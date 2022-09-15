@@ -219,8 +219,17 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "m1ner79",
+      "name": "Michal Gornicki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55558050?v=4",
+      "profile": "https://github.com/m1ner79",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "skipCi": true
+  "skipCi": false
 }
