@@ -64,7 +64,7 @@ describe('Schema component', () => {
     expect(screen.getAllByText('object [CIRCULAR]')).toHaveLength(2);
   });
 
-  describe('should render boolean values', function() {
+  describe('should render boolean values', () => {
     test('defined as defaults', async () => {
       const schema = {
         type: 'object',
