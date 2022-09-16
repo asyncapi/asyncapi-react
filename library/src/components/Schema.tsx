@@ -168,7 +168,9 @@ export const Schema: React.FunctionComponent<Props> = ({
           </div>
           {rawValue ? (
             <div>
-              <div className="text-sm">{schema.const()}</div>
+              <div className="text-sm">
+                {SchemaHelpers.prettifyValue(schema.const(), false)}
+              </div>
             </div>
           ) : (
             <div>
