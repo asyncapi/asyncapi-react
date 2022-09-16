@@ -176,14 +176,24 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(`"foobar"`);
     });
 
+    test('should handle string in strict mode (default behaviour)', () => {
+      const result = SchemaHelpers.prettifyValue('foobar');
+      expect(result).toEqual(`"foobar"`);
+    });
+
+    test('should handle string in non strict mode', () => {
+      const result = SchemaHelpers.prettifyValue('foobar', false);
+      expect(result).toEqual(`foobar`);
+    });
+
     test('should handle number', () => {
       const result = SchemaHelpers.prettifyValue(2137);
-      expect(result).toEqual(2137);
+      expect(result).toEqual('2137');
     });
 
     test('should handle boolean', () => {
       const result = SchemaHelpers.prettifyValue(false);
-      expect(result).toEqual(false);
+      expect(result).toEqual('false');
     });
 
     test('should handle array', () => {
