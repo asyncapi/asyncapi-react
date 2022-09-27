@@ -2,7 +2,7 @@ import React from 'react';
 import { Server as ServerType } from '@asyncapi/parser';
 
 import { Security } from './Security';
-import { Markdown, Schema, Bindings } from '../../components';
+import { Markdown, Schema, Bindings, Tags, Extensions } from '../../components';
 
 import { useConfig } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
@@ -83,6 +83,14 @@ export const Server: React.FunctionComponent<Props> = ({
                 name="Server specific information"
                 bindings={server.bindings()}
               />
+            </div>
+          )}
+
+          <Extensions name="Server Extensions" item={server} />
+
+          {server.hasTags() && (
+            <div className="mt-2">
+              <Tags tags={server.tags()} />
             </div>
           )}
         </div>
