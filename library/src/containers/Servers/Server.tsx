@@ -88,7 +88,7 @@ export const Server: React.FunctionComponent<Props> = ({
 
           <Extensions name="Server Extensions" item={server} />
 
-          {server.hasTags() && (
+          {typeof server.hasTags === 'function' && server.hasTags() && (
             <div className="mt-2">
               <Tags tags={server.tags()} />
             </div>
