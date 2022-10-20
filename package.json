@@ -43,7 +43,7 @@
     "@semantic-release/release-notes-generator": "^9.0.2",
     "conventional-changelog-conventionalcommits": "^4.4.0",
     "husky": "^2.4.1",
-    "lerna": "^3.22.1",
+    "lerna": "^6.0.1",
     "lint-staged": "^13.0.3",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
