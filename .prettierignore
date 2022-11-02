@@ -14,3 +14,4 @@
 npm-debug.log*
 lerna-debug.log*
 /**/*.tgz
+/.github
