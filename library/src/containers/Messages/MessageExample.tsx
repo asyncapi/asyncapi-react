@@ -51,14 +51,16 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   examples = [],
 }) => {
   const config = useConfig();
-  const [expand, setExpand] = useState(
+  const [expanded, setExpanded] = useState(
     (config && config.expand && config.expand.messageExamples) || false,
   );
+
   useEffect(() => {
-    if (config && config.expand && config.expand.messageExamples) {
-      setExpand(config.expand.messageExamples);
-    }
+    setExpanded(
+      (config && config.expand && config.expand.messageExamples) || false,
+    );
   }, [config.expand]);
+
   return (
     <div className="mt-4">
       <div>
