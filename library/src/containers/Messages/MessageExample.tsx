@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
 
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
 import { MessageExample as MessageExampleType } from '../../types';
+import { useConfig } from '../../contexts';
 
 interface Props {
   message: Message;
@@ -49,7 +50,16 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   schema,
   examples = [],
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const config = useConfig();
+  const [expanded, setExpanded] = useState(
+    (config && config.expand && config.expand.messageExamples) || false,
+  );
+
+  useEffect(() => {
+    setExpanded(
+      (config && config.expand && config.expand.messageExamples) || false,
+    );
+  }, [config.expand]);
 
   return (
     <div className="mt-4">

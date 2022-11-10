@@ -20,6 +20,9 @@ interface ConfigInterface {
     schemas?: boolean;
     errors?: boolean;
   };
+  expand?: {
+    messageExamples?: boolean;
+  },
   sidebar?: {
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
   },
@@ -43,6 +46,11 @@ interface ConfigInterface {
 
   This field contains configuration responsible for the way of working of the sidebar.
   `showOperations` field is set to `byDefault` by default.
+  
+- **expand?: Partial<ExpandConfig>**
+
+  This field contains configuration responsible for collapsing and expanding component sections.
+  `messageExamples` field is set to `false` by default.
 
 - **parserOptions?: ParserOptions**
 
@@ -81,6 +89,9 @@ const config: ConfigInterface = {
   sidebar: {
     showOperations: 'bySpecTags',
   },
+  expand: {
+    messageExamples: false,
+  },
 };
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
@@ -106,6 +117,9 @@ const config = {
   sidebar: {
     showOperations: 'bySpecTags',
   },
+  expand: {
+    messageExamples: true,
+  },
 };
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
@@ -126,6 +140,9 @@ In the above examples, after concatenation with the default configuration, the r
     messages: true,
     schemas: true,
     errors: false,
+  },
+  expand: {
+    messageExamples: true,
   },
   sidebar: {
     showOperations: 'bySpecTags',

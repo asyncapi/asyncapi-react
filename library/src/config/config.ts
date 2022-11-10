@@ -1,6 +1,7 @@
 export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
+  expand?: ExpandConfig;
   sidebar?: SideBarConfig;
   parserOptions?: any;
   publishLabel?: string;
@@ -15,6 +16,10 @@ export interface ShowConfig {
   messages?: boolean;
   schemas?: boolean;
   errors?: boolean;
+}
+
+export interface ExpandConfig {
+  messageExamples?: boolean;
 }
 
 export interface SideBarConfig {

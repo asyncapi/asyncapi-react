@@ -15,6 +15,9 @@ export const defaultConfig: ConfigInterface = {
     schemas: true,
     errors: true,
   },
+  expand: {
+    messageExamples: false,
+  },
   sidebar: {
     showOperations: 'byOperationsTags',
   },
