@@ -49,7 +49,7 @@ interface ConfigInterface {
   
 - **expand?: Partial<ExpandConfig>**
 
-  This field contains configuration responsible for collapsing and expanding the example payloads.
+  This field contains configuration responsible for collapsing and expanding component sections.
   `messageExamples` field is set to `false` by default.
 
 - **parserOptions?: ParserOptions**
