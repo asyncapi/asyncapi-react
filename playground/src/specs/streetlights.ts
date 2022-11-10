@@ -1,4 +1,4 @@
-export const streetlights = `asyncapi: '2.4.0'
+export const streetlights = `asyncapi: '2.5.0'
 id: 'urn:com:smartylighting:streetlights:server'
 info:
   title: Streetlights API
@@ -76,6 +76,8 @@ servers:
         enum:
           - '1883'
           - '8883'
+    tags:
+      - name: 'env:production'
     security:
       - apiKey: []
       - supportedOauthFlows:

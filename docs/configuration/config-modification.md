@@ -20,10 +20,15 @@ interface ConfigInterface {
     schemas?: boolean;
     errors?: boolean;
   };
+  expand?: {
+    messageExamples?: boolean;
+  },
   sidebar?: {
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
   },
   parserOptions?: ParserOptions;
+  publishLabel?: string;
+  subscribeLabel?: string;
 }
 ```
 
@@ -41,11 +46,26 @@ interface ConfigInterface {
 
   This field contains configuration responsible for the way of working of the sidebar.
   `showOperations` field is set to `byDefault` by default.
+  
+- **expand?: Partial<ExpandConfig>**
+
+  This field contains configuration responsible for collapsing and expanding component sections.
+  `messageExamples` field is set to `false` by default.
 
 - **parserOptions?: ParserOptions**
 
   This field contains configuration for [`asyncapi-parser`](https://github.com/asyncapi/parser). See available options [here](https://github.com/asyncapi/parser-js/blob/master/API.md#module_@asyncapi/parser..parse).
   This field is set to `null` by default.
+
+- **publishLabel?: string**
+
+  This field contains configuration responsible for customizing the label for publish operations.
+  This field is set to `PUB` by default.
+
+- **subscribeLabel?: string**
+
+  This field contains configuration responsible for customizing the label for subscribe operations.
+  This field is set to `SUB` by default.
 
 ## Examples
 
@@ -68,6 +88,9 @@ const config: ConfigInterface = {
   },
   sidebar: {
     showOperations: 'bySpecTags',
+  },
+  expand: {
+    messageExamples: false,
   },
 };
 
@@ -94,6 +117,9 @@ const config = {
   sidebar: {
     showOperations: 'bySpecTags',
   },
+  expand: {
+    messageExamples: true,
+  },
 };
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
@@ -115,8 +141,13 @@ In the above examples, after concatenation with the default configuration, the r
     schemas: true,
     errors: false,
   },
+  expand: {
+    messageExamples: true,
+  },
   sidebar: {
     showOperations: 'bySpecTags',
   },
+  publishLabel: 'PUB',
+  subscribeLabel: 'SUB',
 }
 ```

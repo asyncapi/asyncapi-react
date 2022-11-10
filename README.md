@@ -48,7 +48,7 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/react-component
+npm install --save @asyncapi/react-component@next
 ```
 
 Check out this simple sandbox application that uses the React component:

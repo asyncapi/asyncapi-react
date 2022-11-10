@@ -3,8 +3,12 @@ import { Tag } from '@asyncapi/parser';
 
 import { CollapseButton } from '../../components';
 import { SideBarConfig } from '../../config/config';
-import { useSpec } from '../../contexts';
+import { useConfig, useSpec } from '../../contexts';
 import { SpecificationHelpers } from '../../helpers';
+import {
+  PUBLISH_LABEL_DEFAULT_TEXT,
+  SUBSCRIBE_LABEL_DEFAULT_TEXT,
+} from '../../constants';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -430,6 +434,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
   displayName,
 }) => {
+  const config = useConfig();
   const { setShowSidebar } = useContext(SidebarContext);
 
   return (
@@ -443,7 +448,7 @@ const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
           className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
           title="Publish"
         >
-          Pub
+          {config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT}
         </span>
         <span className="break-all inline-block">{displayName}</span>
       </a>
@@ -455,6 +460,7 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
   channelName,
   displayName,
 }) => {
+  const config = useConfig();
   const { setShowSidebar } = useContext(SidebarContext);
 
   return (
@@ -468,7 +474,7 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
           className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
           title="Subscribe"
         >
-          SUB
+          {config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT}
         </span>
         <span className="break-all inline-block">{displayName}</span>
       </a>

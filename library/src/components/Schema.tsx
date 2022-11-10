@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Schema as SchemaType } from '@asyncapi/parser';
 
 import { Href, CollapseButton, Markdown, Extensions } from './index';
@@ -16,7 +16,10 @@ interface Props {
   onlyTitle?: boolean;
 }
 
-const SchemaContext = React.createContext({ reverse: false });
+const SchemaContext = React.createContext({
+  reverse: false,
+  deepExpanded: false,
+});
 
 export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
@@ -26,11 +29,20 @@ export const Schema: React.FunctionComponent<Props> = ({
   isProperty = false,
   isCircular = false,
   dependentRequired,
-  expanded = false,
+  expanded: propExpanded = false,
   onlyTitle = false,
 }) => {
-  const { reverse } = useContext(SchemaContext);
-  const [expand, setExpand] = useState(expanded);
+  const { reverse, deepExpanded } = useContext(SchemaContext);
+  const [expanded, setExpanded] = useState(propExpanded);
+  const [deepExpand, setDeepExpand] = useState(false);
+
+  useEffect(() => {
+    setDeepExpand(deepExpanded);
+  }, [deepExpanded, setDeepExpand]);
+
+  useEffect(() => {
+    setExpanded(deepExpand);
+  }, [deepExpand, setExpanded]);
 
   if (
     !schema ||
@@ -57,7 +69,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     schema.isCircular() ||
     schema.ext('x-parser-circular') ||
     false;
-  let uid = schema.uid();
+  const uid = schema.uid();
 
   const schemaItems = schema.items();
   if (schemaItems && !Array.isArray(schemaItems)) {
@@ -73,7 +85,6 @@ export const Schema: React.FunctionComponent<Props> = ({
       schemaItems.isCircular() ||
       schemaItems.ext('x-parser-circular') ||
       false;
-    uid = schemaItems.uid();
     if (
       isCircular &&
       typeof (schemaItems as any).circularSchema === 'function'
@@ -100,19 +111,28 @@ export const Schema: React.FunctionComponent<Props> = ({
     );
 
   return (
-    <SchemaContext.Provider value={{ reverse: !reverse }}>
+    <SchemaContext.Provider
+      value={{ reverse: !reverse, deepExpanded: deepExpand }}
+    >
       <div>
         <div className="flex py-2">
           <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
             {isExpandable && !isCircular ? (
-              <CollapseButton
-                onClick={() => setExpand(prev => !prev)}
-                chevronProps={{
-                  className: expand ? '-rotate-180' : '-rotate-90',
-                }}
-              >
-                {renderedSchemaName}
-              </CollapseButton>
+              <>
+                <CollapseButton
+                  onClick={() => setExpanded(prev => !prev)}
+                  expanded={expanded}
+                >
+                  {renderedSchemaName}
+                </CollapseButton>
+                <button
+                  type="button"
+                  onClick={() => setDeepExpand(prev => !prev)}
+                  className="ml-1 text-sm text-gray-500"
+                >
+                  {deepExpand ? 'Collapse all' : 'Expand all'}
+                </button>
+              </>
             ) : (
               <span
                 className={`break-words text-sm ${isProperty ? 'italic' : ''}`}
@@ -148,7 +168,9 @@ export const Schema: React.FunctionComponent<Props> = ({
           </div>
           {rawValue ? (
             <div>
-              <div className="text-sm">{schema.const()}</div>
+              <div className="text-sm">
+                {SchemaHelpers.prettifyValue(schema.const(), false)}
+              </div>
             </div>
           ) : (
             <div>
@@ -275,7 +297,7 @@ export const Schema: React.FunctionComponent<Props> = ({
           <div
             className={`rounded p-4 py-2 border bg-gray-100 ${
               reverse ? 'bg-gray-200' : ''
-            } ${expand ? 'block' : 'hidden'}`}
+            } ${expanded ? 'block' : 'hidden'}`}
           >
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />

@@ -97,13 +97,13 @@ export class SchemaHelpers {
     return type;
   }
 
-  static prettifyValue(value: any) {
+  static prettifyValue(value: any, strict = true): string {
     const typeOf = typeof value;
     if (typeOf === 'string') {
-      return `"${value}"`;
+      return strict ? `"${value}"` : value;
     }
     if (typeOf === 'number' || typeOf === 'bigint' || typeOf === 'boolean') {
-      return value;
+      return `${value}`;
     }
     if (Array.isArray(value)) {
       return `[${value.toString()}]`;

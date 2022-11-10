@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Message, Schema } from '@asyncapi/parser';
 
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
 import { MessageExample as MessageExampleType } from '../../types';
+import { useConfig } from '../../contexts';
 
 interface Props {
   message: Message;
@@ -49,25 +50,33 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   schema,
   examples = [],
 }) => {
-  const [expand, setExpand] = useState(false);
+  const config = useConfig();
+  const [expanded, setExpanded] = useState(
+    (config && config.expand && config.expand.messageExamples) || false,
+  );
+
+  useEffect(() => {
+    setExpanded(
+      (config && config.expand && config.expand.messageExamples) || false,
+    );
+  }, [config.expand]);
 
   return (
     <div className="mt-4">
       <div>
         <CollapseButton
-          onClick={() => setExpand(prev => !prev)}
+          onClick={() => setExpanded(prev => !prev)}
+          expanded={expanded}
           chevronProps={{
-            className: `fill-current text-gray-200 ${
-              expand ? '-rotate-180' : '-rotate-90'
-            }`,
+            className: 'fill-current text-gray-200',
           }}
         >
-          <span className="px-2 py-1 mr-2 text-gray-200 text-sm border rounded focus:outline-none">
+          <span className="inline-block w-20 py-0.5 mr-1 text-gray-200 text-sm border text-center rounded focus:outline-none">
             {type}
           </span>
         </CollapseButton>
       </div>
-      <div className={expand ? 'block' : 'hidden'}>
+      <div className={expanded ? 'block' : 'hidden'}>
         {examples && examples.length > 0 ? (
           <ul>
             {examples.map((example, idx) => (

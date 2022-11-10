@@ -12,7 +12,7 @@ If you wanna use the React AsyncAPI component in your Angular project, you have 
 First read the [Readme](../../Readme.md) document and install the React AsyncAPI component by:
 
 ```sh
-npm install --save @asyncapi/react-component
+npm install --save @asyncapi/react-component@next
 ```
 
 ### Usage
