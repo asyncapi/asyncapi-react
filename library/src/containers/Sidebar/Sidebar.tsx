@@ -280,18 +280,18 @@ export const OperationsByRootTags: React.FunctionComponent = () => {
             return (
               ops.length > 0 && (
                 <li key={tag.name()}>
-                  <OperationsByTagItem tagName={tag.name()}>
+                  <ItemsByTagItem tagName={tag.name()}>
                     {taggedOperations(tag)}
-                  </OperationsByTagItem>
+                  </ItemsByTagItem>
                 </li>
               )
             );
           })}
         {untaggedOperations.length > 0 && (
           <li>
-            <OperationsByTagItem tagName="Untagged">
+            <ItemsByTagItem tagName="Untagged">
               {untaggedOperations}
-            </OperationsByTagItem>
+            </ItemsByTagItem>
           </li>
         )}
       </ul>
@@ -370,18 +370,18 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
             return (
               ops.length > 0 && (
                 <li key={tag.name()}>
-                  <OperationsByTagItem tagName={tag.name()}>
+                  <ItemsByTagItem tagName={tag.name()}>
                     {taggedOperations(tag)}
-                  </OperationsByTagItem>
+                  </ItemsByTagItem>
                 </li>
               )
             );
           })}
         {untaggedOperations.length > 0 && (
           <li>
-            <OperationsByTagItem tagName="Untagged">
+            <ItemsByTagItem tagName="Untagged">
               {untaggedOperations}
-            </OperationsByTagItem>
+            </ItemsByTagItem>
           </li>
         )}
       </ul>
@@ -389,11 +389,11 @@ export const OperationsByOperationsTags: React.FunctionComponent = () => {
   );
 };
 
-interface OperationsByTagItemProps {
+interface ItemsByTagItemProps {
   tagName: string;
 }
 
-const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = ({
+const ItemsByTagItem: React.FunctionComponent<ItemsByTagItemProps> = ({
   tagName,
   children,
 }) => {
@@ -515,9 +515,9 @@ export const ServersByTags: React.FunctionComponent = () => {
     }
 
     taggedServersList.push(
-      <ServersByTagItem tagName={'#' + tagName} key={tagName}>
+      <ItemsByTagItem tagName={'#' + tagName} key={tagName}>
         {serverNamesList}
-      </ServersByTagItem>,
+      </ItemsByTagItem>,
     );
   });
 
@@ -543,44 +543,15 @@ export const ServersByTags: React.FunctionComponent = () => {
   });
 
   untaggedServersList.push(
-    <ServersByTagItem tagName="Untagged" key="untagged-servers">
+    <ItemsByTagItem tagName="Untagged" key="untagged-servers">
       {serverNamesList}
-    </ServersByTagItem>,
+    </ItemsByTagItem>,
   );
 
   return (
     <div>
       {taggedServersList && <>{taggedServersList}</>}
       {untaggedServersList && <>{untaggedServersList}</>}
-    </div>
-  );
-};
-
-interface ServersByTagItemProps {
-  tagName: string;
-}
-
-const ServersByTagItem: React.FunctionComponent<ServersByTagItemProps> = ({
-  tagName,
-  children,
-}) => {
-  const [expand, setExpand] = useState(false);
-
-  return (
-    <div>
-      <CollapseButton
-        onClick={() => setExpand(prev => !prev)}
-        chevronProps={{
-          className: expand ? '-rotate-180' : '-rotate-90',
-        }}
-      >
-        <span className="text-sm inline-block mt-1 font-extralight">
-          {tagName}
-        </span>
-      </CollapseButton>
-      <ul className={`${expand ? 'block' : 'hidden'} text-sm mt-2 font-light`}>
-        {children}
-      </ul>
     </div>
   );
 };
