@@ -39,7 +39,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     Operations = OperationsByOperationsTags;
   }
 
-  let Servers = ServersByTags;
+  const Servers = ServersByTags;
 
   const messagesList = messages && Object.keys(messages).length > 0 && (
     <li className="mb-3 mt-9">
@@ -479,9 +479,11 @@ export const ServersByTags: React.FunctionComponent = () => {
   const servers = asyncapi.servers();
   const serversTags = SpecificationHelpers.serversTags(asyncapi);
 
+  let serverNamesList: any = [];
+
   const taggedServersList: React.ReactNodeArray = [];
   Object.entries(serversTags).forEach(([tagName, serverName]) => {
-    const serverNamesList: any = [];
+    serverNamesList = [];
     // If to one tag are related several servers, each server's name is pulled
     // out separately.
     if (typeof serverName === 'object' && serverName.length > 0) {
@@ -525,7 +527,7 @@ export const ServersByTags: React.FunctionComponent = () => {
   // intermediate array, it is written this way only to add syntactic sugar, by
   // aligning with the way grouping of tagged servers is written.
   const untaggedServersList: React.ReactNodeArray = [];
-  const serverNamesList: any = [];
+  serverNamesList = [];
   Object.entries(servers).forEach(([serverName, server]) => {
     if (!server.hasTags()) {
       serverNamesList.push(
