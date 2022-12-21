@@ -39,6 +39,8 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
     Operations = OperationsByOperationsTags;
   }
 
+  let Servers = ServersByTags;
+
   const messagesList = messages && Object.keys(messages).length > 0 && (
     <li className="mb-3 mt-9">
       <a
@@ -153,6 +155,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                   >
                     Servers
                   </a>
+                  <Servers />
                 </li>
               )}
               {asyncapi.hasChannels() && (
@@ -466,5 +469,118 @@ const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
         <span className="break-all inline-block">{channelName}</span>
       </a>
     </li>
+  );
+};
+
+export const ServersByTags: React.FunctionComponent = () => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  const asyncapi = useSpec();
+  const servers = asyncapi.servers();
+  const serversTags = SpecificationHelpers.serversTags(asyncapi);
+
+  const taggedServersList: React.ReactNodeArray = [];
+  Object.entries(serversTags).forEach(([tagName, serverName]) => {
+    const serverNamesList: any = [];
+    // If to one tag are related several servers, each server's name is pulled
+    // out separately.
+    if (typeof serverName === 'object' && serverName.length > 0) {
+      serverName.forEach(serverNameRelatedToTag => {
+        serverNamesList.push(
+          <li key={tagName + '-' + serverNameRelatedToTag}>
+            <a
+              className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+              href={`#server-${serverNameRelatedToTag}`}
+              onClick={() => setShowSidebar(false)}
+            >
+              <span className="break-all inline-block">
+                {serverNameRelatedToTag}
+              </span>
+            </a>
+          </li>,
+        );
+      });
+    } else {
+      serverNamesList.push(
+        <li key={tagName + '-' + serverName}>
+          <a
+            className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+            href={`#server-${serverName}`}
+            onClick={() => setShowSidebar(false)}
+          >
+            <span className="break-all inline-block">{serverName}</span>
+          </a>
+        </li>,
+      );
+    }
+
+    taggedServersList.push(
+      <ServersByTagItem tagName={'#' + tagName} key={tagName}>
+        {serverNamesList}
+      </ServersByTagItem>,
+    );
+  });
+
+  // There is no real benefit in writing untagged servers grouping with
+  // intermediate array, it is written this way only to add syntactic sugar, by
+  // aligning with the way grouping of tagged servers is written.
+  const untaggedServersList: React.ReactNodeArray = [];
+  const serverNamesList: any = [];
+  Object.entries(servers).forEach(([serverName, server]) => {
+    if (!server.hasTags()) {
+      serverNamesList.push(
+        <li key={'untagged-' + serverName}>
+          <a
+            className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+            href={`#server-${serverName}`}
+            onClick={() => setShowSidebar(false)}
+          >
+            <span className="break-all inline-block">{serverName}</span>
+          </a>
+        </li>,
+      );
+    }
+  });
+
+  untaggedServersList.push(
+    <ServersByTagItem tagName="Untagged" key="untagged-servers">
+      {serverNamesList}
+    </ServersByTagItem>,
+  );
+
+  return (
+    <div>
+      {taggedServersList && <>{taggedServersList}</>}
+      {untaggedServersList && <>{untaggedServersList}</>}
+    </div>
+  );
+};
+
+interface ServersByTagItemProps {
+  tagName: string;
+}
+
+const ServersByTagItem: React.FunctionComponent<ServersByTagItemProps> = ({
+  tagName,
+  children,
+}) => {
+  const [expand, setExpand] = useState(false);
+
+  return (
+    <div>
+      <CollapseButton
+        onClick={() => setExpand(prev => !prev)}
+        chevronProps={{
+          className: expand ? '-rotate-180' : '-rotate-90',
+        }}
+      >
+        <span className="text-sm inline-block mt-1 font-extralight">
+          {tagName}
+        </span>
+      </CollapseButton>
+      <ul className={`${expand ? 'block' : 'hidden'} text-sm mt-2 font-light`}>
+        {children}
+      </ul>
+    </div>
   );
 };
