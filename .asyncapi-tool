@@ -1,9 +1,8 @@
 title: AsyncAPI React component
 filters:
-    language:
-        - TypeScript
+    language: TypeScript
     technology:
-        - React
+        - React js
         - WebComponents
     categories:
         - ui-component
