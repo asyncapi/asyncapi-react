@@ -1,10 +1,29 @@
 import React, { ButtonHTMLAttributes, SVGAttributes } from 'react';
-import { HiChevronRight } from 'react-icons/hi';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   chevronProps?: SVGAttributes<SVGElement>;
   expanded?: boolean;
 }
+
+const HiChevronRight = (props: SVGAttributes<SVGElement> = {}) => (
+  // Copied from https://icon-sets.iconify.design/heroicons/chevron-right/
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="m8.25 4.5l7.5 7.5l-7.5 7.5"
+    />
+  </svg>
+);
 
 export const CollapseButton: React.FunctionComponent<Props> = ({
   chevronProps,
