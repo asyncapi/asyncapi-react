@@ -6,7 +6,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const HiChevronRight = (props: SVGAttributes<SVGElement> = {}) => (
-  // Copied from https://icon-sets.iconify.design/heroicons/chevron-right/
+  // Copied from https://icon-sets.iconify.design/heroicons-solid/chevron-right/
   <svg 
     stroke="currentColor" 
     fill="currentColor" 
