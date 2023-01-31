@@ -283,21 +283,24 @@ const OperationsList: React.FunctionComponent = () => {
 
   const operations: Array<TagObject<{
     channelName: string;
+    summary: string;
     kind: 'publish' | 'subscribe';
   }>> = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
+      const operation = channel.publish();
       operations.push({
         name: `publish-${channelName}`,
-        object: channel.publish(),
-        data: { channelName, kind: 'publish' },
+        object: operation,
+        data: { channelName, kind: 'publish', summary: operation.summary() },
       });
     }
     if (channel.hasSubscribe()) {
+      const operation = channel.subscribe();
       operations.push({
         name: `subscribe-${channelName}`,
-        object: channel.subscribe(),
-        data: { channelName, kind: 'subscribe' },
+        object: operation,
+        data: { channelName, kind: 'subscribe', summary: operation.summary() },
       });
     }
   });
@@ -305,8 +308,8 @@ const OperationsList: React.FunctionComponent = () => {
   if (showOperations === 'byDefault') {
     return (
       <ul className="text-sm mt-2">
-        {operations.map(({ name, data: { channelName, kind } }) => (
-          <OperationItem channelName={channelName} kind={kind} key={name} />
+        {operations.map(({ name, data }) => (
+          <OperationItem key={name} {...data} />
         ))}
       </ul>
     );
@@ -335,8 +338,8 @@ const OperationsList: React.FunctionComponent = () => {
       {Array.from(tagged.entries()).map(([tag, taggedOperations]) => (
         <li key={tag}>
           <ItemsByTagItem tagName={tag}>
-            {taggedOperations.map(({ name, data: { kind, channelName } }) => (
-              <OperationItem channelName={channelName} kind={kind} key={name} />
+            {taggedOperations.map(({ name, data }) => (
+              <OperationItem key={name} {...data} />
             ))}
           </ItemsByTagItem>
         </li>
@@ -344,8 +347,8 @@ const OperationsList: React.FunctionComponent = () => {
       {untagged.length > 0 ? (
         <li>
           <ItemsByTagItem tagName="Untagged">
-            {untagged.map(({ name, data: { kind, channelName } }) => (
-              <OperationItem channelName={channelName} kind={kind} key={name} />
+            {untagged.map(({ name, data }) => (
+              <OperationItem key={name} {...data} />
             ))}
           </ItemsByTagItem>
         </li>
@@ -356,11 +359,13 @@ const OperationsList: React.FunctionComponent = () => {
 
 interface OperationItemProps {
   channelName: string;
+  summary: string;
   kind: 'publish' | 'subscribe';
 }
 
 const OperationItem: React.FunctionComponent<OperationItemProps> = ({
   channelName,
+  summary,
   kind,
 }) => {
   const config = useConfig();
@@ -389,7 +394,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         >
           {label}
         </span>
-        <span className="break-all inline-block">{channelName}</span>
+        <span className="break-all inline-block">{summary || channelName}</span>
       </a>
     </li>
   );
