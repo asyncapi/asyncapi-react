@@ -1,6 +1,6 @@
 export const defaultConfig: string = `{
   "show": {
-    "sidebar": false,
+    "sidebar": true,
     "info": true,
     "operations": true,
     "servers": true,
@@ -10,5 +10,9 @@ export const defaultConfig: string = `{
   },
   "expand":{
     "messageExamples": false
+  },
+  "sidebar": {
+    "showServers": "byDefault",
+    "showOperations": "byDefault"
   }
 }`;
