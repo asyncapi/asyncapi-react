@@ -61,7 +61,7 @@ class Playground extends Component<{}, State> {
       <PlaygroundWrapper>
         <Navigation />
         <SplitWrapper>
-          {/* <CodeEditorsWrapper>
+          <CodeEditorsWrapper>
             <Tabs
               additionalHeaderContent={this.renderAdditionalHeaderContent()}
             >
@@ -87,7 +87,7 @@ class Playground extends Component<{}, State> {
                 />
               </Tab>
             </Tabs>
-          </CodeEditorsWrapper> */}
+          </CodeEditorsWrapper>
           <AsyncApiWrapper>
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
