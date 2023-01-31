@@ -1,10 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Tag } from '@asyncapi/parser';
 
 import { CollapseButton } from '../../components';
-import { SideBarConfig } from '../../config/config';
 import { useConfig, useSpec } from '../../contexts';
-import { SpecificationHelpers } from '../../helpers';
 import {
   PUBLISH_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
@@ -16,14 +13,8 @@ const SidebarContext = React.createContext<{
   setShowSidebar: (value: boolean | ((prevValue: boolean) => boolean)) => value,
 });
 
-interface Props {
-  config?: SideBarConfig;
-}
-
-export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
+export const Sidebar: React.FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-
-  const showOperations = config?.showOperations || 'byDefault';
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
@@ -31,13 +22,11 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   const components = asyncapi.hasComponents() && asyncapi.components();
   const messages = components && components.messages();
   const schemas = components && components.schemas();
-
-  let Operations = OperationsList;
-  if (showOperations === 'bySpecTags') {
-    Operations = OperationsByRootTags;
-  } else if (showOperations === 'byOperationsTags') {
-    Operations = OperationsByOperationsTags;
-  }
+  const hasOperations =
+    asyncapi.hasChannels() &&
+    Object.values(asyncapi.channels()).some(
+      channel => channel.hasPublish() || channel.hasSubscribe(),
+    );
 
   const messagesList = messages && Object.keys(messages).length > 0 && (
     <li className="mb-3 mt-9">
@@ -145,17 +134,18 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                 </a>
               </li>
               {asyncapi.hasServers() && (
-                <li className="mb-3">
+                <li className="mb-3 mt-9">
                   <a
-                    className="text-gray-700 no-underline hover:text-gray-900"
+                    className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
                     href="#servers"
                     onClick={() => setShowSidebar(false)}
                   >
                     Servers
                   </a>
+                  <ServersList />
                 </li>
               )}
-              {asyncapi.hasChannels() && (
+              {hasOperations && (
                 <>
                   <li className="mb-3 mt-9">
                     <a
@@ -165,7 +155,7 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
                     >
                       Operations
                     </a>
-                    <Operations />
+                    <OperationsList />
                   </li>
                   {messagesList}
                   {schemasList}
@@ -179,228 +169,259 @@ export const Sidebar: React.FunctionComponent<Props> = ({ config }) => {
   );
 };
 
-export const OperationsList: React.FunctionComponent = () => {
+interface TagObject<T = any> {
+  name: string;
+  object: { tags?: () => Array<{ name: () => string }> };
+  data: T;
+}
+
+function filterObjectsByTags<T = any>(
+  tags: string[],
+  objects: Array<TagObject<T>>,
+): { tagged: Map<string, TagObject[]>; untagged: TagObject[] } {
+  const taggedObjects = new Set<TagObject>();
+  const tagged = new Map<string, TagObject[]>();
+
+  tags.forEach(tag => {
+    const taggedForTag: TagObject[] = [];
+    objects.forEach(obj => {
+      const object = obj.object;
+      if (typeof object.tags !== 'function') {
+        return;
+      }
+
+      const objectTags = (object.tags() || []).map(t => t.name());
+      const hasTag = objectTags.includes(tag);
+      if (hasTag) {
+        taggedForTag.push(obj);
+        taggedObjects.add(obj);
+      }
+    });
+    tagged.set(tag, taggedForTag);
+  });
+
+  const untagged: TagObject[] = [];
+  objects.forEach(obj => {
+    if (!taggedObjects.has(obj)) {
+      untagged.push(obj);
+    }
+  });
+
+  return { tagged, untagged };
+}
+
+const ServersList: React.FunctionComponent = () => {
+  const sidebarConfig = useConfig().sidebar;
+  const asyncapi = useSpec();
+  const servers = asyncapi.servers();
+  const showServers = sidebarConfig?.showServers || 'byDefault';
+
+  if (showServers === 'byDefault') {
+    return (
+      <ul className="text-sm mt-2">
+        {Object.keys(servers).map(serverName => (
+          <ServerItem serverName={serverName} key={serverName} />
+        ))}
+      </ul>
+    );
+  }
+
+  let specTagNames: string[];
+  if (showServers === 'bySpecTags') {
+    specTagNames = (asyncapi.tags() || []).map(tag => tag.name());
+  } else {
+    const serverTagNamesSet = new Set<string>();
+    Object.values(servers).forEach(server => {
+      if (typeof server.tags !== 'function') {
+        return;
+      }
+      server.tags().forEach(t => serverTagNamesSet.add(t.name()));
+    });
+    specTagNames = Array.from(serverTagNamesSet);
+  }
+
+  const serializedServers: TagObject[] = Object.entries(servers).map(
+    ([serverName, server]) => ({
+      name: serverName,
+      object: server,
+      data: {},
+    }),
+  );
+  const { tagged, untagged } = filterObjectsByTags(
+    specTagNames,
+    serializedServers,
+  );
+  return (
+    <ul className="text-sm mt-2">
+      {Array.from(tagged.entries()).map(([tag, taggedServers]) => (
+        <li key={tag}>
+          <ItemsByTagItem tagName={tag}>
+            {taggedServers.map(({ name: serverName }) => (
+              <ServerItem serverName={serverName} key={serverName} />
+            ))}
+          </ItemsByTagItem>
+        </li>
+      ))}
+      {untagged.length > 0 ? (
+        <li>
+          <ItemsByTagItem tagName="Untagged">
+            {untagged.map(({ name: serverName }) => (
+              <ServerItem serverName={serverName} key={serverName} />
+            ))}
+          </ItemsByTagItem>
+        </li>
+      ) : null}
+    </ul>
+  );
+};
+
+const OperationsList: React.FunctionComponent = () => {
+  const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
   const channels = asyncapi.channels();
+  const showOperations = sidebarConfig?.showOperations || 'byDefault';
 
-  const operationsList: React.ReactNodeArray = [];
+  const operations: Array<TagObject<{
+    channelName: string;
+    kind: 'publish' | 'subscribe';
+  }>> = [];
   Object.entries(channels).forEach(([channelName, channel]) => {
     if (channel.hasPublish()) {
-      operationsList.push(
-        <OperationsPubItem
-          channelName={channelName}
-          displayName={channel.publish().summary() || channelName}
-          key={`pub-${channelName}`}
-        />,
-      );
+      operations.push({
+        name: `publish-${channelName}`,
+        object: channel.publish(),
+        data: { channelName, kind: 'publish' },
+      });
     }
     if (channel.hasSubscribe()) {
-      operationsList.push(
-        <OperationsSubItem
-          channelName={channelName}
-          displayName={channel.subscribe().summary() || channelName}
-          key={`sub-${channelName}`}
-        />,
-      );
+      operations.push({
+        name: `subscribe-${channelName}`,
+        object: channel.subscribe(),
+        data: { channelName, kind: 'subscribe' },
+      });
     }
   });
 
-  return <ul className="text-sm mt-2">{operationsList}</ul>;
-};
-
-export const OperationsByRootTags: React.FunctionComponent = () => {
-  const asyncapi = useSpec();
-  const channels = asyncapi.channels();
-  const tags = asyncapi.tags();
-
-  const taggedOperations = (tag: Tag) => {
-    const operationsList: React.ReactNodeArray = [];
-    Object.entries(channels).forEach(([channelName, channel]) => {
-      if (
-        channel.hasPublish() &&
-        SpecificationHelpers.containTags(channel.publish(), tag)
-      ) {
-        operationsList.push(
-          <OperationsPubItem
-            channelName={channelName}
-            displayName={channel.publish().summary() || channelName}
-            key={`pub-${channelName}`}
-          />,
-        );
-      }
-      if (
-        channel.hasSubscribe() &&
-        SpecificationHelpers.containTags(channel.subscribe(), tag)
-      ) {
-        operationsList.push(
-          <OperationsSubItem
-            channelName={channelName}
-            displayName={channel.subscribe().summary() || channelName}
-            key={`sub-${channelName}`}
-          />,
-        );
-      }
-    });
-    return operationsList;
-  };
-
-  const untaggedOperations: React.ReactNodeArray = [];
-  Object.entries(channels).forEach(([channelName, channel]) => {
-    if (
-      channel.hasPublish() &&
-      (!channel.publish().hasTags() ||
-        !SpecificationHelpers.containTags(channel.publish(), tags))
-    ) {
-      untaggedOperations.push(
-        <OperationsPubItem
-          channelName={channelName}
-          displayName={channel.publish().summary() || channelName}
-          key={`pub-${channelName}`}
-        />,
-      );
-    }
-    if (
-      channel.hasSubscribe() &&
-      (!channel.subscribe().hasTags() ||
-        !SpecificationHelpers.containTags(channel.subscribe(), tags))
-    ) {
-      untaggedOperations.push(
-        <OperationsSubItem
-          channelName={channelName}
-          displayName={channel.subscribe().summary() || channelName}
-          key={`sub-${channelName}`}
-        />,
-      );
-    }
-  });
-
-  return (
-    <div>
-      <ul>
-        {tags &&
-          tags.map(tag => {
-            const ops = taggedOperations(tag);
-            return (
-              ops.length > 0 && (
-                <li key={tag.name()}>
-                  <OperationsByTagItem tagName={tag.name()}>
-                    {taggedOperations(tag)}
-                  </OperationsByTagItem>
-                </li>
-              )
-            );
-          })}
-        {untaggedOperations.length > 0 && (
-          <li>
-            <OperationsByTagItem tagName="Untagged">
-              {untaggedOperations}
-            </OperationsByTagItem>
-          </li>
-        )}
+  if (showOperations === 'byDefault') {
+    return (
+      <ul className="text-sm mt-2">
+        {operations.map(({ name, data: { channelName, kind } }) => (
+          <OperationItem channelName={channelName} kind={kind} key={name} />
+        ))}
       </ul>
-    </div>
+    );
+  }
+
+  let operationTagNames: string[];
+  if (showOperations === 'bySpecTags') {
+    operationTagNames = (asyncapi.tags() || []).map(tag => tag.name());
+  } else {
+    const operationTagNamesSet = new Set<string>();
+    Object.values(operations).forEach(({ object }) => {
+      if (typeof object.tags !== 'function') {
+        return;
+      }
+      object.tags().forEach(t => operationTagNamesSet.add(t.name()));
+    });
+    operationTagNames = Array.from(operationTagNamesSet);
+  }
+
+  const { tagged, untagged } = filterObjectsByTags(
+    operationTagNames,
+    operations,
+  );
+  return (
+    <ul className="text-sm mt-2">
+      {Array.from(tagged.entries()).map(([tag, taggedOperations]) => (
+        <li key={tag}>
+          <ItemsByTagItem tagName={tag}>
+            {taggedOperations.map(({ name, data: { kind, channelName } }) => (
+              <OperationItem channelName={channelName} kind={kind} key={name} />
+            ))}
+          </ItemsByTagItem>
+        </li>
+      ))}
+      {untagged.length > 0 ? (
+        <li>
+          <ItemsByTagItem tagName="Untagged">
+            {untagged.map(({ name, data: { kind, channelName } }) => (
+              <OperationItem channelName={channelName} kind={kind} key={name} />
+            ))}
+          </ItemsByTagItem>
+        </li>
+      ) : null}
+    </ul>
   );
 };
 
-export const OperationsByOperationsTags: React.FunctionComponent = () => {
-  const asyncapi = useSpec();
-  const channels = asyncapi.channels();
-  const operationsTags = SpecificationHelpers.operationsTags(asyncapi);
+interface OperationItemProps {
+  channelName: string;
+  kind: 'publish' | 'subscribe';
+}
 
-  const taggedOperations = (tag: Tag) => {
-    const operationsList: React.ReactNodeArray = [];
-    Object.entries(channels).forEach(([channelName, channel]) => {
-      if (
-        channel.hasPublish() &&
-        SpecificationHelpers.containTags(channel.publish(), tag)
-      ) {
-        operationsList.push(
-          <OperationsPubItem
-            channelName={channelName}
-            displayName={channel.publish().summary() || channelName}
-            key={`pub-${channelName}`}
-          />,
-        );
-      }
-      if (
-        channel.hasSubscribe() &&
-        SpecificationHelpers.containTags(channel.subscribe(), tag)
-      ) {
-        operationsList.push(
-          <OperationsSubItem
-            channelName={channelName}
-            displayName={channel.subscribe().summary() || channelName}
-            key={`sub-${channelName}`}
-          />,
-        );
-      }
-    });
-    return operationsList;
-  };
+const OperationItem: React.FunctionComponent<OperationItemProps> = ({
+  channelName,
+  kind,
+}) => {
+  const config = useConfig();
+  const { setShowSidebar } = useContext(SidebarContext);
 
-  const untaggedOperations: React.ReactNodeArray = [];
-  Object.entries(channels).forEach(([channelName, channel]) => {
-    if (
-      channel.hasPublish() &&
-      (!channel.publish().hasTags() ||
-        !SpecificationHelpers.containTags(channel.publish(), operationsTags))
-    ) {
-      untaggedOperations.push(
-        <OperationsPubItem
-          channelName={channelName}
-          displayName={channel.publish().summary() || channelName}
-          key={`pub-${channelName}`}
-        />,
-      );
-    }
-    if (
-      channel.hasSubscribe() &&
-      (!channel.subscribe().hasTags() ||
-        !SpecificationHelpers.containTags(channel.subscribe(), operationsTags))
-    ) {
-      untaggedOperations.push(
-        <OperationsSubItem
-          channelName={channelName}
-          displayName={channel.subscribe().summary() || channelName}
-          key={`sub-${channelName}`}
-        />,
-      );
-    }
-  });
+  const isPublish = kind === 'publish';
+  let label: string = '';
+  if (isPublish) {
+    label = config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT;
+  } else {
+    label = config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT;
+  }
 
   return (
-    <div>
-      <ul>
-        {operationsTags &&
-          operationsTags.map(tag => {
-            const ops = taggedOperations(tag);
-            return (
-              ops.length > 0 && (
-                <li key={tag.name()}>
-                  <OperationsByTagItem tagName={tag.name()}>
-                    {taggedOperations(tag)}
-                  </OperationsByTagItem>
-                </li>
-              )
-            );
-          })}
-        {untaggedOperations.length > 0 && (
-          <li>
-            <OperationsByTagItem tagName="Untagged">
-              {untaggedOperations}
-            </OperationsByTagItem>
-          </li>
-        )}
-      </ul>
-    </div>
+    <li>
+      <a
+        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+        href={`#operation-${kind}-${channelName}`}
+        onClick={() => setShowSidebar(false)}
+      >
+        <span
+          className={`${
+            isPublish ? 'bg-blue-600' : 'bg-green-600'
+          } font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs`}
+          title={isPublish ? 'Publish' : 'Subscribe'}
+        >
+          {label}
+        </span>
+        <span className="break-all inline-block">{displayName}</span>
+      </a>
+    </li>
   );
 };
 
-interface OperationsByTagItemProps {
+interface ServerItemProps {
+  serverName: string;
+}
+
+const ServerItem: React.FunctionComponent<ServerItemProps> = ({
+  serverName,
+}) => {
+  const { setShowSidebar } = useContext(SidebarContext);
+
+  return (
+    <li>
+      <a
+        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
+        href={`#server-${serverName}`}
+        onClick={() => setShowSidebar(false)}
+      >
+        <span className="break-all inline-block">{serverName}</span>
+      </a>
+    </li>
+  );
+};
+
+interface ItemsByTagItemProps {
   tagName: string;
 }
 
-const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = ({
+const ItemsByTagItem: React.FunctionComponent<ItemsByTagItemProps> = ({
   tagName,
   children,
 }) => {
@@ -422,62 +443,5 @@ const OperationsByTagItem: React.FunctionComponent<OperationsByTagItemProps> = (
         {children}
       </ul>
     </div>
-  );
-};
-
-interface OperationsPubItemProps {
-  channelName: string;
-  displayName: string;
-}
-
-const OperationsPubItem: React.FunctionComponent<OperationsPubItemProps> = ({
-  channelName,
-  displayName,
-}) => {
-  const config = useConfig();
-  const { setShowSidebar } = useContext(SidebarContext);
-
-  return (
-    <li>
-      <a
-        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
-        href={`#operation-publish-${channelName}`}
-        onClick={() => setShowSidebar(false)}
-      >
-        <span
-          className="bg-blue-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-          title="Publish"
-        >
-          {config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT}
-        </span>
-        <span className="break-all inline-block">{displayName}</span>
-      </a>
-    </li>
-  );
-};
-
-const OperationsSubItem: React.FunctionComponent<OperationsPubItemProps> = ({
-  channelName,
-  displayName,
-}) => {
-  const config = useConfig();
-  const { setShowSidebar } = useContext(SidebarContext);
-
-  return (
-    <li>
-      <a
-        className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
-        href={`#operation-subscribe-${channelName}`}
-        onClick={() => setShowSidebar(false)}
-      >
-        <span
-          className="bg-green-600 font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs"
-          title="Subscribe"
-        >
-          {config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT}
-        </span>
-        <span className="break-all inline-block">{displayName}</span>
-      </a>
-    </li>
   );
 };

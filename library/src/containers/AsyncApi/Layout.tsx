@@ -43,6 +43,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
     },
   });
 
+  const configShow = config.show || {};
   return (
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
@@ -52,15 +53,15 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
             id={config.schemaID || undefined}
             ref={ref}
           >
-            {config.show?.sidebar && <Sidebar config={config.sidebar} />}
+            {configShow.sidebar && <Sidebar />}
             <div className="panel--center relative py-8 flex-1">
               <div className="relative z-10">
-                {config.show?.errors && error && <Error error={error} />}
-                {config.show?.info && <Info />}
-                {config.show?.servers && <Servers />}
-                {config.show?.operations && <Operations />}
-                {config.show?.messages && <Messages />}
-                {config.show?.schemas && <Schemas />}
+                {configShow.errors && error && <Error error={error} />}
+                {configShow.info && <Info />}
+                {configShow.servers && <Servers />}
+                {configShow.operations && <Operations />}
+                {configShow.messages && <Messages />}
+                {configShow.schemas && <Schemas />}
               </div>
               <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
             </div>

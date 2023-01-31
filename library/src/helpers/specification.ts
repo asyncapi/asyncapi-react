@@ -79,4 +79,23 @@ export class SpecificationHelpers {
     });
     return Array.from(tags.values());
   }
+
+  /**
+   * Return all tags from servers
+   */
+  static serversTags(spec: AsyncAPIDocument) {
+    const tags = {} as { string: string[] };
+    Object.entries(spec.servers()).forEach(([_, server]) => {
+      if (server.hasTags()) {
+        server.tags().forEach(tag => {
+          if (tags[tag.name()]) {
+            tags[tag.name()] = [tags[tag.name()], _];
+          } else {
+            tags[tag.name()] = _;
+          }
+        });
+      }
+    });
+    return tags;
+  }
 }
