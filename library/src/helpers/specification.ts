@@ -50,19 +50,15 @@ export class SpecificationHelpers {
   /**
    * Check if given schema have one of the specified tags.
    */
-  static containTags(
-    schema: { tags: () => Tag[] },
-    tags: string | string[],
-  ): boolean {
+  static containTags(schema: any, tags: Tag | Tag[]): boolean {
     const tagsToCheck =
       typeof schema.tags === 'function' ? schema.tags() : undefined;
-    if (!tagsToCheck || !Array.isArray(tagsToCheck)) {
+    if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
       return false;
     }
-
-    const arrayTags = Array.isArray(tags) ? tags : [tags];
+    tags = Array.isArray(tags) ? tags : [tags];
     return tagsToCheck.some((tag: Tag) =>
-      arrayTags.some(t => t === tag.name()),
+      (tags as Tag[]).some(t => t.name() === tag.name()),
     );
   }
 
