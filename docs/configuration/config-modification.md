@@ -24,6 +24,7 @@ interface ConfigInterface {
     messageExamples?: boolean;
   },
   sidebar?: {
+    showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
   },
   parserOptions?: ParserOptions;
@@ -45,6 +46,7 @@ interface ConfigInterface {
 - **sidebar?: Partial<SideBarConfig>**
 
   This field contains configuration responsible for the way of working of the sidebar.
+  `showServers` field is set to `byDefault` by default.
   `showOperations` field is set to `byDefault` by default.
   
 - **expand?: Partial<ExpandConfig>**
@@ -87,6 +89,7 @@ const config: ConfigInterface = {
     errors: false,
   },
   sidebar: {
+    showServers: 'byServersTags',
     showOperations: 'bySpecTags',
   },
   expand: {
@@ -115,6 +118,7 @@ const config = {
     errors: false,
   },
   sidebar: {
+    showServers: 'byServersTags',
     showOperations: 'bySpecTags',
   },
   expand: {
@@ -145,6 +149,7 @@ In the above examples, after concatenation with the default configuration, the r
     messageExamples: true,
   },
   sidebar: {
+    showServers: 'byServersTags',
     showOperations: 'bySpecTags',
   },
   publishLabel: 'PUB',

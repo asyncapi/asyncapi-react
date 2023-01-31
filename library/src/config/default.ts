@@ -19,7 +19,8 @@ export const defaultConfig: ConfigInterface = {
     messageExamples: false,
   },
   sidebar: {
-    showOperations: 'byOperationsTags',
+    showServers: 'byDefault',
+    showOperations: 'byDefault',
   },
   publishLabel: PUBLISH_LABEL_DEFAULT_TEXT,
   subscribeLabel: SUBSCRIBE_LABEL_DEFAULT_TEXT,

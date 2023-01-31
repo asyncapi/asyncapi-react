@@ -10,5 +10,9 @@ export const defaultConfig: string = `{
   },
   "expand":{
     "messageExamples": false
+  },
+  "sidebar": {
+    "showServers": "byDefault",
+    "showOperations": "byDefault"
   }
 }`;
