@@ -68,9 +68,9 @@
     "get:version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/avro-schema-parser": "^0.3.0",
-    "@asyncapi/openapi-schema-parser": "^2.0.0",
-    "@asyncapi/parser": "^1.17.0",
+    "@asyncapi/avro-schema-parser": "^1.1.0",
+    "@asyncapi/openapi-schema-parser": "^2.0.1",
+    "@asyncapi/parser": "^1.18.0",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
