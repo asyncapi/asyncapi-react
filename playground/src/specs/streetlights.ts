@@ -12,6 +12,15 @@ info:
     * Dim a specific streetlight 😎
     * Receive real-time information about environmental lighting conditions 📈
 
+    ### We got mermaids 🧜‍♀️
+
+    \`\`\`mermaid
+    graph LR
+      Mermaid --> Graph --> Looks --> Cool
+      Graph --> Works["Works!"]
+      Works --> Cool
+    \`\`\`
+
   termsOfService: http://asyncapi.org/terms/
   contact:
     name: API Support
