@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "AsyncAPI React",
+	"build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+            },
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-yaml",
+                "asyncapi.asyncapi-preview"
+            ]
+        }
+    }
+}
