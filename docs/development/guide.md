@@ -37,6 +37,24 @@ This repository has the following structure:
 
 If you make any changes in the project structure, remember to update it.
 
+## Using a Development Container (optional)
+
+If you don't want to install a complete build environment on your local machine (node/npm) you can develop inside a [dev container][dev-containers]. This is supported in VS Code with the [Dev Containers](dev-containers-ext) extension. Open the folder in VS Code and (auto-prompted) rebuild and reopen in the container.
+
+[dev-containers]: https://code.visualstudio.com/docs/devcontainers/containers
+[dev-containers-ext]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+
+All of the build/development tools you need are installed in the container at the correct versions, so all you need to install locally is docker to run the container. The container runs a headless version of VS Code and your local GUI attaches to it. Your local directory is mounted inside the container.
+
+If you don't use VS Code you can run the container manually like this:
+```
+$ cd /path/to/asyncapi-react
+$ docker build -t manualdevcont .devcontainer
+$ docker run -v /path/to/asyncapi-react:/workspaces/asyncapi-react -it manualdevcont /bin/bash
+```
+
+The rest of this guide can now be done from a terminal inside the dev container, isolating the effects from your local machine.
+
 ## Install dependencies
 
 To install all dependencies for the [Playground](../../playground) application and prepare a symlink for the [`library`](../../library) package, run this command:
