@@ -74,6 +74,7 @@
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
+    "mermaid": "^9.3.0",
     "openapi-sampler": "^1.2.1",
     "use-resize-observer": "^8.0.0"
   },
