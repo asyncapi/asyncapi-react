@@ -70,6 +70,7 @@
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^1.1.0",
     "@asyncapi/openapi-schema-parser": "^2.0.1",
+    "@asyncapi/protobuf-schema-parser": "^1.0.0",
     "@asyncapi/parser": "^1.18.0",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
