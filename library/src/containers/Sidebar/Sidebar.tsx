@@ -318,7 +318,7 @@ const OperationsList: React.FunctionComponent = () => {
     operationTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const operationTagNamesSet = new Set<string>();
-    Object.values(operations).map((operation) => {
+    Object.values(operations).forEach((operation) => {
       operation.tags().forEach(t => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);
