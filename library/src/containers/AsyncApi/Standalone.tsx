@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocument } from '@asyncapi/parser';
+import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import { SpecificationHelpers } from '../../helpers';
 import { ErrorObject, PropsSchema } from '../../types';
@@ -15,7 +15,7 @@ export interface AsyncApiProps {
 }
 
 interface AsyncAPIState {
-  asyncapi?: AsyncAPIDocument;
+  asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
 }
 

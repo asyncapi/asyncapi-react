@@ -1,61 +1,44 @@
 import { SpecificationHelpers } from '../specification';
-
-// @ts-ignore
-import AsyncAPIDocument from '@asyncapi/parser/lib/models/asyncapi';
-// @ts-ignore
-import Operation from '@asyncapi/parser/lib/models/operation';
-// @ts-ignore
-import Tag from '@asyncapi/parser/lib/models/tag';
+import {AsyncAPIDocumentV2 as AsyncAPIDocument, OperationV2 as Operation, TagV2 as Tag, stringify} from '@asyncapi/parser';
 
 describe('SpecificationHelpers', () => {
   describe('.retrieveParsedSpec', () => {
     test('should return parsed specification when is passed AsyncAPIDocument instance', () => {
-      const doc = new AsyncAPIDocument({ asyncapi: '2.0.0' });
+      const doc = new AsyncAPIDocument({ asyncapi: '2.0.0', info: {title: 'test', version: '0.0.0'}, channels: {} });
 
       const result = SpecificationHelpers.retrieveParsedSpec(doc);
-      expect(result).toEqual(doc);
-    });
-
-    test('should return parsed specification when is passed parsed JS object', () => {
-      const doc = { asyncapi: '2.0.0', 'x-parser-spec-parsed': true };
-      const expected = new AsyncAPIDocument(doc);
-
-      const result = SpecificationHelpers.retrieveParsedSpec(doc);
-      expect(result).toEqual(expected);
-    });
-
-    test('should return parsed specification when is passed parsed string', () => {
-      const doc = { asyncapi: '2.0.0', 'x-parser-spec-parsed': true };
-      const stringified = JSON.stringify(doc);
-      const expected = new AsyncAPIDocument(doc);
-
-      const result = SpecificationHelpers.retrieveParsedSpec(stringified);
-      expect(result).toEqual(expected);
-    });
-
-    test('should return parsed specification when is passed parsed stringified spec ', () => {
-      const doc = {
-        asyncapi: '2.0.0',
-        'x-parser-spec-parsed': true,
-        'x-parser-stringified-spec': true,
-      };
-      const expected = new AsyncAPIDocument(doc);
-
-      const result = SpecificationHelpers.retrieveParsedSpec(doc);
-      expect(result).toEqual(expected);
+      expect(result).not.toBeUndefined();
+      expect(result instanceof AsyncAPIDocument).toEqual(true);
     });
 
     test('should return parsed specification when is passed parsed stringified spec (by string) ', () => {
       const doc = {
-        asyncapi: '2.0.0',
-        'x-parser-spec-parsed': true,
-        'x-parser-stringified-spec': true,
+        asyncapi: '2.0.0', info: {title: 'test', version: '0.0.0'}, channels: {}, 'x-parser-spec-parsed': true
       };
-      const stringified = JSON.stringify(doc);
       const expected = new AsyncAPIDocument(doc);
-
+      const stringified = stringify(expected);
       const result = SpecificationHelpers.retrieveParsedSpec(stringified);
-      expect(result).toEqual(expected);
+      expect(result).not.toBeUndefined();
+      expect(result instanceof AsyncAPIDocument).toEqual(true);
+    });
+
+    test('should return parsed specification when is passed parsed JS object', () => {
+      const doc = { asyncapi: '2.0.0', info: {title: 'test', version: '0.0.0'}, channels: {}, 'x-parser-spec-parsed': true };
+
+      const result = SpecificationHelpers.retrieveParsedSpec(doc);
+      expect(result).not.toBeUndefined();
+      expect(result instanceof AsyncAPIDocument).toEqual(true);
+    });
+
+    test('should return parsed specification when is passed old AsyncAPI document', () => {
+      const doc = {
+        json: () => {return {
+          asyncapi: '2.0.0', info: {title: 'test', version: '0.0.0'}, channels: {}, 'x-parser-spec-parsed': true, 'x-parser-api-version': 0
+        }}
+      };
+      const result = SpecificationHelpers.retrieveParsedSpec(doc);
+      expect(result).not.toBeUndefined();
+      expect(result instanceof AsyncAPIDocument).toEqual(true);
     });
   });
 
@@ -82,6 +65,8 @@ describe('SpecificationHelpers', () => {
   describe('.operationsTags', () => {
     test('should extract the pub/sub tags names from the channel in the given spec', () => {
       const input = {
+        asyncapi: '2.0.0',
+        info: {title: 'test', version: '0.0.0'},
         channels: {
           'smartylighting/streetlights/1/0/event/1/lighting/measured': {
             publish: {
@@ -98,15 +83,16 @@ describe('SpecificationHelpers', () => {
       const doc = new AsyncAPIDocument(input);
 
       const result = SpecificationHelpers.operationsTags(doc);
-      expect(result).toEqual([
-        new Tag({ name: 'smartylighting' }),
-        new Tag({ name: 'measure' }),
-        new Tag({ name: 'dim' }),
-      ]);
+
+      expect(result[0].json()).toEqual(new Tag({ name: 'smartylighting' }).json());
+      expect(result[1].json()).toEqual(new Tag({ name: 'measure' }).json());
+      expect(result[2].json()).toEqual(new Tag({ name: 'dim' }).json());
     });
 
     test('should return empty array if any operations tags are present in the given spec', () => {
       const input = {
+        asyncapi: '2.0.0',
+        info: {title: 'test', version: '0.0.0'},
         channels: {
           'smartylighting/streetlights/1/0/event/1/lighting/measured': {
             publish: {

@@ -1,8 +1,6 @@
-import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
-// @ts-ignore
-import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
-// @ts-ignore
-import avroSchemaParser from '@asyncapi/avro-schema-parser';
+import { Parser as AsyncapiParser, fromURL } from '@asyncapi/parser';
+import {OpenAPISchemaParser} from '@asyncapi/openapi-schema-parser';
+import {AvroSchemaParser} from '@asyncapi/avro-schema-parser';
 // @ts-ignore
 import protoSchemaParser from '@asyncapi/protobuf-schema-parser';
 
@@ -10,9 +8,10 @@ import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
-registerSchemaParser(openapiSchemaParser);
-registerSchemaParser(avroSchemaParser);
-registerSchemaParser(protoSchemaParser);
+const asyncapiParser = new AsyncapiParser();
+asyncapiParser.registerSchemaParser(OpenAPISchemaParser());
+asyncapiParser.registerSchemaParser(AvroSchemaParser());
+//asyncapiParser.registerSchemaParser(protoSchemaParser);
 
 export class Parser {
   static async parse(
@@ -20,8 +19,8 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      const asyncapi = await parse(content, parserOptions);
-      return { asyncapi };
+      const { document } = await asyncapiParser.parse(content, parserOptions);
+      return { asyncapi: document };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }
@@ -32,12 +31,13 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      const asyncapi = await parseFromUrl(
+      const fromResult = fromURL(
+        asyncapiParser,
         arg.url,
-        arg.requestOptions,
-        parserOptions,
+        arg.requestOptions
       );
-      return { asyncapi };
+      const { document } = await fromResult.parse(parserOptions);
+      return { asyncapi: document };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }

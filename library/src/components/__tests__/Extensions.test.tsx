@@ -6,7 +6,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 // @ts-ignore
-import SchemaModel from '@asyncapi/parser/lib/models/schema';
+import {SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
 import { Extensions } from '../Extensions';
 

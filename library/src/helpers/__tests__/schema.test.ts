@@ -1,11 +1,5 @@
 import { SchemaHelpers, SchemaCustomTypes } from '../schema';
-
-// @ts-ignore
-import Schema from '@asyncapi/parser/lib/models/schema';
-// @ts-ignore
-import ServerVariable from '@asyncapi/parser/lib/models/server-variable';
-// @ts-ignore
-import ChannelParameter from '@asyncapi/parser/lib/models/channel-parameter';
+import {SchemaV2 as Schema, ServerVariableV2 as ServerVariable, ChannelParameterV2 as ChannelParameter, ServerVariablesInterface, ChannelParametersInterface } from '@asyncapi/parser';
 
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
@@ -425,7 +419,7 @@ describe('SchemaHelpers', () => {
           examples: ['foo', 'bar'],
           description: 'Some description',
         }),
-      };
+      } as unknown as ServerVariablesInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -460,7 +454,7 @@ describe('SchemaHelpers', () => {
           location: '$message.payload#/user/id',
           description: 'Some description',
         }),
-      };
+      } as unknown as ChannelParametersInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -491,7 +485,7 @@ describe('SchemaHelpers', () => {
         bar: new ChannelParameter({
           location: '$message.payload#/user/id',
         }),
-      };
+      } as unknown as ChannelParametersInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -749,19 +743,18 @@ describe('SchemaHelpers', () => {
   describe('.getDependentSchemas', () => {
     test('should return undefined when dependencies is not defined', () => {
       const schema = new Schema({
+        type: 'object',
         properties: {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-            },
-            credit_card: {
-              type: 'string',
-            },
+          name: {
+            type: 'string',
           },
-          required: ['name'],
+          credit_card: {
+            type: 'string',
+          },
         },
-      });
+        required: ['name'],
+      },
+      );
 
       const result = SchemaHelpers.getDependentSchemas(schema);
       expect(result).toEqual(undefined);
@@ -788,7 +781,7 @@ describe('SchemaHelpers', () => {
           },
         },
       };
-      const schema = new Schema(jsonSchema);
+      const schema = new Schema(jsonSchema as any);
       const expected = new Schema({
         type: 'object',
         properties: {
@@ -834,7 +827,7 @@ describe('SchemaHelpers', () => {
           },
         },
       };
-      const schema = new Schema(jsonSchema);
+      const schema = new Schema(jsonSchema as any);
       const expected = new Schema({
         type: 'object',
         properties: {

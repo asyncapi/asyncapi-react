@@ -4,9 +4,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-
-// @ts-ignore
-import SchemaModel from '@asyncapi/parser/lib/models/schema';
+import {SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
 import { Schema } from '../Schema';
 
@@ -24,7 +22,7 @@ describe('Schema component', () => {
     };
     schema.properties.circular = schema;
     schema.properties.circularTwo = schema;
-    const schemaModel = new SchemaModel(schema);
+    const schemaModel = new SchemaModel(schema as any);
 
     render(<Schema schema={schemaModel} />);
 
@@ -51,7 +49,7 @@ describe('Schema component', () => {
     schema.properties.circular = schema;
     schema.properties.circularTwo = schema;
     schema['x-parser-circular-props'] = ['circular', 'circularTwo'];
-    const schemaModel = new SchemaModel(schema);
+    const schemaModel = new SchemaModel(schema as any);
 
     render(<Schema schema={schemaModel} />);
 
@@ -79,7 +77,7 @@ describe('Schema component', () => {
           },
         },
       };
-      const schemaModel = new SchemaModel(schema);
+      const schemaModel = new SchemaModel(schema as any);
 
       render(<Schema schema={schemaModel} />);
 
@@ -101,7 +99,7 @@ describe('Schema component', () => {
           },
         },
       };
-      const schemaModel = new SchemaModel(schema);
+      const schemaModel = new SchemaModel(schema as any);
 
       render(<Schema schema={schemaModel} />);
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AsyncAPIDocument } from '@asyncapi/parser';
+import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 import useResizeObserver from 'use-resize-observer';
 
 import { Sidebar } from '../Sidebar/Sidebar';
@@ -15,7 +15,7 @@ import { SpecificationContext, ConfigContext } from '../../contexts';
 import { ErrorObject } from '../../types';
 
 interface Props {
-  asyncapi: AsyncAPIDocument;
+  asyncapi: AsyncAPIDocumentInterface;
   config: ConfigInterface;
   error?: ErrorObject;
 }

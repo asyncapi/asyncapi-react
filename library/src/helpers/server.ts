@@ -1,4 +1,4 @@
-import { SecurityScheme } from '@asyncapi/parser';
+import { SecuritySchemeInterface } from '@asyncapi/parser';
 
 export class ServerHelpers {
   static securityType(value: string) {
@@ -49,7 +49,7 @@ export class ServerHelpers {
 
   static getKafkaSecurity(
     protocol: string,
-    securitySchema: SecurityScheme | null,
+    securitySchema: SecuritySchemeInterface | null,
   ) {
     let securityProtocol;
     let saslMechanism;
