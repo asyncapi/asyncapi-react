@@ -59,13 +59,13 @@ export const Schema: React.FunctionComponent<Props> = ({
   const externalDocs = schema.externalDocs();
 
   const renderTypeExt = schema.extensions().get(SchemaHelpers.extRenderType);
-  const renderType =  renderTypeExt !== undefined && renderTypeExt.value() !== false;
+  const renderType = renderTypeExt?.value() !== false;
 
   const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
-  const rawValue =  rawValueExt !== undefined && rawValueExt.value() === true;
+  const rawValue = rawValueExt?.value() === true;
 
   const parameterLocationExt = schema.extensions().get(SchemaHelpers.extParameterLocation);
-  const parameterLocation =  parameterLocationExt !== undefined && parameterLocationExt.value() === true;
+  const parameterLocation = parameterLocationExt?.value() === true;
   
   let schemaType = SchemaHelpers.toSchemaType(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
@@ -75,35 +75,6 @@ export const Schema: React.FunctionComponent<Props> = ({
     schema.isCircular() ||
     false;
   const uid = schema.$id();
-
-  const schemaItems = schema.items();
-  if (schemaItems && !Array.isArray(schemaItems)) {
-    /**
-     * fallback for older logic for circular references:
-     *
-     * checking uid for circular items
-     * `x-parser-circular` extension is added to every schema which has circular `items` field,
-     * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
-     */
-    isCircular =
-      isCircular ||
-      schemaItems.isCircular() ||
-      false;
-    if (
-      isCircular &&
-      typeof (schemaItems as any).circularSchema === 'function'
-    ) {
-      schemaType = SchemaHelpers.toSchemaType(
-        schemaItems
-      );
-    }
-  } else if (
-    isCircular &&
-    typeof (schema as any).circularSchema === 'function'
-  ) {
-    schemaType = SchemaHelpers.toSchemaType((schema as any).circularSchema());
-  }
-
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
     typeof schemaName === 'string' ? (
@@ -395,7 +366,6 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
   const required = schema.required() || [];
   const patternProperties = schema.patternProperties();
-  const circularProps = schema.extensions().get('x-parser-circular-props')?.value() || [];
 
   return (
     <>
@@ -405,7 +375,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isProperty={true}
-          isCircular={circularProps.includes(propertyName)}
+          isCircular={property.isCircular()}
           dependentRequired={SchemaHelpers.getDependentRequired(
             propertyName,
             schema,
@@ -419,7 +389,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           isPatternProperty={true}
           isProperty={true}
-          isCircular={circularProps.includes(propertyName)}
+          isCircular={property.isCircular()}
           key={propertyName}
         />
       ))}
