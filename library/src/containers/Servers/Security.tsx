@@ -158,7 +158,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
     );
   }
 
-  let flows = securitySchema && securitySchema.flows();
+  let flows = securitySchema?.flows();
   let unwrappedFlows: Record<string, OAuthFlowInterface> = {};
   if(flows?.hasImplicit()) {
     unwrappedFlows['implicit'] = flows.implicit() as OAuthFlowInterface;
