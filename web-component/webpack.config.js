@@ -26,6 +26,19 @@ module.exports = {
       // See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem."
       react: path.resolve('./node_modules/react'),
     },
+    fallback: {
+      util: false,
+      buffer: false,
+      fs: false,
+      path: false,
+      stream: false,
+      zlib: false,
+      assert: false,
+      url: false,
+      polyfill: false,
+      http: false,
+      https: false,
+    },
   },
   devtool: 'source-map',
 

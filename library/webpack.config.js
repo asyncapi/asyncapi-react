@@ -35,6 +35,25 @@ const umdBundle = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      'nimma/legacy$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/legacy/cjs/index.js',
+      ),
+      'nimma/fallbacks$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/cjs/fallbacks/index.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+      util: false,
+      buffer: false,
+      path: false,
+      stream: false,
+      zlib: require.resolve('browserify-zlib'),
+      assert: false,
+    },
   },
   externals: {
     react: {
@@ -82,10 +101,46 @@ const standaloneBundle = {
           transpileOnly: true,
         },
       },
+      {
+        include: [
+          path.resolve(
+            __dirname,
+            './node_modules/nimma/dist/cjs/fallbacks/jsonpath-plus.js',
+          ),
+        ],
+        use: ['remove-hashbag-loader'],
+      },
     ],
+  },
+  resolveLoader: {
+    alias: {
+      'remove-hashbag-loader': path.join(
+        __dirname,
+        './loaders/remove-hashbag-loader',
+      ),
+    },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      'nimma/legacy$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/legacy/cjs/index.js',
+      ),
+      'nimma/fallbacks$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/cjs/fallbacks/index.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+      util: false,
+      buffer: false,
+      path: false,
+      stream: false,
+      zlib: false,
+      assert: false,
+    },
   },
 
   plugins: [
