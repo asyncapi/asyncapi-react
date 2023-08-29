@@ -58,22 +58,18 @@ export const Schema: React.FunctionComponent<Props> = ({
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const externalDocs = schema.externalDocs();
 
-  const renderTypeExt = schema.extensions().get(SchemaHelpers.extRenderType);
-  const renderType = renderTypeExt?.value() !== false;
-
   const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
   const rawValue = rawValueExt?.value() === true;
 
-  const parameterLocationExt = schema.extensions().get(SchemaHelpers.extParameterLocation);
+  const parameterLocationExt = schema
+    .extensions()
+    .get(SchemaHelpers.extParameterLocation);
   const parameterLocation = parameterLocationExt?.value() === true;
-  
+
   let schemaType = SchemaHelpers.toSchemaType(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
-  isCircular =
-    isCircular ||
-    schema.isCircular() ||
-    false;
+  isCircular = isCircular || schema.isCircular() || false;
   const uid = schema.$id();
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
@@ -150,11 +146,9 @@ export const Schema: React.FunctionComponent<Props> = ({
           ) : (
             <div>
               <div>
-                {renderType && (
-                  <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
-                    {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
-                  </div>
-                )}
+                <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
+                  {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
+                </div>
                 <div className="inline-block">
                   {schema.format() && (
                     <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
@@ -279,7 +273,8 @@ export const Schema: React.FunctionComponent<Props> = ({
 
             {schema.oneOf() &&
               schema
-                .oneOf()?.map((s, idx) => (
+                .oneOf()
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -288,7 +283,8 @@ export const Schema: React.FunctionComponent<Props> = ({
                 ))}
             {schema.anyOf() &&
               schema
-                .anyOf()?.map((s, idx) => (
+                .anyOf()
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -297,7 +293,8 @@ export const Schema: React.FunctionComponent<Props> = ({
                 ))}
             {schema.allOf() &&
               schema
-                .allOf()?.map((s, idx) => (
+                .allOf()
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -383,16 +380,18 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           key={propertyName}
         />
       ))}
-      {Object.entries(patternProperties || {}).map(([propertyName, property]) => (
-        <Schema
-          schema={property}
-          schemaName={propertyName}
-          isPatternProperty={true}
-          isProperty={true}
-          isCircular={property.isCircular()}
-          key={propertyName}
-        />
-      ))}
+      {Object.entries(patternProperties || {}).map(
+        ([propertyName, property]) => (
+          <Schema
+            schema={property}
+            schemaName={propertyName}
+            isPatternProperty={true}
+            isProperty={true}
+            isCircular={property.isCircular()}
+            key={propertyName}
+          />
+        ),
+      )}
     </>
   );
 };
@@ -404,7 +403,12 @@ interface AdditionalPropertiesProps {
 const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
   schema,
 }) => {
-  if (schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() === false) {
+  if (
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
+  ) {
     return null;
   }
 
@@ -470,7 +474,12 @@ interface AdditionalItemsProps {
 const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
-  if (schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() === false) {
+  if (
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
+  ) {
     return null;
   }
 

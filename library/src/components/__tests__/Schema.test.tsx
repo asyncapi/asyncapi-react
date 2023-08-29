@@ -4,12 +4,12 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import {SchemaV2 as SchemaModel } from '@asyncapi/parser';
+import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
 import { Schema } from '../Schema';
 
 describe('Schema component', () => {
-  test('should work with circular references in schema - using `x-parser-circular-props` extensions', async () => {
+  test('should work with circular references in schema', async () => {
     const schema = {
       type: 'object',
       properties: {
@@ -22,7 +22,6 @@ describe('Schema component', () => {
     };
     schema.properties.circular = schema;
     schema.properties.circularTwo = schema;
-    schema['x-schema-private-render-type'] = true;
     const schemaModel = new SchemaModel(schema as any);
 
     render(<Schema schema={schemaModel} />);

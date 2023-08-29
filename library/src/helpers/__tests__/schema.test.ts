@@ -1,5 +1,11 @@
 import { SchemaHelpers, SchemaCustomTypes } from '../schema';
-import {SchemaV2 as Schema, ServerVariableV2 as ServerVariable, ChannelParameterV2 as ChannelParameter, ServerVariablesInterface, ChannelParametersInterface } from '@asyncapi/parser';
+import {
+  SchemaV2 as Schema,
+  ServerVariableV2 as ServerVariable,
+  ChannelParameterV2 as ChannelParameter,
+  ServerVariablesInterface,
+  ChannelParametersInterface,
+} from '@asyncapi/parser';
 
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
@@ -411,7 +417,7 @@ describe('SchemaHelpers', () => {
 
   describe('.serverVariablesToSchema', () => {
     test('should transform variables to schema', () => {
-      const variables = {
+      const variables = ({
         foo: new ServerVariable({ enum: ['foo', 'bar'], default: 'foo' }),
         bar: new ServerVariable({
           enum: ['foo', 'bar'],
@@ -419,7 +425,7 @@ describe('SchemaHelpers', () => {
           examples: ['foo', 'bar'],
           description: 'Some description',
         }),
-      } as unknown as ServerVariablesInterface;
+      } as unknown) as ServerVariablesInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -438,7 +444,6 @@ describe('SchemaHelpers', () => {
         },
         required: ['foo', 'bar'],
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.serverVariablesToSchema(variables);
       expect(result).toEqual(schema);
@@ -447,14 +452,14 @@ describe('SchemaHelpers', () => {
 
   describe('.parametersToSchema', () => {
     test('should transform parameters to schema', () => {
-      const parameters = {
+      const parameters = ({
         foo: new ChannelParameter({ schema: { type: 'string' } }),
         bar: new ChannelParameter({
           schema: { type: 'string' },
           location: '$message.payload#/user/id',
           description: 'Some description',
         }),
-      } as unknown as ChannelParametersInterface;
+      } as unknown) as ChannelParametersInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -471,21 +476,20 @@ describe('SchemaHelpers', () => {
         },
         required: ['foo', 'bar'],
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.parametersToSchema(parameters);
       expect(result).toEqual(schema);
     });
 
     test('should handle empty schema of parameter', () => {
-      const parameters = {
+      const parameters = ({
         foo: new ChannelParameter({
           description: 'Some description',
         }),
         bar: new ChannelParameter({
           location: '$message.payload#/user/id',
         }),
-      } as unknown as ChannelParametersInterface;
+      } as unknown) as ChannelParametersInterface;
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -500,7 +504,6 @@ describe('SchemaHelpers', () => {
         },
         required: ['foo', 'bar'],
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.parametersToSchema(parameters);
       expect(result).toEqual(schema);
@@ -563,7 +566,6 @@ describe('SchemaHelpers', () => {
           },
         ],
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.jsonToSchema(json);
       expect(result).toEqual(schema);
@@ -583,7 +585,6 @@ describe('SchemaHelpers', () => {
           },
         },
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.jsonToSchema(json);
       expect(result).toEqual(schema);
@@ -617,7 +618,6 @@ describe('SchemaHelpers', () => {
               },
             ],
             'x-schema-private-render-additional-info': false,
-            'x-schema-private-render-type': false,
           },
           bar: {
             type: 'string',
@@ -626,7 +626,6 @@ describe('SchemaHelpers', () => {
           },
         },
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
       const result = SchemaHelpers.jsonToSchema(json);
       expect(result).toEqual(schema);
@@ -753,8 +752,7 @@ describe('SchemaHelpers', () => {
           },
         },
         required: ['name'],
-      },
-      );
+      });
 
       const result = SchemaHelpers.getDependentSchemas(schema);
       expect(result).toEqual(undefined);
@@ -793,7 +791,6 @@ describe('SchemaHelpers', () => {
           },
         },
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
 
       const result = SchemaHelpers.getDependentSchemas(schema);
@@ -845,7 +842,6 @@ describe('SchemaHelpers', () => {
           },
         },
         'x-schema-private-render-additional-info': false,
-        'x-schema-private-render-type': false,
       });
 
       const result = SchemaHelpers.getDependentSchemas(schema);
