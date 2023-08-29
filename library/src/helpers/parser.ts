@@ -1,6 +1,6 @@
 import { Parser as AsyncapiParser, fromURL } from '@asyncapi/parser';
-import {OpenAPISchemaParser} from '@asyncapi/openapi-schema-parser';
-import {AvroSchemaParser} from '@asyncapi/avro-schema-parser';
+import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
+import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 // @ts-ignore
 import protoSchemaParser from '@asyncapi/protobuf-schema-parser';
 
@@ -11,7 +11,8 @@ import { VALIDATION_ERRORS_TYPE } from '../constants';
 const asyncapiParser = new AsyncapiParser();
 asyncapiParser.registerSchemaParser(OpenAPISchemaParser());
 asyncapiParser.registerSchemaParser(AvroSchemaParser());
-//asyncapiParser.registerSchemaParser(protoSchemaParser);
+// Waiting for schema parser to be upgraded
+// asyncapiParser.registerSchemaParser(protoSchemaParser);
 
 export class Parser {
   static async parse(
@@ -31,11 +32,7 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      const fromResult = fromURL(
-        asyncapiParser,
-        arg.url,
-        arg.requestOptions
-      );
+      const fromResult = fromURL(asyncapiParser, arg.url, arg.requestOptions);
       const { document } = await fromResult.parse(parserOptions);
       return { asyncapi: document };
     } catch (err) {

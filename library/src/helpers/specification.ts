@@ -1,12 +1,20 @@
-import { AsyncAPIDocumentInterface, TagInterface, isAsyncAPIDocument, isOldAsyncAPIDocument, toAsyncAPIDocument, unstringify } from '@asyncapi/parser';
+import {
+  AsyncAPIDocumentInterface,
+  TagInterface,
+  isAsyncAPIDocument,
+  isOldAsyncAPIDocument,
+  toAsyncAPIDocument,
+  unstringify,
+} from '@asyncapi/parser';
 import { isStringifiedDocument } from '@asyncapi/parser/cjs/document';
-
 
 export class SpecificationHelpers {
   /**
    * Returns parsed AsyncAPI specification.
    */
-  static retrieveParsedSpec(schema: any): AsyncAPIDocumentInterface | undefined {
+  static retrieveParsedSpec(
+    schema: any,
+  ): AsyncAPIDocumentInterface | undefined {
     if (!schema) {
       return undefined;
     }
@@ -15,7 +23,7 @@ export class SpecificationHelpers {
       return schema;
     }
 
-    if(isOldAsyncAPIDocument(schema)) {
+    if (isOldAsyncAPIDocument(schema)) {
       // Is from old parser
       const parsedJSON = schema.json();
       return toAsyncAPIDocument(parsedJSON);
@@ -35,14 +43,16 @@ export class SpecificationHelpers {
       return unstringify(schema);
     }
 
-    let parsedDoc = toAsyncAPIDocument(schema);
-    return parsedDoc;
+    return toAsyncAPIDocument(schema);
   }
 
   /**
    * Check if given schema have one of the specified tags.
    */
-  static containTags(schema: any, tags: TagInterface | TagInterface[]): boolean {
+  static containTags(
+    schema: any,
+    tags: TagInterface | TagInterface[],
+  ): boolean {
     const tagsToCheck =
       typeof schema.tags === 'function' ? schema.tags() : undefined;
     if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
@@ -61,7 +71,10 @@ export class SpecificationHelpers {
     const tags = new Map<string, TagInterface>();
     Object.entries(spec.operations().all()).forEach(([_, operation]) => {
       if (operation?.tags().length > 0) {
-        operation.tags().all().forEach(tag => tags.set(tag.name(), tag));
+        operation
+          .tags()
+          .all()
+          .forEach(tag => tags.set(tag.name(), tag));
       }
     });
     return Array.from(tags.values());
@@ -74,13 +87,16 @@ export class SpecificationHelpers {
     const tags = {} as { string: string[] };
     Object.entries(spec.servers()).forEach(([_, server]) => {
       if (server.tags().length > 0) {
-        server.tags().all().forEach(tag => {
-          if (tags[tag.name()]) {
-            tags[tag.name()] = [tags[tag.name()], _];
-          } else {
-            tags[tag.name()] = _;
-          }
-        });
+        server
+          .tags()
+          .all()
+          .forEach(tag => {
+            if (tags[tag.name()]) {
+              tags[tag.name()] = [tags[tag.name()], _];
+            } else {
+              tags[tag.name()] = _;
+            }
+          });
       }
     });
     return tags;

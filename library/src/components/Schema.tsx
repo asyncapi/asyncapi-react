@@ -66,7 +66,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     .get(SchemaHelpers.extParameterLocation);
   const parameterLocation = parameterLocationExt?.value() === true;
 
-  let schemaType = SchemaHelpers.toSchemaType(schema);
+  const schemaType = SchemaHelpers.toSchemaType(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
   isCircular = isCircular || schema.isCircular() || false;
@@ -412,7 +412,7 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
     return null;
   }
 
-  let type = schema.type();
+  const type = schema.type();
   if (type === undefined || !type.includes('object')) {
     return null;
   }
@@ -442,7 +442,7 @@ interface SchemaItemsProps {
 }
 
 const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
-  let type = schema.type();
+  const type = schema.type();
   if (type === undefined || !type.includes('array')) {
     return null;
   }
@@ -483,7 +483,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     return null;
   }
 
-  let type = schema.type();
+  const type = schema.type();
   if (type === undefined || !type.includes('array')) {
     return null;
   }

@@ -1,5 +1,9 @@
 import React from 'react';
-import { OAuthFlowInterface, SecurityRequirementsInterface, SecuritySchemeInterface } from '@asyncapi/parser';
+import {
+  OAuthFlowInterface,
+  SecurityRequirementsInterface,
+  SecuritySchemeInterface,
+} from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
 import { useSpec } from '../../contexts';
@@ -97,7 +101,10 @@ function collectSecuritySchemas(
     }
     if (securitySchema.openIdConnectUrl()) {
       schemas.push(
-        <Href href={securitySchema.openIdConnectUrl() as string} className="underline">
+        <Href
+          href={securitySchema.openIdConnectUrl() as string}
+          className="underline"
+        >
           Connect URL
         </Href>,
       );
@@ -158,27 +165,28 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
     );
   }
 
-  let flows = securitySchema?.flows();
-  let unwrappedFlows: Record<string, OAuthFlowInterface> = {};
-  if(flows?.hasImplicit()) {
-    unwrappedFlows['implicit'] = flows.implicit() as OAuthFlowInterface;
+  const flows = securitySchema?.flows();
+  const unwrappedFlows: Record<string, OAuthFlowInterface> = {};
+  if (flows?.hasImplicit()) {
+    unwrappedFlows.implicit = flows.implicit() as OAuthFlowInterface;
   }
-  if(flows?.hasAuthorizationCode()) {
-    unwrappedFlows['authorizationCode'] = flows.authorizationCode() as OAuthFlowInterface;
+  if (flows?.hasAuthorizationCode()) {
+    unwrappedFlows.authorizationCode = flows.authorizationCode() as OAuthFlowInterface;
   }
-  if(flows?.hasClientCredentials()) {
-    unwrappedFlows['clientCredentials'] = flows.clientCredentials() as OAuthFlowInterface;
+  if (flows?.hasClientCredentials()) {
+    unwrappedFlows.clientCredentials = flows.clientCredentials() as OAuthFlowInterface;
   }
-  if(flows?.hasPassword()) {
-    unwrappedFlows['password'] = flows.implicit() as OAuthFlowInterface;
+  if (flows?.hasPassword()) {
+    unwrappedFlows.password = flows.implicit() as OAuthFlowInterface;
   }
-  const renderedFlows = Object.entries(unwrappedFlows).map(([flowName, flow]) => {
+  const renderedFlows = Object.entries(unwrappedFlows).map(
+    ([flowName, flow]) => {
       const authorizationUrl = flow.authorizationUrl();
       const tokenUrl = flow.tokenUrl();
       const refreshUrl = flow.refreshUrl();
-      const scopes = flow.scopes()
+      const scopes = flow.scopes();
 
-      return  (
+      return (
         <div
           className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded"
           key={flowName}
@@ -243,7 +251,8 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
           )}
         </div>
       );
-    });
+    },
+  );
 
   return (
     <div>
