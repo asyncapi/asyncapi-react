@@ -100,6 +100,7 @@
     "cssnano": "^4.1.11",
     "cypress": "^7.4.0",
     "jest": "^26.0.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "postcss": "^8.2.10",
     "postcss-cli": "^8.3.1",
     "postcss-import": "^14.0.2",

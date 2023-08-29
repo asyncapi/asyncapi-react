@@ -1,6 +1,7 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const umdBundle = {
   entry: {
@@ -47,12 +48,6 @@ const umdBundle = {
     },
     fallback: {
       fs: false,
-      util: false,
-      buffer: false,
-      path: false,
-      stream: false,
-      zlib: false,
-      assert: false,
     },
   },
   externals: {
@@ -69,6 +64,7 @@ const umdBundle = {
      * Uncomment plugin when you wanna see dependency map of bundled package
      */
     // new BundleAnalyzerPlugin(),
+    new NodePolyfillPlugin(),
   ],
 };
 
@@ -134,12 +130,6 @@ const standaloneBundle = {
     },
     fallback: {
       fs: false,
-      util: false,
-      buffer: false,
-      path: false,
-      stream: false,
-      zlib: false,
-      assert: false,
     },
   },
 
@@ -148,6 +138,7 @@ const standaloneBundle = {
      * Uncomment plugin when you wanna see dependency map of bundled package
      */
     // new BundleAnalyzerPlugin(),
+    new NodePolyfillPlugin(),
   ],
 };
 
