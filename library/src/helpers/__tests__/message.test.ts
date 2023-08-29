@@ -1,5 +1,5 @@
 import { MessageHelpers } from '../message';
-import {MessageV2 as Message} from '@asyncapi/parser';
+import { MessageV2 as Message } from '@asyncapi/parser';
 
 describe('MessageHelpers', () => {
   describe('.generateExample', () => {

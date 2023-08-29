@@ -9,7 +9,8 @@ import { SCHEMAS_TEXT } from '../../constants';
 export const Schemas: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
-  const schemas = !asyncapi.components().isEmpty() && asyncapi.components().schemas();
+  const schemas =
+    !asyncapi.components().isEmpty() && asyncapi.components().schemas();
 
   if (!schemas || Object.keys(schemas).length === 0) {
     return null;

@@ -28,7 +28,9 @@ export class MessageHelpers {
     return schema;
   }
 
-  static getPayloadExamples(msg: MessageInterface): MessageExample[] | undefined {
+  static getPayloadExamples(
+    msg: MessageInterface,
+  ): MessageExample[] | undefined {
     const examples = msg.examples().all();
 
     if (examples.some(e => e.hasPayload())) {
@@ -58,7 +60,9 @@ export class MessageHelpers {
     return;
   }
 
-  static getHeadersExamples(msg: MessageInterface): MessageExample[] | undefined {
+  static getHeadersExamples(
+    msg: MessageInterface,
+  ): MessageExample[] | undefined {
     const examples = msg.examples().all();
     if (examples.some(e => e.hasHeaders())) {
       const messageExamples = examples

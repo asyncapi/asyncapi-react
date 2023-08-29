@@ -41,7 +41,10 @@ export const Operation: React.FunctionComponent<Props> = props => {
   // check typeof as fallback for older version than `2.4.0`
   const security =
     typeof operation.security === 'function' && operation.security();
-  const parameters = channel.parameters() !== undefined ? SchemaHelpers.parametersToSchema(channel.parameters()) : undefined;
+  const parameters =
+    channel.parameters() !== undefined
+      ? SchemaHelpers.parametersToSchema(channel.parameters())
+      : undefined;
 
   return (
     <div>
@@ -153,10 +156,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message
-                message={operation.messages()[0]}
-                showExamples={true}
-              />
+              <Message message={operation.messages()[0]} showExamples={true} />
             </div>
           </div>
         )}

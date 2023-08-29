@@ -18,7 +18,10 @@ export const Sidebar: React.FunctionComponent = () => {
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
-  const logo = info.extensions().get('x-logo')?.value();
+  const logo = info
+    .extensions()
+    .get('x-logo')
+    ?.value();
   const components = asyncapi.components();
   const messages = components && components.messages();
   const schemas = components && components.schemas();
@@ -291,14 +294,30 @@ const OperationsList: React.FunctionComponent = () => {
       processedOperations.push({
         name: `publish-${operationId}`,
         object: operation,
-        data: { channelName: operation.channels().all()[0].address() || '', kind: 'publish', summary: operation.summary() || ''  },
+        data: {
+          channelName:
+            operation
+              .channels()
+              .all()[0]
+              .address() || '',
+          kind: 'publish',
+          summary: operation.summary() || '',
+        },
       });
     }
     if (operation.isReceive()) {
       processedOperations.push({
         name: `subscribe-${operationId}`,
         object: operation,
-        data: { channelName: operation.channels().all()[0].address() || '', kind: 'subscribe', summary: operation.summary() || '' },
+        data: {
+          channelName:
+            operation
+              .channels()
+              .all()[0]
+              .address() || '',
+          kind: 'subscribe',
+          summary: operation.summary() || '',
+        },
       });
     }
   });
@@ -318,7 +337,7 @@ const OperationsList: React.FunctionComponent = () => {
     operationTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const operationTagNamesSet = new Set<string>();
-    Object.values(operations).forEach((operation) => {
+    Object.values(operations).forEach(operation => {
       operation.tags().forEach(t => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);

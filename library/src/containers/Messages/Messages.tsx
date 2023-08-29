@@ -9,7 +9,8 @@ import { MESSAGES_TEXT } from '../../constants';
 export const Messages: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
-  const messages = !asyncapi.components().isEmpty() && asyncapi.components().messages();
+  const messages =
+    !asyncapi.components().isEmpty() && asyncapi.components().messages();
 
   if (!messages || Object.keys(messages).length === 0) {
     return null;
