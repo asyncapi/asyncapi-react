@@ -51,7 +51,7 @@ const umdBundle = {
       buffer: false,
       path: false,
       stream: false,
-      zlib: require.resolve('browserify-zlib'),
+      zlib: false,
       assert: false,
     },
   },
