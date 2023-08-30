@@ -1,5 +1,5 @@
 import React from 'react';
-import { Server as ServerType } from '@asyncapi/parser';
+import { ServerInterface } from '@asyncapi/parser';
 
 import { Security } from './Security';
 import { Markdown, Schema, Bindings, Tags, Extensions } from '../../components';
@@ -9,7 +9,7 @@ import { CommonHelpers, SchemaHelpers } from '../../helpers';
 
 interface Props {
   serverName: string;
-  server: ServerType;
+  server: ServerInterface;
 }
 
 export const Server: React.FunctionComponent<Props> = ({
@@ -77,7 +77,7 @@ export const Server: React.FunctionComponent<Props> = ({
             </div>
           }
 
-          {server.hasBindings() && (
+          {server.bindings() && (
             <div className="mt-2">
               <Bindings
                 name="Server specific information"
@@ -88,7 +88,7 @@ export const Server: React.FunctionComponent<Props> = ({
 
           <Extensions name="Server Extensions" item={server} />
 
-          {typeof server.hasTags === 'function' && server.hasTags() && (
+          {server.tags().length > 0 && (
             <div className="mt-2">
               <Tags tags={server.tags()} />
             </div>

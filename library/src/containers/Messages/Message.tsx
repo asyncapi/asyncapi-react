@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message as MessageType } from '@asyncapi/parser';
+import { MessageInterface } from '@asyncapi/parser';
 
 import { MessageExample } from './MessageExample';
 import {
@@ -19,7 +19,7 @@ import {
 } from '../../constants';
 
 interface Props {
-  message: MessageType;
+  message: MessageInterface;
   messageName?: string;
   index?: number | string;
   showExamples?: boolean;
@@ -59,7 +59,7 @@ export const Message: React.FunctionComponent<Props> = ({
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
             <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {message.uid()}
+              {message.id()}
             </span>
           </div>
 
@@ -155,7 +155,7 @@ export const Message: React.FunctionComponent<Props> = ({
             </div>
           )}
 
-          {message.hasBindings() && (
+          {message.bindings().length > 0 && (
             <div className="mt-2">
               <Bindings
                 name="Message specific information"
@@ -166,7 +166,7 @@ export const Message: React.FunctionComponent<Props> = ({
 
           <Extensions item={message} />
 
-          {message.hasTags() && (
+          {message.tags().length > 0 && (
             <div className="mt-2">
               <Tags tags={message.tags()} />
             </div>

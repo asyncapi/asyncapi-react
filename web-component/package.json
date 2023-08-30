@@ -48,13 +48,13 @@
     "@asyncapi/react-component": "^1.0.0-next.47",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "ts-loader": "^8.3.0",
     "web-react-components": "^1.4.2"
   },
   "devDependencies": {
+    "ts-loader": "9.4.4",
     "@types/react": "^16.9.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.12"
+    "webpack": "5.88.2",
+    "webpack-cli": "5.1.4"
   },
   "publishConfig": {
     "access": "public"

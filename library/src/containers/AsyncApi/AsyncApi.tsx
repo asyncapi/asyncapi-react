@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocument } from '@asyncapi/parser';
+import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import AsyncApiStandalone from './Standalone';
 
@@ -17,7 +17,7 @@ export interface AsyncApiProps {
 }
 
 interface AsyncAPIState {
-  asyncapi?: AsyncAPIDocument;
+  asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
 }
 

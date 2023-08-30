@@ -1,12 +1,12 @@
-import { AsyncAPIDocument } from '@asyncapi/parser';
+import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 export type PropsSchema =
   | string
   | FetchingSchemaInterface
-  | AsyncAPIDocument
+  | AsyncAPIDocumentInterface
   | object;
 
-export type NullableAsyncApi = AsyncAPIDocument | null;
+export type NullableAsyncApi = AsyncAPIDocumentInterface | null;
 
 export interface AsyncApiState {
   validatedSchema: NullableAsyncApi;
@@ -25,7 +25,7 @@ export interface FetchingSchemaInterface {
 }
 
 export interface ParserReturn {
-  asyncapi?: AsyncAPIDocument;
+  asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
 }
 
