@@ -314,9 +314,6 @@ export class SchemaHelpers {
   static getDependentSchemas(
     schema: SchemaInterface,
   ): SchemaInterface | undefined {
-    if (!schema) {
-      return;
-    }
     const dependencies = schema.dependencies();
     if (!dependencies) {
       return;
