@@ -17,6 +17,8 @@ import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import {
   EXTERAL_DOCUMENTATION_TEXT,
   PUBLISH_LABEL_DEFAULT_TEXT,
+  REPLIER_LABEL_DEFAULT_TEXT,
+  REQUEST_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
 import { PayloadType } from '../../types';
@@ -165,32 +167,53 @@ export const Operation: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationInfo: React.FunctionComponent<Props> = ({
+function getTypeInformation({
   type = PayloadType.PUBLISH,
-  operation,
-  channelName,
-  channel,
-}) => {
+}: {
+  type: PayloadType;
+}): { borderColor: string; typeLabel: string } {
   const config = useConfig();
+  if (type === PayloadType.SUBSCRIBE) {
+    return {
+      borderColor: 'border-green-600 text-green-600',
+      typeLabel: config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT,
+    };
+  }
+  if (type === PayloadType.REPLIER) {
+    return {
+      borderColor: 'border-orange-600 text-orange-600',
+      typeLabel: config.publishLabel || REPLIER_LABEL_DEFAULT_TEXT,
+    };
+  }
+  if (type === PayloadType.REQUESTER) {
+    return {
+      borderColor: 'border-red-600 text-red-600',
+      typeLabel: config.publishLabel || REQUEST_LABEL_DEFAULT_TEXT,
+    };
+  }
+  // type === PayloadType.PUBLISH
+  return {
+    borderColor: 'border-blue-600 text-blue-500',
+    typeLabel: config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT,
+  };
+}
+
+export const OperationInfo: React.FunctionComponent<Props> = props => {
+  const { type = PayloadType.PUBLISH, operation, channelName, channel } = props;
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
+  const { borderColor, typeLabel } = getTypeInformation({ type });
 
   return (
     <>
       <div className="mb-4">
         <h3>
           <span
-            className={`font-mono border uppercase p-1 rounded mr-2 ${
-              type === PayloadType.PUBLISH
-                ? 'border-blue-600 text-blue-500'
-                : 'border-green-600 text-green-600'
-            }`}
+            className={`font-mono border uppercase p-1 rounded mr-2 ${borderColor}`}
             title={type}
           >
-            {type === PayloadType.PUBLISH
-              ? config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT
-              : config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT}
+            {typeLabel}
           </span>{' '}
           <span className="font-mono text-base">{channelName}</span>
         </h3>
@@ -235,6 +258,122 @@ export const OperationInfo: React.FunctionComponent<Props> = ({
           </div>
         </div>
       )}
+
+      <OperationReplyInfo {...props} />
+    </>
+  );
+};
+
+export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
+  const { type = PayloadType.PUBLISH, operation } = props;
+  if (type !== PayloadType.REPLIER && type !== PayloadType.REQUESTER)
+    return <></>;
+  const reply = operation.reply();
+  if (reply === undefined) return <></>;
+  const { typeLabel } = getTypeInformation({ type });
+  const replyMessages = reply.messages();
+  const explicitChannel = reply.channel();
+
+  return (
+    <>
+      <div className="mb-4">
+        <h3>
+          <span
+            className={`font-mono border uppercase p-1 rounded mr-2`}
+            title={type}
+          >
+            {typeLabel} information
+          </span>
+        </h3>
+      </div>
+
+      {explicitChannel && (
+        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+          <div className="text-sm text-gray-700">
+            {typeLabel} should be done on channel
+            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+              {explicitChannel.id()}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="w-full mt-4">
+        {replyMessages.length > 1 ? (
+          <div className="mt-2">
+            <p className="px-8">
+              {typeLabel} should be with <strong>one of</strong> the following
+              messages:
+            </p>
+            <ul>
+              {replyMessages.all().map((msg, idx) => (
+                <li className="mt-4" key={idx}>
+                  <Message message={msg} index={idx} showExamples={true} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="mt-2">
+            <p className="px-8">
+              {typeLabel} should be with the following message:
+            </p>
+            <div className="mt-2">
+              <Message message={replyMessages.all()[0]} showExamples={true} />
+            </div>
+          </div>
+        )}
+      </div>
+      <OperationReplyAddressInfo {...props} />
+
+      <Extensions name="Operation Reply Extensions" item={reply} />
+    </>
+  );
+};
+
+export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
+  type = PayloadType.PUBLISH,
+  operation,
+}) => {
+  if (type !== PayloadType.REPLIER && type !== PayloadType.REQUESTER)
+    return <></>;
+  const reply = operation.reply();
+  if (reply === undefined || !reply.hasAddress()) return <></>;
+  const { typeLabel } = getTypeInformation({ type });
+  const replyAddress = reply.address()!;
+  const replyAddressLocation = replyAddress.location();
+
+  return (
+    <>
+      <div className="mb-4">
+        <h3>
+          <span
+            className={`font-mono border uppercase p-1 rounded mr-2`}
+            title={type}
+          >
+            Operation {typeLabel} address information
+          </span>
+        </h3>
+      </div>
+
+      {replyAddress.hasDescription() && (
+        <div className="mt-2">
+          <Markdown>{replyAddress.description()}</Markdown>
+        </div>
+      )}
+
+      {replyAddressLocation && (
+        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
+          <div className="text-sm text-gray-700">
+            Operation {typeLabel} address location
+            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+              {replyAddressLocation}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <Extensions name="Operation Reply Address Extensions" item={reply} />
     </>
   );
 };

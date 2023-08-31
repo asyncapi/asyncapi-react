@@ -289,6 +289,9 @@ export class SchemaHelpers {
     propertyName: string,
     schema: SchemaInterface,
   ): string[] | undefined {
+    if (!schema) {
+      return;
+    }
     const dependentRequired: string[] = [];
     const dependencies = schema.dependencies();
     if (!dependencies) {
@@ -311,6 +314,9 @@ export class SchemaHelpers {
   static getDependentSchemas(
     schema: SchemaInterface,
   ): SchemaInterface | undefined {
+    if (!schema) {
+      return;
+    }
     const dependencies = schema.dependencies();
     if (!dependencies) {
       return;

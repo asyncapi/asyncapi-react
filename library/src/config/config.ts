@@ -6,6 +6,8 @@ export interface ConfigInterface {
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;
+  requestLabel?: string;
+  replyLabel?: string;
 }
 
 export interface ShowConfig {

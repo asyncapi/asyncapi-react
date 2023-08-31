@@ -9,6 +9,19 @@ import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 import { Schema } from '../Schema';
 
 describe('Schema component', () => {
+  test('should work with true schema', async () => {
+    const schema = true;
+    const schemaModel = new SchemaModel(schema as any);
+
+    render(<Schema schema={schemaModel} />);
+  });
+
+  test('should work with false schema', async () => {
+    const schema = false;
+    const schemaModel = new SchemaModel(schema as any);
+
+    render(<Schema schema={schemaModel} />);
+  });
   test('should work with circular references in schema', async () => {
     const schema = {
       type: 'object',

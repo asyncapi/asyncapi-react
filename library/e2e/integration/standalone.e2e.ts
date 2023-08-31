@@ -1,5 +1,6 @@
 describe('Standalone bundle', () => {
   testSuite('With parser', 'e2e/sites/standalone.html');
+  testSuite('With parser for v3', 'e2e/sites/standalone-v3.html');
   testSuite('Without parser', 'e2e/sites/standalone-without-parser.html');
 
   function testSuite(testName: string, site: string) {
