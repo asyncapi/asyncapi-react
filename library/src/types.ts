@@ -32,8 +32,6 @@ export interface ParserReturn {
 export enum PayloadType {
   PUBLISH = 'publish',
   SUBSCRIBE = 'subscribe',
-  REQUESTER = 'requester',
-  REPLIER = 'replier',
 }
 
 export interface MessageExample {
