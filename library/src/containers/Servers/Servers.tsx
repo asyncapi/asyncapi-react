@@ -25,18 +25,25 @@ export const Servers: React.FunctionComponent = () => {
         {SERVERS_TEXT}
       </h2>
       <ul>
-        {Object.entries(servers).map(([serverName, server]) => (
-          <li
-            className="mb-4"
-            key={serverName}
-            id={`${CommonHelpers.getIdentifier(
-              `server-${serverName}`,
-              config,
-            )}`}
-          >
-            <Server serverName={serverName} server={server} key={serverName} />
-          </li>
-        ))}
+        {servers.map(server => {
+          const serverName = server.id();
+          return (
+            <li
+              className="mb-4"
+              key={serverName}
+              id={`${CommonHelpers.getIdentifier(
+                `server-${serverName}`,
+                config,
+              )}`}
+            >
+              <Server
+                serverName={serverName}
+                server={server}
+                key={serverName}
+              />
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
