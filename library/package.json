@@ -79,8 +79,8 @@
     "use-resize-observer": "^8.0.0"
   },
   "peerDependencies": {
-    "react": ">=16.9.2",
-    "react-dom": ">=16.9.2"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
@@ -105,8 +105,8 @@
     "postcss-cli": "^8.3.1",
     "postcss-import": "^14.0.2",
     "postcss-scopify": "^0.1.9",
-    "react": "^16.9.2",
-    "react-dom": "^16.9.2",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "tailwindcss": "^2.1.1",
     "ts-jest": "^26.4.1",
     "ts-loader": "9.4.4",
