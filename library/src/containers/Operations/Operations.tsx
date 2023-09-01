@@ -7,7 +7,9 @@ import { OPERATIONS_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
 
 export const Operations: React.FunctionComponent = () => {
-  const operations = useSpec().operations();
+  const operations = useSpec()
+    .operations()
+    .all();
   const config = useConfig();
 
   if (!Object.keys(operations).length) {
@@ -15,7 +17,9 @@ export const Operations: React.FunctionComponent = () => {
   }
 
   const operationsList: React.ReactNodeArray = [];
-  Object.entries(operations).forEach(([operationName, operation]) => {
+  operations.forEach(operation => {
+    const channel = operation.channels()[0];
+    const operationName = channel.address() ?? '';
     if (operation.isSend()) {
       if (operation.reply() !== undefined) {
         operationsList.push(
@@ -31,7 +35,7 @@ export const Operations: React.FunctionComponent = () => {
               type={PayloadType.REQUESTER}
               operation={operation}
               channelName={operationName}
-              channel={operation.channels()[0]}
+              channel={channel}
             />
           </li>,
         );
@@ -49,7 +53,7 @@ export const Operations: React.FunctionComponent = () => {
               type={PayloadType.PUBLISH}
               operation={operation}
               channelName={operationName}
-              channel={operation.channels()[0]}
+              channel={channel}
             />
           </li>,
         );
@@ -70,7 +74,7 @@ export const Operations: React.FunctionComponent = () => {
               type={PayloadType.REPLIER}
               operation={operation}
               channelName={operationName}
-              channel={operation.channels()[0]}
+              channel={channel}
             />
           </li>,
         );
@@ -88,7 +92,7 @@ export const Operations: React.FunctionComponent = () => {
               type={PayloadType.SUBSCRIBE}
               operation={operation}
               channelName={operationName}
-              channel={operation.channels()[0]}
+              channel={channel}
             />
           </li>,
         );

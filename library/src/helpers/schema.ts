@@ -201,21 +201,19 @@ export class SchemaHelpers {
   static serverVariablesToSchema(
     urlVariables?: ServerVariablesInterface,
   ): SchemaInterface | undefined {
-    if (!urlVariables || !Object.keys(urlVariables).length) {
+    if (!urlVariables || urlVariables.length === 0) {
       return undefined;
     }
+    const obj = {};
+    urlVariables.all().forEach(variable => {
+      obj[variable.id()] = Object.assign({}, variable.json() || {});
+      obj[variable.id()].type = 'string';
+    });
 
     const json = {
       type: 'object',
-      properties: Object.entries(urlVariables).reduce(
-        (obj, [variableName, variable]) => {
-          obj[variableName] = Object.assign({}, variable.json() || {});
-          obj[variableName].type = 'string';
-          return obj;
-        },
-        {},
-      ),
-      required: Object.keys(urlVariables),
+      properties: obj,
+      required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
     return new SchemaClass(json as any);
@@ -224,27 +222,25 @@ export class SchemaHelpers {
   static parametersToSchema(
     parameters?: ChannelParametersInterface,
   ): SchemaInterface | undefined {
-    if (!parameters || !Object.keys(parameters).length) {
+    if (!parameters || parameters.isEmpty()) {
       return undefined;
     }
+    const obj = {};
+    parameters.all().forEach(parameter => {
+      const parameterSchema = parameter.schema();
+      obj[parameter.id()] = Object.assign({}, parameterSchema?.json() ?? {});
+      obj[parameter.id()].description = parameter.hasDescription()
+        ? parameter.description()
+        : undefined;
+      obj[parameter.id()][this.extParameterLocation] = parameter.hasLocation()
+        ? parameter.location()
+        : undefined;
+    });
 
     const json = {
       type: 'object',
-      properties: Object.entries(parameters).reduce(
-        (obj, [paramaterName, parameter]) => {
-          const parameterSchema = parameter.schema();
-          obj[paramaterName] = Object.assign(
-            {},
-            parameterSchema ? parameterSchema.json() : {},
-          );
-          obj[paramaterName].description =
-            parameter.description() || obj[paramaterName].description;
-          obj[paramaterName][this.extParameterLocation] = parameter.location();
-          return obj;
-        },
-        {},
-      ),
-      required: Object.keys(parameters),
+      properties: obj,
+      required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
     return new SchemaClass(json as any);
@@ -267,7 +263,7 @@ export class SchemaHelpers {
     }
     const extensions = value.extensions() as ExtensionsInterface;
     const filteredExtensions = {};
-    for (const ext of Object.values(extensions.all())) {
+    for (const ext of extensions.all()) {
       const extType = ext as ExtensionInterface;
       if (
         !extType.id().startsWith('x-parser-') &&
@@ -289,9 +285,6 @@ export class SchemaHelpers {
     propertyName: string,
     schema: SchemaInterface,
   ): string[] | undefined {
-    if (!schema) {
-      return;
-    }
     const dependentRequired: string[] = [];
     const dependencies = schema.dependencies();
     if (!dependencies) {

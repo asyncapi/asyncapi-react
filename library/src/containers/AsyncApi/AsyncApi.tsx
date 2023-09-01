@@ -34,7 +34,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   async componentDidMount() {
     if (this.props.schema) {
       const { schema, config } = this.props;
-      this.parseSchema(schema, config && config.parserOptions);
+      await this.parseSchema(schema, config && config.parserOptions);
     }
   }
 
@@ -44,7 +44,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     if (oldSchema !== newSchema) {
       const { config } = this.props;
-      this.parseSchema(newSchema, config && config.parserOptions);
+      await this.parseSchema(newSchema, config && config.parserOptions);
     }
   }
 

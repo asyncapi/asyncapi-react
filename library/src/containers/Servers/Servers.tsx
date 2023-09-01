@@ -7,7 +7,9 @@ import { CommonHelpers } from '../../helpers';
 import { SERVERS_TEXT } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {
-  const servers = useSpec().servers();
+  const servers = useSpec()
+    .servers()
+    .all();
   const config = useConfig();
 
   if (!Object.keys(servers).length) {

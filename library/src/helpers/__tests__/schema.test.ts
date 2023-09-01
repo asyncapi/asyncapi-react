@@ -1,10 +1,11 @@
+import { ParameterObject } from '@asyncapi/parser/esm/spec-types/v2';
 import { SchemaHelpers, SchemaCustomTypes } from '../schema';
 import {
   SchemaV2 as Schema,
   ServerVariableV2 as ServerVariable,
   ChannelParameterV2 as ChannelParameter,
-  ServerVariablesInterface,
-  ChannelParametersInterface,
+  ChannelParametersV2 as ChannelParameters,
+  ServerVariablesV2,
 } from '@asyncapi/parser';
 
 describe('SchemaHelpers', () => {
@@ -417,29 +418,35 @@ describe('SchemaHelpers', () => {
 
   describe('.serverVariablesToSchema', () => {
     test('should transform variables to schema', () => {
-      const variables = ({
-        foo: new ServerVariable({ enum: ['foo', 'bar'], default: 'foo' }),
-        bar: new ServerVariable({
-          enum: ['foo', 'bar'],
-          default: 'bar',
-          examples: ['foo', 'bar'],
-          description: 'Some description',
-        }),
-      } as unknown) as ServerVariablesInterface;
+      const variables = new ServerVariablesV2([
+        new ServerVariable(
+          { enum: ['foo', 'bar'], default: 'foo' },
+          { asyncapi: {} as any, pointer: '', id: 'foo' },
+        ),
+        new ServerVariable(
+          {
+            enum: ['foo', 'bar'],
+            default: 'bar',
+            examples: ['foo', 'bar'],
+            description: 'Some description',
+          },
+          { asyncapi: {} as any, pointer: '', id: 'bar' },
+        ),
+      ]);
       const schema = new Schema({
         type: 'object',
         properties: {
-          foo: {
-            type: 'string',
-            default: 'foo',
-            enum: ['foo', 'bar'],
-          },
           bar: {
             type: 'string',
             default: 'bar',
             enum: ['foo', 'bar'],
             examples: ['foo', 'bar'],
             description: 'Some description',
+          },
+          foo: {
+            type: 'string',
+            default: 'foo',
+            enum: ['foo', 'bar'],
           },
         },
         required: ['foo', 'bar'],
@@ -451,15 +458,28 @@ describe('SchemaHelpers', () => {
   });
 
   describe('.parametersToSchema', () => {
+    function createParameter(parameters: Record<string, any>) {
+      const params = [];
+      for (const [paramProperty, param] of Object.entries(parameters)) {
+        params.push(
+          new ChannelParameter(param as ParameterObject, {
+            asyncapi: {} as any,
+            pointer: '',
+            id: paramProperty,
+          }),
+        );
+      }
+      return new ChannelParameters(params);
+    }
     test('should transform parameters to schema', () => {
-      const parameters = ({
-        foo: new ChannelParameter({ schema: { type: 'string' } }),
-        bar: new ChannelParameter({
+      const parameters = createParameter({
+        foo: { schema: { type: 'string' } },
+        bar: {
           schema: { type: 'string' },
           location: '$message.payload#/user/id',
           description: 'Some description',
-        }),
-      } as unknown) as ChannelParametersInterface;
+        },
+      });
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -478,18 +498,19 @@ describe('SchemaHelpers', () => {
         'x-schema-private-render-additional-info': false,
       });
       const result = SchemaHelpers.parametersToSchema(parameters);
-      expect(result).toEqual(schema);
+
+      expect(result?.json()).toEqual(schema.json());
     });
 
     test('should handle empty schema of parameter', () => {
-      const parameters = ({
-        foo: new ChannelParameter({
+      const parameters = createParameter({
+        foo: {
           description: 'Some description',
-        }),
-        bar: new ChannelParameter({
+        },
+        bar: {
           location: '$message.payload#/user/id',
-        }),
-      } as unknown) as ChannelParametersInterface;
+        },
+      });
       const schema = new Schema({
         type: 'object',
         properties: {
@@ -506,7 +527,7 @@ describe('SchemaHelpers', () => {
         'x-schema-private-render-additional-info': false,
       });
       const result = SchemaHelpers.parametersToSchema(parameters);
-      expect(result).toEqual(schema);
+      expect(result?.json()).toEqual(schema.json());
     });
   });
 

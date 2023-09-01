@@ -1,10 +1,10 @@
 import React from 'react';
-import { TagInterface } from '@asyncapi/parser';
+import { TagsInterface } from '@asyncapi/parser';
 
 import { Tag } from './Tag';
 
 interface Props {
-  tags?: TagInterface[];
+  tags?: TagsInterface;
 }
 
 export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
@@ -14,7 +14,7 @@ export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
 
   return (
     <ul className="flex flex-wrap leading-normal">
-      {tags.map(tag => (
+      {tags.all().map(tag => (
         <li className="inline-block mt-2 mr-2" key={tag.name()}>
           <Tag tag={tag} />
         </li>

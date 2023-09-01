@@ -39,7 +39,8 @@ export const Operation: React.FunctionComponent<Props> = props => {
   }
 
   // check typeof as fallback for older version than `2.2.0`
-  const servers = typeof channel.servers === 'function' && channel.servers();
+  const servers =
+    typeof channel.servers === 'function' && channel.servers().all();
   // check typeof as fallback for older version than `2.4.0`
   const security =
     typeof operation.security === 'function' && operation.security();
@@ -61,12 +62,12 @@ export const Operation: React.FunctionComponent<Props> = props => {
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
-                      'server-' + server,
+                      'server-' + server.id(),
                       config,
                     )}`}
                     className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
                   >
-                    <span className="underline">{server}</span>
+                    <span className="underline">{server.id()}</span>
                   </a>
                 </li>
               ))}
@@ -147,18 +148,24 @@ export const Operation: React.FunctionComponent<Props> = props => {
               Accepts <strong>one of</strong> the following messages:
             </p>
             <ul>
-              {operation.messages().map((msg, idx) => (
-                <li className="mt-4" key={idx}>
-                  <Message message={msg} index={idx} showExamples={true} />
-                </li>
-              ))}
+              {operation
+                .messages()
+                .all()
+                .map((msg, idx) => (
+                  <li className="mt-4" key={idx}>
+                    <Message message={msg} index={idx} showExamples={true} />
+                  </li>
+                ))}
             </ul>
           </div>
         ) : (
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message message={operation.messages()[0]} showExamples={true} />
+              <Message
+                message={operation.messages().all()[0]}
+                showExamples={true}
+              />
             </div>
           </div>
         )}

@@ -10,7 +10,11 @@ export const Schemas: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
   const schemas =
-    !asyncapi.components().isEmpty() && asyncapi.components().schemas();
+    !asyncapi.components().isEmpty() &&
+    asyncapi
+      .components()
+      .schemas()
+      .all();
 
   if (!schemas || Object.keys(schemas).length === 0) {
     return null;
