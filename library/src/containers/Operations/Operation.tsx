@@ -17,8 +17,6 @@ import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import {
   EXTERAL_DOCUMENTATION_TEXT,
   PUBLISH_LABEL_DEFAULT_TEXT,
-  REPLIER_LABEL_DEFAULT_TEXT,
-  REQUEST_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
 import { PayloadType } from '../../types';
@@ -186,18 +184,6 @@ function getTypeInformation({
       typeLabel: config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT,
     };
   }
-  if (type === PayloadType.REPLIER) {
-    return {
-      borderColor: 'border-orange-600 text-orange-600',
-      typeLabel: config.publishLabel || REPLIER_LABEL_DEFAULT_TEXT,
-    };
-  }
-  if (type === PayloadType.REQUESTER) {
-    return {
-      borderColor: 'border-red-600 text-red-600',
-      typeLabel: config.publishLabel || REQUEST_LABEL_DEFAULT_TEXT,
-    };
-  }
   // type === PayloadType.PUBLISH
   return {
     borderColor: 'border-blue-600 text-blue-500',
@@ -265,122 +251,6 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
           </div>
         </div>
       )}
-
-      <OperationReplyInfo {...props} />
-    </>
-  );
-};
-
-export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
-  const { type = PayloadType.PUBLISH, operation } = props;
-  if (type !== PayloadType.REPLIER && type !== PayloadType.REQUESTER)
-    return <></>;
-  const reply = operation.reply();
-  if (reply === undefined) return <></>;
-  const { typeLabel } = getTypeInformation({ type });
-  const replyMessages = reply.messages();
-  const explicitChannel = reply.channel();
-
-  return (
-    <>
-      <div className="mb-4">
-        <h3>
-          <span
-            className={`font-mono border uppercase p-1 rounded mr-2`}
-            title={type}
-          >
-            {typeLabel} information
-          </span>
-        </h3>
-      </div>
-
-      {explicitChannel && (
-        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-          <div className="text-sm text-gray-700">
-            {typeLabel} should be done on channel
-            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-              {explicitChannel.id()}
-            </span>
-          </div>
-        </div>
-      )}
-
-      <div className="w-full mt-4">
-        {replyMessages.length > 1 ? (
-          <div className="mt-2">
-            <p className="px-8">
-              {typeLabel} should be with <strong>one of</strong> the following
-              messages:
-            </p>
-            <ul>
-              {replyMessages.all().map((msg, idx) => (
-                <li className="mt-4" key={idx}>
-                  <Message message={msg} index={idx} showExamples={true} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <div className="mt-2">
-            <p className="px-8">
-              {typeLabel} should be with the following message:
-            </p>
-            <div className="mt-2">
-              <Message message={replyMessages.all()[0]} showExamples={true} />
-            </div>
-          </div>
-        )}
-      </div>
-      <OperationReplyAddressInfo {...props} />
-
-      <Extensions name="Operation Reply Extensions" item={reply} />
-    </>
-  );
-};
-
-export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
-  type = PayloadType.PUBLISH,
-  operation,
-}) => {
-  if (type !== PayloadType.REPLIER && type !== PayloadType.REQUESTER)
-    return <></>;
-  const reply = operation.reply();
-  if (reply === undefined || !reply.hasAddress()) return <></>;
-  const { typeLabel } = getTypeInformation({ type });
-  const replyAddress = reply.address()!;
-  const replyAddressLocation = replyAddress.location();
-
-  return (
-    <>
-      <div className="mb-4">
-        <h3>
-          <span
-            className={`font-mono border uppercase p-1 rounded mr-2`}
-            title={type}
-          >
-            Operation {typeLabel} address information
-          </span>
-        </h3>
-      </div>
-
-      {replyAddress.hasDescription() && (
-        <div className="mt-2">
-          <Markdown>{replyAddress.description()}</Markdown>
-        </div>
-      )}
-
-      {replyAddressLocation && (
-        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-          <div className="text-sm text-gray-700">
-            Operation {typeLabel} address location
-            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-              {replyAddressLocation}
-            </span>
-          </div>
-        </div>
-      )}
-
-      <Extensions name="Operation Reply Address Extensions" item={reply} />
     </>
   );
 };

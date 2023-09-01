@@ -21,82 +21,42 @@ export const Operations: React.FunctionComponent = () => {
     const channel = operation.channels()[0];
     const operationName = channel.address() ?? '';
     if (operation.isSend()) {
-      if (operation.reply() !== undefined) {
-        operationsList.push(
-          <li
-            className="mb-12"
-            key={`req-${operationName}`}
-            id={CommonHelpers.getIdentifier(
-              `operation-${PayloadType.REQUESTER}-${operationName}`,
-              config,
-            )}
-          >
-            <Operation
-              type={PayloadType.REQUESTER}
-              operation={operation}
-              channelName={operationName}
-              channel={channel}
-            />
-          </li>,
-        );
-      } else {
-        operationsList.push(
-          <li
-            className="mb-12"
-            key={`pub-${operationName}`}
-            id={CommonHelpers.getIdentifier(
-              `operation-${PayloadType.PUBLISH}-${operationName}`,
-              config,
-            )}
-          >
-            <Operation
-              type={PayloadType.PUBLISH}
-              operation={operation}
-              channelName={operationName}
-              channel={channel}
-            />
-          </li>,
-        );
-      }
+      operationsList.push(
+        <li
+          className="mb-12"
+          key={`pub-${operationName}`}
+          id={CommonHelpers.getIdentifier(
+            `operation-${PayloadType.PUBLISH}-${operationName}`,
+            config,
+          )}
+        >
+          <Operation
+            type={PayloadType.PUBLISH}
+            operation={operation}
+            channelName={operationName}
+            channel={channel}
+          />
+        </li>,
+      );
     }
     if (operation.isReceive()) {
-      if (operation.reply() !== undefined) {
-        operationsList.push(
-          <li
-            className="mb-12"
-            key={`replier-${operationName}`}
-            id={CommonHelpers.getIdentifier(
-              `operation-${PayloadType.REPLIER}-${operationName}`,
-              config,
-            )}
-          >
-            <Operation
-              type={PayloadType.REPLIER}
-              operation={operation}
-              channelName={operationName}
-              channel={channel}
-            />
-          </li>,
-        );
-      } else {
-        operationsList.push(
-          <li
-            className="mb-12"
-            key={`sub-${operationName}`}
-            id={CommonHelpers.getIdentifier(
-              `operation-${PayloadType.SUBSCRIBE}-${operationName}`,
-              config,
-            )}
-          >
-            <Operation
-              type={PayloadType.SUBSCRIBE}
-              operation={operation}
-              channelName={operationName}
-              channel={channel}
-            />
-          </li>,
-        );
-      }
+      operationsList.push(
+        <li
+          className="mb-12"
+          key={`sub-${operationName}`}
+          id={CommonHelpers.getIdentifier(
+            `operation-${PayloadType.SUBSCRIBE}-${operationName}`,
+            config,
+          )}
+        >
+          <Operation
+            type={PayloadType.SUBSCRIBE}
+            operation={operation}
+            channelName={operationName}
+            channel={channel}
+          />
+        </li>,
+      );
     }
   });
 
