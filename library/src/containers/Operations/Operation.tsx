@@ -182,13 +182,13 @@ function getTypeInformation({
   if (type === PayloadType.SUBSCRIBE) {
     return {
       borderColor: 'border-green-600 text-green-600',
-      typeLabel: config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT,
+      typeLabel: config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
     };
   }
   // type === PayloadType.PUBLISH
   return {
     borderColor: 'border-blue-600 text-blue-500',
-    typeLabel: config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT,
+    typeLabel: config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
   };
 }
 
