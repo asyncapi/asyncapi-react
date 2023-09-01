@@ -20,7 +20,7 @@ import {
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
 import { PayloadType } from '../../types';
-
+import { ConfigInterface } from '../../config/config';
 interface Props {
   type: PayloadType;
   operation: OperationInterface;
@@ -174,10 +174,11 @@ export const Operation: React.FunctionComponent<Props> = props => {
 
 function getTypeInformation({
   type = PayloadType.PUBLISH,
+  config,
 }: {
   type: PayloadType;
+  config: ConfigInterface;
 }): { borderColor: string; typeLabel: string } {
-  const config = useConfig();
   if (type === PayloadType.SUBSCRIBE) {
     return {
       borderColor: 'border-green-600 text-green-600',
@@ -193,10 +194,11 @@ function getTypeInformation({
 
 export const OperationInfo: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.PUBLISH, operation, channelName, channel } = props;
+  const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
-  const { borderColor, typeLabel } = getTypeInformation({ type });
+  const { borderColor, typeLabel } = getTypeInformation({ type, config });
 
   return (
     <>

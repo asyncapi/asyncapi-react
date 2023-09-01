@@ -11,7 +11,7 @@ import {
 
 import { Bindings } from '../Bindings';
 function createBinding(bindingObj: Record<string, any>) {
-  let bindings: BindingSchema[] = [];
+  const bindings: BindingSchema[] = [];
   for (const [protocol, binding] of Object.entries(bindingObj)) {
     const obj = {};
     obj[protocol] = binding;
@@ -19,7 +19,7 @@ function createBinding(bindingObj: Record<string, any>) {
       new BindingSchema(binding, {
         asyncapi: {} as any,
         pointer: '',
-        protocol: protocol,
+        protocol,
       }),
     );
   }
