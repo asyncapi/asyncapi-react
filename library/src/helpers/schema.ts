@@ -228,7 +228,7 @@ export class SchemaHelpers {
     const obj = {};
     parameters.all().forEach(parameter => {
       const parameterSchema = parameter.schema();
-      obj[parameter.id()] = Object.assign({}, parameterSchema?.json() ?? {});
+      obj[parameter.id()] = { ...(parameterSchema?.json() ?? {}) };
       obj[parameter.id()].description = parameter.hasDescription()
         ? parameter.description()
         : undefined;
