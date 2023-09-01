@@ -206,7 +206,7 @@ export class SchemaHelpers {
     }
     const obj = {};
     urlVariables.all().forEach(variable => {
-      obj[variable.id()] = Object.assign({}, variable.json() || {});
+      obj[variable.id()] = { ...(variable.json() || {}) };
       obj[variable.id()].type = 'string';
     });
 
@@ -326,7 +326,7 @@ export class SchemaHelpers {
       type: 'object',
       properties: Object.entries(records).reduce(
         (obj, [propertyName, propertySchema]) => {
-          obj[propertyName] = Object.assign({}, propertySchema.json());
+          obj[propertyName] = { ...(propertySchema.json() || {}) };
           return obj;
         },
         {},
