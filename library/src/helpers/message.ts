@@ -1,4 +1,4 @@
-import { Message } from '@asyncapi/parser';
+import { MessageInterface } from '@asyncapi/parser';
 // @ts-ignore
 import { sample } from 'openapi-sampler';
 
@@ -28,18 +28,21 @@ export class MessageHelpers {
     return schema;
   }
 
-  static getPayloadExamples(msg: Message): MessageExample[] | undefined {
-    const examples = msg.examples();
-    if (Array.isArray(examples) && examples.some(e => e.payload)) {
+  static getPayloadExamples(
+    msg: MessageInterface,
+  ): MessageExample[] | undefined {
+    const examples = msg.examples().all();
+
+    if (examples.some(e => e.hasPayload())) {
       const messageExamples = examples
         .flatMap(e => {
-          if (!e.payload) {
+          if (!e.payload()) {
             return;
           }
           return {
-            name: e.name,
-            summary: e.summary,
-            example: e.payload,
+            name: e.name(),
+            summary: e.summary(),
+            example: e.payload(),
           };
         })
         .filter(Boolean) as MessageExample[];
@@ -51,24 +54,26 @@ export class MessageHelpers {
 
     const payload = msg.payload();
     if (payload && payload.examples()) {
-      return payload.examples().map(example => ({ example }));
+      return payload.examples()?.map(example => ({ example }));
     }
 
     return;
   }
 
-  static getHeadersExamples(msg: Message): MessageExample[] | undefined {
-    const examples = msg.examples();
-    if (Array.isArray(examples) && examples.some(e => e.headers)) {
+  static getHeadersExamples(
+    msg: MessageInterface,
+  ): MessageExample[] | undefined {
+    const examples = msg.examples().all();
+    if (examples.some(e => e.hasHeaders())) {
       const messageExamples = examples
         .flatMap(e => {
-          if (!e.headers) {
+          if (!e.hasHeaders()) {
             return;
           }
           return {
-            name: e.name,
-            summary: e.summary,
-            example: e.headers,
+            name: e.name(),
+            summary: e.summary(),
+            example: e.headers(),
           };
         })
         .filter(Boolean) as MessageExample[];
@@ -80,7 +85,7 @@ export class MessageHelpers {
 
     const headers = msg.headers();
     if (headers && headers.examples()) {
-      return headers.examples().map(example => ({ example }));
+      return headers.examples()?.map(example => ({ example }));
     }
 
     return;

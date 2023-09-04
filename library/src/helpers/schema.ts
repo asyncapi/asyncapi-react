@@ -1,6 +1,11 @@
-import { ChannelParameter, ServerVariable, Schema } from '@asyncapi/parser';
-// @ts-ignore
-import SchemaClass from '@asyncapi/parser/lib/models/schema';
+import {
+  SchemaInterface,
+  ChannelParametersInterface,
+  ServerVariablesInterface,
+  SchemaV2 as SchemaClass,
+  ExtensionInterface,
+  ExtensionsInterface,
+} from '@asyncapi/parser';
 
 export enum SchemaCustomTypes {
   // for `true` and `{}` schemas
@@ -55,12 +60,11 @@ const jsonSchemaKeywordTypes: Record<string, string> = {
 const jsonSchemaKeywords = Object.keys(jsonSchemaKeywordTypes);
 
 export class SchemaHelpers {
-  static extRenderType = 'x-schema-private-render-type';
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
   static extRawValue = 'x-schema-private-raw-value';
   static extParameterLocation = 'x-schema-private-parameter-location';
 
-  static toSchemaType(schema: Schema): string {
+  static toSchemaType(schema: SchemaInterface): string {
     if (!schema || typeof schema.json !== 'function') {
       return SchemaCustomTypes.UNKNOWN;
     }
@@ -111,7 +115,7 @@ export class SchemaHelpers {
     return JSON.stringify(value);
   }
 
-  static humanizeConstraints(schema: Schema): string[] {
+  static humanizeConstraints(schema: SchemaInterface): string[] {
     const constraints: string[] = [];
 
     // related to number/integer
@@ -165,7 +169,7 @@ export class SchemaHelpers {
     return constraints;
   }
 
-  static isExpandable(schema: Schema): boolean {
+  static isExpandable(schema: SchemaInterface): boolean {
     let type = this.inferType(schema);
     type = Array.isArray(type) ? type : [type];
     if (type.includes('object') || type.includes('array')) {
@@ -176,7 +180,7 @@ export class SchemaHelpers {
       schema.oneOf() ||
       schema.anyOf() ||
       schema.allOf() ||
-      Object.keys(schema.properties()).length ||
+      Object.keys(schema.properties() || {}).length > 0 ||
       schema.items() ||
       schema.not() ||
       schema.if() ||
@@ -195,8 +199,8 @@ export class SchemaHelpers {
   }
 
   static serverVariablesToSchema(
-    urlVariables?: Record<string, ServerVariable>,
-  ): Schema | undefined {
+    urlVariables?: ServerVariablesInterface,
+  ): SchemaInterface | undefined {
     if (!urlVariables || !Object.keys(urlVariables).length) {
       return undefined;
     }
@@ -212,15 +216,14 @@ export class SchemaHelpers {
         {},
       ),
       required: Object.keys(urlVariables),
-      [this.extRenderType]: false,
       [this.extRenderAdditionalInfo]: false,
     };
-    return new SchemaClass(json);
+    return new SchemaClass(json as any);
   }
 
   static parametersToSchema(
-    parameters?: Record<string, ChannelParameter>,
-  ): Schema | undefined {
+    parameters?: ChannelParametersInterface,
+  ): SchemaInterface | undefined {
     if (!parameters || !Object.keys(parameters).length) {
       return undefined;
     }
@@ -242,10 +245,9 @@ export class SchemaHelpers {
         {},
       ),
       required: Object.keys(parameters),
-      [this.extRenderType]: false,
       [this.extRenderAdditionalInfo]: false,
     };
-    return new SchemaClass(json);
+    return new SchemaClass(json as any);
   }
 
   static jsonToSchema(value: any): any {
@@ -263,18 +265,18 @@ export class SchemaHelpers {
     if (!value || typeof value.extensions !== 'function') {
       return;
     }
-    return Object.entries(value.extensions() || {}).reduce(
-      (obj, [extName, ext]) => {
-        if (
-          !extName.startsWith('x-parser-') &&
-          !extName.startsWith('x-schema-private-')
-        ) {
-          obj[extName] = ext;
-        }
-        return obj;
-      },
-      {},
-    );
+    const extensions = value.extensions() as ExtensionsInterface;
+    const filteredExtensions = {};
+    for (const ext of Object.values(extensions.all())) {
+      const extType = ext as ExtensionInterface;
+      if (
+        !extType.id().startsWith('x-parser-') &&
+        !extType.id().startsWith('x-schema-private-')
+      ) {
+        filteredExtensions[extType.id()] = extType.value();
+      }
+    }
+    return filteredExtensions;
   }
 
   /**
@@ -285,7 +287,7 @@ export class SchemaHelpers {
    */
   static getDependentRequired(
     propertyName: string,
-    schema: Schema,
+    schema: SchemaInterface,
   ): string[] | undefined {
     const dependentRequired: string[] = [];
     const dependencies = schema.dependencies();
@@ -306,13 +308,15 @@ export class SchemaHelpers {
    *
    * @param schema
    */
-  static getDependentSchemas(schema: Schema): Schema | undefined {
+  static getDependentSchemas(
+    schema: SchemaInterface,
+  ): SchemaInterface | undefined {
     const dependencies = schema.dependencies();
     if (!dependencies) {
       return;
     }
 
-    const records: Record<string, Schema> = {};
+    const records: Record<string, SchemaInterface> = {};
     for (const [prop, propSchema] of Object.entries(dependencies)) {
       if (typeof propSchema === 'object' && !Array.isArray(propSchema)) {
         records[prop] = propSchema;
@@ -331,13 +335,12 @@ export class SchemaHelpers {
         },
         {},
       ),
-      [this.extRenderType]: false,
       [this.extRenderAdditionalInfo]: false,
     };
-    return new SchemaClass(json);
+    return new SchemaClass(json as any);
   }
 
-  private static toType(type: string, schema: Schema): string {
+  private static toType(type: string, schema: SchemaInterface): string {
     if (schema.isCircular()) {
       return type;
     }
@@ -354,12 +357,15 @@ export class SchemaHelpers {
     return type;
   }
 
-  private static toItemsType(items: Schema[], schema: Schema): string {
+  private static toItemsType(
+    items: SchemaInterface[],
+    schema: SchemaInterface,
+  ): string {
     const types = items.map(item => this.toSchemaType(item)).join(', ');
-    const additionalItems = schema.additionalItems() as any;
-    if (additionalItems === undefined || additionalItems.json()) {
+    const additionalItems = schema.additionalItems();
+    if (additionalItems !== undefined && additionalItems !== false) {
       const additionalType =
-        additionalItems === undefined || additionalItems.json() === true
+        additionalItems === true
           ? SchemaCustomTypes.ANY
           : this.toSchemaType(additionalItems);
       return `tuple<${types ||
@@ -368,7 +374,7 @@ export class SchemaHelpers {
     return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
   }
 
-  private static toCombinedType(schema: Schema): string | undefined {
+  private static toCombinedType(schema: SchemaInterface): string | undefined {
     const oneOf = schema.oneOf();
     if (oneOf) {
       return 'oneOf';
@@ -382,7 +388,7 @@ export class SchemaHelpers {
     return;
   }
 
-  private static inferType(schema: Schema): string[] | string {
+  private static inferType(schema: SchemaInterface): string[] | string {
     let types = schema.type();
 
     if (types !== undefined) {
@@ -508,7 +514,6 @@ export class SchemaHelpers {
       return {
         type: 'array',
         items: value.map(v => this.jsonFieldToSchema(v)),
-        [this.extRenderType]: false,
         [this.extRenderAdditionalInfo]: false,
       };
     }
@@ -518,7 +523,6 @@ export class SchemaHelpers {
         obj[k] = this.jsonFieldToSchema(v);
         return obj;
       }, {}),
-      [this.extRenderType]: false,
       [this.extRenderAdditionalInfo]: false,
     };
   }

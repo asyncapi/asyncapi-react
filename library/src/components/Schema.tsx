@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Schema as SchemaType } from '@asyncapi/parser';
+import { SchemaInterface } from '@asyncapi/parser';
 
 import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
   schemaName?: React.ReactNode;
-  schema?: SchemaType;
+  schema?: SchemaInterface;
   required?: boolean;
   isPatternProperty?: boolean;
   isProperty?: boolean;
@@ -58,48 +58,19 @@ export const Schema: React.FunctionComponent<Props> = ({
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const externalDocs = schema.externalDocs();
 
-  const renderType = schema.ext(SchemaHelpers.extRenderType) !== false;
-  const rawValue = schema.ext(SchemaHelpers.extRawValue) === true;
-  const parameterLocation = schema.ext(SchemaHelpers.extParameterLocation);
+  const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
+  const rawValue = rawValueExt?.value() === true;
+
+  const parameterLocationExt = schema
+    .extensions()
+    .get(SchemaHelpers.extParameterLocation);
+  const parameterLocation = parameterLocationExt?.value() === true;
+
+  const schemaType = SchemaHelpers.toSchemaType(schema);
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
-  let schemaType = SchemaHelpers.toSchemaType(schema);
-  isCircular =
-    isCircular ||
-    schema.isCircular() ||
-    schema.ext('x-parser-circular') ||
-    false;
-  const uid = schema.uid();
-
-  const schemaItems = schema.items();
-  if (schemaItems && !Array.isArray(schemaItems)) {
-    /**
-     * fallback for older logic for circular references:
-     *
-     * checking uid for circular items
-     * `x-parser-circular` extension is added to every schema which has circular `items` field,
-     * so we must check that `items` is schema (not array of schemas) and infer UID of schema to display which schema is circular (by the name of schema)
-     */
-    isCircular =
-      isCircular ||
-      schemaItems.isCircular() ||
-      schemaItems.ext('x-parser-circular') ||
-      false;
-    if (
-      isCircular &&
-      typeof (schemaItems as any).circularSchema === 'function'
-    ) {
-      schemaType = SchemaHelpers.toSchemaType(
-        (schemaItems as any).circularSchema(),
-      );
-    }
-  } else if (
-    isCircular &&
-    typeof (schema as any).circularSchema === 'function'
-  ) {
-    schemaType = SchemaHelpers.toSchemaType((schema as any).circularSchema());
-  }
-
+  isCircular = isCircular || schema.isCircular() || false;
+  const uid = schema.$id();
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
     typeof schemaName === 'string' ? (
@@ -177,11 +148,9 @@ export const Schema: React.FunctionComponent<Props> = ({
           ) : (
             <div>
               <div>
-                {renderType && (
-                  <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
-                    {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
-                  </div>
-                )}
+                <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
+                  {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
+                </div>
                 <div className="inline-block">
                   {schema.format() && (
                     <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
@@ -224,7 +193,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   )}
                 </div>
 
-                {schema.hasDescription() && (
+                {schema.description() !== undefined && (
                   <div>
                     <Markdown>{schema.description()}</Markdown>
                   </div>
@@ -249,7 +218,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.enum() && (
                   <ul className="text-xs">
                     Allowed values:{' '}
-                    {schema.enum().map((e, idx) => (
+                    {schema.enum()?.map((e, idx) => (
                       <li
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
@@ -280,7 +249,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.examples() && (
                   <ul className="text-xs">
                     Examples values:{' '}
-                    {schema.examples().map((e, idx) => (
+                    {schema.examples()?.map((e, idx) => (
                       <li
                         key={idx}
                         className="border inline-block text-orange-600 rounded ml-1 py-0 px-2 break-all"
@@ -307,7 +276,7 @@ export const Schema: React.FunctionComponent<Props> = ({
             {schema.oneOf() &&
               schema
                 .oneOf()
-                .map((s, idx) => (
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -317,7 +286,7 @@ export const Schema: React.FunctionComponent<Props> = ({
             {schema.anyOf() &&
               schema
                 .anyOf()
-                .map((s, idx) => (
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -327,7 +296,7 @@ export const Schema: React.FunctionComponent<Props> = ({
             {schema.allOf() &&
               schema
                 .allOf()
-                .map((s, idx) => (
+                ?.map((s, idx) => (
                   <Schema
                     key={idx}
                     schema={s}
@@ -383,7 +352,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 };
 
 interface SchemaPropertiesProps {
-  schema: SchemaType;
+  schema: SchemaInterface;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
@@ -396,7 +365,6 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
   const required = schema.required() || [];
   const patternProperties = schema.patternProperties();
-  const circularProps = schema.ext('x-parser-circular-props') || [];
 
   return (
     <>
@@ -406,7 +374,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schemaName={propertyName}
           required={required.includes(propertyName)}
           isProperty={true}
-          isCircular={circularProps.includes(propertyName)}
+          isCircular={property.isCircular()}
           dependentRequired={SchemaHelpers.getDependentRequired(
             propertyName,
             schema,
@@ -414,34 +382,40 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           key={propertyName}
         />
       ))}
-      {Object.entries(patternProperties).map(([propertyName, property]) => (
-        <Schema
-          schema={property}
-          schemaName={propertyName}
-          isPatternProperty={true}
-          isProperty={true}
-          isCircular={circularProps.includes(propertyName)}
-          key={propertyName}
-        />
-      ))}
+      {Object.entries(patternProperties || {}).map(
+        ([propertyName, property]) => (
+          <Schema
+            schema={property}
+            schemaName={propertyName}
+            isPatternProperty={true}
+            isProperty={true}
+            isCircular={property.isCircular()}
+            key={propertyName}
+          />
+        ),
+      )}
     </>
   );
 };
 
 interface AdditionalPropertiesProps {
-  schema: SchemaType;
+  schema: SchemaInterface;
 }
 
 const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
   schema,
 }) => {
-  if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
+  if (
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
+  ) {
     return null;
   }
 
-  let type = schema.type();
-  type = Array.isArray(type) ? type : [type];
-  if (!type.includes('object')) {
+  const type = schema.type();
+  if (type === undefined || !type.includes('object')) {
     return null;
   }
 
@@ -466,13 +440,12 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
 };
 
 interface SchemaItemsProps {
-  schema: SchemaType;
+  schema: SchemaInterface;
 }
 
 const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
-  let type = schema.type();
-  type = Array.isArray(type) ? type : [type];
-  if (!type.includes('array')) {
+  const type = schema.type();
+  if (type === undefined || !type.includes('array')) {
     return null;
   }
   const items = schema.items();
@@ -497,19 +470,23 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
 };
 
 interface AdditionalItemsProps {
-  schema: SchemaType;
+  schema: SchemaInterface;
 }
 
 const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
-  if (schema.ext(SchemaHelpers.extRenderAdditionalInfo) === false) {
+  if (
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
+  ) {
     return null;
   }
 
-  let type = schema.type();
-  type = Array.isArray(type) ? type : [type];
-  if (!type.includes('array')) {
+  const type = schema.type();
+  if (type === undefined || !type.includes('array')) {
     return null;
   }
   if (!Array.isArray(schema.items())) {

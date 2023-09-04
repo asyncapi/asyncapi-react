@@ -1,29 +1,32 @@
-import { AsyncAPIDocument, Tag } from '@asyncapi/parser';
-// @ts-ignore
-import AsyncAPIDocumentModel from '@asyncapi/parser/lib/models/asyncapi';
+import {
+  AsyncAPIDocumentInterface,
+  TagInterface,
+  isAsyncAPIDocument,
+  isOldAsyncAPIDocument,
+  toAsyncAPIDocument,
+  unstringify,
+} from '@asyncapi/parser';
+import { isStringifiedDocument } from '@asyncapi/parser/cjs/document';
 
 export class SpecificationHelpers {
   /**
    * Returns parsed AsyncAPI specification.
    */
-  static retrieveParsedSpec(schema: any): AsyncAPIDocument | undefined {
+  static retrieveParsedSpec(
+    schema: any,
+  ): AsyncAPIDocumentInterface | undefined {
     if (!schema) {
       return undefined;
     }
 
-    // check if schema is an instance of AsyncAPIDocument (model from AsyncAPI Parser)
-    if (schema.constructor && schema.constructor.name === 'AsyncAPIDocument') {
-      return schema as AsyncAPIDocument;
+    if (isAsyncAPIDocument(schema)) {
+      return schema;
     }
 
-    // then check if schema is an instance of AsyncAPIDocument (model from AsyncAPI Parser)
-    // this check is used for security in case of code mangling (unification)
-    if (
-      typeof schema.version === 'function' &&
-      schema._json &&
-      schema._json.asyncapi
-    ) {
-      return schema as AsyncAPIDocument;
+    if (isOldAsyncAPIDocument(schema)) {
+      // Is from old parser
+      const parsedJSON = schema.json();
+      return toAsyncAPIDocument(parsedJSON);
     }
 
     // check if input is a string and try parse it
@@ -36,45 +39,42 @@ export class SpecificationHelpers {
     }
 
     // at the end check if schema is a parsed JS object (as output from AsyncAPI Parser)
-    if (typeof schema === 'object' && schema['x-parser-spec-parsed'] === true) {
-      // if schema is stringified by `AsyncAPIDocument.stringify` function
-      if (schema['x-parser-spec-stringified'] === true) {
-        return AsyncAPIDocumentModel.parse(schema);
-      }
-      return new AsyncAPIDocumentModel(schema);
+    if (isStringifiedDocument(schema)) {
+      return unstringify(schema);
     }
 
-    return undefined;
+    return toAsyncAPIDocument(schema);
   }
 
   /**
    * Check if given schema have one of the specified tags.
    */
-  static containTags(schema: any, tags: Tag | Tag[]): boolean {
+  static containTags(
+    schema: any,
+    tags: TagInterface | TagInterface[],
+  ): boolean {
     const tagsToCheck =
       typeof schema.tags === 'function' ? schema.tags() : undefined;
     if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
       return false;
     }
     tags = Array.isArray(tags) ? tags : [tags];
-    return tagsToCheck.some((tag: Tag) =>
-      (tags as Tag[]).some(t => t.name() === tag.name()),
+    return tagsToCheck.some((tag: TagInterface) =>
+      (tags as TagInterface[]).some(t => t.name() === tag.name()),
     );
   }
 
   /**
    * Return all tags from operations
    */
-  static operationsTags(spec: AsyncAPIDocument) {
-    const tags = new Map<string, Tag>();
-    Object.entries(spec.channels()).forEach(([_, channel]) => {
-      const publish = channel.publish();
-      if (publish && publish.hasTags()) {
-        publish.tags().forEach(tag => tags.set(tag.name(), tag));
-      }
-      const subscribe = channel.subscribe();
-      if (subscribe && subscribe.hasTags()) {
-        subscribe.tags().forEach(tag => tags.set(tag.name(), tag));
+  static operationsTags(spec: AsyncAPIDocumentInterface) {
+    const tags = new Map<string, TagInterface>();
+    Object.entries(spec.operations().all()).forEach(([_, operation]) => {
+      if (operation?.tags().length > 0) {
+        operation
+          .tags()
+          .all()
+          .forEach(tag => tags.set(tag.name(), tag));
       }
     });
     return Array.from(tags.values());
@@ -83,17 +83,20 @@ export class SpecificationHelpers {
   /**
    * Return all tags from servers
    */
-  static serversTags(spec: AsyncAPIDocument) {
+  static serversTags(spec: AsyncAPIDocumentInterface) {
     const tags = {} as { string: string[] };
     Object.entries(spec.servers()).forEach(([_, server]) => {
-      if (server.hasTags()) {
-        server.tags().forEach(tag => {
-          if (tags[tag.name()]) {
-            tags[tag.name()] = [tags[tag.name()], _];
-          } else {
-            tags[tag.name()] = _;
-          }
-        });
+      if (server.tags().length > 0) {
+        server
+          .tags()
+          .all()
+          .forEach(tag => {
+            if (tags[tag.name()]) {
+              tags[tag.name()] = [tags[tag.name()], _];
+            } else {
+              tags[tag.name()] = _;
+            }
+          });
       }
     });
     return tags;

@@ -1,6 +1,7 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const umdBundle = {
   entry: {
@@ -35,6 +36,19 @@ const umdBundle = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      'nimma/legacy$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/legacy/cjs/index.js',
+      ),
+      'nimma/fallbacks$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/cjs/fallbacks/index.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+    },
   },
   externals: {
     react: {
@@ -50,6 +64,7 @@ const umdBundle = {
      * Uncomment plugin when you wanna see dependency map of bundled package
      */
     // new BundleAnalyzerPlugin(),
+    new NodePolyfillPlugin(),
   ],
 };
 
@@ -82,10 +97,40 @@ const standaloneBundle = {
           transpileOnly: true,
         },
       },
+      {
+        include: [
+          path.resolve(
+            __dirname,
+            './node_modules/nimma/dist/cjs/fallbacks/jsonpath-plus.js',
+          ),
+        ],
+        use: ['remove-hashbag-loader'],
+      },
     ],
+  },
+  resolveLoader: {
+    alias: {
+      'remove-hashbag-loader': path.join(
+        __dirname,
+        './loaders/remove-hashbag-loader',
+      ),
+    },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      'nimma/legacy$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/legacy/cjs/index.js',
+      ),
+      'nimma/fallbacks$': path.resolve(
+        __dirname,
+        'node_modules/nimma/dist/cjs/fallbacks/index.js',
+      ),
+    },
+    fallback: {
+      fs: false,
+    },
   },
 
   plugins: [
@@ -93,6 +138,7 @@ const standaloneBundle = {
      * Uncomment plugin when you wanna see dependency map of bundled package
      */
     // new BundleAnalyzerPlugin(),
+    new NodePolyfillPlugin(),
   ],
 };
 

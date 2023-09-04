@@ -18,14 +18,17 @@ export const Sidebar: React.FunctionComponent = () => {
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
-  const logo = info.ext('x-logo');
-  const components = asyncapi.hasComponents() && asyncapi.components();
+  const logo = info
+    .extensions()
+    .get('x-logo')
+    ?.value();
+  const components = asyncapi.components();
   const messages = components && components.messages();
   const schemas = components && components.schemas();
   const hasOperations =
-    asyncapi.hasChannels() &&
+    asyncapi.channels().length > 0 &&
     Object.values(asyncapi.channels()).some(
-      channel => channel.hasPublish() || channel.hasSubscribe(),
+      channel => channel.operations().length > 0,
     );
 
   const messagesList = messages && Object.keys(messages).length > 0 && (
@@ -45,7 +48,7 @@ export const Sidebar: React.FunctionComponent = () => {
               href={`#message-${messageName}`}
               onClick={() => setShowSidebar(false)}
             >
-              <div className="break-all inline-block">{message.uid()}</div>
+              <div className="break-all inline-block">{message.id()}</div>
             </a>
           </li>
         ))}
@@ -133,7 +136,7 @@ export const Sidebar: React.FunctionComponent = () => {
                   Introduction
                 </a>
               </li>
-              {asyncapi.hasServers() && (
+              {asyncapi.servers().length > 0 && (
                 <li className="mb-3 mt-9">
                   <a
                     className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -228,7 +231,7 @@ const ServersList: React.FunctionComponent = () => {
 
   let specTagNames: string[];
   if (showServers === 'bySpecTags') {
-    specTagNames = (asyncapi.tags() || []).map(tag => tag.name());
+    specTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const serverTagNamesSet = new Set<string>();
     Object.values(servers).forEach(server => {
@@ -278,29 +281,43 @@ const ServersList: React.FunctionComponent = () => {
 const OperationsList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
-  const channels = asyncapi.channels();
+  const operations = asyncapi.operations();
   const showOperations = sidebarConfig?.showOperations || 'byDefault';
 
-  const operations: Array<TagObject<{
+  const processedOperations: Array<TagObject<{
     channelName: string;
     summary: string;
     kind: 'publish' | 'subscribe';
   }>> = [];
-  Object.entries(channels).forEach(([channelName, channel]) => {
-    if (channel.hasPublish()) {
-      const operation = channel.publish();
-      operations.push({
-        name: `publish-${channelName}`,
+  Object.entries(operations).forEach(([operationId, operation]) => {
+    if (operation.isSend()) {
+      processedOperations.push({
+        name: `publish-${operationId}`,
         object: operation,
-        data: { channelName, kind: 'publish', summary: operation.summary() },
+        data: {
+          channelName:
+            operation
+              .channels()
+              .all()[0]
+              .address() || '',
+          kind: 'publish',
+          summary: operation.summary() || '',
+        },
       });
     }
-    if (channel.hasSubscribe()) {
-      const operation = channel.subscribe();
-      operations.push({
-        name: `subscribe-${channelName}`,
+    if (operation.isReceive()) {
+      processedOperations.push({
+        name: `subscribe-${operationId}`,
         object: operation,
-        data: { channelName, kind: 'subscribe', summary: operation.summary() },
+        data: {
+          channelName:
+            operation
+              .channels()
+              .all()[0]
+              .address() || '',
+          kind: 'subscribe',
+          summary: operation.summary() || '',
+        },
       });
     }
   });
@@ -308,7 +325,7 @@ const OperationsList: React.FunctionComponent = () => {
   if (showOperations === 'byDefault') {
     return (
       <ul className="text-sm mt-2">
-        {operations.map(({ name, data }) => (
+        {processedOperations.map(({ name, data }) => (
           <OperationItem key={name} {...data} />
         ))}
       </ul>
@@ -317,21 +334,18 @@ const OperationsList: React.FunctionComponent = () => {
 
   let operationTagNames: string[];
   if (showOperations === 'bySpecTags') {
-    operationTagNames = (asyncapi.tags() || []).map(tag => tag.name());
+    operationTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const operationTagNamesSet = new Set<string>();
-    Object.values(operations).forEach(({ object }) => {
-      if (typeof object.tags !== 'function') {
-        return;
-      }
-      object.tags().forEach(t => operationTagNamesSet.add(t.name()));
+    Object.values(operations).forEach(operation => {
+      operation.tags().forEach(t => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);
   }
 
   const { tagged, untagged } = filterObjectsByTags(
     operationTagNames,
-    operations,
+    processedOperations,
   );
   return (
     <ul className="text-sm mt-2">

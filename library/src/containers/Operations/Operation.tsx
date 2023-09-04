@@ -1,5 +1,5 @@
 import React from 'react';
-import { Channel, Operation as OperationType } from '@asyncapi/parser';
+import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
 
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
@@ -23,9 +23,9 @@ import { PayloadType } from '../../types';
 
 interface Props {
   type: PayloadType;
-  operation: OperationType;
+  operation: OperationInterface;
   channelName: string;
-  channel: Channel;
+  channel: ChannelInterface;
 }
 
 export const Operation: React.FunctionComponent<Props> = props => {
@@ -41,7 +41,10 @@ export const Operation: React.FunctionComponent<Props> = props => {
   // check typeof as fallback for older version than `2.4.0`
   const security =
     typeof operation.security === 'function' && operation.security();
-  const parameters = SchemaHelpers.parametersToSchema(channel.parameters());
+  const parameters =
+    channel.parameters() !== undefined
+      ? SchemaHelpers.parametersToSchema(channel.parameters())
+      : undefined;
 
   return (
     <div>
@@ -53,7 +56,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
             <p>Available only on servers:</p>
             <ul className="flex flex-wrap leading-normal">
               {servers.map(server => (
-                <li className="inline-block mt-2 mr-2" key={server as string}>
+                <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
                       'server-' + server,
@@ -100,7 +103,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           </div>
         )}
 
-        {channel.hasBindings() && (
+        {channel.bindings() && (
           <div className="mt-2">
             <Bindings
               name="Channel specific information"
@@ -111,7 +114,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
 
         <Extensions name="Channel Extensions" item={channel} />
 
-        {operation.hasBindings() && (
+        {operation.bindings() && (
           <div className="mt-2">
             <Bindings
               name="Operation specific information"
@@ -122,7 +125,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
 
         <Extensions name="Operation Extensions" item={operation} />
 
-        {operation.hasTags() && (
+        {operation.tags() && (
           <div className="mt-2">
             <Tags tags={operation.tags()} />
           </div>
@@ -136,7 +139,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           config,
         )}
       >
-        {operation.hasMultipleMessages() ? (
+        {operation.messages().length > 1 ? (
           <div className="mt-2">
             <p className="px-8">
               Accepts <strong>one of</strong> the following messages:
@@ -153,10 +156,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message
-                message={(operation.message as (index: number) => any)(0)}
-                showExamples={true}
-              />
+              <Message message={operation.messages()[0]} showExamples={true} />
             </div>
           </div>
         )}

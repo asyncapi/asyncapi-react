@@ -1,56 +1,55 @@
 import React from 'react';
 
 import { Operation } from './Operation';
-
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers } from '../../helpers';
 import { OPERATIONS_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
 
 export const Operations: React.FunctionComponent = () => {
-  const channels = useSpec().channels();
+  const operations = useSpec().operations();
   const config = useConfig();
 
-  if (!Object.keys(channels).length) {
+  if (!Object.keys(operations).length) {
     return null;
   }
 
   const operationsList: React.ReactNodeArray = [];
-  Object.entries(channels).forEach(([channelName, channel]) => {
-    if (channel.hasPublish()) {
+  Object.entries(operations).forEach(([operationName, operation]) => {
+    if (operation.isSend()) {
       operationsList.push(
         <li
           className="mb-12"
-          key={`pub-${channelName}`}
+          key={`pub-${operationName}`}
           id={CommonHelpers.getIdentifier(
-            `operation-${PayloadType.PUBLISH}-${channelName}`,
+            `operation-${PayloadType.PUBLISH}-${operationName}`,
             config,
           )}
         >
           <Operation
             type={PayloadType.PUBLISH}
-            operation={channel.publish()}
-            channelName={channelName}
-            channel={channel}
+            operation={operation}
+            channelName={operationName}
+            channel={operation.channels()[0]}
           />
         </li>,
       );
     }
-    if (channel.hasSubscribe()) {
+    if (operation.isReceive()) {
       operationsList.push(
         <li
           className="mb-12"
-          key={`sub-${channelName}`}
+          key={`sub-${operationName}`}
           id={CommonHelpers.getIdentifier(
-            `operation-${PayloadType.SUBSCRIBE}-${channelName}`,
+            `operation-${PayloadType.SUBSCRIBE}-${operationName}`,
             config,
           )}
         >
           <Operation
             type={PayloadType.SUBSCRIBE}
-            operation={channel.subscribe()}
-            channelName={channelName}
-            channel={channel}
+            operation={operation}
+            channelName={operationName}
+            channel={operation.channels()[0]}
           />
         </li>,
       );
