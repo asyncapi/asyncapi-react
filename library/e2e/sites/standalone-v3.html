@@ -1,0 +1,61 @@
+<html>
+  <body>
+    <div id="spec"></div>
+
+    <script src="../../browser/standalone/index.js"></script>
+    <link rel="stylesheet" href="../../styles/default.min.css" />
+    <script>
+      const schema = {
+        asyncapi: '3.0.0',
+        info: {
+          title: 'Example AsyncAPI',
+          version: '0.1.0',
+        },
+        servers: {
+          'example-server': {
+            host: 'test.example.org',
+            protocol: 'mqtt',
+          },
+        },
+        channels: {
+          'example-channel': {
+            address: 'example-channel',
+            messages: {
+              'example-message': {
+                payload: {
+                  type: 'object',
+                  properties: {
+                    exampleField: {
+                      type: 'string',
+                    },
+                    exampleNumber: {
+                      type: 'number',
+                    },
+                    exampleDate: {
+                      type: 'string',
+                      format: 'date-time',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        operations: {
+          'example-operation': {
+            action: 'send',
+            channel: {
+              $ref: '#/channels/example-channel',
+            },
+            reply: {
+              channel: {
+                $ref: '#/channels/example-channel',
+              },
+            },
+          },
+        },
+      };
+      AsyncApiStandalone.render({ schema }, document.getElementById('spec'));
+    </script>
+  </body>
+</html>

@@ -32,7 +32,11 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      const fromResult = fromURL(asyncapiParser, arg.url, arg.requestOptions);
+      const fromResult = fromURL(
+        asyncapiParser,
+        arg.url,
+        arg.requestOptions as any,
+      );
       const { document } = await fromResult.parse(parserOptions);
       return { asyncapi: document };
     } catch (err) {

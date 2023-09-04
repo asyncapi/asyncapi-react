@@ -4,9 +4,27 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import {
+  BindingV2 as BindingSchema,
+  BindingsV2 as BindingsSchema,
+} from '@asyncapi/parser';
 
 import { Bindings } from '../Bindings';
-
+function createBinding(bindingObj: Record<string, any>) {
+  const bindings: BindingSchema[] = [];
+  for (const [protocol, binding] of Object.entries(bindingObj)) {
+    const obj = {};
+    obj[protocol] = binding;
+    bindings.push(
+      new BindingSchema(binding, {
+        asyncapi: {} as any,
+        pointer: '',
+        protocol,
+      }),
+    );
+  }
+  return new BindingsSchema(bindings);
+}
 describe('Bindings component', () => {
   test('should work with simple data', async () => {
     const bindings = {
@@ -17,7 +35,7 @@ describe('Bindings component', () => {
         fooKafka: 'barKafka',
       },
     };
-    render(<Bindings bindings={bindings} />);
+    render(<Bindings bindings={createBinding(bindings)} />);
 
     expect(screen.getAllByText('Binding specific information')).toBeDefined();
     expect(screen.getAllByText('Binding specific information')).toHaveLength(2);
@@ -37,7 +55,7 @@ describe('Bindings component', () => {
       kafka: undefined,
       http: null,
     };
-    render(<Bindings bindings={bindings} />);
+    render(<Bindings bindings={createBinding(bindings)} />);
 
     expect(screen.getAllByText('Binding specific information')).toBeDefined();
     expect(screen.getAllByText('Binding specific information')).toHaveLength(3);

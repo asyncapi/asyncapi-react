@@ -7,7 +7,9 @@ import { OPERATIONS_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
 
 export const Operations: React.FunctionComponent = () => {
-  const operations = useSpec().operations();
+  const operations = useSpec()
+    .operations()
+    .all();
   const config = useConfig();
 
   if (!Object.keys(operations).length) {
@@ -15,22 +17,24 @@ export const Operations: React.FunctionComponent = () => {
   }
 
   const operationsList: React.ReactNodeArray = [];
-  Object.entries(operations).forEach(([operationName, operation]) => {
+  operations.forEach(operation => {
+    const channel = operation.channels().all()[0];
+    const channelAddress = channel?.address() ?? '';
     if (operation.isSend()) {
       operationsList.push(
         <li
           className="mb-12"
-          key={`pub-${operationName}`}
+          key={`pub-${operation.id()}`}
           id={CommonHelpers.getIdentifier(
-            `operation-${PayloadType.PUBLISH}-${operationName}`,
+            `operation-${PayloadType.PUBLISH}-${operation.id()}`,
             config,
           )}
         >
           <Operation
             type={PayloadType.PUBLISH}
             operation={operation}
-            channelName={operationName}
-            channel={operation.channels()[0]}
+            channelName={channelAddress}
+            channel={channel}
           />
         </li>,
       );
@@ -39,17 +43,17 @@ export const Operations: React.FunctionComponent = () => {
       operationsList.push(
         <li
           className="mb-12"
-          key={`sub-${operationName}`}
+          key={`sub-${operation.id()}`}
           id={CommonHelpers.getIdentifier(
-            `operation-${PayloadType.SUBSCRIBE}-${operationName}`,
+            `operation-${PayloadType.SUBSCRIBE}-${operation.id()}`,
             config,
           )}
         >
           <Operation
             type={PayloadType.SUBSCRIBE}
             operation={operation}
-            channelName={operationName}
-            channel={operation.channels()[0]}
+            channelName={channelAddress}
+            channel={channel}
           />
         </li>,
       );

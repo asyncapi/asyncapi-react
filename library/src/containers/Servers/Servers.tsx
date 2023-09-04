@@ -7,7 +7,9 @@ import { CommonHelpers } from '../../helpers';
 import { SERVERS_TEXT } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {
-  const servers = useSpec().servers();
+  const servers = useSpec()
+    .servers()
+    .all();
   const config = useConfig();
 
   if (!Object.keys(servers).length) {
@@ -23,18 +25,25 @@ export const Servers: React.FunctionComponent = () => {
         {SERVERS_TEXT}
       </h2>
       <ul>
-        {Object.entries(servers).map(([serverName, server]) => (
-          <li
-            className="mb-4"
-            key={serverName}
-            id={`${CommonHelpers.getIdentifier(
-              `server-${serverName}`,
-              config,
-            )}`}
-          >
-            <Server serverName={serverName} server={server} key={serverName} />
-          </li>
-        ))}
+        {servers.map(server => {
+          const serverName = server.id();
+          return (
+            <li
+              className="mb-4"
+              key={serverName}
+              id={`${CommonHelpers.getIdentifier(
+                `server-${serverName}`,
+                config,
+              )}`}
+            >
+              <Server
+                serverName={serverName}
+                server={server}
+                key={serverName}
+              />
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

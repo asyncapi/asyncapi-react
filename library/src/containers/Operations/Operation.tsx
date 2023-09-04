@@ -20,7 +20,7 @@ import {
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
 import { PayloadType } from '../../types';
-
+import { ConfigInterface } from '../../config/config';
 interface Props {
   type: PayloadType;
   operation: OperationInterface;
@@ -37,7 +37,8 @@ export const Operation: React.FunctionComponent<Props> = props => {
   }
 
   // check typeof as fallback for older version than `2.2.0`
-  const servers = typeof channel.servers === 'function' && channel.servers();
+  const servers =
+    typeof channel.servers === 'function' && channel.servers().all();
   // check typeof as fallback for older version than `2.4.0`
   const security =
     typeof operation.security === 'function' && operation.security();
@@ -59,12 +60,12 @@ export const Operation: React.FunctionComponent<Props> = props => {
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
-                      'server-' + server,
+                      'server-' + server.id(),
                       config,
                     )}`}
                     className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
                   >
-                    <span className="underline">{server}</span>
+                    <span className="underline">{server.id()}</span>
                   </a>
                 </li>
               ))}
@@ -145,18 +146,24 @@ export const Operation: React.FunctionComponent<Props> = props => {
               Accepts <strong>one of</strong> the following messages:
             </p>
             <ul>
-              {operation.messages().map((msg, idx) => (
-                <li className="mt-4" key={idx}>
-                  <Message message={msg} index={idx} showExamples={true} />
-                </li>
-              ))}
+              {operation
+                .messages()
+                .all()
+                .map((msg, idx) => (
+                  <li className="mt-4" key={idx}>
+                    <Message message={msg} index={idx} showExamples={true} />
+                  </li>
+                ))}
             </ul>
           </div>
         ) : (
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message message={operation.messages()[0]} showExamples={true} />
+              <Message
+                message={operation.messages().all()[0]}
+                showExamples={true}
+              />
             </div>
           </div>
         )}
@@ -165,32 +172,43 @@ export const Operation: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationInfo: React.FunctionComponent<Props> = ({
+function getTypeInformation({
   type = PayloadType.PUBLISH,
-  operation,
-  channelName,
-  channel,
-}) => {
+  config,
+}: {
+  type: PayloadType;
+  config: ConfigInterface;
+}): { borderColor: string; typeLabel: string } {
+  if (type === PayloadType.SUBSCRIBE) {
+    return {
+      borderColor: 'border-green-600 text-green-600',
+      typeLabel: config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
+    };
+  }
+  // type === PayloadType.PUBLISH
+  return {
+    borderColor: 'border-blue-600 text-blue-500',
+    typeLabel: config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
+  };
+}
+
+export const OperationInfo: React.FunctionComponent<Props> = props => {
+  const { type = PayloadType.PUBLISH, operation, channelName, channel } = props;
   const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
+  const { borderColor, typeLabel } = getTypeInformation({ type, config });
 
   return (
     <>
       <div className="mb-4">
         <h3>
           <span
-            className={`font-mono border uppercase p-1 rounded mr-2 ${
-              type === PayloadType.PUBLISH
-                ? 'border-blue-600 text-blue-500'
-                : 'border-green-600 text-green-600'
-            }`}
+            className={`font-mono border uppercase p-1 rounded mr-2 ${borderColor}`}
             title={type}
           >
-            {type === PayloadType.PUBLISH
-              ? config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT
-              : config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT}
+            {typeLabel}
           </span>{' '}
           <span className="font-mono text-base">{channelName}</span>
         </h3>
