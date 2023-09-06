@@ -72,3 +72,9 @@
     @apply whitespace-pre-wrap;
   }
 }
+
+@layer utilities {
+  .break-anywhere {
+    overflow-wrap: anywhere;
+  }
+}
