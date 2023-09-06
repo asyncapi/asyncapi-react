@@ -1,8 +1,7 @@
 import { Parser as AsyncapiParser, fromURL } from '@asyncapi/parser';
 import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
+import { ProtoBuffSchemaParser } from '@asyncapi/protobuf-schema-parser';
 import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
-// @ts-ignore
-import protoSchemaParser from '@asyncapi/protobuf-schema-parser';
 
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
@@ -11,8 +10,7 @@ import { VALIDATION_ERRORS_TYPE } from '../constants';
 const asyncapiParser = new AsyncapiParser();
 asyncapiParser.registerSchemaParser(OpenAPISchemaParser());
 asyncapiParser.registerSchemaParser(AvroSchemaParser());
-// Waiting for schema parser to be upgraded
-// asyncapiParser.registerSchemaParser(protoSchemaParser);
+asyncapiParser.registerSchemaParser(ProtoBuffSchemaParser());
 
 export class Parser {
   static async parse(
