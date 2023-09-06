@@ -16,7 +16,7 @@ export const Messages: React.FunctionComponent = () => {
       .messages()
       .all();
 
-  if (!messages || Object.keys(messages).length === 0) {
+  if (!messages || messages.length === 0) {
     return null;
   }
 
@@ -29,17 +29,17 @@ export const Messages: React.FunctionComponent = () => {
         {MESSAGES_TEXT}
       </h2>
       <ul>
-        {Object.entries(messages).map(([messageName, message], idx) => (
+        {messages.map((message, idx) => (
           <li
             className="mb-4"
-            key={messageName}
-            id={CommonHelpers.getIdentifier(`message-${messageName}`, config)}
+            key={message.id()}
+            id={CommonHelpers.getIdentifier(`message-${message.id()}`, config)}
           >
             <Message
-              messageName={messageName}
+              messageName={message.id()}
               message={message}
               index={idx + 1}
-              key={messageName}
+              key={message.id()}
             />
           </li>
         ))}

@@ -16,7 +16,7 @@ export const Schemas: React.FunctionComponent = () => {
       .schemas()
       .all();
 
-  if (!schemas || Object.keys(schemas).length === 0) {
+  if (!schemas || schemas.length === 0) {
     return null;
   }
 
@@ -29,13 +29,13 @@ export const Schemas: React.FunctionComponent = () => {
         {SCHEMAS_TEXT}
       </h2>
       <ul>
-        {Object.entries(schemas).map(([schemaName, schema]) => (
+        {schemas.map(schema => (
           <li
             className="mb-4"
-            key={schemaName}
-            id={CommonHelpers.getIdentifier(`schema-${schemaName}`, config)}
+            key={schema.id()}
+            id={CommonHelpers.getIdentifier(`schema-${schema.id()}`, config)}
           >
-            <Schema schemaName={schemaName} schema={schema} />
+            <Schema schemaName={schema.id()} schema={schema} />
           </li>
         ))}
       </ul>
