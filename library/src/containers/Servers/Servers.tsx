@@ -12,7 +12,7 @@ export const Servers: React.FunctionComponent = () => {
     .all();
   const config = useConfig();
 
-  if (!Object.keys(servers).length) {
+  if (!servers.length) {
     return null;
   }
 
