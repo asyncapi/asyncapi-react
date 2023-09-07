@@ -1,6 +1,7 @@
 import { parse, parseFromUrl, registerSchemaParser } from '@asyncapi/parser';
 import openapiSchemaParser from '@asyncapi/openapi-schema-parser';
 import avroSchemaParser from '@asyncapi/avro-schema-parser';
+import protoSchemaParser from '@asyncapi/protobuf-schema-parser';
 
 import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
 
@@ -16,6 +17,7 @@ type ParseDocumentFromURL = (
 
 registerSchemaParser(openapiSchemaParser);
 registerSchemaParser(avroSchemaParser);
+registerSchemaParser(protoSchemaParser);
 
 export class Parser {
   private parseSchema: ParseDocument;
