@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
   webpack: function(config, env) {
-    config.plugins;
     config.module.rules = config.module.rules.map(rootRule => {
       if (rootRule.oneOf) {
         rootRule.oneOf = rootRule.oneOf.map(rule => {
