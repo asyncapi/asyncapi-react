@@ -69,35 +69,5 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "release": {
-    "branches": [
-      "master",
-      {
-        "name": "next",
-        "prerelease": true
-      }
-    ],
-    "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/release-notes-generator",
-        {
-          "preset": "conventionalcommits"
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "library"
-        }
-      ],
-      "@semantic-release/github"
-    ]
   }
 }

@@ -27,7 +27,7 @@ function retrieveSchemaProp(
   if (!schemaUrl || schemaUrl === 'undefined') {
     schemaUrl = undefined as any;
   }
-  if (!schemaFetchOptions || schemaFetchOptions === 'undefined') {
+  if (!schemaFetchOptions) {
     schemaFetchOptions = undefined as any;
   }
 

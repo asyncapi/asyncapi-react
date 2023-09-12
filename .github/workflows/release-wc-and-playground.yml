@@ -12,16 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
           # in case release is created from release branch then we need to checkout from given branch
           # if @semantic-release/github is used to publish, the minimum version is 7.2.0 for proper working
           ref: ${{ github.event.release.target_commitish }}
+      - name: Check package-lock version
+        uses: asyncapi/.github/.github/actions/get-node-version-from-package-lock@master
+        id: lockversion
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: "${{ steps.lockversion.outputs.version }}"
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: Install latest version of library in the web-component
         run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
         working-directory: ./web-component
@@ -33,37 +38,41 @@ jobs:
         # When adding "bump:version" script in package.json, make sure --allow-same-version is set in case someone forgot and updated package.json manually and we want to avoide this action to fail and raise confusion
         run: VERSION=${{github.event.release.tag_name}} npm run bump:webcomp:version
       - name: Release web-component to NPM (@latest tag)
-        if: github.event.release.target_commitish != 'next'
-        uses: JS-DevTools/npm-publish@v1
+        if: github.event.release.target_commitish == 'master'
+        uses: JS-DevTools/npm-publish@5a85faf05d2ade2d5b6682bfe5359915d5159c6c # using 2.2.1 version https://github.com/JS-DevTools/npm-publish/releases/tag/v2.2.1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./web-component/package.json
           access: public
-      - name: Release web-component to NPM (@next tag)
-        if: github.event.release.target_commitish == 'next'
-        uses: JS-DevTools/npm-publish@v1
+      - name: Release web-component to NPM (feature branch tag)
+        if: github.event.release.target_commitish != 'master'
+        uses: JS-DevTools/npm-publish@5a85faf05d2ade2d5b6682bfe5359915d5159c6c # using 2.2.1 version https://github.com/JS-DevTools/npm-publish/releases/tag/v2.2.1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./web-component/package.json
           access: public
-          tag: next
+          tag: github.event.release.target_commitish
 
   playground:
     name: Release Playground
-    if: github.event.release.target_commitish == 'next'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
           # in case release is created from release branch then we need to checkout from given branch
           # if @semantic-release/github is used to publish, the minimum version is 7.2.0 for proper working
           ref: ${{ github.event.release.target_commitish }}
+      - name: Check package-lock version
+        uses: asyncapi/.github/.github/actions/get-node-version-from-package-lock@master
+        id: lockversion
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: "${{ steps.lockversion.outputs.version }}"
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: Use latest version of react component in the playground
         run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
         working-directory: ./playground
@@ -73,10 +82,10 @@ jobs:
         run: npm run build
         working-directory: ./playground
       - name: Deploy GH page
-        uses: JamesIves/github-pages-deploy-action@3.4.2
+        uses: JamesIves/github-pages-deploy-action@a1ea191d508feb8485aceba848389d49f80ca2dc # use v4.4.3 https://github.com/JamesIves/github-pages-deploy-action/releases/tag/v4.4.3
         with:
-          ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: playground/build
-          GIT_CONFIG_NAME: asyncapi-bot
-          GIT_CONFIG_EMAIL: info@asyncapi.io
+          token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages
+          folder: playground/build
+          git-config-name: asyncapi-bot
+          git-config-email: info@asyncapi.io

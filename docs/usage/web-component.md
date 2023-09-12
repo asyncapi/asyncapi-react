@@ -7,7 +7,7 @@ If you are not using React you may want to use the `@asyncapi/web-component` com
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/web-component@next
+npm install --save @asyncapi/web-component
 ```
 
 Check out this simple sandbox application that uses the Web Component in Angular project:

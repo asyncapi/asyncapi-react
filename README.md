@@ -2,14 +2,7 @@
 
 React component for AsyncAPI specification. Available also as a Web Component, but not only.
 
----
-
-> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. The current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch. Check out releases with `next` suffix in the release tag or the `next` tag on NPM.
-
----
-
 ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
-
 
 ## Overview
 
@@ -47,10 +40,10 @@ The official [React](https://reactjs.org/) component for AsyncAPI specification.
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/react-component@next
+npm install --save @asyncapi/react-component
 ```
 
-Check out this simple sandbox application that uses the React component:
+Check out this sandbox application that uses the React component:
 
 [![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-react-component-in-action-wvdy2)
 
@@ -178,7 +171,7 @@ If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you
      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
    </style>
    
-   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.32/styles/default.min.css">
+   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
    
    ...
  </head>
