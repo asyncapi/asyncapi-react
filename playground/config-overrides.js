@@ -36,11 +36,11 @@ module.exports = {
         alias: {
           'nimma/legacy$': path.resolve(
             __dirname,
-            'node_modules/nimma/dist/legacy/cjs/index.js',
+            '../library/node_modules/nimma/dist/legacy/cjs/index.js',
           ),
           'nimma/fallbacks$': path.resolve(
             __dirname,
-            'node_modules/nimma/dist/cjs/fallbacks/index.js',
+            '../library/node_modules/nimma/dist/cjs/fallbacks/index.js',
           ),
         },
       },
