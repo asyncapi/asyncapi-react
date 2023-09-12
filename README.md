@@ -1,20 +1,19 @@
-<h5 align="center">
-  <img src="./.github/assets/logo.png" alt="AsyncAPI logo" width="200">
-  <br>
-  React Component
-</h5>
-<h4 align="center">React component for AsyncAPI 2.0 specification. Available also as a Web Component.</h4>
+[![AsyncAPI React Component](./.github/assets/logo.png)](https://www.asyncapi.com)
+
+React component for AsyncAPI specification. Available also as a Web Component, but not only.
 
 ---
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
+> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. The current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch. Check out releases with `next` suffix in the release tag or the `next` tag on NPM.
+
+---
+
+![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
 
 
 ## Overview
 
-A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
-
-> **CAUTION**: This package only supports AsyncAPI 2.0 specification. If you use 1.x, we recommend that you upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
+The official [React](https://reactjs.org/) component for AsyncAPI specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
 
 <!-- toc is generated with GitHub Actions do not remove toc markers -->
 
@@ -211,7 +210,6 @@ You can also run the Playground application locally by following [this](./docs/d
 ## Modules
 
 The `@asyncapi/react-component` package has 3 crafted JS modules to be used in various environments:
-
 - `esm` (ECMAScript Modules) is intended for use in a single-page applications with predefined environments like [`create-react-app`](https://github.com/facebook/create-react-app) that are capable of resolving dependencies (via Webpack, Browserify, etc). It can also be used on the server side (for tasks like Server Side Rendering) when the application is using `esm`.
 - `cjs` (CommonJS Modules) similar uses as for `esm` modules, but using CommonJS modules.
 - `umd` (Universal Module Definition) is a dependency-free module that includes everything you need to serve AsyncAPI documentation (however [React](https://github.com/facebook/react/tree/master/packages/react) and [ReactDOM](https://github.com/facebook/react/tree/master/packages/react-dom) dependencies must be served separately) on a single-page application that can't resolve npm module dependencies or in normal HTML page. We have 2 types of minified `umd` bundles, with and without [AsyncAPI Parser](https://github.com/asyncapi/parser-js) in paths:
@@ -263,6 +261,10 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     <td align="center"><a href="http://www.codeblock.ch"><img src="https://avatars3.githubusercontent.com/u/416252?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Claude Gex</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=gexclaude" title="Code">💻</a> <a href="#platform-gexclaude" title="Packaging/porting to new platform">📦</a> <a href="#ideas-gexclaude" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/c-pius"><img src="https://avatars0.githubusercontent.com/u/22994291?v=4?s=100" width="100px;" alt=""/><br /><sub><b>c-pius</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=c-pius" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/issues?q=author%3Ac-pius" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/aeworxet"><img src="https://avatars.githubusercontent.com/u/16149591?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Viacheslav Turovskyi</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Documentation">📖</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aeworxet" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/195858"><img src="https://avatars.githubusercontent.com/u/3858485?v=4?s=100" width="100px;" alt=""/><br /><sub><b>195858</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=195858" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/aayushmau5"><img src="https://avatars.githubusercontent.com/u/54525741?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aayush Kumar Sahu</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aayushmau5" title="Code">💻</a></td>
+    <td align="center"><a href="http://dalelane.co.uk/"><img src="https://avatars.githubusercontent.com/u/1444788?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dale Lane</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=dalelane" title="Code">💻</a> <a href="#ideas-dalelane" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/m1ner79"><img src="https://avatars.githubusercontent.com/u/55558050?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Michal Gornicki</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=m1ner79" title="Documentation">📖</a></td>
   </tr>
 </table>
 
