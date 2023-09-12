@@ -23,11 +23,11 @@ export const Sidebar: React.FunctionComponent = () => {
     .get('x-logo')
     ?.value();
   const components = asyncapi.components();
-  const messages = components && components.messages().all();
-  const schemas = components && components.schemas().all();
+  const messages = components?.messages().all();
+  const schemas = components?.schemas().all();
   const hasOperations = asyncapi.operations().length > 0;
 
-  const messagesList = messages && messages.length > 0 && (
+  const messagesList = messages?.length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -52,7 +52,7 @@ export const Sidebar: React.FunctionComponent = () => {
     </li>
   );
 
-  const schemasList = schemas && schemas.length > 0 && (
+  const schemasList = schemas?.length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
