@@ -156,7 +156,7 @@ describe('AsyncAPI component', () => {
     );
   });
 
-  test('should work all options', async () => {
+  test('should work with all options', async () => {
     const schema = {
       asyncapi: '2.0.0',
       info: {
