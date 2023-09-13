@@ -155,4 +155,63 @@ describe('AsyncAPI component', () => {
       expect(result.container.querySelector('#introduction')).toBeDefined(),
     );
   });
+
+  test('should work with all options', async () => {
+    const schema = {
+      asyncapi: '2.0.0',
+      info: {
+        title: 'Example AsyncAPI',
+        version: '0.1.0',
+      },
+      servers: {
+        'example-server': {
+          url: 'test.example.org',
+          protocol: 'mqtt',
+        },
+      },
+      channels: {
+        'example-channel': {
+          subscribe: {
+            message: {
+              payload: {
+                type: 'object',
+                properties: {
+                  exampleField: {
+                    type: 'string',
+                  },
+                  exampleNumber: {
+                    type: 'number',
+                  },
+                  exampleDate: {
+                    type: 'string',
+                    format: 'date-time',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+    const result = render(
+      <AsyncApiComponent
+        schema={schema}
+        config={{
+          show: {
+            sidebar: true,
+            info: true,
+            servers: true,
+            operations: true,
+            messages: true,
+            schemas: true,
+            errors: true,
+          },
+        }}
+      />,
+    );
+
+    await waitFor(() =>
+      expect(result.container.querySelector('#introduction')).toBeDefined(),
+    );
+  });
 });

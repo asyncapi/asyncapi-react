@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/web-component",
-  "version": "1.0.0-next.53",
+  "version": "1.0.0-next.54",
   "private": false,
   "description": "A web component for AsyncAPI specification. Based on @asyncapi/react-component.",
   "repository": {
@@ -51,8 +51,8 @@
     "web-react-components": "^1.4.2"
   },
   "devDependencies": {
-    "ts-loader": "9.4.4",
     "@types/react": "^16.9.2",
+    "ts-loader": "9.4.4",
     "webpack": "5.88.2",
     "webpack-cli": "5.1.4"
   },

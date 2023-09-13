@@ -23,15 +23,11 @@ export const Sidebar: React.FunctionComponent = () => {
     .get('x-logo')
     ?.value();
   const components = asyncapi.components();
-  const messages = components && components.messages();
-  const schemas = components && components.schemas();
-  const hasOperations =
-    asyncapi.channels().length > 0 &&
-    Object.values(asyncapi.channels()).some(
-      channel => channel.operations().length > 0,
-    );
+  const messages = components?.messages().all();
+  const schemas = components?.schemas().all();
+  const hasOperations = asyncapi.operations().length > 0;
 
-  const messagesList = messages && Object.keys(messages).length > 0 && (
+  const messagesList = messages?.length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -41,11 +37,11 @@ export const Sidebar: React.FunctionComponent = () => {
         Messages
       </a>
       <ul className="text-sm mt-2">
-        {Object.entries(messages).map(([messageName, message]) => (
-          <li key={messageName}>
+        {messages.map(message => (
+          <li key={message.name()}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#message-${messageName}`}
+              href={`#message-${message.name()}`}
               onClick={() => setShowSidebar(false)}
             >
               <div className="break-all inline-block">{message.id()}</div>
@@ -56,7 +52,7 @@ export const Sidebar: React.FunctionComponent = () => {
     </li>
   );
 
-  const schemasList = schemas && Object.keys(schemas).length > 0 && (
+  const schemasList = schemas?.length > 0 && (
     <li className="mb-3 mt-9">
       <a
         className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -66,14 +62,14 @@ export const Sidebar: React.FunctionComponent = () => {
         Schemas
       </a>
       <ul className="text-sm mt-2">
-        {Object.keys(schemas).map(schemaName => (
-          <li key={schemaName}>
+        {schemas.map(schema => (
+          <li key={schema.id()}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#schema-${schemaName}`}
+              href={`#schema-${schema.id()}`}
               onClick={() => setShowSidebar(false)}
             >
-              <div className="break-all inline-block">{schemaName}</div>
+              <div className="break-all inline-block">{schema.id()}</div>
             </a>
           </li>
         ))}
@@ -216,14 +212,14 @@ function filterObjectsByTags<T = any>(
 const ServersList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
-  const servers = asyncapi.servers();
+  const servers = asyncapi.servers().all();
   const showServers = sidebarConfig?.showServers || 'byDefault';
 
   if (showServers === 'byDefault') {
     return (
       <ul className="text-sm mt-2">
-        {Object.keys(servers).map(serverName => (
-          <ServerItem serverName={serverName} key={serverName} />
+        {servers.map(server => (
+          <ServerItem serverName={server.id()} key={server.id()} />
         ))}
       </ul>
     );
@@ -234,22 +230,17 @@ const ServersList: React.FunctionComponent = () => {
     specTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const serverTagNamesSet = new Set<string>();
-    Object.values(servers).forEach(server => {
-      if (typeof server.tags !== 'function') {
-        return;
-      }
+    servers.forEach(server => {
       server.tags().forEach(t => serverTagNamesSet.add(t.name()));
     });
     specTagNames = Array.from(serverTagNamesSet);
   }
 
-  const serializedServers: TagObject[] = Object.entries(servers).map(
-    ([serverName, server]) => ({
-      name: serverName,
-      object: server,
-      data: {},
-    }),
-  );
+  const serializedServers: TagObject[] = servers.map(server => ({
+    name: server.id(),
+    object: server,
+    data: {},
+  }));
   const { tagged, untagged } = filterObjectsByTags(
     specTagNames,
     serializedServers,
@@ -281,7 +272,7 @@ const ServersList: React.FunctionComponent = () => {
 const OperationsList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
-  const operations = asyncapi.operations();
+  const operations = asyncapi.operations().all();
   const showOperations = sidebarConfig?.showOperations || 'byDefault';
 
   const processedOperations: Array<TagObject<{
@@ -289,17 +280,16 @@ const OperationsList: React.FunctionComponent = () => {
     summary: string;
     kind: 'publish' | 'subscribe';
   }>> = [];
-  Object.entries(operations).forEach(([operationId, operation]) => {
+  operations.forEach(operation => {
+    const operationChannel = operation.channels();
+    const operationChannels = operationChannel.all();
+    const channelAddress = operationChannels[0]?.address();
     if (operation.isSend()) {
       processedOperations.push({
-        name: `publish-${operationId}`,
+        name: `publish-${operation.id()}`,
         object: operation,
         data: {
-          channelName:
-            operation
-              .channels()
-              .all()[0]
-              .address() || '',
+          channelName: channelAddress || '',
           kind: 'publish',
           summary: operation.summary() || '',
         },
@@ -307,14 +297,10 @@ const OperationsList: React.FunctionComponent = () => {
     }
     if (operation.isReceive()) {
       processedOperations.push({
-        name: `subscribe-${operationId}`,
+        name: `subscribe-${operation.id()}`,
         object: operation,
         data: {
-          channelName:
-            operation
-              .channels()
-              .all()[0]
-              .address() || '',
+          channelName: channelAddress || '',
           kind: 'subscribe',
           summary: operation.summary() || '',
         },
@@ -337,7 +323,7 @@ const OperationsList: React.FunctionComponent = () => {
     operationTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
   } else {
     const operationTagNamesSet = new Set<string>();
-    Object.values(operations).forEach(operation => {
+    operations.forEach(operation => {
       operation.tags().forEach(t => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);
