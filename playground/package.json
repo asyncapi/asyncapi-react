@@ -11,9 +11,9 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "codemirror": "^5.48.4",
     "re-resizable": "^6.0.0",
-    "react": "^16.8.0",
+    "react": "link:../library/node_modules/react",
     "react-codemirror2": "^6.0.0",
-    "react-dom": "^16.8.0",
+    "react-dom": "link:../library/node_modules/react-dom",
     "react-split": "^2.0.11",
     "styled-components": "^4.3.2"
   },
