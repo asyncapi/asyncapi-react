@@ -7,7 +7,7 @@ If you are not using React you may want to use the Standalone Bundle of AsyncAPI
 Run this command to install the component in your project:
 
 ```sh
-npm install --save @asyncapi/react-component@next
+npm install --save @asyncapi/react-component
 ```
 
 ## Usage in frameworks
@@ -23,13 +23,13 @@ Check how to use the Standalone bundle in:
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/styles/default.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
   </head>
   <body>
     
     <div id="asyncapi"></div>
 
-    <script src="https://unpkg.com/@asyncapi/react-component@1.0.0-next.12/browser/standalone/index.js"></script>
+    <script src="https://unpkg.com/@asyncapi/react-component@latest/browser/standalone/index.js"></script>
     <script>
       AsyncApiStandalone.render({
         schema: {

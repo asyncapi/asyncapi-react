@@ -191,8 +191,45 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "195858",
+      "name": "195858",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3858485?v=4",
+      "profile": "https://github.com/195858",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "aayushmau5",
+      "name": "Aayush Kumar Sahu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54525741?v=4",
+      "profile": "https://github.com/aayushmau5",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dalelane",
+      "name": "Dale Lane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1444788?v=4",
+      "profile": "http://dalelane.co.uk/",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "m1ner79",
+      "name": "Michal Gornicki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55558050?v=4",
+      "profile": "https://github.com/m1ner79",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "skipCi": true
+  "skipCi": false
 }

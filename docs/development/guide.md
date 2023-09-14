@@ -65,7 +65,7 @@ You can access the live development server at [localhost:3000](http://localhost:
 
 To spin up with Gitpod development environment, we configured our workspace through a [.gitpod.yml](/.gitpod.yml) file.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/master)
 
 ## Tests
 
