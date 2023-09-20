@@ -30,8 +30,10 @@ export interface ParserReturn {
 }
 
 export enum PayloadType {
-  PUBLISH = 'publish',
-  SUBSCRIBE = 'subscribe',
+  SEND = 'send',
+  RECIEVE = 'receive',
+  REQUEST = 'request',
+  REPLY = 'reply',
 }
 
 export interface MessageExample {

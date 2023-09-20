@@ -38,7 +38,7 @@ export const Message: React.FunctionComponent<Props> = ({
   }
 
   // check typeof as fallback for older version than `2.4.0`
-  const messageId = typeof message.id === 'function' && message.id();
+  let messageId = typeof message.id === 'function' && message.id();
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();
@@ -49,6 +49,16 @@ export const Message: React.FunctionComponent<Props> = ({
   const externalDocs = message.externalDocs();
   const showInfoList = contentType || externalDocs;
 
+  // For some reason the parser is returning the wrong message ID,
+  // when retrieving reply() messages that's the reason retrieving it this way
+  const xParserMessageName = message.json()['x-parser-message-name'];
+  if (
+    !messageId ||
+    Number(messageId) == index ||
+    (Number(messageId) == 0 && xParserMessageName)
+  ) {
+    messageId = xParserMessageName;
+  }
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8">
@@ -59,7 +69,7 @@ export const Message: React.FunctionComponent<Props> = ({
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
             <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {message.id()}
+              {messageId}
             </span>
           </div>
 
