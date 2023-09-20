@@ -54,8 +54,8 @@ export const Message: React.FunctionComponent<Props> = ({
   const xParserMessageName = message.json()['x-parser-message-name'];
   if (
     !messageId ||
-    Number(messageId) == index ||
-    (Number(messageId) == 0 && xParserMessageName)
+    Number(messageId) === index ||
+    (Number(messageId) === 0 && xParserMessageName)
   ) {
     messageId = xParserMessageName;
   }

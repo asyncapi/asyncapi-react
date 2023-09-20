@@ -281,11 +281,14 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.SEND, operation } = props;
   const config = useConfig();
   const [showMessages, setShowMessages] = useState(false);
-  if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) return <></>;
+  if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
+    return <></>;
+  }
   const reply = operation.reply();
-  if (reply === undefined) return <></>;
+  if (reply === undefined) {
+    return <></>;
+  }
   const { typeLabel } = getTypeInformation({ type, config });
-  console.log(typeLabel);
   const replyMessages = reply.messages();
   const explicitChannel = reply.channel();
 
@@ -371,9 +374,13 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   operation,
 }) => {
   const config = useConfig();
-  if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) return <></>;
+  if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
+    return <></>;
+  }
   const reply = operation.reply();
-  if (reply === undefined || !reply.hasAddress()) return <></>;
+  if (reply === undefined || !reply.hasAddress()) {
+    return <></>;
+  }
   const { typeLabel } = getTypeInformation({ type, config });
   const replyAddress = reply.address()!;
   const replyAddressLocation = replyAddress.location();
