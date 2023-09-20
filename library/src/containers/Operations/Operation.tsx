@@ -279,11 +279,11 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
 
 export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.SEND, operation } = props;
+  const config = useConfig();
   const [showMessages, setShowMessages] = useState(false);
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) return <></>;
   const reply = operation.reply();
   if (reply === undefined) return <></>;
-  const config = useConfig();
   const { typeLabel } = getTypeInformation({ type, config });
   console.log(typeLabel);
   const replyMessages = reply.messages();
@@ -370,10 +370,10 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   type = PayloadType.SEND,
   operation,
 }) => {
+  const config = useConfig();
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) return <></>;
   const reply = operation.reply();
   if (reply === undefined || !reply.hasAddress()) return <></>;
-  const config = useConfig();
   const { typeLabel } = getTypeInformation({ type, config });
   const replyAddress = reply.address()!;
   const replyAddressLocation = replyAddress.location();
