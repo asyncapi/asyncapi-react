@@ -184,7 +184,7 @@ function getTypeInformation({
   type: PayloadType;
   config: ConfigInterface;
 }): { borderColor: string; typeLabel: string } {
-  if (type === PayloadType.RECIEVE) {
+  if (type === PayloadType.RECEIVE) {
     return {
       borderColor: 'border-green-600 text-green-600',
       typeLabel: config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
@@ -216,7 +216,7 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
   if (operation.action() !== type) {
-    type = PayloadType.RECIEVE;
+    type = PayloadType.RECEIVE;
   }
   const { borderColor, typeLabel } = getTypeInformation({ type, config });
 
@@ -285,6 +285,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   if (reply === undefined) return <></>;
   const config = useConfig();
   const { typeLabel } = getTypeInformation({ type, config });
+  console.log(typeLabel);
   const replyMessages = reply.messages();
   const explicitChannel = reply.channel();
 
@@ -295,13 +296,14 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
           <div className="flex items-center pt-4">
             <div
               className={`w-1 h-11 ${
-                typeLabel === 'SEND' ? 'bg-red-600' : 'bg-orange-600'
+                typeLabel === 'REQUEST' ? 'bg-red-600' : 'bg-orange-600'
               }`}
             ></div>
             <div className="p-4">
               <h3 className="text-sm">
                 <span className="mr-2 uppercase" title={type}>
-                  {typeLabel === 'SEND' ? 'Requester' : 'Replier'} information
+                  {typeLabel === 'REQUEST' ? 'Requester' : 'Replier'}{' '}
+                  information
                 </span>
               </h3>
               {explicitChannel && (

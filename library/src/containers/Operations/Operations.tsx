@@ -84,12 +84,12 @@ export const Operations: React.FunctionComponent = () => {
             className="mb-12"
             key={`sub-${operation.id()}`}
             id={CommonHelpers.getIdentifier(
-              `operation-${PayloadType.RECIEVE}-${operation.id()}`,
+              `operation-${PayloadType.RECEIVE}-${operation.id()}`,
               config,
             )}
           >
             <Operation
-              type={PayloadType.RECIEVE}
+              type={PayloadType.RECEIVE}
               operation={operation}
               channelName={channelAddress}
               channel={channel}

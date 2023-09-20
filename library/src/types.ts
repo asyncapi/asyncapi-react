@@ -31,7 +31,7 @@ export interface ParserReturn {
 
 export enum PayloadType {
   SEND = 'send',
-  RECIEVE = 'receive',
+  RECEIVE = 'receive',
   REQUEST = 'request',
   REPLY = 'reply',
 }
