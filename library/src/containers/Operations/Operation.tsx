@@ -301,7 +301,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
               className={`w-1 h-11 ${
                 typeLabel === 'REQUEST' ? 'bg-red-600' : 'bg-orange-600'
               }`}
-            ></div>
+            />
             <div className="p-4">
               <h3 className="text-sm">
                 <span className="mr-2 uppercase" title={type}>
