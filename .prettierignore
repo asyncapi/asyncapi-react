@@ -6,8 +6,12 @@
 
 # production
 /**/lib
+/**/bundles
 /**/build
 /**/dist
+/library/browser
+/library/lib
+/library/styles
 
 # misc
 .DS_Store

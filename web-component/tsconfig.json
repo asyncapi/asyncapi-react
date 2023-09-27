@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./lib",
     "baseUrl": "./src",
-    "declaration": true
+    "declaration": true,
+    "ignoreDeprecations": "5.0"
   },
   "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
   "exclude": ["lib/**/*"]

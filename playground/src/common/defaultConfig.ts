@@ -1,12 +1,18 @@
 export const defaultConfig: string = `{
   "show": {
+    "sidebar": false,
     "info": true,
+    "operations": true,
     "servers": true,
-    "security": false,
     "messages": true,
     "schemas": true,
-    "channels": true
+    "errors": true
   },
-  "showErrors": true,
-  "disableDefaultTheme": false
+  "expand":{
+    "messageExamples": false
+  },
+  "sidebar": {
+    "showServers": "byDefault",
+    "showOperations": "byDefault"
+  }
 }`;

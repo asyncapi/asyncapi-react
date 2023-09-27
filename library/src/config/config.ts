@@ -1,30 +1,28 @@
-import { PushStateBehavior } from '../types';
-
 export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
   expand?: ExpandConfig;
-  showErrors?: boolean;
+  sidebar?: SideBarConfig;
   parserOptions?: any;
-  pushStateBehavior?: PushStateBehavior;
+  publishLabel?: string;
+  subscribeLabel?: string;
 }
 
 export interface ShowConfig {
+  sidebar?: boolean;
   info?: boolean;
-  channels?: boolean;
   servers?: boolean;
+  operations?: boolean;
   messages?: boolean;
   schemas?: boolean;
-}
-
-export interface ExpandNestedConfig {
-  root?: boolean;
-  elements?: boolean;
+  errors?: boolean;
 }
 
 export interface ExpandConfig {
-  channels?: ExpandNestedConfig;
-  servers?: ExpandNestedConfig;
-  messages?: ExpandNestedConfig;
-  schemas?: ExpandNestedConfig;
+  messageExamples?: boolean;
+}
+
+export interface SideBarConfig {
+  showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
+  showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
 }

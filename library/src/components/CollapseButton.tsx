@@ -1,41 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { ButtonHTMLAttributes, SVGAttributes } from 'react';
 
-import { bemClasses } from '../helpers';
-import { COLLAPSE_ALL_TEXT, EXPAND_ALL_TEXT } from '../constants';
-import { useExpandedContext } from '../store';
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  chevronProps?: SVGAttributes<SVGElement>;
+  expanded?: boolean;
+}
 
-export const CollapseButton = () => {
-  const {
-    expanded,
-    setExpanded,
-    numberOfElements,
-    numberOfExpanded,
-  } = useExpandedContext();
-  const [initial, setInitial] = useState<boolean>(false);
+const HiChevronRight = (props: SVGAttributes<SVGElement> = {}) => (
+  // Copied from https://icon-sets.iconify.design/heroicons-solid/chevron-right/
+  <svg
+    stroke="currentColor"
+    fill="currentColor"
+    strokeWidth="0"
+    viewBox="0 0 20 20"
+    height="1em"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      fillRule="evenodd"
+      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
-  useEffect(() => {
-    setInitial(true);
-  }, []);
-
-  useEffect(() => {
-    if (!initial) {
-      return;
-    }
-
-    if (numberOfExpanded === 0 && expanded) {
-      setExpanded(false);
-    }
-    if (numberOfExpanded === numberOfElements && !expanded) {
-      setExpanded(true);
-    }
-  }, [numberOfExpanded]);
-
-  return (
-    <button
-      className={bemClasses.element(`collapse-button`)}
-      onClick={() => setExpanded(state => !state)}
-    >
-      <span>{expanded ? COLLAPSE_ALL_TEXT : EXPAND_ALL_TEXT}</span>
-    </button>
-  );
-};
+export const CollapseButton: React.FunctionComponent<Props> = ({
+  chevronProps,
+  expanded = false,
+  children,
+  ...rest
+}) => (
+  <button
+    {...rest}
+    className={`focus:outline-none ${rest.className}`}
+    type="button"
+  >
+    <div className="inline-block">{children}</div>
+    <HiChevronRight
+      {...chevronProps}
+      className={`inline-block align-baseline cursor-pointer ml-0.5 -mb-1 w-5 h-5 transform transition-transform duration-150 ease-linear ${
+        expanded ? '-rotate-90' : ''
+      } ${chevronProps?.className || ''}`}
+    />
+  </button>
+);

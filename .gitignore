@@ -3,11 +3,14 @@
 
 # testing
 /**/coverage
+/**/cypress
 
 # production
 /**/lib
 /**/build
 /**/dist
+/library/browser
+/library/styles
 /library/LICENSE
 /library/README.md
 

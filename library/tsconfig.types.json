@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "outDir": "lib/types"
+  },
+  "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
+  "exclude": [
+    "src/standalone.ts",
+    "src/standalone-*.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

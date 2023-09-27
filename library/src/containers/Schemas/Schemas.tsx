@@ -1,58 +1,44 @@
 import React from 'react';
 
-import { SchemaComponent } from './Schema';
+import { Schema } from './Schema';
 
-import { ExpandNestedConfig } from '../../config';
-import { bemClasses } from '../../helpers';
-import { Toggle } from '../../components';
-import { SCHEMAS_TEXT, CONTAINER_LABELS } from '../../constants';
-import { Schema } from '../../types';
+import { useConfig, useSpec } from '../../contexts';
+import { CommonHelpers } from '../../helpers';
+import { SCHEMAS_TEXT } from '../../constants';
 
-interface Props {
-  schemas?: Record<string, Schema>;
-  expand?: ExpandNestedConfig;
-}
+export const Schemas: React.FunctionComponent = () => {
+  const asyncapi = useSpec();
+  const config = useConfig();
+  const schemas =
+    !asyncapi.components().isEmpty() &&
+    asyncapi
+      .components()
+      .schemas()
+      .all();
 
-export const SchemasComponent: React.FunctionComponent<Props> = ({
-  schemas,
-  expand,
-}) => {
-  if (!schemas) {
+  if (!schemas || schemas.length === 0) {
     return null;
   }
-  const className = CONTAINER_LABELS.SCHEMAS;
-
-  const header = <h2>{SCHEMAS_TEXT}</h2>;
-
-  const content = (
-    <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(schemas).map(([key, schema]) => (
-        <li key={key} className={bemClasses.element(`${className}-list-item`)}>
-          <SchemaComponent
-            name={key}
-            schema={schema}
-            toggle={true}
-            toggleExpand={expand && expand.elements}
-          />
-        </li>
-      ))}
-    </ul>
-  );
 
   return (
     <section
-      className={bemClasses.element(className)}
-      id={bemClasses.identifier([className])}
+      id={`${CommonHelpers.getIdentifier('schemas', config)}`}
+      className="mt-16"
     >
-      <Toggle
-        header={header}
-        className={className}
-        expanded={expand && expand.root}
-        label={CONTAINER_LABELS.SCHEMAS}
-        toggleInState={true}
-      >
-        {content}
-      </Toggle>
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+        {SCHEMAS_TEXT}
+      </h2>
+      <ul>
+        {schemas.map(schema => (
+          <li
+            className="mb-4"
+            key={schema.id()}
+            id={CommonHelpers.getIdentifier(`schema-${schema.id()}`, config)}
+          >
+            <Schema schemaName={schema.id()} schema={schema} />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 };

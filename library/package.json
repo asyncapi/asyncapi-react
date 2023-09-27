@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "0.24.23",
+  "version": "1.0.0-next.54",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -8,8 +8,8 @@
     "url": "git+https://github.com/asyncapi/asyncapi-react"
   },
   "author": {
-    "name": "The Kyma project authors",
-    "url": "http://kyma-project.io"
+    "name": "The AsyncAPI maintainers",
+    "url": "https://www.asyncapi.com"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -29,42 +29,90 @@
     "reactjs",
     "event"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/types/index.d.ts",
   "files": [
     "/lib",
+    "/browser",
+    "/styles",
     "./README.md",
     "./LICENSE"
   ],
+  "sideEffects": [
+    "./styles/default.css",
+    "./styles/default.min.css"
+  ],
   "scripts": {
-    "start": "tsc --watch",
-    "build": "tsc && npm run copyCss",
-    "test": "jest --detectOpenHandles",
-    "testWatch": "jest --detectOpenHandles --watch",
-    "copyCss": "cp -r ./src/styles ./lib",
-    "prepare": "npm run build && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE"
+    "start": "tsc -p tsconfig.esm.json --watch",
+    "build:dev": "npm run build:esm && npm run build:types && npm run build:styles",
+    "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:standalone && npm run build:types && npm run build:styles",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:umd": "cross-env BUILD_MODE=umd webpack",
+    "build:standalone": "cross-env BUILD_MODE=standalone webpack",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:styles": "npm run build:styles:dev && npm run build:styles:prod",
+    "build:styles:dev": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.css --verbose",
+    "build:styles:prod": "cross-env NODE_ENV=production MINIFY_STYLES=true postcss src/styles/default.css -o styles/default.min.css --verbose",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "jest --detectOpenHandles",
+    "test:unit:watch": "jest --detectOpenHandles --watch",
+    "test:e2e:dev": "cypress run",
+    "test:e2e": "npm run build:standalone && cypress run",
+    "prepare": "npm run build:dev",
+    "prepublishOnly": "npm run prepack",
+    "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
+    "get:name": "echo $npm_package_name",
+    "get:version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/avro-schema-parser": "^1.0.0",
-    "@asyncapi/openapi-schema-parser": "^2.0.1",
-    "@asyncapi/parser": "^1.15.1",
-    "constate": "^1.2.0",
-    "dompurify": "^2.1.1",
-    "markdown-it": "^12.3.2",
-    "merge": "^2.1.0",
-    "openapi-sampler": "1.2.1",
-    "react-use": "^12.2.0"
+    "@asyncapi/avro-schema-parser": "3.0.3",
+    "@asyncapi/openapi-schema-parser": "3.0.4",
+    "@asyncapi/protobuf-schema-parser": "3.0.0",
+    "@asyncapi/parser": "^3.0.0-next-major-spec.1",
+    "highlight.js": "^10.7.2",
+    "isomorphic-dompurify": "^0.13.0",
+    "marked": "^4.0.14",
+    "openapi-sampler": "^1.2.1",
+    "use-resize-observer": "^8.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.9.0",
+    "@tailwindcss/typography": "^0.4.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^12.8.3",
     "@types/dompurify": "^2.0.4",
-    "@types/jest": "^24.0.18",
-    "@types/markdown-it": "^10.0.2",
+    "@types/highlight.js": "^10.1.0",
+    "@types/jest": "^26.0.23",
+    "@types/marked": "^4.0.1",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
-    "jest": "^24.9.0",
-    "react": "^16.9.0",
-    "ts-jest": "^26.4.1"
+    "@types/react-dom": "^17.0.3",
+    "autoprefixer": "^10.2.5",
+    "cross-env": "^7.0.3",
+    "cssnano": "^4.1.11",
+    "cypress": "^7.4.0",
+    "jest": "^26.0.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "postcss": "^8.2.10",
+    "postcss-cli": "^8.3.1",
+    "postcss-import": "^14.0.2",
+    "postcss-scopify": "^0.1.9",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "tailwindcss": "^2.1.1",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "9.4.4",
+    "webpack": "5.88.2",
+    "webpack-bundle-analyzer": "4.9.0",
+    "webpack-cli": "5.1.4"
   },
   "publishConfig": {
     "access": "public"

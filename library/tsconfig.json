@@ -1,10 +1,10 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "baseUrl": "./src",
-    "declaration": true
+    "module": "ESNext",
+    "target": "es5",
+    "outDir": "lib/esm",
+    "types": ["jest", "node"]
   },
-  "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"],
-  "exclude": ["lib/**/*", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["src/*.ts", "src/**/*.ts", "src/*.tsx", "src/**/*.tsx"]
 }

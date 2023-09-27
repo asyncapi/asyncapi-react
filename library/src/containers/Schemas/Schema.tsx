@@ -1,142 +1,30 @@
 import React from 'react';
+import { SchemaInterface } from '@asyncapi/parser';
 
-import { SchemaPropertiesComponent as SchemaProperties } from './SchemaProperties';
-import { SchemaExampleComponent } from './SchemaExample';
-
-import { Toggle } from '../../components';
-import { Schema } from '../../types';
-import {
-  bemClasses,
-  searchForNestedObject,
-  removeSpecialChars,
-} from '../../helpers';
-import { ITEM_LABELS, CONTAINER_LABELS } from '../../constants';
+import { Schema as SchemaComponent } from '../../components';
 
 interface Props {
-  name: string;
-  schema?: Schema;
-  description?: React.ReactNode;
-  exampleTitle?: string;
-  hideTitle?: boolean;
-  toggle?: boolean;
-  toggleExpand?: boolean;
-  examples?: object[];
-  required?: boolean;
+  schemaName: string;
+  schema: SchemaInterface;
 }
 
-const renderSchemaProps = (
-  schemaName: string,
-  schema: Schema,
-  required: boolean,
-): React.ReactNode => {
-  const properties = schema.properties;
-
-  if (properties) {
-    return Object.entries(properties).map(([key, prop]) => (
-      <SchemaProperties
-        key={key}
-        name={key}
-        properties={prop}
-        treeSpace={0}
-        required={schema.required && schema.required.includes(key)}
-      />
-    ));
-  }
-
-  return (
-    <SchemaProperties
-      name={schemaName}
-      hasDynamicName={true}
-      properties={schema}
-      treeSpace={0}
-      required={required}
-    />
-  );
-};
-
-export const SchemaComponent: React.FunctionComponent<Props> = ({
-  name,
+export const Schema: React.FunctionComponent<Props> = ({
+  schemaName,
   schema,
-  description,
-  exampleTitle,
-  hideTitle = false,
-  toggle = false,
-  toggleExpand = false,
-  examples = [],
-  required = false,
 }) => {
   if (!schema) {
     return null;
   }
-  schema.description = schema.description || description || '';
 
-  const className = ITEM_LABELS.SCHEMA;
-  const hasNotField = searchForNestedObject(schema, 'not');
-
-  const header = (
-    <h3>
-      <span className={bemClasses.element(`${className}-header-title`)}>
-        {name}
-      </span>
-    </h3>
-  );
-  const hasExamples = examples.length;
-  const content = (
-    <>
-      <div className={`${bemClasses.element(`${className}-table`)} p-4`}>
-        {renderSchemaProps(name, schema, required)}
+  return (
+    <div>
+      <div className="panel-item--center px-8">
+        <div className="shadow rounded px-4 py-2 border bg-gray-200">
+          <SchemaComponent schemaName={schemaName} schema={schema} />
+        </div>
       </div>
 
-      {hasExamples ? (
-        examples.map((el, i) => (
-          <SchemaExampleComponent
-            title={hasExamples > 1 ? `${exampleTitle} ${i}` : exampleTitle}
-            example={el}
-            key={i}
-          />
-        )) // we need to disable this component if schema has "not" field anywhere in it
-      ) : hasNotField ? null : (
-        <SchemaExampleComponent title={exampleTitle} schema={schema} />
-      )}
-    </>
-  );
-
-  const schemaID = toggle
-    ? bemClasses.identifier([CONTAINER_LABELS.SCHEMAS, name])
-    : undefined;
-  const schemaDataID = toggle
-    ? bemClasses.identifier([
-        CONTAINER_LABELS.SCHEMAS,
-        removeSpecialChars(name),
-      ])
-    : undefined;
-  return (
-    <section
-      className={bemClasses.element(className)}
-      id={schemaID}
-      data-asyncapi-id={schemaDataID}
-    >
-      {toggle ? (
-        <Toggle
-          header={header}
-          className={className}
-          expanded={toggleExpand}
-          label={ITEM_LABELS.SCHEMA}
-          itemName={name}
-          toggleInState={true}
-        >
-          {content}
-        </Toggle>
-      ) : (
-        <>
-          {hideTitle ? null : (
-            <header className={bemClasses.element(`${className}-header`)}>
-              {header}
-            </header>
-          )}
-          {content}
-        </>
-      )}
-    </section>
+      <div className="w-full mt-4" />
+    </div>
   );
 };

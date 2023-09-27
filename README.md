@@ -1,20 +1,12 @@
 [![AsyncAPI React Component](./.github/assets/logo.png)](https://www.asyncapi.com)
 
-React component for AsyncAPI 2.0 specification. Available also as a Web Component.
+React component for AsyncAPI specification. Available also as a Web Component, but not only.
 
----
-
-> :warning: We are in the process of rewriting the component under the [`next`](https://github.com/asyncapi/asyncapi-react/tree/next) branch. The current version `0.X.X` is in the maintenance mode, we are focusing mainly on the `next` branch. Check out releases with `next` suffix in the release tag or the `next` tag on NPM.
-
----
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg)](#contributors) ![npm](https://img.shields.io/npm/v/@asyncapi/react-component) ![npm](https://img.shields.io/npm/dt/@asyncapi/react-component)
+![npm](https://img.shields.io/npm/dt/@asyncapi/react-component) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/asyncapi/asyncapi-react/tree/next)
 
 ## Overview
 
-A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
-
-> **CAUTION**: This package only supports AsyncAPI 2.0 specification. If you use 1.x, we recommend that you upgrade to the latest AsyncAPI version using the [Node.js](https://github.com/asyncapi/converter) or [Go](https://github.com/asyncapi/converter-go) converters.
+The official [React](https://reactjs.org/) component for AsyncAPI specification. It allows you to render the documentation of your asynchronous API provided in the AsyncAPI specification format and validate this specification. You can fully restyle the component using your own styles.
 
 <!-- toc is generated with GitHub Actions do not remove toc markers -->
 
@@ -22,16 +14,18 @@ A official [React](https://reactjs.org/) component for AsyncAPI 2.0 specificatio
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-  * [Props](#props)
-  * [Features](#features)
-  * [Styles](#styles)
+- [Using in React](#using-in-react)
+- [Using in other technologies](#using-in-other-technologies)
+- [Props](#props)
+- [Features](#features)
+- [Styles](#styles)
+  * [Default styles](#default-styles)
+  * [Custom styles](#custom-styles)
+  * [Custom logo](#custom-logo)
 - [Playground](#playground)
-- [Web Component](#web-component)
-  * [Installation](#installation-1)
-  * [Using in Angular](#using-in-angular)
+- [Modules](#modules)
 - [Development](#development)
 - [Contribution](#contribution)
-- [Missing features](#missing-features)
 - [Credits](#credits)
 - [Contributors](#contributors)
 
@@ -49,17 +43,70 @@ Run this command to install the component in your project:
 npm install --save @asyncapi/react-component
 ```
 
-Check out this simple sandbox application that uses the React component:
+Check out this sandbox application that uses the React component:
 
 [![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-react-component-in-action-wvdy2)
 
-### Props
+## Using in React
+
+Check a simple example which shows passing the inline AsyncAPI specification with custom configurations:
+
+```tsx
+import * as React from "react";
+import { render } from "react-dom";
+import AsyncApiComponent, { ConfigInterface } from "@asyncapi/react-component";
+
+const schema = `
+asyncapi: '2.0.0'
+info:
+  title: Example
+  version: '0.1.0'
+channels:
+  example-channel:
+    subscribe:
+      message:
+        payload:
+          type: object
+          properties:
+            exampleField:
+              type: string
+            exampleNumber:
+              type: number
+            exampleDate:
+              type: string
+              format: date-time
+`;
+
+const config: ConfigInterface = {
+  schemaID: 'custom-spec',
+  show: {
+    operations: false,
+    errors: false,
+  },
+};
+
+const App = () => <AsyncApiComponent schema={schema} config={config} />;
+
+render(<App />, document.getElementById("root"));
+```
+
+## Using in other technologies
+
+To check how to use web-component or use a component in other technologies see:
+
+- [Using in Angular](./docs/usage/angular.md)
+- [Using in Vue](./docs/usage/vue.md)
+- [Using in NextJS](./docs/usage/nextjs.md)
+- [Standalone bundle usage](./docs/usage/standalone-bundle.md)
+- [Web Component usage](./docs/usage/web-component.md)
+
+## Props
 
 The list of props for the AsyncAPI React component includes:
 
-- **schema: string | AsyncApiInterface | FetchingSchemaInterface**
+- **schema: string | AsyncAPIDocument | object | FetchingSchemaInterface**
 
-  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncApiInterface`](./library/src/types.ts#L13) type, or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncAPIDocument`](https://github.com/asyncapi/parser-js/blob/master/lib/models/asyncapi.js) type, parsed specification as JS object from [AsyncAPI Parser](https://github.com/asyncapi/parser-js) or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
 - **config?: Partial<ConfigInterface\>**
 
@@ -68,19 +115,84 @@ The list of props for the AsyncAPI React component includes:
 
   > **NOTE:** The `Partial<T>` type means that every field in the `T` type is optional.
 
-### Features
+## Features
 
 For a list and description of features offered by the AsyncAPI React component, see [this](./docs/features) directory.
 
-### Styles
+## Styles
 
+### Default styles
 To use default styles import them as follows:
 
 ``` js
-import "@asyncapi/react-component/lib/styles/fiori.css";
+import "@asyncapi/react-component/styles/default.css";
+// or minified version
+import "@asyncapi/react-component/styles/default.min.css";
 ```
 
-For information on how to change styles, read the [Style Modification](./docs/configuration/style-modification.md) document.
+### Custom styles
+The AsyncAPI React component does not set any global fonts. This component allows the usage of your custom `font-family` and other styling.
+
+This can be done by defining the styles in a file or inline using a `<style>` tag in the `<head>` section of the page where you are using AsyncAPI React component.
+
+Example custom styles (defined in the `styles/custom.css` file):
+```css
+html {
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+```
+
+If you are using the component in a project that uses a bundler like Webpack, don't forget to import the custom styles.
+
+``` js
+import "styles/custom.css";
+import "@asyncapi/react-component/styles/default.min.css";
+```
+
+If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you can put the custom styles as a style sheet link or as an inline style in the `<head>` section of the HTML code:
+
+```html
+ <head>
+   <!-- Custom style sheet -->
+   <link rel="stylesheet" href="./styles/custom.css">
+
+   <!-- OR as inline style -->
+   <style>
+     html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
+     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
+   </style>
+   
+   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
+   
+   ...
+ </head>
+```
+
+### Custom logo
+
+The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the [InfoObject](https://github.com/asyncapi/spec/blob/master/spec/asyncapi.md#infoObject), a logo will be shown in the top left corner.
+
+> **NOTE**: The logo will only appear if the [sidebar option](./docs/configuration/config-modification.md#definition) is enabled.
+  
+```yaml
+asyncapi: 2.2.0
+info:
+  title: Account Service
+  version: 1.0.0
+  description: This service is in charge of processing user signups.
+  x-logo: 'https://raw.githubusercontent.com/asyncapi/spec/master/assets/logo.png'
+channels:
+  ...
+```
 
 ## Playground
 
@@ -88,102 +200,14 @@ This repository comes in with a [Playground application](https://asyncapi.github
 
 You can also run the Playground application locally by following [this](./docs/development/guide.md#install-dependencies) instruction from the development guide.
 
-## Web Component
+## Modules
 
-If you are not using React you may want to use the `@asyncapi/web-component` component as a plain web component in any other web framework of your choice or as an element of a static HTML webpage. This is achieved by making use of [web-react-components](https://www.npmjs.com/package/web-react-components).
-
-When invoked as an independent entity, Web Component takes the following props (as it is still a React component):
-
-- `schema` is a `schema` property from the React component,
-    > **NOTE**: Since version 0.19.0 specifying a `schema` object can be omitted. `schema.url` and `schema.requestOptions` can be replaced with `schemaUrl` and `schemaFetchOptions` properties accordingly.
-- `config` is an **optional** `config` property from the React component,
-- `schemaUrl` property is a `string`, specific to Web Component, containing a URL to fetch an AsyncAPI Schema from. It is a wrapper for `schema.url` property in `schema` object under the hood,
-    > **NOTE**: If `schemaUrl` property is specified, the `schema.url` property of the React component will be ignored.
-- `schemaFetchOptions` property is an **optional** `object` of [RequestInit](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.requestinit.html) type in JSON format, specific to Web Component, containing additional fetching options. It is a wrapper for `schema.requestOptions` property in `schema` object, which are both needed only in case process of fetching from a URL is any different from a usual browser request,
-    > **NOTE**: If `schemaFetchOptions` property is specified, `schema.requestOptions` property of the React component will be ignored. If `schemaUrl` property is NOT specified, `schemaFetchOptions` will be ignored itself and `schema.url`/`schema.requestOptions` properties of the React component must be used in this case.
-- `cssImportPath` property is the path to styles. Default version from `unpkg.com` contains guaranteed minimum styling for the Web Component,
-- [webcomponentsjs](https://www.npmjs.com/package/@webcomponents/webcomponentsjs) is a series of polyfills to make code runnable in old browsers. It is **optional** if you do not intend to support any.
-
-```html
-<!-- Remove 'webcomponentsjs' if no support for older browsers is required -->
-<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.5.0/webcomponents-bundle.js"></script>
-<script src="https://unpkg.com/@asyncapi/web-component@0.19.0/lib/asyncapi-web-component.js" defer></script>
-
-<asyncapi-component
-  schemaUrl="https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/2.0.0/streetlights.yml"
-  schemaFetchOptions='{"method":"GET","mode":"cors"}' <!-- Remove if it is only a plain browser request -->
-  cssImportPath="https://unpkg.com/@asyncapi/react-component@0.19.0/lib/styles/fiori.css">
-</asyncapi-component>
-```
-
-> **NOTE**: If a Web Component is called with no properties at all, error will be shown on page.
-
-> **NOTE**: If there are several Web Components on one page, each one will be rendered using its own properties.
-
-### Installation
-
-Run this command to install the component in your project:
-
-```sh
-npm install --save @asyncapi/web-component
-```
-
-Check out this simple sandbox application that uses the Web Component in Angular project:
-
-[![Edit asyncapi-web-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-web-component-in-action-l652x)
-
-### Using in Angular
-
-To use component in Angular, follow these steps:
-
-1. Update `AppModule` by adding the `CUSTOM_ELEMENTS_SCHEMA` to the `schemas` array in the `NgModule` metadata:
-
-  ```ts
-  import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-  @NgModule({
-    ...
-    schemas: [
-      CUSTOM_ELEMENTS_SCHEMA,
-    ]
-  })
-  export class AppModule {}
-  ```
-
-2. Import the `@asyncapi/web-component` module in an Angular's component where you want to use the web component: 
-
-  ```ts
-  import { Component } from '@angular/core';
-  import '@asyncapi/web-component/lib/asyncapi-web-component';
-
-  @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
-  })
-  export class AppComponent {
-    ...
-  }
-  ```
-
-3. Use web component in the template as follows:
-
-  ```html
-  <asyncapi-component
-    [schema]="schema"
-    [config]="config"
-    [schemaUrl]="schemaUrl"
-    [schemaFetchOptions]="schemaFetchOptions"
-    [cssImportPath]="cssImportPath">
-  </asyncapi-component>
-  ```
- 
-  where:
-  
-  - `schema`, `config`, `schemaUrl`, `schemaFetchOptions` are Web Component's properties used in any valid combination, as described in [Web Component specification](#web-component),
-  - `cssImportPath` is the path to styles. By default it is `assets/asyncapi.css`
-
-  > **NOTE**: The easiest way to use the default css is to copy the content of the `@asyncapi/react-component/lib/styles/fiori.css` file to a `assets/asyncapi.css` file.
+The `@asyncapi/react-component` package has 3 crafted JS modules to be used in various environments:
+- `esm` (ECMAScript Modules) is intended for use in a single-page applications with predefined environments like [`create-react-app`](https://github.com/facebook/create-react-app) that are capable of resolving dependencies (via Webpack, Browserify, etc). It can also be used on the server side (for tasks like Server Side Rendering) when the application is using `esm`.
+- `cjs` (CommonJS Modules) similar uses as for `esm` modules, but using CommonJS modules.
+- `umd` (Universal Module Definition) is a dependency-free module that includes everything you need to serve AsyncAPI documentation (however [React](https://github.com/facebook/react/tree/master/packages/react) and [ReactDOM](https://github.com/facebook/react/tree/master/packages/react-dom) dependencies must be served separately) on a single-page application that can't resolve npm module dependencies or in normal HTML page. We have 2 types of minified `umd` bundles, with and without [AsyncAPI Parser](https://github.com/asyncapi/parser-js) in paths:
+  - `@asyncapi/react-component/browser/index.js`
+  - `@asyncapi/react-component/browser/without-parser.js`
 
 ## Development
 
@@ -196,25 +220,9 @@ If you create a feature request, use the dedicated **Feature request** issue tem
 
 If you have a bug to report, reproduce it in an online code editor. For example, use [CodeSandbox](https://codesandbox.io/). Attach the link to the reproduced bug to your issue. Log the bug using the **Bug report** template.
 
-## Missing features
-
-See the list of features that are still missing in the component:
-
-- [ ] render [`bindings`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#fixed-fields-19)
-- [ ] render [`tags`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#tagsObject)
-- [ ] render [`externalDocs`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#externalDocumentationObject)
-- [ ] render [`schema properties`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#properties) 
-- [ ] render [`correlationID`](https://github.com/asyncapi/asyncapi/blob/master/versions/2.0.0/asyncapi.md#correlationIdObject)
-
-If you want to help us develop them, feel free to contribute.
-
 ## Credits
 
-<p align="center">
- <a href="https://kyma-project.io/" target="_blank">
-  <img src="https://raw.githubusercontent.com/kyma-project/kyma/master/logo.png" width="235">
- </a>
-</p>
+The project was originally developed under the [Kyma project](https://kyma-project.io/), in 2019 it was moved under AsyncAPI Initiative.
 
 ## Contributors
 

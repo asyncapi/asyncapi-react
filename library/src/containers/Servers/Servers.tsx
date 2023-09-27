@@ -1,64 +1,50 @@
 import React from 'react';
 
-import { ServerComponent } from './Server';
+import { Server } from './Server';
 
-import { ExpandNestedConfig } from '../../config';
-import { bemClasses } from '../../helpers';
-import { Servers, SecurityScheme } from '../../types';
-import { Toggle } from '../../components';
-import { SERVERS, CONTAINER_LABELS } from '../../constants';
+import { useConfig, useSpec } from '../../contexts';
+import { CommonHelpers } from '../../helpers';
+import { SERVERS_TEXT } from '../../constants';
 
-interface Props {
-  servers?: Servers;
-  securitySchemes?: Record<string, SecurityScheme>;
-  expand?: ExpandNestedConfig;
-}
+export const Servers: React.FunctionComponent = () => {
+  const servers = useSpec()
+    .servers()
+    .all();
+  const config = useConfig();
 
-export const ServersComponent: React.FunctionComponent<Props> = ({
-  servers,
-  securitySchemes,
-  expand,
-}) => {
-  if (!servers) {
+  if (!servers.length) {
     return null;
   }
-  const className = CONTAINER_LABELS.SERVERS;
-
-  const header = <h2>{SERVERS}</h2>;
-
-  const content = (
-    <ul className={bemClasses.element(`${className}-list`)}>
-      {Object.entries(servers).map(([stage, server]) => (
-        <li
-          key={stage}
-          className={bemClasses.element(`${className}-list-item`)}
-        >
-          <ServerComponent
-            key={`${server.url}${stage}`}
-            server={server}
-            stage={stage}
-            securitySchemes={securitySchemes}
-            toggleExpand={expand && expand.elements}
-          />
-        </li>
-      ))}
-    </ul>
-  );
 
   return (
     <section
-      className={bemClasses.element(className)}
-      id={bemClasses.identifier([className])}
+      id={`${CommonHelpers.getIdentifier('servers', config)}`}
+      className="mt-16"
     >
-      <Toggle
-        header={header}
-        className={className}
-        expanded={expand && expand.root}
-        label={CONTAINER_LABELS.SERVERS}
-        toggleInState={true}
-      >
-        {content}
-      </Toggle>
+      <h2 className="2xl:w-7/12 text-3xl font-light mb-4 px-8">
+        {SERVERS_TEXT}
+      </h2>
+      <ul>
+        {servers.map(server => {
+          const serverName = server.id();
+          return (
+            <li
+              className="mb-4"
+              key={serverName}
+              id={`${CommonHelpers.getIdentifier(
+                `server-${serverName}`,
+                config,
+              )}`}
+            >
+              <Server
+                serverName={serverName}
+                server={server}
+                key={serverName}
+              />
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 };

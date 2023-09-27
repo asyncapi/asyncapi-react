@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import Split from 'react-split';
 
 const SplitWrapper: React.FunctionComponent = ({ children }) => (

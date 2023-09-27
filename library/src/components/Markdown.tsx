@@ -1,7 +1,20 @@
 import React from 'react';
+import { sanitize } from 'isomorphic-dompurify';
 
-import { bemClasses } from '../helpers';
+import { renderMarkdown } from '../helpers';
 
-export const Markdown: React.FunctionComponent = ({ children }) => (
-  <div className={bemClasses.element(`markdown`)}>{children}</div>
-);
+export const Markdown: React.FunctionComponent = ({ children }) => {
+  if (!children) {
+    return null;
+  }
+  if (typeof children !== 'string') {
+    return <>{children}</>;
+  }
+
+  return (
+    <div
+      className="prose max-w-none text-sm"
+      dangerouslySetInnerHTML={{ __html: sanitize(renderMarkdown(children)) }}
+    />
+  );
+};
