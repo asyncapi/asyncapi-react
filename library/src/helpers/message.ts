@@ -84,8 +84,9 @@ export class MessageHelpers {
     }
 
     const headers = msg.headers();
-    if (headers && headers.examples()) {
-      return headers.examples()?.map(example => ({ example }));
+    const examples = headers?.examples?.();
+    if (examples) {
+    return examples.map(example => ({ example }));
     }
 
     return;
