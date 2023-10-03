@@ -56,8 +56,6 @@ export class MessageHelpers {
     if (payload && payload.examples()) {
       return payload.examples()?.map(example => ({ example }));
     }
-
-    return;
   }
 
   static getHeadersExamples(
