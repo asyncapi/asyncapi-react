@@ -57,7 +57,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
 
   useEffect(() => {
     setExpanded(
-      (config && config.expand && config.expand.messageExamples) || false,
+      config?.expand?.messageExamples ?? false
     );
   }, [config.expand]);
 
