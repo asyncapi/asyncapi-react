@@ -275,7 +275,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
         </div>
       )}
 
-      {securitySchema && securitySchema.hasDescription() && (
+      {securitySchema?.hasDescription() && (
         <div>
           <Markdown>{securitySchema.description()}</Markdown>
         </div>
