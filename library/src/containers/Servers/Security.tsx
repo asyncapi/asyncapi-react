@@ -26,8 +26,7 @@ export const Security: React.FunctionComponent<Props> = ({
 
   let renderedSecurities;
   if (
-    !security ||
-    !security.length ||
+    !security?.length ||
     !securitySchemes ||
     !Object.keys(securitySchemes).length
   ) {
