@@ -53,7 +53,7 @@ export class MessageHelpers {
     }
 
     const payload = msg.payload();
-    if (payload && payload.examples()) {
+    if (payload?.examples()) {
       return payload.examples()?.map(example => ({ example }));
     }
     return;
@@ -83,7 +83,7 @@ export class MessageHelpers {
     }
 
     const headers = msg.headers();
-    if (headers && headers.examples()) {
+    if (headers?.examples()) {
       return headers.examples()?.map(example => ({ example }));
     }
     return undefined;

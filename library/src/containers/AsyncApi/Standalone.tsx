@@ -32,7 +32,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (parsedSpec) {
       this.state = { asyncapi: parsedSpec };
     }
-    return;
   }
 
   async componentDidMount() {
