@@ -56,7 +56,6 @@ export class MessageHelpers {
     if (payload?.examples()) {
       return payload.examples()?.map(example => ({ example }));
     }
-
     return;
   }
 
@@ -87,7 +86,6 @@ export class MessageHelpers {
     if (headers?.examples()) {
       return headers.examples()?.map(example => ({ example }));
     }
-
-    return;
+    return undefined;
   }
 }
