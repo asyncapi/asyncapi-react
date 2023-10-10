@@ -38,7 +38,7 @@ export const Message: React.FunctionComponent<Props> = ({
   }
 
   // check typeof as fallback for older version than `2.4.0`
-  let messageId = typeof message.id === 'function' && message.id();
+  const messageId = typeof message.id === 'function' && message.id();
   const title = message.title();
   const summary = message.summary();
   const payload = message.payload();
