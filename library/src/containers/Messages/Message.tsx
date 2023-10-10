@@ -49,16 +49,6 @@ export const Message: React.FunctionComponent<Props> = ({
   const externalDocs = message.externalDocs();
   const showInfoList = contentType || externalDocs;
 
-  // For some reason the parser is returning the wrong message ID,
-  // when retrieving reply() messages that's the reason retrieving it this way
-  const xParserMessageName = message.json()['x-parser-message-name'];
-  if (
-    !messageId ||
-    Number(messageId) === index ||
-    (Number(messageId) === 0 && xParserMessageName)
-  ) {
-    messageId = xParserMessageName;
-  }
   return (
     <div className="panel-item">
       <div className="panel-item--center px-8">

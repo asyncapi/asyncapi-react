@@ -296,7 +296,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
     <>
       <div className="font-mono px-8 py-4">
         <div className="border rounded">
-          <div className="flex items-center pt-4">
+          <div className="flex items-center">
             <div
               className={`w-1 h-11 ${
                 typeLabel === 'REQUEST' ? 'bg-red-600' : 'bg-orange-600'
@@ -319,51 +319,52 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
               )}
             </div>
           </div>
-          {replyMessages.isEmpty() === false && (
-            <div className="px-4 py-2">
-              <CollapseButton
-                onClick={() => setShowMessages(prev => !prev)}
-                expanded={showMessages}
-              >
-                <span className="inline-block py-0.5 mr-1 text-gray-500 text-sm text-center rounded focus:outline-none">
-                  Expected Reply{' '}
-                  {replyMessages.length > 1 ? 'Messages' : 'Message'}
-                </span>
-              </CollapseButton>
-              <div
-                className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
-              >
-                {replyMessages.length > 1 ? (
-                  <div className="mt-2">
-                    <ul>
-                      {replyMessages.all().map((msg, idx) => (
-                        <li className="mt-4" key={idx}>
-                          <Message
-                            message={msg}
-                            index={idx}
-                            showExamples={true}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <div className="mt-2">
+          <div className="px-2 py-2">
+            {replyMessages.isEmpty() === false && (
+              <>
+                <CollapseButton
+                  onClick={() => setShowMessages(prev => !prev)}
+                  expanded={showMessages}
+                >
+                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-sm text-center rounded focus:outline-none">
+                    Expected Reply{' '}
+                    {replyMessages.length > 1 ? 'Messages' : 'Message'}
+                  </span>
+                </CollapseButton>
+                <div
+                  className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
+                >
+                  {replyMessages.length > 1 ? (
                     <div className="mt-2">
-                      <Message
-                        message={replyMessages.all()[0]}
-                        showExamples={true}
-                      />
+                      <ul>
+                        {replyMessages.all().map((msg, idx) => (
+                          <li className="mt-4" key={idx}>
+                            <Message
+                              message={msg}
+                              index={idx}
+                              showExamples={true}
+                            />
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+                  ) : (
+                    <div className="mt-2">
+                      <div className="mt-2">
+                        <Message
+                          message={replyMessages.all()[0]}
+                          showExamples={true}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+            <OperationReplyAddressInfo {...props} />
+          </div>
         </div>
       </div>
-      <OperationReplyAddressInfo {...props} />
-
       <Extensions name="Operation Reply Extensions" item={reply} />
     </>
   );
@@ -387,34 +388,24 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <div className="mb-4">
-        <h3>
-          <span
-            className={`font-mono border uppercase p-1 rounded mr-2`}
-            title={type}
-          >
-            Operation {typeLabel} address information
+      <h3 className="text-xs mt-4">
+        <span className="mr-2 uppercase" title={type}>
+          {typeLabel} address information
+        </span>
+      </h3>
+      {replyAddressLocation && (
+        <div className="text-xs text-gray-700">
+          {typeLabel} address location
+          <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+            {replyAddressLocation}
           </span>
-        </h3>
-      </div>
-
+        </div>
+      )}
       {replyAddress.hasDescription() && (
         <div className="mt-2">
           <Markdown>{replyAddress.description()}</Markdown>
         </div>
       )}
-
-      {replyAddressLocation && (
-        <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
-          <div className="text-sm text-gray-700">
-            Operation {typeLabel} address location
-            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-              {replyAddressLocation}
-            </span>
-          </div>
-        </div>
-      )}
-
       <Extensions name="Operation Reply Address Extensions" item={reply} />
     </>
   );
