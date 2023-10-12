@@ -26,8 +26,7 @@ export const Security: React.FunctionComponent<Props> = ({
 
   let renderedSecurities;
   if (
-    !security ||
-    !security.length ||
+    !security?.length ||
     !securitySchemes ||
     !Object.keys(securitySchemes).length
   ) {
@@ -276,7 +275,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
         </div>
       )}
 
-      {securitySchema && securitySchema.hasDescription() && (
+      {securitySchema?.hasDescription() && (
         <div>
           <Markdown>{securitySchema.description()}</Markdown>
         </div>
