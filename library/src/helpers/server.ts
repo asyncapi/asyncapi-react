@@ -53,19 +53,19 @@ export class ServerHelpers {
   ) {
     let securityProtocol;
     let saslMechanism;
+
     if (protocol === 'kafka') {
       if (securitySchema) {
         securityProtocol = 'SASL_PLAINTEXT';
       } else {
         securityProtocol = 'PLAINTEXT';
       }
+    } else if (securitySchema) {
+      securityProtocol = 'SASL_SSL';
     } else {
-      if (securitySchema) {
-        securityProtocol = 'SASL_SSL';
-      } else {
-        securityProtocol = 'SSL';
-      }
+      securityProtocol = 'SSL';
     }
+
     if (securitySchema) {
       switch (securitySchema.type()) {
         case 'plain':
