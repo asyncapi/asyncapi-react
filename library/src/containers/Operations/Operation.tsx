@@ -279,8 +279,8 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
 
 export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.SEND, operation } = props;
-  const config = useConfig();
   const [showMessages, setShowMessages] = useState(false);
+  const [showChannel, setShowChannel] = useState(false);
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
     return <></>;
   }
@@ -288,45 +288,62 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   if (reply === undefined) {
     return <></>;
   }
-  const { typeLabel } = getTypeInformation({ type, config });
+
   const replyMessages = reply.messages();
   const explicitChannel = reply.channel();
+  const replyAddress = reply.address()?.location()
 
   return (
     <>
       <div className="font-mono px-8 py-4">
         <div className="border rounded">
-          <div className="flex items-center">
+          <div className={`w-full ${type === "reply" ? "bg-green-600 border-green-600" : "bg-blue-600 border-blue-600"} text-sm rounded-t h-8 px-4 border text-white flex items-center`}>
+            <span className='font-bold'>REPLY INFORMATION</span>
+          </div>
+          <div className="flex">
             <div
-              className={`w-1 h-11 ${
-                typeLabel === 'REQUEST' ? 'bg-red-600' : 'bg-orange-600'
-              }`}
+              className={`w-1 h-11 ${type === "reply" ? "bg-green-600" : "bg-blue-600"} mt-4`}
             />
             <div className="p-4">
-              <h3 className="text-sm">
-                <span className="mr-2 uppercase" title={type}>
-                  {typeLabel === 'REQUEST' ? 'Requester' : 'Replier'}{' '}
-                  information
+              <h3 className="text-xs">
+                <span className="mr-2" title={type}>
+                  REPLY CHANNEL INFORMATION
                 </span>
               </h3>
-              {explicitChannel && (
+              {explicitChannel?.address() ? (
                 <div className="text-xs text-gray-700">
-                  {typeLabel} should be done on channel
+                  Reply will be provided via this designated address
                   <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                    {explicitChannel.address()}
+                    {explicitChannel.address()} {' '} 
                   </span>
                 </div>
-              )}
+              ) : <div className="text-xs text-gray-700">
+              Reply will be directed to the address specified at this location
+              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                {replyAddress}
+              </span>
+            </div>}
+              <div className='mt-2'>
+              {explicitChannel && <CollapseButton
+                  onClick={() => setShowChannel(prev => !prev)}
+                  expanded={showChannel}
+                >
+                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
+                    View channel details
+                  </span>
+                </CollapseButton> }
+                {explicitChannel && <div className={`w-full mt-4 ${showChannel ? 'block' : 'hidden'}`}><OperationChannelInfo {...props} /> </div>}
+              </div>
             </div>
           </div>
-          <div className="px-2 py-2">
-            {replyMessages.isEmpty() === false && (
-              <>
+            <OperationReplyAddressInfo {...props} />
+          {replyMessages.isEmpty() === false && (
+              <div className='p-4'>
                 <CollapseButton
                   onClick={() => setShowMessages(prev => !prev)}
                   expanded={showMessages}
                 >
-                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-sm text-center rounded focus:outline-none">
+                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
                     Expected Reply{' '}
                     {replyMessages.length > 1 ? 'Messages' : 'Message'}
                   </span>
@@ -359,22 +376,87 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             )}
-            <OperationReplyAddressInfo {...props} />
-          </div>
         </div>
       </div>
+
       <Extensions name="Operation Reply Extensions" item={reply} />
     </>
   );
 };
 
+export const OperationChannelInfo: React.FunctionComponent<Props> = ({
+  type = PayloadType.SEND,
+  channelName,
+  channel
+}) => {
+  const config = useConfig();
+  const servers =
+    typeof channel.servers === 'function' && channel.servers().all();
+  const parameters =
+    channel.parameters() !== undefined
+      ? SchemaHelpers.parametersToSchema(channel.parameters())
+      : undefined;
+  if(!channel) return <></>
+  return <>
+  <div>
+    {channel.hasDescription() && (
+        <div className="mt-2">
+          <Markdown>{channel.description()}</Markdown>
+        </div>
+      )}
+        {servers && servers.length > 0 ? (
+          <div className="mt-2 text-sm">
+            <p>Available only on servers:</p>
+            <ul className="flex flex-wrap leading-normal">
+              {servers.map(server => (
+                <li className="inline-block mt-2 mr-2" key={server.id()}>
+                  <a
+                    href={`#${CommonHelpers.getIdentifier(
+                      'server-' + server.id(),
+                      config,
+                    )}`}
+                    className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
+                  >
+                    <span className="underline">{server.id()}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {parameters && (
+          <div
+            className="mt-2"
+            id={CommonHelpers.getIdentifier(
+              `operation-${type}-${channelName}-parameters`,
+              config,
+            )}
+          >
+            <Schema
+              schemaName="Parameters"
+              schema={parameters}
+              expanded={true}
+            />
+          </div>
+        )}
+        {channel.bindings() && (
+          <div className="mt-2">
+            <Bindings
+              name="Bindings"
+              bindings={channel.bindings()}
+            />
+          </div>
+        )}
+  </div>
+  </>
+}
+
 export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   type = PayloadType.SEND,
   operation,
 }) => {
-  const config = useConfig();
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
     return <></>;
   }
@@ -382,20 +464,21 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   if (reply === undefined || !reply.hasAddress()) {
     return <></>;
   }
-  const { typeLabel } = getTypeInformation({ type, config });
   const replyAddress = reply.address()!;
   const replyAddressLocation = replyAddress.location();
 
   return (
-    <>
-      <h3 className="text-xs mt-4">
+    <div className='flex'>
+      <div className={`w-1 h-11 ${type === "reply" ? "bg-green-600" : "bg-blue-600"} mt-4`} />
+      <div className='p-4'>
+      <h3 className="text-xs">
         <span className="mr-2 uppercase" title={type}>
-          {typeLabel} address information
+          REPLY address information
         </span>
       </h3>
       {replyAddressLocation && (
         <div className="text-xs text-gray-700">
-          {typeLabel} address location
+          REPLY address should be provided in
           <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
             {replyAddressLocation}
           </span>
@@ -407,6 +490,7 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
         </div>
       )}
       <Extensions name="Operation Reply Address Extensions" item={reply} />
-    </>
+      </div>
+    </div>
   );
 };
