@@ -398,7 +398,9 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
     channel.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
-  if(!channel) return <></>
+  if(!channel){
+    return <></>
+  }
   return <>
   <div>
     {channel.hasDescription() && (
