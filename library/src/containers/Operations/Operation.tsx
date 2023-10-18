@@ -291,18 +291,26 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
 
   const replyMessages = reply.messages();
   const explicitChannel = reply.channel();
-  const replyAddress = reply.address()?.location()
+  const replyAddress = reply.address()?.location();
 
   return (
     <>
       <div className="font-mono px-8 py-4">
         <div className="border rounded">
-          <div className={`w-full ${type === "reply" ? "bg-green-600 border-green-600" : "bg-blue-600 border-blue-600"} text-sm rounded-t h-8 px-4 border text-white flex items-center`}>
-            <span className='font-bold'>REPLY INFORMATION</span>
+          <div
+            className={`w-full ${
+              type === 'reply'
+                ? 'bg-green-600 border-green-600'
+                : 'bg-blue-600 border-blue-600'
+            } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
+          >
+            <span className="font-bold">REPLY INFORMATION</span>
           </div>
           <div className="flex">
             <div
-              className={`w-1 h-11 ${type === "reply" ? "bg-green-600" : "bg-blue-600"} mt-4`}
+              className={`w-1 h-11 ${
+                type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+              } mt-4`}
             />
             <div className="p-4">
               <h3 className="text-xs">
@@ -314,70 +322,83 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                 <div className="text-xs text-gray-700">
                   Reply will be provided via this designated address
                   <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                    {explicitChannel.address()} {' '} 
+                    {explicitChannel.address()}{' '}
                   </span>
                 </div>
-              ) : <div className="text-xs text-gray-700">
-              Reply will be directed to the address specified at this location
-              <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                {replyAddress}
-              </span>
-            </div>}
-              <div className='mt-2'>
-              {explicitChannel && <CollapseButton
-                  onClick={() => setShowChannel(prev => !prev)}
-                  expanded={showChannel}
-                >
-                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
-                    View channel details
+              ) : (
+                <div className="text-xs text-gray-700">
+                  Reply will be directed to the address specified at this
+                  location
+                  <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                    {replyAddress}
                   </span>
-                </CollapseButton> }
-                {explicitChannel && <div className={`w-full mt-4 ${showChannel ? 'block' : 'hidden'}`}><OperationChannelInfo {...props} /> </div>}
+                </div>
+              )}
+              <div className="mt-2">
+                {explicitChannel && (
+                  <CollapseButton
+                    onClick={() => setShowChannel(prev => !prev)}
+                    expanded={showChannel}
+                  >
+                    <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
+                      View channel details
+                    </span>
+                  </CollapseButton>
+                )}
+                {explicitChannel && (
+                  <div
+                    className={`w-full mt-4 ${
+                      showChannel ? 'block' : 'hidden'
+                    }`}
+                  >
+                    <OperationChannelInfo {...props} />{' '}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-            <OperationReplyAddressInfo {...props} />
+          <OperationReplyAddressInfo {...props} />
           {replyMessages.isEmpty() === false && (
-              <div className='p-4'>
-                <CollapseButton
-                  onClick={() => setShowMessages(prev => !prev)}
-                  expanded={showMessages}
-                >
-                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
-                    Expected Reply{' '}
-                    {replyMessages.length > 1 ? 'Messages' : 'Message'}
-                  </span>
-                </CollapseButton>
-                <div
-                  className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
-                >
-                  {replyMessages.length > 1 ? (
+            <div className="p-4">
+              <CollapseButton
+                onClick={() => setShowMessages(prev => !prev)}
+                expanded={showMessages}
+              >
+                <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
+                  Expected Reply{' '}
+                  {replyMessages.length > 1 ? 'Messages' : 'Message'}
+                </span>
+              </CollapseButton>
+              <div
+                className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
+              >
+                {replyMessages.length > 1 ? (
+                  <div className="mt-2">
+                    <ul>
+                      {replyMessages.all().map((msg, idx) => (
+                        <li className="mt-4" key={idx}>
+                          <Message
+                            message={msg}
+                            index={idx}
+                            showExamples={true}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div className="mt-2">
                     <div className="mt-2">
-                      <ul>
-                        {replyMessages.all().map((msg, idx) => (
-                          <li className="mt-4" key={idx}>
-                            <Message
-                              message={msg}
-                              index={idx}
-                              showExamples={true}
-                            />
-                          </li>
-                        ))}
-                      </ul>
+                      <Message
+                        message={replyMessages.all()[0]}
+                        showExamples={true}
+                      />
                     </div>
-                  ) : (
-                    <div className="mt-2">
-                      <div className="mt-2">
-                        <Message
-                          message={replyMessages.all()[0]}
-                          showExamples={true}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -389,7 +410,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
 export const OperationChannelInfo: React.FunctionComponent<Props> = ({
   type = PayloadType.SEND,
   channelName,
-  channel
+  channel,
 }) => {
   const config = useConfig();
   const servers =
@@ -398,62 +419,56 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
     channel.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
-  if(!channel){
-    return <></>
+  if (!channel) {
+    return <></>;
   }
-  return <>
-  <div>
-    {channel.hasDescription() && (
+
+  return (
+    <div>
+      {channel.hasDescription() && (
         <div className="mt-2">
           <Markdown>{channel.description()}</Markdown>
         </div>
       )}
-        {servers && servers.length > 0 ? (
-          <div className="mt-2 text-sm">
-            <p>Available only on servers:</p>
-            <ul className="flex flex-wrap leading-normal">
-              {servers.map(server => (
-                <li className="inline-block mt-2 mr-2" key={server.id()}>
-                  <a
-                    href={`#${CommonHelpers.getIdentifier(
-                      'server-' + server.id(),
-                      config,
-                    )}`}
-                    className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
-                  >
-                    <span className="underline">{server.id()}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {parameters && (
-          <div
-            className="mt-2"
-            id={CommonHelpers.getIdentifier(
-              `operation-${type}-${channelName}-parameters`,
-              config,
-            )}
-          >
-            <Schema
-              schemaName="Parameters"
-              schema={parameters}
-              expanded={true}
-            />
-          </div>
-        )}
-        {channel.bindings() && (
-          <div className="mt-2">
-            <Bindings
-              name="Bindings"
-              bindings={channel.bindings()}
-            />
-          </div>
-        )}
-  </div>
-  </>
-}
+      {servers && servers.length > 0 ? (
+        <div className="mt-2 text-sm">
+          <p>Available only on servers:</p>
+          <ul className="flex flex-wrap leading-normal">
+            {servers.map(server => (
+              <li className="inline-block mt-2 mr-2" key={server.id()}>
+                <a
+                  href={`#${CommonHelpers.getIdentifier(
+                    'server-' + server.id(),
+                    config,
+                  )}`}
+                  className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
+                >
+                  <span className="underline">{server.id()}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {parameters && (
+        <div
+          className="mt-2"
+          id={CommonHelpers.getIdentifier(
+            `operation-${type}-${channelName}-parameters`,
+            config,
+          )}
+        >
+          <Schema schemaName="Parameters" schema={parameters} expanded={true} />
+        </div>
+      )}
+      {channel.bindings() && (
+        <div className="mt-2">
+          <Bindings name="Bindings" bindings={channel.bindings()} />
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   type = PayloadType.SEND,
@@ -470,28 +485,32 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   const replyAddressLocation = replyAddress.location();
 
   return (
-    <div className='flex'>
-      <div className={`w-1 h-11 ${type === "reply" ? "bg-green-600" : "bg-blue-600"} mt-4`} />
-      <div className='p-4'>
-      <h3 className="text-xs">
-        <span className="mr-2 uppercase" title={type}>
-          REPLY address information
-        </span>
-      </h3>
-      {replyAddressLocation && (
-        <div className="text-xs text-gray-700">
-          REPLY address should be provided in
-          <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-            {replyAddressLocation}
+    <div className="flex">
+      <div
+        className={`w-1 h-11 ${
+          type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+        } mt-4`}
+      />
+      <div className="p-4">
+        <h3 className="text-xs">
+          <span className="mr-2 uppercase" title={type}>
+            REPLY address information
           </span>
-        </div>
-      )}
-      {replyAddress.hasDescription() && (
-        <div className="mt-2">
-          <Markdown>{replyAddress.description()}</Markdown>
-        </div>
-      )}
-      <Extensions name="Operation Reply Address Extensions" item={reply} />
+        </h3>
+        {replyAddressLocation && (
+          <div className="text-xs text-gray-700">
+            REPLY address should be provided in
+            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+              {replyAddressLocation}
+            </span>
+          </div>
+        )}
+        {replyAddress.hasDescription() && (
+          <div className="mt-2">
+            <Markdown>{replyAddress.description()}</Markdown>
+          </div>
+        )}
+        <Extensions name="Operation Reply Address Extensions" item={reply} />
       </div>
     </div>
   );
