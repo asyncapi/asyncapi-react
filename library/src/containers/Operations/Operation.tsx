@@ -13,13 +13,16 @@ import {
   CollapseButton,
 } from '../../components';
 
-import { useConfig } from '../../contexts';
+import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import {
   EXTERAL_DOCUMENTATION_TEXT,
   PUBLISH_LABEL_DEFAULT_TEXT,
+  RECEIVE_TEXT_LABEL_DEFAULT_TEXT,
+  // PUBLISH_LABEL_DEFAULT_TEXT,
   REPLIER_LABEL_DEFAULT_TEXT,
   REQUEST_LABEL_DEFAULT_TEXT,
+  SEND_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
 import { PayloadType } from '../../types';
@@ -178,25 +181,30 @@ export const Operation: React.FunctionComponent<Props> = props => {
 };
 
 function getTypeInformation({
-  type = PayloadType.SEND,
+  typeRes = PayloadType.SEND,
   config,
+  version,
 }: {
-  type: PayloadType;
+  typeRes: PayloadType;
   config: ConfigInterface;
+  version: any;
 }): { borderColor: string; typeLabel: string } {
-  if (type === PayloadType.RECEIVE) {
+  if (typeRes === PayloadType.RECEIVE) {
     return {
       borderColor: 'border-green-600 text-green-600',
-      typeLabel: config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
+      typeLabel:
+        version === 1
+          ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
+          : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
     };
   }
-  if (type === PayloadType.REPLY) {
+  if (typeRes === PayloadType.REPLY) {
     return {
       borderColor: 'border-orange-600 text-orange-600',
       typeLabel: config.replyLabel || REPLIER_LABEL_DEFAULT_TEXT,
     };
   }
-  if (type === PayloadType.REQUEST) {
+  if (typeRes === PayloadType.REQUEST) {
     return {
       borderColor: 'border-red-600 text-red-600',
       typeLabel: config.requestLabel || REQUEST_LABEL_DEFAULT_TEXT,
@@ -204,22 +212,30 @@ function getTypeInformation({
   }
   return {
     borderColor: 'border-blue-600 text-blue-500',
-    typeLabel: config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
+    typeLabel:
+      version === 1
+        ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
+        : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
   };
 }
 
 export const OperationInfo: React.FunctionComponent<Props> = props => {
-  const { operation, channelName, channel } = props;
-  let type = PayloadType.SEND;
+  const { type = PayloadType.SEND, operation, channelName, channel } = props;
+  const specV = useSpec().version();
+  const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
-  if (operation.action() !== type) {
-    type = PayloadType.RECEIVE;
+  let typeRes = type;
+  if (version === 1 && operation.action() !== typeRes) {
+    typeRes = PayloadType.RECEIVE;
   }
-  const { borderColor, typeLabel } = getTypeInformation({ type, config });
-
+  const { borderColor, typeLabel } = getTypeInformation({
+    typeRes,
+    config,
+    version,
+  });
   return (
     <>
       <div className="mb-4">
