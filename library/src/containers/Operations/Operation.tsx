@@ -200,13 +200,13 @@ function getTypeInformation({
   if (typeRes === PayloadType.REPLY) {
     return {
       borderColor: 'border-orange-600 text-orange-600',
-      typeLabel: config.replyLabel || REPLIER_LABEL_DEFAULT_TEXT,
+      typeLabel: config.replyLabel ?? REPLIER_LABEL_DEFAULT_TEXT,
     };
   }
   if (typeRes === PayloadType.REQUEST) {
     return {
       borderColor: 'border-red-600 text-red-600',
-      typeLabel: config.requestLabel || REQUEST_LABEL_DEFAULT_TEXT,
+      typeLabel: config.requestLabel ?? REQUEST_LABEL_DEFAULT_TEXT,
     };
   }
   return {
@@ -345,7 +345,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                 ) : (
                   <div className="text-xs text-gray-700">
                     Reply will be directed to the address specified at this
-                    location:
+                    location:{' '}
                     <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
                       {replyAddress}
                     </span>
