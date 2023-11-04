@@ -19,7 +19,6 @@ import {
   EXTERAL_DOCUMENTATION_TEXT,
   PUBLISH_LABEL_DEFAULT_TEXT,
   RECEIVE_TEXT_LABEL_DEFAULT_TEXT,
-  // PUBLISH_LABEL_DEFAULT_TEXT,
   REPLIER_LABEL_DEFAULT_TEXT,
   REQUEST_LABEL_DEFAULT_TEXT,
   SEND_LABEL_DEFAULT_TEXT,
@@ -187,7 +186,7 @@ function getTypeInformation({
 }: {
   typeRes: PayloadType;
   config: ConfigInterface;
-  version: any;
+  version: number;
 }): { borderColor: string; typeLabel: string } {
   if (typeRes === PayloadType.RECEIVE) {
     return {
