@@ -291,119 +291,122 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
 
   const replyMessages = reply.messages();
   const explicitChannel = reply.channel();
+
   const replyAddress = reply.address()?.location();
 
   return (
-    <>
-      <div className="font-mono px-8 py-4">
-        <div className="border rounded">
-          <div
-            className={`w-full ${
-              type === 'reply'
-                ? 'bg-green-600 border-green-600'
-                : 'bg-blue-600 border-blue-600'
-            } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
-          >
-            <span className="font-bold">REPLY INFORMATION</span>
-          </div>
-          <div className="flex">
+    <div className="panel-item">
+      <div className="panel-item--center">
+        <div className="font-mono px-8 py-4">
+          <div className="border rounded">
             <div
-              className={`w-1 h-11 ${
-                type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
-              } mt-4`}
-            />
-            <div className="p-4">
-              <h3 className="text-xs">
-                <span className="mr-2" title={type}>
-                  REPLY CHANNEL INFORMATION
-                </span>
-              </h3>
-              {explicitChannel?.address() ? (
-                <div className="text-xs text-gray-700">
-                  Reply will be provided via this designated address
-                  <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                    {explicitChannel.address()}{' '}
-                  </span>
-                </div>
-              ) : (
-                <div className="text-xs text-gray-700">
-                  Reply will be directed to the address specified at this
-                  location
-                  <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                    {replyAddress}
-                  </span>
-                </div>
-              )}
-              <div className="mt-2">
-                {explicitChannel && (
-                  <CollapseButton
-                    onClick={() => setShowChannel(prev => !prev)}
-                    expanded={showChannel}
-                  >
-                    <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
-                      View channel details
-                    </span>
-                  </CollapseButton>
-                )}
-                {explicitChannel && (
-                  <div
-                    className={`w-full mt-4 ${
-                      showChannel ? 'block' : 'hidden'
-                    }`}
-                  >
-                    <OperationChannelInfo {...props} />{' '}
-                  </div>
-                )}
-              </div>
+              className={`w-full ${
+                type === 'reply'
+                  ? 'bg-green-600 border-green-600'
+                  : 'bg-blue-600 border-blue-600'
+              } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
+            >
+              <span className="font-bold">REPLY INFORMATION</span>
             </div>
-          </div>
-          <OperationReplyAddressInfo {...props} />
-          {replyMessages.isEmpty() === false && (
-            <div className="p-4">
-              <CollapseButton
-                onClick={() => setShowMessages(prev => !prev)}
-                expanded={showMessages}
-              >
-                <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
-                  Expected Reply{' '}
-                  {replyMessages.length > 1 ? 'Messages' : 'Message'}
-                </span>
-              </CollapseButton>
+            <div className="flex">
               <div
-                className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
-              >
-                {replyMessages.length > 1 ? (
-                  <div className="mt-2">
-                    <ul>
-                      {replyMessages.all().map((msg, idx) => (
-                        <li className="mt-4" key={idx}>
-                          <Message
-                            message={msg}
-                            index={idx}
-                            showExamples={true}
-                          />
-                        </li>
-                      ))}
-                    </ul>
+                className={`w-1 h-11 ${
+                  type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+                } mt-4`}
+              />
+              <div className="p-4">
+                <h3 className="text-xs">
+                  <span className="mr-2" title={type}>
+                    REPLY CHANNEL INFORMATION
+                  </span>
+                </h3>
+                {explicitChannel?.address() ? (
+                  <div className="text-xs text-gray-700">
+                    Reply will be provided via this designated address:
+                    <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                      {explicitChannel.address()}{' '}
+                    </span>
                   </div>
                 ) : (
-                  <div className="mt-2">
-                    <div className="mt-2">
-                      <Message
-                        message={replyMessages.all()[0]}
-                        showExamples={true}
-                      />
-                    </div>
+                  <div className="text-xs text-gray-700">
+                    Reply will be directed to the address specified at this
+                    location:
+                    <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                      {replyAddress}
+                    </span>
                   </div>
                 )}
+                <div className="mt-2">
+                  {explicitChannel && (
+                    <CollapseButton
+                      onClick={() => setShowChannel(prev => !prev)}
+                      expanded={showChannel}
+                    >
+                      <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
+                        View channel details
+                      </span>
+                    </CollapseButton>
+                  )}
+                  {explicitChannel && (
+                    <div
+                      className={`w-full mt-4 ${
+                        showChannel ? 'block' : 'hidden'
+                      }`}
+                    >
+                      <OperationChannelInfo {...props} />{' '}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
+            <OperationReplyAddressInfo {...props} />
+            {replyMessages.isEmpty() === false && (
+              <div className="p-4">
+                <CollapseButton
+                  onClick={() => setShowMessages(prev => !prev)}
+                  expanded={showMessages}
+                >
+                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
+                    Expected Reply{' '}
+                    {replyMessages.length > 1 ? 'Messages' : 'Message'}
+                  </span>
+                </CollapseButton>
+                <div
+                  className={`w-full mt-4 ${showMessages ? 'block' : 'hidden'}`}
+                >
+                  {replyMessages.length > 1 ? (
+                    <div className="mt-2">
+                      <ul>
+                        {replyMessages.all().map((msg, idx) => (
+                          <li className="mt-4" key={idx}>
+                            <Message
+                              message={msg}
+                              index={idx}
+                              showExamples={true}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="mt-2">
+                      <div className="mt-2">
+                        <Message
+                          message={replyMessages.all()[0]}
+                          showExamples={true}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <Extensions name="Operation Reply Extensions" item={reply} />
-    </>
+        <Extensions name="Operation Reply Extensions" item={reply} />
+      </div>
+    </div>
   );
 };
 
@@ -425,6 +428,14 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
 
   return (
     <div>
+      {channel.address() && (
+        <div className="mt-2 text-xs text-gray-700">
+          Address:{' '}
+          <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+            {channel.address()}
+          </span>
+        </div>
+      )}
       {channel.hasDescription() && (
         <div className="mt-2">
           <Markdown>{channel.description()}</Markdown>
@@ -499,7 +510,7 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
         </h3>
         {replyAddressLocation && (
           <div className="text-xs text-gray-700">
-            REPLY address should be provided in
+            REPLY address should be provided in:
             <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
               {replyAddressLocation}
             </span>
