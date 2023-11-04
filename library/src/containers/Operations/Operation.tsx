@@ -337,7 +337,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                 </h3>
                 {explicitChannel?.address() ? (
                   <div className="text-xs text-gray-700">
-                    Reply will be provided via this designated address:
+                    Reply will be provided via this designated address:{' '}
                     <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
                       {explicitChannel.address()}{' '}
                     </span>
