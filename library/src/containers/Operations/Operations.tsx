@@ -99,7 +99,6 @@ export const Operations: React.FunctionComponent = () => {
       }
     }
   });
-
   return (
     <section
       id={`${CommonHelpers.getIdentifier('operations', config)}`}

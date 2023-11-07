@@ -4,7 +4,6 @@ import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
 import {
-  Href,
   Markdown,
   Schema,
   Bindings,
@@ -12,6 +11,7 @@ import {
   Extensions,
   CollapseButton,
 } from '../../components';
+import { Href } from '../../components/Href';
 
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
@@ -36,7 +36,6 @@ interface Props {
 export const Operation: React.FunctionComponent<Props> = props => {
   const config = useConfig();
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
-
   if (!operation || !channel) {
     return null;
   }
@@ -155,7 +154,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
                 .messages()
                 .all()
                 .map((msg, idx) => (
-                  <li className="mt-4" key={idx}>
+                  <li className="mt-4" key={msg.id()}>
                     <Message message={msg} index={idx} showExamples={true} />
                   </li>
                 ))}
@@ -393,7 +392,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                     <div className="mt-2">
                       <ul>
                         {replyMessages.all().map((msg, idx) => (
-                          <li className="mt-4" key={idx}>
+                          <li className="mt-4" key={msg.id()}>
                             <Message
                               message={msg}
                               index={idx}
@@ -441,14 +440,53 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
     return <></>;
   }
 
+  const handleClickScroll = (section: any) => {
+    const element = document.getElementById(section);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div>
       {channel.address() && (
         <div className="mt-2 text-xs text-gray-700">
           Address:{' '}
-          <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+          <span className="border text-orange-600 rounded text-xs py-0 px-2">
             {channel.address()}
           </span>
+        </div>
+      )}
+      {channel.messages() && (
+        <div className="mt-2 text-xs text-gray-700 flex items-center">
+          <div className="mt-2">
+            {channel.messages().all().length > 1 ? 'Messages:' : 'Message:'}
+          </div>{' '}
+          <ul className="flex flex-wrap leading-normal ml-2">
+            {channel
+              .messages()
+              .all()
+              .map(message => {
+                return (
+                  <li className="inline-block mt-2 mr-2" key={message.id()}>
+                    <button
+                      onClick={() =>
+                        handleClickScroll(
+                          CommonHelpers.getIdentifier(
+                            `message-${message.id()}`,
+                            config,
+                          ),
+                        )
+                      }
+                    >
+                      <div className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1">
+                        <span className="">{message.id()}</span>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
+          </ul>
         </div>
       )}
       {channel.hasDescription() && (
@@ -525,7 +563,7 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
         </h3>
         {replyAddressLocation && (
           <div className="text-xs text-gray-700">
-            REPLY address should be provided in:
+            REPLY will be sent to the address provided in:
             <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
               {replyAddressLocation}
             </span>
