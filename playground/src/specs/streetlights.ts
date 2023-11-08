@@ -1,466 +1,298 @@
-export const streetlights = `asyncapi: '2.6.0'
-id: 'urn:com:smartylighting:streetlights:server'
+export const streetlights = `asyncapi: 3.0.0
+
 info:
-  title: Streetlights API
-  version: '1.0.0'
+  title: Kraken Websockets API
+  version: '1.8.0'
   description: |
-    The Smartylighting Streetlights API allows you to remotely manage the city lights.
+    WebSockets API offers real-time market data updates. WebSockets is a bidirectional protocol offering fastest real-time data, helping you build real-time applications. The public message types presented below do not require authentication. Private-data messages can be subscribed on a separate authenticated endpoint. 
 
-    ### Check out its awesome features:
+    ### General Considerations
 
-    * Turn a specific streetlight on/off 🌃
-    * Dim a specific streetlight 😎
-    * Receive real-time information about environmental lighting conditions 📈
+    - TLS with SNI (Server Name Indication) is required in order to establish a Kraken WebSockets API connection. See Cloudflare's [What is SNI?](https://www.cloudflare.com/learning/ssl/what-is-sni/) guide for more details.
+    - All messages sent and received via WebSockets are encoded in JSON format
+    - All decimal fields (including timestamps) are quoted to preserve precision.
+    - Timestamps should not be considered unique and not be considered as aliases for transaction IDs. Also, the granularity of timestamps is not representative of transaction rates.
+    - At least one private message should be subscribed to keep the authenticated client connection open.
+    - Please use REST API endpoint [AssetPairs](https://www.kraken.com/features/api#get-tradable-pairs) to fetch the list of pairs which can be subscribed via WebSockets API. For example, field 'wsname' gives the supported pairs name which can be used to subscribe.
+    - Cloudflare imposes a connection/re-connection rate limit (per IP address) of approximately 150 attempts per rolling 10 minutes. If this is exceeded, the IP is banned for 10 minutes.
+    - Recommended reconnection behaviour is to (1) attempt reconnection instantly up to a handful of times if the websocket is dropped randomly during normal operation but (2) after maintenance or extended downtime, attempt to reconnect no more quickly than once every 5 seconds. There is no advantage to reconnecting more rapidly after maintenance during cancel_only mode.
 
-  termsOfService: http://asyncapi.org/terms/
-  contact:
-    name: API Support
-    url: http://www.asyncapi.org/support
-    email: support@asyncapi.org
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-tags:
-  - name: root-tag1
-    externalDocs:
-      description: External docs description 1
-      url: https://www.asyncapi.com/
-  - name: root-tag2
-    description: Description 2
-    externalDocs:
-      url: "https://www.asyncapi.com/"
-  - name: root-tag3
-  - name: root-tag4
-    description: Description 4
-  - name: root-tag5
-    externalDocs:
-      url: "https://www.asyncapi.com/"
-externalDocs:
-  description: Find more info here
-  url: https://example.com
-defaultContentType: application/json
-
-servers:
-  production:
-    url: api.streetlights.smartylighting.com:{port}
-    protocol: mqtt
-    description: |
-      Private server that requires authorization.
-      Once the socket is open you can subscribe to private-data channels by sending an authenticated subscribe request message.
-
-      The API client must request an authentication "token" via the following REST API endpoint "GetWebSocketsToken" to connect to WebSockets Private endpoints. For more details read https://support.kraken.com/hc/en-us/articles/360034437672-How-to-retrieve-a-WebSocket-authentication-token-Example-code-in-Python-3
-
-      The resulting token must be provided in the "token" field of any new private WebSocket feed subscription: 
-      \`\`\`json
-      {
-        "event": "subscribe",
-        "subscription":
-        {
-          "name": "ownTrades",
-          "token": "WW91ciBhdXRoZW50aWNhdGlvbiB0b2tlbiBnb2VzIGhlcmUu"
-        }
-      }
-      \`\`\`
-
-      \`\`\`elixir
-      defmodule Hello do
-        def world do
-          IO.puts("hello")
-        end
-      end
-      \`\`\`
-    variables:
-      port:
-        description: Secure connection (TLS) is available through port 8883.
-        default: '1883'
-        enum:
-          - '1883'
-          - '8883'
-    tags:
-      - name: 'env:production'
-    security:
-      - apiKey: []
-      - supportedOauthFlows:
-        - streetlights:on
-        - streetlights:off
-        - streetlights:dim
-      - openIdConnectWellKnown: []
-  dummy-mqtt:
-    url: mqtt://localhost
-    protocol: mqtt
-    description: |
-      Private server
-
-      \`\`\`csharp
-      using System;
-
-      namespace HelloWorld
-      {
-        class Program
-        {
-          static void Main(string[] args)
-          {
-            Console.WriteLine("Hello World!");    
-          }
-        }
-      }
-      \`\`\`
-    bindings:
-      mqtt:
-        clientId: guest        
-        cleanSession: false
-        keepAlive: 60
-        bindingVersion: 0.1.0
-        lastWill:
-          topic: smartylighting/streetlights/1/0/lastwill
-          qos: 1
-          message: so long and thanks for all the fish
-          retain: false
-  dummy-amqp:
-    url: amqp://localhost:{port}
-    protocol: amqp
-    description: dummy AMQP broker
-    protocolVersion: "0.9.1"
-    variables:
-      port:
-        enum:
-          - '15672'
-          - '5672'
-  dommy-kafka:
-    url: http://localhost:{port}
-    protocol: kafka
-    description: dummy Kafka broker
-    variables:
-      port:
-        default: '9092'
 
 channels:
-  smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
-    x-security:
-      $ref: '#/components/securitySchemes/supportedOauthFlows/flows/clientCredentials'
-    description: The topic on which measured values may be produced and consumed.
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    servers:
-      - production
-      - dommy-kafka
-    subscribe:
-      summary: Receive information about environmental lighting conditions of a particular streetlight.
-      operationId: receiveLightMeasurement
-      externalDocs:
-        description: Find more info here
-        url: https://example.com
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/lightMeasured'
-      bindings:
-        mqtt:
-          qos: 1
-          bindingVersion: 0.1.0
-        http:
-          type: request
-          method: GET
-          query:
-            type: object
-            required:
-            - companyId
-            properties:
-              companyId:
-                type: number
-                minimum: 1
-                description: The Id of the company.
-            additionalProperties: false
+  ping:
+    address: /
+    messages:
+      ping:
+        $ref: '#/components/messages/ping'
+  pong:
+    address: /
+    messages:
+      pong:
+        $ref: '#/components/messages/pong'
 
-  smartylighting/streetlights/1/0/action/{streetlightId}/turn/on:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    servers:
-      - production
-      - dummy-amqp
-    publish:
-      operationId: turnOn
-      security:
-        - supportedOauthFlows:
-          - streetlights:on
-      externalDocs:
-        description: Find more info here
-        url: https://example.com
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/turnOnOff'
+  heartbeat:
+    address: /
+    messages:
+      heartbeat:
+        $ref: '#/components/messages/heartbeat'
+      
+  systemStatus:
+    address: /
+    messages:
+      systemStatus:
+        $ref: '#/components/messages/systemStatus'
+      
+  currencyInfo:
+    address: /
+    messages:
+      subscriptionStatus:
+        $ref: '#/components/messages/subscriptionStatus'
+      dummyCurrencyInfo:
+        $ref: '#/components/messages/dummyCurrencyInfo'
 
-  smartylighting/streetlights/1/0/action/{streetlightId}/turn/off:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    publish:
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/turnOnOff'
+  subscribe:
+    address: /
+    messages:
+      subscribe:
+        $ref: '#/components/messages/subscribe'
 
-  smartylighting/streetlights/1/0/action/{streetlightId}/dim:
-    parameters:
-      streetlightId:
-        $ref: '#/components/parameters/streetlightId'
-    servers:
-      - production
-      - dummy-amqp
-    publish:
-      operationId: dimLight
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
-        $ref: '#/components/messages/dimLight'
-
+  unsubscribe:
+    address: /
+    messages:
+      unsubscribe:
+        $ref: '#/components/messages/unsubscribe'
+      
+operations:
+  receivePing:
+    action: receive
+    channel: 
+      $ref: '#/channels/ping'
+    reply:
+      channel: 
+        $ref: '#/channels/pong'
+  heartbeat:
+    action: send
+    channel: 
+      $ref: '#/channels/heartbeat' 
+  systemStatus:
+    action: send
+    channel: 
+      $ref: '#/channels/systemStatus' 
+  subscribe:
+    action: receive
+    channel: 
+      $ref: '#/channels/subscribe'
+    reply:
+      channel: 
+        $ref: '#/channels/currencyInfo'
+  unsubscribe:
+    action: receive
+    channel: 
+      $ref: '#/channels/unsubscribe'
+    reply:
+      channel: 
+        $ref: '#/channels/currencyInfo'
+      messages:
+        - $ref: '#/components/messages/subscriptionStatus'   
+       
+       
 components:
   messages:
-    lightMeasured:
-      messageId: lightMeasured Message ID
-      name: lightMeasured
-      title: Light measured
-      summary: Inform about environmental lighting conditions for a particular streetlight.
-      contentType: application/json
-      correlationId:
-        $ref: "#/components/correlationIds/sentAtCorrelator"
-      externalDocs:
-        url: "https://www.asyncapi.com/"
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
+    dummyCurrencyInfo:
+      summary: Dummy message with no real life details
+      description: It is here in this example to showcase that there is an additional message that normally is of a complex structure. It represents actually currency exchange value to show a reply to operation receiveSubscribeRequest with more than one possible message.
       payload:
-        $ref: "#/components/schemas/lightMeasuredPayload"
-      bindings:
-        mqtt:
-          bindingVersion: 0.1.0
+        type: object
+        properties:
+          event:
+            type: string
+            const: currencyInfo
+          reqid:
+            $ref: '#/components/schemas/reqid'
+          data:
+            type: object
+        required:
+          - event
+      correlationId:
+        location: '$message.payload#/reqid'
+    ping:
+      summary: Ping server to determine whether connection is alive
+      description: Client can ping server to determine whether connection is alive, server responds with pong. This is an application level ping as opposed to default ping in websockets standard which is server initiated
+      payload:
+        $ref: '#/components/schemas/ping'
+      correlationId:
+        location: $message.payload#/reqid
+        
+    pong:
+      summary: Pong is a response to ping message
+      description: Server pong response to a ping to determine whether connection is alive. This is an application level pong as opposed to default pong in websockets standard which is sent by client in response to a ping
+      payload:
+        $ref: '#/components/schemas/pong' 
+      correlationId:
+        location: $message.payload#/reqid
+
+    subscribe:
+      description: Subscribe to a topic on a single or multiple currency pairs.
+      payload:
+        $ref: '#/components/schemas/subscribe'
+      correlationId:
+        location: $message.payload#/reqid
+    unsubscribe:
+      description: Unsubscribe, can specify a channelID or multiple currency pairs.
+      payload:
+        $ref: '#/components/schemas/unsubscribe'
+      correlationId:
+        location: $message.payload#/reqid
+    subscriptionStatus:
+      description: Subscription status response to subscribe, unsubscribe or exchange initiated unsubscribe.
+      payload:
+        $ref: '#/components/schemas/subscriptionStatus'
       examples:
-        - headers:
-            my-app-header: 12
-          payload:
-            lumens: 1
-            sentAt: "2020-01-31T13:24:53Z"
-        - headers:
-            my-app-header: 13
         - payload:
-            lumens: 3
-            sentAt: "2020-10-31T13:24:53Z"
-      x-schema-extensions-as-object:
-        type: object
-        properties:
-          prop1:
-            type: string
-          prop2:
-            type: integer
-            minimum: 0
-      x-schema-extensions-as-primitive: dummy
-      x-schema-extensions-as-array: 
-        - "item1"
-        - "item2"
-    LwM2mOjbects:
-      payload:
-        type: object
-        properties:
-          objectLinks:
-            type: string
-        example:
-          objectLinks: "lwm2m=1.1, </0/0>, </1/1>;ssid=1, </2>, </3/0>"
-    turnOnOff:
-      name: turnOnOff
-      title: Turn on/off
-      summary: Command a particular streetlight to turn the lights on or off.
-      payload:
-        $ref: "#/components/schemas/turnOnOffPayload"
-      headers: 
-        type: object
-        properties:
-          $ref: '#/components/schemas/streamHeaders'
-    dimLight:
-      name: dimLight
-      title: Dim light
-      summary: Command a particular streetlight to dim the lights.
-      correlationId:
-        $ref: "#/components/correlationIds/sentAtCorrelator"
-      externalDocs:
-        url: "https://www.asyncapi.com/"
-      tags:
-        - name: oparation-tag1
-          externalDocs:
-            description: External docs description 1
-            url: https://www.asyncapi.com/
-        - name: oparation-tag2
-          description: Description 2
-          externalDocs:
-            url: "https://www.asyncapi.com/"
-        - name: oparation-tag3
-        - name: oparation-tag4
-          description: Description 4
-        - name: oparation-tag5
-          externalDocs:
-            url: "https://www.asyncapi.com/"
-      traits:
-        - $ref: '#/components/messageTraits/commonHeaders'
-      payload:
-        $ref: "#/components/schemas/dimLightPayload"
+            channelID: 10001
+            channelName: ohlc-5
+            event: subscriptionStatus
+            pair: XBT/EUR
+            reqid: 42
+            status: unsubscribed
+            subscription:
+              interval: 5
+              name: ohlc
+        - payload:
+            errorMessage: Subscription depth not supported
+            event: subscriptionStatus
+            pair: XBT/USD
+            status: error
+            subscription:
+              depth: 42
+              name: book
 
+    systemStatus:
+      description: Status sent on connection or system status changes.
+      payload:
+        $ref: '#/components/schemas/systemStatus' 
+        
+    heartbeat:
+      description: Server heartbeat sent if no subscription traffic within 1 second (approximately)
+      payload:
+        $ref: '#/components/schemas/heartbeat' 
+        
+        
   schemas:
-    lightMeasuredPayload:
+    ping:
       type: object
       properties:
-        lumens:
-          type: integer
-          description: Light intensity measured in lumens.
-          writeOnly: true
-          oneOf: 
-            - minimum: 0
-              maximum: 5
-            - minimum: 10
-              maximum: 20
-          externalDocs:
-            url: "https://www.asyncapi.com/"
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-        ifElseThen:
-          type: integer
-          minimum: 1
-          maximum: 1000
-          if:
-            minimum: 100
-          then: 
-            multipleOf: 100
-          else:
-            if: 
-              minimum: 10
-            then: 
-              multipleOf: 10
-        dependencies:
-          $ref: "#/components/schemas/dependenciesObject"
-        anySchema: true
-        cannotBeDefined: false
-        restrictedAny: 
-          minimum: 1
-          maximum: 1000
+        event:
+          type: string
+          const: ping
+        reqid:
+          $ref: '#/components/schemas/reqid'
       required:
-        - lumens
-      x-schema-extensions-as-object:
-        type: object
-        properties:
-          prop1:
-            type: string
-          prop2:
-            type: integer
-            minimum: 0
-      x-schema-extensions-as-primitive: dummy
-      x-schema-extensions-as-array: 
-        - "item1"
-        - "item2"
-    turnOnOffPayload:
+        - event
+    heartbeat:
       type: object
       properties:
-        command:
+        event:
           type: string
-          enum:
-            - on
-            - off
-          description: Whether to turn on or off the light.
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-        arrayRank:
-          $ref: '#/components/schemas/arrayRank'
-      additionalProperties:
-        type: string
-
-    dimLightPayload:
+          const: heartbeat
+    pong:
       type: object
       properties:
-        percentage:
-          type: integer
-          description: Percentage to which the light should be dimmed to.
-          minimum: 0
-          maximum: 100
-          readOnly: true
-        sentAt:
-          $ref: "#/components/schemas/sentAt"
-        key:
-          type: integer
-          not:
-            minimum: 3
-      patternProperties:
-        ^S_:
+        event:
           type: string
-        ^I_:
+          const: pong
+        reqid:
+          $ref: '#/components/schemas/reqid'
+    systemStatus:
+      type: object
+      properties:
+        event:
+          type: string
+          const: systemStatus
+        connectionID:
           type: integer
-      additionalProperties: false
-    sentAt:
+          description: The ID of the connection
+        status:
+          $ref: '#/components/schemas/status'
+        version:
+          type: string
+    status:
       type: string
-      format: date-time
-      description: Date and time when the message was sent.
-    union:
-      type: [string, number]
-    objectWithKey:
-      type: object
-      propertyNames:
-        format: email
-      properties:
-        key:
-          type: string
-    objectWithKey2:
+      enum:
+        - online
+        - maintenance
+        - cancel_only
+        - limit_only
+        - post_only
+    subscribe:
       type: object
       properties:
-        key2:
+        event:
           type: string
-          format: time
-    oneOfSchema:
-      oneOf:
-        - $ref: "#/components/schemas/objectWithKey"
-        - $ref: "#/components/schemas/objectWithKey2"
-    anyOfSchema:
-      anyOf:
-        - $ref: "#/components/schemas/objectWithKey"
-        - $ref: "#/components/schemas/objectWithKey2"
-    allOfSchema:
-      allOf:
-        - $ref: "#/components/schemas/objectWithKey"
-        - $ref: "#/components/schemas/objectWithKey2"
-    arrayContains: 
-      type: array
-      contains:
-        type: integer
-    dependenciesObject:
-      type: object
-      properties:
-        name:
-          type: string
-        credit_card:
-          type: integer
-        billing_address:
-          type: string
-        schema_dependency:
-          type: string
-      required:
-        - name
-      dependencies:
-        credit_card:
+          const: subscribe
+        reqid:
+          $ref: '#/components/schemas/reqid'
+        pair:
+          $ref: '#/components/schemas/pair'
+        subscription:
+          type: object
           properties:
-            billing_address:
-              type: string
-            billing_address2:
-              type: string
+            depth:
+              $ref: '#/components/schemas/depth'
+            interval:
+              $ref: '#/components/schemas/interval'
+            name:
+              $ref: '#/components/schemas/name'
+            ratecounter:
+              $ref: '#/components/schemas/ratecounter'
+            snapshot:
+              $ref: '#/components/schemas/snapshot'
+            token:
+              $ref: '#/components/schemas/token'
           required:
-          - billing_address
-          dependencies:
-            billing_address2:
-              properties:
-                billing_address3:
-                  type: string
-              required:
-              - billing_address3    
-
+            - name
+      required:
+        - event
+    unsubscribe:
+      type: object
+      properties:
+        event:
+          type: string
+          const: unsubscribe
+        reqid:
+          $ref: '#/components/schemas/reqid'
+        pair:
+          $ref: '#/components/schemas/pair'
+        subscription:
+          type: object
+          properties:
+            depth:
+              $ref: '#/components/schemas/depth'
+            interval:
+              $ref: '#/components/schemas/interval'
+            name:
+              $ref: '#/components/schemas/name'
+            token:
+              $ref: '#/components/schemas/token'
+          required:
+            - name
+      required:
+        - event
     subscriptionStatus:
       type: object
       oneOf:
+        - $ref: '#/components/schemas/subscriptionStatusError'
+        - $ref: '#/components/schemas/subscriptionStatusSuccess'
+    subscriptionStatusError:
+      allOf:
+        - properties:
+            errorMessage:
+              type: string
+          required:
+            - errorMessage
+        - $ref: '#/components/schemas/subscriptionStatusCommon'
+    subscriptionStatusSuccess:
+      allOf:
         - properties:
             channelID:
               type: integer
@@ -468,140 +300,96 @@ components:
             channelName:
               type: string
               description: Channel Name on successful subscription. For payloads 'ohlc' and 'book', respective interval or depth will be added as suffix.
-        - properties:
-            errorMessage:
-              type: string
+          required:
+            - channelID
+            - channelName
+        - $ref: '#/components/schemas/subscriptionStatusCommon'
+    subscriptionStatusCommon:
+      type: object
+      required:
+         - event
       properties:
         event:
           type: string
           const: subscriptionStatus
+        reqid:
+          $ref: '#/components/schemas/reqid'
+        pair:
+          $ref: '#/components/schemas/pair'
+        status:
+          $ref: '#/components/schemas/status'
         subscription:
+          required:
+            - name
           type: object
           properties:
             depth:
-              type: string
+              $ref: '#/components/schemas/depth'
             interval:
-              type: string
-          required:
-            - name
-      required:
-        - event
-
-    arrayRank:
-      type: object
-      properties:
-        valueRank: 
-          $ref: '#/components/schemas/arrayValueRank'
-        arrayDimensions: 
-          $ref: '#/components/schemas/arrayArrayDimensions'
-
-    arrayValueRank:
-      description: >
-        This Attribute indicates whether the val Attribute of the datapoint is an
-        array and how many dimensions the array has.
+              $ref: '#/components/schemas/interval'
+            maxratecount:
+              $ref: '#/components/schemas/maxratecount'
+            name:
+              $ref: '#/components/schemas/name'
+            token:
+              $ref: '#/components/schemas/token'
+    interval:
       type: integer
-      default: -1
-      examples:
-        - 2
-      oneOf:
-        - const: -1
-          description: 'Scalar: The value is not an array.'
-        - const: 0
-          description: 'OneOrMoreDimensions: The value is an array with one or more dimensions.'
-        - const: 1
-          description: 'OneDimension: The value is an array with one dimension.'
-        - const: 2
-          description: 'The value is an array with two dimensions.'
-
-    arrayArrayDimensions:
+      description: Time interval associated with ohlc subscription in minutes.
+      default: 1
+      enum:
+        - 1
+        - 5
+        - 15
+        - 30
+        - 60
+        - 240
+        - 1440
+        - 10080
+        - 21600
+    name:
+      type: string
+      description: The name of the channel you subscribe too.
+      enum:
+        - book
+        - ohlc
+        - openOrders
+        - ownTrades
+        - spread
+        - ticker
+        - trade
+    token:
+      type: string
+      description: base64-encoded authentication token for private-data endpoints.
+    depth:
+      type: integer
+      default: 10
+      enum:
+        - 10
+        - 25
+        - 100
+        - 500
+        - 1000
+      description: Depth associated with book subscription in number of levels each side.
+    maxratecount:
+      type: integer
+      description: Max rate-limit budget. Compare to the ratecounter field in the openOrders updates to check whether you are approaching the rate limit.
+    ratecounter:
+      type: boolean
+      default: false
+      description: Whether to send rate-limit counter in updates (supported only for openOrders subscriptions)
+    snapshot:
+      type: boolean
+      default: true
+      description: Whether to send historical feed data snapshot upon subscription (supported only for ownTrades subscriptions)
+    reqid:
+      type: integer
+      description: client originated ID reflected in response message.
+    pair:
       type: array
+      description: Array of currency pairs.
       items:
-        type: integer
-        minimum: 0
-      examples:
-        - [3, 5]
-
-    streamHeaders:
-      Etag:
         type: string
-        description: |
-          The RFC7232 ETag header field in a response provides the current entity-
-          tag for the selected resource. An entity-tag is an opaque identifier for
-          different versions of a resource over time, regardless whether multiple
-          versions are valid at the same time. An entity-tag consists of an opaque
-          quoted string, possibly prefixed by a weakness indicator.
-        example: 411a
-      Cache-Control:
-        description: The Cache-Control HTTP header holds directives (instructions) for caching in request.
-        type: string
-        example: no-cache, no-store, must-revalidate
-
-  securitySchemes:
-    apiKey:
-      type: apiKey
-      in: user
-      description: Provide your API key as the user and leave the password empty.
-    supportedOauthFlows:
-      type: oauth2
-      description: Flows to support OAuth 2.0
-      flows:
-        implicit:
-          authorizationUrl: 'https://authserver.example/auth'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        password:
-          tokenUrl: 'https://authserver.example/token'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        clientCredentials:
-          tokenUrl: 'https://authserver.example/token'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-        authorizationCode:
-          authorizationUrl: 'https://authserver.example/auth'
-          tokenUrl: 'https://authserver.example/token'
-          refreshUrl: 'https://authserver.example/refresh'
-          scopes:
-            'streetlights:on': Ability to switch lights on
-            'streetlights:off': Ability to switch lights off
-            'streetlights:dim': Ability to dim the lights
-    openIdConnectWellKnown:
-      type: openIdConnect
-      openIdConnectUrl: 'https://authserver.example/.well-known'
-
-  parameters:
-    streetlightId:
-      description: The ID of the streetlight.
-      schema:
-        type: string
-      location: "$message.payload#/user/id"
-
-  correlationIds:
-    sentAtCorrelator:
-      description: Data from message payload used as correlation ID
-      location: $message.payload#/sentAt
-
-  messageTraits:
-    commonHeaders:
-      headers:
-        type: object
-        properties:
-          my-app-header:
-            type: integer
-            minimum: 0
-            maximum: 100
-        required:
-          - my-app-header
-  
-  operationTraits:
-    kafka:
-      bindings:
-        kafka:
-          clientId: my-app-id
-`;
+        description: Format of each pair is "A/B", where A and B are ISO 4217-A3 for standardized assets and popular unique symbol if not standardized.
+        pattern: '[A-Z\s]+\/[A-Z\s]+'
+        `;

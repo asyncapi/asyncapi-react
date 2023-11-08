@@ -193,7 +193,7 @@ function getTypeInformation({
       typeLabel:
         version === 1
           ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
-          : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
+          : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
     };
   }
   if (typeRes === PayloadType.REPLY) {
@@ -213,7 +213,7 @@ function getTypeInformation({
     typeLabel:
       version === 1
         ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
-        : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
+        : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
   };
 }
 
@@ -440,13 +440,6 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
     return <></>;
   }
 
-  const handleClickScroll = (section: any) => {
-    const element = document.getElementById(section);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div>
       {channel.address() && (
@@ -455,38 +448,6 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
           <span className="border text-orange-600 rounded text-xs py-0 px-2">
             {channel.address()}
           </span>
-        </div>
-      )}
-      {channel.messages() && (
-        <div className="mt-2 text-xs text-gray-700 flex items-center">
-          <div className="mt-2">
-            {channel.messages().all().length > 1 ? 'Messages:' : 'Message:'}
-          </div>{' '}
-          <ul className="flex flex-wrap leading-normal ml-2">
-            {channel
-              .messages()
-              .all()
-              .map(message => {
-                return (
-                  <li className="inline-block mt-2 mr-2" key={message.id()}>
-                    <button
-                      onClick={() =>
-                        handleClickScroll(
-                          CommonHelpers.getIdentifier(
-                            `message-${message.id()}`,
-                            config,
-                          ),
-                        )
-                      }
-                    >
-                      <div className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1">
-                        <span className="">{message.id()}</span>
-                      </div>
-                    </button>
-                  </li>
-                );
-              })}
-          </ul>
         </div>
       )}
       {channel.hasDescription() && (
@@ -514,6 +475,31 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
           </ul>
         </div>
       ) : null}
+      {channel.messages().all().length > 1 ? (
+        <div className="mt-2">
+          <span>Messages:</span>
+          <ul>
+            {channel
+              .messages()
+              .all()
+              .map((msg, idx) => (
+                <li className="mt-4" key={msg.id()}>
+                  <Message message={msg} index={idx} showExamples={true} />
+                </li>
+              ))}
+          </ul>
+        </div>
+      ) : (
+        <div className="mt-2">
+          <span className="text-xs text-gray-700">Message:</span>
+          <div className="mt-2">
+            <Message
+              message={channel.messages().all()[0]}
+              showExamples={true}
+            />
+          </div>
+        </div>
+      )}
       {parameters && (
         <div
           className="mt-2"
