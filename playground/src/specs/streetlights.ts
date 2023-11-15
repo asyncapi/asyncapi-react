@@ -400,6 +400,7 @@ components:
     union:
       type: [string, number]
     objectWithKey:
+      title: objectWithKey
       type: object
       propertyNames:
         format: email
