@@ -48,7 +48,7 @@
   }
 
   .container\:base .examples {
-    @apply 2xl:p-0 2xl:mt-0;
+    @apply 2xl:mt-0;
   }
 
   .container\:base .panel--right {
