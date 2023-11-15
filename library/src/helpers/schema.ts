@@ -101,6 +101,20 @@ export class SchemaHelpers {
     return type;
   }
 
+  static applicatorSchemaName(
+    idx: number,
+    firstCase: string,
+    otherCases: string,
+    title?: string,
+  ) {
+    const suffix = (title !== null && ` ${title}:`) || `:`;
+    if (idx === 0) {
+      return `${firstCase}${suffix}`;
+    } else {
+      return `${otherCases}${suffix}`;
+    }
+  }
+
   static prettifyValue(value: any, strict = true): string {
     const typeOf = typeof value;
     if (typeOf === 'string') {
