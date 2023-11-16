@@ -39,8 +39,16 @@ export const SPECIFICATION_TEXT = 'Specification';
 export const DEPRECATED_TEXT = 'Deprecated';
 export const PUBLISH_TEXT = 'Publish';
 export const PUBLISH_LABEL_DEFAULT_TEXT = 'PUB';
+export const SEND_TEXT = 'Send';
+export const SEND_LABEL_DEFAULT_TEXT = 'SEND';
 export const SUBSCRIBE_TEXT = 'Subscribe';
 export const SUBSCRIBE_LABEL_DEFAULT_TEXT = 'SUB';
+export const RECEIVE_TEXT = 'Receive';
+export const RECEIVE_TEXT_LABEL_DEFAULT_TEXT = 'RECEIVE';
+export const REQUEST_TEXT = 'Request';
+export const REQUEST_LABEL_DEFAULT_TEXT = 'REQUEST';
+export const REPLIER_TEXT = 'Reply';
+export const REPLIER_LABEL_DEFAULT_TEXT = 'REPLY';
 export const REQUIRED_TEXT = 'Required';
 export const GENERATED_TEXT = 'Generated';
 
