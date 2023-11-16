@@ -477,7 +477,7 @@ export const OperationChannelInfo: React.FunctionComponent<Props> = ({
       ) : null}
       {channel.messages().all().length > 1 ? (
         <div className="mt-2">
-          <span>Messages:</span>
+          <span className="text-xs text-gray-700">Messages:</span>
           <ul>
             {channel
               .messages()
