@@ -28,7 +28,7 @@
     "react-scripts": "3.1.2"
   },
   "scripts": {
-    "start": "react-app-rewired --openssl-legacy-provider start",
+    "start": "react-app-rewired start",
     "test": "react-app-rewired test",
     "build": "react-app-rewired build",
     "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
