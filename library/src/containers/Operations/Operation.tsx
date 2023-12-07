@@ -429,23 +429,19 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
   operation,
 }) => {
   const reply = operation.reply();
-  if (reply === undefined) {
-    return <></>;
-  }
 
-  const channel = reply.channel();
-  if (channel === undefined) {
-    return <></>;
-  }
+  const channel = reply?.channel();
+
   const channelName = channel?.address() ?? '';
 
   const config = useConfig();
   const servers =
-    typeof channel.servers === 'function' && channel.servers().all();
+    typeof channel?.servers === 'function' && channel.servers().all();
   const parameters =
-    channel.parameters() !== undefined
+    channel?.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
+
   if (!channel) {
     return <></>;
   }
