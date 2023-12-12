@@ -241,6 +241,7 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
           <span
             className={`font-mono border uppercase p-1 rounded mr-2 ${borderColor}`}
             title={type}
+            id={channelName}
           >
             {typeLabel}
           </span>{' '}
