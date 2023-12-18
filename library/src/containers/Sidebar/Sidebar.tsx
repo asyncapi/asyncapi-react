@@ -360,7 +360,7 @@ const OperationsList: React.FunctionComponent = () => {
 interface OperationItemProps {
   channelName: string;
   summary: string;
-  kind: 'publish' | 'subscribe';
+  kind: 'subscribe' | 'publish';
 }
 
 const OperationItem: React.FunctionComponent<OperationItemProps> = ({
@@ -383,7 +383,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
     <li>
       <a
         className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
-        href={`#operation-${kind}-${channelName}`}
+        href={'#' + channelName}
         onClick={() => setShowSidebar(false)}
       >
         <span
