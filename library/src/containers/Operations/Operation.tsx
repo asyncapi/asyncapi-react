@@ -367,7 +367,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                         showChannel ? 'block' : 'hidden'
                       }`}
                     >
-                      <OperationChannelInfo {...props} />{' '}
+                      <OperationReplyChannelInfo {...props} />{' '}
                     </div>
                   )}
                 </div>
@@ -424,18 +424,24 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationChannelInfo: React.FunctionComponent<Props> = ({
+export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
   type = PayloadType.SEND,
-  channelName,
-  channel,
+  operation,
 }) => {
+  const reply = operation.reply();
+
+  const channel = reply?.channel();
+
+  const channelName = channel?.address() ?? '';
+
   const config = useConfig();
   const servers =
-    typeof channel.servers === 'function' && channel.servers().all();
+    typeof channel?.servers === 'function' && channel.servers().all();
   const parameters =
-    channel.parameters() !== undefined
+    channel?.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
+
   if (!channel) {
     return <></>;
   }
