@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "1.2.6",
+  "version": "1.2.10",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -68,10 +68,10 @@
     "get:version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@asyncapi/avro-schema-parser": "^3.0.7",
-    "@asyncapi/openapi-schema-parser": "^3.0.8",
-    "@asyncapi/parser": "^3.0.1",
-    "@asyncapi/protobuf-schema-parser": "^3.0.4",
+    "@asyncapi/avro-schema-parser": "^3.0.9",
+    "@asyncapi/openapi-schema-parser": "^3.0.10",
+    "@asyncapi/parser": "^3.0.2",
+    "@asyncapi/protobuf-schema-parser": "^3.0.6",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
