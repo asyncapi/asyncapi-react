@@ -107,7 +107,7 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    const suffix = (title !== null && ` ${title}:`) || `:`;
+    const suffix = title ? ` ${title}:` : ':';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
     } else {
