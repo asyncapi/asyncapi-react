@@ -1,19 +1,28 @@
 import React from 'react';
-
-import { Schema } from './Schema';
-
+import { Schema } from './Schema'
 import { SchemaHelpers } from '../helpers';
+import type { AsyncAPIDocumentInterface, BaseModel } from "@asyncapi/parser"
+import type { ConfigInterface } from "../config"
 
+
+
+export interface ExtensionComponentProps<V = any> {
+  key: string; 
+  value: V; 
+  document: AsyncAPIDocumentInterface 
+  config: ConfigInterface 
+  parent: BaseModel 
+}
 interface Props {
   name?: string;
-  item: any;
+  extensions: ExtensionsInterface;
 }
 
 export const Extensions: React.FunctionComponent<Props> = ({
-  name = 'Extensions',
-  item,
+  name = 'Extensions Specific Information',
+  extensions,
 }) => {
-  const extensions = SchemaHelpers.getCustomExtensions(item);
+  const extensions = SchemaHelpers.getCustomExtensions(extensions);
   if (!extensions || !Object.keys(extensions).length) {
     return null;
   }

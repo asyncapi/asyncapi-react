@@ -10,6 +10,7 @@ export interface ConfigInterface {
   receiveLabel?: string;
   requestLabel?: string;
   replyLabel?: string;
+  extensions: Record<string, React.ComponentType<ExtensionComponentProps>>
 }
 
 export interface ShowConfig {
