@@ -156,6 +156,23 @@ export const TabsContent = styled.div`
   overflow: auto;
   height: calc(100vh - 117px);
   min-height: calc(100vh - 117px);
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #848485;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #464547;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #d5d2d2;
+  }
 `;
 
 export const TabWrapper = styled.li``;

@@ -18,7 +18,7 @@ const SplitWrapper: React.FunctionComponent = ({ children }) => (
     }}
     gutterStyle={() => ({
       backgroundColor: 'gray',
-      width: '7px',
+      width: '5px',
     })}
     minSize={250}
   >
