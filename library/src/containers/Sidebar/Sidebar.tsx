@@ -1,9 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { CollapseButton } from '../../components';
 import { useConfig, useSpec } from '../../contexts';
-import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
 import { CommonHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
+import {
+  PUBLISH_LABEL_DEFAULT_TEXT,
+  SUBSCRIBE_LABEL_DEFAULT_TEXT,
+} from '../../constants';
+import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
