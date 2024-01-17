@@ -5,25 +5,25 @@ export interface TagObject<T = any> {
   tags: TagsInterface;
   data: T;
 }
-export type SortedReturnType = {
+export interface SortedReturnType {
   tagged: Map<string, TagObject[]>;
   untagged: TagObject[];
-};
+}
 
 /**
  * Filter an array of objects by certain tags
  */
 export function filterObjectsByTags<T>(
   tags: string[],
-  objects: TagObject<T>[],
+  objects: Array<TagObject<T>>,
 ): SortedReturnType {
   const taggedObjects = new Set<TagObject>();
   const tagged = new Map<string, TagObject[]>();
   tags.forEach(tag => {
     const taggedForTag: TagObject[] = [];
     objects.forEach(obj => {
-      const tags = obj.tags;
-      const nameTags = (tags.all() ?? []).map(t => t.name());
+      const objTags = obj.tags;
+      const nameTags = (objTags.all() ?? []).map(t => t.name());
       const hasTag = nameTags.includes(tag);
       if (hasTag) {
         taggedForTag.push(obj);
