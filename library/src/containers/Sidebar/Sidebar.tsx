@@ -6,6 +6,7 @@ import {
   PUBLISH_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../../constants';
+import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -168,52 +169,11 @@ export const Sidebar: React.FunctionComponent = () => {
   );
 };
 
-interface TagObject<T = any> {
-  name: string;
-  object: { tags?: () => Array<{ name: () => string }> };
-  data: T;
-}
-
-function filterObjectsByTags<T = any>(
-  tags: string[],
-  objects: Array<TagObject<T>>,
-): { tagged: Map<string, TagObject[]>; untagged: TagObject[] } {
-  const taggedObjects = new Set<TagObject>();
-  const tagged = new Map<string, TagObject[]>();
-
-  tags.forEach(tag => {
-    const taggedForTag: TagObject[] = [];
-    objects.forEach(obj => {
-      const object = obj.object;
-      if (typeof object.tags !== 'function') {
-        return;
-      }
-
-      const objectTags = (object.tags() || []).map(t => t.name());
-      const hasTag = objectTags.includes(tag);
-      if (hasTag) {
-        taggedForTag.push(obj);
-        taggedObjects.add(obj);
-      }
-    });
-    tagged.set(tag, taggedForTag);
-  });
-
-  const untagged: TagObject[] = [];
-  objects.forEach(obj => {
-    if (!taggedObjects.has(obj)) {
-      untagged.push(obj);
-    }
-  });
-
-  return { tagged, untagged };
-}
-
 const ServersList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
   const servers = asyncapi.servers().all();
-  const showServers = sidebarConfig?.showServers || 'byDefault';
+  const showServers = sidebarConfig?.showServers ?? 'byDefault';
 
   if (showServers === 'byDefault') {
     return (
@@ -227,7 +187,12 @@ const ServersList: React.FunctionComponent = () => {
 
   let specTagNames: string[];
   if (showServers === 'bySpecTags') {
-    specTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
+    specTagNames = (
+      asyncapi
+        .info()
+        .tags()
+        .all() ?? []
+    ).map(tag => tag.name());
   } else {
     const serverTagNamesSet = new Set<string>();
     servers.forEach(server => {
@@ -238,7 +203,7 @@ const ServersList: React.FunctionComponent = () => {
 
   const serializedServers: TagObject[] = servers.map(server => ({
     name: server.id(),
-    object: server,
+    tags: server.tags(),
     data: {},
   }));
   const { tagged, untagged } = filterObjectsByTags(
@@ -273,7 +238,7 @@ const OperationsList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
   const operations = asyncapi.operations().all();
-  const showOperations = sidebarConfig?.showOperations || 'byDefault';
+  const showOperations = sidebarConfig?.showOperations ?? 'byDefault';
 
   const processedOperations: Array<TagObject<{
     channelName: string;
@@ -287,22 +252,22 @@ const OperationsList: React.FunctionComponent = () => {
     if (operation.isSend()) {
       processedOperations.push({
         name: `publish-${operation.id()}`,
-        object: operation,
+        tags: operation.tags(),
         data: {
-          channelName: channelAddress || '',
+          channelName: channelAddress ?? '',
           kind: 'publish',
-          summary: operation.summary() || '',
+          summary: operation.summary() ?? '',
         },
       });
     }
     if (operation.isReceive()) {
       processedOperations.push({
         name: `subscribe-${operation.id()}`,
-        object: operation,
+        tags: operation.tags(),
         data: {
-          channelName: channelAddress || '',
+          channelName: channelAddress ?? '',
           kind: 'subscribe',
-          summary: operation.summary() || '',
+          summary: operation.summary() ?? '',
         },
       });
     }
@@ -320,11 +285,19 @@ const OperationsList: React.FunctionComponent = () => {
 
   let operationTagNames: string[];
   if (showOperations === 'bySpecTags') {
-    operationTagNames = (asyncapi.info().tags() || []).map(tag => tag.name());
+    operationTagNames = (
+      asyncapi
+        .info()
+        .tags()
+        .all() ?? []
+    ).map(tag => tag.name());
   } else {
     const operationTagNamesSet = new Set<string>();
     operations.forEach(operation => {
-      operation.tags().forEach(t => operationTagNamesSet.add(t.name()));
+      operation
+        .tags()
+        .all()
+        .forEach(t => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);
   }
@@ -374,9 +347,9 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
   const isPublish = kind === 'publish';
   let label: string = '';
   if (isPublish) {
-    label = config.publishLabel || PUBLISH_LABEL_DEFAULT_TEXT;
+    label = config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT;
   } else {
-    label = config.subscribeLabel || SUBSCRIBE_LABEL_DEFAULT_TEXT;
+    label = config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT;
   }
 
   return (
@@ -394,7 +367,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         >
           {label}
         </span>
-        <span className="break-all inline-block">{summary || channelName}</span>
+        <span className="break-all inline-block">{summary ?? channelName}</span>
       </a>
     </li>
   );
