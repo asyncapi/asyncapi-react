@@ -256,7 +256,7 @@ const OperationsList: React.FunctionComponent = () => {
     const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
     let label: string = '';
     if (version === 0) {
-      //old version uses different labels for the operations
+      // old version uses different labels for the operations
       const operationChannels = operationChannel.all();
       const channelAddress = operationChannels[0]?.address();
       label = operation.hasSummary()
