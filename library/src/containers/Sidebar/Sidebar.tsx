@@ -1,12 +1,9 @@
 import React, { useState, useContext } from 'react';
-
 import { CollapseButton } from '../../components';
 import { useConfig, useSpec } from '../../contexts';
-import {
-  PUBLISH_LABEL_DEFAULT_TEXT,
-  SUBSCRIBE_LABEL_DEFAULT_TEXT,
-} from '../../constants';
 import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
+import { CommonHelpers } from '../../helpers';
+import { PayloadType } from '../../types';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -78,6 +75,23 @@ export const Sidebar: React.FunctionComponent = () => {
     </li>
   );
 
+  const operationList = hasOperations && (
+    <>
+      <li className="mb-3 mt-9">
+        <a
+          className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
+          href="#operations"
+          onClick={() => setShowSidebar(false)}
+        >
+          Operations
+        </a>
+        <OperationsList />
+      </li>
+      {messagesList}
+      {schemasList}
+    </>
+  );
+
   return (
     <SidebarContext.Provider value={{ setShowSidebar }}>
       <div
@@ -100,9 +114,6 @@ export const Sidebar: React.FunctionComponent = () => {
         className={`${
           showSidebar ? 'block fixed w-full' : 'hidden'
         } sidebar relative w-64 max-h-screen h-full bg-gray-200 shadow z-20`}
-        // className={`${
-        //   showSidebar ? 'block fixed w-full' : 'hidden'
-        // } sidebar bg-gray-200 font-sans font-light px-4 py-8 z-20 shadow overflow-auto`}
       >
         <div
           className={`${
@@ -145,22 +156,7 @@ export const Sidebar: React.FunctionComponent = () => {
                   <ServersList />
                 </li>
               )}
-              {hasOperations && (
-                <>
-                  <li className="mb-3 mt-9">
-                    <a
-                      className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
-                      href="#operations"
-                      onClick={() => setShowSidebar(false)}
-                    >
-                      Operations
-                    </a>
-                    <OperationsList />
-                  </li>
-                  {messagesList}
-                  {schemasList}
-                </>
-              )}
+              {operationList}
             </ul>
           </div>
         </div>
@@ -234,43 +230,46 @@ const ServersList: React.FunctionComponent = () => {
   );
 };
 
+interface OperationItemProps {
+  label: string;
+  type: PayloadType;
+  operationHrefId: string;
+}
 const OperationsList: React.FunctionComponent = () => {
   const sidebarConfig = useConfig().sidebar;
   const asyncapi = useSpec();
   const operations = asyncapi.operations().all();
   const showOperations = sidebarConfig?.showOperations ?? 'byDefault';
 
-  const processedOperations: Array<TagObject<{
-    channelName: string;
-    summary: string;
-    kind: 'publish' | 'subscribe';
-  }>> = [];
-  operations.forEach(operation => {
+  const processedOperations: Array<TagObject<
+    OperationItemProps
+  >> = operations.map(operation => {
     const operationChannel = operation.channels();
-    const operationChannels = operationChannel.all();
-    const channelAddress = operationChannels[0]?.address();
-    if (operation.isSend()) {
-      processedOperations.push({
-        name: `publish-${operation.id()}`,
-        tags: operation.tags(),
-        data: {
-          channelName: channelAddress ?? '',
-          kind: 'publish',
-          summary: operation.summary() ?? '',
-        },
-      });
+    const operationHrefId = CommonHelpers.getOperationIdentifier(operation);
+    const type = CommonHelpers.getOperationType(operation);
+
+    const specV = useSpec().version();
+    const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
+    let label: string = '';
+    if (version === 0) {
+      //old version uses different labels for the operations
+      const operationChannels = operationChannel.all();
+      const channelAddress = operationChannels[0]?.address();
+      label = operation.hasSummary()
+        ? operation.summary()!
+        : channelAddress ?? '';
+    } else {
+      label = operation.id()!;
     }
-    if (operation.isReceive()) {
-      processedOperations.push({
-        name: `subscribe-${operation.id()}`,
-        tags: operation.tags(),
-        data: {
-          channelName: channelAddress ?? '',
-          kind: 'subscribe',
-          summary: operation.summary() ?? '',
-        },
-      });
-    }
+    return {
+      name: `${type}-${operation.id()}`,
+      tags: operation.tags(),
+      data: {
+        label,
+        type,
+        operationHrefId,
+      },
+    };
   });
 
   if (showOperations === 'byDefault') {
@@ -330,44 +329,35 @@ const OperationsList: React.FunctionComponent = () => {
   );
 };
 
-interface OperationItemProps {
-  channelName: string;
-  summary: string;
-  kind: 'publish' | 'subscribe';
-}
-
 const OperationItem: React.FunctionComponent<OperationItemProps> = ({
-  channelName,
-  summary,
-  kind,
+  type,
+  operationHrefId,
+  label,
 }) => {
   const config = useConfig();
   const { setShowSidebar } = useContext(SidebarContext);
-
-  const isPublish = kind === 'publish';
-  let label: string = '';
-  if (isPublish) {
-    label = config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT;
-  } else {
-    label = config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT;
-  }
+  const {
+    typeLabel,
+    backgroundColor,
+  } = CommonHelpers.getOperationDesignInformation({
+    type,
+    config,
+  });
 
   return (
     <li>
       <a
         className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
-        href={`#operation-${kind}-${channelName}`}
+        href={`#${operationHrefId}`}
         onClick={() => setShowSidebar(false)}
       >
         <span
-          className={`${
-            isPublish ? 'bg-blue-600' : 'bg-green-600'
-          } font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs`}
-          title={isPublish ? 'Publish' : 'Subscribe'}
+          className={`${backgroundColor} font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs`}
+          title={typeLabel}
         >
-          {label}
+          {typeLabel}
         </span>
-        <span className="break-all inline-block">{summary ?? channelName}</span>
+        <span className="break-all inline-block">{label}</span>
       </a>
     </li>
   );

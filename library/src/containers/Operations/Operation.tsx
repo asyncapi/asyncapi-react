@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
-
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
 import {
@@ -12,20 +11,11 @@ import {
   CollapseButton,
 } from '../../components';
 import { Href } from '../../components/Href';
-
-import { useConfig, useSpec } from '../../contexts';
+import { useConfig } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
-import {
-  EXTERAL_DOCUMENTATION_TEXT,
-  PUBLISH_LABEL_DEFAULT_TEXT,
-  RECEIVE_TEXT_LABEL_DEFAULT_TEXT,
-  REPLIER_LABEL_DEFAULT_TEXT,
-  REQUEST_LABEL_DEFAULT_TEXT,
-  SEND_LABEL_DEFAULT_TEXT,
-  SUBSCRIBE_LABEL_DEFAULT_TEXT,
-} from '../../constants';
+import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
-import { ConfigInterface } from '../../config/config';
+
 interface Props {
   type: PayloadType;
   operation: OperationInterface;
@@ -34,11 +24,11 @@ interface Props {
 }
 
 export const Operation: React.FunctionComponent<Props> = props => {
-  const config = useConfig();
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   if (!operation || !channel) {
     return null;
   }
+  const config = useConfig();
 
   // check typeof as fallback for older version than `2.2.0`
   const servers =
@@ -178,61 +168,18 @@ export const Operation: React.FunctionComponent<Props> = props => {
   );
 };
 
-function getTypeInformation({
-  typeRes = PayloadType.SEND,
-  config,
-  version,
-}: {
-  typeRes: PayloadType;
-  config: ConfigInterface;
-  version: number;
-}): { borderColor: string; typeLabel: string } {
-  if (typeRes === PayloadType.RECEIVE) {
-    return {
-      borderColor: 'border-green-600 text-green-600',
-      typeLabel:
-        version === 1
-          ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
-          : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
-    };
-  }
-  if (typeRes === PayloadType.REPLY) {
-    return {
-      borderColor: 'border-orange-600 text-orange-600',
-      typeLabel: config.replyLabel ?? REPLIER_LABEL_DEFAULT_TEXT,
-    };
-  }
-  if (typeRes === PayloadType.REQUEST) {
-    return {
-      borderColor: 'border-red-600 text-red-600',
-      typeLabel: config.requestLabel ?? REQUEST_LABEL_DEFAULT_TEXT,
-    };
-  }
-  return {
-    borderColor: 'border-blue-600 text-blue-500',
-    typeLabel:
-      version === 1
-        ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
-        : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
-  };
-}
-
 export const OperationInfo: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
-  const specV = useSpec().version();
-  const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
-  let typeRes = type;
-  if (version === 1 && operation.action() !== typeRes) {
-    typeRes = PayloadType.RECEIVE;
-  }
-  const { borderColor, typeLabel } = getTypeInformation({
-    typeRes,
+  const {
+    borderColor,
+    typeLabel,
+  } = CommonHelpers.getOperationDesignInformation({
+    type,
     config,
-    version,
   });
   return (
     <>
@@ -429,9 +376,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
   operation,
 }) => {
   const reply = operation.reply();
-
   const channel = reply?.channel();
-
   const channelName = channel?.address() ?? '';
 
   const config = useConfig();
