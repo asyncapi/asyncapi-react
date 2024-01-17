@@ -5,7 +5,11 @@ export interface ConfigInterface {
   sidebar?: SideBarConfig;
   parserOptions?: any;
   publishLabel?: string;
+  sendLabel?: string;
   subscribeLabel?: string;
+  receiveLabel?: string;
+  requestLabel?: string;
+  replyLabel?: string;
 }
 
 export interface ShowConfig {

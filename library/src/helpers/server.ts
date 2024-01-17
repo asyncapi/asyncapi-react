@@ -59,13 +59,12 @@ export class ServerHelpers {
       } else {
         securityProtocol = 'PLAINTEXT';
       }
+    } else if (securitySchema) {
+      securityProtocol = 'SASL_SSL';
     } else {
-      if (securitySchema) {
-        securityProtocol = 'SASL_SSL';
-      } else {
-        securityProtocol = 'SSL';
-      }
+      securityProtocol = 'SSL';
     }
+
     if (securitySchema) {
       switch (securitySchema.type()) {
         case 'plain':

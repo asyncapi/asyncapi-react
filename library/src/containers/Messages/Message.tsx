@@ -59,7 +59,7 @@ export const Message: React.FunctionComponent<Props> = ({
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
             <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {message.id()}
+              {messageId}
             </span>
           </div>
 

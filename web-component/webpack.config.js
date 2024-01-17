@@ -1,4 +1,5 @@
 const path = require('path');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -27,17 +28,7 @@ module.exports = {
       react: path.resolve('./node_modules/react'),
     },
     fallback: {
-      util: false,
-      buffer: false,
       fs: false,
-      path: false,
-      stream: false,
-      zlib: false,
-      assert: false,
-      url: false,
-      polyfill: false,
-      http: false,
-      https: false,
     },
   },
   devtool: 'source-map',
@@ -51,4 +42,12 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    /**
+     * Uncomment plugin when you wanna see dependency map of bundled package
+     */
+    // new BundleAnalyzerPlugin(),
+    new NodePolyfillPlugin(),
+  ],
 };

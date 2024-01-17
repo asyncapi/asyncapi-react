@@ -10,8 +10,8 @@ The contributing process in this project relies on the [GitHub flow](https://gui
 
 1. Fork this repository.
 1. Make your changes. Do not forgot about:
-   - [Naming and architecture convention](./DEVELOPMENT.md#naming--architecture-convention)
-   - [Project structure](./development-guide.md/#project-structure)
+   - [Naming and architecture convention](./docs/development/guide.md#naming-and-architecture-convention)
+   - [Project structure](./docs/development/guide.md#project-structure)
    - Tests
    - Updating relevant documents if you add, remove, update props or configuration.
 1. Create a PR.

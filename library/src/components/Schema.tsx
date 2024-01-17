@@ -280,7 +280,12 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Adheres to:' : 'Or to:'}
+                    schemaName={SchemaHelpers.applicatorSchemaName(
+                      idx,
+                      'Adheres to',
+                      'Or to',
+                      s.title(),
+                    )}
                   />
                 ))}
             {schema.anyOf() &&
@@ -290,7 +295,12 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Can adhere to:' : 'Or to:'}
+                    schemaName={SchemaHelpers.applicatorSchemaName(
+                      idx,
+                      'Can adhere to',
+                      'Or to',
+                      s.title(),
+                    )}
                   />
                 ))}
             {schema.allOf() &&
@@ -300,7 +310,12 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <Schema
                     key={idx}
                     schema={s}
-                    schemaName={idx === 0 ? 'Consists of:' : 'And with:'}
+                    schemaName={SchemaHelpers.applicatorSchemaName(
+                      idx,
+                      'Consists of',
+                      'And of',
+                      s.title(),
+                    )}
                   />
                 ))}
             {schema.not() && (
