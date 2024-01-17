@@ -39,7 +39,8 @@ describe('sidebar', () => {
       };
       const objects: TagObject<any>[] = [obj1, obj2, obj3];
       const filteredTags = filterObjectsByTags(tagsToFind, objects);
-      expect(filteredTags.tagged.size).toEqual(2);
+      expect(filteredTags.tagged.size).toEqual(1);
+      expect(filteredTags.tagged.get('test')!.length).toEqual(2);
       expect(filteredTags.untagged.length).toEqual(1);
     });
   });
