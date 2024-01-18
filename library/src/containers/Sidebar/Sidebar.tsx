@@ -3,10 +3,6 @@ import { CollapseButton } from '../../components';
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers } from '../../helpers';
 import { PayloadType } from '../../types';
-import {
-  PUBLISH_LABEL_DEFAULT_TEXT,
-  SUBSCRIBE_LABEL_DEFAULT_TEXT,
-} from '../../constants';
 import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
 
 const SidebarContext = React.createContext<{
@@ -240,7 +236,8 @@ interface OperationItemProps {
   operationHrefId: string;
 }
 const OperationsList: React.FunctionComponent = () => {
-  const sidebarConfig = useConfig().sidebar;
+  const config = useConfig();
+  const sidebarConfig = config.sidebar;
   const asyncapi = useSpec();
   const operations = asyncapi.operations().all();
   const showOperations = sidebarConfig?.showOperations ?? 'byDefault';
@@ -249,10 +246,13 @@ const OperationsList: React.FunctionComponent = () => {
     OperationItemProps
   >> = operations.map(operation => {
     const operationChannel = operation.channels();
-    const operationHrefId = CommonHelpers.getOperationIdentifier(operation);
+    const operationHrefId = CommonHelpers.getOperationIdentifier({
+      operation,
+      config,
+    });
     const type = CommonHelpers.getOperationType(operation);
 
-    const specV = useSpec().version();
+    const specV = asyncapi.version();
     const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
     let label: string = '';
     if (version === 0) {
@@ -340,12 +340,16 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
 }) => {
   const config = useConfig();
   const { setShowSidebar } = useContext(SidebarContext);
+  const specV = useSpec().version();
+  const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
+  const isAsyncAPIv2 = version === 0;
   const {
     typeLabel,
     backgroundColor,
   } = CommonHelpers.getOperationDesignInformation({
     type,
     config,
+    isAsyncAPIv2,
   });
 
   return (

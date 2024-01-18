@@ -33,8 +33,13 @@ export class CommonHelpers {
     }
     return PayloadType.RECEIVE;
   }
-  static getOperationIdentifier(operation: OperationInterface) {
-    const config = useConfig();
+  static getOperationIdentifier({
+    operation,
+    config,
+  }: {
+    operation: OperationInterface;
+    config: ConfigInterface;
+  }) {
     if (operation.isSend()) {
       if (operation.reply() !== undefined) {
         return CommonHelpers.getIdentifier(
@@ -64,20 +69,19 @@ export class CommonHelpers {
   static getOperationDesignInformation({
     type,
     config,
+    isAsyncAPIv2,
   }: {
     type: PayloadType;
     config: ConfigInterface;
+    isAsyncAPIv2: boolean;
   }): { borderColor: string; typeLabel: string; backgroundColor: string } {
-    const specV = useSpec().version();
-    const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
     if (type === PayloadType.RECEIVE) {
       return {
         borderColor: 'border-green-600 text-green-600',
         backgroundColor: 'bg-green-600',
-        typeLabel:
-          version === 1
-            ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
-            : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
+        typeLabel: !isAsyncAPIv2
+          ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
+          : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
       };
     }
     if (type === PayloadType.REPLY) {
@@ -97,10 +101,9 @@ export class CommonHelpers {
     return {
       borderColor: 'border-blue-600 text-blue-500',
       backgroundColor: 'bg-blue-600',
-      typeLabel:
-        version === 1
-          ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
-          : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
+      typeLabel: !isAsyncAPIv2
+        ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
+        : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
     };
   }
 }

@@ -11,7 +11,7 @@ import {
   CollapseButton,
 } from '../../components';
 import { Href } from '../../components/Href';
-import { useConfig } from '../../contexts';
+import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
@@ -25,10 +25,10 @@ interface Props {
 
 export const Operation: React.FunctionComponent<Props> = props => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
+  const config = useConfig();
   if (!operation || !channel) {
     return null;
   }
-  const config = useConfig();
 
   // check typeof as fallback for older version than `2.2.0`
   const servers =
@@ -174,12 +174,16 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
+  const specV = useSpec().version();
+  const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
+  const isAsyncAPIv2 = version === 0;
   const {
     borderColor,
     typeLabel,
   } = CommonHelpers.getOperationDesignInformation({
     type,
     config,
+    isAsyncAPIv2,
   });
   return (
     <>

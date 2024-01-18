@@ -17,7 +17,10 @@ export const Operations: React.FunctionComponent = () => {
   const operationsList: React.ReactNodeArray = operations.map(operation => {
     const channel = operation.channels().all()[0];
     const channelAddress = channel?.address() ?? '';
-    const operationId = CommonHelpers.getOperationIdentifier(operation);
+    const operationId = CommonHelpers.getOperationIdentifier({
+      operation,
+      config,
+    });
     const type = CommonHelpers.getOperationType(operation);
     return (
       <li className="mb-12" key={`${type}-${operation.id()}`} id={operationId}>
