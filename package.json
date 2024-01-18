@@ -31,7 +31,6 @@
     "bump:playground:version": "cd playground && npm --no-git-tag-version --allow-same-version version $VERSION",
     "bump:webcomp:version": "cd web-component && npm --no-git-tag-version --allow-same-version version $VERSION",
     "bump:lib:version": "cd library && npm --no-git-tag-version --allow-same-version version $VERSION",
-    "bump:version": "npm run bump:lib:version && npm run bump:webcomp:version && npm run bump:playground:version && npm run install:reactcomp:webcomponent && npm run install:reactcomp:playground",
     "install:reactcomp:playground": "cd playground && npm run install:reactcomp",
     "install:reactcomp:webcomponent": "cd web-component && npm run install:reactcomp",
     "get:name": "cd library && npm run get:name",
