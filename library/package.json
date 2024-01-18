@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
