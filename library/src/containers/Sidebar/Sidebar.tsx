@@ -35,8 +35,8 @@ export const Sidebar: React.FunctionComponent = () => {
         Messages
       </a>
       <ul className="text-sm mt-2">
-        {messages.map(message => (
-          <li key={message.name()}>
+        {messages.map((message, index) => (
+          <li key={`menu-message-list-${message.name() ?? index}`}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
               href={`#message-${message.name()}`}
@@ -60,8 +60,8 @@ export const Sidebar: React.FunctionComponent = () => {
         Schemas
       </a>
       <ul className="text-sm mt-2">
-        {schemas.map(schema => (
-          <li key={schema.id()}>
+        {schemas.map((schema, index) => (
+          <li key={`menu-message-list-${schema.id() ?? index}`}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
               href={`#schema-${schema.id()}`}
@@ -353,7 +353,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
   });
 
   return (
-    <li>
+    <li key={`menu-operation-list-${operationHrefId}`}>
       <a
         className="flex no-underline text-gray-700 mb-2 hover:text-gray-900"
         href={`#${operationHrefId}`}

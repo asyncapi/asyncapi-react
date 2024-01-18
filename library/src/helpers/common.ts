@@ -1,6 +1,5 @@
 import { ConfigInterface } from '../config';
 import { OperationInterface } from '@asyncapi/parser';
-import { useConfig, useSpec } from '../contexts';
 import { PayloadType } from '../types';
 import {
   PUBLISH_LABEL_DEFAULT_TEXT,
