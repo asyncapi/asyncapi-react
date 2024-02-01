@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SchemaHelpers .applicatorSchemaName should not render title because title is null 1`] = `"first case:"`;
+
+exports[`SchemaHelpers .applicatorSchemaName should not render title because title is null 2`] = `"other cases:"`;
+
+exports[`SchemaHelpers .applicatorSchemaName should not render title because title is undefined 1`] = `"first case:"`;
+
+exports[`SchemaHelpers .applicatorSchemaName should not render title because title is undefined 2`] = `"other cases:"`;
+
+exports[`SchemaHelpers .applicatorSchemaName should render title 1`] = `"first case title example:"`;
+
+exports[`SchemaHelpers .applicatorSchemaName should render title 2`] = `"other cases title example:"`;

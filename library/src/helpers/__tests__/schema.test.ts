@@ -869,4 +869,60 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(expected);
     });
   });
+
+  describe('.applicatorSchemaName', () => {
+    const FIRST_CASE = 'first case';
+    const OTHER_CASES = 'other cases';
+
+    test('should not render title because title is null', () => {
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          0,
+          FIRST_CASE,
+          OTHER_CASES,
+          null as never,
+        ),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          1,
+          FIRST_CASE,
+          OTHER_CASES,
+          null as never,
+        ),
+      ).toMatchSnapshot();
+    });
+
+    test('should not render title because title is undefined', () => {
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          0,
+          FIRST_CASE,
+          OTHER_CASES,
+          undefined,
+        ),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          1,
+          FIRST_CASE,
+          OTHER_CASES,
+          undefined,
+        ),
+      ).toMatchSnapshot();
+    });
+
+    test('should render title', () => {
+      const TITLE = 'title example';
+      expect(
+        SchemaHelpers.applicatorSchemaName(0, FIRST_CASE, OTHER_CASES, TITLE),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(1, FIRST_CASE, OTHER_CASES, TITLE),
+      ).toMatchSnapshot();
+    });
+  });
 });
