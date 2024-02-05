@@ -18,8 +18,24 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      const { document } = await asyncapiParser.parse(content, parserOptions);
-      return { asyncapi: document };
+      const parseResult = await asyncapiParser.parse(content, parserOptions);
+
+      let error: { title: string } = { title: '' };
+      if (parseResult.document === undefined) {
+        parseResult.diagnostics.forEach(diagnostic => {
+          if (diagnostic.code.toString().includes('error')) {
+            error.title = diagnostic.message.toString();
+          }
+        });
+
+        if (error.title === '') {
+          error.title = 'Unexpected error while parsing the document.';
+        }
+
+        throw error;
+      }
+
+      return { asyncapi: parseResult.document };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }
