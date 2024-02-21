@@ -98,6 +98,10 @@ export class SchemaHelpers {
     if (combinedType) {
       return combinedType;
     }
+
+    if (type === 'object' && schema.title()) {
+      type += ' [' + schema.title() + ']';
+    }
     return type;
   }
 
