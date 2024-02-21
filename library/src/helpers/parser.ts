@@ -3,7 +3,12 @@ import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
 import { ProtoBuffSchemaParser } from '@asyncapi/protobuf-schema-parser';
 import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 
-import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
+import {
+  ErrorObject,
+  ParserReturn,
+  FetchingSchemaInterface,
+  ValidationError,
+} from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
@@ -20,18 +25,21 @@ export class Parser {
     try {
       const parseResult = await asyncapiParser.parse(content, parserOptions);
 
-      let error: { title: string } = { title: '' };
+      let error: {
+        title: string | undefined;
+        validationErrors: ValidationError[] | undefined;
+      } = {
+        title: 'There were errors validating Asyncapi document',
+        validationErrors: undefined,
+      };
+
       if (parseResult.document === undefined) {
         parseResult.diagnostics.forEach(diagnostic => {
           if (diagnostic.code.toString().includes('error')) {
-            error.title = diagnostic.message.toString();
+            const tempObj = { title: diagnostic.message };
+            error.validationErrors = [(tempObj as unknown) as ValidationError];
           }
         });
-
-        if (error.title === '') {
-          error.title = 'Unexpected error while parsing the document.';
-        }
-
         throw error;
       }
 
