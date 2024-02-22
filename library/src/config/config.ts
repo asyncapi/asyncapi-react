@@ -5,8 +5,8 @@ export interface ConfigInterface {
   sidebar?: SideBarConfig;
   parserOptions?: any;
   publishLabel?: string;
-  sendLabel?: string;
   subscribeLabel?: string;
+  sendLabel?: string;
   receiveLabel?: string;
   requestLabel?: string;
   replyLabel?: string;
