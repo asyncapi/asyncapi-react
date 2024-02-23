@@ -169,6 +169,12 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`number | string | boolean`);
     });
+
+    test('should handle append title to object', () => {
+      const schema = new Schema({ type: 'object', title: 'SampleType' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('object [SampleType]');
+    });
   });
 
   describe('.prettifyValue', () => {
