@@ -471,7 +471,7 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     !Array.isArray(items) &&
     Object.keys(items.properties() || {}).length
   ) {
-    return <SchemaProperties schema={items} />;
+    return <Schema schema={items} />;
   } else if (Array.isArray(items)) {
     return (
       <>
