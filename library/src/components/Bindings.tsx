@@ -16,7 +16,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const renderedBindings = bindings.all().map(binding => {
+  const renderedBindings = bindings.all().map((binding) => {
     const bindingValue = binding.value();
     const schema = SchemaHelpers.jsonToSchema(bindingValue);
     const protocol = binding.protocol();

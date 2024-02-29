@@ -66,7 +66,7 @@ export interface ErrorObject {
     startColumn: number;
     startOffset: number;
   };
-  refs?: Array<{
+  refs?: {
     title: string;
     jsonPointer: string;
     startLine: number;
@@ -75,5 +75,5 @@ export interface ErrorObject {
     endLine: number;
     endColumn: number;
     endOffset: number;
-  }>;
+  }[];
 }

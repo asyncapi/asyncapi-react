@@ -87,7 +87,7 @@ export class SchemaHelpers {
 
     let type = this.inferType(schema);
     if (Array.isArray(type)) {
-      return type.map(t => this.toType(t, schema)).join(' | ');
+      return type.map((t) => this.toType(t, schema)).join(' | ');
     }
     type = this.toType(type, schema);
     const combinedType = this.toCombinedType(schema);
@@ -223,7 +223,7 @@ export class SchemaHelpers {
       return undefined;
     }
     const obj: Record<string, any> = {};
-    urlVariables.all().forEach(variable => {
+    urlVariables.all().forEach((variable) => {
       obj[variable.id()] = { ...(variable.json() || {}) };
       obj[variable.id()].type = 'string';
     });
@@ -244,7 +244,7 @@ export class SchemaHelpers {
       return undefined;
     }
     const obj: Record<string, any> = {};
-    parameters.all().forEach(parameter => {
+    parameters.all().forEach((parameter) => {
       const parameterSchema = parameter.schema();
       obj[parameter.id()] = { ...(parameterSchema?.json() ?? {}) };
       obj[parameter.id()].description = parameter.hasDescription()
@@ -377,15 +377,16 @@ export class SchemaHelpers {
     items: SchemaInterface[],
     schema: SchemaInterface,
   ): string {
-    const types = items.map(item => this.toSchemaType(item)).join(', ');
+    const types = items.map((item) => this.toSchemaType(item)).join(', ');
     const additionalItems = schema.additionalItems();
     if (additionalItems !== undefined && additionalItems !== false) {
       const additionalType =
         additionalItems === true
           ? SchemaCustomTypes.ANY
           : this.toSchemaType(additionalItems);
-      return `tuple<${types ||
-        SchemaCustomTypes.UNKNOWN}, ...optional<${additionalType}>>`;
+      return `tuple<${
+        types || SchemaCustomTypes.UNKNOWN
+      }, ...optional<${additionalType}>>`;
     }
     return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
   }
@@ -411,7 +412,7 @@ export class SchemaHelpers {
       if (Array.isArray(types)) {
         // if types have `integer` and `number` types, `integer` is unnecessary
         if (types.includes('integer') && types.includes('number')) {
-          types = types.filter(t => t !== 'integer');
+          types = types.filter((t) => t !== 'integer');
         }
         return types.length === 1 ? types[0] : types;
       }
@@ -424,12 +425,12 @@ export class SchemaHelpers {
     }
     const enumValue = schema.enum();
     if (Array.isArray(enumValue) && enumValue.length) {
-      const inferredType = Array.from(new Set(enumValue.map(e => typeof e)));
+      const inferredType = Array.from(new Set(enumValue.map((e) => typeof e)));
       return inferredType.length === 1 ? inferredType[0] : inferredType;
     }
 
     const schemaKeys = Object.keys(schema.json() || {}) || [];
-    const hasInferredTypes = jsonSchemaKeywords.some(key =>
+    const hasInferredTypes = jsonSchemaKeywords.some((key) =>
       schemaKeys.includes(key),
     );
     if (hasInferredTypes === true) {
@@ -529,16 +530,19 @@ export class SchemaHelpers {
     if (Array.isArray(value)) {
       return {
         type: 'array',
-        items: value.map(v => this.jsonFieldToSchema(v)),
+        items: value.map((v) => this.jsonFieldToSchema(v)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
     return {
       type: 'object',
-      properties: Object.entries(value).reduce((obj, [k, v]) => {
-        obj[k] = this.jsonFieldToSchema(v);
-        return obj;
-      }, {} as Record<string, unknown>),
+      properties: Object.entries(value).reduce(
+        (obj, [k, v]) => {
+          obj[k] = this.jsonFieldToSchema(v);
+          return obj;
+        },
+        {} as Record<string, unknown>,
+      ),
       [this.extRenderAdditionalInfo]: false,
     };
   }
