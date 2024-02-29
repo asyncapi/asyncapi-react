@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { TabLink, TabWrapper } from './styled';
 
 export interface TabProps {
-  children: React.ReactNode;
   title: string;
   tabIndex?: number;
   isActive?: boolean;
