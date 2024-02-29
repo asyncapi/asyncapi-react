@@ -21,7 +21,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true,
     "resolveJsonModule": true
   },
   "include": ["./library", "./playground"],
