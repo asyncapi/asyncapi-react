@@ -40,7 +40,7 @@ export const Security: React.FunctionComponent<Props> = ({
       .map(requirement => {
         const requirements = requirement.all();
         const key = Object.keys(requirements)[0];
-        const def = securitySchemes[String(key) as any];
+        const def = securitySchemes[Number(key)];
         const requiredScopes: any = requirements[Number(key)];
 
         if (!def) {

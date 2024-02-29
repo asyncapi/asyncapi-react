@@ -222,7 +222,7 @@ export class SchemaHelpers {
     if (!urlVariables || urlVariables.length === 0) {
       return undefined;
     }
-    const obj: Record<string, any> = {};
+    const obj: Record<string, Record<string, unknown>> = {};
     urlVariables.all().forEach(variable => {
       obj[variable.id()] = { ...(variable.json() || {}) };
       obj[variable.id()].type = 'string';
@@ -243,7 +243,7 @@ export class SchemaHelpers {
     if (!parameters || parameters.isEmpty()) {
       return undefined;
     }
-    const obj: Record<string, any> = {};
+    const obj: Record<string, Record<string, unknown>> = {};
     parameters.all().forEach(parameter => {
       const parameterSchema = parameter.schema();
       obj[parameter.id()] = { ...(parameterSchema?.json() ?? {}) };
@@ -280,7 +280,7 @@ export class SchemaHelpers {
       return;
     }
     const extensions = value.extensions() as ExtensionsInterface;
-    const filteredExtensions: Record<string, any> = {};
+    const filteredExtensions: Record<string, unknown> = {};
     for (const ext of extensions.all()) {
       const extType = ext as ExtensionInterface;
       if (
