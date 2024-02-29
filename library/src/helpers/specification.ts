@@ -85,7 +85,6 @@ export class SpecificationHelpers {
    */
   static serversTags(spec: AsyncAPIDocumentInterface) {
     const tags: Record<string, string[]> = {};
-
     Object.entries(spec.servers()).forEach(([_, server]) => {
       if (server.tags().length > 0) {
         server
