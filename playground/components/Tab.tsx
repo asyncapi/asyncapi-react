@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { TabLink, TabWrapper } from './styled';
 
 export interface TabProps {
-  children: React.ReactNode;
+  children: React.ReactNode; // NOSONAR
   title: string;
   tabIndex?: number;
   isActive?: boolean;
@@ -19,7 +19,9 @@ class Tab extends Component<TabProps> {
         <TabLink
           onClick={(event: any) => {
             event.preventDefault();
-            parentCallback!(tabIndex!);
+            if (parentCallback && tabIndex) {
+              parentCallback(tabIndex);
+            }
           }}
           active={isActive}
         >
