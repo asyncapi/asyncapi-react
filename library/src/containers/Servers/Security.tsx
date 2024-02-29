@@ -37,7 +37,7 @@ export const Security: React.FunctionComponent<Props> = ({
     }
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
-      .map((requirement) => {
+      .map(requirement => {
         const requirements = requirement.all();
         const key = Object.keys(requirements)[0];
         const def = securitySchemes[String(key) as any];
@@ -170,12 +170,10 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
     unwrappedFlows.implicit = flows.implicit() as OAuthFlowInterface;
   }
   if (flows?.hasAuthorizationCode()) {
-    unwrappedFlows.authorizationCode =
-      flows.authorizationCode() as OAuthFlowInterface;
+    unwrappedFlows.authorizationCode = flows.authorizationCode() as OAuthFlowInterface;
   }
   if (flows?.hasClientCredentials()) {
-    unwrappedFlows.clientCredentials =
-      flows.clientCredentials() as OAuthFlowInterface;
+    unwrappedFlows.clientCredentials = flows.clientCredentials() as OAuthFlowInterface;
   }
   if (flows?.hasPassword()) {
     unwrappedFlows.password = flows.implicit() as OAuthFlowInterface;

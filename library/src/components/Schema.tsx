@@ -91,14 +91,14 @@ export const Schema: React.FunctionComponent<Props> = ({
             {isExpandable && !isCircular ? (
               <>
                 <CollapseButton
-                  onClick={() => setExpanded((prev) => !prev)}
+                  onClick={() => setExpanded(prev => !prev)}
                   expanded={expanded}
                 >
                   {renderedSchemaName}
                 </CollapseButton>
                 <button
                   type="button"
-                  onClick={() => setDeepExpand((prev) => !prev)}
+                  onClick={() => setDeepExpand(prev => !prev)}
                   className="ml-1 text-sm text-gray-500"
                 >
                   {deepExpand ? 'Collapse all' : 'Expand all'}
@@ -177,7 +177,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
                   {/* constraints */}
                   {!!constraints.length &&
-                    constraints.map((c) => (
+                    constraints.map(c => (
                       <span
                         className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
                         key={c}
@@ -417,12 +417,14 @@ interface AdditionalPropertiesProps {
   schema: SchemaInterface;
 }
 
-const AdditionalProperties: React.FunctionComponent<
-  AdditionalPropertiesProps
-> = ({ schema }) => {
+const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
+  schema,
+}) => {
   if (
-    schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
-    false
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
   ) {
     return null;
   }
@@ -490,8 +492,10 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
   if (
-    schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
-    false
+    schema
+      .extensions()
+      .get(SchemaHelpers.extRenderAdditionalInfo)
+      ?.value() === false
   ) {
     return null;
   }

@@ -10,7 +10,11 @@ export const Messages: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
   const messages =
-    !asyncapi.components().isEmpty() && asyncapi.components().messages().all();
+    !asyncapi.components().isEmpty() &&
+    asyncapi
+      .components()
+      .messages()
+      .all();
 
   if (!messages || messages.length === 0) {
     return null;

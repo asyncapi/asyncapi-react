@@ -136,12 +136,12 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
-    borderColor: (theme) => ({
+    borderColor: theme => ({
       ...theme('colors'),
       DEFAULT: theme('colors.gray.400', 'currentColor'),
     }),
     extend: {
-      typography: (theme) => ({
+      typography: theme => ({
         DEFAULT: {
           css: {
             pre: {

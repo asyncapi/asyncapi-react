@@ -10,7 +10,11 @@ export const Schemas: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
   const schemas =
-    !asyncapi.components().isEmpty() && asyncapi.components().schemas().all();
+    !asyncapi.components().isEmpty() &&
+    asyncapi
+      .components()
+      .schemas()
+      .all();
 
   if (!schemas || schemas.length === 0) {
     return null;
@@ -25,7 +29,7 @@ export const Schemas: React.FunctionComponent = () => {
         {SCHEMAS_TEXT}
       </h2>
       <ul>
-        {schemas.map((schema) => (
+        {schemas.map(schema => (
           <li
             className="mb-4"
             key={schema.id()}

@@ -15,15 +15,15 @@ export interface SortedReturnType {
  */
 export function filterObjectsByTags<T>(
   tags: string[],
-  objects: TagObject<T>[],
+  objects: Array<TagObject<T>>,
 ): SortedReturnType {
   const taggedObjects = new Set<TagObject>();
   const tagged = new Map<string, TagObject[]>();
-  tags.forEach((tag) => {
+  tags.forEach(tag => {
     const taggedForTag: TagObject[] = [];
-    objects.forEach((obj) => {
+    objects.forEach(obj => {
       const objTags = obj.tags;
-      const nameTags = (objTags.all() ?? []).map((t) => t.name());
+      const nameTags = (objTags.all() ?? []).map(t => t.name());
       const hasTag = nameTags.includes(tag);
       if (hasTag) {
         taggedForTag.push(obj);
@@ -36,7 +36,7 @@ export function filterObjectsByTags<T>(
   });
 
   const untagged: TagObject[] = [];
-  objects.forEach((obj) => {
+  objects.forEach(obj => {
     if (!taggedObjects.has(obj)) {
       untagged.push(obj);
     }
