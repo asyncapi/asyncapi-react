@@ -38,15 +38,17 @@ export const Schema: React.FunctionComponent<Props> = ({
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
 
-  if (!isArray) {
-    useEffect(() => {
+  useEffect(() => {
+    if (!isArray) {
       setDeepExpand(deepExpanded);
-    }, [deepExpanded, setDeepExpand]);
+    }
+  }, [deepExpanded, setDeepExpand]);
 
-    useEffect(() => {
+  useEffect(() => {
+    if (!isArray) {
       setExpanded(deepExpand);
-    }, [deepExpand, setExpanded]);
-  }
+    }
+  }, [deepExpand, setExpanded]);
 
   if (
     !schema ||
@@ -477,14 +479,14 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     !Array.isArray(items) &&
     Object.keys(items.properties() || {}).length
   ) {
-    return <Schema schema={items} isArray />;
+    return <Schema schema={items} isArray={true} />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
           <Schema
             schema={item}
-            isArray
+            isArray={true}
             schemaName={`${idx + 1} item:`}
             key={idx}
           />
@@ -492,7 +494,7 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
       </>
     );
   }
-  return <Schema schema={items} isArray schemaName="Items:" />;
+  return <Schema schema={items} isArray={true} schemaName="Items:" />;
 };
 
 interface AdditionalItemsProps {
