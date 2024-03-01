@@ -64,7 +64,7 @@ class Playground extends Component<{}, State> {
           <CodeEditorsWrapper>
             <Tabs
               additionalHeaderContent={
-                <RefreshIcon show={this.state.refreshing}>
+                <RefreshIcon $show={this.state.refreshing}>
                   {'\uE00A'}
                 </RefreshIcon>
               }

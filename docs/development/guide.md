@@ -45,12 +45,6 @@ To install all dependencies for the [Playground](../../playground) application a
 npm install
 ```
 
-If you want to clear dependencies and remove a symlink, run this command:
-
-```sh
-npm run clean
-```
-
 ## Launch a development environment
 
 Launch the development server with the hot reloading functionality that allows any change in files in the `playground/src` and `library/src` folders to be immediately visible in the browser. Use this command:

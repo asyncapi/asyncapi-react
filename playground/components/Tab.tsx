@@ -23,7 +23,7 @@ class Tab extends Component<TabProps> {
               parentCallback(tabIndex);
             }
           }}
-          active={isActive}
+          $active={isActive}
         >
           {title}
         </TabLink>
