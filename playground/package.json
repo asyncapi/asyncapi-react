@@ -5,7 +5,8 @@
   "scripts": {
     "build": "next build",
     "start": "next dev",
-    "lint": "next lint"
+    "lint": "next lint",
+    "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
   },
   "dependencies": {
     "@asyncapi/react-component": "file:../library",
