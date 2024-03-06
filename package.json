@@ -21,6 +21,7 @@
     "web-component"
   ],
   "scripts": {
+    "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
     "build": "npm run build:library && npm run build:webcomponent && npm run build:playground",
