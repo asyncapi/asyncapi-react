@@ -41,7 +41,7 @@ class CodeEditorComponent extends Component<Props, State> {
           }}
           theme={material}
           extensions={[yaml()]}
-          onChange={value => {
+          onChange={(value: string) => {
             this.props.parentCallback(value);
           }}
         />

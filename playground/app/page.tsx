@@ -92,6 +92,8 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
+            {/*
+              @ts-ignore */}
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </SplitWrapper>
