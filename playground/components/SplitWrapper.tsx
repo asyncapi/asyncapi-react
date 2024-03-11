@@ -5,7 +5,7 @@ interface SplitWrapperProps {
   children: React.ReactNode;
 }
 
-// TODO: replace react-split with a React 18 friendly library
+// react-split should be replaced with a React 18 friendly library or CSS
 const SplitWrapper = (props: SplitWrapperProps) => (
   <>
     {/* @ts-ignore */}
