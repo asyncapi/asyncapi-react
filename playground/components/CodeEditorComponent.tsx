@@ -33,6 +33,7 @@ class CodeEditorComponent extends Component<Props, State> {
 
     return (
       <CodeEditorWrapper>
+        {/* @ts-ignore remove when library and web-component is upgraded to React v18 */}
         <CodeMirror
           value={code}
           basicSetup={{
