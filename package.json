@@ -26,7 +26,7 @@
     "test": "cd library && npm test",
     "build": "npm run build:library && npm run build:webcomponent && npm run build:playground",
     "build:library": "cd library && npm run prepare",
-    "build:webcomponent": "cd web-component && npm run prepare",
+    "build:webcomponent": "cd web-component && npm run bundle",
     "build:playground": "cd playground && npm run build",
     "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
     "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
