@@ -48,7 +48,7 @@
     "concurrently": "^6.0.1",
     "husky": "^2.4.1",
     "lerna": "^8.1.2",
-    "lint-staged": "^15.2.2",
+    "lint-staged": "8.2.1",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
