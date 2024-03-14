@@ -23,7 +23,7 @@ export class MessageHelpers {
           obj[propertyName] = this.sanitizeExample(property);
         }
         return obj;
-      }, {});
+      }, {} as Record<string, unknown>);
     }
     return schema;
   }

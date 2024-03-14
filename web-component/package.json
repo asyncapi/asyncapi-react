@@ -39,7 +39,6 @@
   "scripts": {
     "start": "tsc --watch",
     "bundle": "webpack",
-    "prepare": "npm run bundle",
     "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
     "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
     "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"

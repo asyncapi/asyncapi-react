@@ -1,6 +1,7 @@
+'use client';
+import '@asyncapi/react-component/styles/default.min.css';
 import React, { Component } from 'react';
 import AsyncApi, { ConfigInterface } from '@asyncapi/react-component';
-
 import {
   Navigation,
   CodeEditorComponent,
@@ -12,10 +13,9 @@ import {
   CodeEditorsWrapper,
   AsyncApiWrapper,
   SplitWrapper,
-} from './components';
-
-import { defaultConfig, parse, debounce } from './common';
-import * as specs from './specs';
+} from '@/components';
+import { defaultConfig, parse, debounce } from '@/utils';
+import * as specs from '@/specs';
 
 const defaultSchema = specs.streetlights;
 
@@ -63,7 +63,11 @@ class Playground extends Component<{}, State> {
         <SplitWrapper>
           <CodeEditorsWrapper>
             <Tabs
-              additionalHeaderContent={this.renderAdditionalHeaderContent()}
+              additionalHeaderContent={
+                <RefreshIcon $show={this.state.refreshing}>
+                  {'\uE00A'}
+                </RefreshIcon>
+              }
             >
               <Tab title="Schema" key="Schema">
                 <>
@@ -75,7 +79,6 @@ class Playground extends Component<{}, State> {
                     code={schema}
                     externalResource={schemaFromExternalResource}
                     parentCallback={this.updateSchemaFn}
-                    mode="text/yaml"
                   />
                 </>
               </Tab>
@@ -89,6 +92,7 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
+            {/* @ts-ignore remove when library and web-component is upgraded to React v18 */}
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </SplitWrapper>
@@ -117,10 +121,6 @@ class Playground extends Component<{}, State> {
   private stopRefreshing = (): void => {
     this.setState({ refreshing: false });
   };
-
-  private renderAdditionalHeaderContent = () => (
-    <RefreshIcon show={this.state.refreshing}>{'\uE00A'}</RefreshIcon>
-  );
 }
 
 export default Playground;

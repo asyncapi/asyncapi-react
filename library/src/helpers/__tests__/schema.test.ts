@@ -464,7 +464,7 @@ describe('SchemaHelpers', () => {
   });
 
   describe('.parametersToSchema', () => {
-    function createParameter(parameters: Record<string, any>) {
+    function createParameter(parameters: Record<string, unknown>) {
       const params = [];
       for (const [paramProperty, param] of Object.entries(parameters)) {
         params.push(

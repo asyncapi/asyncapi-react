@@ -32,6 +32,9 @@ jobs:
         working-directory: ./web-component
       - name: Install dependencies
         run: npm install
+      - name: Bundle
+        run: npm run bundle
+        working-directory: ./web-component
       - name: Bump version in package.json
         # There is no need to substract "v" from the tag as version script handles it
         # When adding "bump:version" script in package.json, make sure no tags are added by default (--no-git-tag-version) as they are already added by release workflow
@@ -86,6 +89,6 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages
-          folder: playground/build
+          folder: playground/out
           git-config-name: asyncapi-bot
           git-config-email: info@asyncapi.io
