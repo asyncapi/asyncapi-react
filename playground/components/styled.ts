@@ -1,3 +1,5 @@
+'use client';
+
 import styled from 'styled-components';
 
 export const PlaygroundWrapper = styled.div``;
@@ -41,34 +43,6 @@ export const NavigationHeaderAsyncApiText = styled.span`
 export const NavigationHeaderEditorText = styled.span`
   font-style: italic;
   margin-left: 6px;
-`;
-
-export const NavigationLinks = styled.ul`
-  display: flex;
-  flex-grow: 1;
-  justify-content: flex-end;
-  margin: 0 16px 0 0;
-  padding: 0;
-  position: relative;
-  list-style-type: none;
-`;
-
-export const NavigationLinksItem = styled.li`
-  display: inline-block;
-  margin-left: 12px;
-
-  > a {
-    font-family: sans-serif;
-    font-weight: 700;
-    color: #f77669;
-    transition: 0.2s color linear;
-    text-decoration: none;
-    cursor: pointer;
-
-    &:hover {
-      color: #c3e88d;
-    }
-  }
 `;
 
 export const NavigationLink = styled.a``;
@@ -123,7 +97,7 @@ export const TabsAdditionalHeaderContent = styled.li`
 `;
 
 interface RefreshIconProps {
-  show?: boolean;
+  $show?: boolean;
 }
 
 export const RefreshIcon = styled.div<RefreshIconProps>`
@@ -131,7 +105,7 @@ export const RefreshIcon = styled.div<RefreshIconProps>`
   font-weight: 700;
   color: #f77669;
   transition: 0.2s all linear;
-  opacity: ${props => (props.show ? '1' : '0')};
+  opacity: ${props => (props.$show ? '1' : '0')};
   animation-name: spin;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -161,7 +135,7 @@ export const TabsContent = styled.div`
 export const TabWrapper = styled.li``;
 
 interface TabLinkProps {
-  active?: boolean;
+  $active?: boolean;
 }
 
 export const TabLink = styled.div<TabLinkProps>`
@@ -171,7 +145,7 @@ export const TabLink = styled.div<TabLinkProps>`
   padding: 19px 0 15px;
   border: none;
   position: relative;
-  color: ${props => (props.active ? '#c3e88d' : '#f77669')};
+  color: ${props => (props.$active ? '#c3e88d' : '#f77669')};
   font-size: 14px;
   outline: none;
   transition: 0.2s color linear;
@@ -187,7 +161,7 @@ export const TabLink = styled.div<TabLinkProps>`
     bottom: 0;
     display: block;
     position: absolute;
-    height: ${props => (props.active ? '3px' : '0px')};
+    height: ${props => (props.$active ? '3px' : '0px')};
     width: 100%;
     border-radius: 2px;
     background-color: #c3e88d;

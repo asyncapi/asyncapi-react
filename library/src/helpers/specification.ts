@@ -84,7 +84,7 @@ export class SpecificationHelpers {
    * Return all tags from servers
    */
   static serversTags(spec: AsyncAPIDocumentInterface) {
-    const tags = {} as { string: string[] };
+    const tags: Record<string, string[]> = {};
     Object.entries(spec.servers()).forEach(([_, server]) => {
       if (server.tags().length > 0) {
         server
@@ -92,9 +92,9 @@ export class SpecificationHelpers {
           .all()
           .forEach(tag => {
             if (tags[tag.name()]) {
-              tags[tag.name()] = [tags[tag.name()], _];
+              tags[tag.name()].push(_);
             } else {
-              tags[tag.name()] = _;
+              tags[tag.name()] = [_];
             }
           });
       }

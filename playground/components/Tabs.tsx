@@ -12,6 +12,7 @@ import { TabProps } from './Tab';
 interface Props {
   additionalHeaderContent?: React.ReactNode;
   defaultActiveTabIndex?: number;
+  children: React.ReactNode;
 }
 
 interface State {

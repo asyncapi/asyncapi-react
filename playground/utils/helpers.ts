@@ -40,7 +40,7 @@ export function debounce<T>(
   onStart: () => void,
   onCancel: () => void,
 ): () => any {
-  let timeout: number | undefined;
+  let timeout: NodeJS.Timeout | undefined;
   return (...args: any[]) => {
     if (timeout) {
       clearTimeout(timeout);

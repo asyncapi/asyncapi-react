@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-
 import { InputWrapper, InputField, Button } from './styled';
-
-import { fetchSchema } from '../common';
+import { fetchSchema } from '@/utils';
 
 interface Props {
   parentCallback(value: string): void;
