@@ -1,3 +1,15 @@
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+
+let assetPrefix = undefined;
+let basePath = undefined;
+
+if (isGithubActions) {
+  const repo = 'asyncapi-react';
+
+  assetPrefix = `/${repo}/`;
+  basePath = `/${repo}`;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -12,6 +24,8 @@ const nextConfig = {
 
     return config;
   },
+  assetPrefix,
+  basePath,
 };
 
 export default nextConfig;
