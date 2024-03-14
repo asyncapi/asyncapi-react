@@ -4,8 +4,7 @@ let assetPrefix = undefined;
 let basePath = undefined;
 
 if (isGithubActions) {
-  const repo = 'asyncapi-react';
-
+  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '');
   assetPrefix = `/${repo}/`;
   basePath = `/${repo}`;
 }
