@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const Tags: React.FunctionComponent<Props> = ({ tags }) => {
-  if (!tags || !tags.length) {
+  if (!tags?.length) {
     return null;
   }
 
