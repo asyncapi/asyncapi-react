@@ -13,7 +13,7 @@ import { Bindings } from '../Bindings';
 function createBinding(bindingObj: Record<string, any>) {
   const bindings: BindingSchema[] = [];
   for (const [protocol, binding] of Object.entries(bindingObj)) {
-    const obj = {};
+    const obj: Record<string, unknown> = {};
     obj[protocol] = binding;
     bindings.push(
       new BindingSchema(binding, {
