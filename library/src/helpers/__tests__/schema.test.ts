@@ -169,6 +169,12 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(`number | string | boolean`);
     });
+
+    test('should handle append title to object', () => {
+      const schema = new Schema({ type: 'object', title: 'SampleType' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('object [SampleType]');
+    });
   });
 
   describe('.prettifyValue', () => {
@@ -458,7 +464,7 @@ describe('SchemaHelpers', () => {
   });
 
   describe('.parametersToSchema', () => {
-    function createParameter(parameters: Record<string, any>) {
+    function createParameter(parameters: Record<string, unknown>) {
       const params = [];
       for (const [paramProperty, param] of Object.entries(parameters)) {
         params.push(
@@ -867,6 +873,62 @@ describe('SchemaHelpers', () => {
 
       const result = SchemaHelpers.getDependentSchemas(schema);
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('.applicatorSchemaName', () => {
+    const FIRST_CASE = 'first case';
+    const OTHER_CASES = 'other cases';
+
+    test('should not render title because title is null', () => {
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          0,
+          FIRST_CASE,
+          OTHER_CASES,
+          null as never,
+        ),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          1,
+          FIRST_CASE,
+          OTHER_CASES,
+          null as never,
+        ),
+      ).toMatchSnapshot();
+    });
+
+    test('should not render title because title is undefined', () => {
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          0,
+          FIRST_CASE,
+          OTHER_CASES,
+          undefined,
+        ),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(
+          1,
+          FIRST_CASE,
+          OTHER_CASES,
+          undefined,
+        ),
+      ).toMatchSnapshot();
+    });
+
+    test('should render title', () => {
+      const TITLE = 'title example';
+      expect(
+        SchemaHelpers.applicatorSchemaName(0, FIRST_CASE, OTHER_CASES, TITLE),
+      ).toMatchSnapshot();
+
+      expect(
+        SchemaHelpers.applicatorSchemaName(1, FIRST_CASE, OTHER_CASES, TITLE),
+      ).toMatchSnapshot();
     });
   });
 });

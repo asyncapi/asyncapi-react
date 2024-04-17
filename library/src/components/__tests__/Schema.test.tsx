@@ -93,4 +93,60 @@ describe('Schema component', () => {
       expect(screen.getByText('false')).toBeDefined();
     });
   });
+
+  describe('should render arrays', () => {
+    test('which includes oneOf', async () => {
+      const schemaModel = new SchemaModel({
+        title: 'Sets',
+        type: 'array',
+        items: {
+          title: 'Set',
+          type: 'object',
+          properties: {
+            pets: {
+              title: 'Pets',
+              type: 'array',
+              items: {
+                title: 'Pet',
+                type: 'object',
+                discriminator: 'type',
+                properties: {
+                  type: {
+                    title: 'Pet.Type',
+                    type: 'string',
+                    enum: ['CAT', 'DOG'],
+                  },
+                },
+                oneOf: [
+                  {
+                    title: 'Cat',
+                    type: 'object',
+                    properties: {
+                      type: {
+                        const: 'CAT',
+                      },
+                    },
+                  },
+                  {
+                    title: 'Dog',
+                    type: 'object',
+                    properties: {
+                      type: {
+                        const: 'DOG',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      });
+
+      render(<Schema schema={schemaModel} />);
+
+      expect(screen.getByText('Adheres to Cat:')).toBeDefined();
+      expect(screen.getByText('Or to Dog:')).toBeDefined();
+    });
+  });
 });

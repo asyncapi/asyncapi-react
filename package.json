@@ -11,20 +11,27 @@
   "bugs": {
     "url": "https://github.com/asyncapi/asyncapi-react/issues"
   },
+  "engines": {
+    "npm": ">=9.0.0",
+    "node": ">=18.0.0"
+  },
+  "workspaces": [
+    "library",
+    "playground",
+    "web-component"
+  ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "start": "lerna exec --parallel -- npm run start",
     "test": "cd library && npm test",
     "build": "npm run build:library && npm run build:webcomponent && npm run build:playground",
     "build:library": "cd library && npm run prepare",
-    "build:webcomponent": "cd web-component && npm run prepare",
+    "build:webcomponent": "cd web-component && npm run bundle",
     "build:playground": "cd playground && npm run build",
     "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
     "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
     "conflict-check": "tslint-config-prettier-check ./tslint.json",
     "markdownlint": "markdownlint **/*.md",
-    "postinstall": "npm run bootstrap",
     "prepublishOnly": "npm run build",
     "gen-readme-toc": "markdown-toc -i README.md",
     "generate:assets": "npm run gen-readme-toc",
@@ -40,8 +47,8 @@
   "devDependencies": {
     "concurrently": "^6.0.1",
     "husky": "^2.4.1",
-    "lerna": "^3.22.1",
-    "lint-staged": "^8.2.1",
+    "lerna": "^8.1.2",
+    "lint-staged": "15.2.2",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^1.18.2",
@@ -51,7 +58,7 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
     "tslint-react-hooks": "^2.1.1",
-    "typescript": "^4.0.0"
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
     "linters": {

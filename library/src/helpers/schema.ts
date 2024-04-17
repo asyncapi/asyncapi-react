@@ -98,6 +98,10 @@ export class SchemaHelpers {
     if (combinedType) {
       return combinedType;
     }
+
+    if (type === 'object' && schema.title()) {
+      type += ' [' + schema.title() + ']';
+    }
     return type;
   }
 
@@ -107,7 +111,7 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    const suffix = (title !== null && ` ${title}:`) || `:`;
+    const suffix = title ? ` ${title}:` : ':';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
     } else {
@@ -218,7 +222,7 @@ export class SchemaHelpers {
     if (!urlVariables || urlVariables.length === 0) {
       return undefined;
     }
-    const obj = {};
+    const obj: Record<string, Record<string, unknown>> = {};
     urlVariables.all().forEach(variable => {
       obj[variable.id()] = { ...(variable.json() || {}) };
       obj[variable.id()].type = 'string';
@@ -239,7 +243,7 @@ export class SchemaHelpers {
     if (!parameters || parameters.isEmpty()) {
       return undefined;
     }
-    const obj = {};
+    const obj: Record<string, Record<string, unknown>> = {};
     parameters.all().forEach(parameter => {
       const parameterSchema = parameter.schema();
       obj[parameter.id()] = { ...(parameterSchema?.json() ?? {}) };
@@ -276,7 +280,7 @@ export class SchemaHelpers {
       return;
     }
     const extensions = value.extensions() as ExtensionsInterface;
-    const filteredExtensions = {};
+    const filteredExtensions: Record<string, unknown> = {};
     for (const ext of extensions.all()) {
       const extType = ext as ExtensionInterface;
       if (
@@ -340,10 +344,12 @@ export class SchemaHelpers {
       type: 'object',
       properties: Object.entries(records).reduce(
         (obj, [propertyName, propertySchema]) => {
-          obj[propertyName] = { ...(propertySchema.json() || {}) };
+          obj[propertyName] = {
+            ...(propertySchema.json() as Record<string, unknown>),
+          };
           return obj;
         },
-        {},
+        {} as Record<string, unknown>,
       ),
       [this.extRenderAdditionalInfo]: false,
     };
@@ -532,7 +538,7 @@ export class SchemaHelpers {
       properties: Object.entries(value).reduce((obj, [k, v]) => {
         obj[k] = this.jsonFieldToSchema(v);
         return obj;
-      }, {}),
+      }, {} as Record<string, unknown>),
       [this.extRenderAdditionalInfo]: false,
     };
   }
