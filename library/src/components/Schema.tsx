@@ -14,6 +14,7 @@ interface Props {
   dependentRequired?: string[];
   expanded?: boolean;
   onlyTitle?: boolean;
+  isArray?: boolean;
 }
 
 const SchemaContext = React.createContext({
@@ -31,17 +32,22 @@ export const Schema: React.FunctionComponent<Props> = ({
   dependentRequired,
   expanded: propExpanded = false,
   onlyTitle = false,
+  isArray = false,
 }) => {
   const { reverse, deepExpanded } = useContext(SchemaContext);
-  const [expanded, setExpanded] = useState(propExpanded);
+  const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
 
   useEffect(() => {
-    setDeepExpand(deepExpanded);
+    if (!isArray) {
+      setDeepExpand(deepExpanded);
+    }
   }, [deepExpanded, setDeepExpand]);
 
   useEffect(() => {
-    setExpanded(deepExpand);
+    if (!isArray) {
+      setExpanded(deepExpand);
+    }
   }, [deepExpand, setExpanded]);
 
   if (
@@ -88,7 +94,7 @@ export const Schema: React.FunctionComponent<Props> = ({
       <div>
         <div className="flex py-2">
           <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
-            {isExpandable && !isCircular ? (
+            {isExpandable && !isCircular && !isArray ? (
               <>
                 <CollapseButton
                   onClick={() => setExpanded(prev => !prev)}
@@ -270,7 +276,7 @@ export const Schema: React.FunctionComponent<Props> = ({
               reverse ? 'bg-gray-200' : ''
             } ${expanded ? 'block' : 'hidden'}`}
           >
-            <SchemaProperties schema={schema} />
+            <SchemaProperties schema={schema} isArray={isArray} />
             <SchemaItems schema={schema} />
 
             {schema.oneOf() &&
@@ -368,10 +374,12 @@ export const Schema: React.FunctionComponent<Props> = ({
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
+  isArray: boolean;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
+  isArray,
 }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
@@ -471,17 +479,22 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     !Array.isArray(items) &&
     Object.keys(items.properties() || {}).length
   ) {
-    return <SchemaProperties schema={items} />;
+    return <Schema schema={items} isArray={true} />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
-          <Schema schema={item} schemaName={`${idx + 1} item:`} key={idx} />
+          <Schema
+            schema={item}
+            isArray={true}
+            schemaName={`${idx + 1} item:`}
+            key={idx}
+          />
         ))}
       </>
     );
   }
-  return <Schema schema={items} schemaName="Items:" />;
+  return <Schema schema={items} isArray={true} schemaName="Items:" />;
 };
 
 interface AdditionalItemsProps {
