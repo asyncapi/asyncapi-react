@@ -3,10 +3,17 @@ import React from 'react';
 import { Schema } from './Schema';
 
 import { SchemaHelpers } from '../helpers';
+import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 interface Props {
   name?: string;
   item: any;
+}
+
+export interface ExtensionComponentProps<V = any> {
+  propertyName: string;
+  propertyValue: V;
+  document: AsyncAPIDocumentInterface;
 }
 
 export const Extensions: React.FunctionComponent<Props> = ({

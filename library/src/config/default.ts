@@ -32,4 +32,5 @@ export const defaultConfig: ConfigInterface = {
   receiveLabel: RECEIVE_TEXT_LABEL_DEFAULT_TEXT,
   requestLabel: REQUEST_LABEL_DEFAULT_TEXT,
   replyLabel: REPLIER_LABEL_DEFAULT_TEXT,
+  extensions: {},
 };

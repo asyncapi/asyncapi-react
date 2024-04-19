@@ -1,3 +1,5 @@
+import { ExtensionComponentProps } from '../components';
+
 export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
@@ -10,6 +12,7 @@ export interface ConfigInterface {
   receiveLabel?: string;
   requestLabel?: string;
   replyLabel?: string;
+  extensions?: Record<string, React.ComponentType<ExtensionComponentProps>>;
 }
 
 export interface ShowConfig {
