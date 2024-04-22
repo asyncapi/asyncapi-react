@@ -39,9 +39,8 @@ export const Security: React.FunctionComponent<Props> = ({
     const securities: React.ReactNodeArray = Object.values(security)
       .map(requirement => {
         const requirements = requirement.all();
-        const key = Object.keys(requirements)[0];
-        const def = securitySchemes[Number(key)];
-        const requiredScopes: any = requirements[Number(key)];
+        const def = requirements[0].scheme();
+        const requiredScopes = requirements[0].scopes();
 
         if (!def) {
           return null;
