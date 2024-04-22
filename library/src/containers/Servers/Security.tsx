@@ -6,7 +6,6 @@ import {
 } from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
-import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
 
 interface Props {
@@ -20,32 +19,20 @@ export const Security: React.FunctionComponent<Props> = ({
   protocol = '',
   header = 'Security',
 }) => {
-  const asyncapi = useSpec();
-  const securitySchemes =
-    !asyncapi.components().isEmpty() && asyncapi.components().securitySchemes();
-
   let renderedSecurities;
-  if (
-    !security?.length ||
-    !securitySchemes ||
-    !Object.keys(securitySchemes).length
-  ) {
-    renderedSecurities = (
-      <SecurityItem
-        protocol={protocol}
-        securitySchema={
-          ['kafka', 'kafka-secure'].includes(protocol)
-            ? null
-            : security[0]?.all()[0].scheme()
-        }
-      />
-    );
+  if (!security?.length) {
+    if (protocol === 'kafka' || protocol === 'kafka-secure') {
+      renderedSecurities = (
+        <SecurityItem protocol={protocol} securitySchema={null} />
+      );
+    }
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
-      .map(requirement => {
-        const requirements = requirement.all();
-        const def = requirements[0].scheme();
-        const requiredScopes = requirements[0].scopes();
+      .map(requirement => requirement.all())
+      .flat()
+      .map(requirements => {
+        const def = requirements.scheme();
+        const requiredScopes = requirements.scopes();
 
         if (!def) {
           return null;
