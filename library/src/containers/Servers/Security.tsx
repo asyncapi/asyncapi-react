@@ -36,7 +36,7 @@ export const Security: React.FunctionComponent<Props> = ({
         securitySchema={
           ['kafka', 'kafka-secure'].includes(protocol)
             ? null
-            : security[0].all()[0].scheme()
+            : security[0]?.all()[0].scheme()
         }
       />
     );
