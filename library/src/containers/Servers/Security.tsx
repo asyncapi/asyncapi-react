@@ -30,11 +30,16 @@ export const Security: React.FunctionComponent<Props> = ({
     !securitySchemes ||
     !Object.keys(securitySchemes).length
   ) {
-    if (protocol === 'kafka' || protocol === 'kafka-secure') {
-      renderedSecurities = (
-        <SecurityItem protocol={protocol} securitySchema={null} />
-      );
-    }
+    renderedSecurities = (
+      <SecurityItem
+        protocol={protocol}
+        securitySchema={
+          ['kafka', 'kafka-secure'].includes(protocol)
+            ? null
+            : security[0].all()[0].scheme()
+        }
+      />
+    );
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
       .map(requirement => {
