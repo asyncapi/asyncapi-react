@@ -28,11 +28,11 @@ export const Security: React.FunctionComponent<Props> = ({
     }
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
-      .map(requirement => requirement.all())
+      .map(requirements => requirements.all())
       .flat()
-      .map(requirements => {
-        const def = requirements.scheme();
-        const requiredScopes = requirements.scopes();
+      .map(requirement => {
+        const def = requirement.scheme();
+        const requiredScopes = requirement.scopes();
 
         if (!def) {
           return null;
