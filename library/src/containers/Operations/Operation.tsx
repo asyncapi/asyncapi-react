@@ -75,11 +75,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
               config,
             )}
           >
-            <Schema
-              schemaName="Parameters"
-              schema={parameters}
-              expanded={true}
-            />
+            <Schema schemaName="Parameters" schema={parameters} expanded />
           </div>
         )}
 
@@ -145,7 +141,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
                 .all()
                 .map((msg, idx) => (
                   <li className="mt-4" key={msg.id()}>
-                    <Message message={msg} index={idx} showExamples={true} />
+                    <Message message={msg} index={idx} showExamples />
                   </li>
                 ))}
             </ul>
@@ -154,10 +150,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message
-                message={operation.messages().all()[0]}
-                showExamples={true}
-              />
+              <Message message={operation.messages().all()[0]} showExamples />
             </div>
           </div>
         )}
@@ -266,7 +259,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
           <div className="border rounded">
             <div
               className={`w-full ${
-                type === 'reply'
+                type === PayloadType.REPLY
                   ? 'bg-green-600 border-green-600'
                   : 'bg-blue-600 border-blue-600'
               } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
@@ -276,7 +269,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
             <div className="flex">
               <div
                 className={`w-1 h-11 ${
-                  type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+                  type === PayloadType.REPLY ? 'bg-green-600' : 'bg-blue-600'
                 } mt-4`}
               />
               <div className="p-4">
@@ -344,11 +337,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                       <ul>
                         {replyMessages.all().map((msg, idx) => (
                           <li className="mt-4" key={msg.id()}>
-                            <Message
-                              message={msg}
-                              index={idx}
-                              showExamples={true}
-                            />
+                            <Message message={msg} index={idx} showExamples />
                           </li>
                         ))}
                       </ul>
@@ -358,7 +347,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                       <div className="mt-2">
                         <Message
                           message={replyMessages.all()[0]}
-                          showExamples={true}
+                          showExamples
                         />
                       </div>
                     </div>
@@ -439,7 +428,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
               .all()
               .map((msg, idx) => (
                 <li className="mt-4" key={msg.id()}>
-                  <Message message={msg} index={idx} showExamples={true} />
+                  <Message message={msg} index={idx} showExamples />
                 </li>
               ))}
           </ul>
@@ -448,10 +437,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
         <div className="mt-2">
           <span className="text-xs text-gray-700">Message:</span>
           <div className="mt-2">
-            <Message
-              message={channel.messages().all()[0]}
-              showExamples={true}
-            />
+            <Message message={channel.messages().all()[0]} showExamples />
           </div>
         </div>
       )}
@@ -463,7 +449,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
             config,
           )}
         >
-          <Schema schemaName="Parameters" schema={parameters} expanded={true} />
+          <Schema schemaName="Parameters" schema={parameters} expanded />
         </div>
       )}
       {channel.bindings() && (
@@ -493,7 +479,7 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
     <div className="flex">
       <div
         className={`w-1 h-11 ${
-          type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+          type === PayloadType.REPLY ? 'bg-green-600' : 'bg-blue-600'
         } mt-4`}
       />
       <div className="p-4">

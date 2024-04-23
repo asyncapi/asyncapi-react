@@ -1,6 +1,8 @@
 import React from 'react';
 import {
+  // eslint-disable-next-line react/no-deprecated
   hydrate as hydrateComponent,
+  // eslint-disable-next-line react/no-deprecated
   render as renderComponent,
 } from 'react-dom';
 
@@ -16,7 +18,7 @@ function querySelector(selector: string): Element | DocumentFragment | null {
  *
  * @param {Any} component of any kind
  */
-export function createRender<P>(component: any) {
+export function createRender<P extends object>(component: any) {
   return (
     props: P,
     container?: Element | DocumentFragment | null,
@@ -27,6 +29,7 @@ export function createRender<P>(component: any) {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     renderComponent(React.createElement(component, props), container, callback);
   };
 }
@@ -36,7 +39,7 @@ export function createRender<P>(component: any) {
  *
  * @param {Any} component of any kind
  */
-export function createHydrate<P>(component: any) {
+export function createHydrate<P extends object>(component: any) {
   return (
     props: P,
     container?: Element | DocumentFragment | null,
@@ -48,6 +51,7 @@ export function createHydrate<P>(component: any) {
     }
 
     hydrateComponent(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       React.createElement(component, props),
       container,
       callback,

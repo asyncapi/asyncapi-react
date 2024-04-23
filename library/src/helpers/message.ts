@@ -1,5 +1,4 @@
 import { MessageInterface } from '@asyncapi/parser';
-// @ts-ignore
 import { sample } from 'openapi-sampler';
 
 import { MessageExample } from '../types';
@@ -7,6 +6,7 @@ import { MessageExample } from '../types';
 export class MessageHelpers {
   static generateExample(schema: any, options: any = {}) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
       return this.sanitizeExample(sample(schema, options)) || '';
     } catch (e) {
       return '';
@@ -15,6 +15,7 @@ export class MessageHelpers {
 
   static sanitizeExample(schema: any): any {
     if (typeof schema === 'object' && schema && !Array.isArray(schema)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return Object.entries(schema).reduce((obj, [propertyName, property]) => {
         if (
           !propertyName.startsWith('x-parser-') &&
@@ -54,6 +55,7 @@ export class MessageHelpers {
 
     const payload = msg.payload();
     if (payload?.examples()) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return payload.examples()?.map(example => ({ example }));
     }
     return;
@@ -84,6 +86,7 @@ export class MessageHelpers {
 
     const headers = msg.headers();
     if (headers?.examples()) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return headers.examples()?.map(example => ({ example }));
     }
     return undefined;

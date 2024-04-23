@@ -32,7 +32,7 @@ export class SpecificationHelpers {
     // check if input is a string and try parse it
     if (typeof schema === 'string') {
       try {
-        schema = JSON.parse(schema);
+        schema = JSON.parse(schema) as Record<string, unknown>;
       } catch (e) {
         return undefined;
       }
@@ -53,14 +53,16 @@ export class SpecificationHelpers {
     schema: any,
     tags: TagInterface | TagInterface[],
   ): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const tagsToCheck =
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       typeof schema.tags === 'function' ? schema.tags() : undefined;
     if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
       return false;
     }
     tags = Array.isArray(tags) ? tags : [tags];
     return tagsToCheck.some((tag: TagInterface) =>
-      (tags as TagInterface[]).some(t => t.name() === tag.name()),
+      tags.some(t => t.name() === tag.name()),
     );
   }
 
@@ -69,7 +71,7 @@ export class SpecificationHelpers {
    */
   static operationsTags(spec: AsyncAPIDocumentInterface) {
     const tags = new Map<string, TagInterface>();
-    Object.entries(spec.operations().all()).forEach(([_, operation]) => {
+    Object.entries(spec.operations().all()).forEach(([, operation]) => {
       if (operation?.tags().length > 0) {
         operation
           .tags()

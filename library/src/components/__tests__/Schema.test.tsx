@@ -9,20 +9,20 @@ import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 import { Schema } from '../Schema';
 
 describe('Schema component', () => {
-  test('should work with true schema', async () => {
+  test('should work with true schema', () => {
     const schema = true;
-    const schemaModel = new SchemaModel(schema as any);
+    const schemaModel = new SchemaModel(schema as never);
 
     render(<Schema schema={schemaModel} />);
   });
 
-  test('should work with false schema', async () => {
+  test('should work with false schema', () => {
     const schema = false;
-    const schemaModel = new SchemaModel(schema as any);
+    const schemaModel = new SchemaModel(schema as never);
 
     render(<Schema schema={schemaModel} />);
   });
-  test('should work with circular references in schema', async () => {
+  test('should work with circular references in schema', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -35,7 +35,7 @@ describe('Schema component', () => {
     };
     schema.properties.circular = schema;
     schema.properties.circularTwo = schema;
-    const schemaModel = new SchemaModel(schema as any);
+    const schemaModel = new SchemaModel(schema as never);
 
     render(<Schema schema={schemaModel} />);
 
@@ -49,7 +49,7 @@ describe('Schema component', () => {
   });
 
   describe('should render boolean values', () => {
-    test('defined as defaults', async () => {
+    test('defined as defaults', () => {
       const schema = {
         type: 'object',
         properties: {
@@ -63,7 +63,7 @@ describe('Schema component', () => {
           },
         },
       };
-      const schemaModel = new SchemaModel(schema as any);
+      const schemaModel = new SchemaModel(schema as never);
 
       render(<Schema schema={schemaModel} />);
 
@@ -71,7 +71,7 @@ describe('Schema component', () => {
       expect(screen.getByText('false')).toBeDefined();
     });
 
-    test('defined as const', async () => {
+    test('defined as const', () => {
       const schema = {
         type: 'object',
         properties: {
@@ -85,7 +85,7 @@ describe('Schema component', () => {
           },
         },
       };
-      const schemaModel = new SchemaModel(schema as any);
+      const schemaModel = new SchemaModel(schema as never);
 
       render(<Schema schema={schemaModel} />);
 
@@ -95,7 +95,7 @@ describe('Schema component', () => {
   });
 
   describe('should render arrays', () => {
-    test('which includes oneOf', async () => {
+    test('which includes oneOf', () => {
       const schemaModel = new SchemaModel({
         title: 'Sets',
         type: 'array',

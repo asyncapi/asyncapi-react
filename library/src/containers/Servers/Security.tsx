@@ -50,6 +50,7 @@ export const Security: React.FunctionComponent<Props> = ({
           <SecurityItem
             protocol={protocol}
             securitySchema={def}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             requiredScopes={requiredScopes}
             key={def.type()}
           />

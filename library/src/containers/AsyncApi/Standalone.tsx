@@ -34,13 +34,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
     }
   }
 
-  async componentDidUpdate(prevProps: AsyncApiProps) {
+  componentDidUpdate(prevProps: AsyncApiProps) {
     const oldSchema = prevProps.schema;
     const newSchema = this.props.schema;
 

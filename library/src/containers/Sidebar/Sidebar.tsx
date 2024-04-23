@@ -16,6 +16,7 @@ export const Sidebar: React.FunctionComponent = () => {
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const logo = info
     .extensions()
     .get('x-logo')
@@ -123,7 +124,9 @@ export const Sidebar: React.FunctionComponent = () => {
           <div className="sidebar--content">
             <div>
               {logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   src={logo}
                   alt={`${info.title()} logo, ${info.version()} version`}
                 />

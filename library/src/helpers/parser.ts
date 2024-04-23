@@ -14,10 +14,12 @@ asyncapiParser.registerSchemaParser(ProtoBuffSchemaParser());
 
 export class Parser {
   static async parse(
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     content: string | any,
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const { document } = await asyncapiParser.parse(content, parserOptions);
       return { asyncapi: document };
     } catch (err) {
@@ -35,6 +37,7 @@ export class Parser {
         arg.url,
         arg.requestOptions as any,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const { document } = await fromResult.parse(parserOptions);
       return { asyncapi: document };
     } catch (err) {

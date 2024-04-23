@@ -26,7 +26,7 @@ interface State {
   refreshing: boolean;
 }
 
-class Playground extends Component<{}, State> {
+class Playground extends Component<unknown, State> {
   updateSchemaFn: (value: string) => void;
   updateConfigFn: (value: string) => void;
 

@@ -11,12 +11,12 @@ import {
 describe('SchemaHelpers', () => {
   describe('.toSchemaType', () => {
     test('should handle falsy value', () => {
-      const result = SchemaHelpers.toSchemaType(null as any);
+      const result = SchemaHelpers.toSchemaType(null as never);
       expect(result).toEqual(SchemaCustomTypes.UNKNOWN);
     });
 
     test('should handle object without .json() function', () => {
-      const result = SchemaHelpers.toSchemaType({} as any);
+      const result = SchemaHelpers.toSchemaType({} as never);
       expect(result).toEqual(SchemaCustomTypes.UNKNOWN);
     });
 
@@ -427,7 +427,8 @@ describe('SchemaHelpers', () => {
       const variables = new ServerVariablesV2([
         new ServerVariable(
           { enum: ['foo', 'bar'], default: 'foo' },
-          { asyncapi: {} as any, pointer: '', id: 'foo' },
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          { asyncapi: {} as never, pointer: '', id: 'foo' },
         ),
         new ServerVariable(
           {
@@ -436,7 +437,7 @@ describe('SchemaHelpers', () => {
             examples: ['foo', 'bar'],
             description: 'Some description',
           },
-          { asyncapi: {} as any, pointer: '', id: 'bar' },
+          { asyncapi: {} as never, pointer: '', id: 'bar' },
         ),
       ]);
       const schema = new Schema({
@@ -469,7 +470,7 @@ describe('SchemaHelpers', () => {
       for (const [paramProperty, param] of Object.entries(parameters)) {
         params.push(
           new ChannelParameter(param as ParameterObject, {
-            asyncapi: {} as any,
+            asyncapi: {} as never,
             pointer: '',
             id: paramProperty,
           }),
@@ -545,8 +546,7 @@ describe('SchemaHelpers', () => {
         const: 'foobar',
         'x-schema-private-raw-value': true,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should transform number to schema', () => {
@@ -556,8 +556,7 @@ describe('SchemaHelpers', () => {
         const: '2137',
         'x-schema-private-raw-value': true,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should transform boolean to schema', () => {
@@ -567,8 +566,7 @@ describe('SchemaHelpers', () => {
         const: 'true',
         'x-schema-private-raw-value': true,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should transform array to schema', () => {
@@ -594,8 +592,7 @@ describe('SchemaHelpers', () => {
         ],
         'x-schema-private-render-additional-info': false,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should transform object to schema', () => {
@@ -613,8 +610,7 @@ describe('SchemaHelpers', () => {
         },
         'x-schema-private-render-additional-info': false,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should transform complex data to schema', () => {
@@ -654,28 +650,25 @@ describe('SchemaHelpers', () => {
         },
         'x-schema-private-render-additional-info': false,
       });
-      const result = SchemaHelpers.jsonToSchema(json);
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(json)).toEqual(schema);
     });
 
     test('should return empty string when data is null', () => {
-      const result = SchemaHelpers.jsonToSchema(null);
       const schema = new Schema({
         type: 'string',
         const: '',
         'x-schema-private-raw-value': true,
       });
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(null)).toEqual(schema);
     });
 
     test('should return empty string when data is undefined', () => {
-      const result = SchemaHelpers.jsonToSchema(undefined);
       const schema = new Schema({
         type: 'string',
         const: '',
         'x-schema-private-raw-value': true,
       });
-      expect(result).toEqual(schema);
+      expect(SchemaHelpers.jsonToSchema(undefined)).toEqual(schema);
     });
   });
 
@@ -806,7 +799,7 @@ describe('SchemaHelpers', () => {
           },
         },
       };
-      const schema = new Schema(jsonSchema as any);
+      const schema = new Schema(jsonSchema as never);
       const expected = new Schema({
         type: 'object',
         properties: {
@@ -851,7 +844,7 @@ describe('SchemaHelpers', () => {
           },
         },
       };
-      const schema = new Schema(jsonSchema as any);
+      const schema = new Schema(jsonSchema as never);
       const expected = new Schema({
         type: 'object',
         properties: {

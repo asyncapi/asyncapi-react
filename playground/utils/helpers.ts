@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const parse = <T extends {}>(str?: string): T => {
   if (!str) {
     return {} as T;
@@ -10,6 +11,7 @@ export const parse = <T extends {}>(str?: string): T => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const stringify = <T extends {}>(content?: T): string => {
   if (!content) {
     return '';
@@ -31,10 +33,11 @@ export const fetchSchema = async (link: string): Promise<any> => {
 };
 
 function handleResponse(response: any) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, arrow-body-style
   return response.text().then((data: string) => data);
 }
 
-export function debounce<T>(
+export function debounce(
   func: (...args: any[]) => void,
   wait: number,
   onStart: () => void,
@@ -48,6 +51,7 @@ export function debounce<T>(
     onStart();
     timeout = setTimeout(() => {
       timeout = undefined;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       func(...args);
       onCancel();
     }, wait || 1000);

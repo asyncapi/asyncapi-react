@@ -17,7 +17,7 @@ describe('Sidebar component', () => {
     expect(parsedDoc.asyncapi).toBeDefined();
     parsed = parsedDoc.asyncapi!;
   });
-  test('should render sidebar with showOperations: byDefault', async () => {
+  test('should render sidebar with showOperations: byDefault', () => {
     render(
       <ConfigContext.Provider
         value={{ sidebar: { showOperations: 'byDefault' } }}
@@ -28,7 +28,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render sidebar with showOperations: byOperationsTags', async () => {
+  test('should render sidebar with showOperations: byOperationsTags', () => {
     render(
       <ConfigContext.Provider
         value={{ sidebar: { showOperations: 'byOperationsTags' } }}
@@ -39,7 +39,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render sidebar with showOperations: bySpecTags', async () => {
+  test('should render sidebar with showOperations: bySpecTags', () => {
     render(
       <ConfigContext.Provider
         value={{ sidebar: { showOperations: 'bySpecTags' } }}
@@ -50,7 +50,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render sidebar with showServers: byDefault', async () => {
+  test('should render sidebar with showServers: byDefault', () => {
     render(
       <ConfigContext.Provider value={{ sidebar: { showServers: 'byDefault' } }}>
         <SpecificationContext.Provider value={parsed}>
@@ -59,7 +59,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render sidebar with showServers: byServersTags', async () => {
+  test('should render sidebar with showServers: byServersTags', () => {
     render(
       <ConfigContext.Provider
         value={{ sidebar: { showServers: 'byServersTags' } }}
@@ -70,7 +70,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render sidebar with showServers: bySpecTags', async () => {
+  test('should render sidebar with showServers: bySpecTags', () => {
     render(
       <ConfigContext.Provider
         value={{ sidebar: { showServers: 'bySpecTags' } }}
@@ -81,7 +81,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
-  test('should render with showOperations: byDefault, showServers: byDefault', async () => {
+  test('should render with showOperations: byDefault, showServers: byDefault', () => {
     render(
       <ConfigContext.Provider
         value={{
