@@ -43,14 +43,14 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
     },
   });
 
-  const configShow = config.show || {};
+  const configShow = config.show ?? {};
   return (
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
         <section className="aui-root">
           <div
             className={`${observerClassName} relative md:flex bg-white leading-normal`}
-            id={config.schemaID || undefined}
+            id={config.schemaID ?? undefined}
             ref={ref}
           >
             {configShow.sidebar && <Sidebar />}

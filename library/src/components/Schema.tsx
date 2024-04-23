@@ -246,7 +246,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0">
                     <Href
                       href={externalDocs.url()}
-                      title={externalDocs.description() || ''}
+                      title={externalDocs.description() ?? ''}
                     >
                       Documentation
                     </Href>
@@ -279,51 +279,42 @@ export const Schema: React.FunctionComponent<Props> = ({
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
 
-            {schema.oneOf() &&
-              schema
-                .oneOf()
-                ?.map((s, idx) => (
-                  <Schema
-                    key={idx}
-                    schema={s}
-                    schemaName={SchemaHelpers.applicatorSchemaName(
-                      idx,
-                      'Adheres to',
-                      'Or to',
-                      s.title(),
-                    )}
-                  />
-                ))}
-            {schema.anyOf() &&
-              schema
-                .anyOf()
-                ?.map((s, idx) => (
-                  <Schema
-                    key={idx}
-                    schema={s}
-                    schemaName={SchemaHelpers.applicatorSchemaName(
-                      idx,
-                      'Can adhere to',
-                      'Or to',
-                      s.title(),
-                    )}
-                  />
-                ))}
-            {schema.allOf() &&
-              schema
-                .allOf()
-                ?.map((s, idx) => (
-                  <Schema
-                    key={idx}
-                    schema={s}
-                    schemaName={SchemaHelpers.applicatorSchemaName(
-                      idx,
-                      'Consists of',
-                      'And of',
-                      s.title(),
-                    )}
-                  />
-                ))}
+            {schema.oneOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Adheres to',
+                  'Or to',
+                  s.title(),
+                )}
+              />
+            ))}
+            {schema.anyOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Can adhere to',
+                  'Or to',
+                  s.title(),
+                )}
+              />
+            ))}
+            {schema.allOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Consists of',
+                  'And of',
+                  s.title(),
+                )}
+              />
+            ))}
             {schema.not() && (
               <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
             )}
@@ -384,7 +375,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
     return null;
   }
 
-  const required = schema.required() || [];
+  const required = schema.required() ?? [];
   const patternProperties = schema.patternProperties();
 
   return (
@@ -403,7 +394,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           key={propertyName}
         />
       ))}
-      {Object.entries(patternProperties || {}).map(
+      {Object.entries(patternProperties ?? {}).map(
         ([propertyName, property]) => (
           <Schema
             schema={property}
@@ -436,7 +427,7 @@ const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> =
   }
 
   const type = schema.type();
-  if (type === undefined || !type.includes('object')) {
+  if (!type?.includes('object')) {
     return null;
   }
 
@@ -466,7 +457,7 @@ interface SchemaItemsProps {
 
 const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
   const type = schema.type();
-  if (type === undefined || !type.includes('array')) {
+  if (!type?.includes('array')) {
     return null;
   }
   const items = schema.items();
@@ -475,7 +466,7 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
   if (
     items &&
     !Array.isArray(items) &&
-    Object.keys(items.properties() || {}).length
+    Object.keys(items.properties() ?? {}).length
   ) {
     return <Schema schema={items} isArray />;
   } else if (Array.isArray(items)) {
@@ -512,7 +503,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   }
 
   const type = schema.type();
-  if (type === undefined || !type.includes('array')) {
+  if (!type?.includes('array')) {
     return null;
   }
   if (!Array.isArray(schema.items())) {

@@ -103,7 +103,7 @@ function collectSecuritySchemas(
     if (securitySchema.openIdConnectUrl()) {
       schemas.push(
         <Href
-          href={securitySchema.openIdConnectUrl() as string}
+          href={securitySchema.openIdConnectUrl()!}
           className="underline"
         >
           Connect URL
@@ -169,16 +169,16 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   const flows = securitySchema?.flows();
   const unwrappedFlows: Record<string, OAuthFlowInterface> = {};
   if (flows?.hasImplicit()) {
-    unwrappedFlows.implicit = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.implicit = flows.implicit()!;
   }
   if (flows?.hasAuthorizationCode()) {
-    unwrappedFlows.authorizationCode = flows.authorizationCode() as OAuthFlowInterface;
+    unwrappedFlows.authorizationCode = flows.authorizationCode()!;
   }
   if (flows?.hasClientCredentials()) {
-    unwrappedFlows.clientCredentials = flows.clientCredentials() as OAuthFlowInterface;
+    unwrappedFlows.clientCredentials = flows.clientCredentials()!;
   }
   if (flows?.hasPassword()) {
-    unwrappedFlows.password = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.password = flows.implicit()!;
   }
   const renderedFlows = Object.entries(unwrappedFlows).map(
     ([flowName, flow]) => {

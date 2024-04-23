@@ -50,7 +50,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     return (
       <AsyncApiStandalone
-        schema={asyncapi || schema}
+        schema={asyncapi ?? schema}
         config={config}
         error={error}
       />

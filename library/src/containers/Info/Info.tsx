@@ -25,7 +25,7 @@ export const Info: React.FunctionComponent = () => {
   const contact = info.contact();
 
   const showInfoList =
-    license || termsOfService || defaultContentType || contact || externalDocs;
+    license ?? termsOfService ?? defaultContentType ?? contact ?? externalDocs;
 
   return (
     <div className="panel-item">
@@ -41,7 +41,7 @@ export const Info: React.FunctionComponent = () => {
                 {license.url() ? (
                   <Href
                     className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                    href={license.url() || ''}
+                    href={license.url() ?? ''}
                   >
                     <span>{license.name()}</span>
                   </Href>
@@ -88,9 +88,9 @@ export const Info: React.FunctionComponent = () => {
                   <li className="inline-block mt-2 mr-2">
                     <Href
                       className="border border-solid border-purple-300 hover:bg-purple-300 hover:text-purple-600 text-purple-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
-                      href={contact.url() || ''}
+                      href={contact.url() ?? ''}
                     >
-                      <span>{contact.name() || URL_SUPPORT_TEXT}</span>
+                      <span>{contact.name() ?? URL_SUPPORT_TEXT}</span>
                     </Href>
                   </li>
                 )}

@@ -39,7 +39,7 @@ function retrieveSchemaProp(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schemaRequestOptions = schemaFetchOptions
       ? JSON.parse(JSON.stringify(schemaFetchOptions))
-      : (schema as FetchingSchemaInterface).requestOptions || {};
+      : (schema as FetchingSchemaInterface).requestOptions ?? {};
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schema = { url: schemaUrl, requestOptions: schemaRequestOptions };
   }
@@ -79,7 +79,7 @@ export class AsyncApiWebComponent extends React.Component<
 
   render() {
     const props = this.props;
-    const finalCssImportPath = props.cssImportPath || 'assets/default.min.css';
+    const finalCssImportPath = props.cssImportPath ?? 'assets/default.min.css';
     const schema = retrieveSchemaProp(this.props);
 
     return (

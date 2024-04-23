@@ -25,7 +25,7 @@ export function createRender<P extends object>(component: any) {
     container?: Element | DocumentFragment | null,
     callback?: () => void,
   ) => {
-    container = container || querySelector('asyncapi');
+    container = container ?? querySelector('asyncapi');
     if (container === null) {
       return;
     }
@@ -47,7 +47,7 @@ export function createHydrate<P extends object>(component: any) {
     container?: Element | DocumentFragment | null,
     callback?: () => void,
   ) => {
-    container = container || querySelector('asyncapi');
+    container = container ?? querySelector('asyncapi');
     if (container === null) {
       return;
     }

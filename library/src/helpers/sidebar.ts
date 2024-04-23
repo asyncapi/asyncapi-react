@@ -16,7 +16,7 @@ export interface SortedReturnType {
  */
 export function filterObjectsByTags<T>(
   tags: string[],
-  objects: Array<TagObject<T>>,
+  objects: TagObject<T>[],
 ): SortedReturnType {
   const taggedObjects = new Set<TagObject>();
   const tagged = new Map<string, TagObject[]>();

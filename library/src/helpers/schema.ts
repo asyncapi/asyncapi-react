@@ -198,14 +198,10 @@ export class SchemaHelpers {
     }
 
     if (
-      schema.oneOf() ||
-      schema.anyOf() ||
-      schema.allOf() ||
-      Object.keys(schema.properties() || {}).length > 0 ||
-      schema.items() ||
-      schema.not() ||
-      schema.if() ||
-      schema.then() ||
+      ((schema.oneOf() ??
+        schema.anyOf() ??
+        schema.allOf() ?? Object.keys(schema.properties() ?? {}).length > 0) ||
+        (schema.items() ?? schema.not() ?? schema.if() ?? schema.then())) ??
       schema.else()
     ) {
       return true;

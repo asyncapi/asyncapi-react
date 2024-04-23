@@ -1,4 +1,4 @@
-export const defaultConfig: string = `{
+export const defaultConfig = `{
   "show": {
     "sidebar": false,
     "info": true,

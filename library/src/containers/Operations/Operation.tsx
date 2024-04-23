@@ -469,7 +469,7 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
     return <></>;
   }
   const reply = operation.reply();
-  if (!reply || !reply.address) {
+  if (!reply?.address) {
     return <></>;
   }
   const replyAddress = reply.address();
