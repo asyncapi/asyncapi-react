@@ -18,7 +18,6 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
-      "./tsconfig.base.json",
       "./library/tsconfig.json",
       "./library/e2e/tsconfig.json",
       "./playground/tsconfig.json",
@@ -291,6 +290,8 @@
     "library/browser",
     "library/lib",
     "library/e2e/plugins/index.js",
+    "library/loaders/remove-hashbag-loader.js",
+    "library/jest.config.js",
     "library/postcss.config.js",
     "library/webpack.config.js",
     "library/tailwind.config.js",

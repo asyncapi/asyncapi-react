@@ -22,7 +22,5 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true
-  },
-  "include": ["./library"],
-  "exclude": ["*/node_modules/**/*", "*/lib/**/*"]
+  }
 }
