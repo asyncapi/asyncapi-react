@@ -262,9 +262,9 @@ const OperationsList: React.FunctionComponent = () => {
       if (version === 0) {
         // old version uses different labels for the operations
         const operationChannels = operationChannel.all();
-        const channelAddress = operationChannels[0]?.address();
+        const channelAddress = operationChannels[0]?.address() ?? '';
         const operationSummary = operation.summary();
-        label = operationSummary ? operationSummary : channelAddress ?? '';
+        label = operationSummary ? operationSummary : channelAddress;
       } else {
         label = operation.id() ?? '';
       }
