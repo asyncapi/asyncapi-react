@@ -30,6 +30,10 @@ interface ConfigInterface {
   parserOptions?: ParserOptions;
   publishLabel?: string;
   subscribeLabel?: string;
+  sendLabel?: string;
+  receiveLabel?: string;
+  requestLabel?: string;
+  replyLabel?: string;
 }
 ```
 
@@ -61,13 +65,33 @@ interface ConfigInterface {
 
 - **publishLabel?: string**
 
-  This field contains configuration responsible for customizing the label for publish operations.
-  This field is set to `PUB` by default.
+  This field contains configuration responsible for customizing the label for publish operations.This take effect for AsyncAPI v2 documents.
+  This field is set to `PUB` by default. 
 
 - **subscribeLabel?: string**
 
-  This field contains configuration responsible for customizing the label for subscribe operations.
+  This field contains configuration responsible for customizing the label for subscribe operations. This take effect for AsyncAPI v2 documents.
   This field is set to `SUB` by default.
+
+- **sendLabel?: string**
+
+  This field contains configuration responsible for customizing the label for send operation. This takes effect when rendering AsyncAPI v3 documents.
+  This field is set to `SEND` by default.
+
+- **receiveLabel?: string**
+
+  This field contains configuration responsible for customizing the label for receive operation. This takes effect when rendering AsyncAPI v3 documents.
+  This field is set to `RECEIVE` by default.
+
+- **requestLabel?: string**
+
+  This field contains configuration responsible for customizing the label for request operation. This takes effect when rendering AsyncAPI v3 documents.
+  This field is set to `REQUEST` by default.
+
+- **replyLabel?: string**
+
+  This field contains configuration responsible for customizing the label for response operation. This takes effect when rendering AsyncAPI v3 documents.
+  This field is set to `REPLY` by default.
 
 ## Examples
 
@@ -154,5 +178,9 @@ In the above examples, after concatenation with the default configuration, the r
   },
   publishLabel: 'PUB',
   subscribeLabel: 'SUB',
+  sendLabel: 'SEND',
+  receiveLabel: 'RECEIVE',
+  requestLabel: 'REQUEST',
+  replyLabel: 'REPLY'
 }
 ```
