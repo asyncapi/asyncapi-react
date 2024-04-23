@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { MessageHelpers } from '../message';
 import { MessageV2 as Message } from '@asyncapi/parser';
 

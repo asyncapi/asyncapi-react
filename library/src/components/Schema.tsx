@@ -33,6 +33,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   expanded: propExpanded = false,
   onlyTitle = false,
   isArray = false,
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { reverse, deepExpanded } = useContext(SchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);

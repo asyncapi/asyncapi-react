@@ -13,10 +13,13 @@ describe('Sidebar component', () => {
   let parsed: AsyncAPIDocumentInterface;
   beforeAll(async () => {
     const parsedDoc = await Parser.parse(asyncapi, {});
+    // eslint-disable-next-line jest/no-standalone-expect
     expect(parsedDoc.error).toBeUndefined();
+    // eslint-disable-next-line jest/no-standalone-expect
     expect(parsedDoc.asyncapi).toBeDefined();
     parsed = parsedDoc.asyncapi!;
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showOperations: byDefault', () => {
     render(
       <ConfigContext.Provider
@@ -28,6 +31,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showOperations: byOperationsTags', () => {
     render(
       <ConfigContext.Provider
@@ -39,6 +43,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showOperations: bySpecTags', () => {
     render(
       <ConfigContext.Provider
@@ -50,6 +55,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showServers: byDefault', () => {
     render(
       <ConfigContext.Provider value={{ sidebar: { showServers: 'byDefault' } }}>
@@ -59,6 +65,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showServers: byServersTags', () => {
     render(
       <ConfigContext.Provider
@@ -70,6 +77,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render sidebar with showServers: bySpecTags', () => {
     render(
       <ConfigContext.Provider
@@ -81,6 +89,7 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  // eslint-disable-next-line jest/expect-expect
   test('should render with showOperations: byDefault, showServers: byDefault', () => {
     render(
       <ConfigContext.Provider

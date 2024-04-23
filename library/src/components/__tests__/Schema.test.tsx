@@ -9,6 +9,7 @@ import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 import { Schema } from '../Schema';
 
 describe('Schema component', () => {
+  // eslint-disable-next-line jest/expect-expect
   test('should work with true schema', () => {
     const schema = true;
     const schemaModel = new SchemaModel(schema as never);
@@ -16,6 +17,7 @@ describe('Schema component', () => {
     render(<Schema schema={schemaModel} />);
   });
 
+  // eslint-disable-next-line jest/expect-expect
   test('should work with false schema', () => {
     const schema = false;
     const schemaModel = new SchemaModel(schema as never);

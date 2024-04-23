@@ -200,7 +200,8 @@ export class SchemaHelpers {
     if (
       ((schema.oneOf() ??
         schema.anyOf() ??
-        schema.allOf() ?? Object.keys(schema.properties() ?? {}).length > 0) ||
+        schema.allOf() ??
+        Object.keys(schema.properties() ?? {}).length > 0) ||
         (schema.items() ?? schema.not() ?? schema.if() ?? schema.then())) ??
       schema.else()
     ) {
@@ -208,11 +209,8 @@ export class SchemaHelpers {
     }
 
     const customExtensions = this.getCustomExtensions(schema);
-    if (customExtensions && Object.keys(customExtensions).length) {
-      return true;
-    }
 
-    return false;
+    return !!(customExtensions && Object.keys(customExtensions).length);
   }
 
   static serverVariablesToSchema(
@@ -410,9 +408,10 @@ export class SchemaHelpers {
     if (schema.allOf()) {
       return 'allOf';
     }
-    return;
+    return undefined;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static inferType(schema: SchemaInterface): string[] | string {
     let types = schema.type();
 
@@ -451,6 +450,7 @@ export class SchemaHelpers {
     return SchemaCustomTypes.ANY;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static humanizeNumberRangeConstraint(
     min: number | undefined,
     exclusiveMin: number | undefined,
@@ -561,6 +561,7 @@ export class SchemaHelpers {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static isJSONSchema(value: any): boolean {
+    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
     if (
       value &&
       typeof value === 'object' &&

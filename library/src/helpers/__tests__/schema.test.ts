@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { ParameterObject } from '@asyncapi/parser/esm/spec-types/v2';
 import { SchemaHelpers, SchemaCustomTypes } from '../schema';
 import {
@@ -32,7 +33,7 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(SchemaCustomTypes.ANY);
     });
 
-    test('should handle schema with non JSON Schema keywords ', () => {
+    test('should handle schema with non JSON Schema keywords', () => {
       const schema = new Schema({ foo: 'bar', 'x-ext': 'someExt' });
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual(SchemaCustomTypes.ANY);

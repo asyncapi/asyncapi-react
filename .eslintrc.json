@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest/globals": true
   },
   "extends": [
     "eslint:recommended",
@@ -9,7 +10,18 @@
     "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:react/recommended",
     "next/core-web-vitals",
+    "plugin:sonarjs/recommended",
+    "plugin:jest/recommended",
     "prettier"
+  ],
+  "plugins": [
+    "eslint-plugin-import",
+    "eslint-plugin-react",
+    "@typescript-eslint",
+    "@typescript-eslint/tslint",
+    "sonarjs",
+    "jest"
+    // "prettier" uncomment when prettier is upgraded to the newest version
   ],
   "settings": {
     "next": {
@@ -25,16 +37,15 @@
       "./web-component/tsconfig.json"
     ]
   },
-  "plugins": [
-    "eslint-plugin-import",
-    "eslint-plugin-react",
-    "@typescript-eslint",
-    "@typescript-eslint/tslint"
-    // "prettier" uncomment when prettier is upgraded to the newest version
-  ],
   "root": true,
   "rules": {
     // "prettier/prettier": "error" uncomment when prettier is upgraded to the newest version
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "cy"]
+      }
+    ]
   },
   "ignorePatterns": [
     "library/browser",

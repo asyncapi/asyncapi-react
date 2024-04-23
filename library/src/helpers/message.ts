@@ -61,7 +61,8 @@ export class MessageHelpers {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return payload.examples()?.map(example => ({ example }));
     }
-    return;
+
+    return undefined;
   }
 
   static getHeadersExamples(

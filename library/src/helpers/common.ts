@@ -26,10 +26,8 @@ export class CommonHelpers {
         return PayloadType.SEND;
       }
     }
-    if (operation.isReceive()) {
-      if (operation.reply() !== undefined) {
-        return PayloadType.REPLY;
-      }
+    if (operation.isReceive() && operation.reply() !== undefined) {
+      return PayloadType.REPLY;
     }
     return PayloadType.RECEIVE;
   }
@@ -53,13 +51,11 @@ export class CommonHelpers {
         );
       }
     }
-    if (operation.isReceive()) {
-      if (operation.reply() !== undefined) {
-        return CommonHelpers.getIdentifier(
-          `operation-${PayloadType.REPLY}-${operation.id()}`,
-          config,
-        );
-      }
+    if (operation.isReceive() && operation.reply() !== undefined) {
+      return CommonHelpers.getIdentifier(
+        `operation-${PayloadType.REPLY}-${operation.id()}`,
+        config,
+      );
     }
     return CommonHelpers.getIdentifier(
       `operation-${PayloadType.RECEIVE}-${operation.id()}`,
