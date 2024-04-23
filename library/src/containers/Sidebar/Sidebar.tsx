@@ -264,7 +264,7 @@ const OperationsList: React.FunctionComponent = () => {
         const operationChannels = operationChannel.all();
         const channelAddress = operationChannels[0]?.address() ?? '';
         const operationSummary = operation.summary();
-        label = operationSummary ? operationSummary : channelAddress;
+        label = operationSummary ?? channelAddress;
       } else {
         label = operation.id() ?? '';
       }
