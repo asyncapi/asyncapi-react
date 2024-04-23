@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { Component } from 'react';
 import { InputWrapper, InputField, Button } from './styled';
 import { fetchSchema } from '@/utils';
@@ -23,7 +24,7 @@ class FetchSchema extends Component<Props, State> {
         <InputField
           value={link}
           placeholder="Link for external schema"
-          onChange={(e: any) => this.setState({ link: e.target.value })}
+          onChange={e => this.setState({ link: e.target.value })}
         />
         <Button type="button" onClick={this.fetchSchemaFromExternalResources}>
           Fetch schema
@@ -43,6 +44,7 @@ class FetchSchema extends Component<Props, State> {
       props: { parentCallback },
       state: { link },
     } = this;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
     parentCallback(await fetchSchema(link));
   };
 }
