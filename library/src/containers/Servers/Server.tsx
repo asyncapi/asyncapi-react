@@ -61,7 +61,7 @@ export const Server: React.FunctionComponent<Props> = ({
               <Schema
                 schemaName="URL Variables"
                 schema={urlVariables}
-                expanded={true}
+                expanded
               />
             </div>
           )}

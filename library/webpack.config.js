@@ -144,7 +144,7 @@ const standaloneBundle = {
 
 const bundles = [];
 
-process.env['BUILD_MODE'] === 'umd' && bundles.push(umdBundle);
-process.env['BUILD_MODE'] === 'standalone' && bundles.push(standaloneBundle);
+process.env.BUILD_MODE === 'umd' && bundles.push(umdBundle);
+process.env.BUILD_MODE === 'standalone' && bundles.push(standaloneBundle);
 
 module.exports = bundles;

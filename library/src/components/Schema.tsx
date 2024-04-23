@@ -396,7 +396,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           schema={property}
           schemaName={propertyName}
           required={required.includes(propertyName)}
-          isProperty={true}
+          isProperty
           isCircular={property.isCircular()}
           dependentRequired={SchemaHelpers.getDependentRequired(
             propertyName,
@@ -410,8 +410,8 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
           <Schema
             schema={property}
             schemaName={propertyName}
-            isPatternProperty={true}
-            isProperty={true}
+            isPatternProperty
+            isProperty
             isCircular={property.isCircular()}
             key={propertyName}
           />
@@ -479,14 +479,14 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
     !Array.isArray(items) &&
     Object.keys(items.properties() || {}).length
   ) {
-    return <Schema schema={items} isArray={true} />;
+    return <Schema schema={items} isArray />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
           <Schema
             schema={item}
-            isArray={true}
+            isArray
             schemaName={`${idx + 1} item:`}
             key={idx}
           />
@@ -494,7 +494,7 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
       </>
     );
   }
-  return <Schema schema={items} isArray={true} schemaName="Items:" />;
+  return <Schema schema={items} isArray schemaName="Items:" />;
 };
 
 interface AdditionalItemsProps {
