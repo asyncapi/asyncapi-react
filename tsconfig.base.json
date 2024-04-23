@@ -23,6 +23,6 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true
   },
-  "include": ["./library", "./playground"],
+  "include": ["./library"],
   "exclude": ["*/node_modules/**/*", "*/lib/**/*"]
 }

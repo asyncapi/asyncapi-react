@@ -92,7 +92,7 @@ class Playground extends Component<unknown, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            {/* @ts-ignore remove when library and web-component is upgraded to React v18 */}
+            {/* @ts-expect-error remove when library and web-component is upgraded to React v18 */}
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </SplitWrapper>

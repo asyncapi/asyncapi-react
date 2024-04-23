@@ -11,13 +11,13 @@ import {
 
 import { Bindings } from '../Bindings';
 function createBinding(bindingObj: Record<string, any>) {
-  const bindings: BindingSchema[] = [];
+  const bindings: BindingSchema<any>[] = [];
   for (const [protocol, binding] of Object.entries(bindingObj)) {
     const obj: Record<string, unknown> = {};
     obj[protocol] = binding;
     bindings.push(
       new BindingSchema(binding, {
-        asyncapi: {} as any,
+        asyncapi: {} as never,
         pointer: '',
         protocol,
       }),
@@ -26,7 +26,7 @@ function createBinding(bindingObj: Record<string, any>) {
   return new BindingsSchema(bindings);
 }
 describe('Bindings component', () => {
-  test('should work with simple data', async () => {
+  test('should work with simple data', () => {
     const bindings = {
       mqtt: {
         fooMqtt: 'barMqtt',
@@ -47,7 +47,7 @@ describe('Bindings component', () => {
     expect(screen.getByText('barKafka')).toBeDefined();
   });
 
-  test('should render empty binding as string', async () => {
+  test('should render empty binding as string', () => {
     const bindings = {
       mqtt: {
         foo: 'bar',

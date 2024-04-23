@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Schema } from './Schema';
 import { SchemaHelpers } from '../helpers';
@@ -18,6 +19,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
 
   const renderedBindings = bindings.all().map(binding => {
     const bindingValue = binding.value();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schema = SchemaHelpers.jsonToSchema(bindingValue);
     const protocol = binding.protocol();
     const schemaName = (

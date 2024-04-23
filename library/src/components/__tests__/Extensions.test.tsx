@@ -5,13 +5,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-// @ts-ignore
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
 import { Extensions } from '../Extensions';
 
 describe('Extensions component', () => {
-  test('should work with simple data', async () => {
+  test('should work with simple data', () => {
     const schema = {
       'x-foo': 'xBar',
       'x-bar': 'xFoo',
@@ -26,7 +25,7 @@ describe('Extensions component', () => {
     expect(screen.getByText('xFoo')).toBeDefined();
   });
 
-  test('should filter non extensions', async () => {
+  test('should filter non extensions', () => {
     const schema = {
       foo: {
         foo: 'bar',
@@ -49,7 +48,7 @@ describe('Extensions component', () => {
     expect(screen.queryByText('bar')).toEqual(null);
   });
 
-  test('should render empty extension as string', async () => {
+  test('should render empty extension as string', () => {
     const schema = {
       'x-foo': 'xBar',
       'x-bar': undefined,

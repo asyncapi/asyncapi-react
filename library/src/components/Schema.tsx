@@ -42,13 +42,13 @@ export const Schema: React.FunctionComponent<Props> = ({
     if (!isArray) {
       setDeepExpand(deepExpanded);
     }
-  }, [deepExpanded, setDeepExpand]);
+  }, [isArray, deepExpanded, setDeepExpand]);
 
   useEffect(() => {
     if (!isArray) {
       setExpanded(deepExpand);
     }
-  }, [deepExpand, setExpanded]);
+  }, [isArray, deepExpand, setExpanded]);
 
   if (
     !schema ||
@@ -276,7 +276,7 @@ export const Schema: React.FunctionComponent<Props> = ({
               reverse ? 'bg-gray-200' : ''
             } ${expanded ? 'block' : 'hidden'}`}
           >
-            <SchemaProperties schema={schema} isArray={isArray} />
+            <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
 
             {schema.oneOf() &&
@@ -374,12 +374,10 @@ export const Schema: React.FunctionComponent<Props> = ({
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
-  isArray: boolean;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
-  isArray,
 }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
@@ -521,6 +519,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     return null;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (
@@ -536,5 +535,6 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
       </p>
     );
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return <Schema schemaName="Additional items:" schema={additionalItems} />;
 };

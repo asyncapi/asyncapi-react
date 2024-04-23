@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import React from 'react';
 
 import { Schema } from './Schema';
@@ -19,6 +22,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
   }
 
   const schema = SchemaHelpers.jsonToSchema(extensions);
+
   return (
     schema && (
       <div className="mt-2">
