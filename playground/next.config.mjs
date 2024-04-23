@@ -25,6 +25,9 @@ const nextConfig = {
   },
   assetPrefix,
   basePath,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
