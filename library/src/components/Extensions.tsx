@@ -9,6 +9,7 @@ import { SchemaHelpers } from '../helpers';
 
 interface Props {
   name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 

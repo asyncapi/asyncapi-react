@@ -37,6 +37,7 @@ class Playground extends Component<unknown, State> {
     refreshing: false,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(props: any) {
     super(props);
     this.updateSchemaFn = debounce(

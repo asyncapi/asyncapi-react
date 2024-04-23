@@ -15,7 +15,7 @@ describe('Sidebar component', () => {
     const parsedDoc = await Parser.parse(asyncapi, {});
     expect(parsedDoc.error).toBeUndefined();
     expect(parsedDoc.asyncapi).toBeDefined();
-    parsed = parsedDoc.asyncapi!;
+    parsed = parsedDoc.asyncapi as AsyncAPIDocumentInterface;
   });
   test('should render sidebar with showOperations: byDefault', () => {
     render(

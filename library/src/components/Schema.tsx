@@ -519,7 +519,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
   const additionalItems = schema.additionalItems() as any;
   if (additionalItems === true || additionalItems === undefined) {
     return (

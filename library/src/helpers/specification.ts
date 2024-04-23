@@ -8,12 +8,13 @@ import {
 } from '@asyncapi/parser';
 import { isStringifiedDocument } from '@asyncapi/parser/cjs/document';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class SpecificationHelpers {
   /**
    * Returns parsed AsyncAPI specification.
    */
   static retrieveParsedSpec(
-    schema: any,
+    schema: unknown,
   ): AsyncAPIDocumentInterface | undefined {
     if (!schema) {
       return undefined;
@@ -50,6 +51,7 @@ export class SpecificationHelpers {
    * Check if given schema have one of the specified tags.
    */
   static containTags(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     schema: any,
     tags: TagInterface | TagInterface[],
   ): boolean {
@@ -60,9 +62,9 @@ export class SpecificationHelpers {
     if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
       return false;
     }
-    tags = Array.isArray(tags) ? tags : [tags];
+    const tagsArr = Array.isArray(tags) ? tags : [tags];
     return tagsToCheck.some((tag: TagInterface) =>
-      tags.some(t => t.name() === tag.name()),
+      tagsArr.some(t => t.name() === tag.name()),
     );
   }
 

@@ -3,7 +3,9 @@ import { sample } from 'openapi-sampler';
 
 import { MessageExample } from '../types';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class MessageHelpers {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static generateExample(schema: any, options: any = {}) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
@@ -13,6 +15,7 @@ export class MessageHelpers {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static sanitizeExample(schema: any): any {
     if (typeof schema === 'object' && schema && !Array.isArray(schema)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

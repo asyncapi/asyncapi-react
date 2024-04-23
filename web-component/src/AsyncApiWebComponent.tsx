@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import * as React from 'react';
-// @ts-expect-error no types
+// @ts-expect-error no types exists
 import { register } from 'web-react-components';
 import AsyncApiComponent, {
   AsyncApiProps,
@@ -26,11 +26,11 @@ function retrieveSchemaProp(
   let schemaFetchOptions = props.schemaFetchOptions;
 
   if (!schemaUrl || schemaUrl === 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     schemaUrl = undefined as any;
   }
   if (!schemaFetchOptions) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     schemaFetchOptions = undefined as any;
   }
 
@@ -57,10 +57,6 @@ export class AsyncApiWebComponent extends React.Component<
   AsyncApiWebComponentProps
 > {
   private lastUrlCheck: number = Date.now();
-
-  constructor(props: AsyncApiWebComponentProps) {
-    super(props);
-  }
 
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {
     const prevSchema = retrieveSchemaProp(this.props);

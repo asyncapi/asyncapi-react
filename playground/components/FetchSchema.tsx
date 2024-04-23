@@ -45,7 +45,7 @@ class FetchSchema extends Component<Props, State> {
       state: { link },
     } = this;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-    parentCallback(await fetchSchema(link));
+    parentCallback((await fetchSchema(link)) as string);
   };
 }
 

@@ -18,6 +18,7 @@ function querySelector(selector: string): Element | DocumentFragment | null {
  *
  * @param {Any} component of any kind
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createRender<P extends object>(component: any) {
   return (
     props: P,
@@ -39,6 +40,7 @@ export function createRender<P extends object>(component: any) {
  *
  * @param {Any} component of any kind
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createHydrate<P extends object>(component: any) {
   return (
     props: P,

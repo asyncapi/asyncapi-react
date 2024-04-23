@@ -41,6 +41,7 @@ export const Security: React.FunctionComponent<Props> = ({
         const requirements = requirement.all();
         const key = Object.keys(requirements)[0];
         const def = securitySchemes[Number(key)];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const requiredScopes: any = requirements[Number(key)];
 
         if (!def) {

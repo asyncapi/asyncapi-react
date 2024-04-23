@@ -9,6 +9,7 @@ import {
   SEND_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../constants';
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class CommonHelpers {
   static getIdentifier(id: string, config?: ConfigInterface) {
     const schemaID = config?.schemaID;

@@ -24,7 +24,7 @@ export const stringify = <T extends {}>(content?: T): string => {
   }
 };
 
-export const fetchSchema = async (link: string): Promise<any> => {
+export const fetchSchema = async (link: string): Promise<unknown> => {
   const requestOptions = {
     method: 'GET',
   };
@@ -32,18 +32,22 @@ export const fetchSchema = async (link: string): Promise<any> => {
   return fetch(link, requestOptions).then(handleResponse);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleResponse(response: any) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, arrow-body-style
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   return response.text().then((data: string) => data);
 }
 
 export function debounce(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   func: (...args: any[]) => void,
   wait: number,
   onStart: () => void,
   onCancel: () => void,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): () => any {
   let timeout: NodeJS.Timeout | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (...args: any[]) => {
     if (timeout) {
       clearTimeout(timeout);

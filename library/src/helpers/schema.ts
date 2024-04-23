@@ -59,6 +59,7 @@ const jsonSchemaKeywordTypes: Record<string, string> = {
 };
 const jsonSchemaKeywords = Object.keys(jsonSchemaKeywordTypes);
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class SchemaHelpers {
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
   static extRawValue = 'x-schema-private-raw-value';
@@ -119,6 +120,7 @@ export class SchemaHelpers {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static prettifyValue(value: any, strict = true): string {
     const typeOf = typeof value;
     if (typeOf === 'string') {
@@ -235,7 +237,7 @@ export class SchemaHelpers {
       required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
@@ -263,10 +265,11 @@ export class SchemaHelpers {
       required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static jsonToSchema(value: any): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const json = this.jsonFieldToSchema(value);
@@ -280,6 +283,7 @@ export class SchemaHelpers {
    *
    * @param value
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getCustomExtensions(value: any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!value || typeof value.extensions !== 'function') {
@@ -361,7 +365,7 @@ export class SchemaHelpers {
       ),
       [this.extRenderAdditionalInfo]: false,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
@@ -516,6 +520,7 @@ export class SchemaHelpers {
     return stringRange;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static jsonFieldToSchema(value: any): any {
     if (value === undefined || value === null) {
       return {
@@ -558,6 +563,7 @@ export class SchemaHelpers {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static isJSONSchema(value: any): boolean {
     if (
       value &&

@@ -262,11 +262,10 @@ const OperationsList: React.FunctionComponent = () => {
       // old version uses different labels for the operations
       const operationChannels = operationChannel.all();
       const channelAddress = operationChannels[0]?.address();
-      label = operation.hasSummary()
-        ? operation.summary()!
-        : channelAddress ?? '';
+      const operationSummary = operation.summary();
+      label = operationSummary ? operationSummary : channelAddress ?? '';
     } else {
-      label = operation.id()!;
+      label = operation.id() || '';
     }
     return {
       name: `${type}-${operation.id()}`,

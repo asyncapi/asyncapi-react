@@ -1,19 +1,19 @@
 import { marked } from 'marked';
 
-// @ts-expect-error no types
+// @ts-expect-error no types exists
 import hljs from 'highlight.js/lib/core';
 
-// @ts-expect-error no types
+// @ts-expect-error no types exists
 import json from 'highlight.js/lib/languages/json';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 hljs.registerLanguage('json', json);
 
-// @ts-expect-error no types
+// @ts-expect-error no types exists
 import yaml from 'highlight.js/lib/languages/yaml';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 hljs.registerLanguage('yaml', yaml);
 
-// @ts-expect-error no types
+// @ts-expect-error no types exists
 import bash from 'highlight.js/lib/languages/bash';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 hljs.registerLanguage('bash', bash);

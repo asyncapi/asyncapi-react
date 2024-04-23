@@ -1,5 +1,6 @@
 import { TagsInterface } from '@asyncapi/parser';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface TagObject<T = any> {
   name: string;
   tags: TagsInterface;
