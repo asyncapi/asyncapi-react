@@ -17,7 +17,7 @@ class Tab extends Component<TabProps> {
     return (
       <TabWrapper key={tabIndex}>
         <TabLink
-          onClick={event => {
+          onClick={(event) => {
             event.preventDefault();
             if (parentCallback && tabIndex) {
               parentCallback(tabIndex);

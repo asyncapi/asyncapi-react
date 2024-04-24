@@ -53,9 +53,7 @@ export interface AsyncApiWebComponentProps extends AsyncApiProps {
   schemaUrl: string;
 }
 
-export class AsyncApiWebComponent extends React.Component<
-  AsyncApiWebComponentProps
-> {
+export class AsyncApiWebComponent extends React.Component<AsyncApiWebComponentProps> {
   private lastUrlCheck: number = Date.now();
 
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {

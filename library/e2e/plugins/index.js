@@ -23,6 +23,6 @@ const webpackOptions = {
   },
 };
 
-module.exports = on => {
+module.exports = (on) => {
   on('file:preprocessor', wp({ webpackOptions }));
 };

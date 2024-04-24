@@ -17,7 +17,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const renderedBindings = bindings.all().map(binding => {
+  const renderedBindings = bindings.all().map((binding) => {
     const bindingValue = binding.value();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schema = SchemaHelpers.jsonToSchema(bindingValue);

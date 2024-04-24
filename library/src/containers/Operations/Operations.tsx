@@ -5,16 +5,14 @@ import { CommonHelpers } from '../../helpers';
 import { OPERATIONS_TEXT } from '../../constants';
 
 export const Operations: React.FunctionComponent = () => {
-  const operations = useSpec()
-    .operations()
-    .all();
+  const operations = useSpec().operations().all();
   const config = useConfig();
 
   if (!Object.keys(operations).length) {
     return null;
   }
 
-  const operationsList: React.ReactNodeArray = operations.map(operation => {
+  const operationsList: React.ReactNodeArray = operations.map((operation) => {
     const channel = operation.channels().all()[0];
     const channelAddress = channel?.address() ?? '';
     const operationId = CommonHelpers.getOperationIdentifier({

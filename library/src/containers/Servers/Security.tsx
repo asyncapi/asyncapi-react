@@ -37,7 +37,7 @@ export const Security: React.FunctionComponent<Props> = ({
     }
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
-      .map(requirement => {
+      .map((requirement) => {
         const requirements = requirement.all();
         const key = Object.keys(requirements)[0];
         const def = securitySchemes[Number(key)];
@@ -102,10 +102,7 @@ function collectSecuritySchemas(
     }
     if (securitySchema.openIdConnectUrl()) {
       schemas.push(
-        <Href
-          href={securitySchema.openIdConnectUrl()!}
-          className="underline"
-        >
+        <Href href={securitySchema.openIdConnectUrl()!} className="underline">
           Connect URL
         </Href>,
       );

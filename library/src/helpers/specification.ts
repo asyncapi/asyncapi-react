@@ -64,7 +64,7 @@ export class SpecificationHelpers {
     }
     const tagsArr = Array.isArray(tags) ? tags : [tags];
     return tagsToCheck.some((tag: TagInterface) =>
-      tagsArr.some(t => t.name() === tag.name()),
+      tagsArr.some((t) => t.name() === tag.name()),
     );
   }
 
@@ -78,7 +78,7 @@ export class SpecificationHelpers {
         operation
           .tags()
           .all()
-          .forEach(tag => tags.set(tag.name(), tag));
+          .forEach((tag) => tags.set(tag.name(), tag));
       }
     });
     return Array.from(tags.values());
@@ -94,7 +94,7 @@ export class SpecificationHelpers {
         server
           .tags()
           .all()
-          .forEach(tag => {
+          .forEach((tag) => {
             if (tags[tag.name()]) {
               tags[tag.name()].push(_);
             } else {

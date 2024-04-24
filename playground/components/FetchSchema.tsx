@@ -24,7 +24,7 @@ class FetchSchema extends Component<Props, State> {
         <InputField
           value={link}
           placeholder="Link for external schema"
-          onChange={e => this.setState({ link: e.target.value })}
+          onChange={(e) => this.setState({ link: e.target.value })}
         />
         <Button type="button" onClick={this.fetchSchemaFromExternalResources}>
           Fetch schema
@@ -35,7 +35,7 @@ class FetchSchema extends Component<Props, State> {
 
   private fetchSchemaFromExternalResources = async () => {
     try {
-           new URL(this.state.link);
+      new URL(this.state.link);
     } catch (e) {
       return;
     }
