@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import React from 'react';
 
 import { Schema } from './Schema';
@@ -6,6 +9,7 @@ import { SchemaHelpers } from '../helpers';
 
 interface Props {
   name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
@@ -19,10 +23,11 @@ export const Extensions: React.FunctionComponent<Props> = ({
   }
 
   const schema = SchemaHelpers.jsonToSchema(extensions);
+
   return (
     schema && (
       <div className="mt-2">
-        <Schema schemaName={name} schema={schema} onlyTitle={true} />
+        <Schema schemaName={name} schema={schema} onlyTitle />
       </div>
     )
   );

@@ -1,0 +1,64 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest/globals": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:react/recommended",
+    "next/core-web-vitals",
+    "plugin:sonarjs/recommended",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "eslint-plugin-import",
+    "eslint-plugin-react",
+    "@typescript-eslint",
+    "@typescript-eslint/tslint",
+    "sonarjs",
+    "jest"
+    // "prettier" uncomment when prettier is upgraded to the newest version
+  ],
+  "settings": {
+    "next": {
+      "rootDir": "playground/"
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "./library/tsconfig.json",
+      "./library/e2e/tsconfig.json",
+      "./playground/tsconfig.json",
+      "./web-component/tsconfig.json"
+    ]
+  },
+  "root": true,
+  "rules": {
+    // "prettier/prettier": "error" uncomment when prettier is upgraded to the newest version
+    "jest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": ["expect", "cy"]
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "library/browser",
+    "library/lib",
+    "library/e2e/plugins/index.js",
+    "library/loaders/remove-hashbag-loader.js",
+    "library/jest.config.js",
+    "library/postcss.config.js",
+    "library/webpack.config.js",
+    "library/tailwind.config.js",
+    "playground/out",
+    "playground/postcss.config.js",
+    "web-component/lib",
+    "web-component/webpack.config.js"
+  ]
+}

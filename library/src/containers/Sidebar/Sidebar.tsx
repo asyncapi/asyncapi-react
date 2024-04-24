@@ -16,6 +16,7 @@ export const Sidebar: React.FunctionComponent = () => {
   const asyncapi = useSpec();
 
   const info = asyncapi.info();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const logo = info
     .extensions()
     .get('x-logo')
@@ -123,7 +124,9 @@ export const Sidebar: React.FunctionComponent = () => {
           <div className="sidebar--content">
             <div>
               {logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   src={logo}
                   alt={`${info.title()} logo, ${info.version()} version`}
                 />
@@ -242,39 +245,40 @@ const OperationsList: React.FunctionComponent = () => {
   const operations = asyncapi.operations().all();
   const showOperations = sidebarConfig?.showOperations ?? 'byDefault';
 
-  const processedOperations: Array<TagObject<
-    OperationItemProps
-  >> = operations.map(operation => {
-    const operationChannel = operation.channels();
-    const operationHrefId = CommonHelpers.getOperationIdentifier({
-      operation,
-      config,
-    });
-    const type = CommonHelpers.getOperationType(operation);
+  const processedOperations: TagObject<OperationItemProps>[] = operations.map(
+    operation => {
+      const operationChannel = operation.channels();
+      const operationHrefId = CommonHelpers.getOperationIdentifier({
+        operation,
+        config,
+      });
+      const type = CommonHelpers.getOperationType(operation);
 
-    const specV = asyncapi.version();
-    const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
-    let label: string = '';
-    if (version === 0) {
-      // old version uses different labels for the operations
-      const operationChannels = operationChannel.all();
-      const channelAddress = operationChannels[0]?.address();
-      label = operation.hasSummary()
-        ? operation.summary()!
-        : channelAddress ?? '';
-    } else {
-      label = operation.id()!;
-    }
-    return {
-      name: `${type}-${operation.id()}`,
-      tags: operation.tags(),
-      data: {
-        label,
-        type,
-        operationHrefId,
-      },
-    };
-  });
+      const specV = asyncapi.version();
+      const version = specV.localeCompare('2.6.0', undefined, {
+        numeric: true,
+      });
+      let label = '';
+      if (version === 0) {
+        // old version uses different labels for the operations
+        const operationChannels = operationChannel.all();
+        const channelAddress = operationChannels[0]?.address() ?? '';
+        const operationSummary = operation.summary();
+        label = operationSummary ?? channelAddress;
+      } else {
+        label = operation.id() ?? '';
+      }
+      return {
+        name: `${type}-${operation.id()}`,
+        tags: operation.tags(),
+        data: {
+          label,
+          type,
+          operationHrefId,
+        },
+      };
+    },
+  );
 
   if (showOperations === 'byDefault') {
     return (

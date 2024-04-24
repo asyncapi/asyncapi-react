@@ -1,5 +1,6 @@
 import { TagsInterface } from '@asyncapi/parser';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface TagObject<T = any> {
   name: string;
   tags: TagsInterface;
@@ -15,7 +16,7 @@ export interface SortedReturnType {
  */
 export function filterObjectsByTags<T>(
   tags: string[],
-  objects: Array<TagObject<T>>,
+  objects: TagObject<T>[],
 ): SortedReturnType {
   const taggedObjects = new Set<TagObject>();
   const tagged = new Map<string, TagObject[]>();

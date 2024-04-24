@@ -35,9 +35,9 @@ class Tabs extends Component<Props, State> {
     });
   };
 
-  renderHeader = (children: Array<React.ReactElement<TabProps>>) =>
+  renderHeader = (children: React.ReactElement<TabProps>[]) =>
     React.Children.map(children, (child, index) => {
-      const c = child as React.ReactElement<TabProps>;
+      const c = child;
       return React.cloneElement(c, {
         title: c.props.title,
         parentCallback: this.handleTabClick,
@@ -46,7 +46,7 @@ class Tabs extends Component<Props, State> {
       });
     });
 
-  renderActiveTab = (children: Array<React.ReactElement<TabProps>>) => {
+  renderActiveTab = (children: React.ReactElement<TabProps>[]) => {
     if (children[this.state.activeTabIndex]) {
       return children[this.state.activeTabIndex].props.children;
     }
@@ -56,6 +56,7 @@ class Tabs extends Component<Props, State> {
   render() {
     const { additionalHeaderContent } = this.props;
     const children = []
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
       .concat(...(this.props.children as any))
       .filter(child => child !== null && child !== undefined);
 
