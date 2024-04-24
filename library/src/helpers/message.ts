@@ -19,15 +19,18 @@ export class MessageHelpers {
   static sanitizeExample(schema: any): any {
     if (typeof schema === 'object' && schema && !Array.isArray(schema)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return Object.entries(schema).reduce((obj, [propertyName, property]) => {
-        if (
-          !propertyName.startsWith('x-parser-') &&
-          !propertyName.startsWith('x-schema-private-')
-        ) {
-          obj[propertyName] = this.sanitizeExample(property);
-        }
-        return obj;
-      }, {} as Record<string, unknown>);
+      return Object.entries(schema).reduce(
+        (obj, [propertyName, property]) => {
+          if (
+            !propertyName.startsWith('x-parser-') &&
+            !propertyName.startsWith('x-schema-private-')
+          ) {
+            obj[propertyName] = this.sanitizeExample(property);
+          }
+          return obj;
+        },
+        {} as Record<string, unknown>,
+      );
     }
     return schema;
   }
@@ -37,9 +40,9 @@ export class MessageHelpers {
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
 
-    if (examples.some(e => e.hasPayload())) {
+    if (examples.some((e) => e.hasPayload())) {
       const messageExamples = examples
-        .flatMap(e => {
+        .flatMap((e) => {
           if (!e.payload()) {
             return;
           }
@@ -59,7 +62,7 @@ export class MessageHelpers {
     const payload = msg.payload();
     if (payload?.examples()) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return payload.examples()?.map(example => ({ example }));
+      return payload.examples()?.map((example) => ({ example }));
     }
 
     return undefined;
@@ -69,9 +72,9 @@ export class MessageHelpers {
     msg: MessageInterface,
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
-    if (examples.some(e => e.hasHeaders())) {
+    if (examples.some((e) => e.hasHeaders())) {
       const messageExamples = examples
-        .flatMap(e => {
+        .flatMap((e) => {
           if (!e.hasHeaders()) {
             return;
           }
@@ -91,7 +94,7 @@ export class MessageHelpers {
     const headers = msg.headers();
     if (headers?.examples()) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return headers.examples()?.map(example => ({ example }));
+      return headers.examples()?.map((example) => ({ example }));
     }
     return undefined;
   }

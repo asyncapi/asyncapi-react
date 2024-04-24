@@ -98,14 +98,14 @@ export const Schema: React.FunctionComponent<Props> = ({
             {isExpandable && !isCircular && !isArray ? (
               <>
                 <CollapseButton
-                  onClick={() => setExpanded(prev => !prev)}
+                  onClick={() => setExpanded((prev) => !prev)}
                   expanded={expanded}
                 >
                   {renderedSchemaName}
                 </CollapseButton>
                 <button
                   type="button"
-                  onClick={() => setDeepExpand(prev => !prev)}
+                  onClick={() => setDeepExpand((prev) => !prev)}
                   className="ml-1 text-sm text-gray-500"
                 >
                   {deepExpand ? 'Collapse all' : 'Expand all'}
@@ -184,7 +184,7 @@ export const Schema: React.FunctionComponent<Props> = ({
 
                   {/* constraints */}
                   {!!constraints.length &&
-                    constraints.map(c => (
+                    constraints.map((c) => (
                       <span
                         className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
                         key={c}
@@ -280,42 +280,48 @@ export const Schema: React.FunctionComponent<Props> = ({
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
 
-            {schema.oneOf()?.map((s, idx) => (
-              <Schema
-                key={idx}
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  'Adheres to',
-                  'Or to',
-                  s.title(),
-                )}
-              />
-            ))}
-            {schema.anyOf()?.map((s, idx) => (
-              <Schema
-                key={idx}
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  'Can adhere to',
-                  'Or to',
-                  s.title(),
-                )}
-              />
-            ))}
-            {schema.allOf()?.map((s, idx) => (
-              <Schema
-                key={idx}
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  'Consists of',
-                  'And of',
-                  s.title(),
-                )}
-              />
-            ))}
+            {schema
+              .oneOf()
+              ?.map((s, idx) => (
+                <Schema
+                  key={idx}
+                  schema={s}
+                  schemaName={SchemaHelpers.applicatorSchemaName(
+                    idx,
+                    'Adheres to',
+                    'Or to',
+                    s.title(),
+                  )}
+                />
+              ))}
+            {schema
+              .anyOf()
+              ?.map((s, idx) => (
+                <Schema
+                  key={idx}
+                  schema={s}
+                  schemaName={SchemaHelpers.applicatorSchemaName(
+                    idx,
+                    'Can adhere to',
+                    'Or to',
+                    s.title(),
+                  )}
+                />
+              ))}
+            {schema
+              .allOf()
+              ?.map((s, idx) => (
+                <Schema
+                  key={idx}
+                  schema={s}
+                  schemaName={SchemaHelpers.applicatorSchemaName(
+                    idx,
+                    'Consists of',
+                    'And of',
+                    s.title(),
+                  )}
+                />
+              ))}
             {schema.not() && (
               <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
             )}
@@ -415,14 +421,12 @@ interface AdditionalPropertiesProps {
   schema: SchemaInterface;
 }
 
-const AdditionalProperties: React.FunctionComponent<AdditionalPropertiesProps> = ({
-  schema,
-}) => {
+const AdditionalProperties: React.FunctionComponent<
+  AdditionalPropertiesProps
+> = ({ schema }) => {
   if (
-    schema
-      .extensions()
-      .get(SchemaHelpers.extRenderAdditionalInfo)
-      ?.value() === false
+    schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
+    false
   ) {
     return null;
   }
@@ -495,10 +499,8 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
 }) => {
   if (
-    schema
-      .extensions()
-      .get(SchemaHelpers.extRenderAdditionalInfo)
-      ?.value() === false
+    schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
+    false
   ) {
     return null;
   }

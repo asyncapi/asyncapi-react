@@ -23,7 +23,7 @@ interface Props {
   channel: ChannelInterface;
 }
 
-export const Operation: React.FunctionComponent<Props> = props => {
+export const Operation: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
   if (!operation || !channel) {
@@ -50,7 +50,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2 text-sm">
             <p>Available only on servers:</p>
             <ul className="flex flex-wrap leading-normal">
-              {servers.map(server => (
+              {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
@@ -161,7 +161,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationInfo: React.FunctionComponent<Props> = props => {
+export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
   const operationSummary = operation.summary();
@@ -170,14 +170,12 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   const specV = useSpec().version();
   const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const isAsyncAPIv2 = version === 0;
-  const {
-    borderColor,
-    typeLabel,
-  } = CommonHelpers.getOperationDesignInformation({
-    type,
-    config,
-    isAsyncAPIv2,
-  });
+  const { borderColor, typeLabel } =
+    CommonHelpers.getOperationDesignInformation({
+      type,
+      config,
+      isAsyncAPIv2,
+    });
   return (
     <>
       <div className="mb-4">
@@ -235,7 +233,7 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
+export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation } = props;
   const [showMessages, setShowMessages] = useState(false);
   const [showChannel, setShowChannel] = useState(false);
@@ -297,7 +295,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                 <div className="mt-2">
                   {explicitChannel && (
                     <CollapseButton
-                      onClick={() => setShowChannel(prev => !prev)}
+                      onClick={() => setShowChannel((prev) => !prev)}
                       expanded={showChannel}
                     >
                       <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
@@ -321,7 +319,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
             {replyMessages.isEmpty() === false && (
               <div className="p-4">
                 <CollapseButton
-                  onClick={() => setShowMessages(prev => !prev)}
+                  onClick={() => setShowMessages((prev) => !prev)}
                   expanded={showMessages}
                 >
                   <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
@@ -403,7 +401,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
         <div className="mt-2 text-sm">
           <p>Available only on servers:</p>
           <ul className="flex flex-wrap leading-normal">
-            {servers.map(server => (
+            {servers.map((server) => (
               <li className="inline-block mt-2 mr-2" key={server.id()}>
                 <a
                   href={`#${CommonHelpers.getIdentifier(

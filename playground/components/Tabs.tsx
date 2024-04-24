@@ -58,7 +58,7 @@ class Tabs extends Component<Props, State> {
     const children = []
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
       .concat(...(this.props.children as any))
-      .filter(child => child !== null && child !== undefined);
+      .filter((child) => child !== null && child !== undefined);
 
     return (
       <TabsWrapper>

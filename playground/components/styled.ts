@@ -105,7 +105,7 @@ export const RefreshIcon = styled.div<RefreshIconProps>`
   font-weight: 700;
   color: #f77669;
   transition: 0.2s all linear;
-  opacity: ${props => (props.$show ? '1' : '0')};
+  opacity: ${(props) => (props.$show ? '1' : '0')};
   animation-name: spin;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -145,7 +145,7 @@ export const TabLink = styled.div<TabLinkProps>`
   padding: 19px 0 15px;
   border: none;
   position: relative;
-  color: ${props => (props.$active ? '#c3e88d' : '#f77669')};
+  color: ${(props) => (props.$active ? '#c3e88d' : '#f77669')};
   font-size: 14px;
   outline: none;
   transition: 0.2s color linear;
@@ -161,7 +161,7 @@ export const TabLink = styled.div<TabLinkProps>`
     bottom: 0;
     display: block;
     position: absolute;
-    height: ${props => (props.$active ? '3px' : '0px')};
+    height: ${(props) => (props.$active ? '3px' : '0px')};
     width: 100%;
     border-radius: 2px;
     background-color: #c3e88d;
@@ -199,7 +199,9 @@ export const InputField = styled.input`
   border: 3px solid #f77669;
   color: #f77669;
   border-radius: 6px;
-  transition: 0.2s border, color linear;
+  transition:
+    0.2s border,
+    color linear;
   font-size: 14px;
 
   &:hover {
@@ -219,7 +221,9 @@ export const Button = styled.button`
   font-size: 14px;
   margin-left: 12px;
   white-space: nowrap;
-  transition: 0.2s border, color linear;
+  transition:
+    0.2s border,
+    color linear;
   cursor: pointer;
 
   &:hover {

@@ -17,10 +17,7 @@ export const Sidebar: React.FunctionComponent = () => {
 
   const info = asyncapi.info();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const logo = info
-    .extensions()
-    .get('x-logo')
-    ?.value();
+  const logo = info.extensions().get('x-logo')?.value();
   const components = asyncapi.components();
   const messages = components?.messages().all();
   const schemas = components?.schemas().all();
@@ -97,7 +94,7 @@ export const Sidebar: React.FunctionComponent = () => {
     <SidebarContext.Provider value={{ setShowSidebar }}>
       <div
         className="burger-menu rounded-full h-16 w-16 bg-white fixed bottom-16 right-8 flex items-center justify-center z-30 cursor-pointer shadow-md bg-teal-500"
-        onClick={() => setShowSidebar(prev => !prev)}
+        onClick={() => setShowSidebar((prev) => !prev)}
         data-lol={showSidebar}
       >
         <svg
@@ -177,7 +174,7 @@ const ServersList: React.FunctionComponent = () => {
   if (showServers === 'byDefault') {
     return (
       <ul className="text-sm mt-2">
-        {servers.map(server => (
+        {servers.map((server) => (
           <ServerItem serverName={server.id()} key={server.id()} />
         ))}
       </ul>
@@ -186,21 +183,18 @@ const ServersList: React.FunctionComponent = () => {
 
   let specTagNames: string[];
   if (showServers === 'bySpecTags') {
-    specTagNames = (
-      asyncapi
-        .info()
-        .tags()
-        .all() ?? []
-    ).map(tag => tag.name());
+    specTagNames = (asyncapi.info().tags().all() ?? []).map((tag) =>
+      tag.name(),
+    );
   } else {
     const serverTagNamesSet = new Set<string>();
-    servers.forEach(server => {
-      server.tags().forEach(t => serverTagNamesSet.add(t.name()));
+    servers.forEach((server) => {
+      server.tags().forEach((t) => serverTagNamesSet.add(t.name()));
     });
     specTagNames = Array.from(serverTagNamesSet);
   }
 
-  const serializedServers: TagObject[] = servers.map(server => ({
+  const serializedServers: TagObject[] = servers.map((server) => ({
     name: server.id(),
     tags: server.tags(),
     data: {},
@@ -246,7 +240,7 @@ const OperationsList: React.FunctionComponent = () => {
   const showOperations = sidebarConfig?.showOperations ?? 'byDefault';
 
   const processedOperations: TagObject<OperationItemProps>[] = operations.map(
-    operation => {
+    (operation) => {
       const operationChannel = operation.channels();
       const operationHrefId = CommonHelpers.getOperationIdentifier({
         operation,
@@ -292,19 +286,16 @@ const OperationsList: React.FunctionComponent = () => {
 
   let operationTagNames: string[];
   if (showOperations === 'bySpecTags') {
-    operationTagNames = (
-      asyncapi
-        .info()
-        .tags()
-        .all() ?? []
-    ).map(tag => tag.name());
+    operationTagNames = (asyncapi.info().tags().all() ?? []).map((tag) =>
+      tag.name(),
+    );
   } else {
     const operationTagNamesSet = new Set<string>();
-    operations.forEach(operation => {
+    operations.forEach((operation) => {
       operation
         .tags()
         .all()
-        .forEach(t => operationTagNamesSet.add(t.name()));
+        .forEach((t) => operationTagNamesSet.add(t.name()));
     });
     operationTagNames = Array.from(operationTagNamesSet);
   }
@@ -347,14 +338,12 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
   const specV = useSpec().version();
   const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const isAsyncAPIv2 = version === 0;
-  const {
-    typeLabel,
-    backgroundColor,
-  } = CommonHelpers.getOperationDesignInformation({
-    type,
-    config,
-    isAsyncAPIv2,
-  });
+  const { typeLabel, backgroundColor } =
+    CommonHelpers.getOperationDesignInformation({
+      type,
+      config,
+      isAsyncAPIv2,
+    });
 
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
@@ -410,7 +399,7 @@ const ItemsByTagItem: React.FunctionComponent<ItemsByTagItemProps> = ({
   return (
     <div>
       <CollapseButton
-        onClick={() => setExpand(prev => !prev)}
+        onClick={() => setExpand((prev) => !prev)}
         chevronProps={{
           className: expand ? '-rotate-180' : '-rotate-90',
         }}

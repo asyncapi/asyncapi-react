@@ -64,7 +64,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
     <div className="mt-4">
       <div>
         <CollapseButton
-          onClick={() => setExpanded(prev => !prev)}
+          onClick={() => setExpanded((prev) => !prev)}
           expanded={expanded}
           chevronProps={{
             className: 'fill-current text-gray-200',
