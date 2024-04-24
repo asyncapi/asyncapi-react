@@ -39,7 +39,7 @@ export enum PayloadType {
 export interface MessageExample {
   name?: string;
   summary?: string;
-  example: any;
+  example: unknown;
 }
 
 export interface ValidationError {
@@ -59,14 +59,14 @@ export interface ErrorObject {
   type: string;
   title: string;
   detail?: string;
-  parsedJSON?: any;
+  parsedJSON?: unknown;
   validationErrors?: ValidationError[];
   location?: {
     startLine: number;
     startColumn: number;
     startOffset: number;
   };
-  refs?: Array<{
+  refs?: {
     title: string;
     jsonPointer: string;
     startLine: number;
@@ -75,5 +75,5 @@ export interface ErrorObject {
     endLine: number;
     endColumn: number;
     endOffset: number;
-  }>;
+  }[];
 }

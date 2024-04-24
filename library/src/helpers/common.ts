@@ -9,6 +9,7 @@ import {
   SEND_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../constants';
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class CommonHelpers {
   static getIdentifier(id: string, config?: ConfigInterface) {
     const schemaID = config?.schemaID;
@@ -25,10 +26,8 @@ export class CommonHelpers {
         return PayloadType.SEND;
       }
     }
-    if (operation.isReceive()) {
-      if (operation.reply() !== undefined) {
-        return PayloadType.REPLY;
-      }
+    if (operation.isReceive() && operation.reply() !== undefined) {
+      return PayloadType.REPLY;
     }
     return PayloadType.RECEIVE;
   }
@@ -52,13 +51,11 @@ export class CommonHelpers {
         );
       }
     }
-    if (operation.isReceive()) {
-      if (operation.reply() !== undefined) {
-        return CommonHelpers.getIdentifier(
-          `operation-${PayloadType.REPLY}-${operation.id()}`,
-          config,
-        );
-      }
+    if (operation.isReceive() && operation.reply() !== undefined) {
+      return CommonHelpers.getIdentifier(
+        `operation-${PayloadType.REPLY}-${operation.id()}`,
+        config,
+      );
     }
     return CommonHelpers.getIdentifier(
       `operation-${PayloadType.RECEIVE}-${operation.id()}`,

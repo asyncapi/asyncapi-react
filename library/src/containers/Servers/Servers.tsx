@@ -7,9 +7,7 @@ import { CommonHelpers } from '../../helpers';
 import { SERVERS_TEXT } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {
-  const servers = useSpec()
-    .servers()
-    .all();
+  const servers = useSpec().servers().all();
   const config = useConfig();
 
   if (!servers.length) {
@@ -25,7 +23,7 @@ export const Servers: React.FunctionComponent = () => {
         {SERVERS_TEXT}
       </h2>
       <ul>
-        {servers.map(server => {
+        {servers.map((server) => {
           const serverName = server.id();
           return (
             <li

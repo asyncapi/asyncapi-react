@@ -10,7 +10,7 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
 
   return errors
     .map((singleError: ValidationError, index: number) => {
-      if (!singleError || !singleError.title || !singleError.location) {
+      if (!singleError?.title || !singleError.location) {
         return null;
       }
       return (
@@ -42,7 +42,7 @@ export const Error: React.FunctionComponent<Props> = ({ error }) => {
           <h2 className="p-2">
             {title ? `${ERROR_TEXT}: ${title}` : ERROR_TEXT}
           </h2>
-          {validationErrors && validationErrors.length ? (
+          {validationErrors?.length ? (
             <div className="bg-gray-800 text-white text-xs p-2">
               <pre>{renderErrors(validationErrors)}</pre>
             </div>

@@ -27,10 +27,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     error: undefined,
   };
 
-  constructor(props: AsyncApiProps) {
-    super(props);
-  }
-
   async componentDidMount() {
     if (this.props.schema) {
       const { schema, config } = this.props;
@@ -54,13 +50,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     return (
       <AsyncApiStandalone
-        schema={asyncapi || schema}
+        schema={asyncapi ?? schema}
         config={config}
         error={error}
       />
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
     if (parsedSpec) {

@@ -59,6 +59,7 @@ const jsonSchemaKeywordTypes: Record<string, string> = {
 };
 const jsonSchemaKeywords = Object.keys(jsonSchemaKeywordTypes);
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class SchemaHelpers {
   static extRenderAdditionalInfo = 'x-schema-private-render-additional-info';
   static extRawValue = 'x-schema-private-raw-value';
@@ -87,7 +88,7 @@ export class SchemaHelpers {
 
     let type = this.inferType(schema);
     if (Array.isArray(type)) {
-      return type.map(t => this.toType(t, schema)).join(' | ');
+      return type.map((t) => this.toType(t, schema)).join(' | ');
     }
     type = this.toType(type, schema);
     const combinedType = this.toCombinedType(schema);
@@ -119,9 +120,11 @@ export class SchemaHelpers {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static prettifyValue(value: any, strict = true): string {
     const typeOf = typeof value;
     if (typeOf === 'string') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return strict ? `"${value}"` : value;
     }
     if (typeOf === 'number' || typeOf === 'bigint' || typeOf === 'boolean') {
@@ -195,25 +198,19 @@ export class SchemaHelpers {
     }
 
     if (
-      schema.oneOf() ||
-      schema.anyOf() ||
-      schema.allOf() ||
-      Object.keys(schema.properties() || {}).length > 0 ||
-      schema.items() ||
-      schema.not() ||
-      schema.if() ||
-      schema.then() ||
+      ((schema.oneOf() ??
+        schema.anyOf() ??
+        schema.allOf() ??
+        Object.keys(schema.properties() ?? {}).length > 0) ||
+        (schema.items() ?? schema.not() ?? schema.if() ?? schema.then())) ??
       schema.else()
     ) {
       return true;
     }
 
     const customExtensions = this.getCustomExtensions(schema);
-    if (customExtensions && Object.keys(customExtensions).length) {
-      return true;
-    }
 
-    return false;
+    return !!(customExtensions && Object.keys(customExtensions).length);
   }
 
   static serverVariablesToSchema(
@@ -223,7 +220,7 @@ export class SchemaHelpers {
       return undefined;
     }
     const obj: Record<string, Record<string, unknown>> = {};
-    urlVariables.all().forEach(variable => {
+    urlVariables.all().forEach((variable) => {
       obj[variable.id()] = { ...(variable.json() || {}) };
       obj[variable.id()].type = 'string';
     });
@@ -234,6 +231,7 @@ export class SchemaHelpers {
       required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
@@ -244,7 +242,7 @@ export class SchemaHelpers {
       return undefined;
     }
     const obj: Record<string, Record<string, unknown>> = {};
-    parameters.all().forEach(parameter => {
+    parameters.all().forEach((parameter) => {
       const parameterSchema = parameter.schema();
       obj[parameter.id()] = { ...(parameterSchema?.json() ?? {}) };
       obj[parameter.id()].description = parameter.hasDescription()
@@ -261,11 +259,15 @@ export class SchemaHelpers {
       required: Object.keys(obj),
       [this.extRenderAdditionalInfo]: false,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static jsonToSchema(value: any): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const json = this.jsonFieldToSchema(value);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return new SchemaClass(json);
   }
 
@@ -275,10 +277,13 @@ export class SchemaHelpers {
    *
    * @param value
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getCustomExtensions(value: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!value || typeof value.extensions !== 'function') {
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const extensions = value.extensions() as ExtensionsInterface;
     const filteredExtensions: Record<string, unknown> = {};
     for (const ext of extensions.all()) {
@@ -345,7 +350,8 @@ export class SchemaHelpers {
       properties: Object.entries(records).reduce(
         (obj, [propertyName, propertySchema]) => {
           obj[propertyName] = {
-            ...(propertySchema.json() as Record<string, unknown>),
+            // @ts-expect-error add proper check
+            ...propertySchema.json(),
           };
           return obj;
         },
@@ -353,6 +359,7 @@ export class SchemaHelpers {
       ),
       [this.extRenderAdditionalInfo]: false,
     };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
     return new SchemaClass(json as any);
   }
 
@@ -377,15 +384,16 @@ export class SchemaHelpers {
     items: SchemaInterface[],
     schema: SchemaInterface,
   ): string {
-    const types = items.map(item => this.toSchemaType(item)).join(', ');
+    const types = items.map((item) => this.toSchemaType(item)).join(', ');
     const additionalItems = schema.additionalItems();
     if (additionalItems !== undefined && additionalItems !== false) {
       const additionalType =
         additionalItems === true
           ? SchemaCustomTypes.ANY
           : this.toSchemaType(additionalItems);
-      return `tuple<${types ||
-        SchemaCustomTypes.UNKNOWN}, ...optional<${additionalType}>>`;
+      return `tuple<${
+        types || SchemaCustomTypes.UNKNOWN
+      }, ...optional<${additionalType}>>`;
     }
     return `tuple<${types || SchemaCustomTypes.UNKNOWN}>`;
   }
@@ -401,9 +409,10 @@ export class SchemaHelpers {
     if (schema.allOf()) {
       return 'allOf';
     }
-    return;
+    return undefined;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static inferType(schema: SchemaInterface): string[] | string {
     let types = schema.type();
 
@@ -411,25 +420,26 @@ export class SchemaHelpers {
       if (Array.isArray(types)) {
         // if types have `integer` and `number` types, `integer` is unnecessary
         if (types.includes('integer') && types.includes('number')) {
-          types = types.filter(t => t !== 'integer');
+          types = types.filter((t) => t !== 'integer');
         }
         return types.length === 1 ? types[0] : types;
       }
       return types;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const constValue = schema.const();
     if (constValue !== undefined) {
       return typeof constValue;
     }
     const enumValue = schema.enum();
     if (Array.isArray(enumValue) && enumValue.length) {
-      const inferredType = Array.from(new Set(enumValue.map(e => typeof e)));
+      const inferredType = Array.from(new Set(enumValue.map((e) => typeof e)));
       return inferredType.length === 1 ? inferredType[0] : inferredType;
     }
 
     const schemaKeys = Object.keys(schema.json() || {}) || [];
-    const hasInferredTypes = jsonSchemaKeywords.some(key =>
+    const hasInferredTypes = jsonSchemaKeywords.some((key) =>
       schemaKeys.includes(key),
     );
     if (hasInferredTypes === true) {
@@ -441,6 +451,7 @@ export class SchemaHelpers {
     return SchemaCustomTypes.ANY;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   private static humanizeNumberRangeConstraint(
     min: number | undefined,
     exclusiveMin: number | undefined,
@@ -506,6 +517,7 @@ export class SchemaHelpers {
     return stringRange;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static jsonFieldToSchema(value: any): any {
     if (value === undefined || value === null) {
       return {
@@ -515,10 +527,13 @@ export class SchemaHelpers {
       };
     }
     if (typeof value !== 'object') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const str =
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         typeof value.toString === 'function' ? value.toString() : value;
       return {
         type: 'string',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const: str,
         [this.extRawValue]: true,
       };
@@ -529,26 +544,36 @@ export class SchemaHelpers {
     if (Array.isArray(value)) {
       return {
         type: 'array',
-        items: value.map(v => this.jsonFieldToSchema(v)),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        items: value.map((v) => this.jsonFieldToSchema(v)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
     return {
       type: 'object',
-      properties: Object.entries(value).reduce((obj, [k, v]) => {
-        obj[k] = this.jsonFieldToSchema(v);
-        return obj;
-      }, {} as Record<string, unknown>),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      properties: Object.entries(value).reduce(
+        (obj, [k, v]) => {
+          obj[k] = this.jsonFieldToSchema(v);
+          return obj;
+        },
+        {} as Record<string, unknown>,
+      ),
       [this.extRenderAdditionalInfo]: false,
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static isJSONSchema(value: any): boolean {
+    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
     if (
       value &&
       typeof value === 'object' &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       (jsonSchemaTypes.includes(value.type) ||
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         (Array.isArray(value.type) &&
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           value.type.some((t: string) => !jsonSchemaTypes.includes(t))))
     ) {
       return true;

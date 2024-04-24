@@ -7,7 +7,7 @@ describe('CommonHelpers', () => {
       expect(result).toEqual(`test`);
     });
 
-    test('should return identifier without config argument', () => {
+    test('should return identifier with config argument', () => {
       const result = CommonHelpers.getIdentifier('test', {
         schemaID: 'prefix-id',
       });
