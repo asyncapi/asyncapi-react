@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  // eslint-disable-next-line react/no-deprecated
-  hydrate as hydrateComponent,
-  // eslint-disable-next-line react/no-deprecated
-  render as renderComponent,
-} from 'react-dom';
+import { hydrateRoot, createRoot } from 'react-dom/client';
 
-function querySelector(selector: string): Element | DocumentFragment | null {
+function querySelector(selector: string): Element | null {
   if (typeof document !== 'undefined') {
     return document.querySelector(selector);
   }
@@ -18,20 +13,19 @@ function querySelector(selector: string): Element | DocumentFragment | null {
  *
  * @param {Any} component of any kind
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createRender<P extends object>(component: any) {
-  return (
-    props: P,
-    container?: Element | DocumentFragment | null,
-    callback?: () => void,
-  ) => {
+export function createRender<
+  Props extends Parameters<typeof React.createElement>[1],
+>(component: Parameters<typeof React.createElement>[0]) {
+  return (props: Props, container?: Element | DocumentFragment | null) => {
     container = container ?? querySelector('asyncapi');
+
     if (container === null) {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    renderComponent(React.createElement(component, props), container, callback);
+    const root = createRoot(container);
+
+    root.render(React.createElement(component, props));
   };
 }
 
@@ -40,23 +34,16 @@ export function createRender<P extends object>(component: any) {
  *
  * @param {Any} component of any kind
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createHydrate<P extends object>(component: any) {
-  return (
-    props: P,
-    container?: Element | DocumentFragment | null,
-    callback?: () => void,
-  ) => {
+export function createHydrate<
+  Props extends Parameters<typeof React.createElement>[1],
+>(component: Parameters<typeof React.createElement>[0]) {
+  return (props: Props, container?: Element | Document | null) => {
     container = container ?? querySelector('asyncapi');
+
     if (container === null) {
       return;
     }
 
-    hydrateComponent(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      React.createElement(component, props),
-      container,
-      callback,
-    );
+    hydrateRoot(container, React.createElement(component, props));
   };
 }
