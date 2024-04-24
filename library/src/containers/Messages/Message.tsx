@@ -47,7 +47,7 @@ export const Message: React.FunctionComponent<Props> = ({
 
   const contentType = message.contentType();
   const externalDocs = message.externalDocs();
-  const showInfoList = contentType || externalDocs;
+  const showInfoList = contentType ?? externalDocs;
 
   return (
     <div className="panel-item">

@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import * as React from 'react';
-// @ts-ignore
+// @ts-expect-error no types exists
 import { register } from 'web-react-components';
 import AsyncApiComponent, {
   AsyncApiProps,
@@ -25,17 +26,21 @@ function retrieveSchemaProp(
   let schemaFetchOptions = props.schemaFetchOptions;
 
   if (!schemaUrl || schemaUrl === 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     schemaUrl = undefined as any;
   }
   if (!schemaFetchOptions) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     schemaFetchOptions = undefined as any;
   }
 
   let schema = props.schema || {};
   if (schemaUrl) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schemaRequestOptions = schemaFetchOptions
       ? JSON.parse(JSON.stringify(schemaFetchOptions))
-      : (schema as FetchingSchemaInterface).requestOptions || {};
+      : (schema as FetchingSchemaInterface).requestOptions ?? {};
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schema = { url: schemaUrl, requestOptions: schemaRequestOptions };
   }
 
@@ -48,14 +53,8 @@ export interface AsyncApiWebComponentProps extends AsyncApiProps {
   schemaUrl: string;
 }
 
-export class AsyncApiWebComponent extends React.Component<
-  AsyncApiWebComponentProps
-> {
+export class AsyncApiWebComponent extends React.Component<AsyncApiWebComponentProps> {
   private lastUrlCheck: number = Date.now();
-
-  constructor(props: AsyncApiWebComponentProps) {
-    super(props);
-  }
 
   shouldComponentUpdate(nextProps: Readonly<AsyncApiWebComponentProps>) {
     const prevSchema = retrieveSchemaProp(this.props);
@@ -78,7 +77,7 @@ export class AsyncApiWebComponent extends React.Component<
 
   render() {
     const props = this.props;
-    const finalCssImportPath = props.cssImportPath || 'assets/default.min.css';
+    const finalCssImportPath = props.cssImportPath ?? 'assets/default.min.css';
     const schema = retrieveSchemaProp(this.props);
 
     return (
@@ -90,6 +89,7 @@ export class AsyncApiWebComponent extends React.Component<
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 register(AsyncApiWebComponent, 'asyncapi-component', [
   'schema',
   'schemaFetchOptions',

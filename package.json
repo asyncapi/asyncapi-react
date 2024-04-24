@@ -28,9 +28,9 @@
     "build:library": "cd library && npm run prepare",
     "build:webcomponent": "cd web-component && npm run bundle",
     "build:playground": "cd playground && npm run build",
-    "lint": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose && prettier --check \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
-    "lint:fix": "tslint -c ./tslint.json --project tsconfig.base.json --format verbose --fix && prettier --write \"**/*.{ts,tsx,js,jsx,json,html,css,yaml}\"",
-    "conflict-check": "tslint-config-prettier-check ./tslint.json",
+    "lint": "eslint --max-warnings 0 .",
+    "lint:fix": "eslint --max-warnings 0 . --fix && npm run format",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,html,css,yaml,yml}\"",
     "markdownlint": "markdownlint **/*.md",
     "prepublishOnly": "npm run build",
     "gen-readme-toc": "markdown-toc -i README.md",
@@ -45,36 +45,24 @@
     "get:version": "cd library && npm run get:version"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
+    "@typescript-eslint/parser": "^7.7.1",
     "concurrently": "^6.0.1",
-    "husky": "^2.4.1",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^28.2.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-sonarjs": "^0.25.1",
     "lerna": "^8.1.2",
-    "lint-staged": "15.2.2",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
-    "prettier": "^1.18.2",
+    "prettier": "^3.2.5",
     "react-split": "^2.0.9",
     "tslib": "^1.10.0",
-    "tslint": "^5.17.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^4.0.0",
-    "tslint-react-hooks": "^2.1.1",
     "typescript": "^5.3.3"
-  },
-  "lint-staged": {
-    "linters": {
-      "**/*.{ts,tsx,js,jsx,json,css,html,yaml}": [
-        "prettier --write",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "package.json",
-      "package-lock.json"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }

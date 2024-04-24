@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import AsyncApiComponent from '..';

@@ -21,3 +21,4 @@ lerna-debug.log*
 /.github
 
 playground/.next/
+playground/out/

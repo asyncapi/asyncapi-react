@@ -28,9 +28,9 @@ export const Security: React.FunctionComponent<Props> = ({
     }
   } else {
     const securities: React.ReactNodeArray = Object.values(security)
-      .map(requirements => requirements.all())
+      .map((requirements) => requirements.all())
       .flat()
-      .map(requirement => {
+      .map((requirement) => {
         const def = requirement.scheme();
         const requiredScopes = requirement.scopes();
 
@@ -91,10 +91,7 @@ function collectSecuritySchemas(
     }
     if (securitySchema.openIdConnectUrl()) {
       schemas.push(
-        <Href
-          href={securitySchema.openIdConnectUrl() as string}
-          className="underline"
-        >
+        <Href href={securitySchema.openIdConnectUrl()!} className="underline">
           Connect URL
         </Href>,
       );
@@ -158,16 +155,16 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   const flows = securitySchema?.flows();
   const unwrappedFlows: Record<string, OAuthFlowInterface> = {};
   if (flows?.hasImplicit()) {
-    unwrappedFlows.implicit = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.implicit = flows.implicit()!;
   }
   if (flows?.hasAuthorizationCode()) {
-    unwrappedFlows.authorizationCode = flows.authorizationCode() as OAuthFlowInterface;
+    unwrappedFlows.authorizationCode = flows.authorizationCode()!;
   }
   if (flows?.hasClientCredentials()) {
-    unwrappedFlows.clientCredentials = flows.clientCredentials() as OAuthFlowInterface;
+    unwrappedFlows.clientCredentials = flows.clientCredentials()!;
   }
   if (flows?.hasPassword()) {
-    unwrappedFlows.password = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.password = flows.implicit()!;
   }
   const renderedFlows = Object.entries(unwrappedFlows).map(
     ([flowName, flow]) => {

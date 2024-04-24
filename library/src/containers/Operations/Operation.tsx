@@ -23,7 +23,7 @@ interface Props {
   channel: ChannelInterface;
 }
 
-export const Operation: React.FunctionComponent<Props> = props => {
+export const Operation: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
   if (!operation || !channel) {
@@ -50,7 +50,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2 text-sm">
             <p>Available only on servers:</p>
             <ul className="flex flex-wrap leading-normal">
-              {servers.map(server => (
+              {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
                     href={`#${CommonHelpers.getIdentifier(
@@ -75,11 +75,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
               config,
             )}
           >
-            <Schema
-              schemaName="Parameters"
-              schema={parameters}
-              expanded={true}
-            />
+            <Schema schemaName="Parameters" schema={parameters} expanded />
           </div>
         )}
 
@@ -145,7 +141,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
                 .all()
                 .map((msg, idx) => (
                   <li className="mt-4" key={msg.id()}>
-                    <Message message={msg} index={idx} showExamples={true} />
+                    <Message message={msg} index={idx} showExamples />
                   </li>
                 ))}
             </ul>
@@ -154,10 +150,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
           <div className="mt-2">
             <p className="px-8">Accepts the following message:</p>
             <div className="mt-2">
-              <Message
-                message={operation.messages().all()[0]}
-                showExamples={true}
-              />
+              <Message message={operation.messages().all()[0]} showExamples />
             </div>
           </div>
         )}
@@ -168,7 +161,7 @@ export const Operation: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationInfo: React.FunctionComponent<Props> = props => {
+export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
   const operationSummary = operation.summary();
@@ -177,14 +170,12 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   const specV = useSpec().version();
   const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const isAsyncAPIv2 = version === 0;
-  const {
-    borderColor,
-    typeLabel,
-  } = CommonHelpers.getOperationDesignInformation({
-    type,
-    config,
-    isAsyncAPIv2,
-  });
+  const { borderColor, typeLabel } =
+    CommonHelpers.getOperationDesignInformation({
+      type,
+      config,
+      isAsyncAPIv2,
+    });
   return (
     <>
       <div className="mb-4">
@@ -242,7 +233,7 @@ export const OperationInfo: React.FunctionComponent<Props> = props => {
   );
 };
 
-export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
+export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation } = props;
   const [showMessages, setShowMessages] = useState(false);
   const [showChannel, setShowChannel] = useState(false);
@@ -266,7 +257,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
           <div className="border rounded">
             <div
               className={`w-full ${
-                type === 'reply'
+                type === PayloadType.REPLY
                   ? 'bg-green-600 border-green-600'
                   : 'bg-blue-600 border-blue-600'
               } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
@@ -276,7 +267,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
             <div className="flex">
               <div
                 className={`w-1 h-11 ${
-                  type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+                  type === PayloadType.REPLY ? 'bg-green-600' : 'bg-blue-600'
                 } mt-4`}
               />
               <div className="p-4">
@@ -304,7 +295,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                 <div className="mt-2">
                   {explicitChannel && (
                     <CollapseButton
-                      onClick={() => setShowChannel(prev => !prev)}
+                      onClick={() => setShowChannel((prev) => !prev)}
                       expanded={showChannel}
                     >
                       <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
@@ -328,7 +319,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
             {replyMessages.isEmpty() === false && (
               <div className="p-4">
                 <CollapseButton
-                  onClick={() => setShowMessages(prev => !prev)}
+                  onClick={() => setShowMessages((prev) => !prev)}
                   expanded={showMessages}
                 >
                   <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-none">
@@ -344,11 +335,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                       <ul>
                         {replyMessages.all().map((msg, idx) => (
                           <li className="mt-4" key={msg.id()}>
-                            <Message
-                              message={msg}
-                              index={idx}
-                              showExamples={true}
-                            />
+                            <Message message={msg} index={idx} showExamples />
                           </li>
                         ))}
                       </ul>
@@ -358,7 +345,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = props => {
                       <div className="mt-2">
                         <Message
                           message={replyMessages.all()[0]}
-                          showExamples={true}
+                          showExamples
                         />
                       </div>
                     </div>
@@ -414,7 +401,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
         <div className="mt-2 text-sm">
           <p>Available only on servers:</p>
           <ul className="flex flex-wrap leading-normal">
-            {servers.map(server => (
+            {servers.map((server) => (
               <li className="inline-block mt-2 mr-2" key={server.id()}>
                 <a
                   href={`#${CommonHelpers.getIdentifier(
@@ -439,7 +426,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
               .all()
               .map((msg, idx) => (
                 <li className="mt-4" key={msg.id()}>
-                  <Message message={msg} index={idx} showExamples={true} />
+                  <Message message={msg} index={idx} showExamples />
                 </li>
               ))}
           </ul>
@@ -448,10 +435,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
         <div className="mt-2">
           <span className="text-xs text-gray-700">Message:</span>
           <div className="mt-2">
-            <Message
-              message={channel.messages().all()[0]}
-              showExamples={true}
-            />
+            <Message message={channel.messages().all()[0]} showExamples />
           </div>
         </div>
       )}
@@ -463,7 +447,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
             config,
           )}
         >
-          <Schema schemaName="Parameters" schema={parameters} expanded={true} />
+          <Schema schemaName="Parameters" schema={parameters} expanded />
         </div>
       )}
       {channel.bindings() && (
@@ -483,17 +467,22 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
     return <></>;
   }
   const reply = operation.reply();
-  if (reply === undefined || !reply.hasAddress()) {
+  if (!reply?.address) {
     return <></>;
   }
-  const replyAddress = reply.address()!;
+  const replyAddress = reply.address();
+
+  if (!replyAddress) {
+    return <></>;
+  }
+
   const replyAddressLocation = replyAddress.location();
 
   return (
     <div className="flex">
       <div
         className={`w-1 h-11 ${
-          type === 'reply' ? 'bg-green-600' : 'bg-blue-600'
+          type === PayloadType.REPLY ? 'bg-green-600' : 'bg-blue-600'
         } mt-4`}
       />
       <div className="p-4">
