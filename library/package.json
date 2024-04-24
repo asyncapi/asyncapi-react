@@ -76,25 +76,25 @@
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
     "openapi-sampler": "^1.2.1",
-    "use-resize-observer": "^8.0.0"
+    "use-resize-observer": "^9.1.0"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.9.0",
     "@tailwindcss/typography": "^0.4.0",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^12.1.5",
+    "@testing-library/react": "^15.0.4",
     "@testing-library/user-event": "^12.8.3",
     "@types/dompurify": "^2.0.4",
     "@types/highlight.js": "^10.1.0",
     "@types/jest": "^26.0.23",
     "@types/marked": "^4.0.1",
     "@types/node": "^12.7.2",
-    "@types/react": "^16.9.2",
-    "@types/react-dom": "^17.0.3",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
     "autoprefixer": "^10.2.5",
     "cross-env": "^7.0.3",
     "cssnano": "^4.1.11",
@@ -105,8 +105,8 @@
     "postcss-cli": "^8.3.1",
     "postcss-import": "^14.0.2",
     "postcss-scopify": "^0.1.9",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "tailwindcss": "^2.1.1",
     "ts-jest": "^26.4.1",
     "ts-loader": "9.4.4",
