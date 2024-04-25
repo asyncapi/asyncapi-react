@@ -8,7 +8,7 @@ interface SplitWrapperProps {
 // react-split should be replaced with a React 18 friendly library or CSS
 const SplitWrapper = (props: SplitWrapperProps) => (
   <>
-    {/* @ts-ignore */}
+    {/* @ts-expect-error upgrade React to v18 */}
     <Split
       style={{
         width: '100%',

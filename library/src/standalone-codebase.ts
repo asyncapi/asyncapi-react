@@ -1,6 +1,8 @@
 import React from 'react';
 import {
+  // eslint-disable-next-line react/no-deprecated
   hydrate as hydrateComponent,
+  // eslint-disable-next-line react/no-deprecated
   render as renderComponent,
 } from 'react-dom';
 
@@ -16,17 +18,19 @@ function querySelector(selector: string): Element | DocumentFragment | null {
  *
  * @param {Any} component of any kind
  */
-export function createRender<P>(component: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createRender<P extends object>(component: any) {
   return (
     props: P,
     container?: Element | DocumentFragment | null,
     callback?: () => void,
   ) => {
-    container = container || querySelector('asyncapi');
+    container = container ?? querySelector('asyncapi');
     if (container === null) {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     renderComponent(React.createElement(component, props), container, callback);
   };
 }
@@ -36,18 +40,20 @@ export function createRender<P>(component: any) {
  *
  * @param {Any} component of any kind
  */
-export function createHydrate<P>(component: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createHydrate<P extends object>(component: any) {
   return (
     props: P,
     container?: Element | DocumentFragment | null,
     callback?: () => void,
   ) => {
-    container = container || querySelector('asyncapi');
+    container = container ?? querySelector('asyncapi');
     if (container === null) {
       return;
     }
 
     hydrateComponent(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       React.createElement(component, props),
       container,
       callback,

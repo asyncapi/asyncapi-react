@@ -5,7 +5,7 @@ describe('sidebar', () => {
   describe('.filterObjectsByTags', () => {
     test('should handle empty objects and find nothing', () => {
       const tagsToFind = ['test'];
-      const objects: Array<TagObject<OperationInterface>> = [];
+      const objects: TagObject<OperationInterface>[] = [];
       const filteredTags = filterObjectsByTags(tagsToFind, objects);
       expect(filteredTags.tagged.size).toEqual(0);
       expect(filteredTags.untagged.length).toEqual(0);
@@ -13,7 +13,7 @@ describe('sidebar', () => {
     test('should handle find one instance', () => {
       const tagsToFind = ['test'];
       const tagsToSearch = new TagsV2([new TagV2({ name: 'test' })]);
-      const objects: Array<TagObject<any>> = [
+      const objects: TagObject<unknown>[] = [
         { data: {}, name: '', tags: tagsToSearch },
       ];
       const filteredTags = filterObjectsByTags(tagsToFind, objects);
@@ -37,10 +37,10 @@ describe('sidebar', () => {
         name: '',
         tags: new TagsV2([new TagV2({ name: 'test' })]),
       };
-      const objects: Array<TagObject<any>> = [obj1, obj2, obj3];
+      const objects: TagObject<unknown>[] = [obj1, obj2, obj3];
       const filteredTags = filterObjectsByTags(tagsToFind, objects);
       expect(filteredTags.tagged.size).toEqual(1);
-      expect(filteredTags.tagged.get('test')!.length).toEqual(2);
+      expect(filteredTags.tagged.get('test')?.length).toEqual(2);
       expect(filteredTags.untagged.length).toEqual(1);
     });
   });

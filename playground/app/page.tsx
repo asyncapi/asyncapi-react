@@ -26,7 +26,7 @@ interface State {
   refreshing: boolean;
 }
 
-class Playground extends Component<{}, State> {
+class Playground extends Component<unknown, State> {
   updateSchemaFn: (value: string) => void;
   updateConfigFn: (value: string) => void;
 
@@ -37,6 +37,7 @@ class Playground extends Component<{}, State> {
     refreshing: false,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(props: any) {
     super(props);
     this.updateSchemaFn = debounce(
@@ -92,7 +93,7 @@ class Playground extends Component<{}, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            {/* @ts-ignore remove when library and web-component is upgraded to React v18 */}
+            {/* @ts-expect-error remove when library and web-component is upgraded to React v18 */}
             <AsyncApi schema={schema} config={parsedConfig} />
           </AsyncApiWrapper>
         </SplitWrapper>

@@ -5,6 +5,7 @@ export interface ConfigInterface {
   show?: ShowConfig;
   expand?: ExpandConfig;
   sidebar?: SideBarConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;

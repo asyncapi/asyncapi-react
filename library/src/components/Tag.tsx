@@ -9,7 +9,7 @@ interface Props {
 
 export const Tag: React.FunctionComponent<Props> = ({ tag }) => {
   const name = `#${tag.name()}`;
-  const description = tag.description() || '';
+  const description = tag.description() ?? '';
   const externalDocs = tag.externalDocs();
 
   const element = (

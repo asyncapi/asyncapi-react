@@ -52,20 +52,19 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
 }) => {
   const config = useConfig();
   const [expanded, setExpanded] = useState(
-    (config && config.expand && config.expand.messageExamples) || false,
+    config?.expand?.messageExamples ?? false,
   );
 
   useEffect(() => {
-    setExpanded(
-      (config && config.expand && config.expand.messageExamples) || false,
-    );
+    setExpanded(config?.expand?.messageExamples ?? false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.expand]);
 
   return (
     <div className="mt-4">
       <div>
         <CollapseButton
-          onClick={() => setExpanded(prev => !prev)}
+          onClick={() => setExpanded((prev) => !prev)}
           expanded={expanded}
           chevronProps={{
             className: 'fill-current text-gray-200',
@@ -93,6 +92,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
                 )}
                 <div className="mt-1">
                   <JSONSnippet
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     snippet={MessageHelpers.sanitizeExample(example.example)}
                   />
                 </div>
@@ -102,6 +102,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
         ) : (
           <div className="mt-4">
             <JSONSnippet
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               snippet={MessageHelpers.generateExample(schema.json())}
             />
             <h6 className="text-xs font-bold text-gray-600 italic mt-2">

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import React, { useContext, useState } from 'react';
 
 import { Schema } from './Schema';
@@ -9,6 +12,7 @@ import { CollapseButton } from './CollapseButton';
 
 interface Props {
   name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
