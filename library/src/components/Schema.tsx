@@ -3,7 +3,6 @@ import { SchemaInterface } from '@asyncapi/parser';
 
 import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
-import { useConfig, useSpec } from '../contexts';
 
 interface Props {
   schemaName?: React.ReactNode;
@@ -38,8 +37,6 @@ export const Schema: React.FunctionComponent<Props> = ({
   const { reverse, deepExpanded } = useContext(SchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
-  const config = useConfig();
-  const document = useSpec();
 
   useEffect(() => {
     if (!isArray) {
@@ -89,20 +86,6 @@ export const Schema: React.FunctionComponent<Props> = ({
     ) : (
       schemaName
     );
-
-  const extensions = config.extensions;
-
-  if (typeof schemaName === 'string' && extensions && extensions[schemaName]) {
-    const Component = extensions[schemaName];
-
-    return (
-      <Component
-        propertyValue={schema.const()}
-        propertyName={schemaName}
-        document={document}
-      />
-    );
-  }
 
   return (
     <SchemaContext.Provider
