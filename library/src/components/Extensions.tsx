@@ -81,7 +81,9 @@ export const Extensions: React.FunctionComponent<Props> = ({
         } ${expanded ? 'block' : 'hidden'}`}
       >
         {Object.keys(extensions)
-          .sort()
+          .sort((extension1, extension2) =>
+            extension1.localeCompare(extension2),
+          )
           .map(extensionKey => {
             if (config.extensions && config.extensions[extensionKey]) {
               const CustomExtensionComponent = config.extensions[extensionKey];
