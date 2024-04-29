@@ -61,7 +61,6 @@
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
     "prettier": "^3.2.5",
-    "react-split": "^2.0.9",
     "tslib": "^1.10.0",
     "typescript": "^5.3.3"
   }

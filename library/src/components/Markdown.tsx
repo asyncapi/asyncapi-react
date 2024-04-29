@@ -3,7 +3,9 @@ import { sanitize } from 'isomorphic-dompurify';
 
 import { renderMarkdown } from '../helpers';
 
-export const Markdown: React.FunctionComponent = ({ children }) => {
+export const Markdown: React.FunctionComponent<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   if (!children) {
     return null;
   }

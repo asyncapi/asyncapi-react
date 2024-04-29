@@ -27,7 +27,7 @@ export const Security: React.FunctionComponent<Props> = ({
       );
     }
   } else {
-    const securities: React.ReactNodeArray = Object.values(security)
+    const securities: React.ReactNode[] = Object.values(security)
       .map((requirements) => requirements.all())
       .flat()
       .map((requirement) => {
@@ -74,8 +74,8 @@ export const Security: React.FunctionComponent<Props> = ({
 function collectSecuritySchemas(
   securitySchema: SecuritySchemeInterface | null,
   requiredScopes: string[] = [],
-): React.ReactNodeArray {
-  const schemas: React.ReactNodeArray = [];
+): React.ReactNode[] {
+  const schemas: React.ReactNode[] = [];
   if (securitySchema) {
     if (securitySchema.name()) {
       schemas.push(<span>Name: {securitySchema.name()}</span>);
@@ -114,7 +114,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   protocol,
   requiredScopes,
 }) => {
-  const schemas: React.ReactNodeArray = collectSecuritySchemas(
+  const schemas: React.ReactNode[] = collectSecuritySchemas(
     securitySchema,
     requiredScopes,
   );

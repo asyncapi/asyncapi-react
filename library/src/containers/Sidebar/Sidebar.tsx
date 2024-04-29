@@ -388,6 +388,7 @@ const ServerItem: React.FunctionComponent<ServerItemProps> = ({
 
 interface ItemsByTagItemProps {
   tagName: string;
+  children: React.ReactNode;
 }
 
 const ItemsByTagItem: React.FunctionComponent<ItemsByTagItemProps> = ({
