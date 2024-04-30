@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Schema } from './Schema';
 
@@ -23,15 +23,11 @@ export interface ExtensionComponentProps<V = any> {
   parent: BaseModel;
 }
 
-const SchemaContext = React.createContext({
-  reverse: false,
-});
 
 export const Extensions: React.FunctionComponent<Props> = ({
   name = 'Extensions',
   item,
 }) => {
-  const { reverse } = useContext(SchemaContext);
   const [expanded, setExpanded] = useState(false);
   const [deepExpand, setDeepExpand] = useState(false);
 
