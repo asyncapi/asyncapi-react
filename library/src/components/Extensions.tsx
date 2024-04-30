@@ -23,7 +23,6 @@ export interface ExtensionComponentProps<V = any> {
   parent: BaseModel;
 }
 
-
 export const Extensions: React.FunctionComponent<Props> = ({
   name = 'Extensions',
   item,
@@ -56,14 +55,14 @@ export const Extensions: React.FunctionComponent<Props> = ({
         <div className="min-w-1/4">
           <>
             <CollapseButton
-              onClick={() => setExpanded(prev => !prev)}
+              onClick={() => setExpanded((prev) => !prev)}
               expanded={expanded}
             >
               <span className={`break-anywhere text-sm ${name}`}>{name}</span>
             </CollapseButton>
             <button
               type="button"
-              onClick={() => setDeepExpand(prev => !prev)}
+              onClick={() => setDeepExpand((prev) => !prev)}
               className="ml-1 text-sm text-gray-500"
             >
               {deepExpand ? 'Collapse all' : 'Expand all'}
@@ -72,15 +71,13 @@ export const Extensions: React.FunctionComponent<Props> = ({
         </div>
       </div>
       <div
-        className={`rounded p-4 py-2 border bg-gray-100 ${
-          reverse ? 'bg-gray-200' : ''
-        } ${expanded ? 'block' : 'hidden'}`}
+        className={`rounded p-4 py-2 border bg-gray-100 ${expanded ? 'block' : 'hidden'}`}
       >
         {Object.keys(extensions)
           .sort((extension1, extension2) =>
             extension1.localeCompare(extension2),
           )
-          .map(extensionKey => {
+          .map((extensionKey) => {
             if (config.extensions && config.extensions[extensionKey]) {
               const CustomExtensionComponent = config.extensions[extensionKey];
               return (
