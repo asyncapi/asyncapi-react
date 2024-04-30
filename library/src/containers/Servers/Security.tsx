@@ -6,7 +6,6 @@ import {
 } from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
-import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
 
 interface Props {
@@ -20,29 +19,20 @@ export const Security: React.FunctionComponent<Props> = ({
   protocol = '',
   header = 'Security',
 }) => {
-  const asyncapi = useSpec();
-  const securitySchemes =
-    !asyncapi.components().isEmpty() && asyncapi.components().securitySchemes();
-
   let renderedSecurities;
-  if (
-    !security?.length ||
-    !securitySchemes ||
-    !Object.keys(securitySchemes).length
-  ) {
+  if (!security?.length) {
     if (protocol === 'kafka' || protocol === 'kafka-secure') {
       renderedSecurities = (
         <SecurityItem protocol={protocol} securitySchema={null} />
       );
     }
   } else {
-    const securities: React.ReactNodeArray = Object.values(security)
+    const securities: React.ReactNode[] = Object.values(security)
+      .map((requirements) => requirements.all())
+      .flat()
       .map((requirement) => {
-        const requirements = requirement.all();
-        const key = Object.keys(requirements)[0];
-        const def = securitySchemes[Number(key)];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const requiredScopes: any = requirements[Number(key)];
+        const def = requirement.scheme();
+        const requiredScopes = requirement.scopes();
 
         if (!def) {
           return null;
@@ -51,7 +41,6 @@ export const Security: React.FunctionComponent<Props> = ({
           <SecurityItem
             protocol={protocol}
             securitySchema={def}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             requiredScopes={requiredScopes}
             key={def.type()}
           />
@@ -85,8 +74,8 @@ export const Security: React.FunctionComponent<Props> = ({
 function collectSecuritySchemas(
   securitySchema: SecuritySchemeInterface | null,
   requiredScopes: string[] = [],
-): React.ReactNodeArray {
-  const schemas: React.ReactNodeArray = [];
+): React.ReactNode[] {
+  const schemas: React.ReactNode[] = [];
   if (securitySchema) {
     if (securitySchema.name()) {
       schemas.push(<span>Name: {securitySchema.name()}</span>);
@@ -125,7 +114,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   protocol,
   requiredScopes,
 }) => {
-  const schemas: React.ReactNodeArray = collectSecuritySchemas(
+  const schemas: React.ReactNode[] = collectSecuritySchemas(
     securitySchema,
     requiredScopes,
   );

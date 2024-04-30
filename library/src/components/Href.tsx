@@ -4,6 +4,7 @@ interface Props {
   href: string;
   title?: string;
   className?: string;
+  children: React.ReactNode;
 }
 
 export const Href: React.FunctionComponent<Props> = ({

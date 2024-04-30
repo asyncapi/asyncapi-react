@@ -1,6 +1,6 @@
 {
   "name": "playground",
-  "version": "1.4.9",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "build": "next build && touch out/.nojekyll",
@@ -8,7 +8,7 @@
     "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^1.4.9",
+    "@asyncapi/react-component": "^1.4.10",
     "@codemirror/lang-yaml": "^6.0.0",
     "@uiw/codemirror-theme-material": "^4.21.24",
     "@uiw/react-codemirror": "^4.21.24",
