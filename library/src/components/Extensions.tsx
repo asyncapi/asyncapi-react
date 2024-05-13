@@ -16,6 +16,7 @@ interface Props {
   item: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ExtensionComponentProps<V = any> {
   propertyName: string;
   propertyValue: V;
@@ -78,10 +79,11 @@ export const Extensions: React.FunctionComponent<Props> = ({
             extension1.localeCompare(extension2),
           )
           .map((extensionKey) => {
-            if (config.extensions && config.extensions[extensionKey]) {
+            if (config.extensions?.[extensionKey]) {
               const CustomExtensionComponent = config.extensions[extensionKey];
               return (
                 <CustomExtensionComponent
+                  key={extensionKey}
                   propertyName={extensionKey}
                   propertyValue={extensions[extensionKey]}
                   document={document}
@@ -93,7 +95,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
                 extensions[extensionKey],
               );
               return (
-                <div className="mt-2">
+                <div key={extensionKey} className="mt-2">
                   <Schema schemaName={extensionKey} schema={extensionSchema} />
                 </div>
               );
