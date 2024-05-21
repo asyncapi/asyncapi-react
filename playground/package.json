@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "build": "next build && touch out/.nojekyll",
-    "start": "next dev",
-    "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
+    "start": "next dev"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^1.4.10",
+    "@asyncapi/react-component": "file:../library",
     "@codemirror/lang-yaml": "^6.0.0",
     "@uiw/codemirror-theme-material": "^4.21.24",
     "@uiw/react-codemirror": "^4.21.24",
