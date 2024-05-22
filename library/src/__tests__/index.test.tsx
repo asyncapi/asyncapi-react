@@ -13,6 +13,7 @@ import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-mul
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
+import { ExtensionComponentProps } from '../components';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -215,5 +216,55 @@ describe('AsyncAPI component', () => {
     await waitFor(() =>
       expect(result.container.querySelector('#introduction')).toBeDefined(),
     );
+  });
+
+  test('should work with custom extensions', async () => {
+    const schema = {
+      asyncapi: '2.0.0',
+      info: {
+        title: 'Example AsyncAPI',
+        version: '0.1.0',
+      },
+      channels: {
+        'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured':
+          {
+            subscribe: {
+              message: {
+                $ref: '#/components/messages/lightMeasured',
+              },
+            },
+          },
+      },
+      components: {
+        messages: {
+          lightMeasured: {
+            name: 'lightMeasured',
+            title: 'Light measured',
+            contentType: 'application/json',
+            'x-custom-extension': 'Custom extension value',
+          },
+        },
+      },
+    };
+
+    const CustomExtension = (props: ExtensionComponentProps) => (
+      <div id="custom-extension">{props.propertyValue}</div>
+    );
+
+    const result = render(
+      <AsyncApiComponent
+        schema={schema}
+        config={{
+          extensions: {
+            'x-custom-extension': CustomExtension,
+          },
+        }}
+      />,
+    );
+
+    await waitFor(async () => {
+      expect(result.container.querySelector('#introduction')).toBeDefined();
+      expect(result.container.querySelector('#custom-extension')).toBeDefined();
+    });
   });
 });
