@@ -1,20 +1,27 @@
 import React from 'react';
 import { ExtensionComponentProps } from '../Extensions';
 
+/**
+ * See <https://github.com/asyncapi/extensions-catalog/blob/master/extensions/x.md>.
+ */
 export default function XExtension({
   propertyValue,
 }: ExtensionComponentProps<string>) {
   const onClickHandler = () => {
-    window.open(propertyValue, '_blank');
+    window.open(`https://x.com/${propertyValue}`, '_blank');
   };
 
   return (
-    <div title={propertyValue} style={{ display: 'inline-block' }}>
+    <div
+      title={`https://x.com/${propertyValue}`}
+      style={{ display: 'inline-block' }}
+    >
       <svg
         onClick={onClickHandler}
         style={{ cursor: 'pointer' }}
         width="15px"
         height="15px"
+        viewBox="0 0 1200 1227"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
