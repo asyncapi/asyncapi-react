@@ -71,7 +71,7 @@
     "@asyncapi/avro-schema-parser": "^3.0.23",
     "@asyncapi/openapi-schema-parser": "^3.0.23",
     "@asyncapi/parser": "^3.0.15",
-    "@asyncapi/protobuf-schema-parser": "^3.2.12",
+    "@asyncapi/protobuf-schema-parser": "^3.2.13",
     "highlight.js": "^10.7.2",
     "isomorphic-dompurify": "^0.13.0",
     "marked": "^4.0.14",
