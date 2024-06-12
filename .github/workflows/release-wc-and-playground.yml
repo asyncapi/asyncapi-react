@@ -76,9 +76,6 @@ jobs:
           node-version: "${{ steps.lockversion.outputs.version }}"
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      - name: Use latest version of react component in the playground
-        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
-        working-directory: ./playground
       - name: Install dependencies
         run: npm install
       - name: Build
