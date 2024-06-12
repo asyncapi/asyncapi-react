@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "@asyncapi/avro-schema-parser": "^3.0.24",
-    "@asyncapi/openapi-schema-parser": "^3.0.23",
+    "@asyncapi/openapi-schema-parser": "^3.0.24",
     "@asyncapi/parser": "^3.1.0",
     "@asyncapi/protobuf-schema-parser": "^3.2.13",
     "highlight.js": "^10.7.2",
