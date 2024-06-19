@@ -262,7 +262,7 @@ describe('AsyncAPI component', () => {
       />,
     );
 
-    await waitFor(async () => {
+    await waitFor(() => {
       expect(result.container.querySelector('#introduction')).toBeDefined();
       expect(result.container.querySelector('#custom-extension')).toBeDefined();
     });
