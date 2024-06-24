@@ -103,4 +103,28 @@ describe('Sidebar component', () => {
       </ConfigContext.Provider>,
     );
   });
+  test('should render with useChannelAddressAsIdentifier: true', () => {
+    const { container } = render(
+      <ConfigContext.Provider
+        value={{ sidebar: { useChannelAddressAsIdentifier: true } }}
+      >
+        <SpecificationContext.Provider value={parsed}>
+          <Sidebar />
+        </SpecificationContext.Provider>
+      </ConfigContext.Provider>,
+    );
+    const operations = container.querySelectorAll('a[href^="#operation-"]');
+    const expectedOperationDescriptions = [
+      'Inform about environmental lighting conditions of a particular streetlight.', // because the channel has a summary
+      'smartylighting.streetlights.1.0.action.{streetlightId}.turn.on',
+      'smartylighting.streetlights.1.0.action.{streetlightId}.turn.off',
+      'smartylighting.streetlights.1.0.action.{streetlightId}.dim',
+    ];
+    for (let i = 0; i < operations.length; i++) {
+      // eslint-disable-next-line jest/no-standalone-expect
+      expect(operations[i].querySelectorAll('span')[1].textContent).toBe(
+        expectedOperationDescriptions[i],
+      );
+    }
+  });
 });
