@@ -34,6 +34,7 @@ interface ConfigInterface {
   receiveLabel?: string;
   requestLabel?: string;
   replyLabel?: string;
+  extensions?: Record<string, React.ComponentType<ExtensionComponentProps>>;
 }
 ```
 
@@ -93,6 +94,11 @@ interface ConfigInterface {
   This field contains configuration responsible for customizing the label for response operation. This takes effect when rendering AsyncAPI v3 documents.
   This field is set to `REPLY` by default.
 
+- **extensions?: Record<string, React.ComponentType<ExtensionComponentProps>>**
+
+  This field contains configuration responsible for adding custom extension components.
+  This field will contain default components.
+
 ## Examples
 
 See exemplary component configuration in TypeScript and JavaScript.
@@ -103,6 +109,7 @@ See exemplary component configuration in TypeScript and JavaScript.
 import * as React from "react";
 import { render } from "react-dom";
 import AsyncAPIComponent, { ConfigInterface } from "@asyncapi/react-component";
+import CustomExtension from "./CustomExtension";
 
 import { schema } from "./mock";
 
@@ -119,11 +126,26 @@ const config: ConfigInterface = {
   expand: {
     messageExamples: false,
   },
+  extensions: {
+    'x-custom-extension': CustomExtension
+  }
 };
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 
 render(<App />, document.getElementById("root"));
+```
+
+```tsx
+// CustomExtension.tsx
+import { ExtensionComponentProps } from '@asyncapi/react-component/lib/types/components/Extensions';
+
+export default function CustomExtension(props: ExtensionComponentProps<string>) {
+  return <div>
+    <h1>{props.propertyName}</h1>
+    <p>{props.propertyValue}</p>
+  </div>
+}
 ```
 
 ### JavaScript
@@ -155,6 +177,16 @@ const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 render(<App />, document.getElementById("root"));
 ```
 
+```jsx
+// CustomExtension.jsx
+export default function CustomExtension(props) {
+  return <div>
+    <h1>{props.propertyName}</h1>
+    <p>{props.propertyValue}</p>
+  </div>
+}
+```
+
 In the above examples, after concatenation with the default configuration, the resulting configuration looks as follows:
 
 ```js
@@ -181,6 +213,10 @@ In the above examples, after concatenation with the default configuration, the r
   sendLabel: 'SEND',
   receiveLabel: 'RECEIVE',
   requestLabel: 'REQUEST',
-  replyLabel: 'REPLY'
+  replyLabel: 'REPLY', 
+  extensions: {
+    // default extensions...
+    'x-custom-extension': CustomExtension
+  }
 }
 ```
