@@ -164,7 +164,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
     unwrappedFlows.clientCredentials = flows.clientCredentials()!;
   }
   if (flows?.hasPassword()) {
-    unwrappedFlows.password = flows.implicit()!;
+    unwrappedFlows.password = flows.password()!;
   }
   const renderedFlows = Object.entries(unwrappedFlows).map(
     ([flowName, flow]) => {

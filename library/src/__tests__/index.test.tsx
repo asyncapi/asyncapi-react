@@ -13,6 +13,7 @@ import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-mul
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
+import streetlightsMqttOAuth2PasswordOnly from './docs/v3/streetlights-mqtt-oauth2password.json';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -90,6 +91,15 @@ describe('AsyncAPI component', () => {
 
     test('and streetlight websocket gemini example', async () => {
       const schema = websocketGemini;
+      const result = render(<AsyncApiComponent schema={schema} />);
+
+      await waitFor(() =>
+        expect(result.container.querySelector('#introduction')).toBeDefined(),
+      );
+    });
+
+    test('and oauth2 password flow example', async () => {
+      const schema = streetlightsMqttOAuth2PasswordOnly;
       const result = render(<AsyncApiComponent schema={schema} />);
 
       await waitFor(() =>
