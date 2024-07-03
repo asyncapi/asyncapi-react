@@ -36,6 +36,7 @@ export const Messages: React.FunctionComponent = () => {
               message={message}
               index={idx + 1}
               key={message.id()}
+              showExamples={config?.show?.messageExamples ?? false}
             />
           </li>
         ))}

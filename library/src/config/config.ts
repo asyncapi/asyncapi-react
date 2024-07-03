@@ -19,6 +19,7 @@ export interface ShowConfig {
   servers?: boolean;
   operations?: boolean;
   messages?: boolean;
+  messageExamples?: boolean;
   schemas?: boolean;
   errors?: boolean;
 }
