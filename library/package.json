@@ -73,7 +73,7 @@
     "@asyncapi/parser": "^3.1.0",
     "@asyncapi/protobuf-schema-parser": "^3.2.14",
     "highlight.js": "^10.7.2",
-    "isomorphic-dompurify": "^0.13.0",
+    "isomorphic-dompurify": "^2.12.0",
     "marked": "^4.0.14",
     "openapi-sampler": "^1.2.1",
     "use-resize-observer": "^9.1.0"
