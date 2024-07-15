@@ -13,7 +13,6 @@ import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-mul
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
-import streetlightsMqttOAuth2PasswordOnly from './docs/v3/streetlights-mqtt-oauth2password.json';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -99,7 +98,22 @@ describe('AsyncAPI component', () => {
     });
 
     test('and oauth2 password flow example', async () => {
-      const schema = streetlightsMqttOAuth2PasswordOnly;
+      const schema = JSON.parse(JSON.stringify(streetlightsMqtt));
+      schema.servers.production.security.push({
+        $ref: '#/components/securitySchemes/oauth2Password',
+      });
+      schema.components.securitySchemes.oauth2Password = {
+        type: 'oauth2',
+        description: 'Flows to support OAuth 2.0',
+        flows: {
+          password: {
+            tokenUrl: 'https://authserver.example/token',
+            availableScopes: {
+              'streetlights:on': 'Ability to switch lights on',
+            },
+          },
+        },
+      };
       const result = render(<AsyncApiComponent schema={schema} />);
 
       await waitFor(() =>
