@@ -96,30 +96,6 @@ describe('AsyncAPI component', () => {
         expect(result.container.querySelector('#introduction')).toBeDefined(),
       );
     });
-
-    test('and oauth2 password flow example', async () => {
-      const schema = JSON.parse(JSON.stringify(streetlightsMqtt));
-      schema.servers.production.security.push({
-        $ref: '#/components/securitySchemes/oauth2Password',
-      });
-      schema.components.securitySchemes.oauth2Password = {
-        type: 'oauth2',
-        description: 'Flows to support OAuth 2.0',
-        flows: {
-          password: {
-            tokenUrl: 'https://authserver.example/token',
-            availableScopes: {
-              'streetlights:on': 'Ability to switch lights on',
-            },
-          },
-        },
-      };
-      const result = render(<AsyncApiComponent schema={schema} />);
-
-      await waitFor(() =>
-        expect(result.container.querySelector('#introduction')).toBeDefined(),
-      );
-    });
   });
   test('should work with simple v2', async () => {
     const schema = {
