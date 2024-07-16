@@ -57,8 +57,8 @@ interface ConfigInterface {
   This field contains configuration responsible for the way of working of the sidebar.
   `showServers` field is set to `byDefault` by default.
   `showOperations` field is set to `byDefault` by default.
-  `useChannelAddressAsIdentifier` uses the channel address or operation summary in the sidebar instead of the operationId, for both AsyncAPI v2 and v3 documents.
-  The default behaviour is to do this only for v2 documents.
+  `useChannelAddressAsIdentifier`: for AsyncAPI v3 documents, use the operation summary or channel address in the sidebar instead of the operationId.
+  By default, this behavior is applied only to AsyncAPI v2 documents.
   
 - **expand?: Partial<ExpandConfig>**
 
