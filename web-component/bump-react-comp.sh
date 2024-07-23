@@ -9,5 +9,7 @@ echo "Log all versions of the package on npm registry"
 npm show @asyncapi/react-component versions
 echo "Log latest version of the package on npm registry"
 npm show @asyncapi/react-component dist-tags.latest
-echo "Starting installation"
+echo "We need to uninstall old version first to make sure package.json will get updated latest version number"
+npm uninstall @asyncapi/react-component
+echo "Starting installation of @asyncapi/react-component@$VERSION in $PWD"
 npm install @asyncapi/react-component@$VERSION --save --loglevel verbose

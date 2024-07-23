@@ -69,6 +69,9 @@
         },
         {
           "$ref": "#/components/securitySchemes/openIdConnectWellKnown"
+        },
+        {
+          "$ref": "#/components/securitySchemes/oauth2Password"
         }
       ],
       "tags": [
@@ -348,6 +351,18 @@
       "openIdConnectWellKnown": {
         "type": "openIdConnect",
         "openIdConnectUrl": "https://authserver.example/.well-known"
+      },
+      "oauth2Password": {
+        "type": "oauth2",
+        "description": "Flows to support OAuth 2.0",
+        "flows": {
+          "password": {
+            "tokenUrl": "https://authserver.example/token",
+            "availableScopes": {
+              "streetlights:on": "Ability to switch lights on"
+            }
+          }
+        }
       }
     },
     "parameters": {

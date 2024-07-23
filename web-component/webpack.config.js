@@ -25,7 +25,7 @@ module.exports = {
       // 2. You might be breaking the Rules of Hooks
       // 3. You might have more than one copy of React in the same app
       // See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem."
-      react: path.resolve('./node_modules/react'),
+      react: path.resolve('../node_modules/react'),
     },
     fallback: {
       fs: false,
