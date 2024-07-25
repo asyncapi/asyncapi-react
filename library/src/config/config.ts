@@ -31,4 +31,5 @@ export interface ExpandConfig {
 export interface SideBarConfig {
   showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
   showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+  useChannelAddressAsIdentifier?: boolean;
 }

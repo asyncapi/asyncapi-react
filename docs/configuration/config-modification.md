@@ -27,6 +27,7 @@ interface ConfigInterface {
   sidebar?: {
     showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+    useChannelAddressAsIdentifier?: boolean;
   },
   parserOptions?: ParserOptions;
   publishLabel?: string;
@@ -56,6 +57,8 @@ interface ConfigInterface {
   This field contains configuration responsible for the way of working of the sidebar.
   `showServers` field is set to `byDefault` by default.
   `showOperations` field is set to `byDefault` by default.
+  `useChannelAddressAsIdentifier`: for AsyncAPI v3 documents, use the operation summary or channel address in the sidebar instead of the operationId.
+  By default, this behavior is applied only to AsyncAPI v2 documents.
   
 - **expand?: Partial<ExpandConfig>**
 
