@@ -253,7 +253,7 @@ const OperationsList: React.FunctionComponent = () => {
         numeric: true,
       });
       let label = '';
-      if (version === 0) {
+      if (version === 0 || sidebarConfig?.useChannelAddressAsIdentifier) {
         // old version uses different labels for the operations
         const operationChannels = operationChannel.all();
         const channelAddress = operationChannels[0]?.address() ?? '';
