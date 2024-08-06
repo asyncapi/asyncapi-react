@@ -73,7 +73,7 @@
     "@asyncapi/parser": "^3.1.0",
     "@asyncapi/protobuf-schema-parser": "^3.2.14",
     "highlight.js": "^10.7.2",
-    "isomorphic-dompurify": "^2.12.0",
+    "isomorphic-dompurify": "^2.14.0",
     "marked": "^4.0.14",
     "openapi-sampler": "^1.2.1",
     "use-resize-observer": "^9.1.0"
@@ -88,8 +88,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^15.0.4",
     "@testing-library/user-event": "^12.8.3",
-    "@types/dompurify": "^2.0.4",
-    "@types/highlight.js": "^10.1.0",
+    "@types/dompurify": "^3.0.5",
     "@types/jest": "^26.0.23",
     "@types/marked": "^4.0.1",
     "@types/node": "^12.7.2",
