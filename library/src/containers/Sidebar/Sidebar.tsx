@@ -14,6 +14,7 @@ const SidebarContext = React.createContext<{
 export const Sidebar: React.FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const asyncapi = useSpec();
+  const config = useConfig();
 
   const info = asyncapi.info();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -22,6 +23,9 @@ export const Sidebar: React.FunctionComponent = () => {
   const messages = components?.messages().all();
   const schemas = components?.schemas().all();
   const hasOperations = asyncapi.operations().length > 0;
+
+  const showMessages = config.show?.messages;
+  const showSchemas = config.show?.schemas;
 
   const messagesList = messages?.length > 0 && (
     <li className="mb-3 mt-9">
@@ -75,6 +79,7 @@ export const Sidebar: React.FunctionComponent = () => {
 
   const operationList = hasOperations && (
     <>
+      <h1>Testing</h1>
       <li className="mb-3 mt-9">
         <a
           className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
@@ -85,8 +90,8 @@ export const Sidebar: React.FunctionComponent = () => {
         </a>
         <OperationsList />
       </li>
-      {messagesList}
-      {schemasList}
+      {showMessages && messagesList}
+      {showSchemas && schemasList}
     </>
   );
 
