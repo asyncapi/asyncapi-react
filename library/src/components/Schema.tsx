@@ -282,18 +282,19 @@ export const Schema: React.FunctionComponent<Props> = ({
 
             {schema
               .oneOf()
-              ?.map((s, idx) => (
-                <Schema
-                  key={idx}
-                  schema={s}
-                  schemaName={SchemaHelpers.applicatorSchemaName(
-                    idx,
-                    'Adheres to',
-                    'Or to',
-                    s.title(),
-                  )}
-                />
-              ))}
+              ?.map((s, idx) => {
+                console.log(s.id())
+                return                 <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Adheres to',
+                  'Or to',
+                  s.title() || s.id(),
+                )}
+              />
+              })}
             {schema
               .anyOf()
               ?.map((s, idx) => (
@@ -304,7 +305,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     idx,
                     'Can adhere to',
                     'Or to',
-                    s.title(),
+                    s.title() || s.id(),
                   )}
                 />
               ))}
@@ -318,7 +319,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     idx,
                     'Consists of',
                     'And of',
-                    s.title(),
+                    s.title() || s.id(),
                   )}
                 />
               ))}
