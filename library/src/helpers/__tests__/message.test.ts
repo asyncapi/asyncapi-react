@@ -1,21 +1,22 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { MessageHelpers } from '../message';
 import { MessageV2 as Message } from '@asyncapi/parser';
 
 describe('MessageHelpers', () => {
   describe('.generateExample', () => {
     test('should return empty string by default', () => {
-      const result = MessageHelpers.generateExample({});
-      expect(result).toEqual('');
+      expect(MessageHelpers.generateExample({})).toEqual('');
     });
 
     test('should instantiate all properties', () => {
-      const result = MessageHelpers.generateExample({
-        properties: {
-          a: { type: 'string' },
-          b: { type: 'integer' },
-        },
-      });
-      expect(result).toEqual({
+      expect(
+        MessageHelpers.generateExample({
+          properties: {
+            a: { type: 'string' },
+            b: { type: 'integer' },
+          },
+        }),
+      ).toEqual({
         a: 'string',
         b: 0,
       });
@@ -24,14 +25,15 @@ describe('MessageHelpers', () => {
 
   describe('.sanitizeExample', () => {
     test('should sanitize example', () => {
-      const result = MessageHelpers.sanitizeExample({
-        properties: {
-          a: { type: 'string' },
-          b: { type: 'integer', 'x-schema-private-foo': true },
-        },
-        'x-parser-foo': true,
-      });
-      expect(result).toEqual({
+      expect(
+        MessageHelpers.sanitizeExample({
+          properties: {
+            a: { type: 'string' },
+            b: { type: 'integer', 'x-schema-private-foo': true },
+          },
+          'x-parser-foo': true,
+        }),
+      ).toEqual({
         properties: {
           a: { type: 'string' },
           b: { type: 'integer' },

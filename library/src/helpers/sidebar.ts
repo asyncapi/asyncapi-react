@@ -1,5 +1,6 @@
 import { TagsInterface } from '@asyncapi/parser';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface TagObject<T = any> {
   name: string;
   tags: TagsInterface;
@@ -15,15 +16,15 @@ export interface SortedReturnType {
  */
 export function filterObjectsByTags<T>(
   tags: string[],
-  objects: Array<TagObject<T>>,
+  objects: TagObject<T>[],
 ): SortedReturnType {
   const taggedObjects = new Set<TagObject>();
   const tagged = new Map<string, TagObject[]>();
-  tags.forEach(tag => {
+  tags.forEach((tag) => {
     const taggedForTag: TagObject[] = [];
-    objects.forEach(obj => {
+    objects.forEach((obj) => {
       const objTags = obj.tags;
-      const nameTags = (objTags.all() ?? []).map(t => t.name());
+      const nameTags = (objTags.all() ?? []).map((t) => t.name());
       const hasTag = nameTags.includes(tag);
       if (hasTag) {
         taggedForTag.push(obj);
@@ -36,7 +37,7 @@ export function filterObjectsByTags<T>(
   });
 
   const untagged: TagObject[] = [];
-  objects.forEach(obj => {
+  objects.forEach((obj) => {
     if (!taggedObjects.has(obj)) {
       untagged.push(obj);
     }

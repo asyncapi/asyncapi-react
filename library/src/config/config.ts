@@ -3,6 +3,7 @@ export interface ConfigInterface {
   show?: ShowConfig;
   expand?: ExpandConfig;
   sidebar?: SideBarConfig;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   parserOptions?: any;
   publishLabel?: string;
   subscribeLabel?: string;
@@ -18,6 +19,7 @@ export interface ShowConfig {
   servers?: boolean;
   operations?: boolean;
   messages?: boolean;
+  messageExamples?: boolean;
   schemas?: boolean;
   errors?: boolean;
 }
@@ -29,4 +31,5 @@ export interface ExpandConfig {
 export interface SideBarConfig {
   showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
   showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+  useChannelAddressAsIdentifier?: boolean;
 }

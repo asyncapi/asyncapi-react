@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-  hydrate as hydrateComponent,
-  render as renderComponent,
-} from 'react-dom';
+import { hydrateRoot, createRoot } from 'react-dom/client';
 
-function querySelector(selector: string): Element | DocumentFragment | null {
+function querySelector(selector: string): Element | null {
   if (typeof document !== 'undefined') {
     return document.querySelector(selector);
   }
@@ -16,18 +13,19 @@ function querySelector(selector: string): Element | DocumentFragment | null {
  *
  * @param {Any} component of any kind
  */
-export function createRender<P>(component: any) {
-  return (
-    props: P,
-    container?: Element | DocumentFragment | null,
-    callback?: () => void,
-  ) => {
-    container = container || querySelector('asyncapi');
+export function createRender<
+  Props extends Parameters<typeof React.createElement>[1],
+>(component: Parameters<typeof React.createElement>[0]) {
+  return (props: Props, container?: Element | DocumentFragment | null) => {
+    container = container ?? querySelector('asyncapi');
+
     if (container === null) {
       return;
     }
 
-    renderComponent(React.createElement(component, props), container, callback);
+    const root = createRoot(container);
+
+    root.render(React.createElement(component, props));
   };
 }
 
@@ -36,21 +34,16 @@ export function createRender<P>(component: any) {
  *
  * @param {Any} component of any kind
  */
-export function createHydrate<P>(component: any) {
-  return (
-    props: P,
-    container?: Element | DocumentFragment | null,
-    callback?: () => void,
-  ) => {
-    container = container || querySelector('asyncapi');
+export function createHydrate<
+  Props extends Parameters<typeof React.createElement>[1],
+>(component: Parameters<typeof React.createElement>[0]) {
+  return (props: Props, container?: Element | Document | null) => {
+    container = container ?? querySelector('asyncapi');
+
     if (container === null) {
       return;
     }
 
-    hydrateComponent(
-      React.createElement(component, props),
-      container,
-      callback,
-    );
+    hydrateRoot(container, React.createElement(component, props));
   };
 }

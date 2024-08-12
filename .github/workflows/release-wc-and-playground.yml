@@ -55,6 +55,15 @@ jobs:
           package: ./web-component/package.json
           access: public
           tag: github.event.release.target_commitish
+      - if: failure() # Only, on failure, send a message on the 94_bot-failing-ci slack channel
+        name: Report workflow run status to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,action,workflow
+          text: 'Release of web component for AsyncAPI React failed'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_FAIL_NOTIFY }}
 
   playground:
     name: Release Playground
@@ -76,9 +85,6 @@ jobs:
           node-version: "${{ steps.lockversion.outputs.version }}"
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      - name: Use latest version of react component in the playground
-        run: VERSION=${{github.event.release.tag_name}} npm run install:reactcomp
-        working-directory: ./playground
       - name: Install dependencies
         run: npm install
       - name: Build
@@ -92,3 +98,12 @@ jobs:
           folder: playground/out
           git-config-name: asyncapi-bot
           git-config-email: info@asyncapi.io
+      - if: failure() # Only, on failure, send a message on the 94_bot-failing-ci slack channel
+        name: Report workflow run status to Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,action,workflow
+          text: 'Release of playground for AsyncAPI React failed'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_CI_FAIL_NOTIFY }}

@@ -10,11 +10,7 @@ export const Messages: React.FunctionComponent = () => {
   const asyncapi = useSpec();
   const config = useConfig();
   const messages =
-    !asyncapi.components().isEmpty() &&
-    asyncapi
-      .components()
-      .messages()
-      .all();
+    !asyncapi.components().isEmpty() && asyncapi.components().messages().all();
 
   if (!messages || messages.length === 0) {
     return null;
@@ -40,6 +36,7 @@ export const Messages: React.FunctionComponent = () => {
               message={message}
               index={idx + 1}
               key={message.id()}
+              showExamples={config?.show?.messageExamples ?? false}
             />
           </li>
         ))}

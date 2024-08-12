@@ -1,19 +1,16 @@
 {
   "name": "playground",
-  "version": "1.4.9",
   "private": true,
   "scripts": {
     "build": "next build && touch out/.nojekyll",
-    "start": "next dev",
-    "lint": "next lint",
-    "install:reactcomp": "chmod +x ./bump-react-comp.sh && ./bump-react-comp.sh"
+    "start": "next dev"
   },
   "dependencies": {
-    "@asyncapi/react-component": "^1.4.9",
+    "@asyncapi/react-component": "file:../library",
     "@codemirror/lang-yaml": "^6.0.0",
     "@uiw/codemirror-theme-material": "^4.21.24",
     "@uiw/react-codemirror": "^4.21.24",
-    "next": "14.1.0",
+    "next": "14.1.1",
     "react": "^18",
     "react-dom": "^18",
     "react-split": "^2.0.14",
@@ -24,8 +21,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.1.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"

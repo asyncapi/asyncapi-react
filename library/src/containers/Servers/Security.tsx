@@ -6,7 +6,6 @@ import {
 } from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
-import { useSpec } from '../../contexts';
 import { ServerHelpers } from '../../helpers';
 
 interface Props {
@@ -20,28 +19,20 @@ export const Security: React.FunctionComponent<Props> = ({
   protocol = '',
   header = 'Security',
 }) => {
-  const asyncapi = useSpec();
-  const securitySchemes =
-    !asyncapi.components().isEmpty() && asyncapi.components().securitySchemes();
-
   let renderedSecurities;
-  if (
-    !security?.length ||
-    !securitySchemes ||
-    !Object.keys(securitySchemes).length
-  ) {
+  if (!security?.length) {
     if (protocol === 'kafka' || protocol === 'kafka-secure') {
       renderedSecurities = (
         <SecurityItem protocol={protocol} securitySchema={null} />
       );
     }
   } else {
-    const securities: React.ReactNodeArray = Object.values(security)
-      .map(requirement => {
-        const requirements = requirement.all();
-        const key = Object.keys(requirements)[0];
-        const def = securitySchemes[Number(key)];
-        const requiredScopes: any = requirements[Number(key)];
+    const securities: React.ReactNode[] = Object.values(security)
+      .map((requirements) => requirements.all())
+      .flat()
+      .map((requirement) => {
+        const def = requirement.scheme();
+        const requiredScopes = requirement.scopes();
 
         if (!def) {
           return null;
@@ -83,8 +74,8 @@ export const Security: React.FunctionComponent<Props> = ({
 function collectSecuritySchemas(
   securitySchema: SecuritySchemeInterface | null,
   requiredScopes: string[] = [],
-): React.ReactNodeArray {
-  const schemas: React.ReactNodeArray = [];
+): React.ReactNode[] {
+  const schemas: React.ReactNode[] = [];
   if (securitySchema) {
     if (securitySchema.name()) {
       schemas.push(<span>Name: {securitySchema.name()}</span>);
@@ -100,10 +91,7 @@ function collectSecuritySchemas(
     }
     if (securitySchema.openIdConnectUrl()) {
       schemas.push(
-        <Href
-          href={securitySchema.openIdConnectUrl() as string}
-          className="underline"
-        >
+        <Href href={securitySchema.openIdConnectUrl()!} className="underline">
           Connect URL
         </Href>,
       );
@@ -126,7 +114,7 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   protocol,
   requiredScopes,
 }) => {
-  const schemas: React.ReactNodeArray = collectSecuritySchemas(
+  const schemas: React.ReactNode[] = collectSecuritySchemas(
     securitySchema,
     requiredScopes,
   );
@@ -167,16 +155,16 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
   const flows = securitySchema?.flows();
   const unwrappedFlows: Record<string, OAuthFlowInterface> = {};
   if (flows?.hasImplicit()) {
-    unwrappedFlows.implicit = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.implicit = flows.implicit()!;
   }
   if (flows?.hasAuthorizationCode()) {
-    unwrappedFlows.authorizationCode = flows.authorizationCode() as OAuthFlowInterface;
+    unwrappedFlows.authorizationCode = flows.authorizationCode()!;
   }
   if (flows?.hasClientCredentials()) {
-    unwrappedFlows.clientCredentials = flows.clientCredentials() as OAuthFlowInterface;
+    unwrappedFlows.clientCredentials = flows.clientCredentials()!;
   }
   if (flows?.hasPassword()) {
-    unwrappedFlows.password = flows.implicit() as OAuthFlowInterface;
+    unwrappedFlows.password = flows.password()!;
   }
   const renderedFlows = Object.entries(unwrappedFlows).map(
     ([flowName, flow]) => {

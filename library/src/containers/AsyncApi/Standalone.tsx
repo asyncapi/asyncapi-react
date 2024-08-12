@@ -34,13 +34,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
     }
   }
 
-  async componentDidUpdate(prevProps: AsyncApiProps) {
+  componentDidUpdate(prevProps: AsyncApiProps) {
     const oldSchema = prevProps.schema;
     const newSchema = this.props.schema;
 
@@ -53,7 +53,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const { config, error: propError } = this.props;
     const { asyncapi, error: stateError } = this.state;
 
-    const error = propError || stateError;
+    const error = propError ?? stateError;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,

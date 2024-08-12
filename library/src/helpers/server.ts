@@ -1,5 +1,6 @@
 import { SecuritySchemeInterface } from '@asyncapi/parser';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class ServerHelpers {
   static securityType(value: string) {
     switch (value) {

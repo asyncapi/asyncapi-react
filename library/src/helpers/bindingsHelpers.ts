@@ -18,6 +18,7 @@ class BindingsHelper {
     return this.schemaObjectKeys.includes(`${bindingType}.${context}`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isObject(value: any): boolean {
     return !!value && typeof value === 'object';
   }

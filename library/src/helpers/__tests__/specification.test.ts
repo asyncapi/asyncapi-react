@@ -20,7 +20,7 @@ describe('SpecificationHelpers', () => {
       expect(result instanceof AsyncAPIDocument).toEqual(true);
     });
 
-    test('should return parsed specification when is passed parsed stringified spec (by string) ', () => {
+    test('should return parsed specification when is passed parsed stringified spec (by string)', () => {
       const doc = {
         asyncapi: '2.0.0',
         info: { title: 'test', version: '0.0.0' },

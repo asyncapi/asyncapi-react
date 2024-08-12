@@ -17,6 +17,7 @@ interface ConfigInterface {
     servers?: boolean;
     operations?: boolean;
     messages?: boolean;
+    messageExamples?: boolean;
     schemas?: boolean;
     errors?: boolean;
   };
@@ -26,6 +27,7 @@ interface ConfigInterface {
   sidebar?: {
     showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
+    useChannelAddressAsIdentifier?: boolean;
   },
   parserOptions?: ParserOptions;
   publishLabel?: string;
@@ -45,13 +47,18 @@ interface ConfigInterface {
 - **show?: Partial<ShowConfig>**
 
   This field contains configuration responsible for rendering specific parts of the AsyncAPI component.
-  All except the `sidebar` fields are set to `true` by default.
+  The `sidebar` and `messageExamples` fields are set to `false` by default. The default for all other fields is `true`.
+
+  The examples for messages shown within an operation are always displayed. To also show examples for the
+  standalone messages in the "Messages" section, set `messageExamples` to `true`.
 
 - **sidebar?: Partial<SideBarConfig>**
 
   This field contains configuration responsible for the way of working of the sidebar.
   `showServers` field is set to `byDefault` by default.
   `showOperations` field is set to `byDefault` by default.
+  `useChannelAddressAsIdentifier`: for AsyncAPI v3 documents, use the operation summary or channel address in the sidebar instead of the operationId.
+  By default, this behavior is applied only to AsyncAPI v2 documents.
   
 - **expand?: Partial<ExpandConfig>**
 

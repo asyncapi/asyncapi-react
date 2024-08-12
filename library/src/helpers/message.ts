@@ -1,29 +1,36 @@
 import { MessageInterface } from '@asyncapi/parser';
-// @ts-ignore
 import { sample } from 'openapi-sampler';
 
 import { MessageExample } from '../types';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class MessageHelpers {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static generateExample(schema: any, options: any = {}) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
       return this.sanitizeExample(sample(schema, options)) || '';
     } catch (e) {
       return '';
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static sanitizeExample(schema: any): any {
     if (typeof schema === 'object' && schema && !Array.isArray(schema)) {
-      return Object.entries(schema).reduce((obj, [propertyName, property]) => {
-        if (
-          !propertyName.startsWith('x-parser-') &&
-          !propertyName.startsWith('x-schema-private-')
-        ) {
-          obj[propertyName] = this.sanitizeExample(property);
-        }
-        return obj;
-      }, {} as Record<string, unknown>);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      return Object.entries(schema).reduce(
+        (obj, [propertyName, property]) => {
+          if (
+            !propertyName.startsWith('x-parser-') &&
+            !propertyName.startsWith('x-schema-private-')
+          ) {
+            obj[propertyName] = this.sanitizeExample(property);
+          }
+          return obj;
+        },
+        {} as Record<string, unknown>,
+      );
     }
     return schema;
   }
@@ -33,9 +40,9 @@ export class MessageHelpers {
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
 
-    if (examples.some(e => e.hasPayload())) {
+    if (examples.some((e) => e.hasPayload())) {
       const messageExamples = examples
-        .flatMap(e => {
+        .flatMap((e) => {
           if (!e.payload()) {
             return;
           }
@@ -54,18 +61,20 @@ export class MessageHelpers {
 
     const payload = msg.payload();
     if (payload?.examples()) {
-      return payload.examples()?.map(example => ({ example }));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return payload.examples()?.map((example) => ({ example }));
     }
-    return;
+
+    return undefined;
   }
 
   static getHeadersExamples(
     msg: MessageInterface,
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
-    if (examples.some(e => e.hasHeaders())) {
+    if (examples.some((e) => e.hasHeaders())) {
       const messageExamples = examples
-        .flatMap(e => {
+        .flatMap((e) => {
           if (!e.hasHeaders()) {
             return;
           }
@@ -84,7 +93,8 @@ export class MessageHelpers {
 
     const headers = msg.headers();
     if (headers?.examples()) {
-      return headers.examples()?.map(example => ({ example }));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return headers.examples()?.map((example) => ({ example }));
     }
     return undefined;
   }
