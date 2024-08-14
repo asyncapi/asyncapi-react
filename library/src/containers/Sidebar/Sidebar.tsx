@@ -344,7 +344,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
       config,
       isAsyncAPIv2,
     });
-    const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600']
+  const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600'];
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
       <a
