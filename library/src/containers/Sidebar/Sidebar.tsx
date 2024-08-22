@@ -79,7 +79,6 @@ export const Sidebar: React.FunctionComponent = () => {
 
   const operationList = hasOperations && (
     <>
-      <h1>Testing</h1>
       <li className="mb-3 mt-9">
         <a
           className="text-xs uppercase text-gray-700 mt-10 mb-4 font-thin hover:text-gray-900"
