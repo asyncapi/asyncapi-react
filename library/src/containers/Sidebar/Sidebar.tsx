@@ -348,7 +348,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
       config,
       isAsyncAPIv2,
     });
-
+  const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600'];
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
       <a
@@ -357,7 +357,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         onClick={() => setShowSidebar(false)}
       >
         <span
-          className={`${backgroundColor} font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs`}
+          className={`font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
           title={typeLabel}
         >
           {typeLabel}

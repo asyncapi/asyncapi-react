@@ -290,7 +290,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     idx,
                     'Adheres to',
                     'Or to',
-                    s.title(),
+                    s.title() ?? s.id(),
                   )}
                 />
               ))}
@@ -304,7 +304,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     idx,
                     'Can adhere to',
                     'Or to',
-                    s.title(),
+                    s.title() ?? s.id(),
                   )}
                 />
               ))}
@@ -318,7 +318,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     idx,
                     'Consists of',
                     'And of',
-                    s.title(),
+                    s.title() ?? s.id(),
                   )}
                 />
               ))}
