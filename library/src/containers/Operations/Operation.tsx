@@ -284,13 +284,15 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
                     </span>
                   </div>
                 ) : (
-                  <div className="text-xs text-gray-700">
-                    Reply will be directed to the address specified at this
-                    location:{' '}
-                    <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
-                      {replyAddress}
-                    </span>
-                  </div>
+                  replyAddress != null && (
+                    <div className="text-xs text-gray-700">
+                      Reply will be directed to the address specified at this
+                      location:{' '}
+                      <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                        {replyAddress}
+                      </span>
+                    </div>
+                  )
                 )}
                 <div className="mt-2">
                   {explicitChannel && (
