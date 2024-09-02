@@ -14,6 +14,7 @@ const SidebarContext = React.createContext<{
 export const Sidebar: React.FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const asyncapi = useSpec();
+  const config = useConfig();
 
   const info = asyncapi.info();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -22,6 +23,9 @@ export const Sidebar: React.FunctionComponent = () => {
   const messages = components?.messages().all();
   const schemas = components?.schemas().all();
   const hasOperations = asyncapi.operations().length > 0;
+
+  const showMessages = config.show?.messages;
+  const showSchemas = config.show?.schemas;
 
   const messagesList = messages?.length > 0 && (
     <li className="mb-3 mt-9">
@@ -85,8 +89,8 @@ export const Sidebar: React.FunctionComponent = () => {
         </a>
         <OperationsList />
       </li>
-      {messagesList}
-      {schemasList}
+      {showMessages && messagesList}
+      {showSchemas && schemasList}
     </>
   );
 
@@ -344,7 +348,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
       config,
       isAsyncAPIv2,
     });
-
+  const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600'];
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
       <a
@@ -353,7 +357,7 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         onClick={() => setShowSidebar(false)}
       >
         <span
-          className={`${backgroundColor} font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs`}
+          className={`font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
           title={typeLabel}
         >
           {typeLabel}
