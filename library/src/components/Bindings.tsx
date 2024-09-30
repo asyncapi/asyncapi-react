@@ -42,5 +42,5 @@ export const Bindings: React.FunctionComponent<Props> = ({
     );
   });
 
-  return <>{renderedBindings}</>;
+  return renderedBindings;
 };

@@ -10,7 +10,7 @@ export const Markdown: React.FunctionComponent<{
     return null;
   }
   if (typeof children !== 'string') {
-    return <>{children}</>;
+    return children;
   }
 
   return (

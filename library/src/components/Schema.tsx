@@ -475,18 +475,14 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
   ) {
     return <Schema schema={items} isArray />;
   } else if (Array.isArray(items)) {
-    return (
-      <>
-        {items.map((item, idx) => (
-          <Schema
-            schema={item}
-            isArray
-            schemaName={`${idx + 1} item:`}
-            key={idx}
-          />
-        ))}
-      </>
-    );
+    return items.map((item, idx) => (
+      <Schema
+        schema={item}
+        isArray
+        schemaName={`${idx + 1} item:`}
+        key={idx}
+      />
+    ));
   }
   return <Schema schema={items} isArray schemaName="Items:" />;
 };

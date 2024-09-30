@@ -238,11 +238,11 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
   const [showMessages, setShowMessages] = useState(false);
   const [showChannel, setShowChannel] = useState(false);
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
-    return <></>;
+    return null;
   }
   const reply = operation.reply();
   if (reply === undefined) {
-    return <></>;
+    return null;
   }
 
   const replyMessages = reply.messages();
@@ -381,7 +381,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
       : undefined;
 
   if (!channel) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -466,16 +466,16 @@ export const OperationReplyAddressInfo: React.FunctionComponent<Props> = ({
   operation,
 }) => {
   if (type !== PayloadType.REPLY && type !== PayloadType.REQUEST) {
-    return <></>;
+    return null;
   }
   const reply = operation.reply();
   if (!reply?.address) {
-    return <></>;
+    return null;
   }
   const replyAddress = reply.address();
 
   if (!replyAddress) {
-    return <></>;
+    return null;
   }
 
   const replyAddressLocation = replyAddress.location();
