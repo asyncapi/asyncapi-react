@@ -909,7 +909,6 @@ describe('SchemaHelpers', () => {
           1,
           FIRST_CASE,
           OTHER_CASES,
-          undefined,
         ),
       ).toMatchSnapshot();
     });
