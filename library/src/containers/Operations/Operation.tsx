@@ -262,7 +262,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
                   : 'bg-blue-600 border-blue-600'
               } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
             >
-              <span className="font-bold">REPLY INFORMATION</span>
+              <strong >REPLY INFORMATION</strong>
             </div>
             <div className="flex">
               <div
