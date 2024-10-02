@@ -17,6 +17,7 @@ export const Href: React.FunctionComponent<Props> = ({
     href={href}
     title={title}
     className={className}
+    target="_blank"
     rel="nofollow noopener noreferrer"
   >
     {children}
