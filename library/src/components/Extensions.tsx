@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import React from 'react';
 
 import { Schema } from './Schema';
+import type { SchemaInterface } from '@asyncapi/parser';
 
 import { SchemaHelpers } from '../helpers';
 
 interface Props {
   name?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any;
+  item: SchemaInterface;
 }
 
 export const Extensions: React.FunctionComponent<Props> = ({
@@ -22,7 +19,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const schema = SchemaHelpers.jsonToSchema(extensions);
+  const schema: SchemaInterface = SchemaHelpers.jsonToSchema(extensions);
 
   return (
     schema && (
