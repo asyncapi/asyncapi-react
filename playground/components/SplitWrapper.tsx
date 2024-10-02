@@ -7,7 +7,6 @@ interface SplitWrapperProps {
 
 // react-split should be replaced with a React 18 friendly library or CSS
 const SplitWrapper = (props: SplitWrapperProps) => (
-  <>
     <Split
       style={{
         width: '100%',
@@ -29,7 +28,6 @@ const SplitWrapper = (props: SplitWrapperProps) => (
     >
       {props.children}
     </Split>
-  </>
 );
 
 export default SplitWrapper;
