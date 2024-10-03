@@ -33,7 +33,7 @@ export const CollapseButton: React.FunctionComponent<Props> = ({
 }) => (
   <button
     {...rest}
-    className={`focus:outline-none ${rest.className}`}
+    className={`focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${rest.className}`}
     type="button"
   >
     <div className="inline-block">{children}</div>
