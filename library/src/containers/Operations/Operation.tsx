@@ -300,7 +300,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
                       onClick={() => setShowChannel((prev) => !prev)}
                       expanded={showChannel}
                     >
-                      <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                      <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-[#c3e88d] focus:outline-2 focus:outline-offset-2">
                         View channel details
                       </span>
                     </CollapseButton>
@@ -324,7 +324,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
                   onClick={() => setShowMessages((prev) => !prev)}
                   expanded={showMessages}
                 >
-                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <span className="inline-block py-0.5 mr-1 text-gray-500 text-xs text-center rounded focus:outline-[#c3e88d] focus:outline-2 focus:outline-offset-2">
                     Expected Reply{' '}
                     {replyMessages.length > 1 ? 'Messages' : 'Message'}
                   </span>
