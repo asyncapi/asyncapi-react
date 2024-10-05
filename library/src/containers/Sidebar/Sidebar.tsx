@@ -119,7 +119,7 @@ export const Sidebar: React.FunctionComponent = () => {
       >
         <div
           className={`${
-            showSidebar ? 'w-full' : ''
+            showSidebar ? 'sidebar--wrapper' : ''
           } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
           <div className="sidebar--content">
