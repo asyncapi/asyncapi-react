@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 import useResizeObserver from 'use-resize-observer';
 
