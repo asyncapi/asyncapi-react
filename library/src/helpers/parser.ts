@@ -3,7 +3,12 @@ import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
 import { ProtoBuffSchemaParser } from '@asyncapi/protobuf-schema-parser';
 import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 
-import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
+import {
+  ErrorObject,
+  ParserReturn,
+  FetchingSchemaInterface,
+  ValidationError,
+} from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
@@ -22,8 +27,38 @@ export class Parser {
   ): Promise<ParserReturn> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const { document } = await asyncapiParser.parse(content, parserOptions);
-      return { asyncapi: document };
+      const parseResult = await asyncapiParser.parse(content, parserOptions);
+
+      let error: {
+        title: string | undefined;
+        validationErrors: ValidationError[] | undefined;
+      } = {
+        title: 'There are errors in your Asyncapi document',
+        validationErrors: [],
+      };
+
+      if (parseResult.document === undefined) {
+        parseResult.diagnostics.forEach((diagnostic) => {
+          if (diagnostic.severity == 0) {
+            const tempObj = {
+              title: diagnostic.message,
+              location: {
+                jsonPointer: 'json pointer',
+                startLine: diagnostic.range.start.line,
+                startColumn: diagnostic.range.start.character,
+                startOffset: 0,
+                endLine: diagnostic.range.end.line,
+                endColumn: diagnostic.range.end.character,
+                endOffset: 0,
+              },
+            };
+            error.validationErrors?.push(tempObj as unknown as ValidationError);
+          }
+        });
+        throw error;
+      }
+
+      return { asyncapi: parseResult.document };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }
