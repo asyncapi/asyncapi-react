@@ -40,7 +40,7 @@ export class Parser {
       if (parseResult.document === undefined) {
         parseResult.diagnostics.forEach((diagnostic) => {
           if (diagnostic.severity == 0) {
-            const tempObj = {
+            const tempObj:ValidationError = {
               title: diagnostic.message,
               location: {
                 jsonPointer: 'json pointer',
@@ -52,7 +52,7 @@ export class Parser {
                 endOffset: 0,
               },
             };
-            error.validationErrors?.push(tempObj as unknown as ValidationError);
+            error.validationErrors?.push(tempObj);
           }
         });
         throw error;
