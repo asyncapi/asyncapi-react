@@ -19,7 +19,7 @@ class Tab extends Component<TabProps> {
         <TabLink
           onClick={(event) => {
             event.preventDefault();
-            if (parentCallback && tabIndex) {
+            if (parentCallback && typeof tabIndex === 'number') {
               parentCallback(tabIndex);
             }
           }}
