@@ -40,10 +40,10 @@ export class Parser {
       if (parseResult.document === undefined) {
         parseResult.diagnostics.forEach((diagnostic) => {
           if (diagnostic.severity == 0) {
-            const tempObj:ValidationError = {
+            const tempObj: ValidationError = {
               title: diagnostic.message,
               location: {
-                jsonPointer: 'json pointer',
+                jsonPointer: '/' + diagnostic.path.join('/'),
                 startLine: diagnostic.range.start.line,
                 startColumn: diagnostic.range.start.character,
                 startOffset: 0,
