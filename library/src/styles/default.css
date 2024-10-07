@@ -14,20 +14,16 @@
   }
   .container\:xl .sidebar--wrapper{
     @apply xl:w-full
+    @apply sm:w-full
   }
   .container\:base .sidebar--content {
     @apply lg:w-56;
   }
-
   /* .container\:lg .sidebar--content {
     @apply absolute;
     left: 50%;
     transform: translate(-50%, 0);
   } */
-
-  .container\:2xl .sidebar--content{
-    background: green;
-  }
 
   .container\:base .panel-item {
     @apply 2xl:flex;
