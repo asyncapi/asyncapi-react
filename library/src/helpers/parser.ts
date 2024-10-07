@@ -3,7 +3,12 @@ import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
 import { ProtoBuffSchemaParser } from '@asyncapi/protobuf-schema-parser';
 import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 
-import { ErrorObject, ParserReturn, FetchingSchemaInterface } from '../types';
+import {
+  ErrorObject,
+  ParserReturn,
+  FetchingSchemaInterface,
+  ValidationError,
+} from '../types';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 
@@ -22,8 +27,40 @@ export class Parser {
   ): Promise<ParserReturn> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const { document } = await asyncapiParser.parse(content, parserOptions);
-      return { asyncapi: document };
+      const parseResult = await asyncapiParser.parse(content, parserOptions);
+
+      const error: {
+        title: string | undefined;
+        validationErrors: ValidationError[] | undefined;
+      } = {
+        title: 'There are errors in your Asyncapi document',
+        validationErrors: [],
+      };
+
+      if (parseResult.document === undefined) {
+        parseResult.diagnostics.forEach((diagnostic) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          if (diagnostic.severity == 0) {
+            const tempObj: ValidationError = {
+              title: diagnostic.message,
+              location: {
+                jsonPointer: '/' + diagnostic.path.join('/'),
+                startLine: diagnostic.range.start.line,
+                startColumn: diagnostic.range.start.character,
+                // as of @asyncapi/parser 3.3.0 offset of 1 correctly shows the error line
+                startOffset: 1,
+                endLine: diagnostic.range.end.line,
+                endColumn: diagnostic.range.end.character,
+                endOffset: 0,
+              },
+            };
+            error.validationErrors?.push(tempObj);
+          }
+        });
+        throw error;
+      }
+
+      return { asyncapi: parseResult.document };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }
