@@ -29,7 +29,7 @@ export class Parser {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const parseResult = await asyncapiParser.parse(content, parserOptions);
 
-      let error: {
+      const error: {
         title: string | undefined;
         validationErrors: ValidationError[] | undefined;
       } = {
@@ -39,6 +39,7 @@ export class Parser {
 
       if (parseResult.document === undefined) {
         parseResult.diagnostics.forEach((diagnostic) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           if (diagnostic.severity == 0) {
             const tempObj: ValidationError = {
               title: diagnostic.message,
@@ -46,7 +47,8 @@ export class Parser {
                 jsonPointer: '/' + diagnostic.path.join('/'),
                 startLine: diagnostic.range.start.line,
                 startColumn: diagnostic.range.start.character,
-                startOffset: 0,
+                // as of @asyncapi/parser 3.3.0 offset of 1 correctly shows the error line
+                startOffset: 1,
                 endLine: diagnostic.range.end.line,
                 endColumn: diagnostic.range.end.character,
                 endOffset: 0,
