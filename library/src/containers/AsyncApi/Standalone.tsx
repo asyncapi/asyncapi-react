@@ -75,7 +75,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       if (!error) {
         return null;
       }
-      return concatenatedConfig.show?.errors && <Error error={error} />;
+      return (
+        concatenatedConfig.show?.errors && (
+          <section className="aui-root">
+            <Error error={error} />
+          </section>
+        )
+      );
     }
 
     return (
