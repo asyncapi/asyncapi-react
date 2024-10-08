@@ -45,4 +45,3 @@ export const CollapseButton: React.FunctionComponent<Props> = ({
     />
   </button>
 );
-
