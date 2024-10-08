@@ -122,7 +122,7 @@ describe('Sidebar component', () => {
     ];
     for (let i = 0; i < operations.length; i++) {
       const description = operations[i].querySelector('span');
-  
+
       // eslint-disable-next-line jest/no-standalone-expect
       expect(description?.textContent).toBe(expectedOperationDescriptions[i]);
     }
