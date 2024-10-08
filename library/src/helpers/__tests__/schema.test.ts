@@ -896,12 +896,7 @@ describe('SchemaHelpers', () => {
 
     test('should not render title because title is undefined', () => {
       expect(
-        SchemaHelpers.applicatorSchemaName(
-          0,
-          FIRST_CASE,
-          OTHER_CASES,
-          undefined,
-        ),
+        SchemaHelpers.applicatorSchemaName(0, FIRST_CASE, OTHER_CASES),
       ).toMatchSnapshot();
 
       expect(
