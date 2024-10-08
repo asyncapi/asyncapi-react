@@ -121,10 +121,10 @@ describe('Sidebar component', () => {
       'smartylighting.streetlights.1.0.action.{streetlightId}.dim',
     ];
     for (let i = 0; i < operations.length; i++) {
+      const description = operations[i].querySelector('span');
+
       // eslint-disable-next-line jest/no-standalone-expect
-      expect(operations[i].querySelectorAll('span')[1].textContent).toBe(
-        expectedOperationDescriptions[i],
-      );
+      expect(description?.textContent).toBe(expectedOperationDescriptions[i]);
     }
   });
 });

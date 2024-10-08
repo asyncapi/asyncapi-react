@@ -160,37 +160,37 @@ export const Schema: React.FunctionComponent<Props> = ({
                 </div>
                 <div className="inline-block">
                   {schema.format() && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                       format: {schema.format()}
-                    </span>
+                    </strong>
                   )}
 
                   {/* related to string */}
                   {schema.pattern() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded mr-2 p-1 text-xs">
+                    <strong className="bg-yellow-600 no-underline text-white rounded mr-2 p-1 text-xs">
                       must match: {schema.pattern()}
-                    </span>
+                    </strong>
                   )}
                   {schema.contentMediaType() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                       media type: {schema.contentMediaType()}
-                    </span>
+                    </strong>
                   )}
                   {schema.contentEncoding() !== undefined && (
-                    <span className="bg-yellow-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                       encoding: {schema.contentEncoding()}
-                    </span>
+                    </strong>
                   )}
 
                   {/* constraints */}
                   {!!constraints.length &&
                     constraints.map((c) => (
-                      <span
-                        className="bg-purple-600 font-bold no-underline text-white rounded lowercase mr-2 p-1 text-xs"
+                      <strong
+                        className="bg-purple-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs"
                         key={c}
                       >
                         {c}
-                      </span>
+                      </strong>
                     ))}
 
                   {uid && !uid.startsWith('<anonymous-') && (
@@ -244,14 +244,14 @@ export const Schema: React.FunctionComponent<Props> = ({
                   </div>
                 )}
                 {externalDocs && (
-                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-2 py-0">
+                  <strong className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-2 py-0">
                     <Href
                       href={externalDocs.url()}
                       title={externalDocs.description() ?? ''}
                     >
                       Documentation
                     </Href>
-                  </span>
+                  </strong>
                 )}
                 {schema.examples() && (
                   <ul className="text-xs">
