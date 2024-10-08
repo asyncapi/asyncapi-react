@@ -122,7 +122,7 @@ export const Sidebar: React.FunctionComponent = () => {
             showSidebar ? 'w-full' : ''
           } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
-          <div className="sidebar--content">
+          <div className="sidebar--wrapper">
             <div>
               {logo ? (
                 // eslint-disable-next-line @next/next/no-img-element
