@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
-import { SpecificationHelpers } from '../../helpers';
-import { ErrorObject, PropsSchema } from '../../types';
+import { Parser, SpecificationHelpers } from '../../helpers';
+import {
+  ErrorObject,
+  isFetchingSchemaInterface,
+  PropsSchema,
+} from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 
 import AsyncApiLayout from './Layout';
@@ -11,7 +15,6 @@ import { Error } from '../Error/Error';
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
-  error?: ErrorObject;
 }
 
 interface AsyncAPIState {
@@ -27,33 +30,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   constructor(props: AsyncApiProps) {
     super(props);
-
-    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
-    if (parsedSpec) {
-      this.state = { asyncapi: parsedSpec };
-    }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     if (!this.state.asyncapi) {
-      this.updateState(this.props.schema);
+      await this.parseSchemaAndSetState(this.props.schema);
     }
-  }
+  };
 
-  componentDidUpdate(prevProps: AsyncApiProps) {
+  componentDidUpdate = async (prevProps: AsyncApiProps) => {
     const oldSchema = prevProps.schema;
     const newSchema = this.props.schema;
 
     if (oldSchema !== newSchema) {
-      this.updateState(newSchema);
+      await this.parseSchemaAndSetState(newSchema);
     }
-  }
+  };
 
   render() {
-    const { config, error: propError } = this.props;
-    const { asyncapi, error: stateError } = this.state;
+    const { config } = this.props;
+    const { asyncapi, error } = this.state;
 
-    const error = propError ?? stateError;
     const concatenatedConfig: ConfigInterface = {
       ...defaultConfig,
       ...config,
@@ -93,13 +90,34 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private updateState(schema: PropsSchema) {
+  private async parseSchemaAndSetState(
+    schema: PropsSchema,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    parserOptions?: any,
+  ) {
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
-    if (!parsedSpec) {
-      this.setState({ asyncapi: undefined });
+    if (parsedSpec) {
+      this.setState({
+        asyncapi: parsedSpec,
+        error: undefined,
+      });
       return;
     }
-    this.setState({ asyncapi: parsedSpec });
+
+    if (isFetchingSchemaInterface(schema)) {
+      const parsedFromUrl = await Parser.parseFromUrl(schema, parserOptions);
+      this.setState({
+        asyncapi: parsedFromUrl.asyncapi,
+        error: parsedFromUrl.error,
+      });
+      return;
+    }
+
+    const parsed = await Parser.parse(schema, parserOptions);
+    this.setState({
+      asyncapi: parsed.asyncapi,
+      error: parsed.error,
+    });
   }
 }
 
