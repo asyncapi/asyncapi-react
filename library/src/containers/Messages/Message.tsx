@@ -58,9 +58,6 @@ export const Message: React.FunctionComponent<Props> = ({
               <span className="text-gray-700 font-bold mr-2">#{index}</span>
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
-            <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {messageId}
-            </span>
           </div>
 
           {summary && <p className="text-gray-600 text-sm">{summary}</p>}
