@@ -1,6 +1,6 @@
 import AsyncApiComponent, {
   AsyncApiProps,
-} from './containers/AsyncApi/AsyncApi';
+} from './containers/AsyncApi/Standalone';
 
 import { createRender, createHydrate } from './standalone-codebase';
 import { hljs } from './helpers';

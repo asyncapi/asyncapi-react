@@ -78,9 +78,43 @@ export class Parser {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         arg.requestOptions as any,
       );
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const { document } = await fromResult.parse(parserOptions);
-      return { asyncapi: document };
+      const { document, diagnostics } = await fromResult.parse(parserOptions);
+
+      if (document == undefined) {
+        // this means there are errors in the document.
+        // so we gather all the severity 0 diagnostics and throw them as errors
+        const error: {
+          title: string | undefined;
+          validationErrors: ValidationError[] | undefined;
+        } = {
+          title: 'There are errors in your Asyncapi document',
+          validationErrors: [],
+        };
+        diagnostics.forEach((diagnostic) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          if (diagnostic.severity == 0) {
+            const tempObj: ValidationError = {
+              title: diagnostic.message,
+              location: {
+                jsonPointer: '/' + diagnostic.path.join('/'),
+                startLine: diagnostic.range.start.line,
+                startColumn: diagnostic.range.start.character,
+                // as of @asyncapi/parser 3.3.0 offset of 1 correctly shows the error line
+                startOffset: 1,
+                endLine: diagnostic.range.end.line,
+                endColumn: diagnostic.range.end.character,
+                endOffset: 0,
+              },
+            };
+            error.validationErrors?.push(tempObj);
+          }
+        });
+        throw error;
+      }
+
+      return { asyncapi: document, error: undefined };
     } catch (err) {
       return this.handleError(err as ErrorObject);
     }
