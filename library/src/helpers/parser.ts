@@ -25,21 +25,21 @@ asyncapiParser.registerSchemaParser(ProtoBuffSchemaParser());
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Parser {
   static async parse(
-    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     content: string | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const { document, diagnostics } = await asyncapiParser.parse(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         content,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         parserOptions,
       );
 
       if (document === undefined) {
-        const error = this.convertDiagnosticToErrorObject(diagnostics, [0]);
-        throw error;
+        throw this.convertDiagnosticToErrorObject(diagnostics, [0]);
       }
 
       return { asyncapi: document };
@@ -67,8 +67,7 @@ export class Parser {
       if (document == undefined) {
         // this means there are errors in the document.
         // so we gather all the severity 0 diagnostics and throw them as errors
-        const error = this.convertDiagnosticToErrorObject(diagnostics, [0]);
-        throw error;
+        throw this.convertDiagnosticToErrorObject(diagnostics, [0]);
       }
 
       return { asyncapi: document, error: undefined };
@@ -77,7 +76,7 @@ export class Parser {
     }
   }
 
-  static convertDiagnosticToErrorObject = (
+  static readonly convertDiagnosticToErrorObject = (
     diagnostics: Diagnostic[],
     severities: DiagnosticSeverity[],
   ): ErrorObject => {
@@ -88,7 +87,7 @@ export class Parser {
     };
     diagnostics.forEach((diagnostic) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-      if (diagnostic.severity in severities) {
+      if (severities.includes(diagnostic.severity)) {
         const tempObj: ValidationError = {
           title: diagnostic.message,
           location: {
