@@ -31,9 +31,10 @@ export class Parser {
     parserOptions?: any,
   ): Promise<ParserReturn> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const { document, diagnostics } = await asyncapiParser.parse(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         content,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         parserOptions,
       );
 
