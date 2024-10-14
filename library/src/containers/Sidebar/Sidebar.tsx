@@ -356,12 +356,12 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         href={`#${operationHrefId}`}
         onClick={() => setShowSidebar(false)}
       >
-        <span
-          className={`font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
+        <strong
+          className={`h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
           title={typeLabel}
         >
           {typeLabel}
-        </span>
+        </strong>
         <span className="break-all inline-block">{label}</span>
       </a>
     </li>
