@@ -130,22 +130,22 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
       <div className="px-4 py-2 ml-2 mb-2 border border-gray-400 bg-gray-100 rounded">
         {securityProtocol && (
           <div className="mt-1">
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
               security.protocol:
-            </span>
-            <span className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
+            </strong>
+            <strong className="inline-block no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
               {securityProtocol}
-            </span>
+            </strong>
           </div>
         )}
         {saslMechanism && (
           <div className="mt-1">
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
               sasl.mechanism:
-            </span>
-            <span className="inline-block font-bold no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
+            </strong>
+            <strong className="inline-block no-underline bg-indigo-400 text-white text-xs rounded py-0 px-1 ml-1">
               {saslMechanism}
-            </span>
+            </strong>
           </div>
         )}
       </div>
@@ -179,19 +179,19 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
           key={flowName}
         >
           <div>
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
               Flow:
-            </span>
-            <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+            </strong>
+            <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
               {ServerHelpers.flowName(flowName)}
-            </span>
+            </strong>
           </div>
 
           {authorizationUrl && (
             <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
                 Auth URL:
-              </span>
+              </strong>
               <Href href={authorizationUrl} className="underline">
                 {authorizationUrl}
               </Href>
@@ -199,9 +199,9 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
           )}
           {tokenUrl && (
             <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
                 Token URL:
-              </span>
+              </strong>
               <Href href={tokenUrl} className="underline">
                 {tokenUrl}
               </Href>
@@ -209,9 +209,9 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
           )}
           {refreshUrl && (
             <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
                 Refresh URL:
-              </span>
+              </strong>
               <Href href={refreshUrl} className="underline">
                 {refreshUrl}
               </Href>
@@ -219,9 +219,9 @@ const SecurityItem: React.FunctionComponent<SecurityItemProps> = ({
           )}
           {scopes && (
             <div className="mt-1">
-              <span className="text-xs font-bold text-gray-600 mt-1 mr-1 uppercase">
+              <strong className="text-xs text-gray-600 mt-1 mr-1 uppercase">
                 Scopes:
-              </span>
+              </strong>
               <ul className="inline-block">
                 {scopes &&
                   Object.entries(scopes).map(([scopeName, scopeDesc]) => (
