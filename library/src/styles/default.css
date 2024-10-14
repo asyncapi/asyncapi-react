@@ -14,13 +14,8 @@
   }
 
   .container\:xl .sidebar--wrapper{
-    @apply xl:w-full
-    @apply sm:w-full
-  }
-
-  .container\:xl .sidebar--wrapper{
-    @apply xl:w-full
-    @apply sm:w-full
+    @apply xl:w-full;
+    @apply sm:w-full;
   }
 
   .container\:base .sidebar--content {
