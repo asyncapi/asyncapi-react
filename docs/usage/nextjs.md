@@ -21,10 +21,13 @@ The `@asyncapi/react-component` package has a special `umd` bundle that can be u
 import dynamic from 'next/dynamic';
 
 // Import styles
-import "@asyncapi/react-component/styles/default.min.css";
+import '@asyncapi/react-component/styles/default.min.css';
 
 // Import component without SSR/SSG
-const AsyncApiComponent = dynamic(() => import('@asyncapi/react-component/browser'), { ssr: false });
+const AsyncApiComponent = dynamic(
+  () => import('@asyncapi/react-component/browser'),
+  { ssr: false },
+);
 
 // `schema` and `config` are these same properties as for normal AsyncAPI React component
 export default function AsyncApiDocs({ schema, config }) {
@@ -45,18 +48,16 @@ npm install --save @asyncapi/parser
 Then we need to use the parser and component as follows:
 
 ```js
-import { parse } from "@asyncapi/parser";
+import { parse } from '@asyncapi/parser';
 // import component without parser onboard
-import { AsyncApiComponentWP } from "@asyncapi/react-component";
+import { AsyncApiComponentWP } from '@asyncapi/react-component';
 
 // Import styles
-import "@asyncapi/react-component/styles/default.min.css";
+import '@asyncapi/react-component/styles/default.min.css';
 
 export default function AsyncApiDocsPage({ asyncapi }) {
   const config = {}; // Configuration for component. This same as for normal React component
-  return (
-    <AsyncApiComponentWP schema={asyncapi} config={config} />
-  )
+  return <AsyncApiComponentWP schema={asyncapi} config={config} />;
 }
 
 // This function gets called at build time
@@ -72,7 +73,7 @@ export async function getStaticProps() {
     props: {
       asyncapi: stringified,
     },
-  }
+  };
 }
 ```
 

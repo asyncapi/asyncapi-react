@@ -1,4 +1,5 @@
 # Contributing to AsyncAPI
+
 We love your input! We want to make contributing to this project as easy and transparent as possible.
 
 ## Contribution recogniton
@@ -37,12 +38,15 @@ The following is a summary of the ideal contribution flow. Please, note that Pul
 ```
 
 ## Code of Conduct
+
 AsyncAPI has adopted a Code of Conduct that we expect project participants to adhere to. Please [read the full text](./CODE_OF_CONDUCT.md) so that you can understand what sort of behaviour is expected.
 
 ## Our Development Process
+
 We use Github to host code, to track issues and feature requests, as well as accept pull requests.
 
 ## Issues
+
 [Open an issue](https://github.com/asyncapi/asyncapi/issues/new) **only** if you want to report a bug or a feature. Don't open issues for questions or support, instead join our [Slack workspace](https://www.asyncapi.com/slack-invite) and ask there. Don't forget to follow our [Slack Etiquette](https://github.com/asyncapi/community/blob/master/slack-etiquette.md) while interacting with community members! It's more likely you'll get help, and much faster!
 
 ## Bug Reports and Feature Requests
@@ -73,7 +77,9 @@ Prefix that follows specification is not enough though. Remember that the title 
 Happy contributing :heart:
 
 ## License
+
 When you submit changes, your submissions are understood to be under the same [Apache 2.0 License](https://github.com/asyncapi/asyncapi/blob/master/LICENSE) that covers the project. Feel free to [contact the maintainers](https://www.asyncapi.com/slack-invite) if that's a concern.
 
 ## References
+
 This document was adapted from the open-source contribution guidelines for [Facebook's Draft](https://github.com/facebook/draft-js/blob/master/CONTRIBUTING.md).

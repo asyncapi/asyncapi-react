@@ -16,12 +16,12 @@ To use component in Angular, follow these steps:
 
 1. Import `@asyncapi/react-component/browser/standalone` bundle and create similar component as below:
 
-  ```html
-  <template>
-    <div ref="asyncapi"></div>
-  </template>
+```html
+<template>
+  <div ref="asyncapi"></div>
+</template>
 
-  <script>
+<script>
   import AsyncApiStandalone from '@asyncapi/react-component/browser/standalone';
 
   const schema = `...`; // AsyncAPI specification, fetched or pasted.
@@ -30,15 +30,15 @@ To use component in Angular, follow these steps:
   export default {
     name: 'AsyncApiComponent',
     props: {
-      msg: String
+      msg: String,
     },
     mounted() {
       const container = this.$refs.asyncapi;
       AsyncApiStandalone.render({ schema, config }, container);
-    }
-  }
-  </script>
-  ```
+    },
+  };
+</script>
+```
 
 2. Copy styles `@asyncapi/react-component/styles/default.min.css` to `assets/asyncapi.min.css` and import in component as:
 

@@ -16,7 +16,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  webpack: config => {
+  webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
     };

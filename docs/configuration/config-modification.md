@@ -23,12 +23,12 @@ interface ConfigInterface {
   };
   expand?: {
     messageExamples?: boolean;
-  },
+  };
   sidebar?: {
     showServers?: 'byDefault' | 'bySpecTags' | 'byServersTags';
     showOperations?: 'byDefault' | 'bySpecTags' | 'byOperationsTags';
     useChannelAddressAsIdentifier?: boolean;
-  },
+  };
   parserOptions?: ParserOptions;
   publishLabel?: string;
   subscribeLabel?: string;
@@ -59,7 +59,7 @@ interface ConfigInterface {
   `showOperations` field is set to `byDefault` by default.
   `useChannelAddressAsIdentifier`: for AsyncAPI v3 documents, use the operation summary or channel address in the sidebar instead of the operationId.
   By default, this behavior is applied only to AsyncAPI v2 documents.
-  
+
 - **expand?: Partial<ExpandConfig>**
 
   This field contains configuration responsible for collapsing and expanding component sections.
@@ -73,7 +73,7 @@ interface ConfigInterface {
 - **publishLabel?: string**
 
   This field contains configuration responsible for customizing the label for publish operations.This take effect for AsyncAPI v2 documents.
-  This field is set to `PUB` by default. 
+  This field is set to `PUB` by default.
 
 - **subscribeLabel?: string**
 
@@ -107,11 +107,11 @@ See exemplary component configuration in TypeScript and JavaScript.
 ### TypeScript
 
 ```tsx
-import * as React from "react";
-import { render } from "react-dom";
-import AsyncAPIComponent, { ConfigInterface } from "@asyncapi/react-component";
+import * as React from 'react';
+import { render } from 'react-dom';
+import AsyncAPIComponent, { ConfigInterface } from '@asyncapi/react-component';
 
-import { schema } from "./mock";
+import { schema } from './mock';
 
 const config: ConfigInterface = {
   schemaID: 'custom-spec',
@@ -130,17 +130,17 @@ const config: ConfigInterface = {
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 
-render(<App />, document.getElementById("root"));
+render(<App />, document.getElementById('root'));
 ```
 
 ### JavaScript
 
 ```jsx
-import * as React from "react";
-import { render } from "react-dom";
-import AsyncAPIComponent from "@asyncapi/react-component";
+import * as React from 'react';
+import { render } from 'react-dom';
+import AsyncAPIComponent from '@asyncapi/react-component';
 
-import { schema } from "./mock";
+import { schema } from './mock';
 
 const config = {
   schemaID: 'custom-spec',
@@ -159,7 +159,7 @@ const config = {
 
 const App = () => <AsyncAPIComponent schema={schema} config={config} />;
 
-render(<App />, document.getElementById("root"));
+render(<App />, document.getElementById('root'));
 ```
 
 In the above examples, after concatenation with the default configuration, the resulting configuration looks as follows:

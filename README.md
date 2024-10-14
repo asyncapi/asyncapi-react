@@ -19,9 +19,9 @@ The official [React](https://reactjs.org/) component for AsyncAPI specification.
 - [Props](#props)
 - [Features](#features)
 - [Styles](#styles)
-  * [Default styles](#default-styles)
-  * [Custom styles](#custom-styles)
-  * [Custom logo](#custom-logo)
+  - [Default styles](#default-styles)
+  - [Custom styles](#custom-styles)
+  - [Custom logo](#custom-logo)
 - [Playground](#playground)
 - [Modules](#modules)
 - [Development](#development)
@@ -52,9 +52,9 @@ Check out this sandbox application that uses the React component:
 Check a simple example which shows passing the inline AsyncAPI specification with custom configurations:
 
 ```tsx
-import * as React from "react";
-import { render } from "react-dom";
-import AsyncApiComponent, { ConfigInterface } from "@asyncapi/react-component";
+import * as React from 'react';
+import { render } from 'react-dom';
+import AsyncApiComponent, { ConfigInterface } from '@asyncapi/react-component';
 
 const schema = `
 asyncapi: '2.0.0'
@@ -87,7 +87,7 @@ const config: ConfigInterface = {
 
 const App = () => <AsyncApiComponent schema={schema} config={config} />;
 
-render(<App />, document.getElementById("root"));
+render(<App />, document.getElementById('root'));
 ```
 
 ## Using in other technologies
@@ -122,20 +122,23 @@ For a list and description of features offered by the AsyncAPI React component, 
 ## Styles
 
 ### Default styles
+
 To use default styles import them as follows:
 
-``` js
-import "@asyncapi/react-component/styles/default.css";
+```js
+import '@asyncapi/react-component/styles/default.css';
 // or minified version
-import "@asyncapi/react-component/styles/default.min.css";
+import '@asyncapi/react-component/styles/default.min.css';
 ```
 
 ### Custom styles
+
 The AsyncAPI React component does not set any global fonts. This component allows the usage of your custom `font-family` and other styling.
 
 This can be done by defining the styles in a file or inline using a `<style>` tag in the `<head>` section of the page where you are using AsyncAPI React component.
 
 Example custom styles (defined in the `styles/custom.css` file):
+
 ```css
 html {
   -moz-tab-size: 4;
@@ -147,34 +150,64 @@ html {
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    Apple Color Emoji,
+    Segoe UI Emoji;
 }
 ```
 
 If you are using the component in a project that uses a bundler like Webpack, don't forget to import the custom styles.
 
-``` js
-import "styles/custom.css";
-import "@asyncapi/react-component/styles/default.min.css";
+```js
+import 'styles/custom.css';
+import '@asyncapi/react-component/styles/default.min.css';
 ```
 
 If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you can put the custom styles as a style sheet link or as an inline style in the `<head>` section of the HTML code:
 
 ```html
- <head>
-   <!-- Custom style sheet -->
-   <link rel="stylesheet" href="./styles/custom.css">
+<head>
+  <!-- Custom style sheet -->
+  <link rel="stylesheet" href="./styles/custom.css" />
 
-   <!-- OR as inline style -->
-   <style>
-     html{-moz-tab-size:4;-o-tab-size:4;tab-size:4;line-height:1.15;-webkit-text-size-adjust:100%};
-     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji};
-   </style>
-   
-   <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
-   
-   ...
- </head>
+  <!-- OR as inline style -->
+  <style>
+    html {
+      -moz-tab-size: 4;
+      -o-tab-size: 4;
+      tab-size: 4;
+      line-height: 1.15;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      margin: 0;
+      font-family:
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif,
+        Apple Color Emoji,
+        Segoe UI Emoji;
+    }
+  </style>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css"
+  />
+
+  ...
+</head>
 ```
 
 ### Custom logo
@@ -182,7 +215,7 @@ If you are using the [standalone bundle](./docs/usage/standalone-bundle.md), you
 The AsyncAPI component supports the option to use a custom logo. By using the `x-logo` custom extension in the [InfoObject](https://github.com/asyncapi/spec/blob/master/spec/asyncapi.md#infoObject), a logo will be shown in the top left corner.
 
 > **NOTE**: The logo will only appear if the [sidebar option](./docs/configuration/config-modification.md#definition) is enabled.
-  
+
 ```yaml
 asyncapi: 2.2.0
 info:
@@ -190,8 +223,7 @@ info:
   version: 1.0.0
   description: This service is in charge of processing user signups.
   x-logo: 'https://raw.githubusercontent.com/asyncapi/spec/master/assets/logo.png'
-channels:
-  ...
+channels: ...
 ```
 
 ## Playground
@@ -203,6 +235,7 @@ You can also run the Playground application locally by following [this](./docs/d
 ## Modules
 
 The `@asyncapi/react-component` package has 3 crafted JS modules to be used in various environments:
+
 - `esm` (ECMAScript Modules) is intended for use in a single-page applications with predefined environments like [`create-react-app`](https://github.com/facebook/create-react-app) that are capable of resolving dependencies (via Webpack, Browserify, etc). It can also be used on the server side (for tasks like Server Side Rendering) when the application is using `esm`.
 - `cjs` (CommonJS Modules) similar uses as for `esm` modules, but using CommonJS modules.
 - `umd` (Universal Module Definition) is a dependency-free module that includes everything you need to serve AsyncAPI documentation (however [React](https://github.com/facebook/react/tree/master/packages/react) and [ReactDOM](https://github.com/facebook/react/tree/master/packages/react-dom) dependencies must be served separately) on a single-page application that can't resolve npm module dependencies or in normal HTML page. We have 2 types of minified `umd` bundles, with and without [AsyncAPI Parser](https://github.com/asyncapi/parser-js) in paths:

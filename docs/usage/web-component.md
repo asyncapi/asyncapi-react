@@ -46,10 +46,10 @@ Check how to use the Web Component in:
 When invoked as an independent entity, Web Component takes the following props (as it is still a React component):
 
 - `schema` is a `schema` property from the React component,
-    > **NOTE**: Since version 0.19.0 specifying a `schema` object can be omitted. `schema.url` and `schema.requestOptions` can be replaced with `schemaUrl` and `schemaFetchOptions` properties accordingly.
+  > **NOTE**: Since version 0.19.0 specifying a `schema` object can be omitted. `schema.url` and `schema.requestOptions` can be replaced with `schemaUrl` and `schemaFetchOptions` properties accordingly.
 - `config` is an **optional** `config` property from the React component in the stringified JSON format,
 - `schemaUrl` property is a `string`, specific to Web Component, containing a URL to fetch an AsyncAPI Schema from. It is a wrapper for `schema.url` property in `schema` object under the hood,
-    > **NOTE**: If `schemaUrl` property is specified, the `schema.url` property of the React component will be ignored.
+  > **NOTE**: If `schemaUrl` property is specified, the `schema.url` property of the React component will be ignored.
 - `schemaFetchOptions` property is an **optional** `object` of [RequestInit](https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.requestinit.html) type in JSON format, specific to Web Component, containing additional fetching options. It is a wrapper for `schema.requestOptions` property in `schema` object, which are both needed only in case process of fetching from a URL is any different from a usual browser request,
-    > **NOTE**: If `schemaFetchOptions` property is specified, `schema.requestOptions` property of the React component will be ignored. If `schemaUrl` property is NOT specified, `schemaFetchOptions` will be ignored itself and `schema.url`/`schema.requestOptions` properties of the React component must be used in this case.
+  > **NOTE**: If `schemaFetchOptions` property is specified, `schema.requestOptions` property of the React component will be ignored. If `schemaUrl` property is NOT specified, `schemaFetchOptions` will be ignored itself and `schema.url`/`schema.requestOptions` properties of the React component must be used in this case.
 - `cssImportPath` property is the path to styles. Default version from `unpkg.com` contains guaranteed minimum styling for the Web Component,

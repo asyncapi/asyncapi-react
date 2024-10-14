@@ -11,13 +11,16 @@ To add configuration for an additional language, import configuration from `high
 See how to add a configuration in the example below:
 
 ```js
-import AsyncApiComponent, { hljs } from "@asyncapi/react-component";
+import AsyncApiComponent, { hljs } from '@asyncapi/react-component';
 
 import csharp from 'highlight.js/lib/languages/csharp';
 hljs.registerLanguage('csharp', csharp);
 
 // And then you can use the comppnent.
-render(<AsyncApiComponent schema={schema} config={config} />, document.getElementById("root"));
+render(
+  <AsyncApiComponent schema={schema} config={config} />,
+  document.getElementById('root'),
+);
 ```
 
 > **NOTE**: You need to load the configuration before rendering the component.

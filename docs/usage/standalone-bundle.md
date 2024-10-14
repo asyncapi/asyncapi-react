@@ -20,35 +20,39 @@ Check how to use the Standalone bundle in:
 ## Usage in HTML webpage
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css"
+    />
   </head>
   <body>
-    
     <div id="asyncapi"></div>
 
     <script src="https://unpkg.com/@asyncapi/react-component@latest/browser/standalone/index.js"></script>
     <script>
-      AsyncApiStandalone.render({
-        schema: {
-          url: 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml',
-          options: { method: "GET", mode: "cors" },
+      AsyncApiStandalone.render(
+        {
+          schema: {
+            url: 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml',
+            options: { method: 'GET', mode: 'cors' },
+          },
+          config: {
+            show: {
+              sidebar: true,
+            },
+          },
         },
-        config: {
-          show: {
-            sidebar: true,
-          }
-        },
-      }, document.getElementById('asyncapi'));
+        document.getElementById('asyncapi'),
+      );
     </script>
-
   </body>
 </html>
 ```
 
-The Standalone Bundle exports two functions: 
+The Standalone Bundle exports two functions:
 
 - `render`, which works like [ReactDOM.render](https://reactjs.org/docs/react-dom.html#render) function, where first argument is the [props for component](../../README.md#props) and the second is the HTML Node,
 - `hydrate`, which works like [ReactDOM.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) function, where first argument is the [props for component](../../README.md#props) and the second is the HTML Node.
