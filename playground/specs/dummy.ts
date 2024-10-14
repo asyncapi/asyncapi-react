@@ -58,7 +58,7 @@ servers:
           - '5672'
     security:
       - user-password: []
-  dommy-kafka:
+  dummy-kafka:
     url: http://localhost:{port}
     protocol: kafka
     description: dummy Kafka broker
