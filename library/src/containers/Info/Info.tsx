@@ -46,9 +46,9 @@ export const Info: React.FunctionComponent = () => {
                     <span>{license.name()}</span>
                   </Href>
                 ) : (
-                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                  <strong className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-3 py-1">
                     {license.name()}
-                  </span>
+                  </strong>
                 )}
               </li>
             )}
@@ -108,9 +108,9 @@ export const Info: React.FunctionComponent = () => {
             )}
             {specId && (
               <li className="inline-block mt-2 mr-2">
-                <span className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                <strong className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 no-underline text-xs uppercase rounded px-3 py-1">
                   ID: {specId}
-                </span>
+                </strong>
               </li>
             )}
           </ul>
