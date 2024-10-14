@@ -126,7 +126,7 @@ servers:
         enum:
           - '15672'
           - '5672'
-  dommy-kafka:
+  dummy-kafka:
     url: http://localhost:{port}
     protocol: kafka
     description: dummy Kafka broker
@@ -144,7 +144,7 @@ channels:
         $ref: '#/components/parameters/streetlightId'
     servers:
       - production
-      - dommy-kafka
+      - dummy-kafka
     subscribe:
       summary: Receive information about environmental lighting conditions of a particular streetlight.
       operationId: receiveLightMeasurement
