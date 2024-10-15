@@ -15,8 +15,9 @@ export const Href: React.FunctionComponent<Props> = ({
 }) => (
   <a
     href={href}
-    title={title}
+    title={title ? `${title} (Opens in new window)` : 'Opens in new window'}
     className={className}
+    target="_blank"
     rel="nofollow noopener noreferrer"
   >
     {children}
