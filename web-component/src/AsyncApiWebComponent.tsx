@@ -26,12 +26,10 @@ function retrieveSchemaProp(
   let schemaFetchOptions = props.schemaFetchOptions;
 
   if (!schemaUrl || schemaUrl === 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-    schemaUrl = undefined as any;
+    schemaUrl = undefined;
   }
   if (!schemaFetchOptions) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-    schemaFetchOptions = undefined as any;
+    schemaFetchOptions = undefined;
   }
 
   let schema = props.schema || {};
@@ -50,7 +48,7 @@ function retrieveSchemaProp(
 export interface AsyncApiWebComponentProps extends AsyncApiProps {
   cssImportPath?: string;
   schemaFetchOptions?: RequestInit;
-  schemaUrl: string;
+  schemaUrl?: string;
 }
 
 export class AsyncApiWebComponent extends React.Component<AsyncApiWebComponentProps> {
