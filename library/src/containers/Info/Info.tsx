@@ -77,6 +77,7 @@ export const Info: React.FunctionComponent = () => {
                 <Href
                   className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                   href={externalDocs.url()}
+                  title={externalDocs.description() || EXTERAL_DOCUMENTATION_TEXT}
                 >
                   <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
                 </Href>
