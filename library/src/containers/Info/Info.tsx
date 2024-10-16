@@ -73,7 +73,10 @@ export const Info: React.FunctionComponent = () => {
               </li>
             )}
             {externalDocs && (
-              <li className="inline-block mt-2 mr-2">
+              <li
+                title={externalDocs.description()}
+                className="inline-block mt-2 mr-2"
+              >
                 <Href
                   className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                   href={externalDocs.url()}
