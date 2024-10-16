@@ -905,12 +905,7 @@ describe('SchemaHelpers', () => {
       ).toMatchSnapshot();
 
       expect(
-        SchemaHelpers.applicatorSchemaName(
-          1,
-          FIRST_CASE,
-          OTHER_CASES,
-          undefined,
-        ),
+        SchemaHelpers.applicatorSchemaName(1, FIRST_CASE, OTHER_CASES),
       ).toMatchSnapshot();
     });
 
