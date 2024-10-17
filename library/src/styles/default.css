@@ -13,15 +13,20 @@
     @apply lg:relative lg:block lg:w-64 lg:h-auto;
   }
 
+  .container\:xl .sidebar--wrapper{
+    @apply xl:w-full;
+    @apply sm:w-full;
+  }
+
   .container\:base .sidebar--content {
     @apply lg:w-56;
   }
 
-  .container\:xl .sidebar--content {
+  /*.container\:xl .sidebar--content {
     @apply absolute;
     left: 50%;
     transform: translate(-50%, 0);
-  }
+  }*/
 
   .container\:base .panel-item {
     @apply 2xl:flex;
