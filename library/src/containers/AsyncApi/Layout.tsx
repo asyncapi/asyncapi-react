@@ -35,7 +35,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
         }
 
         const possibleClassName =
-          width <= 1280 ? 'container:xl' : 'container:base';
+          width <= 1536 ? 'container:xl' : 'container:base';
         if (possibleClassName !== observerClassName) {
           setObserverClassName(possibleClassName);
         }
