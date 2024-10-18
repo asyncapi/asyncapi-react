@@ -53,7 +53,7 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
               {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
-                    href={`#${CommonHelpers.getIdentifier(
+                    href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
                       'server-' + server.id(),
                       config,
                     )}`}
@@ -406,7 +406,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
             {servers.map((server) => (
               <li className="inline-block mt-2 mr-2" key={server.id()}>
                 <a
-                  href={`#${CommonHelpers.getIdentifier(
+                  href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
                     'server-' + server.id(),
                     config,
                   )}`}
