@@ -518,7 +518,12 @@ export class SchemaHelpers {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any): any {
+  private static jsonFieldToSchema(value: any, MAX_REC: number = 10): any {
+    // MAX_REC should never be passed as parameter.
+    // it is meant for internal recursion limit tracking
+    if (MAX_REC == 0) {
+      return {};
+    }
     if (value === undefined || value === null) {
       return {
         type: 'string',
@@ -545,7 +550,7 @@ export class SchemaHelpers {
       return {
         type: 'array',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        items: value.map((v) => this.jsonFieldToSchema(v)),
+        items: value.map((v) => this.jsonFieldToSchema(v, MAX_REC - 1)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
@@ -554,7 +559,7 @@ export class SchemaHelpers {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       properties: Object.entries(value).reduce(
         (obj, [k, v]) => {
-          obj[k] = this.jsonFieldToSchema(v);
+          obj[k] = this.jsonFieldToSchema(v, MAX_REC - 1);
           return obj;
         },
         {} as Record<string, unknown>,
