@@ -518,7 +518,7 @@ export class SchemaHelpers {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any, MAX_REC: number = 10): any {
+  private static jsonFieldToSchema(value: any, MAX_REC = 10): any {
     // MAX_REC should never be passed as parameter.
     // it is meant for internal recursion limit tracking
     if (MAX_REC == 0) {
