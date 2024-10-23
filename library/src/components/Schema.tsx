@@ -512,9 +512,7 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   if (!Array.isArray(schema.items())) {
     return null;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-  const additionalItems = schema.additionalItems() as any;
+  const additionalItems = schema.additionalItems();
   if (additionalItems === true || additionalItems === undefined) {
     return (
       <p className="mt-2 text-xs text-gray-700">
