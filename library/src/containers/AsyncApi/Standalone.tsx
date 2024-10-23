@@ -69,6 +69,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.sidebar,
         ...(!!config && config.sidebar),
       },
+      extensions: {
+        ...defaultConfig.extensions,
+        ...(!!config && config.extensions),
+      },
     };
 
     if (!asyncapi) {
