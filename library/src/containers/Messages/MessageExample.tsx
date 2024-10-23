@@ -70,7 +70,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
             className: 'fill-current text-gray-200',
           }}
         >
-          <span className="inline-block w-20 py-0.5 mr-1 bg-gray-200 text-sm text-center rounded focus:outline-none">
+          <span className="inline-block w-20 py-0.5 mr-1 text-gray-200 text-sm border text-center rounded focus:outline-none">
             {type}
           </span>
         </CollapseButton>
