@@ -170,7 +170,7 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const specV = useSpec().version();
   const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const isAsyncAPIv2 = version === 0;
-  const { borderColor, typeLabel } =
+  const { backgroundColor, typeLabel } =
     CommonHelpers.getOperationDesignInformation({
       type,
       config,
@@ -181,7 +181,7 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
       <div className="mb-4">
         <h3>
           <span
-            className={`font-mono border uppercase p-1 rounded mr-2 ${borderColor}`}
+            className={`font-mono text-white uppercase p-1 rounded mr-2 ${backgroundColor}`}
             title={type}
           >
             {typeLabel}
@@ -223,7 +223,7 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
         <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
           <div className="text-sm text-gray-700">
             Operation ID
-            <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+            <span className="bg-orange-600 text-white rounded text-xs ml-2 py-0 px-2">
               {operationId}
             </span>
           </div>

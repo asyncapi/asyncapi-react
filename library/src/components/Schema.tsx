@@ -209,7 +209,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.default() !== undefined && (
                   <div className="text-xs">
                     Default value:
-                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                    <span className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2">
                       {SchemaHelpers.prettifyValue(schema.default())}
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.const() !== undefined && (
                   <div className="text-xs">
                     Const:
-                    <span className="border inline-block text-orange-600 rounded ml-1 py-0 px-2">
+                    <span className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2">
                       {SchemaHelpers.prettifyValue(schema.const())}
                     </span>
                   </div>
@@ -228,7 +228,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     {schema.enum()?.map((e, idx) => (
                       <li
                         key={idx}
-                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2"
+                        className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
@@ -259,7 +259,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     {schema.examples()?.map((e, idx) => (
                       <li
                         key={idx}
-                        className="border inline-block text-orange-600 rounded ml-1 py-0 px-2 break-all"
+                        className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2 break-all"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
