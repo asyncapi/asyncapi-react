@@ -541,10 +541,10 @@ export class SchemaHelpers {
       };
     }
 
-    if (visited.has(value)) {
+    if (visited.has(value as object)) {
       return {};
     }
-    visited.add(value);
+    visited.add(value as object);
 
     if (this.isJSONSchema(value)) {
       return value;
