@@ -119,7 +119,7 @@ export const Sidebar: React.FunctionComponent = () => {
       >
         <div
           className={`${
-            showSidebar ? 'w-full' : ''
+            showSidebar ? 'sidebar--wrapper' : ''
           } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
           <div className="sidebar--content">
@@ -348,7 +348,13 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
       config,
       isAsyncAPIv2,
     });
-  const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600'];
+  const bgColors = [
+    'bg-red-600',
+    'bg-orange-600',
+    'bg-green-600',
+    'bg-blue-600',
+  ];
+
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
       <a
