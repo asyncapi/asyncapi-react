@@ -518,12 +518,9 @@ export class SchemaHelpers {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any, MAX_REC = 10): any {
-    // MAX_REC should never be passed as parameter.
+  private static jsonFieldToSchema(value: any, visited = new WeakSet()): any {
+    // visited should never be passed as parameter.
     // it is meant for internal recursion limit tracking
-    if (MAX_REC == 0) {
-      return {};
-    }
     if (value === undefined || value === null) {
       return {
         type: 'string',
@@ -543,6 +540,12 @@ export class SchemaHelpers {
         [this.extRawValue]: true,
       };
     }
+
+    if (visited.has(value)) {
+      return {};
+    }
+    visited.add(value);
+
     if (this.isJSONSchema(value)) {
       return value;
     }
@@ -550,7 +553,7 @@ export class SchemaHelpers {
       return {
         type: 'array',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        items: value.map((v) => this.jsonFieldToSchema(v, MAX_REC - 1)),
+        items: value.map((v) => this.jsonFieldToSchema(v, visited)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
@@ -559,7 +562,7 @@ export class SchemaHelpers {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       properties: Object.entries(value).reduce(
         (obj, [k, v]) => {
-          obj[k] = this.jsonFieldToSchema(v, MAX_REC - 1);
+          obj[k] = this.jsonFieldToSchema(v, visited);
           return obj;
         },
         {} as Record<string, unknown>,
