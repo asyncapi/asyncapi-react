@@ -28,8 +28,7 @@ function fallbackRender({ error, resetErrorBoundary }: FallbackProps) {
 
 const AsyncApiErrorBoundary = ({ children }: Props) => {
   const onReset = (details: any) => {
-    // TODO: some magic to make monaco editor undo
-    console.log('resetting', details);
+    // TODO: maybe some magic to recover the previous document ( the one without the error ) automatically 
   };
 
   return (
