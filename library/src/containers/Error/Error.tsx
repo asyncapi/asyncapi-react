@@ -15,7 +15,7 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
       }
       return (
         <div key={index} className="flex gap-2">
-          {(singleError?.location?.startLine ||
+          {(singleError?.location?.startLine ??
             singleError?.location?.startOffset) && (
             <span>{`line ${singleError?.location?.startLine + singleError?.location?.startOffset}:`}</span>
           )}

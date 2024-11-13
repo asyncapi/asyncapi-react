@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { ErrorObject } from '../../types';
 import { Error } from '../Error/Error';
 
@@ -8,33 +8,23 @@ interface Props {
   children: ReactNode;
 }
 
-interface FallbackProps {
-  error: any;
-  resetErrorBoundary?: (...args: any[]) => void;
-}
-
-function fallbackRender({ error, resetErrorBoundary }: FallbackProps) {
+function fallbackRender({ error }: FallbackProps) {
   const ErrorObject: ErrorObject = {
-    title: "Something went wrong",
+    title: 'Something went wrong',
     type: 'application-error',
-    validationErrors:[
+    validationErrors: [
       {
-        title:error.message,
-      }
-    ]
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        title: error?.message,
+      },
+    ],
   };
   return <Error error={ErrorObject} />;
 }
 
 const AsyncApiErrorBoundary = ({ children }: Props) => {
-  const onReset = (details: any) => {
-    // TODO: maybe some magic to recover the previous document ( the one without the error ) automatically 
-  };
-
   return (
-    <ErrorBoundary fallbackRender={fallbackRender} onReset={onReset}>
-      {children}
-    </ErrorBoundary>
+    <ErrorBoundary fallbackRender={fallbackRender}>{children}</ErrorBoundary>
   );
 };
 
