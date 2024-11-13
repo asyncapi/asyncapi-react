@@ -15,7 +15,10 @@ const renderErrors = (errors: ValidationError[]): React.ReactNode => {
       }
       return (
         <div key={index} className="flex gap-2">
-          <span>{`line ${singleError?.location?.startLine + singleError?.location?.startOffset}:`}</span>
+          {(singleError?.location?.startLine ||
+            singleError?.location?.startOffset) && (
+            <span>{`line ${singleError?.location?.startLine + singleError?.location?.startOffset}:`}</span>
+          )}
           <code className="whitespace-pre-wrap break-all ml-2">
             {singleError.title}
           </code>
