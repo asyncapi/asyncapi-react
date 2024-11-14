@@ -542,7 +542,7 @@ export class SchemaHelpers {
     }
 
     if (visited.has(value as object)) {
-      return {};
+      throw new Error("too much recursion. Please check document for recursion.")
     }
     visited.add(value as object);
 
