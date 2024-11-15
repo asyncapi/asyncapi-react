@@ -25,9 +25,9 @@ export const Bindings: React.FunctionComponent<Props> = ({
     const schemaName = (
       <div className="inline-block text-sm">
         <span>{name}</span>
-        <span className="bg-teal-500 font-bold no-underline text-white uppercase rounded mx-2 px-2 py-1 text-xs">
+        <strong className="bg-teal-500 no-underline text-white uppercase rounded mx-2 px-2 py-1 text-xs">
           {protocol}
-        </span>
+        </strong>
       </div>
     );
     return (

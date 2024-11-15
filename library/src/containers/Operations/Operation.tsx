@@ -53,7 +53,7 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
               {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
-                    href={`#${CommonHelpers.getIdentifier(
+                    href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
                       'server-' + server.id(),
                       config,
                     )}`}
@@ -262,7 +262,7 @@ export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
                   : 'bg-blue-600 border-blue-600'
               } text-sm rounded-t h-8 px-4 border text-white flex items-center`}
             >
-              <span className="font-bold">REPLY INFORMATION</span>
+              <strong>REPLY INFORMATION</strong>
             </div>
             <div className="flex">
               <div
@@ -406,7 +406,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
             {servers.map((server) => (
               <li className="inline-block mt-2 mr-2" key={server.id()}>
                 <a
-                  href={`#${CommonHelpers.getIdentifier(
+                  href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
                     'server-' + server.id(),
                     config,
                   )}`}
