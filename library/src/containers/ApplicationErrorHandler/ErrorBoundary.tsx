@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactNode } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { ErrorObject } from '../../types';
@@ -23,8 +23,16 @@ function fallbackRender({ error }: FallbackProps) {
 }
 
 const AsyncApiErrorBoundary = ({ children }: Props) => {
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    setKey((prevKey) => prevKey + 1);
+  }, [children]);
+
   return (
-    <ErrorBoundary fallbackRender={fallbackRender}>{children}</ErrorBoundary>
+    <ErrorBoundary key={key} fallbackRender={fallbackRender}>
+      {children}
+    </ErrorBoundary>
   );
 };
 
