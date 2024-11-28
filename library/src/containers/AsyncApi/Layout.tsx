@@ -11,19 +11,16 @@ import { Schemas } from '../Schemas/Schemas';
 
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
-import { ErrorObject } from '../../types';
 import AsyncApiErrorBoundary from '../ApplicationErrorHandler/ErrorBoundary';
 
 interface Props {
   asyncapi: AsyncAPIDocumentInterface;
   config: ConfigInterface;
-  error?: ErrorObject;
 }
 
 const AsyncApiLayout: React.FunctionComponent<Props> = ({
   asyncapi,
   config,
-  error = null,
 }) => {
   const [observerClassName, setObserverClassName] = useState('container:xl');
 
