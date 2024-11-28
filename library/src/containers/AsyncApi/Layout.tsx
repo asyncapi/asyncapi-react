@@ -8,7 +8,6 @@ import { Servers } from '../Servers/Servers';
 import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 import { Schemas } from '../Schemas/Schemas';
-import { Error } from '../Error/Error';
 
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
@@ -58,7 +57,6 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
               {configShow.sidebar && <Sidebar />}
               <div className="panel--center relative py-8 flex-1">
                 <div className="relative z-10">
-                  {configShow.errors && error && <Error error={error} />}
                   {configShow.info && <Info />}
                   {configShow.servers && <Servers />}
                   {configShow.operations && <Operations />}
