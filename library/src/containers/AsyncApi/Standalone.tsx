@@ -84,13 +84,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       );
     }
 
-    return (
-      <AsyncApiLayout
-        asyncapi={asyncapi}
-        config={concatenatedConfig}
-        error={error}
-      />
-    );
+    return <AsyncApiLayout asyncapi={asyncapi} config={concatenatedConfig} />;
   }
 
   private updateState(schema: PropsSchema) {
