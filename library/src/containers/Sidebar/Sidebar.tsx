@@ -39,9 +39,10 @@ export const Sidebar: React.FunctionComponent = () => {
       <ul className="text-sm mt-2">
         {messages.map((message, index) => (
           <li key={`menu-message-list-${message.name() ?? index}`}>
+          // fixed the href message.name() to message.id() to fix undifined name 
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#message-${message.name()}`}
+              href={`#message-${message.id()}`}
               onClick={() => setShowSidebar(false)}
             >
               <div className="break-all inline-block">{message.id()}</div>
