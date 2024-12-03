@@ -41,7 +41,7 @@ export const Sidebar: React.FunctionComponent = () => {
           <li key={`menu-message-list-${message.name() ?? index}`}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#message-${message.name()}`}
+              href={`#message-${message.name() ?? message.id()}`}
               onClick={() => setShowSidebar(false)}
             >
               <div className="break-all inline-block">{message.id()}</div>
