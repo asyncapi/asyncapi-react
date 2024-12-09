@@ -136,6 +136,7 @@ servers:
 
 channels:
   smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
+    x-x: AsyncAPISpec
     x-security:
       $ref: '#/components/securitySchemes/supportedOauthFlows/flows/clientCredentials'
     description: The topic on which measured values may be produced and consumed.
