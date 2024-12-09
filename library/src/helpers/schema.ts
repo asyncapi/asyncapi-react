@@ -264,7 +264,7 @@ export class SchemaHelpers {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static jsonToSchema(value: any): any {
+  static jsonToSchema(value: any): SchemaInterface {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const json = this.jsonFieldToSchema(value);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
