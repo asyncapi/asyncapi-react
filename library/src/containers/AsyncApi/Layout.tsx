@@ -8,22 +8,19 @@ import { Servers } from '../Servers/Servers';
 import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 import { Schemas } from '../Schemas/Schemas';
-import { Error } from '../Error/Error';
 
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
-import { ErrorObject } from '../../types';
+import AsyncApiErrorBoundary from '../ApplicationErrorHandler/ErrorBoundary';
 
 interface Props {
   asyncapi: AsyncAPIDocumentInterface;
   config: ConfigInterface;
-  error?: ErrorObject;
 }
 
 const AsyncApiLayout: React.FunctionComponent<Props> = ({
   asyncapi,
   config,
-  error = null,
 }) => {
   const [observerClassName, setObserverClassName] = useState('container:xl');
 
@@ -35,7 +32,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
         }
 
         const possibleClassName =
-          width <= 1280 ? 'container:xl' : 'container:base';
+          width <= 1536 ? 'container:xl' : 'container:base';
         if (possibleClassName !== observerClassName) {
           setObserverClassName(possibleClassName);
         }
@@ -48,24 +45,25 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
         <section className="aui-root">
-          <div
-            className={`${observerClassName} relative md:flex bg-white leading-normal`}
-            id={config.schemaID ?? undefined}
-            ref={ref}
-          >
-            {configShow.sidebar && <Sidebar />}
-            <div className="panel--center relative py-8 flex-1">
-              <div className="relative z-10">
-                {configShow.errors && error && <Error error={error} />}
-                {configShow.info && <Info />}
-                {configShow.servers && <Servers />}
-                {configShow.operations && <Operations />}
-                {configShow.messages && <Messages />}
-                {configShow.schemas && <Schemas />}
+          <AsyncApiErrorBoundary>
+            <div
+              className={`${observerClassName} relative md:flex bg-white leading-normal`}
+              id={config.schemaID ?? undefined}
+              ref={ref}
+            >
+              {configShow.sidebar && <Sidebar />}
+              <div className="panel--center relative py-8 flex-1">
+                <div className="relative z-10">
+                  {configShow.info && <Info />}
+                  {configShow.servers && <Servers />}
+                  {configShow.operations && <Operations />}
+                  {configShow.messages && <Messages />}
+                  {configShow.schemas && <Schemas />}
+                </div>
+                <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
               </div>
-              <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
             </div>
-          </div>
+          </AsyncApiErrorBoundary>
         </section>
       </SpecificationContext.Provider>
     </ConfigContext.Provider>
