@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { Schema } from './Schema';
 
 import { SchemaHelpers } from '../helpers';
-import { AsyncAPIDocumentInterface, BaseModel } from '@asyncapi/parser';
 import { useConfig, useSpec } from '../contexts';
 import { CollapseButton } from './CollapseButton';
 
@@ -16,20 +15,11 @@ interface Props {
   item: any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ExtensionComponentProps<V = any> {
-  propertyName: string;
-  propertyValue: V;
-  document: AsyncAPIDocumentInterface;
-  parent: BaseModel;
-}
-
 export const Extensions: React.FunctionComponent<Props> = ({
   name = 'Extensions',
   item,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const [deepExpand, setDeepExpand] = useState(false);
 
   const config = useConfig();
   const document = useSpec();
@@ -61,13 +51,6 @@ export const Extensions: React.FunctionComponent<Props> = ({
             >
               <span className={`break-anywhere text-sm ${name}`}>{name}</span>
             </CollapseButton>
-            <button
-              type="button"
-              onClick={() => setDeepExpand((prev) => !prev)}
-              className="ml-1 text-sm text-gray-500"
-            >
-              {deepExpand ? 'Collapse all' : 'Expand all'}
-            </button>
           </>
         </div>
       </div>

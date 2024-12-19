@@ -6,14 +6,13 @@
 
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import AsyncApiComponent from '..';
+import AsyncApiComponent, { ExtensionComponentProps } from '..';
 import adoaKafka from './docs/v3/adeo-kafka-request-reply.json';
 import krakenMessageFilter from './docs/v3/kraken-websocket-request-reply-message-filter-in-reply.json';
 import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-multiple-channels.json';
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
-import { ExtensionComponentProps } from '../components';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
