@@ -7,6 +7,7 @@ import {
   SEND_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../constants';
+import XExtension from '../components/supportedExtensions/XExtension';
 
 export const defaultConfig: ConfigInterface = {
   schemaID: '',
@@ -33,4 +34,7 @@ export const defaultConfig: ConfigInterface = {
   receiveLabel: RECEIVE_TEXT_LABEL_DEFAULT_TEXT,
   requestLabel: REQUEST_LABEL_DEFAULT_TEXT,
   replyLabel: REPLIER_LABEL_DEFAULT_TEXT,
+  extensions: {
+    'x-x': XExtension,
+  },
 };

@@ -1,4 +1,4 @@
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import { AsyncAPIDocumentInterface, BaseModel } from '@asyncapi/parser';
 
 export type PropsSchema =
   | string
@@ -76,4 +76,12 @@ export interface ErrorObject {
     endColumn: number;
     endOffset: number;
   }[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ExtensionComponentProps<V = any> {
+  propertyName: string;
+  propertyValue: V;
+  document: AsyncAPIDocumentInterface;
+  parent: BaseModel;
 }
