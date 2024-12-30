@@ -8,10 +8,6 @@ import { ExtensionComponentProps } from '../../types';
 export default function XExtension({
   propertyValue,
 }: ExtensionComponentProps<string>) {
-  // const onClickHandler = () => {
-  //   window.open(`https://x.com/${propertyValue}`, '_blank');
-  // };
-
   return (
     <a
       title={`https://x.com/${propertyValue}`}
