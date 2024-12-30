@@ -8,17 +8,20 @@ import { ExtensionComponentProps } from '../../types';
 export default function XExtension({
   propertyValue,
 }: ExtensionComponentProps<string>) {
-  const onClickHandler = () => {
-    window.open(`https://x.com/${propertyValue}`, '_blank');
-  };
+  // const onClickHandler = () => {
+  //   window.open(`https://x.com/${propertyValue}`, '_blank');
+  // };
 
   return (
-    <div
+    <a
       title={`https://x.com/${propertyValue}`}
       style={{ display: 'inline-block' }}
+      href={`https://x.com/${propertyValue}`}
+      rel="noopener noreferrer"
+      target="_blank"
     >
       <svg
-        onClick={onClickHandler}
+        // onClick={onClickHandler}
         style={{ cursor: 'pointer' }}
         width="15px"
         height="15px"
@@ -31,6 +34,6 @@ export default function XExtension({
           fill="black"
         />
       </svg>
-    </div>
+    </a>
   );
 }
