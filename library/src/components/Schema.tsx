@@ -77,6 +77,7 @@ export const Schema: React.FunctionComponent<Props> = ({
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
   isCircular = isCircular || schema.isCircular() || false;
+  console.log('isCircular: ', isCircular);
   const uid = schema.$id();
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =

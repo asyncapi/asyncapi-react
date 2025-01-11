@@ -79,10 +79,12 @@ export const Payload: React.FunctionComponent<Props> = ({
   const parameterLocation = parameterLocationExt?.value() === true;
 
   const schemaType = SchemaHelpers.toSchemaType(schema);
-  const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
   isCircular = isCircular || schema.isCircular() || false;
+  console.log('isCircular: ', isCircular);
+
   const uid = schema.$id();
+
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
     typeof schemaName === 'string' ? (
@@ -93,19 +95,35 @@ export const Payload: React.FunctionComponent<Props> = ({
       schemaName
     );
 
-    if (schemaName == "dependencies") {
-      console.log("schema = ",schema)
-    }
+  // string pattern, constraints, enum, const -> come in Rules and Constraints section
+  const showRules =
+    schema.pattern() ||
+    constraints.length > 0 ||
+    schema.contentEncoding() ||
+    schema.enum() ||
+    schema.const();
+
+  // oneOf, if, then, else, dependentSchemas -> come in Conditions section
+  const showConditions =
+    schema.oneOf()?.length ||
+    schema.if() ||
+    schema.then() ||
+    schema.else() ||
+    dependentSchemas;
+
+  // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
+  const isExpandable =
+    SchemaHelpers.isExpandable(schema) || showRules || showConditions;
 
   return (
     <PayloadSchemaContext.Provider
       value={{ reverse: !reverse, deepExpanded: deepExpand }}
     >
-      <div className="border rounded-lg mb-4 overflow-hidden">
+      <div className="border rounded mb-4 overflow-hidden">
         {/* Header Section */}
         <div className="flex flex-col justify-center p-4 bg-white">
           <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               {isExpandable && !isCircular && !isArray ? (
                 <div className="flex items-center gap-2">
                   <CollapseButton
@@ -114,13 +132,6 @@ export const Payload: React.FunctionComponent<Props> = ({
                   >
                     {renderedSchemaName}
                   </CollapseButton>
-                  <button
-                    type="button"
-                    onClick={() => setDeepExpand((prev) => !prev)}
-                    className="text-sm text-gray-500 hover:text-gray-700"
-                  >
-                    {deepExpand ? 'Collapse all' : 'Expand all'}
-                  </button>
                 </div>
               ) : (
                 <span className={`text-sm ${isProperty ? 'italic' : ''}`}>
@@ -130,6 +141,31 @@ export const Payload: React.FunctionComponent<Props> = ({
               <span className="capitalize text-sm text-teal-500 font-bold">
                 {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
               </span>
+              {schema.format() && (
+                <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                  format: {schema.format()}
+                </strong>
+              )}
+              {schema.contentMediaType() !== undefined && (
+                <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                  media type: {schema.contentMediaType()}
+                </strong>
+              )}
+              {uid && !uid.startsWith('<anonymous-') && (
+                <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                  uid: {uid}
+                </span>
+              )}
+
+              {isExpandable && !isCircular && !isArray && (
+                <button
+                  type="button"
+                  onClick={() => setDeepExpand((prev) => !prev)}
+                  className="ml-auto text-sm text-gray-500 hover:text-gray-700"
+                >
+                  {deepExpand ? 'Collapse all' : 'Expand all'}
+                </button>
+              )}
             </div>
           </div>
 
@@ -167,25 +203,53 @@ export const Payload: React.FunctionComponent<Props> = ({
               <Markdown>{schema.description()}</Markdown>
             </div>
           )}
+          {parameterLocation && (
+            <div className="text-xs">
+              Parameter location:{' '}
+              <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                {parameterLocation}
+              </span>
+            </div>
+          )}
+          {externalDocs && (
+            <strong className="w-min border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-2 py-0 mt-2">
+              <Href
+                href={externalDocs.url()}
+                title={externalDocs.description() ?? ''}
+              >
+                Documentation
+              </Href>
+            </strong>
+          )}
         </div>
 
         {/* Expandable Content */}
         {!isCircular && isExpandable && expanded && (
           <div className="p-4 border-t">
-            {/* Rules Section */}
-            {(constraints.length > 0 || schema.enum() || schema.const()) && (
+            {/* Rules Section: it generally doesnt have any recursion in it */}
+            {showRules && (
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-gray-700 mb-2">
                   Rules & Constraints
                 </h4>
-                <div className="space-y-2 bg-white p-4 rounded-lg border">
+                <div className="space-y-2 bg-blue-100 p-4 rounded border">
+                  {schema.pattern() !== undefined && (
+                    <strong className="bg-yellow-600 no-underline text-white rounded mr-2 p-1 text-xs">
+                      must match: {schema.pattern()}
+                    </strong>
+                  )}
+                  {schema.contentEncoding() !== undefined && (
+                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                      encoding: {schema.contentEncoding()}
+                    </strong>
+                  )}
                   {constraints.map((constraint) => (
-                    <div
+                    <strong
                       key={constraint}
                       className="bg-purple-50 text-purple-700 px-3 py-1 rounded-md text-sm"
                     >
                       {constraint}
-                    </div>
+                    </strong>
                   ))}
                   {schema.enum() && (
                     <div className="text-sm">
@@ -212,19 +276,15 @@ export const Payload: React.FunctionComponent<Props> = ({
               </div>
             )}
 
-            {/* Conditions Section */}
-            {(schema.if() ||
-              schema.then() ||
-              schema.else() ||
-              schema.oneOf()?.length ||
-              dependentSchemas) && (
+            {/* Conditions Section: has hella recursion in it*/}
+            {showConditions && (
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-gray-700 mb-2">
                   Conditions
                 </h4>
                 <div className="space-y-2">
                   {schema.oneOf()?.length && (
-                    <div className="border rounded-lg bg-white p-4">
+                    <div className="border rounded bg-white p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
                         Can be <strong>One Of</strong> these:
                       </h5>

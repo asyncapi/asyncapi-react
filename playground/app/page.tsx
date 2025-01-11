@@ -17,7 +17,8 @@ import {
 import { defaultConfig, parse, debounce } from '@/utils';
 import * as specs from '@/specs';
 
-const defaultSchema = specs.streetlights;
+// const defaultSchema = specs.streetlights;
+const defaultSchema = specs.overcomplicatedStreetlights;
 
 interface State {
   schema: string;
