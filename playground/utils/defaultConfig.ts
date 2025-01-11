@@ -1,11 +1,11 @@
 export const defaultConfig = `{
   "show": {
     "sidebar": false,
-    "info": true,
-    "operations": true,
-    "servers": true,
+    "info": false,
+    "operations": false,
+    "servers": false,
     "messages": true,
-    "schemas": true,
+    "schemas": false,
     "errors": true
   },
   "expand":{
