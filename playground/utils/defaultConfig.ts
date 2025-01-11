@@ -1,3 +1,4 @@
+// TODO: CHANGE THIS BACK TO ORIGINAL CONFIG 
 export const defaultConfig = `{
   "show": {
     "sidebar": false,
