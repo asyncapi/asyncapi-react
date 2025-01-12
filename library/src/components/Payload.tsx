@@ -241,20 +241,26 @@ export const Payload: React.FunctionComponent<Props> = ({
           <div className="p-4 border-t bg-white">
             <div className="flex gap-1">
               {showRules && (
-                <h4
+                <button
                   className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
                   onClick={() => setTabOpen('Rules')}
+                  role="tab"
+                  aria-selected={tabOpen === 'Rules'}
+                  aria-controls="rules-panel"
                 >
                   Rules
-                </h4>
+                </button>
               )}
               {showConditions && (
-                <h4
+                <button
                   className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Conditions' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
                   onClick={() => setTabOpen('Conditions')}
+                  role="tab"
+                  aria-selected={tabOpen === 'Conditions'}
+                  aria-controls="conditions-panel"
                 >
                   Conditions
-                </h4>
+                </button>
               )}
             </div>
             {/* Rules Section: it generally doesnt have any recursion in it */}
