@@ -83,7 +83,7 @@ export const Payload: React.FunctionComponent<Props> = ({
       schemaName
     );
 
-  // string pattern, constraints, enum, const -> come in Rules and Constraints section
+  // comes in Rules section
   const showRules =
     schema.pattern() ||
     constraints.length > 0 ||
@@ -91,7 +91,7 @@ export const Payload: React.FunctionComponent<Props> = ({
     schema.enum() ||
     schema.const();
 
-  // oneOf, if, then, else, dependentSchemas -> come in Conditions section
+  // comes in Conditions section
   const showConditions =
     schema.oneOf()?.length ||
     schema.anyOf()?.length ||
@@ -166,7 +166,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                 </span>
               )}
               {/* TODO: find out if below is really needed ?? 
-              cuz schema.const() is already shown in a strict manner in Rules and Constraints */}
+              cuz schema.const() is already shown in a strict manner in Rules */}
               {SchemaHelpers.prettifyValue(schema.const(), false) && (
                 <span className="text-sm">
                   {SchemaHelpers.prettifyValue(schema.const(), false)}
@@ -248,7 +248,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
                   onClick={() => setTabOpen('Rules')}
                 >
-                  Rules & Constraints
+                  Rules
                 </h4>
               )}
               {showConditions && (
