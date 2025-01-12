@@ -44,18 +44,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
 
-  useEffect(() => {
-    if (!isArray) {
-      setDeepExpand(deepExpanded);
-    }
-  }, [isArray, deepExpanded, setDeepExpand]);
-
-  useEffect(() => {
-    if (!isArray) {
-      setExpanded(deepExpand);
-    }
-  }, [isArray, deepExpand, setExpanded]);
-
   if (
     !schema ||
     (typeof schemaName === 'string' &&
@@ -119,6 +107,22 @@ export const Payload: React.FunctionComponent<Props> = ({
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || showRules || showConditions;
+
+  const [tabOpen, setTabOpen] = useState<'Rules' | 'Conditions'>(
+    showRules ? 'Rules' : 'Conditions',
+  );
+
+  useEffect(() => {
+    if (!isArray) {
+      setDeepExpand(deepExpanded);
+    }
+  }, [isArray, deepExpanded, setDeepExpand]);
+
+  useEffect(() => {
+    if (!isArray) {
+      setExpanded(deepExpand);
+    }
+  }, [isArray, deepExpand, setExpanded]);
 
   return (
     <PayloadSchemaContext.Provider
@@ -237,13 +241,28 @@ export const Payload: React.FunctionComponent<Props> = ({
 
         {/* Expandable Content */}
         {!isCircular && isExpandable && expanded && (
-          <div className="p-4 border-t">
-            {/* Rules Section: it generally doesnt have any recursion in it */}
-            {showRules && (
-              <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-700">
+          <div className="p-4 border-t bg-white">
+            <div className="flex gap-1">
+              {showRules && (
+                <h4
+                  className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                  onClick={() => setTabOpen('Rules')}
+                >
                   Rules & Constraints
                 </h4>
+              )}
+              {showConditions && (
+                <h4
+                  className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Conditions' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                  onClick={() => setTabOpen('Conditions')}
+                >
+                  Conditions
+                </h4>
+              )}
+            </div>
+            {/* Rules Section: it generally doesnt have any recursion in it */}
+            {showRules && tabOpen=="Rules" && (
+              <div className="mb-4">
                 <div className="space-y-2 bg-blue-100 p-4 rounded border">
                   {schema.pattern() !== undefined && (
                     <strong className="bg-yellow-600 no-underline text-white rounded mr-2 p-1 text-xs">
@@ -289,11 +308,8 @@ export const Payload: React.FunctionComponent<Props> = ({
             )}
 
             {/* Conditions Section: has hella recursion in it*/}
-            {showConditions && (
+            {showConditions && tabOpen=="Conditions" && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-900 bg-gray-400 w-min p-2 rounded-t">
-                  Conditions
-                </h4>
                 <div className="space-y-2">
                   {schema.oneOf()?.length && (
                     <div className="border rounded bg-gray-100 p-4">
