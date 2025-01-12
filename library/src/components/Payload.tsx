@@ -98,6 +98,7 @@ export const Payload: React.FunctionComponent<Props> = ({
 
   // comes in Rules section
   const showRules =
+    schema.format() ||
     schema.pattern() ||
     constraints.length > 0 ||
     schema.contentEncoding() ||
@@ -147,11 +148,6 @@ export const Payload: React.FunctionComponent<Props> = ({
               <span className="capitalize text-sm text-teal-500 font-bold">
                 {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
               </span>
-              {schema.format() && (
-                <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
-                  format: {schema.format()}
-                </strong>
-              )}
               {schema.contentMediaType() !== undefined && (
                 <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                   media type: {schema.contentMediaType()}
@@ -267,15 +263,29 @@ export const Payload: React.FunctionComponent<Props> = ({
             {showRules && tabOpen == 'Rules' && (
               <div className="mb-4">
                 <div className="space-y-2 bg-blue-100 p-4 rounded border">
-                  {schema.pattern() !== undefined && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded mr-2 p-1 text-xs">
-                      must match: {schema.pattern()}
-                    </strong>
+                  {schema.format() && (
+                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                      format:{' '}
+                      <span className="rounded font-bold p-1 text-sm">
+                        {schema.format()}
+                      </span>
+                    </span>
+                  )}
+                  {schema.pattern() && (
+                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                      must match:{' '}
+                      <span className="rounded font-bold p-1 text-sm">
+                        {schema.pattern()}
+                      </span>
+                    </span>
                   )}
                   {schema.contentEncoding() !== undefined && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
-                      encoding: {schema.contentEncoding()}
-                    </strong>
+                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                      encoding:{' '}
+                      <span className="rounded font-bold p-1 text-sm">
+                        {schema.contentEncoding()}
+                      </span>
+                    </span>
                   )}
                   {constraints.map((constraint) => (
                     <strong

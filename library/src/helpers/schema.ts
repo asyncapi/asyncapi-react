@@ -112,7 +112,8 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    const suffix = title ? ` ${title}:` : ':';
+    var suffix = title ? ` ${title}:` : ':';
+    if (suffix.startsWith(' <anonymous-schema-')) suffix = ' Anonymous Schema';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
     } else {
@@ -473,10 +474,10 @@ export class SchemaHelpers {
       // numberRange += hasExclusiveMax ? ' )' : ' ]';
 
       // below is code for "0 <= value <= 1"
-      numberRange = ""
+      numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
       numberRange += hasExclusiveMin ? ' < ' : ' <= ';
-      numberRange += "value";
+      numberRange += 'value';
       numberRange += hasExclusiveMax ? ' < ' : ' <= ';
       numberRange += hasExclusiveMax ? exclusiveMax : max;
     } else if (hasMin) {

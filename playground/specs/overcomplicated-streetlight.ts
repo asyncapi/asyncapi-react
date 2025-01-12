@@ -315,7 +315,8 @@ components:
           description: Light intensity measured in lumens.
           writeOnly: true
           oneOf: 
-            - minimum: 0
+            - type: integer
+              minimum: 0
               maximum: 5
             - minimum: 10
               maximum: 20
