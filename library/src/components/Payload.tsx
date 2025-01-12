@@ -262,7 +262,7 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Rules Section: it generally doesnt have any recursion in it */}
             {showRules && tabOpen == 'Rules' && (
               <div className="mb-4">
-                <div className="space-y-2 bg-blue-100 p-4 rounded border">
+                <div className="space-y-2 bg-blue-100 p-4 rounded-b border">
                   {schema.format() && (
                     <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
                       format:{' '}
@@ -297,7 +297,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   ))}
                   {schema.const() !== undefined && (
                     <div className="text-sm">
-                      <span className="text-gray-600">Constant value: </span>
+                      <span className="">Constant value: </span>
                       <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded">
                         {SchemaHelpers.prettifyValue(schema.const())}
                       </span>
@@ -305,11 +305,11 @@ export const Payload: React.FunctionComponent<Props> = ({
                   )}
                   {schema.enum() && (
                     <div className="text-sm">
-                      <span className="text-gray-600">Allowed values: </span>
+                      <span className="">Allowed values: </span>
                       {schema.enum()?.map((e, idx) => (
                         <span
                           key={idx}
-                          className="bg-orange-50 text-orange-700 px-2 py-1 rounded mr-1"
+                          className="bg-orange-50 text-orange-700 font-bold px-2 py-1 rounded"
                         >
                           {SchemaHelpers.prettifyValue(e)}
                         </span>
@@ -327,7 +327,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {schema.oneOf()?.length && (
                     <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Can be <strong>One Of</strong> these:
+                        Can be <strong>One Of</strong> the following:
                       </h5>
                       {schema
                         .oneOf()
@@ -337,8 +337,8 @@ export const Payload: React.FunctionComponent<Props> = ({
                             schema={s}
                             schemaName={SchemaHelpers.applicatorSchemaName(
                               idx,
-                              'Adheres to',
-                              'Or to',
+                              '',
+                              '',
                               s.title() ?? s.id(),
                             )}
                           />
@@ -349,7 +349,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {schema.anyOf()?.length && (
                     <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Can be <strong>Any Of</strong> these:
+                        Can be <strong>Any Of</strong> the following:
                       </h5>
                       {schema
                         .anyOf()
@@ -359,8 +359,8 @@ export const Payload: React.FunctionComponent<Props> = ({
                             schema={s}
                             schemaName={SchemaHelpers.applicatorSchemaName(
                               idx,
-                              'Can adhere to',
-                              'Or to',
+                              '',
+                              '',
                               s.title() ?? s.id(),
                             )}
                           />
@@ -371,7 +371,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {schema.allOf()?.length && (
                     <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Must consist <strong>All Of</strong> these:
+                        Must consist <strong>All Of</strong> the following:
                       </h5>
                       {schema
                         .allOf()
@@ -381,8 +381,8 @@ export const Payload: React.FunctionComponent<Props> = ({
                             schema={s}
                             schemaName={SchemaHelpers.applicatorSchemaName(
                               idx,
-                              'Consists of',
-                              'And of',
+                              '',
+                              '',
                               s.title() ?? s.id(),
                             )}
                           />
@@ -393,7 +393,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {schema.not() && (
                     <Payload
                       schema={schema.not()}
-                      schemaName="Cannot adhere to:"
+                      schemaName="Can NOT adhere to:"
                     />
                   )}
 
