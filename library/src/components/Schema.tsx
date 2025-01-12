@@ -77,7 +77,6 @@ export const Schema: React.FunctionComponent<Props> = ({
   const isExpandable = SchemaHelpers.isExpandable(schema) || dependentSchemas;
 
   isCircular = isCircular || schema.isCircular() || false;
-  console.log('isCircular: ', isCircular);
   const uid = schema.$id();
   const styledSchemaName = isProperty ? 'italic' : '';
   const renderedSchemaName =
@@ -95,9 +94,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     >
       <div>
         <div className="flex py-2">
-          {/* the top tile */}
           <div className={`${onlyTitle ? '' : 'min-w-1/4'} mr-2`}>
-            {/* Schema Name with collapse button */}
             {isExpandable && !isCircular && !isArray ? (
               <>
                 <CollapseButton
@@ -158,13 +155,11 @@ export const Schema: React.FunctionComponent<Props> = ({
           ) : (
             <div>
               <div>
-                {/* Schema Type */}
                 <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
                   {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
                 </div>
 
                 <div className="inline-block">
-                  {/* The tags */}
                   {schema.format() && (
                     <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
                       format: {schema.format()}
@@ -205,14 +200,12 @@ export const Schema: React.FunctionComponent<Props> = ({
                   )}
                 </div>
 
-                {/* Description */}
                 {schema.description() !== undefined && (
                   <div>
                     <Markdown>{schema.description()}</Markdown>
                   </div>
                 )}
 
-                {/* About values */}
                 {schema.default() !== undefined && (
                   <div className="text-xs">
                     Default value:
@@ -242,7 +235,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                     ))}
                   </ul>
                 )}
-
                 {parameterLocation && (
                   <div className="text-xs">
                     Parameter location:{' '}
@@ -279,22 +271,6 @@ export const Schema: React.FunctionComponent<Props> = ({
           )}
         </div>
 
-        {/* {!!constraints.length && (
-          <div>
-            <span>Rules</span>
-            {!!constraints.length &&
-              constraints.map((c) => (
-                <strong
-                  className="bg-purple-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs"
-                  key={c}
-                >
-                  {c} constraint
-                </strong>
-              ))}
-          </div>
-        )} */}
-
-        {/* the expandable part */}
         {isCircular || !isExpandable ? null : (
           <div
             className={`rounded p-4 py-2 border bg-gray-100 ${
@@ -318,7 +294,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                   )}
                 />
               ))}
-
             {schema
               .anyOf()
               ?.map((s, idx) => (
@@ -333,7 +308,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                   )}
                 />
               ))}
-
             {schema
               .allOf()
               ?.map((s, idx) => (
@@ -348,7 +322,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                   )}
                 />
               ))}
-
             {schema.not() && (
               <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
             )}
@@ -359,7 +332,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                 schemaName="Property names must adhere to:"
               />
             )}
-
             {schema.contains() && (
               <Schema
                 schema={schema.contains()}
@@ -370,14 +342,12 @@ export const Schema: React.FunctionComponent<Props> = ({
             {schema.if() && (
               <Schema schema={schema.if()} schemaName="If schema adheres to:" />
             )}
-
             {schema.then() && (
               <Schema
                 schema={schema.then()}
                 schemaName="Then must adhere to:"
               />
             )}
-
             {schema.else() && (
               <Schema schema={schema.else()} schemaName="Otherwise:" />
             )}
@@ -392,7 +362,6 @@ export const Schema: React.FunctionComponent<Props> = ({
             <Extensions item={schema} />
 
             <AdditionalProperties schema={schema} />
-
             <AdditionalItems schema={schema} />
           </div>
         )}
