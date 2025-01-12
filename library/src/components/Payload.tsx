@@ -156,6 +156,13 @@ export const Payload: React.FunctionComponent<Props> = ({
                   uid: {uid}
                 </span>
               )}
+              {/* TODO: find out if below is really needed ?? 
+              cuz schema.const() is already shown in a strict manner in Rules and Constraints */}
+              {SchemaHelpers.prettifyValue(schema.const(), false) && (
+                <span className="text-sm">
+                  {SchemaHelpers.prettifyValue(schema.const(), false)}
+                </span>
+              )}
 
               {isExpandable && !isCircular && !isArray && (
                 <button
@@ -229,7 +236,7 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Rules Section: it generally doesnt have any recursion in it */}
             {showRules && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                <h4 className="text-sm font-semibold text-gray-700">
                   Rules & Constraints
                 </h4>
                 <div className="space-y-2 bg-blue-100 p-4 rounded border">
@@ -251,6 +258,14 @@ export const Payload: React.FunctionComponent<Props> = ({
                       {constraint}
                     </strong>
                   ))}
+                  {schema.const() !== undefined && (
+                    <div className="text-sm">
+                      <span className="text-gray-600">Constant value: </span>
+                      <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded">
+                        {SchemaHelpers.prettifyValue(schema.const())}
+                      </span>
+                    </div>
+                  )}
                   {schema.enum() && (
                     <div className="text-sm">
                       <span className="text-gray-600">Allowed values: </span>
@@ -264,14 +279,6 @@ export const Payload: React.FunctionComponent<Props> = ({
                       ))}
                     </div>
                   )}
-                  {schema.const() !== undefined && (
-                    <div className="text-sm">
-                      <span className="text-gray-600">Constant value: </span>
-                      <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded">
-                        {SchemaHelpers.prettifyValue(schema.const())}
-                      </span>
-                    </div>
-                  )}
                 </div>
               </div>
             )}
@@ -279,7 +286,7 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Conditions Section: has hella recursion in it*/}
             {showConditions && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                <h4 className="text-sm font-semibold text-gray-900 bg-gray-400 w-min p-2 rounded-t">
                   Conditions
                 </h4>
                 <div className="space-y-2">
@@ -300,10 +307,74 @@ export const Payload: React.FunctionComponent<Props> = ({
                               'Or to',
                               s.title() ?? s.id(),
                             )}
-                            onlyTitle={true}
                           />
                         ))}
                     </div>
+                  )}
+
+                  {schema.anyOf()?.length && (
+                    <div className="border rounded bg-white p-4">
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                        Can be <strong>Any Of</strong> these:
+                      </h5>
+                      {schema
+                        .anyOf()
+                        ?.map((s, idx) => (
+                          <Payload
+                            key={idx}
+                            schema={s}
+                            schemaName={SchemaHelpers.applicatorSchemaName(
+                              idx,
+                              'Can adhere to',
+                              'Or to',
+                              s.title() ?? s.id(),
+                            )}
+                          />
+                        ))}
+                    </div>
+                  )}
+
+                  {schema.allOf()?.length && (
+                    <div className="border rounded bg-white p-4">
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                        Must consist <strong>All Of</strong> these:
+                      </h5>
+                      {schema
+                        .allOf()
+                        ?.map((s, idx) => (
+                          <Payload
+                            key={idx}
+                            schema={s}
+                            schemaName={SchemaHelpers.applicatorSchemaName(
+                              idx,
+                              'Consists of',
+                              'And of',
+                              s.title() ?? s.id(),
+                            )}
+                          />
+                        ))}
+                    </div>
+                  )}
+
+                  {schema.not() && (
+                    <Payload
+                      schema={schema.not()}
+                      schemaName="Cannot adhere to:"
+                    />
+                  )}
+
+                  {schema.propertyNames() && (
+                    <Payload
+                      schema={schema.propertyNames()}
+                      schemaName="Property names must adhere to:"
+                    />
+                  )}
+
+                  {schema.contains() && (
+                    <Payload
+                      schema={schema.contains()}
+                      schemaName="Array must contain at least one of:"
+                    />
                   )}
 
                   {schema.if() && (
