@@ -106,6 +106,11 @@ export const Payload: React.FunctionComponent<Props> = ({
   // oneOf, if, then, else, dependentSchemas -> come in Conditions section
   const showConditions =
     schema.oneOf()?.length ||
+    schema.anyOf()?.length ||
+    schema.allOf()?.length ||
+    schema.not() ||
+    schema.propertyNames() ||
+    schema.contains() ||
     schema.if() ||
     schema.then() ||
     schema.else() ||
