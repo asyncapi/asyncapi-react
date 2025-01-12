@@ -37,12 +37,26 @@ export const Payload: React.FunctionComponent<Props> = ({
   isArray = false,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
-  //   if (schemaName == "Payload") {
-  //     console.log("schema = ",schema)
-  //   }
   const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
+  const [tabOpen, setTabOpen] = useState<'Rules' | 'Conditions'>('Rules');
+
+  useEffect(() => {
+    if (!isArray) {
+      setDeepExpand(deepExpanded);
+    }
+  }, [isArray, deepExpanded, setDeepExpand]);
+
+  useEffect(() => {
+    if (!isArray) {
+      setExpanded(deepExpand);
+    }
+  }, [isArray, deepExpand, setExpanded]);
+
+  useEffect(() => {
+    setTabOpen(showRules ? 'Rules' : 'Conditions');
+  }, [schema]);
 
   if (
     !schema ||
@@ -69,7 +83,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   const schemaType = SchemaHelpers.toSchemaType(schema);
 
   isCircular = isCircular || schema.isCircular() || false;
-  console.log('isCircular: ', isCircular);
 
   const uid = schema.$id();
 
@@ -107,22 +120,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || showRules || showConditions;
-
-  const [tabOpen, setTabOpen] = useState<'Rules' | 'Conditions'>(
-    showRules ? 'Rules' : 'Conditions',
-  );
-
-  useEffect(() => {
-    if (!isArray) {
-      setDeepExpand(deepExpanded);
-    }
-  }, [isArray, deepExpanded, setDeepExpand]);
-
-  useEffect(() => {
-    if (!isArray) {
-      setExpanded(deepExpand);
-    }
-  }, [isArray, deepExpand, setExpanded]);
 
   return (
     <PayloadSchemaContext.Provider
@@ -261,7 +258,7 @@ export const Payload: React.FunctionComponent<Props> = ({
               )}
             </div>
             {/* Rules Section: it generally doesnt have any recursion in it */}
-            {showRules && tabOpen=="Rules" && (
+            {showRules && tabOpen == 'Rules' && (
               <div className="mb-4">
                 <div className="space-y-2 bg-blue-100 p-4 rounded border">
                   {schema.pattern() !== undefined && (
@@ -308,7 +305,7 @@ export const Payload: React.FunctionComponent<Props> = ({
             )}
 
             {/* Conditions Section: has hella recursion in it*/}
-            {showConditions && tabOpen=="Conditions" && (
+            {showConditions && tabOpen == 'Conditions' && (
               <div className="mb-4">
                 <div className="space-y-2">
                   {schema.oneOf()?.length && (
