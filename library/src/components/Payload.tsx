@@ -126,7 +126,7 @@ export const Payload: React.FunctionComponent<Props> = ({
     >
       <div className="border rounded mb-4 overflow-hidden">
         {/* Header Section */}
-        <div className="flex flex-col justify-center p-4 bg-white">
+        <div className="flex flex-col justify-center p-4 bg-gray-100">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-2 w-full">
               {isExpandable && !isCircular && !isArray ? (
@@ -296,7 +296,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                 </h4>
                 <div className="space-y-2">
                   {schema.oneOf()?.length && (
-                    <div className="border rounded bg-white p-4">
+                    <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
                         Can be <strong>One Of</strong> these:
                       </h5>
@@ -318,7 +318,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   )}
 
                   {schema.anyOf()?.length && (
-                    <div className="border rounded bg-white p-4">
+                    <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
                         Can be <strong>Any Of</strong> these:
                       </h5>
@@ -340,7 +340,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   )}
 
                   {schema.allOf()?.length && (
-                    <div className="border rounded bg-white p-4">
+                    <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
                         Must consist <strong>All Of</strong> these:
                       </h5>
