@@ -158,7 +158,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                 <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
                   {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
                 </div>
-
                 <div className="inline-block">
                   {schema.format() && (
                     <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
@@ -183,6 +182,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     </strong>
                   )}
 
+                  {/* constraints */}
                   {!!constraints.length &&
                     constraints.map((c) => (
                       <strong
