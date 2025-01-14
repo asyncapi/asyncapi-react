@@ -166,6 +166,35 @@ export const Payload: React.FunctionComponent<Props> = ({
                 </span>
               )}
 
+              {/* Field Status Indicators */}
+              {(required ||
+                schema.deprecated() ||
+                schema.writeOnly() ||
+                schema.readOnly()) && (
+                <div className="flex items-center space-x-2">
+                  {required && (
+                    <span className="text-red-600 text-xs rounded">
+                      required
+                    </span>
+                  )}
+                  {schema.deprecated() && (
+                    <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
+                      deprecated
+                    </span>
+                  )}
+                  {schema.writeOnly() && (
+                    <span className="text-gray-600 text-xs rounded">
+                      write-only
+                    </span>
+                  )}
+                  {schema.readOnly() && (
+                    <span className="text-gray-500 text-xs rounded">
+                      read-only
+                    </span>
+                  )}
+                </div>
+              )}
+
               {isExpandable && !isCircular && !isArray && (
                 <button
                   type="button"
@@ -178,34 +207,6 @@ export const Payload: React.FunctionComponent<Props> = ({
             </div>
           </div>
 
-          {/* Field Status Indicators */}
-          {required ||
-            schema.deprecated() ||
-            schema.writeOnly() ||
-            (schema.readOnly() && (
-              <div className="mt-2 space-x-2">
-                {required && (
-                  <span className="text-red-600 text-xs px-2 py-1 bg-red-50 rounded">
-                    required
-                  </span>
-                )}
-                {schema.deprecated() && (
-                  <span className="text-red-600 text-xs px-2 py-1 bg-red-50 rounded">
-                    deprecated
-                  </span>
-                )}
-                {schema.writeOnly() && (
-                  <span className="text-gray-500 text-xs px-2 py-1 bg-gray-50 rounded">
-                    write-only
-                  </span>
-                )}
-                {schema.readOnly() && (
-                  <span className="text-gray-500 text-xs px-2 py-1 bg-gray-50 rounded">
-                    read-only
-                  </span>
-                )}
-              </div>
-            ))}
           {/* Description */}
           {schema.description() && (
             <div className="mt-2 text-sm text-gray-600">
