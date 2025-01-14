@@ -17,7 +17,7 @@ import {
   CONTENT_TYPES_SITE,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
-import { Payload } from '../../components/Payload';
+import { Payload } from '../../components/Payload/Payload';
 
 interface Props {
   message: MessageInterface;
