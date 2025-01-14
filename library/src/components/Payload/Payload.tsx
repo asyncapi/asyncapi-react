@@ -103,7 +103,7 @@ export const Payload: React.FunctionComponent<Props> = ({
     constraints.length > 0 ||
     schema.contentEncoding() ||
     schema.enum() ||
-    schema.const();
+    schema.const() !== undefined;
 
   // comes in Conditions section
   const showConditions =
@@ -160,17 +160,18 @@ export const Payload: React.FunctionComponent<Props> = ({
               )}
               {/* TODO: find out if below is really needed ?? 
               cuz schema.const() is already shown in a strict manner in Rules */}
-              {SchemaHelpers.prettifyValue(schema.const(), false) && (
+              {/* {SchemaHelpers.prettifyValue(schema.const(), false) && (
                 <span className="text-sm">
                   {SchemaHelpers.prettifyValue(schema.const(), false)}
                 </span>
-              )}
+              )} */}
 
               {/* Field Status Indicators */}
               {(required ||
                 schema.deprecated() ||
                 schema.writeOnly() ||
-                schema.readOnly()) && (
+                schema.readOnly() ||
+                isPatternProperty) && (
                 <div className="flex items-center space-x-2">
                   {required && (
                     <span className="text-red-600 text-xs rounded">
@@ -181,6 +182,11 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
                       deprecated
                     </span>
+                  )}
+                  {isPatternProperty && (
+                    <div className="text-gray-500 text-xs italic">
+                      (pattern property)
+                    </div>
                   )}
                   {schema.writeOnly() && (
                     <span className="text-gray-600 text-xs rounded">
@@ -212,6 +218,19 @@ export const Payload: React.FunctionComponent<Props> = ({
             <div className="mt-2 text-sm text-gray-600">
               <Markdown>{schema.description()}</Markdown>
             </div>
+          )}
+          {schema.examples() && (
+            <ul className="text-xs">
+              Examples values:{' '}
+              {schema.examples()?.map((e, idx) => (
+                <li
+                  key={idx}
+                  className="inline-block bg-gray-600 text-white rounded ml-1 py-0 px-2 break-all"
+                >
+                  <span>{SchemaHelpers.prettifyValue(e)}</span>
+                </li>
+              ))}
+            </ul>
           )}
           {parameterLocation && (
             <div className="text-xs">
