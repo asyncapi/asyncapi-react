@@ -10,7 +10,7 @@
     "@codemirror/lang-yaml": "^6.0.0",
     "@uiw/codemirror-theme-material": "^4.21.24",
     "@uiw/react-codemirror": "^4.21.24",
-    "next": "14.2.10",
+    "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "react-split": "^2.0.14",
