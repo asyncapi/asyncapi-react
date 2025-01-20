@@ -282,9 +282,9 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Rules Section: it generally doesnt have any recursion in it */}
             {showRules && tabOpen == 'Rules' && (
               <div className="mb-4">
-                <div className="space-y-2 bg-blue-100 p-4 rounded-b border">
+                <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded-b border">
                   {schema.format() && (
-                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                    <span className="no-underline rounded lowercase p-1 text-sm">
                       format:{' '}
                       <span className="rounded font-bold p-1 text-sm">
                         {schema.format()}
@@ -292,7 +292,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                     </span>
                   )}
                   {schema.pattern() && (
-                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                    <span className="no-underline rounded lowercase p-1 text-sm">
                       must match:{' '}
                       <span className="rounded font-bold p-1 text-sm">
                         {schema.pattern()}
@@ -300,7 +300,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                     </span>
                   )}
                   {schema.contentEncoding() !== undefined && (
-                    <span className="no-underline rounded lowercase mr-2 p-1 text-sm">
+                    <span className="no-underline rounded lowercase p-1 text-sm">
                       encoding:{' '}
                       <span className="rounded font-bold p-1 text-sm">
                         {schema.contentEncoding()}
@@ -310,7 +310,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {constraints.map((constraint) => (
                     <strong
                       key={constraint}
-                      className="bg-purple-50 text-purple-700 px-3 py-1 rounded-md text-sm"
+                      className="text-purple-700 p-1 rounded-md text-sm"
                     >
                       {constraint}
                     </strong>
