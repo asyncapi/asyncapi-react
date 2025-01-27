@@ -1,8 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useLayoutEffect,
+} from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 
-import { Href, CollapseButton, Markdown, Extensions } from '../index';
+import {
+  Href,
+  CollapseButton,
+  Markdown,
+  Extensions,
+  HiChevronRight,
+} from '../index';
 import { SchemaHelpers } from '../../helpers';
+import { useSidebarContext } from '../../contexts/conditionsSidebar';
 
 interface Props {
   schemaName?: React.ReactNode;
@@ -16,6 +29,8 @@ interface Props {
   expanded?: boolean;
   onlyTitle?: boolean;
   isArray?: boolean;
+  showConditionSidebar?: boolean;
+  recursionCounter?: number;
 }
 
 const PayloadSchemaContext = React.createContext({
@@ -35,18 +50,29 @@ export const Payload: React.FunctionComponent<Props> = ({
   expanded: propExpanded = false,
   onlyTitle = false,
   isArray = false,
+  recursionCounter = 0,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'Rules' | 'Conditions'>('Rules');
+  const { conditionsSidebarOpen, toggleSidebar } = useSidebarContext();
+  const [conditionsHeight, setConditionsHeight] = useState(0);
+  const conditionsDivRef = useRef<HTMLDivElement>(null);
+
+  const floatConditionsToRight =
+    isProperty && recursionCounter == 2 && conditionsSidebarOpen;
 
   useEffect(() => {
     if (!isArray) {
       setDeepExpand(deepExpanded);
     }
   }, [isArray, deepExpanded, setDeepExpand]);
+
+  // useEffect(() => {
+  //   setConditionsSidebarOpen(showConditionsSidebar);
+  // }, [showConditionsSidebar, conditionsSidebarOpen, setConditionsSidebarOpen]);
 
   useEffect(() => {
     if (!isArray) {
@@ -57,6 +83,29 @@ export const Payload: React.FunctionComponent<Props> = ({
   useEffect(() => {
     setTabOpen(showRules ? 'Rules' : 'Conditions');
   }, [schema]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log('conditionsDivRef.current ', conditionsDivRef.current);
+      if (conditionsDivRef.current) {
+        console.log(
+          'height ',
+          schemaName,
+          ' ',
+          conditionsDivRef.current.getBoundingClientRect().height,
+        );
+        setConditionsHeight(
+          conditionsDivRef.current.getBoundingClientRect().height,
+        );
+      }
+    }, 500);
+  }, []);
+  // useLayoutEffect(() => {
+  //   if (conditionsDivRef.current) {
+  //     console.log("height ",schemaName , " ", conditionsDivRef.current.getBoundingClientRect().height)
+  //     setConditionsHeight(conditionsDivRef.current.getBoundingClientRect().height);
+  //   }
+  // }, []);
 
   if (
     !schema ||
@@ -124,226 +173,260 @@ export const Payload: React.FunctionComponent<Props> = ({
 
   return (
     <PayloadSchemaContext.Provider
-      value={{ reverse: !reverse, deepExpanded: deepExpand }}
+      value={{
+        reverse: !reverse,
+        deepExpanded: deepExpand,
+      }}
     >
-      <div className="border rounded mb-4 overflow-hidden">
-        {/* Header Section */}
-        <div className="flex flex-col justify-center p-4 bg-gray-100">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2 w-full">
-              {isExpandable && !isCircular && !isArray ? (
-                <div className="flex items-center gap-2">
-                  <CollapseButton
-                    onClick={() => setExpanded((prev) => !prev)}
-                    expanded={expanded}
-                  >
-                    {renderedSchemaName}
-                  </CollapseButton>
-                </div>
-              ) : (
-                <span className={`text-sm ${isProperty ? 'italic' : ''}`}>
-                  {schemaName}
+      <div className="flex mb-4 gap-2">
+        <div
+          className={`border rounded overflow-visible ${conditionsSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
+        >
+          {/* Header Section */}
+          <div className="flex flex-col justify-center p-4 bg-gray-100">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-2 w-full">
+                {isExpandable && !isCircular && !isArray ? (
+                  // TODO: make this sticky
+                  <div className="flex items-center gap-2">
+                    <CollapseButton
+                      onClick={() => setExpanded((prev) => !prev)}
+                      expanded={expanded}
+                    >
+                      {renderedSchemaName}
+                    </CollapseButton>
+                  </div>
+                ) : (
+                  <span className={`text-sm ${isProperty ? 'italic' : ''}`}>
+                    {schemaName}
+                  </span>
+                )}
+                <span className="capitalize text-sm text-teal-500 font-bold">
+                  {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
                 </span>
-              )}
-              <span className="capitalize text-sm text-teal-500 font-bold">
-                {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
-              </span>
-              {schema.contentMediaType() !== undefined && (
-                <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
-                  media type: {schema.contentMediaType()}
-                </strong>
-              )}
-              {uid && !uid.startsWith('<anonymous-') && (
-                <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
-                  uid: {uid}
-                </span>
-              )}
-              {/* TODO: find out if below is really needed ?? 
+                {schema.contentMediaType() !== undefined && (
+                  <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    media type: {schema.contentMediaType()}
+                  </strong>
+                )}
+                {uid && !uid.startsWith('<anonymous-') && (
+                  <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                    uid: {uid}
+                  </span>
+                )}
+                {/* TODO: find out if below is really needed ?? 
               cuz schema.const() is already shown in a strict manner in Rules */}
-              {/* {SchemaHelpers.prettifyValue(schema.const(), false) && (
+                {/* {SchemaHelpers.prettifyValue(schema.const(), false) && (
                 <span className="text-sm">
                   {SchemaHelpers.prettifyValue(schema.const(), false)}
                 </span>
               )} */}
 
-              {/* Field Status Indicators */}
-              {(required ||
-                schema.deprecated() ||
-                schema.writeOnly() ||
-                schema.readOnly() ||
-                isPatternProperty) && (
-                <div className="flex items-center space-x-2">
-                  {required && (
-                    <span className="text-red-600 text-xs rounded">
-                      required
-                    </span>
-                  )}
-                  {schema.deprecated() && (
-                    <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
-                      deprecated
-                    </span>
-                  )}
-                  {isPatternProperty && (
-                    <div className="text-gray-500 text-xs italic">
-                      (pattern property)
-                    </div>
-                  )}
-                  {schema.writeOnly() && (
-                    <span className="text-gray-600 text-xs rounded">
-                      write-only
-                    </span>
-                  )}
-                  {schema.readOnly() && (
-                    <span className="text-gray-500 text-xs rounded">
-                      read-only
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {isExpandable && !isCircular && !isArray && (
-                <button
-                  type="button"
-                  onClick={() => setDeepExpand((prev) => !prev)}
-                  className="ml-auto text-sm text-gray-500 hover:text-gray-700"
-                >
-                  {deepExpand ? 'Collapse all' : 'Expand all'}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Description */}
-          {schema.description() && (
-            <div className="mt-2 text-sm text-gray-600">
-              <Markdown>{schema.description()}</Markdown>
-            </div>
-          )}
-          {schema.examples() && (
-            <ul className="text-xs">
-              Examples values:{' '}
-              {schema.examples()?.map((e, idx) => (
-                <li
-                  key={idx}
-                  className="inline-block bg-gray-600 text-white rounded ml-1 py-0 px-2 break-all"
-                >
-                  <span>{SchemaHelpers.prettifyValue(e)}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {parameterLocation && (
-            <div className="text-xs">
-              Parameter location:{' '}
-              <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
-                {parameterLocation}
-              </span>
-            </div>
-          )}
-          {externalDocs && (
-            <strong className="w-min border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-2 py-0 mt-2">
-              <Href
-                href={externalDocs.url()}
-                title={externalDocs.description() ?? ''}
-              >
-                Documentation
-              </Href>
-            </strong>
-          )}
-        </div>
-
-        {/* Expandable Content */}
-        {!isCircular && isExpandable && expanded && (
-          <div className="p-4 border-t bg-white">
-            <div className="flex gap-1">
-              {showRules && (
-                <button
-                  className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
-                  onClick={() => setTabOpen('Rules')}
-                  role="tab"
-                  aria-selected={tabOpen === 'Rules'}
-                  aria-controls="rules-panel"
-                >
-                  Rules
-                </button>
-              )}
-              {showConditions && (
-                <button
-                  className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Conditions' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
-                  onClick={() => setTabOpen('Conditions')}
-                  role="tab"
-                  aria-selected={tabOpen === 'Conditions'}
-                  aria-controls="conditions-panel"
-                >
-                  Conditions
-                </button>
-              )}
-            </div>
-            {/* Rules Section: it generally doesnt have any recursion in it */}
-            {showRules && tabOpen == 'Rules' && (
-              <div className="mb-4">
-                <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded-b border">
-                  {schema.format() && (
-                    <span className="no-underline rounded lowercase p-1 text-sm">
-                      format:{' '}
-                      <span className="rounded font-bold p-1 text-sm">
-                        {schema.format()}
+                {/* Field Status Indicators */}
+                {(required ||
+                  schema.deprecated() ||
+                  schema.writeOnly() ||
+                  schema.readOnly() ||
+                  isPatternProperty) && (
+                  <div className="flex items-center space-x-2">
+                    {required && (
+                      <span className="text-red-600 text-xs rounded">
+                        required
                       </span>
-                    </span>
-                  )}
-                  {schema.pattern() && (
-                    <span className="no-underline rounded lowercase p-1 text-sm">
-                      must match:{' '}
-                      <span className="rounded font-bold p-1 text-sm">
-                        {schema.pattern()}
+                    )}
+                    {schema.deprecated() && (
+                      <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
+                        deprecated
                       </span>
-                    </span>
-                  )}
-                  {schema.contentEncoding() !== undefined && (
-                    <span className="no-underline rounded lowercase p-1 text-sm">
-                      encoding:{' '}
-                      <span className="rounded font-bold p-1 text-sm">
-                        {schema.contentEncoding()}
+                    )}
+                    {isPatternProperty && (
+                      <div className="text-gray-500 text-xs italic">
+                        (pattern property)
+                      </div>
+                    )}
+                    {schema.writeOnly() && (
+                      <span className="text-gray-600 text-xs rounded">
+                        write-only
                       </span>
-                    </span>
-                  )}
-                  {constraints.map((constraint) => (
-                    <strong
-                      key={constraint}
-                      className="text-purple-700 p-1 rounded-md text-sm"
+                    )}
+                    {schema.readOnly() && (
+                      <span className="text-gray-500 text-xs rounded">
+                        read-only
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <div className="ml-auto flex gap-4">
+                  {isExpandable && !isCircular && !isArray && (
+                    <button
+                      type="button"
+                      onClick={() => setDeepExpand((prev) => !prev)}
+                      className="text-sm text-gray-500 hover:text-gray-700"
                     >
-                      {constraint}
-                    </strong>
-                  ))}
-                  {schema.const() !== undefined && (
-                    <div className="text-sm">
-                      <span className="">Constant value: </span>
-                      <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded">
-                        {SchemaHelpers.prettifyValue(schema.const())}
-                      </span>
-                    </div>
+                      {deepExpand ? 'Collapse all' : 'Expand all'}
+                    </button>
                   )}
-                  {schema.enum() && (
-                    <div className="text-sm">
-                      <span className="">Allowed values: </span>
-                      {schema.enum()?.map((e, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-orange-50 text-orange-700 font-bold px-2 py-1 rounded"
-                        >
-                          {SchemaHelpers.prettifyValue(e)}
-                        </span>
-                      ))}
-                    </div>
+                  {recursionCounter == 0 && (
+                    <button
+                      type="button"
+                      onClick={() => toggleSidebar()}
+                      className="flex items-center text-sm bg-gray-300 p-1 rounded"
+                    >
+                      <span className=''>Conditions</span>
+                      <HiChevronRight
+                        className={`inline-block align-baseline cursor-pointer w-5 h-6 transform transition-transform duration-150 ease-linear ${
+                          conditionsSidebarOpen ? `-rotate-${0}` : `-rotate-${180}`
+                        }`}
+                      />
+                    </button>
                   )}
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* Conditions Section: has hella recursion in it*/}
-            {showConditions && tabOpen == 'Conditions' && (
-              <div className="mb-4">
-                <div className="space-y-2">
+            {/* Description */}
+            {schema.description() && (
+              <div className="mt-2 text-sm text-gray-600">
+                <Markdown>{schema.description()}</Markdown>
+              </div>
+            )}
+            {schema.examples() && (
+              <ul className="text-xs">
+                Examples values:{' '}
+                {schema.examples()?.map((e, idx) => (
+                  <li
+                    key={idx}
+                    className="inline-block bg-gray-600 text-white rounded ml-1 py-0 px-2 break-all"
+                  >
+                    <span>{SchemaHelpers.prettifyValue(e)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {parameterLocation && (
+              <div className="text-xs">
+                Parameter location:{' '}
+                <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                  {parameterLocation}
+                </span>
+              </div>
+            )}
+            {externalDocs && (
+              <strong className="w-min border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-2 py-0 mt-2">
+                <Href
+                  href={externalDocs.url()}
+                  title={externalDocs.description() ?? ''}
+                >
+                  Documentation
+                </Href>
+              </strong>
+            )}
+          </div>
+
+          {/* Expandable Content */}
+          {!isCircular && isExpandable && expanded && (
+            <div className="p-4 border-t bg-white">
+              <div
+                className="flex gap-1"
+                style={{ minHeight: conditionsHeight }}
+              >
+                {showRules && (
+                  <button
+                    className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                    onClick={() => setTabOpen('Rules')}
+                    role="tab"
+                    aria-selected={tabOpen === 'Rules'}
+                    aria-controls="rules-panel"
+                  >
+                    Rules
+                  </button>
+                )}
+                {/* {showConditions && (
+                  <button
+                    className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Conditions' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                    onClick={() => setTabOpen('Conditions')}
+                    role="tab"
+                    aria-selected={tabOpen === 'Conditions'}
+                    aria-controls="conditions-panel"
+                  >
+                    Conditions
+                  </button>
+                )} */}
+              </div>
+              <div className="relative">
+                {/* Rules Section: it generally doesnt have any recursion in it */}
+                {showRules && tabOpen == 'Rules' && (
+                  <div className="mb-4 w-full">
+                    <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded-b border">
+                      {schema.format() && (
+                        <span className="no-underline rounded lowercase p-1 text-sm">
+                          format:{' '}
+                          <span className="rounded font-bold p-1 text-sm">
+                            {schema.format()}
+                          </span>
+                        </span>
+                      )}
+                      {schema.pattern() && (
+                        <span className="no-underline rounded lowercase p-1 text-sm">
+                          must match:{' '}
+                          <span className="rounded font-bold p-1 text-sm">
+                            {schema.pattern()}
+                          </span>
+                        </span>
+                      )}
+                      {schema.contentEncoding() !== undefined && (
+                        <span className="no-underline rounded lowercase p-1 text-sm">
+                          encoding:{' '}
+                          <span className="rounded font-bold p-1 text-sm">
+                            {schema.contentEncoding()}
+                          </span>
+                        </span>
+                      )}
+                      {constraints.map((constraint) => (
+                        <strong
+                          key={constraint}
+                          className="text-purple-700 p-1 rounded-md text-sm"
+                        >
+                          {constraint}
+                        </strong>
+                      ))}
+                      {schema.const() !== undefined && (
+                        <div className="text-sm">
+                          <span className="">Constant value: </span>
+                          <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded">
+                            {SchemaHelpers.prettifyValue(schema.const())}
+                          </span>
+                        </div>
+                      )}
+                      {schema.enum() && (
+                        <div className="text-sm">
+                          <span className="">Allowed values: </span>
+                          {schema.enum()?.map((e, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-orange-50 text-orange-700 font-bold px-2 py-1 rounded"
+                            >
+                              {SchemaHelpers.prettifyValue(e)}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Conditions Section: has hella recursion in it*/}
+                {/* {showConditions && tabOpen == 'Conditions' && ( */}
+                <div
+                  className={`space-y-2 mb-4 z-10 w-full`}
+                  style={
+                    floatConditionsToRight
+                      ? { marginLeft: 'calc(100% + 75px)' }
+                      : {}
+                  }
+                  ref={conditionsDivRef}
+                >
                   {schema.oneOf()?.length && (
                     <div className="border rounded bg-gray-100 p-4">
                       <h5 className="text-sm font-semibold text-gray-700 mb-2">
@@ -361,6 +444,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                               '',
                               s.title() ?? s.id(),
                             )}
+                            recursionCounter={recursionCounter + 1}
                           />
                         ))}
                     </div>
@@ -383,6 +467,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                               '',
                               s.title() ?? s.id(),
                             )}
+                            recursionCounter={recursionCounter + 1}
                           />
                         ))}
                     </div>
@@ -405,6 +490,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                               '',
                               s.title() ?? s.id(),
                             )}
+                            recursionCounter={recursionCounter + 1}
                           />
                         ))}
                     </div>
@@ -414,6 +500,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <Payload
                       schema={schema.not()}
                       schemaName="Can NOT adhere to:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
 
@@ -421,6 +508,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <Payload
                       schema={schema.propertyNames()}
                       schemaName="Property names must adhere to:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
 
@@ -428,6 +516,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <Payload
                       schema={schema.contains()}
                       schemaName="Array must contain at least one of:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
 
@@ -435,41 +524,68 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <Payload
                       schema={schema.if()}
                       schemaName="If schema adheres to:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
                   {schema.then() && (
                     <Payload
                       schema={schema.then()}
                       schemaName="Then must adhere to:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
                   {schema.else() && (
-                    <Payload schema={schema.else()} schemaName="Otherwise:" />
+                    <Payload
+                      schema={schema.else()}
+                      schemaName="Otherwise:"
+                      recursionCounter={recursionCounter + 1}
+                    />
                   )}
                   {dependentSchemas && (
                     <Payload
                       schema={dependentSchemas}
                       schemaName="Dependent schemas:"
+                      recursionCounter={recursionCounter + 1}
                     />
                   )}
                 </div>
+                {/* )} */}
               </div>
-            )}
 
-            {/* Properties Section */}
-            <SchemaProperties schema={schema} />
+              {/* Properties Section */}
+              <SchemaProperties
+                schema={schema}
+                recursionCounter={recursionCounter + 1}
+              />
 
-            {/* Array Items Section */}
-            <SchemaItems schema={schema} />
+              {/* Array Items Section */}
+              <SchemaItems
+                schema={schema}
+                recursionCounter={recursionCounter + 1}
+              />
 
-            {/* Additional Properties/Items Section */}
-            <div className="mt-4">
-              <AdditionalProperties schema={schema} />
-              <AdditionalItems schema={schema} />
+              {/* Additional Properties/Items Section */}
+              <div className="mt-4">
+                <AdditionalProperties
+                  schema={schema}
+                  recursionCounter={recursionCounter + 1}
+                />
+                <AdditionalItems
+                  schema={schema}
+                  recursionCounter={recursionCounter + 1}
+                />
+              </div>
+
+              {/* Extensions Section */}
+              <Extensions item={schema} />
             </div>
+          )}
+        </div>
 
-            {/* Extensions Section */}
-            <Extensions item={schema} />
+        {/* right side conditions sidebar */}
+        {conditionsSidebarOpen && recursionCounter == 0 && (
+          <div className="w-1/2 mt-16">
+            <span>Conditions Sidebar</span>
           </div>
         )}
       </div>
@@ -479,10 +595,12 @@ export const Payload: React.FunctionComponent<Props> = ({
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
+  recursionCounter?: number;
 }
 
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
+  recursionCounter = 0,
 }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
@@ -506,6 +624,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
             schema,
           )}
           key={propertyName}
+          recursionCounter={recursionCounter + 1}
         />
       ))}
       {Object.entries(patternProperties ?? {}).map(
@@ -517,6 +636,7 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
             isProperty
             isCircular={property.isCircular()}
             key={propertyName}
+            recursionCounter={recursionCounter + 1}
           />
         ),
       )}
@@ -526,11 +646,12 @@ const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
 
 interface AdditionalPropertiesProps {
   schema: SchemaInterface;
+  recursionCounter?: number;
 }
 
 const AdditionalProperties: React.FunctionComponent<
   AdditionalPropertiesProps
-> = ({ schema }) => {
+> = ({ schema, recursionCounter = 0 }) => {
   if (
     schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
     false
@@ -562,15 +683,20 @@ const AdditionalProperties: React.FunctionComponent<
     <Payload
       schemaName="Additional properties:"
       schema={additionalProperties}
+      recursionCounter={recursionCounter + 1}
     />
   );
 };
 
 interface SchemaItemsProps {
   schema: SchemaInterface;
+  recursionCounter?: number;
 }
 
-const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
+const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
+  schema,
+  recursionCounter = 0,
+}) => {
   const type = schema.type();
   if (!type?.includes('array')) {
     return null;
@@ -594,20 +720,30 @@ const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({ schema }) => {
             isArray
             schemaName={`${idx + 1} item:`}
             key={idx}
+            recursionCounter={recursionCounter + 1}
           />
         ))}
       </>
     );
   }
-  return <Payload schema={items} isArray schemaName="Items:" />;
+  return (
+    <Payload
+      schema={items}
+      isArray
+      schemaName="Items:"
+      recursionCounter={recursionCounter + 1}
+    />
+  );
 };
 
 interface AdditionalItemsProps {
   schema: SchemaInterface;
+  recursionCounter?: number;
 }
 
 const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
   schema,
+  recursionCounter = 0,
 }) => {
   if (
     schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
@@ -641,5 +777,11 @@ const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     );
   }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  return <Payload schemaName="Additional items:" schema={additionalItems} />;
+  return (
+    <Payload
+      schemaName="Additional items:"
+      schema={additionalItems}
+      recursionCounter={recursionCounter + 1}
+    />
+  );
 };
