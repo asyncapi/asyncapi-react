@@ -2,8 +2,6 @@ import React, {
   useState,
   useEffect,
   useContext,
-  useRef,
-  useLayoutEffect,
 } from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 
@@ -16,6 +14,7 @@ import {
 } from '../index';
 import { SchemaHelpers } from '../../helpers';
 import { useSidebarContext } from '../../contexts/conditionsSidebar';
+import { useElementSize } from '../../hooks/useElementSize';
 
 interface Props {
   schemaName?: React.ReactNode;
@@ -58,8 +57,8 @@ export const Payload: React.FunctionComponent<Props> = ({
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'Rules' | 'Conditions'>('Rules');
   const { conditionsSidebarOpen, toggleSidebar } = useSidebarContext();
-  const [conditionsHeight, setConditionsHeight] = useState(0);
-  const conditionsDivRef = useRef<HTMLDivElement>(null);
+  const [setConditionsRef, conditionsSize] = useElementSize();
+  const [setRulesRef, rulesSize] = useElementSize();
 
   const floatConditionsToRight =
     isProperty && recursionCounter == 2 && conditionsSidebarOpen;
@@ -70,10 +69,6 @@ export const Payload: React.FunctionComponent<Props> = ({
     }
   }, [isArray, deepExpanded, setDeepExpand]);
 
-  // useEffect(() => {
-  //   setConditionsSidebarOpen(showConditionsSidebar);
-  // }, [showConditionsSidebar, conditionsSidebarOpen, setConditionsSidebarOpen]);
-
   useEffect(() => {
     if (!isArray) {
       setExpanded(deepExpand);
@@ -83,29 +78,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   useEffect(() => {
     setTabOpen(showRules ? 'Rules' : 'Conditions');
   }, [schema]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('conditionsDivRef.current ', conditionsDivRef.current);
-      if (conditionsDivRef.current) {
-        console.log(
-          'height ',
-          schemaName,
-          ' ',
-          conditionsDivRef.current.getBoundingClientRect().height,
-        );
-        setConditionsHeight(
-          conditionsDivRef.current.getBoundingClientRect().height,
-        );
-      }
-    }, 500);
-  }, []);
-  // useLayoutEffect(() => {
-  //   if (conditionsDivRef.current) {
-  //     console.log("height ",schemaName , " ", conditionsDivRef.current.getBoundingClientRect().height)
-  //     setConditionsHeight(conditionsDivRef.current.getBoundingClientRect().height);
-  //   }
-  // }, []);
 
   if (
     !schema ||
@@ -180,7 +152,7 @@ export const Payload: React.FunctionComponent<Props> = ({
     >
       <div className="flex mb-4 gap-2">
         <div
-          className={`border rounded overflow-visible ${conditionsSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
+          className={`border rounded overflow-visible ${expanded && conditionsSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
         >
           {/* Header Section */}
           <div className="flex flex-col justify-center p-4 bg-gray-100">
@@ -215,12 +187,14 @@ export const Payload: React.FunctionComponent<Props> = ({
                   </span>
                 )}
                 {/* TODO: find out if below is really needed ?? 
-              cuz schema.const() is already shown in a strict manner in Rules */}
-                {/* {SchemaHelpers.prettifyValue(schema.const(), false) && (
-                <span className="text-sm">
-                  {SchemaHelpers.prettifyValue(schema.const(), false)}
-                </span>
-              )} */}
+                cuz schema.const() is already shown in a strict manner in Rules */}
+                {/* 
+                {SchemaHelpers.prettifyValue(schema.const(), false) && (
+                  <span className="text-sm">
+                    {SchemaHelpers.prettifyValue(schema.const(), false)}
+                  </span>
+                )} 
+                 */}
 
                 {/* Field Status Indicators */}
                 {(required ||
@@ -271,12 +245,14 @@ export const Payload: React.FunctionComponent<Props> = ({
                     <button
                       type="button"
                       onClick={() => toggleSidebar()}
-                      className="flex items-center text-sm bg-gray-300 p-1 rounded"
+                      className="flex items-center text-sm bg-gray-400 p-1 rounded"
                     >
-                      <span className=''>Conditions</span>
+                      <span className="">Conditions</span>
                       <HiChevronRight
                         className={`inline-block align-baseline cursor-pointer w-5 h-6 transform transition-transform duration-150 ease-linear ${
-                          conditionsSidebarOpen ? `-rotate-${0}` : `-rotate-${180}`
+                          conditionsSidebarOpen
+                            ? `-rotate-${0}`
+                            : `-rotate-${180}`
                         }`}
                       />
                     </button>
@@ -326,38 +302,21 @@ export const Payload: React.FunctionComponent<Props> = ({
 
           {/* Expandable Content */}
           {!isCircular && isExpandable && expanded && (
-            <div className="p-4 border-t bg-white">
+            <div className="p-4 border-t bg-white relative">
               <div
-                className="flex gap-1"
-                style={{ minHeight: conditionsHeight }}
+                className=""
+                style={{
+                  minHeight: Math.max(conditionsSize.height, rulesSize.height),
+                }}
               >
-                {showRules && (
-                  <button
-                    className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Rules' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
-                    onClick={() => setTabOpen('Rules')}
-                    role="tab"
-                    aria-selected={tabOpen === 'Rules'}
-                    aria-controls="rules-panel"
-                  >
-                    Rules
-                  </button>
-                )}
-                {/* {showConditions && (
-                  <button
-                    className={`text-sm font-semibold text-gray-900 ${tabOpen == 'Conditions' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
-                    onClick={() => setTabOpen('Conditions')}
-                    role="tab"
-                    aria-selected={tabOpen === 'Conditions'}
-                    aria-controls="conditions-panel"
-                  >
-                    Conditions
-                  </button>
-                )} */}
-              </div>
-              <div className="relative">
                 {/* Rules Section: it generally doesnt have any recursion in it */}
                 {showRules && tabOpen == 'Rules' && (
-                  <div className="mb-4 w-full">
+                  <div className="mb-4 w-full" ref={setRulesRef}>
+                    <p
+                      className={`text-sm font-semibold text-gray-900 bg-gray-400 p-2 rounded-t w-min`}
+                    >
+                      Rules
+                    </p>
                     <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded-b border">
                       {schema.format() && (
                         <span className="no-underline rounded lowercase p-1 text-sm">
@@ -417,139 +376,150 @@ export const Payload: React.FunctionComponent<Props> = ({
                 )}
 
                 {/* Conditions Section: has hella recursion in it*/}
-                {/* {showConditions && tabOpen == 'Conditions' && ( */}
-                <div
-                  className={`space-y-2 mb-4 z-10 w-full`}
-                  style={
-                    floatConditionsToRight
-                      ? { marginLeft: 'calc(100% + 75px)' }
-                      : {}
-                  }
-                  ref={conditionsDivRef}
-                >
-                  {schema.oneOf()?.length && (
-                    <div className="border rounded bg-gray-100 p-4">
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Can be <strong>One Of</strong> the following:
-                      </h5>
-                      {schema
-                        .oneOf()
-                        ?.map((s, idx) => (
-                          <Payload
-                            key={idx}
-                            schema={s}
-                            schemaName={SchemaHelpers.applicatorSchemaName(
-                              idx,
-                              '',
-                              '',
-                              s.title() ?? s.id(),
-                            )}
-                            recursionCounter={recursionCounter + 1}
-                          />
-                        ))}
+                {showConditions && (
+                  <div
+                    className="z-10 w-full"
+                    style={
+                      floatConditionsToRight
+                        ? {
+                            position: 'absolute',
+                            left: 'calc(100% + 40px)',
+                            top: '1rem',
+                          }
+                        : {}
+                    }
+                    ref={setConditionsRef}
+                  >
+                    <p
+                      className={`text-sm font-semibold text-gray-900 bg-gray-400 p-2 rounded-t w-min`}
+                    >
+                      Conditions
+                    </p>
+                    <div className={`space-y-2`}>
+                      {schema.oneOf()?.length && (
+                        <div className="border rounded bg-gray-100 p-4">
+                          <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                            Can be <strong>One Of</strong> the following:
+                          </h5>
+                          {schema
+                            .oneOf()
+                            ?.map((s, idx) => (
+                              <Payload
+                                key={idx}
+                                schema={s}
+                                schemaName={SchemaHelpers.applicatorSchemaName(
+                                  idx,
+                                  '',
+                                  '',
+                                  s.title() ?? s.id(),
+                                )}
+                                recursionCounter={recursionCounter + 1}
+                              />
+                            ))}
+                        </div>
+                      )}
+
+                      {schema.anyOf()?.length && (
+                        <div className="border rounded bg-gray-100 p-4">
+                          <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                            Can be <strong>Any Of</strong> the following:
+                          </h5>
+                          {schema
+                            .anyOf()
+                            ?.map((s, idx) => (
+                              <Payload
+                                key={idx}
+                                schema={s}
+                                schemaName={SchemaHelpers.applicatorSchemaName(
+                                  idx,
+                                  '',
+                                  '',
+                                  s.title() ?? s.id(),
+                                )}
+                                recursionCounter={recursionCounter + 1}
+                              />
+                            ))}
+                        </div>
+                      )}
+
+                      {schema.allOf()?.length && (
+                        <div className="border rounded bg-gray-100 p-4">
+                          <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                            Must consist <strong>All Of</strong> the following:
+                          </h5>
+                          {schema
+                            .allOf()
+                            ?.map((s, idx) => (
+                              <Payload
+                                key={idx}
+                                schema={s}
+                                schemaName={SchemaHelpers.applicatorSchemaName(
+                                  idx,
+                                  '',
+                                  '',
+                                  s.title() ?? s.id(),
+                                )}
+                                recursionCounter={recursionCounter + 1}
+                              />
+                            ))}
+                        </div>
+                      )}
+
+                      {schema.not() && (
+                        <Payload
+                          schema={schema.not()}
+                          schemaName="Can NOT adhere to:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+
+                      {schema.propertyNames() && (
+                        <Payload
+                          schema={schema.propertyNames()}
+                          schemaName="Property names must adhere to:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+
+                      {schema.contains() && (
+                        <Payload
+                          schema={schema.contains()}
+                          schemaName="Array must contain at least one of:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+
+                      {schema.if() && (
+                        <Payload
+                          schema={schema.if()}
+                          schemaName="If schema adheres to:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+                      {schema.then() && (
+                        <Payload
+                          schema={schema.then()}
+                          schemaName="Then must adhere to:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+                      {schema.else() && (
+                        <Payload
+                          schema={schema.else()}
+                          schemaName="Otherwise:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
+                      {dependentSchemas && (
+                        <Payload
+                          schema={dependentSchemas}
+                          schemaName="Dependent schemas:"
+                          recursionCounter={recursionCounter + 1}
+                        />
+                      )}
                     </div>
-                  )}
-
-                  {schema.anyOf()?.length && (
-                    <div className="border rounded bg-gray-100 p-4">
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Can be <strong>Any Of</strong> the following:
-                      </h5>
-                      {schema
-                        .anyOf()
-                        ?.map((s, idx) => (
-                          <Payload
-                            key={idx}
-                            schema={s}
-                            schemaName={SchemaHelpers.applicatorSchemaName(
-                              idx,
-                              '',
-                              '',
-                              s.title() ?? s.id(),
-                            )}
-                            recursionCounter={recursionCounter + 1}
-                          />
-                        ))}
-                    </div>
-                  )}
-
-                  {schema.allOf()?.length && (
-                    <div className="border rounded bg-gray-100 p-4">
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2">
-                        Must consist <strong>All Of</strong> the following:
-                      </h5>
-                      {schema
-                        .allOf()
-                        ?.map((s, idx) => (
-                          <Payload
-                            key={idx}
-                            schema={s}
-                            schemaName={SchemaHelpers.applicatorSchemaName(
-                              idx,
-                              '',
-                              '',
-                              s.title() ?? s.id(),
-                            )}
-                            recursionCounter={recursionCounter + 1}
-                          />
-                        ))}
-                    </div>
-                  )}
-
-                  {schema.not() && (
-                    <Payload
-                      schema={schema.not()}
-                      schemaName="Can NOT adhere to:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-
-                  {schema.propertyNames() && (
-                    <Payload
-                      schema={schema.propertyNames()}
-                      schemaName="Property names must adhere to:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-
-                  {schema.contains() && (
-                    <Payload
-                      schema={schema.contains()}
-                      schemaName="Array must contain at least one of:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-
-                  {schema.if() && (
-                    <Payload
-                      schema={schema.if()}
-                      schemaName="If schema adheres to:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-                  {schema.then() && (
-                    <Payload
-                      schema={schema.then()}
-                      schemaName="Then must adhere to:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-                  {schema.else() && (
-                    <Payload
-                      schema={schema.else()}
-                      schemaName="Otherwise:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-                  {dependentSchemas && (
-                    <Payload
-                      schema={dependentSchemas}
-                      schemaName="Dependent schemas:"
-                      recursionCounter={recursionCounter + 1}
-                    />
-                  )}
-                </div>
-                {/* )} */}
+                  </div>
+                )}
               </div>
 
               {/* Properties Section */}
@@ -583,10 +553,8 @@ export const Payload: React.FunctionComponent<Props> = ({
         </div>
 
         {/* right side conditions sidebar */}
-        {conditionsSidebarOpen && recursionCounter == 0 && (
-          <div className="w-1/2 mt-16">
-            <span>Conditions Sidebar</span>
-          </div>
+        {expanded && conditionsSidebarOpen && recursionCounter == 0 && (
+          <div className="w-1/2 mt-16" />
         )}
       </div>
     </PayloadSchemaContext.Provider>
