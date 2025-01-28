@@ -530,7 +530,9 @@ export class SchemaHelpers {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any): any {
+  private static jsonFieldToSchema(value: any, visited = new WeakSet()): any {
+    // visited should never be passed as parameter.
+    // it is meant for internal recursion limit tracking
     if (value === undefined || value === null) {
       return {
         type: 'string',
@@ -550,6 +552,14 @@ export class SchemaHelpers {
         [this.extRawValue]: true,
       };
     }
+
+    if (visited.has(value as object)) {
+      throw new Error(
+        'too much recursion. Please check document for recursion.',
+      );
+    }
+    visited.add(value as object);
+
     if (this.isJSONSchema(value)) {
       return value;
     }
@@ -557,7 +567,7 @@ export class SchemaHelpers {
       return {
         type: 'array',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        items: value.map((v) => this.jsonFieldToSchema(v)),
+        items: value.map((v) => this.jsonFieldToSchema(v, visited)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
@@ -566,7 +576,7 @@ export class SchemaHelpers {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       properties: Object.entries(value).reduce(
         (obj, [k, v]) => {
-          obj[k] = this.jsonFieldToSchema(v);
+          obj[k] = this.jsonFieldToSchema(v, visited);
           return obj;
         },
         {} as Record<string, unknown>,
