@@ -44,7 +44,7 @@ export interface MessageExample {
 
 export interface ValidationError {
   title: string;
-  location: {
+  location?: {
     jsonPointer: string;
     startLine: number;
     startColumn: number;
