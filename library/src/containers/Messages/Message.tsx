@@ -17,7 +17,6 @@ import {
   CONTENT_TYPES_SITE,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
-import { Payload } from '../../components/Payload/Payload';
 
 interface Props {
   message: MessageInterface;
@@ -134,8 +133,7 @@ export const Message: React.FunctionComponent<Props> = ({
                   : undefined
               }
             >
-              {/* <Schema schemaName="Payload" schema={payload} /> */}
-              <Payload schemaName="Payload" schema={payload} />
+              <Schema schemaName="Payload" schema={payload} />
             </div>
           )}
           {headers && (

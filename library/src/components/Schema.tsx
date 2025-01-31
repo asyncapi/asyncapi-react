@@ -3,6 +3,7 @@ import { SchemaInterface } from '@asyncapi/parser';
 
 import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
+import { Payload } from './Payload/Payload';
 
 interface Props {
   schemaName?: React.ReactNode;
@@ -22,7 +23,9 @@ const SchemaContext = React.createContext({
   deepExpanded: false,
 });
 
-export const Schema: React.FunctionComponent<Props> = ({
+export const Schema = Payload
+
+export const SchemaOld: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
   required = false,

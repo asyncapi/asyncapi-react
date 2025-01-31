@@ -1,12 +1,11 @@
-// TODO: CHANGE THIS BACK TO ORIGINAL CONFIG 
 export const defaultConfig = `{
   "show": {
     "sidebar": false,
-    "info": false,
-    "operations": false,
-    "servers": false,
+    "info": true,
+    "operations": true,
+    "servers": true,
     "messages": true,
-    "schemas": false,
+    "schemas": true,
     "errors": true
   },
   "expand":{
