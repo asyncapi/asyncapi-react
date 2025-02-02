@@ -10,7 +10,7 @@ interface FeildStatusIndicatorProps {
 export const FeildStatusIndicator = ({
   schema,
   required = false,
-  isPatternProperty
+  isPatternProperty,
 }: FeildStatusIndicatorProps) => {
   return (
     <>

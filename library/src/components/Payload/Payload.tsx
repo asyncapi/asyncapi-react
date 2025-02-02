@@ -19,7 +19,7 @@ import { Conditions } from './Conditions/Conditions';
 import { Rules } from './Rules/Rules';
 import { FeildStatusIndicator } from './FeildStatusIndicators';
 
-interface Props {
+export interface Props {
   schemaName?: React.ReactNode;
   schema?: SchemaInterface;
   showSchemaType?: boolean;
@@ -91,8 +91,8 @@ export const Payload: React.FunctionComponent<Props> = ({
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const externalDocs = schema.externalDocs();
 
-  const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
-  const rawValue = rawValueExt?.value() === true;
+  // const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
+  // const rawValue = rawValueExt?.value() === true;
 
   const parameterLocationExt = schema
     .extensions()

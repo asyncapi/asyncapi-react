@@ -6,13 +6,13 @@ import { SchemaHelpers } from '../../../helpers';
 interface ConditionsProps {
   schema: SchemaInterface;
   recursionCounter?: number;
-  dependentSchemas?: SchemaInterface
+  dependentSchemas?: SchemaInterface;
 }
 
 export const Conditions = ({
   schema,
   recursionCounter = 0,
-  dependentSchemas
+  dependentSchemas,
 }: ConditionsProps) => {
   return (
     <>

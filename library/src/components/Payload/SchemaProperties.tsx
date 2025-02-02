@@ -1,17 +1,16 @@
-import React from "react"
-import { SchemaInterface } from "@asyncapi/parser";
-import { SchemaHelpers } from "../../helpers";
-import { Payload } from "./Payload";
+import React from 'react';
+import { SchemaInterface } from '@asyncapi/parser';
+import { SchemaHelpers } from '../../helpers';
+import { Payload } from './Payload';
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
   recursionCounter?: number;
 }
 
-export const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
-  schema,
-  recursionCounter = 0,
-}) => {
+export const SchemaProperties: React.FunctionComponent<
+  SchemaPropertiesProps
+> = ({ schema, recursionCounter = 0 }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
     return null;

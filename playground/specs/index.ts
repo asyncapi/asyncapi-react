@@ -12,4 +12,4 @@ export * from './rpc-server';
 export * from './slack-rtm';
 export * from './streetlights';
 export * from './overcomplicated-streetlight';
-export * from './complex-schema'
+export * from './complex-schema';

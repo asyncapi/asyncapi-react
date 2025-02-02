@@ -23,7 +23,7 @@ const SchemaContext = React.createContext({
   deepExpanded: false,
 });
 
-export const Schema = Payload
+export const Schema = Payload;
 
 export const SchemaOld: React.FunctionComponent<Props> = ({
   schemaName,
