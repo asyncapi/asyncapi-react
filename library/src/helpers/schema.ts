@@ -112,7 +112,8 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    const suffix = title ? ` ${title}:` : ':';
+    var suffix = title ? ` ${title}:` : ':';
+    if (suffix.startsWith(' <anonymous-schema-')) suffix = ' Anonymous Schema';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
     } else {
@@ -465,17 +466,28 @@ export class SchemaHelpers {
 
     let numberRange;
     if (hasMin && hasMax) {
-      numberRange = hasExclusiveMin ? '( ' : '[ ';
+      // below is code for "[ 0 .. 1 ]""
+      // numberRange = hasExclusiveMin ? '( ' : '[ ';
+      // numberRange += hasExclusiveMin ? exclusiveMin : min;
+      // numberRange += ' .. ';
+      // numberRange += hasExclusiveMax ? exclusiveMax : max;
+      // numberRange += hasExclusiveMax ? ' )' : ' ]';
+
+      // below is code for "0 <= value <= 1"
+      numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
-      numberRange += ' .. ';
+      numberRange += hasExclusiveMin ? ' < ' : ' <= ';
+      numberRange += 'value';
+      numberRange += hasExclusiveMax ? ' < ' : ' <= ';
       numberRange += hasExclusiveMax ? exclusiveMax : max;
-      numberRange += hasExclusiveMax ? ' )' : ' ]';
     } else if (hasMin) {
-      numberRange = hasExclusiveMin ? '> ' : '>= ';
+      numberRange = 'value ';
+      numberRange += hasExclusiveMin ? '> ' : '>= ';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
     } else if (hasMax) {
+      numberRange = 'value ';
       numberRange = hasExclusiveMax ? '< ' : '<= ';
-      numberRange += hasExclusiveMax ? exclusiveMax : max;
+      numberRange += 'value ' + hasExclusiveMax ? exclusiveMax : max;
     }
     return numberRange;
   }
