@@ -12,7 +12,6 @@ import { Schemas } from '../Schemas/Schemas';
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
 import AsyncApiErrorBoundary from '../ApplicationErrorHandler/ErrorBoundary';
-import { SidebarProvider } from '../../contexts/conditionsSidebar';
 
 interface Props {
   asyncapi: AsyncAPIDocumentInterface;
@@ -45,7 +44,6 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   return (
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
-        <SidebarProvider>
           <section className="aui-root">
             <AsyncApiErrorBoundary>
               <div
@@ -67,7 +65,6 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
               </div>
             </AsyncApiErrorBoundary>
           </section>
-        </SidebarProvider>
       </SpecificationContext.Provider>
     </ConfigContext.Provider>
   );

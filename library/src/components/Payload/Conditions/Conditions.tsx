@@ -21,9 +21,9 @@ export const Conditions = ({
       >
         Conditions
       </p>
-      <div className={`space-y-2 bg-blue-100`}>
+      <div className={`space-y-2 bg-blue-100 border rounded rounded-tl-none p-4`}>
         {schema.oneOf()?.length && (
-          <div className="border rounded p-4">
+          <div className="">
             <h5 className="text-sm font-semibold text-gray-700 mb-2">
               Can be <strong>One Of</strong> the following:
             </h5>
@@ -46,7 +46,7 @@ export const Conditions = ({
         )}
 
         {schema.anyOf()?.length && (
-          <div className="border rounded p-4">
+          <div className="">
             <h5 className="text-sm font-semibold text-gray-700 mb-2">
               Can be <strong>Any Of</strong> the following:
             </h5>
@@ -69,7 +69,7 @@ export const Conditions = ({
         )}
 
         {schema.allOf()?.length && (
-          <div className="border rounded p-4">
+          <div className="">
             <h5 className="text-sm font-semibold text-gray-700 mb-2">
               Must consist <strong>All Of</strong> the following:
             </h5>
@@ -116,26 +116,31 @@ export const Conditions = ({
         )}
 
         {schema.if() && (
-          <Payload
-            schema={schema.if()}
-            schemaName="If schema adheres to:"
-            recursionCounter={recursionCounter + 1}
-          />
+          <div className="">
+            {schema.if() && (
+              <Payload
+                schema={schema.if()}
+                schemaName="If schema adheres to:"
+                recursionCounter={recursionCounter + 1}
+              />
+            )}
+            {schema.then() && (
+              <Payload
+                schema={schema.then()}
+                schemaName="Then must adhere to:"
+                recursionCounter={recursionCounter + 1}
+              />
+            )}
+            {schema.else() && (
+              <Payload
+                schema={schema.else()}
+                schemaName="Otherwise:"
+                recursionCounter={recursionCounter + 1}
+              />
+            )}
+          </div>
         )}
-        {schema.then() && (
-          <Payload
-            schema={schema.then()}
-            schemaName="Then must adhere to:"
-            recursionCounter={recursionCounter + 1}
-          />
-        )}
-        {schema.else() && (
-          <Payload
-            schema={schema.else()}
-            schemaName="Otherwise:"
-            recursionCounter={recursionCounter + 1}
-          />
-        )}
+        
         {dependentSchemas && (
           <Payload
             schema={dependentSchemas}

@@ -15,7 +15,7 @@ export const Rules = ({ schema, constraints }: RulesProps) => {
       >
         Rules
       </p>
-      <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded-b border">
+      <div className="flex flex-col space-y-2 bg-blue-100 p-4 rounded rounded-tl-none border">
         {schema.format() && (
           <span className="no-underline rounded lowercase p-1 text-sm">
             format:{' '}

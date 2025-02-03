@@ -9,7 +9,6 @@ import {
   HiChevronRight,
 } from '../index';
 import { SchemaHelpers } from '../../helpers';
-import { useSidebarContext } from '../../contexts/conditionsSidebar';
 import { useElementSize } from '../../hooks/useElementSize';
 import { SchemaItems } from './SchemaItems';
 import { AdditionalItems } from './AdditionalItems';
@@ -58,12 +57,13 @@ export const Payload: React.FunctionComponent<Props> = ({
   const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
-  const { conditionsSidebarOpen, toggleSidebar } = useSidebarContext();
+  // rulesSidebarOpen state is usefull only when recursionCounter is 0, else it is redundant
+  const [rulesSidebarOpen, setRulesSidebarOpen] = useState(false);
   const [setConditionsRef, conditionsSize] = useElementSize();
   const [setRulesRef, rulesSize] = useElementSize();
 
   const floatConditionsToRight =
-    isProperty && recursionCounter >= 2 && conditionsSidebarOpen;
+    isProperty && recursionCounter >= 2 && rulesSidebarOpen;
 
   useEffect(() => {
     if (!isArray) {
@@ -159,11 +159,9 @@ export const Payload: React.FunctionComponent<Props> = ({
       }}
     >
       <div className="flex mb-4 gap-2">
-        <div
-          className={`border rounded overflow-visible ${expanded && conditionsSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
-        >
+        <div className={`border rounded overflow-visible w-full`}>
           {/* Header Section */}
-          <div className="flex flex-col justify-center p-4 bg-gray-100">
+          <div className="flex flex-col justify-center p-4 bg-gray-100 border-b">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-2 w-full">
                 {isExpandable && !isCircular && !isArray ? (
@@ -224,15 +222,13 @@ export const Payload: React.FunctionComponent<Props> = ({
                   {childrenHaveConditions && recursionCounter == 0 && (
                     <button
                       type="button"
-                      onClick={() => toggleSidebar()}
+                      onClick={() => setRulesSidebarOpen((prev) => !prev)}
                       className="flex items-center text-sm  p-1 rounded"
                     >
                       <span className="">Conditions</span>
                       <HiChevronRight
                         className={`inline-block align-baseline cursor-pointer w-5 h-6 transform transition-transform duration-150 ease-linear ${
-                          conditionsSidebarOpen
-                            ? `-rotate-${0}`
-                            : `-rotate-${180}`
+                          rulesSidebarOpen ? `-rotate-${0}` : `-rotate-${180}`
                         }`}
                       />
                     </button>
@@ -280,83 +276,89 @@ export const Payload: React.FunctionComponent<Props> = ({
             )}
           </div>
 
-          {/* Expandable Content */}
-          {!isCircular && isExpandable && expanded && (
-            <div className="p-4 border-t bg-white relative">
-              {/* Properties Section */}
-              <SchemaProperties
-                schema={schema}
-                recursionCounter={recursionCounter + 1}
-              />
-
-              {/* Array Items Section */}
-              <SchemaItems
-                schema={schema}
-                recursionCounter={recursionCounter + 1}
-              />
-
+          <div className="flex ">
+            {/* Expandable Content */}
+            {!isCircular && isExpandable && expanded && (
               <div
-                className=""
-                style={{
-                  minHeight: Math.max(conditionsSize.height, rulesSize.height),
-                }}
+                className={`p-4 bg-white relative ${expanded && rulesSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
               >
-                {/* Conditions Section: has hella recursion in it*/}
-                {conditionsExist && (
-                  <div className="mb-4 w-full" ref={setConditionsRef}>
-                    <Conditions
-                      schema={schema}
-                      recursionCounter={recursionCounter}
-                      dependentSchemas={dependentSchemas}
-                    />
-                  </div>
-                )}
-                
-                {/* Rules Section: it generally doesnt have any recursion in it */}
-                {rulesExist && (
-                  <div
-                    className="z-10 w-full"
-                    style={
-                      floatConditionsToRight && conditionsExist
-                        ? {
-                            position: 'absolute',
-                            left: `calc(100% + ${conditionsRightShift}px)`,
-                            top: '1rem',
-                          }
-                        : {}
-                    }
-                    ref={setRulesRef}
-                  >
-                    <Rules schema={schema} constraints={constraints} />
-                  </div>
-                )}
-              </div>
-
-              {/* Additional Properties/Items Section */}
-              <div className="mt-4">
-                <AdditionalProperties
+                {/* Properties Section */}
+                <SchemaProperties
                   schema={schema}
                   recursionCounter={recursionCounter + 1}
                 />
-                <AdditionalItems
+
+                {/* Array Items Section */}
+                <SchemaItems
                   schema={schema}
                   recursionCounter={recursionCounter + 1}
                 />
-              </div>
 
-              {/* Extensions Section */}
-              <Extensions
-                item={schema}
-                recursionCounter={recursionCounter + 1}
-              />
-            </div>
-          )}
+                <div
+                  className=""
+                  style={{
+                    minHeight: Math.max(
+                      conditionsSize.height,
+                      rulesSize.height,
+                    ),
+                  }}
+                >
+                  {/* Conditions Section: has hella recursion in it*/}
+                  {conditionsExist && (
+                    <div className="mb-4 w-full" ref={setConditionsRef}>
+                      <Conditions
+                        schema={schema}
+                        recursionCounter={recursionCounter}
+                        dependentSchemas={dependentSchemas}
+                      />
+                    </div>
+                  )}
+
+                  {/* Rules Section: it generally doesnt have any recursion in it */}
+                  {rulesExist && (
+                    <div
+                      className="z-10 w-full"
+                      style={
+                        floatConditionsToRight && conditionsExist
+                          ? {
+                              position: 'absolute',
+                              left: `calc(100% + ${conditionsRightShift}px)`,
+                              top: '1rem',
+                            }
+                          : {}
+                      }
+                      ref={setRulesRef}
+                    >
+                      <Rules schema={schema} constraints={constraints} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Properties/Items Section */}
+                <div className="mt-4">
+                  <AdditionalProperties
+                    schema={schema}
+                    recursionCounter={recursionCounter + 1}
+                  />
+                  <AdditionalItems
+                    schema={schema}
+                    recursionCounter={recursionCounter + 1}
+                  />
+                </div>
+
+                {/* Extensions Section */}
+                <Extensions
+                  item={schema}
+                  recursionCounter={recursionCounter + 1}
+                />
+              </div>
+            )}
+            {/* right side conditions sidebar */}
+            {expanded && rulesSidebarOpen && recursionCounter == 0 && (
+              <div className="w-1/2 mt-16" />
+            )}
+          </div>
         </div>
-
-        {/* right side conditions sidebar */}
-        {expanded && conditionsSidebarOpen && recursionCounter == 0 && (
-          <div className="w-1/2 mt-16" />
-        )}
       </div>
     </PayloadSchemaContext.Provider>
   );
