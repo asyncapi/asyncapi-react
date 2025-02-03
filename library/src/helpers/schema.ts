@@ -602,4 +602,57 @@ export class SchemaHelpers {
     }
     return false;
   }
+
+  public static hasRules(schema: SchemaInterface, constraints: string[]) {
+    return (
+      schema.format() ||
+      schema.pattern() ||
+      constraints.length > 0 ||
+      schema.contentEncoding() ||
+      schema.enum() ||
+      schema.default() !== undefined ||
+      schema.const() !== undefined
+    );
+  }
+
+  public static hasConditions(schema: SchemaInterface) {
+    const dependentSchemas = this.getDependentSchemas(schema);
+    return (
+      schema.oneOf()?.length ||
+      schema.anyOf()?.length ||
+      schema.allOf()?.length ||
+      schema.not() ||
+      schema.propertyNames() ||
+      schema.contains() ||
+      schema.if() ||
+      schema.then() ||
+      schema.else() ||
+      dependentSchemas
+    );
+  }
+
+  // checks if any of the nested schema children has got conditions in it
+  public static childrenHaveConditions(
+    schema: SchemaInterface,
+    visited: WeakSet<SchemaInterface> = new WeakSet(),
+  ): boolean {
+    if (visited.has(schema)) {
+      return false;
+    }
+    visited.add(schema);
+    const children = schema.properties();
+    if (!children) {
+      return false;
+    }
+    const childArray = Object.values(children);
+    for (const child of childArray) {
+      if (
+        this.hasConditions(child) ||
+        this.childrenHaveConditions(child, visited)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

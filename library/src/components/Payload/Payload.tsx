@@ -116,36 +116,15 @@ export const Payload: React.FunctionComponent<Props> = ({
     );
 
   // comes in Rules section
-  const rulesExist =
-    schema.format() ||
-    schema.pattern() ||
-    constraints.length > 0 ||
-    schema.contentEncoding() ||
-    schema.enum() ||
-    schema.default() !== undefined ||
-    schema.const() !== undefined;
-
+  const rulesExist = SchemaHelpers.hasRules(schema, constraints);
   // comes in Conditions section
-  const conditionsExist =
-    schema.oneOf()?.length ||
-    schema.anyOf()?.length ||
-    schema.allOf()?.length ||
-    schema.not() ||
-    schema.propertyNames() ||
-    schema.contains() ||
-    schema.if() ||
-    schema.then() ||
-    schema.else() ||
-    dependentSchemas;
+  const conditionsExist = SchemaHelpers.hasConditions(schema);
 
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
 
-  // TODO: check recursiveley to see if any of the children have any conditions present in them.
-  // this is neccesary to conditionally render the conditions sidebar toggle button
-  // will need some functions in SchemaHelpers something like jsonFieldToSchema or something
-  const childrenHaveConditions = true; // hardcoding for now
+  const childrenHaveConditions = SchemaHelpers.childrenHaveConditions(schema);
 
   // this is the ammount of shift it needs to be moved to the right in px
   // by absolute when the components gets nested a lot
@@ -225,7 +204,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                       onClick={() => setRulesSidebarOpen((prev) => !prev)}
                       className="flex items-center text-sm  p-1 rounded"
                     >
-                      <span className="">Conditions</span>
+                      <span className="">Rules</span>
                       <HiChevronRight
                         className={`inline-block align-baseline cursor-pointer w-5 h-6 transform transition-transform duration-150 ease-linear ${
                           rulesSidebarOpen ? `-rotate-${0}` : `-rotate-${180}`
