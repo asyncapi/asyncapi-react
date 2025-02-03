@@ -301,19 +301,23 @@ export const Payload: React.FunctionComponent<Props> = ({
                   minHeight: Math.max(conditionsSize.height, rulesSize.height),
                 }}
               >
-                {/* Rules Section: it generally doesnt have any recursion in it */}
-                {rulesExist && (
-                  <div className="mb-4 w-full" ref={setRulesRef}>
-                    <Rules schema={schema} constraints={constraints} />
-                  </div>
-                )}
-
                 {/* Conditions Section: has hella recursion in it*/}
                 {conditionsExist && (
+                  <div className="mb-4 w-full" ref={setConditionsRef}>
+                    <Conditions
+                      schema={schema}
+                      recursionCounter={recursionCounter}
+                      dependentSchemas={dependentSchemas}
+                    />
+                  </div>
+                )}
+                
+                {/* Rules Section: it generally doesnt have any recursion in it */}
+                {rulesExist && (
                   <div
                     className="z-10 w-full"
                     style={
-                      floatConditionsToRight
+                      floatConditionsToRight && conditionsExist
                         ? {
                             position: 'absolute',
                             left: `calc(100% + ${conditionsRightShift}px)`,
@@ -321,13 +325,9 @@ export const Payload: React.FunctionComponent<Props> = ({
                           }
                         : {}
                     }
-                    ref={setConditionsRef}
+                    ref={setRulesRef}
                   >
-                    <Conditions
-                      schema={schema}
-                      recursionCounter={recursionCounter}
-                      dependentSchemas={dependentSchemas}
-                    />
+                    <Rules schema={schema} constraints={constraints} />
                   </div>
                 )}
               </div>
