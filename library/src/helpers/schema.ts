@@ -632,27 +632,27 @@ export class SchemaHelpers {
   }
 
   // checks if any of the nested schema children has got conditions in it
-  public static childrenHaveConditions(
-    schema: SchemaInterface,
-    visited: WeakSet<SchemaInterface> = new WeakSet(),
-  ): boolean {
-    if (visited.has(schema)) {
-      return false;
-    }
-    visited.add(schema);
-    const children = schema.properties();
-    if (!children) {
-      return false;
-    }
-    const childArray = Object.values(children);
-    for (const child of childArray) {
-      if (
-        this.hasConditions(child) ||
-        this.childrenHaveConditions(child, visited)
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // public static childrenHaveConditions(
+  //   schema: SchemaInterface,
+  //   visited: WeakSet<SchemaInterface> = new WeakSet(),
+  // ): boolean {
+  //   if (visited.has(schema)) {
+  //     return false;
+  //   }
+  //   visited.add(schema);
+  //   const children = schema.properties();
+  //   if (!children) {
+  //     return false;
+  //   }
+  //   const childArray = Object.values(children);
+  //   for (const child of childArray) {
+  //     if (
+  //       this.hasConditions(child) ||
+  //       this.childrenHaveConditions(child, visited)
+  //     ) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 }

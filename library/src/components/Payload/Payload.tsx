@@ -6,10 +6,10 @@ import {
   CollapseButton,
   Markdown,
   Extensions,
-  HiChevronRight,
+  // HiChevronRight,
 } from '../index';
 import { SchemaHelpers } from '../../helpers';
-import { useElementSize } from '../../hooks/useElementSize';
+// import { useElementSize } from '../../hooks/useElementSize';
 import { SchemaItems } from './SchemaItems';
 import { AdditionalItems } from './AdditionalItems';
 import { SchemaProperties } from './SchemaProperties';
@@ -57,13 +57,14 @@ export const Payload: React.FunctionComponent<Props> = ({
   const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
+  const [tabOpen, setTabOpen] = useState<'RULES' | 'CONDITIONS'>('RULES');
   // rulesSidebarOpen state is usefull only when recursionCounter is 0, else it is redundant
-  const [rulesSidebarOpen, setRulesSidebarOpen] = useState(false);
-  const [setConditionsRef, conditionsSize] = useElementSize();
-  const [setRulesRef, rulesSize] = useElementSize();
+  // const [rulesSidebarOpen, setRulesSidebarOpen] = useState(false);
+  // const [setConditionsRef, conditionsSize] = useElementSize();
+  // const [setRulesRef, rulesSize] = useElementSize();
 
-  const floatConditionsToRight =
-    isProperty && recursionCounter >= 2 && rulesSidebarOpen;
+  // const floatConditionsToRight =
+  //   isProperty && recursionCounter >= 2 && rulesSidebarOpen;
 
   useEffect(() => {
     if (!isArray) {
@@ -124,11 +125,15 @@ export const Payload: React.FunctionComponent<Props> = ({
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
 
-  const childrenHaveConditions = SchemaHelpers.childrenHaveConditions(schema);
+  // const childrenHaveConditions = SchemaHelpers.childrenHaveConditions(schema);
 
   // this is the ammount of shift it needs to be moved to the right in px
   // by absolute when the components gets nested a lot
-  const conditionsRightShift = 30 + 10 * (recursionCounter - 1);
+  // const conditionsRightShift = 30 + 10 * (recursionCounter - 1);
+
+  useEffect(() => {
+    if (!rulesExist) setTabOpen('CONDITIONS');
+  }, []);
 
   return (
     <PayloadSchemaContext.Provider
@@ -198,7 +203,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                       {deepExpand ? 'Collapse all' : 'Expand all'}
                     </button>
                   )}
-                  {childrenHaveConditions && recursionCounter == 0 && (
+                  {/* {childrenHaveConditions && recursionCounter == 0 && (
                     <button
                       type="button"
                       onClick={() => setRulesSidebarOpen((prev) => !prev)}
@@ -211,7 +216,7 @@ export const Payload: React.FunctionComponent<Props> = ({
                         }`}
                       />
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
@@ -259,7 +264,8 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Expandable Content */}
             {!isCircular && isExpandable && expanded && (
               <div
-                className={`p-4 bg-white relative ${expanded && rulesSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
+                // className={`p-4 bg-white relative ${expanded && rulesSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
+                className={`p-4 bg-white relative w-full`}
               >
                 {/* Properties Section */}
                 <SchemaProperties
@@ -273,18 +279,34 @@ export const Payload: React.FunctionComponent<Props> = ({
                   recursionCounter={recursionCounter + 1}
                 />
 
-                <div
-                  className=""
-                  style={{
-                    minHeight: Math.max(
-                      conditionsSize.height,
-                      rulesSize.height,
-                    ),
-                  }}
-                >
+                <div className="">
+                  <div className="flex gap-1">
+                    {rulesExist && (
+                      <button
+                        className={`text-sm font-semibold text-gray-900 ${tabOpen == 'RULES' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                        onClick={() => setTabOpen('RULES')}
+                        role="tab"
+                        aria-selected={tabOpen === 'RULES'}
+                        aria-controls="rules-panel"
+                      >
+                        Rules
+                      </button>
+                    )}
+                    {conditionsExist && (
+                      <button
+                        className={`text-sm font-semibold text-gray-900 ${tabOpen == 'CONDITIONS' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
+                        onClick={() => setTabOpen('CONDITIONS')}
+                        role="tab"
+                        aria-selected={tabOpen === 'CONDITIONS'}
+                        aria-controls="conditions-panel"
+                      >
+                        Conditions
+                      </button>
+                    )}
+                  </div>
                   {/* Conditions Section: has hella recursion in it*/}
-                  {conditionsExist && (
-                    <div className="mb-4 w-full" ref={setConditionsRef}>
+                  {conditionsExist && tabOpen == 'CONDITIONS' && (
+                    <div className="mb-4 w-full">
                       <Conditions
                         schema={schema}
                         recursionCounter={recursionCounter}
@@ -294,20 +316,8 @@ export const Payload: React.FunctionComponent<Props> = ({
                   )}
 
                   {/* Rules Section: it generally doesnt have any recursion in it */}
-                  {rulesExist && (
-                    <div
-                      className="z-10 w-full"
-                      style={
-                        floatConditionsToRight && conditionsExist
-                          ? {
-                              position: 'absolute',
-                              left: `calc(100% + ${conditionsRightShift}px)`,
-                              top: '1rem',
-                            }
-                          : {}
-                      }
-                      ref={setRulesRef}
-                    >
+                  {rulesExist && tabOpen == 'RULES' && (
+                    <div className="z-10 w-full">
                       <Rules schema={schema} constraints={constraints} />
                     </div>
                   )}
@@ -333,9 +343,9 @@ export const Payload: React.FunctionComponent<Props> = ({
               </div>
             )}
             {/* right side conditions sidebar */}
-            {expanded && rulesSidebarOpen && recursionCounter == 0 && (
+            {/* {expanded && rulesSidebarOpen && recursionCounter == 0 && (
               <div className="w-1/2 mt-16" />
-            )}
+            )} */}
           </div>
         </div>
       </div>
