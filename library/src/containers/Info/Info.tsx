@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Href, Markdown, Tags } from '../../components';
+import { Extensions, Href, Markdown, Tags } from '../../components';
 import { useSpec } from '../../contexts';
 import {
   TERMS_OF_SERVICE_TEXT,
@@ -23,6 +23,7 @@ export const Info: React.FunctionComponent = () => {
   const termsOfService = info.termsOfService();
   const defaultContentType = asyncapi.defaultContentType();
   const contact = info.contact();
+  const extensions = info.extensions();
 
   const showInfoList =
     license ?? termsOfService ?? defaultContentType ?? contact ?? externalDocs;
@@ -126,6 +127,12 @@ export const Info: React.FunctionComponent = () => {
         {asyncapi.info().tags().length > 0 && (
           <div className="mt-4">
             <Tags tags={asyncapi.info().tags()} />
+          </div>
+        )}
+
+        {extensions.length > 0 && (
+          <div className="mt-4">
+            <Extensions name="Info Extensions" item={info} />
           </div>
         )}
       </div>
