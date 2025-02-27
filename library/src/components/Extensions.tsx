@@ -11,13 +11,11 @@ interface Props {
   name?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
-  recursionCounter?: number;
 }
 
 export const Extensions: React.FunctionComponent<Props> = ({
   name = 'Extensions',
   item,
-  recursionCounter = 0,
 }) => {
   const extensions = SchemaHelpers.getCustomExtensions(item);
   if (!extensions || !Object.keys(extensions).length) {
@@ -32,7 +30,6 @@ export const Extensions: React.FunctionComponent<Props> = ({
         <Schema
           schemaName={name}
           schema={schema}
-          recursionCounter={recursionCounter + 1}
           onlyTitle
         />
       </div>

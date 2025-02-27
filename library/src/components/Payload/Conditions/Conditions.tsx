@@ -5,13 +5,11 @@ import { SchemaHelpers } from '../../../helpers';
 
 interface ConditionsProps {
   schema: SchemaInterface;
-  recursionCounter?: number;
   dependentSchemas?: SchemaInterface;
 }
 
 export const Conditions = ({
   schema,
-  recursionCounter = 0,
   dependentSchemas,
 }: ConditionsProps) => {
   return (
@@ -33,7 +31,6 @@ export const Conditions = ({
                   '',
                   s.title() ?? s.id(),
                 )}
-                recursionCounter={recursionCounter + 1}
               />
             ))}
         </div>
@@ -56,7 +53,6 @@ export const Conditions = ({
                   '',
                   s.title() ?? s.id(),
                 )}
-                recursionCounter={recursionCounter + 1}
               />
             ))}
         </div>
@@ -79,7 +75,6 @@ export const Conditions = ({
                   '',
                   s.title() ?? s.id(),
                 )}
-                recursionCounter={recursionCounter + 1}
               />
             ))}
         </div>
@@ -89,7 +84,6 @@ export const Conditions = ({
         <Payload
           schema={schema.not()}
           schemaName="Can NOT adhere to:"
-          recursionCounter={recursionCounter + 1}
         />
       )}
 
@@ -97,7 +91,6 @@ export const Conditions = ({
         <Payload
           schema={schema.propertyNames()}
           schemaName="Property names must adhere to:"
-          recursionCounter={recursionCounter + 1}
         />
       )}
 
@@ -105,7 +98,6 @@ export const Conditions = ({
         <Payload
           schema={schema.contains()}
           schemaName="Array must contain at least one of:"
-          recursionCounter={recursionCounter + 1}
         />
       )}
 
@@ -115,21 +107,18 @@ export const Conditions = ({
             <Payload
               schema={schema.if()}
               schemaName="If schema adheres to:"
-              recursionCounter={recursionCounter + 1}
             />
           )}
           {schema.then() && (
             <Payload
               schema={schema.then()}
               schemaName="Then must adhere to:"
-              recursionCounter={recursionCounter + 1}
             />
           )}
           {schema.else() && (
             <Payload
               schema={schema.else()}
               schemaName="Otherwise:"
-              recursionCounter={recursionCounter + 1}
             />
           )}
         </div>
@@ -139,7 +128,6 @@ export const Conditions = ({
         <Payload
           schema={dependentSchemas}
           schemaName="Dependent schemas:"
-          recursionCounter={recursionCounter + 1}
         />
       )}
     </div>

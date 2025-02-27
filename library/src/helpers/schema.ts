@@ -466,14 +466,14 @@ export class SchemaHelpers {
 
     let numberRange;
     if (hasMin && hasMax) {
-      // below is code for "[ 0 .. 1 ]""
+      // Alternative number range format: "[ 0 .. 1 ]"
       // numberRange = hasExclusiveMin ? '( ' : '[ ';
       // numberRange += hasExclusiveMin ? exclusiveMin : min;
       // numberRange += ' .. ';
       // numberRange += hasExclusiveMax ? exclusiveMax : max;
       // numberRange += hasExclusiveMax ? ' )' : ' ]';
 
-      // below is code for "0 <= value <= 1"
+      // Alternative number range format: "0 <= value <= 1"
       numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
       numberRange += hasExclusiveMin ? ' < ' : ' <= ';
@@ -630,29 +630,4 @@ export class SchemaHelpers {
       dependentSchemas
     );
   }
-
-  // checks if any of the nested schema children has got conditions in it
-  // public static childrenHaveConditions(
-  //   schema: SchemaInterface,
-  //   visited: WeakSet<SchemaInterface> = new WeakSet(),
-  // ): boolean {
-  //   if (visited.has(schema)) {
-  //     return false;
-  //   }
-  //   visited.add(schema);
-  //   const children = schema.properties();
-  //   if (!children) {
-  //     return false;
-  //   }
-  //   const childArray = Object.values(children);
-  //   for (const child of childArray) {
-  //     if (
-  //       this.hasConditions(child) ||
-  //       this.childrenHaveConditions(child, visited)
-  //     ) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
 }

@@ -5,12 +5,11 @@ import { Payload } from './Payload';
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
-  recursionCounter?: number;
 }
 
 export const SchemaProperties: React.FunctionComponent<
   SchemaPropertiesProps
-> = ({ schema, recursionCounter = 0 }) => {
+> = ({ schema}) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
     return null;
@@ -33,7 +32,6 @@ export const SchemaProperties: React.FunctionComponent<
             schema,
           )}
           key={propertyName}
-          recursionCounter={recursionCounter + 1}
         />
       ))}
       {Object.entries(patternProperties ?? {}).map(
@@ -45,7 +43,6 @@ export const SchemaProperties: React.FunctionComponent<
             isProperty
             isCircular={property.isCircular()}
             key={propertyName}
-            recursionCounter={recursionCounter + 1}
           />
         ),
       )}

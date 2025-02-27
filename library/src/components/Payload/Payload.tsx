@@ -9,7 +9,6 @@ import {
   // HiChevronRight,
 } from '../index';
 import { SchemaHelpers } from '../../helpers';
-// import { useElementSize } from '../../hooks/useElementSize';
 import { SchemaItems } from './SchemaItems';
 import { AdditionalItems } from './AdditionalItems';
 import { SchemaProperties } from './SchemaProperties';
@@ -31,7 +30,6 @@ export interface Props {
   onlyTitle?: boolean;
   isArray?: boolean;
   showConditionSidebar?: boolean;
-  recursionCounter?: number;
 }
 
 const PayloadSchemaContext = React.createContext({
@@ -51,20 +49,12 @@ export const Payload: React.FunctionComponent<Props> = ({
   expanded: propExpanded = false,
   onlyTitle = false,
   isArray = false,
-  recursionCounter = 0,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'RULES' | 'CONDITIONS'>('RULES');
-  // rulesSidebarOpen state is usefull only when recursionCounter is 0, else it is redundant
-  // const [rulesSidebarOpen, setRulesSidebarOpen] = useState(false);
-  // const [setConditionsRef, conditionsSize] = useElementSize();
-  // const [setRulesRef, rulesSize] = useElementSize();
-
-  // const floatConditionsToRight =
-  //   isProperty && recursionCounter >= 2 && rulesSidebarOpen;
 
   useEffect(() => {
     if (!isArray) {
@@ -91,9 +81,6 @@ export const Payload: React.FunctionComponent<Props> = ({
 
   const constraints = SchemaHelpers.humanizeConstraints(schema);
   const externalDocs = schema.externalDocs();
-
-  // const rawValueExt = schema.extensions().get(SchemaHelpers.extRawValue);
-  // const rawValue = rawValueExt?.value() === true;
 
   const parameterLocationExt = schema
     .extensions()
@@ -124,12 +111,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
-
-  // const childrenHaveConditions = SchemaHelpers.childrenHaveConditions(schema);
-
-  // this is the ammount of shift it needs to be moved to the right in px
-  // by absolute when the components gets nested a lot
-  // const conditionsRightShift = 30 + 10 * (recursionCounter - 1);
 
   useEffect(() => {
     if (!rulesExist) setTabOpen('CONDITIONS');
@@ -203,20 +184,6 @@ export const Payload: React.FunctionComponent<Props> = ({
                       {deepExpand ? 'Collapse all' : 'Expand all'}
                     </button>
                   )}
-                  {/* {childrenHaveConditions && recursionCounter == 0 && (
-                    <button
-                      type="button"
-                      onClick={() => setRulesSidebarOpen((prev) => !prev)}
-                      className="flex items-center text-sm  p-1 rounded"
-                    >
-                      <span className="">Rules</span>
-                      <HiChevronRight
-                        className={`inline-block align-baseline cursor-pointer w-5 h-6 transform transition-transform duration-150 ease-linear ${
-                          rulesSidebarOpen ? `-rotate-${0}` : `-rotate-${180}`
-                        }`}
-                      />
-                    </button>
-                  )} */}
                 </div>
               </div>
             </div>
@@ -264,19 +231,16 @@ export const Payload: React.FunctionComponent<Props> = ({
             {/* Expandable Content */}
             {!isCircular && isExpandable && expanded && (
               <div
-                // className={`p-4 bg-white relative ${expanded && rulesSidebarOpen && recursionCounter == 0 ? ' w-1/2' : 'w-full'}`}
                 className={`p-4 bg-white relative w-full`}
               >
                 {/* Properties Section */}
                 <SchemaProperties
                   schema={schema}
-                  recursionCounter={recursionCounter + 1}
                 />
 
                 {/* Array Items Section */}
                 <SchemaItems
                   schema={schema}
-                  recursionCounter={recursionCounter + 1}
                 />
 
                 <div className="">
@@ -304,18 +268,17 @@ export const Payload: React.FunctionComponent<Props> = ({
                       </button>
                     )}
                   </div>
-                  {/* Conditions Section: has hella recursion in it*/}
+                  {/* Conditions Section: has deep recursions */}
                   {conditionsExist && tabOpen == 'CONDITIONS' && (
                     <div className="mb-4 w-full">
                       <Conditions
                         schema={schema}
-                        recursionCounter={recursionCounter}
                         dependentSchemas={dependentSchemas}
                       />
                     </div>
                   )}
 
-                  {/* Rules Section: it generally doesnt have any recursion in it */}
+                  {/* Rules Section: typically does not involve recursion */}
                   {rulesExist && tabOpen == 'RULES' && (
                     <div className="z-10 w-full">
                       <Rules schema={schema} constraints={constraints} />
@@ -327,25 +290,18 @@ export const Payload: React.FunctionComponent<Props> = ({
                 <div className="mt-4">
                   <AdditionalProperties
                     schema={schema}
-                    recursionCounter={recursionCounter + 1}
                   />
                   <AdditionalItems
                     schema={schema}
-                    recursionCounter={recursionCounter + 1}
                   />
                 </div>
 
                 {/* Extensions Section */}
                 <Extensions
                   item={schema}
-                  recursionCounter={recursionCounter + 1}
                 />
               </div>
             )}
-            {/* right side conditions sidebar */}
-            {/* {expanded && rulesSidebarOpen && recursionCounter == 0 && (
-              <div className="w-1/2 mt-16" />
-            )} */}
           </div>
         </div>
       </div>

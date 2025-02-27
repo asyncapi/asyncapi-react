@@ -5,12 +5,11 @@ import { Payload } from './Payload';
 
 interface AdditionalPropertiesProps {
   schema: SchemaInterface;
-  recursionCounter?: number;
 }
 
 export const AdditionalProperties: React.FunctionComponent<
   AdditionalPropertiesProps
-> = ({ schema, recursionCounter = 0 }) => {
+> = ({ schema }) => {
   if (
     schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
     false
@@ -42,7 +41,6 @@ export const AdditionalProperties: React.FunctionComponent<
     <Payload
       schemaName="Additional properties:"
       schema={additionalProperties}
-      recursionCounter={recursionCounter + 1}
     />
   );
 };

@@ -4,12 +4,10 @@ import { Payload } from './Payload';
 
 interface SchemaItemsProps {
   schema: SchemaInterface;
-  recursionCounter?: number;
 }
 
 export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
   schema,
-  recursionCounter = 0,
 }) => {
   const type = schema.type();
   if (!type?.includes('array')) {
@@ -33,7 +31,6 @@ export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
             isArray
             schemaName={`${idx + 1} item:`}
             key={idx}
-            recursionCounter={recursionCounter + 1}
           />
         ))}
       </>
@@ -44,7 +41,6 @@ export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
       schema={items}
       isArray
       schemaName="Items:"
-      recursionCounter={recursionCounter + 1}
     />
   );
 };

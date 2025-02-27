@@ -53,12 +53,13 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
               {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
-                    href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
+                    href={`#${CommonHelpers.getIdentifier(
                       'server-' + server.id(),
                       config,
                     )}`}
                     className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
                   >
+                    MEOW
                     <span className="underline">{server.id()}</span>
                   </a>
                 </li>
