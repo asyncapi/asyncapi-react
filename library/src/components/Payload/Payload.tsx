@@ -68,6 +68,10 @@ export const Payload: React.FunctionComponent<Props> = ({
     }
   }, [isArray, deepExpand, setExpanded]);
 
+  useEffect(() => {
+    if (!rulesExist) setTabOpen('CONDITIONS');
+  }, []);
+
   if (
     !schema ||
     (typeof schemaName === 'string' &&
@@ -111,10 +115,6 @@ export const Payload: React.FunctionComponent<Props> = ({
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
-
-  useEffect(() => {
-    if (!rulesExist) setTabOpen('CONDITIONS');
-  }, []);
 
   return (
     <PayloadSchemaContext.Provider
@@ -230,18 +230,12 @@ export const Payload: React.FunctionComponent<Props> = ({
           <div className="flex ">
             {/* Expandable Content */}
             {!isCircular && isExpandable && expanded && (
-              <div
-                className={`p-4 bg-white relative w-full`}
-              >
+              <div className={`p-4 bg-white relative w-full`}>
                 {/* Properties Section */}
-                <SchemaProperties
-                  schema={schema}
-                />
+                <SchemaProperties schema={schema} />
 
                 {/* Array Items Section */}
-                <SchemaItems
-                  schema={schema}
-                />
+                <SchemaItems schema={schema} />
 
                 <div className="">
                   <div className="flex gap-1">
@@ -288,18 +282,12 @@ export const Payload: React.FunctionComponent<Props> = ({
 
                 {/* Additional Properties/Items Section */}
                 <div className="mt-4">
-                  <AdditionalProperties
-                    schema={schema}
-                  />
-                  <AdditionalItems
-                    schema={schema}
-                  />
+                  <AdditionalProperties schema={schema} />
+                  <AdditionalItems schema={schema} />
                 </div>
 
                 {/* Extensions Section */}
-                <Extensions
-                  item={schema}
-                />
+                <Extensions item={schema} />
               </div>
             )}
           </div>
