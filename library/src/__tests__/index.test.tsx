@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import AsyncApiComponent from '..';
+import AsyncApiComponent, { ExtensionComponentProps } from '..';
 import adoaKafka from './docs/v3/adeo-kafka-request-reply.json';
 import krakenMessageFilter from './docs/v3/kraken-websocket-request-reply-message-filter-in-reply.json';
 import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-multiple-channels.json';
@@ -215,5 +215,55 @@ describe('AsyncAPI component', () => {
     await waitFor(() =>
       expect(result.container.querySelector('#introduction')).toBeDefined(),
     );
+  });
+
+  test('should work with custom extensions', async () => {
+    const schema = {
+      asyncapi: '2.0.0',
+      info: {
+        title: 'Example AsyncAPI',
+        version: '0.1.0',
+      },
+      channels: {
+        'smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured':
+          {
+            subscribe: {
+              message: {
+                $ref: '#/components/messages/lightMeasured',
+              },
+            },
+          },
+      },
+      components: {
+        messages: {
+          lightMeasured: {
+            name: 'lightMeasured',
+            title: 'Light measured',
+            contentType: 'application/json',
+            'x-custom-extension': 'Custom extension value',
+          },
+        },
+      },
+    };
+
+    const CustomExtension = (props: ExtensionComponentProps) => (
+      <div id="custom-extension">{props.propertyValue}</div>
+    );
+
+    const result = render(
+      <AsyncApiComponent
+        schema={schema}
+        config={{
+          extensions: {
+            'x-custom-extension': CustomExtension,
+          },
+        }}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(result.container.querySelector('#introduction')).toBeDefined();
+      expect(result.container.querySelector('#custom-extension')).toBeDefined();
+    });
   });
 });

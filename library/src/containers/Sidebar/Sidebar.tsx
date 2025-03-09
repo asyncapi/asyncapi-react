@@ -41,7 +41,7 @@ export const Sidebar: React.FunctionComponent = () => {
           <li key={`menu-message-list-${message.name() ?? index}`}>
             <a
               className="flex break-words no-underline text-gray-700 mt-2 hover:text-gray-900"
-              href={`#message-${message.name()}`}
+              href={`#message-${message.name() ?? message.id()}`}
               onClick={() => setShowSidebar(false)}
             >
               <div className="break-all inline-block">{message.id()}</div>
@@ -119,7 +119,7 @@ export const Sidebar: React.FunctionComponent = () => {
       >
         <div
           className={`${
-            showSidebar ? 'w-full' : ''
+            showSidebar ? 'sidebar--wrapper' : ''
           } block fixed max-h-screen h-full font-sans px-4 pt-8 pb-16 overflow-y-auto bg-gray-200`}
         >
           <div className="sidebar--content">
@@ -348,7 +348,13 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
       config,
       isAsyncAPIv2,
     });
-  const bgColors = ['bg-red-600', 'bg-orange-600', 'bg-green-600'];
+  const bgColors = [
+    'bg-red-600',
+    'bg-orange-600',
+    'bg-green-600',
+    'bg-blue-600',
+  ];
+
   return (
     <li key={`menu-operation-list-${operationHrefId}`}>
       <a
@@ -356,12 +362,12 @@ const OperationItem: React.FunctionComponent<OperationItemProps> = ({
         href={`#${operationHrefId}`}
         onClick={() => setShowSidebar(false)}
       >
-        <span
-          className={`font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
+        <strong
+          className={`h-6 no-underline text-white uppercase p-1 mr-2 rounded text-xs ${bgColors.includes(backgroundColor) && backgroundColor}`}
           title={typeLabel}
         >
           {typeLabel}
-        </span>
+        </strong>
         <span className="break-all inline-block">{label}</span>
       </a>
     </li>

@@ -55,12 +55,9 @@ export const Message: React.FunctionComponent<Props> = ({
         <div className="shadow rounded bg-gray-200 p-4 border">
           <div>
             {index !== undefined && (
-              <span className="text-gray-700 font-bold mr-2">#{index}</span>
+              <strong className="text-gray-700 mr-2">#{index}</strong>
             )}
             {title && <span className="text-gray-700 mr-2">{title}</span>}
-            <span className="border text-orange-600 rounded text-xs py-0 px-2">
-              {messageId}
-            </span>
           </div>
 
           {summary && <p className="text-gray-600 text-sm">{summary}</p>}
@@ -94,7 +91,7 @@ export const Message: React.FunctionComponent<Props> = ({
             <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
               <div className="text-sm text-gray-700">
                 Message ID
-                <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                <span className="bg-orange-600 text-white rounded text-xs ml-2 py-0 px-2">
                   {messageId}
                 </span>
               </div>
@@ -105,7 +102,7 @@ export const Message: React.FunctionComponent<Props> = ({
             <div className="border bg-gray-100 rounded px-4 py-2 mt-2">
               <div className="text-sm text-gray-700">
                 Correlation ID
-                <span className="border text-orange-600 rounded text-xs ml-2 py-0 px-2">
+                <span className="bg-orange-600 text-white rounded text-xs ml-2 py-0 px-2">
                   {correlationId.location()}
                 </span>
               </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Href, Markdown, Tags } from '../../components';
+import { Extensions, Href, Markdown, Tags } from '../../components';
 import { useSpec } from '../../contexts';
 import {
   TERMS_OF_SERVICE_TEXT,
@@ -23,6 +23,7 @@ export const Info: React.FunctionComponent = () => {
   const termsOfService = info.termsOfService();
   const defaultContentType = asyncapi.defaultContentType();
   const contact = info.contact();
+  const extensions = info.extensions();
 
   const showInfoList =
     license ?? termsOfService ?? defaultContentType ?? contact ?? externalDocs;
@@ -46,9 +47,9 @@ export const Info: React.FunctionComponent = () => {
                     <span>{license.name()}</span>
                   </Href>
                 ) : (
-                  <span className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                  <strong className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-3 py-1">
                     {license.name()}
-                  </span>
+                  </strong>
                 )}
               </li>
             )}
@@ -77,6 +78,7 @@ export const Info: React.FunctionComponent = () => {
                 <Href
                   className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 font-bold no-underline text-xs uppercase rounded px-3 py-1"
                   href={externalDocs.url()}
+                  title={externalDocs.description() ?? undefined}
                 >
                   <span>{EXTERAL_DOCUMENTATION_TEXT}</span>
                 </Href>
@@ -108,9 +110,9 @@ export const Info: React.FunctionComponent = () => {
             )}
             {specId && (
               <li className="inline-block mt-2 mr-2">
-                <span className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs uppercase rounded px-3 py-1">
+                <strong className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 no-underline text-xs uppercase rounded px-3 py-1">
                   ID: {specId}
-                </span>
+                </strong>
               </li>
             )}
           </ul>
@@ -125,6 +127,12 @@ export const Info: React.FunctionComponent = () => {
         {asyncapi.info().tags().length > 0 && (
           <div className="mt-4">
             <Tags tags={asyncapi.info().tags()} />
+          </div>
+        )}
+
+        {extensions.length > 0 && (
+          <div className="mt-4">
+            <Extensions name="Info Extensions" item={info} />
           </div>
         )}
       </div>

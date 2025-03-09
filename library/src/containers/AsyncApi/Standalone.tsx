@@ -69,6 +69,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.sidebar,
         ...(!!config && config.sidebar),
       },
+      extensions: {
+        ...defaultConfig.extensions,
+        ...(!!config && config.extensions),
+      },
     };
 
     if (!asyncapi) {
@@ -84,13 +88,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       );
     }
 
-    return (
-      <AsyncApiLayout
-        asyncapi={asyncapi}
-        config={concatenatedConfig}
-        error={error}
-      />
-    );
+    return <AsyncApiLayout asyncapi={asyncapi} config={concatenatedConfig} />;
   }
 
   private updateState(schema: PropsSchema) {

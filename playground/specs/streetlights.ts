@@ -1,6 +1,7 @@
 export const streetlights = `asyncapi: '2.6.0'
 id: 'urn:com:smartylighting:streetlights:server'
 info:
+  x-x: AsyncAPISpec
   title: Streetlights API
   version: '1.0.0'
   description: |
@@ -286,18 +287,18 @@ components:
       externalDocs:
         url: "https://www.asyncapi.com/"
       tags:
-        - name: oparation-tag1
+        - name: operation-tag1
           externalDocs:
             description: External docs description 1
             url: https://www.asyncapi.com/
-        - name: oparation-tag2
+        - name: operation-tag2
           description: Description 2
           externalDocs:
             url: "https://www.asyncapi.com/"
-        - name: oparation-tag3
-        - name: oparation-tag4
+        - name: operation-tag3
+        - name: operation-tag4
           description: Description 4
-        - name: oparation-tag5
+        - name: operation-tag5
           externalDocs:
             url: "https://www.asyncapi.com/"
       traits:
