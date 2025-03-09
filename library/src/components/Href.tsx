@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
   href: string;
@@ -14,7 +14,7 @@ export const Href: React.FunctionComponent<Props> = ({
   children,
 }) => (
   <a
-    href={href}
+    href={href}F
     title={title ? `${title} (Opens in new window)` : 'Opens in new window'}
     className={className}
     target="_blank"

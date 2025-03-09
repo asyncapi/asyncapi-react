@@ -45,12 +45,12 @@
   },
   "dependencies": {
     "@asyncapi/react-component": "^2.6.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "web-react-components": "^1.4.2"
   },
   "devDependencies": {
-    "@types/react": "^18",
+    "@types/react": "^18.3.18",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "ts-loader": "9.4.4",
     "webpack": "5.88.2",

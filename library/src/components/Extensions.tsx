@@ -1,13 +1,14 @@
+import React, { useState } from "react";
+import { useConfig, useSpec } from "../contexts";
+import { SchemaHelpers } from "../helpers";
+import { CollapseButton } from "./CollapseButton";
+import { Schema } from "./Schema";
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import React, { useState } from 'react';
 
-import { Schema } from './Schema';
 
-import { SchemaHelpers } from '../helpers';
-import { useConfig, useSpec } from '../contexts';
-import { CollapseButton } from './CollapseButton';
 
 interface Props {
   name?: string;
