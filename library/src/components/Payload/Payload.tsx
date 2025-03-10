@@ -37,6 +37,7 @@ const PayloadSchemaContext = React.createContext({
   deepExpanded: false,
 });
 
+
 export const Payload: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
