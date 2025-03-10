@@ -33,7 +33,7 @@ class FetchSchema extends Component<Props, State> {
     );
   }
 
-  private fetchSchemaFromExternalResources = async () => {
+  private readonly fetchSchemaFromExternalResources = async () => {
     try {
       new URL(this.state.link);
     } catch (e) {
@@ -43,7 +43,6 @@ class FetchSchema extends Component<Props, State> {
       props: { parentCallback },
       state: { link },
     } = this;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
     parentCallback((await fetchSchema(link)) as string);
   };
 }
