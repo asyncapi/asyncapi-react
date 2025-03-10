@@ -6,7 +6,7 @@
     "sourceMap": true,
     "inlineSources": true,
     "allowJs": false,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "removeComments": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

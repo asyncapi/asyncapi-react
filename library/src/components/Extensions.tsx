@@ -4,8 +4,7 @@ import { SchemaHelpers } from "../helpers";
 import { CollapseButton } from "./CollapseButton";
 import { Schema } from "./Schema";
 
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 
 
 

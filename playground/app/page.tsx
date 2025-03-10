@@ -27,8 +27,8 @@ interface State {
 }
 
 class Playground extends Component<unknown, State> {
-  updateSchemaFn: (value: string) => void;
-  updateConfigFn: (value: string) => void;
+  private readonly updateSchemaFn: (value: string) => void;
+  private readonly updateConfigFn: (value: string) => void;
 
   state = {
     schema: defaultSchema,
@@ -100,25 +100,25 @@ class Playground extends Component<unknown, State> {
     );
   }
 
-  private updateSchema = (schema: string) => {
+  private readonly updateSchema = (schema: string) => {
     this.setState({ schema });
   };
 
-  private updateSchemaFromExternalResource = (schema: string) => {
+  private readonly updateSchemaFromExternalResource = (schema: string) => {
     this.setState({ schemaFromExternalResource: schema });
   };
 
-  private updateConfig = (config: string) => {
+  private readonly updateConfig = (config: string) => {
     this.setState({ config });
   };
 
-  private startRefreshing = (): void => {
+  private readonly startRefreshing = (): void => {
     setTimeout(() => {
       this.setState({ refreshing: true });
     }, 500);
   };
 
-  private stopRefreshing = (): void => {
+  private readonly stopRefreshing = (): void => {
     this.setState({ refreshing: false });
   };
 }
