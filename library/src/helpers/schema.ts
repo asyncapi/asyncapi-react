@@ -466,14 +466,7 @@ export class SchemaHelpers {
 
     let numberRange;
     if (hasMin && hasMax) {
-      // Alternative number range format: "[ 0 .. 1 ]"
-      // numberRange = hasExclusiveMin ? '( ' : '[ ';
-      // numberRange += hasExclusiveMin ? exclusiveMin : min;
-      // numberRange += ' .. ';
-      // numberRange += hasExclusiveMax ? exclusiveMax : max;
-      // numberRange += hasExclusiveMax ? ' )' : ' ]';
-
-      // Alternative number range format: "0 <= value <= 1"
+      // number range format: "0 <= value <= 1"
       numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
       numberRange += hasExclusiveMin ? ' < ' : ' <= ';
@@ -481,13 +474,15 @@ export class SchemaHelpers {
       numberRange += hasExclusiveMax ? ' < ' : ' <= ';
       numberRange += hasExclusiveMax ? exclusiveMax : max;
     } else if (hasMin) {
-      numberRange = 'value ';
-      numberRange += hasExclusiveMin ? '> ' : '>= ';
+      numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
+      numberRange += hasExclusiveMin ? ' < ' : ' <= ';
+      numberRange += 'value';
     } else if (hasMax) {
-      numberRange = 'value ';
-      numberRange = hasExclusiveMax ? '< ' : '<= ';
-      numberRange += 'value ' + hasExclusiveMax ? exclusiveMax : max;
+      numberRange = '';
+      numberRange += 'value';
+      numberRange += hasExclusiveMax ? ' < ' : ' <= ';
+      numberRange += hasExclusiveMax ? exclusiveMax : max;
     }
     return numberRange;
   }
