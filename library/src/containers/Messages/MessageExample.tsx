@@ -10,6 +10,18 @@ interface Props {
   message: MessageInterface;
 }
 
+interface SchemaWithFormat {
+  schemaFormat: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: any;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isMultiFormatSchema(schema: any): schema is SchemaWithFormat {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return schema;
+}
+
 export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   if (!message) {
     return null;
@@ -59,7 +71,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
     // Detect multi-format schema and restructure the schema property
     // to ensure compatibility with the sample generator
     const schemaData = schema.json();
-    if (schemaData.schema) {
+    if (isMultiFormatSchema(schemaData)) {
       Object.assign(schemaData, schemaData.schema);
       delete schemaData.schema;
     }
