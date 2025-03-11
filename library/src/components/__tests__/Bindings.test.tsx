@@ -1,17 +1,15 @@
-/**
- * @jest-environment jsdom
- */
+import React from "react";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { Bindings } from "../Bindings";
+import { Bindings } from "../Bindings";
+import { Bindings } from "../Bindings";
 
-/* eslint-disable sonarjs/no-duplicate-string */
-
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import {
   BindingV2 as BindingSchema,
-  BindingsV2 as BindingsSchema,
 } from '@asyncapi/parser';
 
-import { Bindings } from '../Bindings';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createBinding(bindingObj: Record<string, any>) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

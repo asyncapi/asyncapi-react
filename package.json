@@ -43,6 +43,8 @@
     "get:version": "cd library && npm run get:version"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.25.9",
+    "@babel/preset-react": "^7.26.3",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
     "@typescript-eslint/parser": "^7.7.1",
@@ -58,8 +60,12 @@
     "lerna": "^8.1.2",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.17.0",
-    "prettier": "^3.2.5",
+    "prettier": "3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tslib": "^1.10.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@asyncapi/react-component": "^2.6.3"
   }
 }
