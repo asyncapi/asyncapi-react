@@ -3,9 +3,8 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
-
 import { Schema } from '../Schema';
 
 describe('Schema component', () => {
@@ -41,6 +40,8 @@ describe('Schema component', () => {
 
     render(<Schema schema={schemaModel} />);
 
+    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
     // properties
     expect(screen.getByText('nonCircular')).toBeDefined();
     expect(screen.getByText('circular')).toBeDefined();
@@ -69,6 +70,8 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
+      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
       expect(screen.getByText('true')).toBeDefined();
       expect(screen.getByText('false')).toBeDefined();
     });
@@ -90,6 +93,12 @@ describe('Schema component', () => {
       const schemaModel = new SchemaModel(schema as never);
 
       render(<Schema schema={schemaModel} />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
+      const constantValueElements = screen.getAllByText('Constant value:');
+      expect(constantValueElements).toBeDefined();
+      expect(constantValueElements).toHaveLength(2);
 
       expect(screen.getByText('true')).toBeDefined();
       expect(screen.getByText('false')).toBeDefined();
@@ -147,8 +156,18 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
-      expect(screen.getByText('Adheres to Cat:')).toBeDefined();
-      expect(screen.getByText('Or to Dog:')).toBeDefined();
+      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
+      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
+      expect(
+        screen.getAllByRole('heading', {
+          name: /can be one of the following/i,
+        }),
+      ).toBeDefined();
+
+      expect(screen.getByText('Cat:')).toBeDefined();
+      expect(screen.getByText('Dog:')).toBeDefined();
     });
   });
 });
