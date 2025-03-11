@@ -112,7 +112,8 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    const suffix = title ? ` ${title}:` : ':';
+    var suffix = title ? ` ${title}:` : ':';
+    if (suffix.startsWith(' <anonymous-schema-')) suffix = ' Anonymous Schema';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
     } else {
@@ -465,16 +466,22 @@ export class SchemaHelpers {
 
     let numberRange;
     if (hasMin && hasMax) {
-      numberRange = hasExclusiveMin ? '( ' : '[ ';
+      // number range format: "0 <= value <= 1"
+      numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
-      numberRange += ' .. ';
+      numberRange += hasExclusiveMin ? ' < ' : ' <= ';
+      numberRange += 'value';
+      numberRange += hasExclusiveMax ? ' < ' : ' <= ';
       numberRange += hasExclusiveMax ? exclusiveMax : max;
-      numberRange += hasExclusiveMax ? ' )' : ' ]';
     } else if (hasMin) {
-      numberRange = hasExclusiveMin ? '> ' : '>= ';
+      numberRange = '';
       numberRange += hasExclusiveMin ? exclusiveMin : min;
+      numberRange += hasExclusiveMin ? ' < ' : ' <= ';
+      numberRange += 'value';
     } else if (hasMax) {
-      numberRange = hasExclusiveMax ? '< ' : '<= ';
+      numberRange = '';
+      numberRange += 'value';
+      numberRange += hasExclusiveMax ? ' < ' : ' <= ';
       numberRange += hasExclusiveMax ? exclusiveMax : max;
     }
     return numberRange;
@@ -589,5 +596,33 @@ export class SchemaHelpers {
       return true;
     }
     return false;
+  }
+
+  public static hasRules(schema: SchemaInterface, constraints: string[]) {
+    return (
+      schema.format() ||
+      schema.pattern() ||
+      constraints.length > 0 ||
+      schema.contentEncoding() ||
+      schema.enum() ||
+      schema.default() !== undefined ||
+      schema.const() !== undefined
+    );
+  }
+
+  public static hasConditions(schema: SchemaInterface) {
+    const dependentSchemas = this.getDependentSchemas(schema);
+    return (
+      schema.oneOf()?.length ||
+      schema.anyOf()?.length ||
+      schema.allOf()?.length ||
+      schema.not() ||
+      schema.propertyNames() ||
+      schema.contains() ||
+      schema.if() ||
+      schema.then() ||
+      schema.else() ||
+      dependentSchemas
+    );
   }
 }

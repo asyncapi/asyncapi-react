@@ -219,37 +219,37 @@ describe('SchemaHelpers', () => {
     test('should handle number/integer inclusive range', () => {
       const schema = new Schema({ minimum: 2, maximum: 5 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['[ 2 .. 5 ]']);
+      expect(result).toEqual(['2 <= value <= 5']);
     });
 
     test('should handle number/integer exclusive range', () => {
       const schema = new Schema({ minimum: 2, exclusiveMaximum: 5 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['[ 2 .. 5 )']);
+      expect(result).toEqual(['2 <= value < 5']);
     });
 
     test('should handle inclusive minimum', () => {
       const schema = new Schema({ minimum: 2 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['>= 2']);
+      expect(result).toEqual(['2 <= value']);
     });
 
     test('should handle inclusive maximum', () => {
       const schema = new Schema({ maximum: 2 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['<= 2']);
+      expect(result).toEqual(['value <= 2']);
     });
 
     test('should handle exclusive minimum', () => {
       const schema = new Schema({ exclusiveMinimum: 5 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['> 5']);
+      expect(result).toEqual(['5 < value']);
     });
 
     test('should handle exclusive maximum', () => {
       const schema = new Schema({ exclusiveMaximum: 5 });
       const result = SchemaHelpers.humanizeConstraints(schema);
-      expect(result).toEqual(['< 5']);
+      expect(result).toEqual(['value < 5']);
     });
 
     test('should handle integer multipleOf', () => {
