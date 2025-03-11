@@ -40,7 +40,9 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
     channel.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
-
+  // Construct the full relative URL, including path, query parameters to avoid path overwrite when
+  // location.hash is included
+  const relativePathname = `${window.location.pathname}${window.location.search}`;
   return (
     <div>
       <div className="panel-item--center px-8">
@@ -53,7 +55,7 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
               {servers.map((server) => (
                 <li className="inline-block mt-2 mr-2" key={server.id()}>
                   <a
-                    href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
+                    href={`${relativePathname}#${CommonHelpers.getIdentifier(
                       'server-' + server.id(),
                       config,
                     )}`}
