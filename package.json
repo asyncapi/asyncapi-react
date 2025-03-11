@@ -61,5 +61,8 @@
     "prettier": "^3.2.5",
     "tslib": "^1.10.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@asyncapi/react-component": "^2.6.3"
   }
 }

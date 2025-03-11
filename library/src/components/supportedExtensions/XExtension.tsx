@@ -1,13 +1,12 @@
-import React from 'react';
-
-import { ExtensionComponentProps } from '../../types';
+import React from "react";
+import { ExtensionComponentProps } from "../../types";
 
 /**
  * See <https://github.com/asyncapi/extensions-catalog/blob/master/extensions/x.md>.
  */
 export default function XExtension({
   propertyValue,
-}: ExtensionComponentProps<string>) {
+}:  ExtensionComponentProps<string>) {
   return (
     <a
       title={`https://x.com/${propertyValue}`}
