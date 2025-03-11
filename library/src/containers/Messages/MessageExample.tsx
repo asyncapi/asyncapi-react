@@ -19,7 +19,12 @@ interface SchemaWithFormat {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isMultiFormatSchema(schema: any): schema is SchemaWithFormat {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return schema;
+  return (
+    schema &&
+    typeof schema === 'object' &&
+    'schemaFormat' in schema &&
+    'schema' in schema
+  );
 }
 
 export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
