@@ -1,9 +1,8 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  // Purge works on production env
-  purge: ['./src/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.tsx'], // Replaces 'purge'
+  darkMode: 'class', // Recommended for better dark mode handling
   theme: {
-    // use default styles of tailwind v1: https://tailwindcss.com/docs/upgrading-to-v2#configure-your-color-palette-explicitly
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -136,12 +135,14 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
     },
-    borderColor: (theme) => ({
-      ...theme('colors'),
-      DEFAULT: theme('colors.gray.400', 'currentColor'),
-    }),
+    
     extend: {
-      typography: (theme) => ({
+      borderColor :{
+        ...theme('colors')
+        DEFAULT: theme('colors.gray.400', 'currentColor'),
+        
+      },
+      typography: ({ theme }) => ({
         DEFAULT: {
           css: {
             pre: {
@@ -151,9 +152,6 @@ module.exports = {
         },
       }),
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [require('@tailwindcss/typography')],
 };

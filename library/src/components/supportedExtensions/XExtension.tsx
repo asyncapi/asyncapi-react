@@ -6,7 +6,7 @@ import { ExtensionComponentProps } from "../../types";
  */
 export default function XExtension({
   propertyValue,
-}:  ExtensionComponentProps<string>) {
+}: ExtensionComponentProps<string>) {
   return (
     <a
       title={`https://x.com/${propertyValue}`}

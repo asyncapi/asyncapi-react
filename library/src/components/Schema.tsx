@@ -121,29 +121,29 @@ export const Schema: React.FunctionComponent<Props> = ({
               </span>
             )}
             {isPatternProperty && (
-              <div className="text-gray-500 text-xs italic">
+              <div className="text-xs italic text-gray-500">
                 (pattern property)
               </div>
             )}
-            {required && <div className="text-red-600 text-xs">required</div>}
+            {required && <div className="text-xs text-red-600">required</div>}
             {dependentRequired && (
               <>
-                <div className="text-gray-500 text-xs">
+                <div className="text-xs text-gray-500">
                   required when defined:
                 </div>
-                <div className="text-red-600 text-xs">
+                <div className="text-xs text-red-600">
                   {dependentRequired.join(', ')}
                 </div>
               </>
             )}
             {schema.deprecated() && (
-              <div className="text-red-600 text-xs">deprecated</div>
+              <div className="text-xs text-red-600">deprecated</div>
             )}
             {schema.writeOnly() && (
-              <div className="text-gray-500 text-xs">write-only</div>
+              <div className="text-xs text-gray-500">write-only</div>
             )}
             {schema.readOnly() && (
-              <div className="text-gray-500 text-xs">read-only</div>
+              <div className="text-xs text-gray-500">read-only</div>
             )}
           </div>
           {rawValue ? (
@@ -155,29 +155,29 @@ export const Schema: React.FunctionComponent<Props> = ({
           ) : (
             <div>
               <div>
-                <div className="capitalize text-sm text-teal-500 font-bold inline-block mr-2">
+                <div className="text-teal-500 mr-2 inline-block text-sm font-bold capitalize">
                   {isCircular ? `${schemaType} [CIRCULAR]` : schemaType}
                 </div>
                 <div className="inline-block">
                   {schema.format() && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="mr-2 rounded bg-yellow-600 p-1 text-xs lowercase text-white no-underline">
                       format: {schema.format()}
                     </strong>
                   )}
 
                   {/* related to string */}
                   {schema.pattern() !== undefined && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded mr-2 p-1 text-xs">
+                    <strong className="mr-2 rounded bg-yellow-600 p-1 text-xs text-white no-underline">
                       must match: {schema.pattern()}
                     </strong>
                   )}
                   {schema.contentMediaType() !== undefined && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="mr-2 rounded bg-yellow-600 p-1 text-xs lowercase text-white no-underline">
                       media type: {schema.contentMediaType()}
                     </strong>
                   )}
                   {schema.contentEncoding() !== undefined && (
-                    <strong className="bg-yellow-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs">
+                    <strong className="mr-2 rounded bg-yellow-600 p-1 text-xs lowercase text-white no-underline">
                       encoding: {schema.contentEncoding()}
                     </strong>
                   )}
@@ -186,7 +186,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   {!!constraints.length &&
                     constraints.map((c) => (
                       <strong
-                        className="bg-purple-600 no-underline text-white rounded lowercase mr-2 p-1 text-xs"
+                        className="mr-2 rounded bg-purple-600 p-1 text-xs lowercase text-white no-underline"
                         key={c}
                       >
                         {c}
@@ -194,7 +194,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     ))}
 
                   {uid && !uid.startsWith('<anonymous-') && (
-                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                    <span className="text-orange-600 mr-2 rounded border p-1 text-xs">
                       uid: {uid}
                     </span>
                   )}
@@ -209,7 +209,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.default() !== undefined && (
                   <div className="text-xs">
                     Default value:
-                    <span className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2">
+                    <span className="bg-orange-600 ml-1 inline-block rounded px-2 py-0 text-white">
                       {SchemaHelpers.prettifyValue(schema.default())}
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {schema.const() !== undefined && (
                   <div className="text-xs">
                     Const:
-                    <span className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2">
+                    <span className="bg-orange-600 ml-1 inline-block rounded px-2 py-0 text-white">
                       {SchemaHelpers.prettifyValue(schema.const())}
                     </span>
                   </div>
@@ -228,7 +228,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     {schema.enum()?.map((e, idx) => (
                       <li
                         key={idx}
-                        className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2"
+                        className="bg-orange-600 ml-1 inline-block rounded px-2 py-0 text-white"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
@@ -238,13 +238,13 @@ export const Schema: React.FunctionComponent<Props> = ({
                 {parameterLocation && (
                   <div className="text-xs">
                     Parameter location:{' '}
-                    <span className="border text-orange-600 rounded mr-2 p-1 text-xs">
+                    <span className="text-orange-600 mr-2 rounded border p-1 text-xs">
                       {parameterLocation}
                     </span>
                   </div>
                 )}
                 {externalDocs && (
-                  <strong className="border border-solid border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 no-underline text-xs uppercase rounded px-2 py-0">
+                  <strong className="border-orange-300 hover:bg-orange-300 hover:text-orange-600 text-orange-500 rounded border border-solid px-2 py-0 text-xs uppercase no-underline">
                     <Href
                       href={externalDocs.url()}
                       title={externalDocs.description() ?? ''}
@@ -259,7 +259,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     {schema.examples()?.map((e, idx) => (
                       <li
                         key={idx}
-                        className="inline-block bg-orange-600 text-white rounded ml-1 py-0 px-2 break-all"
+                        className="bg-orange-600 ml-1 inline-block break-all rounded px-2 py-0 text-white"
                       >
                         <span>{SchemaHelpers.prettifyValue(e)}</span>
                       </li>
@@ -273,55 +273,49 @@ export const Schema: React.FunctionComponent<Props> = ({
 
         {isCircular || !isExpandable ? null : (
           <div
-            className={`rounded p-4 py-2 border bg-gray-100 ${
+            className={`rounded border bg-gray-100 p-4 py-2 ${
               reverse ? 'bg-gray-200' : ''
             } ${expanded ? 'block' : 'hidden'}`}
           >
             <SchemaProperties schema={schema} />
             <SchemaItems schema={schema} />
 
-            {schema
-              .oneOf()
-              ?.map((s, idx) => (
-                <Schema
-                  key={idx}
-                  schema={s}
-                  schemaName={SchemaHelpers.applicatorSchemaName(
-                    idx,
-                    'Adheres to',
-                    'Or to',
-                    s.title() ?? s.id(),
-                  )}
-                />
-              ))}
-            {schema
-              .anyOf()
-              ?.map((s, idx) => (
-                <Schema
-                  key={idx}
-                  schema={s}
-                  schemaName={SchemaHelpers.applicatorSchemaName(
-                    idx,
-                    'Can adhere to',
-                    'Or to',
-                    s.title() ?? s.id(),
-                  )}
-                />
-              ))}
-            {schema
-              .allOf()
-              ?.map((s, idx) => (
-                <Schema
-                  key={idx}
-                  schema={s}
-                  schemaName={SchemaHelpers.applicatorSchemaName(
-                    idx,
-                    'Consists of',
-                    'And of',
-                    s.title() ?? s.id(),
-                  )}
-                />
-              ))}
+            {schema.oneOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Adheres to',
+                  'Or to',
+                  s.title() ?? s.id(),
+                )}
+              />
+            ))}
+            {schema.anyOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Can adhere to',
+                  'Or to',
+                  s.title() ?? s.id(),
+                )}
+              />
+            ))}
+            {schema.allOf()?.map((s, idx) => (
+              <Schema
+                key={idx}
+                schema={s}
+                schemaName={SchemaHelpers.applicatorSchemaName(
+                  idx,
+                  'Consists of',
+                  'And of',
+                  s.title() ?? s.id(),
+                )}
+              />
+            ))}
             {schema.not() && (
               <Schema schema={schema.not()} schemaName="Cannot adhere to:" />
             )}

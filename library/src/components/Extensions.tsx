@@ -1,13 +1,14 @@
+import React, { useState } from "react";
+import { useConfig, useSpec } from "../contexts";
+import { SchemaHelpers } from "../helpers";
+import { CollapseButton } from "./CollapseButton";
+import { Schema } from "./Schema";
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import React, { useState } from 'react';
 
-import { Schema } from './Schema';
 
-import { SchemaHelpers } from '../helpers';
-import { useConfig, useSpec } from '../contexts';
-import { CollapseButton } from './CollapseButton';
 
 interface Props {
   name?: string;
@@ -55,7 +56,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
         </div>
       </div>
       <div
-        className={`rounded p-4 py-2 border bg-gray-100 ${expanded ? 'block' : 'hidden'}`}
+        className={`rounded border bg-gray-100 p-4 py-2 ${expanded ? 'block' : 'hidden'}`}
       >
         {Object.keys(extensions)
           .sort((extension1, extension2) =>

@@ -1,8 +1,22 @@
 {
   "trailingComma": "all",
-  
   "bracketSpacing": true,
   "tabWidth": 2,
-  "endOfLine": "lf"
+  "endOfLine": "auto",
+  "singleQuote": true,
+
+
+
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindFunctions": ["clsx", "classnames"],
+  
+  "overrides": [
+    {
+      "files": ["*.tsx", "*.jsx"],
+      "options": {
+        "parser": "babel-ts"
+      }
+    }
+  ]
 
 }

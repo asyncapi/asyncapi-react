@@ -1,6 +1,6 @@
 import { AsyncAPIDocumentInterface, BaseModel } from "@asyncapi/parser";
 
-export type PropsSchema =
+export type PropsSchema = 
   | string
   | FetchingSchemaInterface
   | AsyncAPIDocumentInterface
