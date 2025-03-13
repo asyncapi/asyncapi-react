@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { ReactNode } from 'react';
+import React, { useEffect, useState,ReactNode } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { ErrorObject } from '../../types';
 import { Error } from '../Error/Error';

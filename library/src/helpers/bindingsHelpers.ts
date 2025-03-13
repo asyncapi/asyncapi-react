@@ -5,7 +5,7 @@ class BindingsHelper {
    * binding properties of type SchemaObject
    * Change it when AsyncAPI will support JSON Schema specification (definition) for bindings
    */
-  private schemaObjectKeys: string[] = [
+  private readonly schemaObjectKeys: string[] = [
     'http.query',
     'kafka.groupId',
     'kafka.clientId',
