@@ -1,13 +1,14 @@
+import React, { useState } from "react";
+import { useConfig, useSpec } from "../contexts";
+import { SchemaHelpers } from "../helpers";
+import { CollapseButton } from "./CollapseButton";
+import { Schema } from "./Schema";
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import React, { useState } from 'react';
 
-import { Schema } from './Schema';
 
-import { SchemaHelpers } from '../helpers';
-import { useConfig, useSpec } from '../contexts';
-import { CollapseButton } from './CollapseButton';
 
 interface Props {
   name?: string;
@@ -44,14 +45,14 @@ export const Extensions: React.FunctionComponent<Props> = ({
     <div>
       <div className="flex py-2">
         <div className="min-w-1/4">
-          <>
+          
             <CollapseButton
               onClick={() => setExpanded((prev) => !prev)}
               expanded={expanded}
             >
               <span className={`break-anywhere text-sm ${name}`}>{name}</span>
             </CollapseButton>
-          </>
+          
         </div>
       </div>
       <div
