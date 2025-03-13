@@ -1,7 +1,8 @@
+import React, { Component } from "react";
+import { Button, InputField, InputWrapper } from "./styled";
+import { fetchSchema } from "@/utils";
+
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { Component } from 'react';
-import { InputWrapper, InputField, Button } from './styled';
-import { fetchSchema } from '@/utils';
 
 interface Props {
   parentCallback(value: string): void;
@@ -33,7 +34,7 @@ class FetchSchema extends Component<Props, State> {
     );
   }
 
-  private fetchSchemaFromExternalResources = async () => {
+  private readonly fetchSchemaFromExternalResources = async () => {
     try {
       new URL(this.state.link);
     } catch (e) {
