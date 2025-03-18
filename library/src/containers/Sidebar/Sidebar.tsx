@@ -89,8 +89,6 @@ export const Sidebar: React.FunctionComponent = () => {
         </a>
         <OperationsList />
       </li>
-      {showMessages && messagesList}
-      {showSchemas && schemasList}
     </>
   );
 
@@ -161,6 +159,8 @@ export const Sidebar: React.FunctionComponent = () => {
                 </li>
               )}
               {operationList}
+              {showMessages && messagesList}
+              {showSchemas && schemasList}
             </ul>
           </div>
         </div>
