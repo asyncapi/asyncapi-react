@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
@@ -18,11 +18,13 @@ describe('Extensions component', () => {
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
 
+    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();
-    expect(screen.getByText('xBar')).toBeDefined();
+    expect(screen.getByText('"xBar"')).toBeDefined();
     expect(screen.getByText('x-bar')).toBeDefined();
-    expect(screen.getByText('xFoo')).toBeDefined();
+    expect(screen.getByText('"xFoo"')).toBeDefined();
   });
 
   test('should filter non extensions', () => {
@@ -38,12 +40,14 @@ describe('Extensions component', () => {
     };
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
+    
+    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
 
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();
-    expect(screen.getByText('xBar')).toBeDefined();
+    expect(screen.getByText('"xBar"')).toBeDefined();
     expect(screen.getByText('x-bar')).toBeDefined();
-    expect(screen.getByText('xFoo')).toBeDefined();
+    expect(screen.getByText('"xFoo"')).toBeDefined();
     expect(screen.queryByText('foo')).toEqual(null);
     expect(screen.queryByText('bar')).toEqual(null);
   });
@@ -57,9 +61,11 @@ describe('Extensions component', () => {
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
 
+    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();
-    expect(screen.getByText('xBar')).toBeDefined();
+    expect(screen.getByText('"xBar"')).toBeDefined();
     expect(screen.getByText('x-bar')).toBeDefined();
     expect(screen.getByText('x-foobar')).toBeDefined();
     expect(screen.queryByText('undefined')).toEqual(null);
