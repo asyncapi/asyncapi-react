@@ -44,27 +44,27 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   return (
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
-          <section className="aui-root">
-            <AsyncApiErrorBoundary>
-              <div
-                className={`${observerClassName} relative md:flex bg-white leading-normal`}
-                id={config.schemaID ?? undefined}
-                ref={ref}
-              >
-                {configShow.sidebar && <Sidebar />}
-                <div className="panel--center relative py-8 flex-1">
-                  <div className="relative z-10">
-                    {configShow.info && <Info />}
-                    {configShow.servers && <Servers />}
-                    {configShow.operations && <Operations />}
-                    {configShow.messages && <Messages />}
-                    {configShow.schemas && <Schemas />}
-                  </div>
-                  <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
+        <section className="aui-root">
+          <AsyncApiErrorBoundary>
+            <div
+              className={`${observerClassName} relative md:flex bg-white leading-normal`}
+              id={config.schemaID ?? undefined}
+              ref={ref}
+            >
+              {configShow.sidebar && <Sidebar />}
+              <div className="panel--center relative py-8 flex-1">
+                <div className="relative z-10">
+                  {configShow.info && <Info />}
+                  {configShow.servers && <Servers />}
+                  {configShow.operations && <Operations />}
+                  {configShow.messages && <Messages />}
+                  {configShow.schemas && <Schemas />}
                 </div>
+                <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
               </div>
-            </AsyncApiErrorBoundary>
-          </section>
+            </div>
+          </AsyncApiErrorBoundary>
+        </section>
       </SpecificationContext.Provider>
     </ConfigContext.Provider>
   );

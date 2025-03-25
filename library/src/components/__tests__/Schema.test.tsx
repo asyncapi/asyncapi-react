@@ -7,6 +7,10 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 import { Schema } from '../Schema';
 
+const expandAll = () => {
+  fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+};
+
 describe('Schema component', () => {
   // eslint-disable-next-line jest/expect-expect
   test('should work with true schema', () => {
@@ -40,7 +44,7 @@ describe('Schema component', () => {
 
     render(<Schema schema={schemaModel} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+    expandAll();
 
     // properties
     expect(screen.getByText('nonCircular')).toBeDefined();
@@ -70,7 +74,7 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+      expandAll();
 
       expect(screen.getByText('true')).toBeDefined();
       expect(screen.getByText('false')).toBeDefined();
@@ -94,7 +98,7 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+      expandAll();
 
       const constantValueElements = screen.getAllByText('Constant value:');
       expect(constantValueElements).toBeDefined();
@@ -156,9 +160,9 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+      expandAll();
 
-      fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+      expandAll();
 
       expect(
         screen.getAllByRole('heading', {

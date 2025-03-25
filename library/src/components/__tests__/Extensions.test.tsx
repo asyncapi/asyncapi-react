@@ -9,6 +9,10 @@ import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
 import { Extensions } from '../Extensions';
 
+const expandAll = () => {
+  fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+};
+
 describe('Extensions component', () => {
   test('should work with simple data', () => {
     const schema = {
@@ -18,7 +22,7 @@ describe('Extensions component', () => {
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+    expandAll();
 
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();
@@ -40,8 +44,8 @@ describe('Extensions component', () => {
     };
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
-    
-    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
+    expandAll();
 
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();
@@ -61,7 +65,7 @@ describe('Extensions component', () => {
     const schemaModel = new SchemaModel(schema);
     render(<Extensions item={schemaModel} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+    expandAll();
 
     expect(screen.getByText('Extensions')).toBeDefined();
     expect(screen.getByText('x-foo')).toBeDefined();

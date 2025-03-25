@@ -12,13 +12,19 @@ export const FeildStatusIndicator = ({
   required = false,
   isPatternProperty,
 }: FeildStatusIndicatorProps) => {
+  const isRequired = required ?? false;
+  const isDeprecated = schema.deprecated() ?? false;
+  const isWriteOnly = schema.writeOnly() ?? false;
+  const isReadOnly = schema.readOnly() ?? false;
+  const isPattern = isPatternProperty ?? false;
+
   return (
     <>
-      {(required ||
-        schema.deprecated() ||
-        schema.writeOnly() ||
-        schema.readOnly() ||
-        isPatternProperty) && (
+      {(isRequired ||
+        isDeprecated ||
+        isWriteOnly ||
+        isReadOnly ||
+        isPattern) && (
         <div className="flex items-center space-x-2">
           {required && (
             <span className="text-red-600 text-xs rounded">required</span>

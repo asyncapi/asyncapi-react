@@ -36,11 +36,5 @@ export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
       </>
     );
   }
-  return (
-    <Payload
-      schema={items}
-      isArray
-      schemaName="Items:"
-    />
-  );
+  return <Payload schema={items} isArray schemaName="Items:" />;
 };

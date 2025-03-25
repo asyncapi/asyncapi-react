@@ -169,7 +169,7 @@ components:
               properties:
                 phone:
                   type: string
-                  pattern: '^\+[1-9]\d{1,14}$'
+                  pattern: '^+[1-9]d{1,14}$'
             - type: object
               properties:
                 email:

@@ -37,18 +37,17 @@ const PayloadSchemaContext = React.createContext({
   deepExpanded: false,
 });
 
-
 export const Payload: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
-  showSchemaType = true,
+  // showSchemaType = true,
   required = false,
   isPatternProperty = false,
   isProperty = false,
   isCircular = false,
-  dependentRequired,
+  // dependentRequired,
   expanded: propExpanded = false,
-  onlyTitle = false,
+  // onlyTitle = false,
   isArray = false,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
@@ -71,7 +70,7 @@ export const Payload: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (!rulesExist) setTabOpen('CONDITIONS');
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (
     !schema ||

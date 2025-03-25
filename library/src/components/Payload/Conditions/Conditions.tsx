@@ -8,10 +8,7 @@ interface ConditionsProps {
   dependentSchemas?: SchemaInterface;
 }
 
-export const Conditions = ({
-  schema,
-  dependentSchemas,
-}: ConditionsProps) => {
+export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
   return (
     <div className={`space-y-2 bg-blue-100 border rounded rounded-tl-none p-4`}>
       {schema.oneOf()?.length && (
@@ -81,10 +78,7 @@ export const Conditions = ({
       )}
 
       {schema.not() && (
-        <Payload
-          schema={schema.not()}
-          schemaName="Can NOT adhere to:"
-        />
+        <Payload schema={schema.not()} schemaName="Can NOT adhere to:" />
       )}
 
       {schema.propertyNames() && (
@@ -104,31 +98,19 @@ export const Conditions = ({
       {schema.if() && (
         <div className="">
           {schema.if() && (
-            <Payload
-              schema={schema.if()}
-              schemaName="If schema adheres to:"
-            />
+            <Payload schema={schema.if()} schemaName="If schema adheres to:" />
           )}
           {schema.then() && (
-            <Payload
-              schema={schema.then()}
-              schemaName="Then must adhere to:"
-            />
+            <Payload schema={schema.then()} schemaName="Then must adhere to:" />
           )}
           {schema.else() && (
-            <Payload
-              schema={schema.else()}
-              schemaName="Otherwise:"
-            />
+            <Payload schema={schema.else()} schemaName="Otherwise:" />
           )}
         </div>
       )}
 
       {dependentSchemas && (
-        <Payload
-          schema={dependentSchemas}
-          schemaName="Dependent schemas:"
-        />
+        <Payload schema={dependentSchemas} schemaName="Dependent schemas:" />
       )}
     </div>
   );

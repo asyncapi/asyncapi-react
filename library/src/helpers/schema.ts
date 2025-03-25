@@ -112,7 +112,7 @@ export class SchemaHelpers {
     otherCases: string,
     title?: string,
   ) {
-    var suffix = title ? ` ${title}:` : ':';
+    let suffix = title ? ` ${title}:` : ':';
     if (suffix.startsWith(' <anonymous-schema-')) suffix = ' Anonymous Schema';
     if (idx === 0) {
       return `${firstCase}${suffix}`;
@@ -600,6 +600,7 @@ export class SchemaHelpers {
 
   public static hasRules(schema: SchemaInterface, constraints: string[]) {
     return (
+      /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
       schema.format() ||
       schema.pattern() ||
       constraints.length > 0 ||
@@ -607,12 +608,14 @@ export class SchemaHelpers {
       schema.enum() ||
       schema.default() !== undefined ||
       schema.const() !== undefined
+      /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
     );
   }
 
   public static hasConditions(schema: SchemaInterface) {
     const dependentSchemas = this.getDependentSchemas(schema);
     return (
+      /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
       schema.oneOf()?.length ||
       schema.anyOf()?.length ||
       schema.allOf()?.length ||
@@ -623,6 +626,7 @@ export class SchemaHelpers {
       schema.then() ||
       schema.else() ||
       dependentSchemas
+      /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
     );
   }
 }

@@ -42,10 +42,5 @@ export const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     );
   }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  return (
-    <Payload
-      schemaName="Additional items:"
-      schema={additionalItems}
-    />
-  );
+  return <Payload schemaName="Additional items:" schema={additionalItems} />;
 };

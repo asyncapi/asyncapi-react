@@ -9,7 +9,7 @@ interface SchemaPropertiesProps {
 
 export const SchemaProperties: React.FunctionComponent<
   SchemaPropertiesProps
-> = ({ schema}) => {
+> = ({ schema }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
     return null;
