@@ -76,8 +76,8 @@ export class CommonHelpers {
         borderColor: 'border-green-600 text-green-600',
         backgroundColor: 'bg-green-600',
         typeLabel: !isAsyncAPIv2
-          ? (config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT)
-          : (config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT),
+          ? config.receiveLabel ?? RECEIVE_TEXT_LABEL_DEFAULT_TEXT
+          : config.publishLabel ?? PUBLISH_LABEL_DEFAULT_TEXT,
       };
     }
     if (type === PayloadType.REPLY) {
@@ -98,8 +98,8 @@ export class CommonHelpers {
       borderColor: 'border-blue-600 text-blue-500',
       backgroundColor: 'bg-blue-600',
       typeLabel: !isAsyncAPIv2
-        ? (config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT)
-        : (config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT),
+        ? config.sendLabel ?? SEND_LABEL_DEFAULT_TEXT
+        : config.subscribeLabel ?? SUBSCRIBE_LABEL_DEFAULT_TEXT,
     };
   }
 }
