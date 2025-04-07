@@ -1,5 +1,7 @@
-import { OperationInterface, TagV2, TagsV2 } from '@asyncapi/parser';
-import { TagObject, filterObjectsByTags } from '../sidebar';
+import type { OperationInterface } from '@asyncapi/parser';
+import { TagV2, TagsV2 } from '@asyncapi/parser';
+import type { TagObject } from '../sidebar';
+import { filterObjectsByTags } from '../sidebar';
 
 describe('sidebar', () => {
   describe('.filterObjectsByTags', () => {

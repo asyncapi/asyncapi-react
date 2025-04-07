@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { MessageInterface, SchemaInterface } from '@asyncapi/parser';
+import type { MessageInterface, SchemaInterface } from '@asyncapi/parser';
 
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
-import { MessageExample as MessageExampleType } from '../../types';
+import type { MessageExample as MessageExampleType } from '../../types';
 import { useConfig } from '../../contexts';
 
 interface Props {

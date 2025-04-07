@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import AsyncApiStandalone from './Standalone';
 
-import {
-  isFetchingSchemaInterface,
-  ErrorObject,
-  PropsSchema,
-} from '../../types';
-import { ConfigInterface } from '../../config';
+import type { ErrorObject, PropsSchema } from '../../types';
+import { isFetchingSchemaInterface } from '../../types';
+import type { ConfigInterface } from '../../config';
 import { SpecificationHelpers, Parser } from '../../helpers';
 
 export interface AsyncApiProps {

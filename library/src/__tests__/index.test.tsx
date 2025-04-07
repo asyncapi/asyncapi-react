@@ -6,7 +6,8 @@
 
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import AsyncApiComponent, { ExtensionComponentProps } from '..';
+import type { ExtensionComponentProps } from '..';
+import AsyncApiComponent from '..';
 import adoaKafka from './docs/v3/adeo-kafka-request-reply.json';
 import krakenMessageFilter from './docs/v3/kraken-websocket-request-reply-message-filter-in-reply.json';
 import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-multiple-channels.json';

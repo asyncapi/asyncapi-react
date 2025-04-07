@@ -2,10 +2,11 @@
 import * as React from 'react';
 // @ts-expect-error no types exists
 import { register } from 'web-react-components';
-import AsyncApiComponent, {
+import type {
   AsyncApiProps,
   FetchingSchemaInterface,
 } from '@asyncapi/react-component';
+import AsyncApiComponent from '@asyncapi/react-component';
 
 /**
  * Angular 11.0.7 running in 'production mode + enforced stricter type
@@ -39,7 +40,7 @@ function retrieveSchemaProp(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schemaRequestOptions = schemaFetchOptions
       ? JSON.parse(JSON.stringify(schemaFetchOptions))
-      : (schema as FetchingSchemaInterface).requestOptions ?? {};
+      : ((schema as FetchingSchemaInterface).requestOptions ?? {});
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schema = { url: schemaUrl, requestOptions: schemaRequestOptions };
   }

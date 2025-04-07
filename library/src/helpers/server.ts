@@ -1,4 +1,4 @@
-import { SecuritySchemeInterface } from '@asyncapi/parser';
+import type { SecuritySchemeInterface } from '@asyncapi/parser';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class ServerHelpers {

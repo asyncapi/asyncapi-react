@@ -1,7 +1,8 @@
 'use client';
 import '@asyncapi/react-component/styles/default.min.css';
 import React, { Component } from 'react';
-import AsyncApi, { ConfigInterface } from '@asyncapi/react-component';
+import type { ConfigInterface } from '@asyncapi/react-component';
+import AsyncApi from '@asyncapi/react-component';
 import {
   Navigation,
   CodeEditorComponent,

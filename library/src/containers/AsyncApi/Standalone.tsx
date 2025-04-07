@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import { SpecificationHelpers } from '../../helpers';
-import { ErrorObject, PropsSchema } from '../../types';
-import { ConfigInterface, defaultConfig } from '../../config';
+import type { ErrorObject, PropsSchema } from '../../types';
+import type { ConfigInterface } from '../../config';
+import { defaultConfig } from '../../config';
 
 import AsyncApiLayout from './Layout';
 import { Error } from '../Error/Error';

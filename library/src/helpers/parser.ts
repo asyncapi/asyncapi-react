@@ -1,14 +1,10 @@
-import {
-  Parser as AsyncapiParser,
-  Diagnostic,
-  DiagnosticSeverity,
-  fromURL,
-} from '@asyncapi/parser';
+import type { Diagnostic, DiagnosticSeverity } from '@asyncapi/parser';
+import { Parser as AsyncapiParser, fromURL } from '@asyncapi/parser';
 import { OpenAPISchemaParser } from '@asyncapi/openapi-schema-parser';
 import { ProtoBuffSchemaParser } from '@asyncapi/protobuf-schema-parser';
 import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 
-import {
+import type {
   ErrorObject,
   ParserReturn,
   FetchingSchemaInterface,

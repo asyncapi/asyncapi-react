@@ -1,7 +1,7 @@
-import { MessageInterface } from '@asyncapi/parser';
+import type { MessageInterface } from '@asyncapi/parser';
 import { sample } from 'openapi-sampler';
 
-import { MessageExample } from '../types';
+import type { MessageExample } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class MessageHelpers {

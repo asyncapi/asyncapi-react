@@ -8,7 +8,7 @@ import { Sidebar } from '../Sidebar';
 import { ConfigContext, SpecificationContext } from '../../../contexts';
 import asyncapi from '../../../__tests__/docs/v3/streetlights-kafka.json';
 import { Parser } from '../../../helpers';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 describe('Sidebar component', () => {
   let parsed: AsyncAPIDocumentInterface;
   beforeAll(async () => {

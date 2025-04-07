@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 import useResizeObserver from 'use-resize-observer';
 
 import { Sidebar } from '../Sidebar/Sidebar';
@@ -9,7 +9,7 @@ import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 import { Schemas } from '../Schemas/Schemas';
 
-import { ConfigInterface } from '../../config';
+import type { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
 import AsyncApiErrorBoundary from '../ApplicationErrorHandler/ErrorBoundary';
 

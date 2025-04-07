@@ -1,6 +1,5 @@
+import type { AsyncAPIDocumentInterface, TagInterface } from '@asyncapi/parser';
 import {
-  AsyncAPIDocumentInterface,
-  TagInterface,
   isAsyncAPIDocument,
   isOldAsyncAPIDocument,
   toAsyncAPIDocument,

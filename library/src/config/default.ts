@@ -1,4 +1,4 @@
-import { ConfigInterface } from './config';
+import type { ConfigInterface } from './config';
 import {
   PUBLISH_LABEL_DEFAULT_TEXT,
   RECEIVE_TEXT_LABEL_DEFAULT_TEXT,

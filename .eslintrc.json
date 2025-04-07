@@ -45,7 +45,10 @@
       {
         "assertFunctionNames": ["expect", "cy"]
       }
-    ]
+    ],
+    // https://typescript-eslint.io/blog/consistent-type-imports-and-exports-why-and-how/
+    "@typescript-eslint/consistent-type-exports": "error",
+    "@typescript-eslint/consistent-type-imports": "error"
   },
   "ignorePatterns": [
     "library/browser",

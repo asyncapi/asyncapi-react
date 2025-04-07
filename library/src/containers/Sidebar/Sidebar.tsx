@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react';
 import { CollapseButton } from '../../components';
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers } from '../../helpers';
-import { PayloadType } from '../../types';
-import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
+import type { PayloadType } from '../../types';
+import type { TagObject } from '../../helpers/sidebar';
+import { filterObjectsByTags } from '../../helpers/sidebar';
 
 const SidebarContext = React.createContext<{
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;

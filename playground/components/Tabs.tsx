@@ -7,7 +7,7 @@ import {
   TabsContent,
 } from './styled';
 
-import { TabProps } from './Tab';
+import type { TabProps } from './Tab';
 
 interface Props {
   additionalHeaderContent?: React.ReactNode;

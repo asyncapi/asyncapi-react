@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { ConfigInterface } from '../config';
+import type { ConfigInterface } from '../config';
 
 export const ConfigContext = createContext<ConfigInterface>({});
 

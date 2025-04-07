@@ -1,6 +1,5 @@
-import AsyncApiComponent, {
-  AsyncApiProps,
-} from './containers/AsyncApi/AsyncApi';
+import type { AsyncApiProps } from './containers/AsyncApi/AsyncApi';
+import AsyncApiComponent from './containers/AsyncApi/AsyncApi';
 
 import { createRender, createHydrate } from './standalone-codebase';
 import { hljs } from './helpers';

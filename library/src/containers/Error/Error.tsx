@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ERROR_TEXT } from '../../constants';
-import { ErrorObject, ValidationError } from '../../types';
+import type { ErrorObject, ValidationError } from '../../types';
 
 const renderErrors = (errors: ValidationError[]): React.ReactNode => {
   if (!errors) {

@@ -1,4 +1,4 @@
-import { ExtensionComponentProps } from '../types';
+import type { ExtensionComponentProps } from '../types';
 
 export interface ConfigInterface {
   schemaID?: string;

@@ -1,11 +1,11 @@
-import {
+import type {
   SchemaInterface,
   ChannelParametersInterface,
   ServerVariablesInterface,
-  SchemaV2 as SchemaClass,
   ExtensionInterface,
   ExtensionsInterface,
 } from '@asyncapi/parser';
+import { SchemaV2 as SchemaClass } from '@asyncapi/parser';
 
 export enum SchemaCustomTypes {
   // for `true` and `{}` schemas

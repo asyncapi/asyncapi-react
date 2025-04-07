@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
+import type { SchemaInterface } from '@asyncapi/parser';
 
 import { Schema as SchemaComponent } from '../../components';
 

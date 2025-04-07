@@ -1,4 +1,5 @@
-import React, { ButtonHTMLAttributes, SVGAttributes } from 'react';
+import type { ButtonHTMLAttributes, SVGAttributes } from 'react';
+import React from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   chevronProps?: SVGAttributes<SVGElement>;

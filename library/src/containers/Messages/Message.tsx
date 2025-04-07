@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageInterface } from '@asyncapi/parser';
+import type { MessageInterface } from '@asyncapi/parser';
 
 import { MessageExample } from './MessageExample';
 import {

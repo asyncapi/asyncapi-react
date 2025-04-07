@@ -2,7 +2,7 @@
 import React from 'react';
 import { Schema } from './Schema';
 import { SchemaHelpers } from '../helpers';
-import { BindingsInterface } from '@asyncapi/parser';
+import type { BindingsInterface } from '@asyncapi/parser';
 
 interface Props {
   name?: string;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
+import type { ChannelInterface, OperationInterface } from '@asyncapi/parser';
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
 import {

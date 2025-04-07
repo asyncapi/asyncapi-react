@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServerInterface } from '@asyncapi/parser';
+import type { ServerInterface } from '@asyncapi/parser';
 
 import { Security } from './Security';
 import { Markdown, Schema, Bindings, Tags, Extensions } from '../../components';

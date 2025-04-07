@@ -1,5 +1,5 @@
 import React from 'react';
-import { TagInterface } from '@asyncapi/parser';
+import type { TagInterface } from '@asyncapi/parser';
 
 import { Href } from './Href';
 

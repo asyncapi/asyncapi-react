@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { ParameterObject } from '@asyncapi/parser/esm/spec-types/v2';
+import type { ParameterObject } from '@asyncapi/parser/esm/spec-types/v2';
 import { SchemaHelpers, SchemaCustomTypes } from '../schema';
 import {
   SchemaV2 as Schema,

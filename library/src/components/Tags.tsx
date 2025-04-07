@@ -1,5 +1,5 @@
 import React from 'react';
-import { TagsInterface } from '@asyncapi/parser';
+import type { TagsInterface } from '@asyncapi/parser';
 
 import { Tag } from './Tag';
 

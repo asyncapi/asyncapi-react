@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
+import type { SchemaInterface } from '@asyncapi/parser';
 
 import { Href, CollapseButton, Markdown, Extensions } from './index';
 import { SchemaHelpers } from '../helpers';
