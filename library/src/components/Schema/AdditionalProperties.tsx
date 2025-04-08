@@ -38,9 +38,6 @@ export const AdditionalProperties: React.FunctionComponent<
     );
   }
   return (
-    <Schema
-      schemaName="Additional properties:"
-      schema={additionalProperties}
-    />
+    <Schema schemaName="Additional properties:" schema={additionalProperties} />
   );
 };
