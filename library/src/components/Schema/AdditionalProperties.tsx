@@ -1,7 +1,7 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 import { SchemaHelpers } from '../../helpers';
-import { Payload } from './Payload';
+import { Schema } from './Schema';
 
 interface AdditionalPropertiesProps {
   schema: SchemaInterface;
@@ -38,7 +38,7 @@ export const AdditionalProperties: React.FunctionComponent<
     );
   }
   return (
-    <Payload
+    <Schema
       schemaName="Additional properties:"
       schema={additionalProperties}
     />

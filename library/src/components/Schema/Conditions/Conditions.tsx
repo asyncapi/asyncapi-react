@@ -1,6 +1,6 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
-import { Payload } from '../Payload';
+import { Schema } from '../Schema';
 import { SchemaHelpers } from '../../../helpers';
 
 interface ConditionsProps {
@@ -19,7 +19,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           {schema
             .oneOf()
             ?.map((s, idx) => (
-              <Payload
+              <Schema
                 key={idx}
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
@@ -41,7 +41,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           {schema
             .anyOf()
             ?.map((s, idx) => (
-              <Payload
+              <Schema
                 key={idx}
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
@@ -63,7 +63,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           {schema
             .allOf()
             ?.map((s, idx) => (
-              <Payload
+              <Schema
                 key={idx}
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
@@ -78,18 +78,18 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
       )}
 
       {schema.not() && (
-        <Payload schema={schema.not()} schemaName="Can NOT adhere to:" />
+        <Schema schema={schema.not()} schemaName="Can NOT adhere to:" />
       )}
 
       {schema.propertyNames() && (
-        <Payload
+        <Schema
           schema={schema.propertyNames()}
           schemaName="Property names must adhere to:"
         />
       )}
 
       {schema.contains() && (
-        <Payload
+        <Schema
           schema={schema.contains()}
           schemaName="Array must contain at least one of:"
         />
@@ -98,19 +98,19 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
       {schema.if() && (
         <div className="">
           {schema.if() && (
-            <Payload schema={schema.if()} schemaName="If schema adheres to:" />
+            <Schema schema={schema.if()} schemaName="If schema adheres to:" />
           )}
           {schema.then() && (
-            <Payload schema={schema.then()} schemaName="Then must adhere to:" />
+            <Schema schema={schema.then()} schemaName="Then must adhere to:" />
           )}
           {schema.else() && (
-            <Payload schema={schema.else()} schemaName="Otherwise:" />
+            <Schema schema={schema.else()} schemaName="Otherwise:" />
           )}
         </div>
       )}
 
       {dependentSchemas && (
-        <Payload schema={dependentSchemas} schemaName="Dependent schemas:" />
+        <Schema schema={dependentSchemas} schemaName="Dependent schemas:" />
       )}
     </div>
   );

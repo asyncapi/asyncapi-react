@@ -5,7 +5,7 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
-import { Schema } from '../Schema';
+import { Schema } from '../Schema/Schema';
 
 const expandAll = () => {
   fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));

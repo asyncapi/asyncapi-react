@@ -4,6 +4,6 @@ export * from './JSONSnippet';
 export * from './Extensions';
 export * from './Href';
 export * from './Markdown';
-export * from './Schema';
+export * from './Schema/Schema';
 export * from './Tag';
 export * from './Tags';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
-import { Payload } from './Payload';
+import { Schema } from './Schema';
 
 interface SchemaItemsProps {
   schema: SchemaInterface;
@@ -21,12 +21,12 @@ export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
     !Array.isArray(items) &&
     Object.keys(items.properties() ?? {}).length
   ) {
-    return <Payload schema={items} isArray />;
+    return <Schema schema={items} isArray />;
   } else if (Array.isArray(items)) {
     return (
       <>
         {items.map((item, idx) => (
-          <Payload
+          <Schema
             schema={item}
             isArray
             schemaName={`${idx + 1} item:`}
@@ -36,5 +36,5 @@ export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
       </>
     );
   }
-  return <Payload schema={items} isArray schemaName="Items:" />;
+  return <Schema schema={items} isArray schemaName="Items:" />;
 };

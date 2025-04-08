@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
-import { Schema } from './Schema';
+import { Schema } from './Schema/Schema';
 import { SchemaHelpers } from '../helpers';
 import { BindingsInterface } from '@asyncapi/parser';
 

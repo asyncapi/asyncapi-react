@@ -1,7 +1,7 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 import { SchemaHelpers } from '../../helpers';
-import { Payload } from './Payload';
+import { Schema } from './Schema';
 
 interface AdditionalItemsProps {
   schema: SchemaInterface;
@@ -42,5 +42,5 @@ export const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
     );
   }
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  return <Payload schemaName="Additional items:" schema={additionalItems} />;
+  return <Schema schemaName="Additional items:" schema={additionalItems} />;
 };

@@ -32,12 +32,12 @@ export interface Props {
   showConditionSidebar?: boolean;
 }
 
-const PayloadSchemaContext = React.createContext({
+const SchemaContext = React.createContext({
   reverse: false,
   deepExpanded: false,
 });
 
-export const Payload: React.FunctionComponent<Props> = ({
+export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
   // showSchemaType = true,
@@ -51,7 +51,7 @@ export const Payload: React.FunctionComponent<Props> = ({
   isArray = false,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
-  const { reverse, deepExpanded } = useContext(PayloadSchemaContext);
+  const { reverse, deepExpanded } = useContext(SchemaContext);
   const [expanded, setExpanded] = useState(propExpanded || isArray);
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'RULES' | 'CONDITIONS'>('RULES');
@@ -117,7 +117,7 @@ export const Payload: React.FunctionComponent<Props> = ({
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
 
   return (
-    <PayloadSchemaContext.Provider
+    <SchemaContext.Provider
       value={{
         reverse: !reverse,
         deepExpanded: deepExpand,
@@ -293,6 +293,6 @@ export const Payload: React.FunctionComponent<Props> = ({
           </div>
         </div>
       </div>
-    </PayloadSchemaContext.Provider>
+    </SchemaContext.Provider>
   );
 };

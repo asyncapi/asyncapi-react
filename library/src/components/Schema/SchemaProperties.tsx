@@ -1,7 +1,7 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 import { SchemaHelpers } from '../../helpers';
-import { Payload } from './Payload';
+import { Schema } from './Schema';
 
 interface SchemaPropertiesProps {
   schema: SchemaInterface;
@@ -21,7 +21,7 @@ export const SchemaProperties: React.FunctionComponent<
   return (
     <>
       {Object.entries(properties).map(([propertyName, property]) => (
-        <Payload
+        <Schema
           schema={property}
           schemaName={propertyName}
           required={required.includes(propertyName)}
@@ -36,7 +36,7 @@ export const SchemaProperties: React.FunctionComponent<
       ))}
       {Object.entries(patternProperties ?? {}).map(
         ([propertyName, property]) => (
-          <Payload
+          <Schema
             schema={property}
             schemaName={propertyName}
             isPatternProperty
