@@ -5,7 +5,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   expanded?: boolean;
 }
 
-export const HiChevronRight = (props: SVGAttributes<SVGElement> = {}) => (
+const HiChevronRight = (props: SVGAttributes<SVGElement> = {}) => (
   // Copied from https://icon-sets.iconify.design/heroicons-solid/chevron-right/
   <svg
     stroke="currentColor"
@@ -40,7 +40,7 @@ export const CollapseButton: React.FunctionComponent<Props> = ({
     <HiChevronRight
       {...chevronProps}
       className={`inline-block align-baseline cursor-pointer ml-0.5 -mb-1 w-5 h-5 transform transition-transform duration-150 ease-linear ${
-        expanded ? `-rotate-90` : ''
+        expanded ? '-rotate-90' : ''
       } ${chevronProps?.className ?? ''}`}
     />
   </button>
