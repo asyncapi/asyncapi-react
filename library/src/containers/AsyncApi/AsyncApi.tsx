@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
-
 import AsyncApiStandalone from './Standalone';
-
 import {
   isFetchingSchemaInterface,
   ErrorObject,
@@ -10,6 +8,7 @@ import {
 } from '../../types';
 import { ConfigInterface } from '../../config';
 import { SpecificationHelpers, Parser } from '../../helpers';
+import AsyncapiLogo from '../../assets/asyncapi-logo';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -19,18 +18,21 @@ export interface AsyncApiProps {
 interface AsyncAPIState {
   asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
+  loading: boolean;
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
+    loading: true,
   };
 
   async componentDidMount() {
     if (this.props.schema) {
       const { schema, config } = this.props;
       await this.parseSchema(schema, config?.parserOptions);
+      this.setState({ loading: false });
     }
   }
 
@@ -39,14 +41,31 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const newSchema = this.props.schema;
 
     if (oldSchema !== newSchema) {
+      this.setState({ loading: true });
       const { config } = this.props;
       await this.parseSchema(newSchema, config?.parserOptions);
+      this.setState({ loading: false });
     }
   }
 
   render() {
     const { schema, config } = this.props;
-    const { asyncapi, error } = this.state;
+    const { asyncapi, error, loading } = this.state;
+
+    if (loading) {
+      return (
+        <div style={{ height: '100%' }} className="aui-root">
+          <div className="flex items-center justify-center h-full w-full">
+            <div className="w-full max-w-sm">
+              <AsyncapiLogo />
+              <div className="loading-bar">
+                <div className="loading-moving-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <AsyncApiStandalone
