@@ -44,7 +44,7 @@
     "./styles/default.min.css"
   ],
   "scripts": {
-    "start": "tsc -p tsconfig.esm.json --watch",
+    "start": "npm run build:styles:dev && tsc -p tsconfig.esm.json --watch",
     "build:dev": "npm run build:esm && npm run build:types && npm run build:styles",
     "build:prod": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:standalone && npm run build:types && npm run build:styles",
     "build:esm": "tsc -p tsconfig.esm.json",
