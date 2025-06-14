@@ -1,4 +1,6 @@
+//@ts-nocheck
 import React, { useState } from 'react';
+import { TryItOutForm } from '../../components/TryItOut';
 import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
@@ -163,6 +165,14 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
 
 export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
+  let schemaPayload = {
+      type: 'object',
+      properties: operation.json().message.payload.properties
+  } 
+
+  let operationType = operation.meta().action; 
+  let opeartionId = operation.meta().id;
+
   const config = useConfig();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
@@ -187,6 +197,11 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
             {typeLabel}
           </span>{' '}
           <span className="font-mono text-base">{channelName}</span>
+          <TryItOutForm
+            backendUrl={`asyncapi/try/${opeartionId}/${operationType}`}
+            channelName={channelName}
+            schemaPayload={schemaPayload}
+          />
         </h3>
       </div>
 
@@ -233,7 +248,7 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export const OperationReplyInfo: React.FunctionComponent<Props> = (props) => {
+export const OperationReplyInfo: React.FunctionComponent<Props> = (props: any) => {
   const { type = PayloadType.SEND, operation } = props;
   const [showMessages, setShowMessages] = useState(false);
   const [showChannel, setShowChannel] = useState(false);
@@ -452,6 +467,7 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
           <Schema schemaName="Parameters" schema={parameters} expanded />
         </div>
       )}
+
       {channel.bindings() && (
         <div className="mt-2">
           <Bindings name="Bindings" bindings={channel.bindings()} />

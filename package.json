@@ -61,5 +61,9 @@
     "prettier": "^3.2.5",
     "tslib": "^1.10.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@rjsf/antd": "^5.24.11",
+    "@rjsf/validator-ajv8": "^5.24.11"
   }
 }
