@@ -45,7 +45,8 @@ npm install --save @asyncapi/react-component
 
 Check out this sandbox application that uses the React component:
 
-[![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/asyncapi-react-component-in-action-wvdy2)
+[![Edit asyncapi-react-component-in-action](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/3xhc96)
+
 
 ## Using in React
 
@@ -57,14 +58,14 @@ import { render } from "react-dom";
 import AsyncApiComponent, { ConfigInterface } from "@asyncapi/react-component";
 
 const schema = `
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 info:
   title: Example
   version: '0.1.0'
 channels:
   example-channel:
-    subscribe:
-      message:
+    messages:
+      exampleMessage:
         payload:
           type: object
           properties:
@@ -75,6 +76,13 @@ channels:
             exampleDate:
               type: string
               format: date-time
+operations:
+  receiveExampleMessage:
+    action: receive
+    channel:
+      $ref: '#/channels/example-channel'
+    messages:
+      - $ref: '#/channels/example-channel/messages/exampleMessage'
 `;
 
 const config: ConfigInterface = {
@@ -184,7 +192,7 @@ The AsyncAPI component supports the option to use a custom logo. By using the `x
 > **NOTE**: The logo will only appear if the [sidebar option](./docs/configuration/config-modification.md#definition) is enabled.
   
 ```yaml
-asyncapi: 2.2.0
+asyncapi: 3.0.0
 info:
   title: Account Service
   version: 1.0.0
@@ -238,7 +246,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kazydek"><img src="https://avatars0.githubusercontent.com/u/40655785?v=4?s=100" width="100px;" alt="Karolina Zydek"/><br /><sub><b>Karolina Zydek</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=kazydek" title="Documentation">📖</a> <a href="https://github.com/asyncapi/asyncapi-react/pulls?q=is%3Apr+reviewed-by%3Akazydek" title="Reviewed Pull Requests">👀</a> <a href="#maintenance-kazydek" title="Maintenance">🚧</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/akucharska"><img src="https://avatars3.githubusercontent.com/u/20790348?v=4?s=100" width="100px;" alt="Agata"/><br /><sub><b>Agata</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=akucharska" title="Code">💻</a> <a href="#maintenance-akucharska" title="Maintenance">🚧</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://resume.github.io/?derberg"><img src="https://avatars1.githubusercontent.com/u/6995927?v=4?s=100" width="100px;" alt="Lukasz Gornicki"/><br /><sub><b>Lukasz Gornicki</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=derberg" title="Documentation">📖</a> <a href="#example-derberg" title="Examples">💡</a> <a href="#ideas-derberg" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=derberg" title="Code">💻</a> <a href="#infra-derberg" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/asyncapi/asyncapi-react/issues?q=author%3Aderberg" title="Bug reports">🐛</a> <a href="#blog-derberg" title="Blogposts">📝</a> <a href="#maintenance-derberg" title="Maintenance">🚧</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aerfio"><img src="https://avatars0.githubusercontent.com/u/17271979?v=4?s=100" width="100px;" alt="Mateusz Puczyński"/><br /><sub><b>Mateusz Puczyński</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Documentation">📖</a> <a href="#ideas-aerfio" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-aerfio" title="Maintenance">🚧</a> <a href="https://github.com/asyncapi/asyncapi-react/pulls?q=is%3Apr+reviewed-by%3Aaerfio" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aerfio"><img src="https://avatars0.githubusercontent.com/u/17271979?v=4?s=100" width="100px;" alt="Mateusz Puczyński"/><br /><sub><b>Mateusz Puczyński</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Code">💻</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Documentation">📖</a> <a href="#ideas-aerfio" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-aerfio" title="Maintenance">🚧</a> <a href="https://github.com/asyncapi/asyncapi-react/pulls?q=is%3Apr+reviewed-by%3Aaerfio" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=aerfio" title="Tests">⚠️</a></td><td align="center" valign="top" width="14.28%"><a href="https://github.com/AceTheCreator"><img src="https://avatars.githubusercontent.com/u/40604284?v=4?s=100" width="100px;" alt="Ace "/><br /><sub><b>Azeez Elegbede</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=AceTheCreator" title="Code">💻</a><a href="https://github.com/asyncapi/asyncapi-react/commits?author=AceTheCreator" title="Documentation">📖</a><a href="#maintenance-AceTheCreator" title="Maintenance">🚧</a><a href="https://github.com/asyncapi/asyncapi-react/pulls?q=is%3Apr+reviewed-by%3Aacethecreator+" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.hash-tech.ch"><img src="https://avatars1.githubusercontent.com/u/35898?v=4?s=100" width="100px;" alt="Hesyar Uzuner"/><br /><sub><b>Hesyar Uzuner</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/issues?q=author%3Ahesyar" title="Bug reports">🐛</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=hesyar" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://marcusilgner.com"><img src="https://avatars0.githubusercontent.com/u/160025?v=4?s=100" width="100px;" alt="Marcus Ilgner"/><br /><sub><b>Marcus Ilgner</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/issues?q=author%3Amilgner" title="Bug reports">🐛</a> <a href="https://github.com/asyncapi/asyncapi-react/commits?author=milgner" title="Code">💻</a></td>
     </tr>
@@ -274,9 +282,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/marceloavan"><img src="https://avatars.githubusercontent.com/u/3874978?v=4?s=100" width="100px;" alt="Marcelo Avancini"/><br /><sub><b>Marcelo Avancini</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=marceloavan" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://shishkin.org/"><img src="https://avatars.githubusercontent.com/u/124065?v=4?s=100" width="100px;" alt="Sergey Shishkin"/><br /><sub><b>Sergey Shishkin</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=shishkin" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sarisia"><img src="https://avatars.githubusercontent.com/u/33576079?v=4?s=100" width="100px;" alt="Takakazu Fu"/><br /><sub><b>Takakazu Fu</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=sarisia" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Laupetin"><img src="https://avatars.githubusercontent.com/u/9197140?v=4?s=100" width="100px;" alt="Jan"/><br /><sub><b>Jan</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=Laupetin" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/AceTheCreator"><img src="https://avatars.githubusercontent.com/u/40604284?v=4?s=100" width="100px;" alt="Ace "/><br /><sub><b>Ace </b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=AceTheCreator" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jonaslagoni"><img src="https://avatars.githubusercontent.com/u/13396189?v=4?s=100" width="100px;" alt="Jonas Lagoni"/><br /><sub><b>Jonas Lagoni</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=jonaslagoni" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Laupetin"><img src="https://avatars.githubusercontent.com/u/9197140?v=4?s=100" width="100px;" alt="Jan"/><br /><sub><b>Jan</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=Laupetin" title="Code">💻</a></td><td align="center" valign="top" width="14.28%"><a href="https://github.com/jonaslagoni"><img src="https://avatars.githubusercontent.com/u/13396189?v=4?s=100" width="100px;" alt="Jonas Lagoni"/><br /><sub><b>Jonas Lagoni</b></sub></a><br /><a href="https://github.com/asyncapi/asyncapi-react/commits?author=jonaslagoni" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
