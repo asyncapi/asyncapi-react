@@ -5,3 +5,4 @@ export { default as SplitWrapper } from './SplitWrapper';
 export { default as Tabs } from './Tabs';
 export { default as Tab } from './Tab';
 export * from './styled';
+export * from './loaders';

@@ -13,6 +13,7 @@ import {
   CodeEditorsWrapper,
   AsyncApiWrapper,
   SplitWrapper,
+  PlaygroundSkeleton, // Add this import
 } from '@/components';
 import { defaultConfig, parse, debounce } from '@/utils';
 import * as specs from '@/specs';
@@ -24,17 +25,24 @@ interface State {
   config: string;
   schemaFromExternalResource: string;
   refreshing: boolean;
+  isLoading: boolean;
+  stylesLoaded: boolean;
 }
 
 class Playground extends Component<unknown, State> {
   updateSchemaFn: (value: string) => void;
   updateConfigFn: (value: string) => void;
+  private loadingTimer?: NodeJS.Timeout;
+  private styleCheckInterval?: NodeJS.Timeout;
+  private maxTimer?: NodeJS.Timeout;
 
   state = {
     schema: defaultSchema,
     config: defaultConfig,
     schemaFromExternalResource: '',
     refreshing: false,
+    isLoading: true,
+    stylesLoaded: false,
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,8 +62,64 @@ class Playground extends Component<unknown, State> {
     );
   }
 
+  componentDidMount() {
+    this.initializeLoader();
+  }
+
+  componentWillUnmount() {
+    this.cleanupTimers();
+  }
+
+  private cleanupTimers = () => {
+    if (this.loadingTimer) clearTimeout(this.loadingTimer);
+    if (this.styleCheckInterval) clearInterval(this.styleCheckInterval);
+    if (this.maxTimer) clearTimeout(this.maxTimer);
+  };
+
+  private initializeLoader = () => {
+    const checkStylesLoaded = () => {
+      const asyncApiStyles = document.querySelector('link[href*="default.min.css"]');
+      const computedStyle = window.getComputedStyle(document.body);
+      
+      if (asyncApiStyles && computedStyle && !this.state.stylesLoaded) {
+        this.setState({ stylesLoaded: true });
+      }
+    };
+
+    // Initial check
+    checkStylesLoaded();
+
+    // Set minimum loading time (600ms)
+    this.loadingTimer = setTimeout(() => {
+      if (this.state.stylesLoaded) {
+        this.setState({ isLoading: false });
+      }
+    }, 600);
+
+    // Check for styles periodically
+    this.styleCheckInterval = setInterval(checkStylesLoaded, 100);
+
+    // Fallback - hide loader after 2 seconds max
+    this.maxTimer = setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 2000);
+  };
+
+  componentDidUpdate(prevProps: unknown, prevState: State) {
+    if (prevState.stylesLoaded !== this.state.stylesLoaded && this.state.stylesLoaded) {
+      setTimeout(() => {
+        this.setState({ isLoading: false });
+      }, 100);
+    }
+  }
+
   render() {
-    const { schema, config, schemaFromExternalResource } = this.state;
+    const { schema, config, schemaFromExternalResource, isLoading } = this.state;
+    
+    if (isLoading) {
+      return <PlaygroundSkeleton />;
+    }
+
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
 
     return (
