@@ -58,7 +58,7 @@ export const SkeletonBox: React.FC<{
 export const NavigationSkeleton: React.FC = () => (
     <div className="flex flex-row w-full bg-[#263238] border-b-2 border-[#607d8b] h-12 px-4 items-center">
         {/* Icon skeleton (like NavigationHeaderIcon) */}
-        <SkeletonBox
+        <SkeletonLine
             width="34px"
             height="34px"
             className="rounded bg-[#37474F] mr-3"
