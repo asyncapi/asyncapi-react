@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import AsyncApiStandalone from './Standalone';
+import { Highlight } from '../../components/Highlight/Highlight';
 
 import {
   isFetchingSchemaInterface,
@@ -10,6 +11,7 @@ import {
 } from '../../types';
 import { ConfigInterface } from '../../config';
 import { SpecificationHelpers, Parser } from '../../helpers';
+import { ChangeTracker } from '../../helpers/ChangeTracker';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -19,13 +21,17 @@ export interface AsyncApiProps {
 interface AsyncAPIState {
   asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
+  highlightedElement?: string;
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
+    highlightedElement: undefined,
   };
+  
+  private lastSchema: string | undefined;
 
   async componentDidMount() {
     if (this.props.schema) {
@@ -41,19 +47,36 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (oldSchema !== newSchema) {
       const { config } = this.props;
       await this.parseSchema(newSchema, config?.parserOptions);
+
+      // Detect changes and update highlight
+      if (typeof oldSchema === 'string' && typeof newSchema === 'string') {
+        const changes = await ChangeTracker.detectChanges(oldSchema, newSchema);
+        if (changes.length > 0) {
+          // Get the first changed element to highlight
+          this.setState({ highlightedElement: changes[0].elementId });
+        }
+      }
     }
   }
 
   render() {
     const { schema, config } = this.props;
-    const { asyncapi, error } = this.state;
+    const { asyncapi, error, highlightedElement } = this.state;
 
     return (
-      <AsyncApiStandalone
-        schema={asyncapi ?? schema}
-        config={config}
-        error={error}
-      />
+      <>
+        <AsyncApiStandalone
+          schema={asyncapi ?? schema}
+          config={config}
+          error={error}
+        />
+        {highlightedElement && (
+          <Highlight
+            elementId={highlightedElement}
+            duration={2000}
+          />
+        )}
+      </>
     );
   }
 
