@@ -30,8 +30,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     error: undefined,
     highlightedElement: undefined,
   };
-  
-  private lastSchema: string | undefined;
 
   async componentDidMount() {
     if (this.props.schema) {

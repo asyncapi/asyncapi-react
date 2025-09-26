@@ -1,5 +1,5 @@
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
-import { Parser } from './Parser';
+import { Parser } from './parser';
+import { ParserReturn } from '../types';
 
 interface Change {
   path: string[];
@@ -8,25 +8,22 @@ interface Change {
 }
 
 export class ChangeTracker {
-  private static getElementId(path: string[]): string {
-    return path.join('-');
-  }
-
-  private static async parseSchema(schema: string) {
+  private static async parseSchema(schema: string): Promise<ParserReturn | null> {
     try {
-      const parsed = await Parser.parse(schema);
-      return parsed;
+      return await Parser.parse(schema);
     } catch (e) {
       return null;
     }
   }
 
   static async detectChanges(oldSchema: string, newSchema: string): Promise<Change[]> {
-    const oldDoc = await this.parseSchema(oldSchema);
-    const newDoc = await this.parseSchema(newSchema);
+    const oldParsed = await this.parseSchema(oldSchema);
+    const newParsed = await this.parseSchema(newSchema);
     
-    if (!oldDoc || !newDoc) return [];
+    if (!oldParsed?.asyncapi || !newParsed?.asyncapi) return [];
 
+    const oldDoc = oldParsed.asyncapi;
+    const newDoc = newParsed.asyncapi;
     const changes: Change[] = [];
     
     // Compare info section
