@@ -50,20 +50,35 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (this.props.onPluginManagerReady) {
       this.props.onPluginManagerReady(this.state.pm!);
     }
+
+    this.setupEventListeners();
+
+    this.registerPlugins();
   }
 
   componentDidUpdate(prevProps: AsyncApiProps) {
+    const { schema, plugins, onPluginEvent } = this.props;
     const oldSchema = prevProps.schema;
-    const newSchema = this.props.schema;
+    const newSchema = schema;
 
     if (oldSchema !== newSchema) {
       this.updateState(newSchema);
+    }
+
+    if (onPluginEvent !== prevProps.onPluginEvent) {
+      this.cleanupEventListeners();
+      this.setupEventListeners();
+    }
+
+    if (plugins !== prevProps.plugins) {
+      this.unregisterPlugins();
+      this.registerPlugins();
     }
   }
 
   render() {
     const { config, error: propError } = this.props;
-    const { asyncapi, error: stateError } = this.state;
+    const { asyncapi, error: stateError, pm } = this.state;
 
     const error = propError ?? stateError;
     const concatenatedConfig: ConfigInterface = {
@@ -100,7 +115,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       );
     }
 
-    return <AsyncApiLayout asyncapi={asyncapi} config={concatenatedConfig} />;
+    return (
+      <AsyncApiLayout
+        asyncapi={asyncapi}
+        config={concatenatedConfig}
+        pluginManager={pm}
+      />
+    );
   }
 
   private handler(eventName: string) {
