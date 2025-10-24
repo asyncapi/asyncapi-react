@@ -7,6 +7,7 @@ import {
   isFetchingSchemaInterface,
   ErrorObject,
   PropsSchema,
+  AsyncApiPlugin,
 } from '../../types';
 import { ConfigInterface } from '../../config';
 import { SpecificationHelpers, Parser } from '../../helpers';
@@ -14,6 +15,7 @@ import { SpecificationHelpers, Parser } from '../../helpers';
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
+  plugins?: AsyncApiPlugin[];
 }
 
 interface AsyncAPIState {
@@ -45,7 +47,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { schema, config } = this.props;
+    const { schema, config, plugins } = this.props;
     const { asyncapi, error } = this.state;
 
     return (
@@ -53,6 +55,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         schema={asyncapi ?? schema}
         config={config}
         error={error}
+        plugins={plugins}
       />
     );
   }
