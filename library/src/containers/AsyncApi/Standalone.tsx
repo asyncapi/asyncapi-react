@@ -2,27 +2,36 @@ import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import { SpecificationHelpers } from '../../helpers';
-import { ErrorObject, PropsSchema } from '../../types';
+import { AsyncApiPlugin, ErrorObject, PropsSchema } from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 
 import AsyncApiLayout from './Layout';
 import { Error } from '../Error/Error';
+import { PluginManager } from '../../helpers/pluginManager';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
+  plugins?: AsyncApiPlugin[];
+  onPluginEvent?: (eventName: string, data: unknown) => void;
+  onPluginManagerReady?: (pluginManager: PluginManager) => void;
   error?: ErrorObject;
 }
 
 interface AsyncAPIState {
   asyncapi?: AsyncAPIDocumentInterface;
   error?: ErrorObject;
+  pm?: PluginManager;
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+  private registeredPlugins = new Set<string>();
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
+    pm: new PluginManager({
+      schema: {},
+    }),
   };
 
   constructor(props: AsyncApiProps) {
@@ -37,6 +46,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   componentDidMount() {
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
+    }
+    if (this.props.onPluginManagerReady) {
+      this.props.onPluginManagerReady(this.state.pm!);
     }
   }
 
@@ -91,6 +103,63 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     return <AsyncApiLayout asyncapi={asyncapi} config={concatenatedConfig} />;
   }
 
+  private handler(eventName: string) {
+    return (data: unknown) => {
+      this.props.onPluginEvent!(eventName, data);
+    };
+  }
+  private setupEventListeners() {
+    const { onPluginEvent } = this.props;
+    const { pm } = this.state;
+
+    if (!onPluginEvent) return;
+
+    // eslint-disable-next-line sonarjs/no-duplicate-string
+    const events = ['plugin:ready', 'plugin:error'];
+    events.forEach((event) => {
+      pm?.on(event, this.handler(event));
+    });
+  }
+
+  private cleanupEventListeners() {
+    const { pm } = this.state;
+    const events = ['plugin:ready', 'plugin:error'];
+    events.forEach((event) => {
+      pm?.off(event, this.handler(event));
+    });
+  }
+
+  private registerPlugins() {
+    const { plugins } = this.props;
+    const { pm } = this.state;
+
+    plugins?.forEach((plugin) => {
+      try {
+        pm?.register(plugin);
+        this.registeredPlugins.add(plugin.name);
+      } catch (error) {
+        console.error(`Failed to register plugin ${plugin.name}:`, error);
+        pm?.emit('plugin:error', {
+          pluginName: plugin.name,
+          // error: error instanceof Error ? error.message : String(error as any),
+        });
+      }
+    });
+  }
+
+  private unregisterPlugins() {
+    const { pm } = this.state;
+
+    this.registeredPlugins.forEach((pluginName) => {
+      try {
+        pm?.unregister(pluginName);
+      } catch (error) {
+        console.error(`Failed to unregister plugin ${pluginName}:`, error);
+      }
+    });
+    this.registeredPlugins.clear();
+  }
+
   private updateState(schema: PropsSchema) {
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
     if (!parsedSpec) {
@@ -98,6 +167,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       return;
     }
     this.setState({ asyncapi: parsedSpec });
+    this.state.pm?.updateContext({ schema: parsedSpec });
   }
 }
 
