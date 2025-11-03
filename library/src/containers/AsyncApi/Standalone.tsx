@@ -136,8 +136,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!onPluginEvent) return;
 
     // eslint-disable-next-line sonarjs/no-duplicate-string
-    const events = ['plugin:ready', 'plugin:error'];
+    const events = ['plugin:ready', 'plugin:error', 'NOTIFICATION'];
     events.forEach((event) => {
+      console.log('event appears here');
+      console.log(event);
       pm?.on(event, this.handler(event));
     });
   }

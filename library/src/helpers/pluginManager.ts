@@ -44,7 +44,6 @@ class PluginManager implements MessageBus {
     plugin.uninstall?.();
     this.plugins.delete(pluginName);
 
-    // Remove all components from this plugin
     this.slotComponents.forEach((components) => {
       const index = components.findIndex((c) =>
         c.component.displayName?.includes(pluginName),
