@@ -8,6 +8,7 @@ import { ConfigInterface, defaultConfig } from '../../config';
 import AsyncApiLayout from './Layout';
 import { Error } from '../Error/Error';
 import { PluginManager } from '../../helpers/pluginManager';
+import { PLUGINEVENTS } from '../../constants';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
@@ -26,6 +27,8 @@ interface AsyncAPIState {
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private registeredPlugins = new Set<string>();
+  private propsPlugins = new Set<string>();
+  private dynamicPlugins = new Set<string>();
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
@@ -50,7 +53,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (this.props.onPluginManagerReady) {
       this.props.onPluginManagerReady(this.state.pm!);
     }
-
     this.setupEventListeners();
 
     this.registerPlugins();
@@ -71,8 +73,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     if (plugins !== prevProps.plugins) {
-      this.unregisterPlugins();
-      this.registerPlugins();
+      this.updatePlugins(prevProps.plugins, plugins);
     }
   }
 
@@ -135,19 +136,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     if (!onPluginEvent) return;
 
-    // eslint-disable-next-line sonarjs/no-duplicate-string
-    const events = ['plugin:ready', 'plugin:error', 'NOTIFICATION'];
-    events.forEach((event) => {
-      console.log('event appears here');
-      console.log(event);
+    PLUGINEVENTS.forEach((event) => {
       pm?.on(event, this.handler(event));
     });
   }
 
   private cleanupEventListeners() {
     const { pm } = this.state;
-    const events = ['plugin:ready', 'plugin:error'];
-    events.forEach((event) => {
+    PLUGINEVENTS.forEach((event) => {
       pm?.off(event, this.handler(event));
     });
   }
@@ -160,27 +156,51 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       try {
         pm?.register(plugin);
         this.registeredPlugins.add(plugin.name);
+        this.propsPlugins.add(plugin.name); // Track as props-managed
       } catch (error) {
         console.error(`Failed to register plugin ${plugin.name}:`, error);
-        pm?.emit('plugin:error', {
+        pm?.emit(PLUGINEVENTS[1], {
           pluginName: plugin.name,
-          // error: error instanceof Error ? error.message : String(error as any),
         });
       }
     });
   }
 
-  private unregisterPlugins() {
+  private updatePlugins(
+    prevPlugins: AsyncApiPlugin[] | undefined,
+    newPlugins: AsyncApiPlugin[] | undefined,
+  ) {
     const { pm } = this.state;
 
-    this.registeredPlugins.forEach((pluginName) => {
-      try {
-        pm?.unregister(pluginName);
-      } catch (error) {
-        console.error(`Failed to unregister plugin ${pluginName}:`, error);
+    const prevPluginMap = new Map((prevPlugins ?? []).map((p) => [p.name, p]));
+    const newPluginMap = new Map((newPlugins ?? []).map((p) => [p.name, p]));
+
+    prevPluginMap.forEach((_plugin, name) => {
+      if (!newPluginMap.has(name) && this.propsPlugins.has(name)) {
+        try {
+          pm?.unregister(name);
+          this.registeredPlugins.delete(name);
+          this.propsPlugins.delete(name);
+        } catch (error) {
+          console.error(`Failed to unregister plugin ${name}:`, error);
+        }
       }
     });
-    this.registeredPlugins.clear();
+
+    newPluginMap.forEach((plugin, name) => {
+      if (!prevPluginMap.has(name)) {
+        try {
+          pm?.register(plugin);
+          this.registeredPlugins.add(name);
+          this.propsPlugins.add(name);
+        } catch (error) {
+          console.error(`Failed to register plugin ${name}:`, error);
+          pm?.emit(PLUGINEVENTS[1], {
+            pluginName: name,
+          });
+        }
+      }
+    });
   }
 
   private updateState(schema: PropsSchema) {
@@ -191,6 +211,67 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
     this.setState({ asyncapi: parsedSpec });
     this.state.pm?.updateContext({ schema: parsedSpec });
+  }
+
+  // Public API for managing plugins via refs
+  public registerPlugin(plugin: AsyncApiPlugin): void {
+    const { pm } = this.state;
+    if (this.propsPlugins.has(plugin.name)) {
+      console.warn(
+        `Plugin "${plugin.name}" is already managed by props. ` +
+          `Remove it from the plugins prop if you want to manage it dynamically.`,
+      );
+      return;
+    }
+
+    if (this.dynamicPlugins.has(plugin.name)) {
+      console.warn(
+        `Plugin "${plugin.name}" is already registered dynamically.`,
+      );
+      return;
+    }
+
+    try {
+      pm?.register(plugin);
+      this.dynamicPlugins.add(plugin.name);
+      this.registeredPlugins.add(plugin.name);
+      pm?.emit(PLUGINEVENTS[0], { pluginName: plugin.name });
+    } catch (error) {
+      console.error(`Failed to register plugin ${plugin.name}:`, error);
+      pm?.emit(PLUGINEVENTS[1], {
+        pluginName: plugin.name,
+      });
+    }
+  }
+
+  public unregisterPlugin(pluginName: string): void {
+    const { pm } = this.state;
+
+    if (this.propsPlugins.has(pluginName)) {
+      console.warn(
+        `Plugin "${pluginName}" is managed by props. ` +
+          `Remove it from the plugins prop to unregister it.`,
+      );
+      return;
+    }
+
+    if (!this.dynamicPlugins.has(pluginName)) {
+      console.warn(
+        `Plugin "${pluginName}" is not registered as a dynamic plugin.`,
+      );
+      return;
+    }
+
+    try {
+      pm?.unregister(pluginName);
+      this.dynamicPlugins.delete(pluginName);
+      this.registeredPlugins.delete(pluginName);
+    } catch (error) {
+      console.error(`Failed to unregister plugin ${pluginName}:`, error);
+      pm?.emit(PLUGINEVENTS[1], {
+        pluginName,
+      });
+    }
   }
 }
 

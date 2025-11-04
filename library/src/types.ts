@@ -107,8 +107,6 @@ export interface AsyncApiPlugin {
   description?: string;
 
   install(api: PluginAPI): void;
-
-  uninstall?(): void;
 }
 
 export type PluginInstance =

@@ -16,6 +16,7 @@ class PluginManager implements MessageBus {
       component: React.ComponentType<ComponentSlotProps>;
       priority: number;
       label?: string;
+      pluginName: string;
     }[]
   >();
   private eventListeners = new Map<string, Set<EventListener>>();
@@ -31,30 +32,31 @@ class PluginManager implements MessageBus {
       return;
     }
 
-    const api = this.createPluginAPI();
+    const api = this.createPluginAPI(plugin);
     plugin.install(api);
     this.plugins.set(plugin.name, plugin);
-    console.log(`Plugin ${plugin.name}@${plugin.version} registered`);
   }
 
   unregister(pluginName: string): void {
     const plugin = this.plugins.get(pluginName);
-    if (!plugin) return;
+    if (!plugin) {
+      console.log(`Plugin "${pluginName}" not found`);
+      return;
+    }
 
-    plugin.uninstall?.();
     this.plugins.delete(pluginName);
 
     this.slotComponents.forEach((components) => {
-      const index = components.findIndex((c) =>
-        c.component.displayName?.includes(pluginName),
-      );
+      const index = components.findIndex((c) => {
+        return c.pluginName === pluginName;
+      });
       if (index > -1) {
         components.splice(index, 1);
       }
     });
   }
 
-  private createPluginAPI(): PluginAPI {
+  private createPluginAPI(plugin: AsyncApiPlugin): PluginAPI {
     return {
       registerComponent: (slot, component, options = {}) => {
         if (!this.slotComponents.has(slot)) {
@@ -62,9 +64,12 @@ class PluginManager implements MessageBus {
         }
 
         const priority = options.priority ?? 100;
-        this.slotComponents
-          .get(slot)!
-          .push({ component, priority, label: options.label });
+        this.slotComponents.get(slot)!.push({
+          component,
+          priority,
+          label: options.label,
+          pluginName: plugin?.name,
+        });
 
         this.slotComponents.get(slot)!.sort((a, b) => b.priority - a.priority);
       },
