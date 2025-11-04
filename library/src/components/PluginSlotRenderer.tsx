@@ -13,15 +13,20 @@ const SlotRenderer: React.FC<SlotRendererProps> = ({
   context,
   pluginManager,
 }) => {
-  const components = pluginManager?.getComponentsForSlot(slot);
+  if (!pluginManager) {
+    return null;
+  }
 
-  if (components?.length === 0) {
+  const components = pluginManager.getComponentsForSlot(slot);
+
+  if (!components || components.length === 0) {
+    console.log('no component detected here');
     return null;
   }
 
   return (
     <div className={`asyncapi-react-plugin-slot-${slot}`} data-slot={slot}>
-      {components?.map((Component, index) => (
+      {components.map((Component, index) => (
         <React.Suspense
           key={`${slot}-${index}`}
           fallback={<div>Loading plugin...</div>}
