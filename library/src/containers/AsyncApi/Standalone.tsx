@@ -238,9 +238,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       pm?.emit(PLUGINEVENTS[0], { pluginName: plugin.name });
     } catch (error) {
       console.error(`Failed to register plugin ${plugin.name}:`, error);
-      pm?.emit(PLUGINEVENTS[1], {
-        pluginName: plugin.name,
-      });
     }
   }
 
@@ -268,9 +265,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       this.registeredPlugins.delete(pluginName);
     } catch (error) {
       console.error(`Failed to unregister plugin ${pluginName}:`, error);
-      pm?.emit(PLUGINEVENTS[1], {
-        pluginName,
-      });
     }
   }
 }
