@@ -213,7 +213,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     this.state.pm?.updateContext({ schema: parsedSpec });
   }
 
-  // Public API for managing plugins via refs
   public registerPlugin(plugin: AsyncApiPlugin): void {
     const { pm } = this.state;
     if (this.propsPlugins.has(plugin.name)) {
