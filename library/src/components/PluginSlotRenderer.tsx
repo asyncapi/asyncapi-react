@@ -20,7 +20,6 @@ const SlotRenderer: React.FC<SlotRendererProps> = ({
   const components = pluginManager.getComponentsForSlot(slot);
 
   if (!components || components.length === 0) {
-    console.log('no component detected here');
     return null;
   }
 
