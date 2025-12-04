@@ -57,23 +57,35 @@ export const Extensions: React.FunctionComponent<Props> = ({
       <div
         className={`rounded p-4 py-2 border bg-gray-100 ${expanded ? 'block' : 'hidden'}`}
       >
+        {/* map supported extensions */}
+        <div className="flex flex-col gap-2">
+          {Object.keys(extensions)
+            .sort((extension1, extension2) =>
+              extension1.localeCompare(extension2),
+            )
+            .map((extensionKey) => {
+              if (config.extensions?.[extensionKey]) {
+                const CustomExtensionComponent =
+                  config.extensions[extensionKey];
+                return (
+                  <CustomExtensionComponent
+                    key={extensionKey}
+                    propertyName={extensionKey}
+                    propertyValue={extensions[extensionKey]}
+                    document={document}
+                    parent={item}
+                  />
+                );
+              } else return null;
+            })}
+        </div>
+        {/* map other extensions */}
         {Object.keys(extensions)
           .sort((extension1, extension2) =>
             extension1.localeCompare(extension2),
           )
           .map((extensionKey) => {
-            if (config.extensions?.[extensionKey]) {
-              const CustomExtensionComponent = config.extensions[extensionKey];
-              return (
-                <CustomExtensionComponent
-                  key={extensionKey}
-                  propertyName={extensionKey}
-                  propertyValue={extensions[extensionKey]}
-                  document={document}
-                  parent={item}
-                />
-              );
-            } else {
+            if (!config.extensions?.[extensionKey]) {
               const extensionSchema = SchemaHelpers.jsonToSchema(
                 extensions[extensionKey],
               );
@@ -82,7 +94,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
                   <Schema schemaName={extensionKey} schema={extensionSchema} />
                 </div>
               );
-            }
+            } else return null;
           })}
       </div>
     </div>
