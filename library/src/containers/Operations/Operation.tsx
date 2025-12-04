@@ -14,7 +14,10 @@ import { Href } from '../../components/Href';
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
-import { PayloadType } from '../../types';
+import { PayloadType, PluginSlot } from '../../types';
+import { PluginManager } from '../../helpers/pluginManager';
+import { SlotRenderer } from '../../components/PluginSlotRenderer';
+import { usePlugin } from '../../contexts/usePlugin';
 
 interface Props {
   type: PayloadType;
@@ -45,7 +48,6 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
     <div>
       <div className="panel-item--center px-8">
         <OperationInfo {...props} />
-
         {servers && servers.length > 0 ? (
           <div className="mt-2 text-sm">
             <p>Available only on servers:</p>
@@ -164,6 +166,7 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
 export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
+  const pluginManager = usePlugin();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
@@ -228,6 +231,15 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
             </span>
           </div>
         </div>
+      )}
+      {PluginManager && (
+        <SlotRenderer
+          slot={PluginSlot.OPERATION}
+          context={{
+            schema: props,
+          }}
+          pluginManager={pluginManager}
+        />
       )}
     </>
   );
