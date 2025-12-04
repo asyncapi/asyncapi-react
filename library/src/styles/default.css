@@ -13,7 +13,7 @@
     @apply lg:relative lg:block lg:w-64 lg:h-auto;
   }
 
-  .container\:xl .sidebar--wrapper{
+  .container\:xl .sidebar--wrapper {
     @apply xl:w-full;
     @apply sm:w-full;
   }
