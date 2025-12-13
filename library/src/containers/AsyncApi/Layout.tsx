@@ -12,15 +12,19 @@ import { Schemas } from '../Schemas/Schemas';
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
 import AsyncApiErrorBoundary from '../ApplicationErrorHandler/ErrorBoundary';
+import { PluginManager } from '../../helpers/pluginManager';
+import { PluginContext } from '../../contexts/usePlugin';
 
 interface Props {
   asyncapi: AsyncAPIDocumentInterface;
   config: ConfigInterface;
+  pluginManager?: PluginManager;
 }
 
 const AsyncApiLayout: React.FunctionComponent<Props> = ({
   asyncapi,
   config,
+  pluginManager,
 }) => {
   const [observerClassName, setObserverClassName] = useState('container:xl');
 
@@ -44,27 +48,29 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
   return (
     <ConfigContext.Provider value={config}>
       <SpecificationContext.Provider value={asyncapi}>
-        <section className="aui-root">
-          <AsyncApiErrorBoundary>
-            <div
-              className={`${observerClassName} relative md:flex bg-white leading-normal`}
-              id={config.schemaID ?? undefined}
-              ref={ref}
-            >
-              {configShow.sidebar && <Sidebar />}
-              <div className="panel--center relative py-8 flex-1">
-                <div className="relative z-10">
-                  {configShow.info && <Info />}
-                  {configShow.servers && <Servers />}
-                  {configShow.operations && <Operations />}
-                  {configShow.messages && <Messages />}
-                  {configShow.schemas && <Schemas />}
+        <PluginContext.Provider value={pluginManager}>
+          <section className="aui-root">
+            <AsyncApiErrorBoundary>
+              <div
+                className={`${observerClassName} relative md:flex bg-white leading-normal`}
+                id={config.schemaID ?? undefined}
+                ref={ref}
+              >
+                {configShow.sidebar && <Sidebar />}
+                <div className="panel--center relative py-8 flex-1">
+                  <div className="relative z-10">
+                    {configShow.info && <Info />}
+                    {configShow.servers && <Servers />}
+                    {configShow.operations && <Operations />}
+                    {configShow.messages && <Messages />}
+                    {configShow.schemas && <Schemas />}
+                  </div>
+                  <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
                 </div>
-                <div className="panel--right absolute top-0 right-0 h-full bg-gray-800" />
               </div>
-            </div>
-          </AsyncApiErrorBoundary>
-        </section>
+            </AsyncApiErrorBoundary>
+          </section>
+        </PluginContext.Provider>
       </SpecificationContext.Provider>
     </ConfigContext.Provider>
   );
