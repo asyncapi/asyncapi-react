@@ -53,7 +53,7 @@
     "build:standalone": "cross-env BUILD_MODE=standalone webpack",
     "build:types": "tsc -p tsconfig.types.json",
     "build:styles": "npm run build:styles:dev && npm run build:styles:prod",
-    "build:styles:dev": "cross-env NODE_ENV=production postcss src/styles/default.css -o styles/default.css --verbose",
+    "build:styles:dev": "cross-env NODE_ENV=development postcss src/styles/default.css -o styles/default.css --verbose & cross-env NODE_ENV=development postcss src/styles/default.css -o styles/default.min.css --verbose",
     "build:styles:prod": "cross-env NODE_ENV=production MINIFY_STYLES=true postcss src/styles/default.css -o styles/default.min.css --verbose",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest --detectOpenHandles",
