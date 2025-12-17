@@ -13,6 +13,7 @@ import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-mul
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
+import { PluginAPI, PluginSlot } from '../types';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -264,6 +265,53 @@ describe('AsyncAPI component', () => {
     await waitFor(() => {
       expect(result.container.querySelector('#introduction')).toBeDefined();
       expect(result.container.querySelector('#custom-extension')).toBeDefined();
+    });
+  });
+
+  test('should work with plugin registration', async () => {
+    const TestPluginComponent = () => (
+      <div data-testid="plugin-component">Test Plugin Rendered</div>
+    );
+
+    const testPlugin = {
+      name: 'test-plugin',
+      version: '1.0.0',
+      install: (api: PluginAPI) => {
+        api.registerComponent(PluginSlot.OPERATION, TestPluginComponent);
+      },
+    };
+
+    const schema = {
+      asyncapi: '2.0.0',
+      info: {
+        title: 'Test API with Plugins',
+        version: '1.0.0',
+      },
+      channels: {
+        'test/channel': {
+          subscribe: {
+            message: {
+              payload: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const result = render(
+      <AsyncApiComponent schema={schema} plugins={[testPlugin]} />,
+    );
+
+    await waitFor(() => {
+      expect(result.container.querySelector('#introduction')).toBeDefined();
+      const pluginComponent = result.getByTestId('plugin-component');
+      expect(pluginComponent).toBeDefined();
+      expect(pluginComponent.textContent).toContain('Test Plugin Rendered');
     });
   });
 });
