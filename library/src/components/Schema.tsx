@@ -377,13 +377,10 @@ interface SchemaPropertiesProps {
 const SchemaProperties: React.FunctionComponent<SchemaPropertiesProps> = ({
   schema,
 }) => {
-  const properties = schema.properties();
-  if (properties === undefined || !Object.keys(properties)) {
-    return null;
-  }
+  const properties = schema.properties() ?? {};
+  const patternProperties = schema.patternProperties() ?? {};
 
   const required = schema.required() ?? [];
-  const patternProperties = schema.patternProperties();
 
   return (
     <>
