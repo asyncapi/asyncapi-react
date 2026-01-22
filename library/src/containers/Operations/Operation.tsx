@@ -15,6 +15,7 @@ import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType } from '../../types';
+import { ServersList } from './ServersList';
 
 interface Props {
   type: PayloadType;
@@ -52,26 +53,11 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
       <div className="panel-item--center px-8">
         <OperationInfo {...props} />
 
-        {servers && servers.length > 0 ? (
-          <div className="mt-2 text-sm">
-            <p>Available only on servers:</p>
-            <ul className="flex flex-wrap leading-normal">
-              {servers.map((server) => (
-                <li className="inline-block mt-2 mr-2" key={server.id()}>
-                  <a
-                    href={`${relativePathname}#${CommonHelpers.getIdentifier(
-                      'server-' + server.id(),
-                      config,
-                    )}`}
-                    className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
-                  >
-                    <span className="underline">{server.id()}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+        <ServersList
+          servers={servers || []}
+          config={config}
+          relativePathname={relativePathname}
+        />
 
         {parameters && (
           <div
@@ -405,26 +391,11 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
           <Markdown>{channel.description()}</Markdown>
         </div>
       )}
-      {servers && servers.length > 0 ? (
-        <div className="mt-2 text-sm">
-          <p>Available only on servers:</p>
-          <ul className="flex flex-wrap leading-normal">
-            {servers.map((server) => (
-              <li className="inline-block mt-2 mr-2" key={server.id()}>
-                <a
-                  href={`${relativePathname}#${CommonHelpers.getIdentifier(
-                    'server-' + server.id(),
-                    config,
-                  )}`}
-                  className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
-                >
-                  <span className="underline">{server.id()}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <ServersList
+        servers={servers || []}
+        config={config}
+        relativePathname={relativePathname}
+      />
       {channel.messages().all().length > 1 ? (
         <div className="mt-2">
           <span className="text-xs text-gray-700">Messages:</span>
