@@ -26,9 +26,9 @@ interface AsyncAPIState {
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
-  private registeredPlugins = new Set<string>();
-  private propsPlugins = new Set<string>();
-  private dynamicPlugins = new Set<string>();
+  private readonly registeredPlugins = new Set<string>();
+  private readonly propsPlugins = new Set<string>();
+
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
@@ -211,60 +211,6 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
     this.setState({ asyncapi: parsedSpec });
     this.state.pm?.updateContext({ schema: parsedSpec });
-  }
-
-  public registerPlugin(plugin: AsyncApiPlugin): void {
-    const { pm } = this.state;
-    if (this.propsPlugins.has(plugin.name)) {
-      console.warn(
-        `Plugin "${plugin.name}" is already managed by props. ` +
-          `Remove it from the plugins prop if you want to manage it dynamically.`,
-      );
-      return;
-    }
-
-    if (this.dynamicPlugins.has(plugin.name)) {
-      console.warn(
-        `Plugin "${plugin.name}" is already registered dynamically.`,
-      );
-      return;
-    }
-
-    try {
-      pm?.register(plugin);
-      this.dynamicPlugins.add(plugin.name);
-      this.registeredPlugins.add(plugin.name);
-      pm?.emit(PLUGINEVENTS[0], { pluginName: plugin.name });
-    } catch (error) {
-      console.error(`Failed to register plugin ${plugin.name}:`, error);
-    }
-  }
-
-  public unregisterPlugin(pluginName: string): void {
-    const { pm } = this.state;
-
-    if (this.propsPlugins.has(pluginName)) {
-      console.warn(
-        `Plugin "${pluginName}" is managed by props. ` +
-          `Remove it from the plugins prop to unregister it.`,
-      );
-      return;
-    }
-
-    if (!this.dynamicPlugins.has(pluginName)) {
-      console.warn(
-        `Plugin "${pluginName}" is not registered as a dynamic plugin.`,
-      );
-      return;
-    }
-
-    try {
-      pm?.unregister(pluginName);
-      this.dynamicPlugins.delete(pluginName);
-      this.registeredPlugins.delete(pluginName);
-    } catch (error) {
-      console.error(`Failed to unregister plugin ${pluginName}:`, error);
-    }
   }
 }
 

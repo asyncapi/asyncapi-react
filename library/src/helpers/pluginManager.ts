@@ -9,8 +9,8 @@ import {
 } from '../types';
 
 class PluginManager implements MessageBus {
-  private plugins = new Map<string, AsyncApiPlugin>();
-  private slotComponents = new Map<
+  private readonly plugins = new Map<string, AsyncApiPlugin>();
+  private readonly slotComponents = new Map<
     PluginSlot,
     {
       component: React.ComponentType<ComponentSlotProps>;
@@ -19,7 +19,7 @@ class PluginManager implements MessageBus {
       pluginName: string;
     }[]
   >();
-  private eventListeners = new Map<string, Set<EventListener>>();
+  private readonly eventListeners = new Map<string, Set<EventListener>>();
   private context: PluginContext;
 
   constructor(initialContext: PluginContext) {
