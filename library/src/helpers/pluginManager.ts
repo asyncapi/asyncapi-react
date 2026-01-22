@@ -40,7 +40,7 @@ class PluginManager implements MessageBus {
   unregister(pluginName: string): void {
     const plugin = this.plugins.get(pluginName);
     if (!plugin) {
-      console.log(`Plugin "${pluginName}" not found`);
+      console.warn(`Plugin "${pluginName}" not found`);
       return;
     }
 
@@ -134,7 +134,7 @@ class PluginManager implements MessageBus {
   }
 
   updateContext(updates: PluginContext): void {
-    this.context = { schema: updates };
+    this.context = updates;
   }
 
   getPlugin(name: string): AsyncApiPlugin | undefined {

@@ -90,6 +90,7 @@ export interface ExtensionComponentProps<V = any> {
 
 export enum PluginSlot {
   OPERATION = 'operation',
+  INFO = 'info',
 }
 
 export interface PluginContext {
