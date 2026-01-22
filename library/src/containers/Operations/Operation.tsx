@@ -25,8 +25,9 @@ interface Props {
 
 // Construct the full relative URL, including path, query parameters to avoid path overwrite when
 // location.hash is included
-const relativePathname = globalThis.location
-  ? `${globalThis.location.pathname}${globalThis.location.search}`
+const location = globalThis.location;
+const relativePathname = location
+  ? `${location.pathname}${location.search}`
   : '';
 
 export const Operation: React.FunctionComponent<Props> = (props) => {
