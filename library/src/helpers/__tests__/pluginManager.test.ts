@@ -305,7 +305,7 @@ describe('PluginManager', () => {
         name: TEST_PLUGIN_NAME,
         version: '1.0.0',
         install: (api) => {
-          expect(api.getContext()).toEqual({ schema: newContext });
+          expect(api.getContext()).toEqual(newContext);
         },
       };
 
