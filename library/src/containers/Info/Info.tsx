@@ -8,9 +8,14 @@ import {
   URL_SUPPORT_TEXT,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
+import { PluginManager } from '../../helpers/pluginManager';
+import { SlotRenderer } from '../../components/PluginSlotRenderer';
+import { usePlugin } from '../../contexts/usePlugin';
+import { PluginSlot } from '../../types';
 
 export const Info: React.FunctionComponent = () => {
   const asyncapi = useSpec();
+  const pluginManager = usePlugin();
 
   const info = asyncapi.info();
   if (!info) {
@@ -134,6 +139,15 @@ export const Info: React.FunctionComponent = () => {
           <div className="mt-4">
             <Extensions name="Info Extensions" item={info} />
           </div>
+        )}
+        {PluginManager && (
+          <SlotRenderer
+            slot={PluginSlot.INFO}
+            context={{
+              schema: info,
+            }}
+            pluginManager={pluginManager}
+          />
         )}
       </div>
 

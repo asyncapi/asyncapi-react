@@ -85,3 +85,57 @@ export interface ExtensionComponentProps<V = any> {
   document: AsyncAPIDocumentInterface;
   parent: BaseModel;
 }
+
+// Plugin interface
+
+export enum PluginSlot {
+  OPERATION = 'operation',
+  INFO = 'info',
+}
+
+export interface PluginContext {
+  schema?: PropsSchema;
+}
+
+export interface ComponentSlotProps {
+  context: PluginContext;
+  onClose?: () => void;
+}
+
+export interface AsyncApiPlugin {
+  name: string;
+  version: string;
+  description?: string;
+
+  install(api: PluginAPI): void;
+}
+
+export type PluginInstance =
+  | AsyncApiPlugin
+  | React.ComponentType<ComponentSlotProps>;
+
+export type EventListener = (...args: unknown[]) => void;
+
+export interface MessageBus {
+  on(eventName: string, callback: (data: unknown) => void): void;
+  off(eventName: string, callback: (data: unknown) => void): void;
+  emit(eventName: string, data: unknown): void;
+  listeners(eventName: string): EventListener[];
+  eventNames(): string[];
+}
+
+export interface PluginAPI {
+  registerComponent(
+    slot: PluginSlot,
+    component: React.ComponentType<ComponentSlotProps>,
+    options?: { priority?: number; label?: string },
+  ): void;
+
+  onSpecLoaded(callback: (spec: unknown) => void): void;
+
+  getContext(): PluginContext;
+
+  on(eventName: string, callback: (data: unknown) => void): void;
+  off(eventName: string, callback: (data: unknown) => void): void;
+  emit(eventName: string, data: unknown): void;
+}
