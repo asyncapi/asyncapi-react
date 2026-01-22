@@ -6,8 +6,8 @@ describe('Standalone bundle', () => {
 
   function testSuite(testName: string, site: string) {
     describe(testName, () => {
-      before(() => {
-        cy.visit(site);
+      beforeEach(() => {
+        cy.visit(`/${site}`);
       });
 
       it('Container should exist', () => {
