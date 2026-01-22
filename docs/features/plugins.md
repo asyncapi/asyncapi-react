@@ -2,8 +2,6 @@
 
 The AsyncAPI React component supports a flexible plugin system to extend and customize your documentation.
 
-> Currently supports Operation level slots only.
-
 ## Usage
 
 ### Static Registration (via props)
@@ -94,3 +92,4 @@ const MyComponent: React.FC<ComponentSlotProps> = ({ context, onClose }) => (
 ## Available Slots
 
 - `PluginSlot.OPERATION` - Renders within operation sections
+- `PluginSlot.INFO` - Renders within info section
