@@ -16,6 +16,7 @@ import {
 } from '@/components';
 import { defaultConfig, parse, debounce } from '@/utils';
 import * as specs from '@/specs';
+import SocialMediaPlugin from "asyncapi-social-plugin";
 
 const defaultSchema = specs.streetlights;
 
@@ -93,7 +94,7 @@ class Playground extends Component<unknown, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi schema={schema} config={parsedConfig} />
+            <AsyncApi schema={schema} config={parsedConfig} plugins={[SocialMediaPlugin]} />
           </AsyncApiWrapper>
         </SplitWrapper>
       </PlaygroundWrapper>
