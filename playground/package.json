@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "next build && touch out/.nojekyll",
-    "start": "next dev"
+    "start": "next dev --webpack"
   },
   "dependencies": {
     "@asyncapi/react-component": "file:../library",
