@@ -598,8 +598,8 @@ export class SchemaHelpers {
     return false;
   }
 
-  public static hasRules(schema: SchemaInterface, constraints: string[]) {
-    return (
+  public static hasRules(schema: SchemaInterface, constraints: string[]): boolean {
+    return !!(
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
       schema.format() ||
       schema.pattern() ||
@@ -612,9 +612,9 @@ export class SchemaHelpers {
     );
   }
 
-  public static hasConditions(schema: SchemaInterface) {
+  public static hasConditions(schema: SchemaInterface): boolean {
     const dependentSchemas = this.getDependentSchemas(schema);
-    return (
+    return !!(
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
       schema.oneOf()?.length ||
       schema.anyOf()?.length ||
