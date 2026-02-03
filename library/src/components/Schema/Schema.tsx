@@ -50,6 +50,22 @@ export const Schema: React.FunctionComponent<Props> = ({
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'RULES' | 'CONDITIONS'>('RULES');
 
+  const constraints = schema
+    ? SchemaHelpers.humanizeConstraints(schema)
+    : [];
+
+  const rulesExist = schema
+    ? SchemaHelpers.hasRules(schema, constraints)
+    : false;
+
+  const conditionsExist = schema
+    ? SchemaHelpers.hasConditions(schema)
+    : false;
+
+  useEffect(() => {
+    if (!rulesExist) setTabOpen('CONDITIONS');
+  }, [rulesExist]);
+
   useEffect(() => {
     if (!isArray) {
       setDeepExpand(deepExpanded);
@@ -62,10 +78,6 @@ export const Schema: React.FunctionComponent<Props> = ({
     }
   }, [isArray, deepExpand, setExpanded]);
 
-  useEffect(() => {
-    if (!rulesExist) setTabOpen('CONDITIONS');
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   if (
     !schema ||
     (typeof schemaName === 'string' &&
@@ -77,7 +89,6 @@ export const Schema: React.FunctionComponent<Props> = ({
 
   const dependentSchemas = SchemaHelpers.getDependentSchemas(schema);
 
-  const constraints = SchemaHelpers.humanizeConstraints(schema);
   const externalDocs = schema.externalDocs();
 
   const parameterLocationExt = schema
@@ -101,10 +112,6 @@ export const Schema: React.FunctionComponent<Props> = ({
       schemaName
     );
 
-  // comes in Rules section
-  const rulesExist = SchemaHelpers.hasRules(schema, constraints);
-  // comes in Conditions section
-  const conditionsExist = SchemaHelpers.hasConditions(schema);
 
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
