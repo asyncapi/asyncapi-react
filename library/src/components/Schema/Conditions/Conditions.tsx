@@ -97,9 +97,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
 
       {schema.if() && (
         <div className="">
-          {schema.if() && (
-            <Schema schema={schema.if()} schemaName="If schema adheres to:" />
-          )}
+          <Schema schema={schema.if()} schemaName="If schema adheres to:" />
           {schema.then() && (
             <Schema schema={schema.then()} schemaName="Then must adhere to:" />
           )}
