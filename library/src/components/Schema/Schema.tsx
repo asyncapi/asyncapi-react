@@ -9,7 +9,7 @@ import { SchemaProperties } from './SchemaProperties';
 import { AdditionalProperties } from './AdditionalProperties';
 import { Conditions } from './Conditions/Conditions';
 import { Rules } from './Rules/Rules';
-import { FeildStatusIndicator } from './FeildStatusIndicators';
+import { FieldStatusIndicator } from './FieldStatusIndicators';
 
 export interface Props {
   schemaName?: React.ReactNode;
@@ -50,17 +50,13 @@ export const Schema: React.FunctionComponent<Props> = ({
   const [deepExpand, setDeepExpand] = useState(false);
   const [tabOpen, setTabOpen] = useState<'RULES' | 'CONDITIONS'>('RULES');
 
-  const constraints = schema
-    ? SchemaHelpers.humanizeConstraints(schema)
-    : [];
+  const constraints = schema ? SchemaHelpers.humanizeConstraints(schema) : [];
 
   const rulesExist = schema
     ? SchemaHelpers.hasRules(schema, constraints)
     : false;
 
-  const conditionsExist = schema
-    ? SchemaHelpers.hasConditions(schema)
-    : false;
+  const conditionsExist = schema ? SchemaHelpers.hasConditions(schema) : false;
 
   useEffect(() => {
     if (!rulesExist) setTabOpen('CONDITIONS');
@@ -111,7 +107,6 @@ export const Schema: React.FunctionComponent<Props> = ({
     ) : (
       schemaName
     );
-
 
   // we want the expanding dropdown to be present if schema has got other stuff, rules or conditions
   const isExpandable =
@@ -169,7 +164,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                  */}
 
                 {/* Field Status Indicators */}
-                <FeildStatusIndicator
+                <FieldStatusIndicator
                   schema={schema}
                   isPatternProperty={isPatternProperty}
                   required={required}

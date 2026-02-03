@@ -598,16 +598,21 @@ export class SchemaHelpers {
     return false;
   }
 
-  public static hasRules(schema: SchemaInterface, constraints: string[]): boolean {
+  public static hasRules(
+    schema: SchemaInterface,
+    constraints: string[],
+  ): boolean {
     return !!(
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-      schema.format() ||
-      schema.pattern() ||
-      constraints.length > 0 ||
-      schema.contentEncoding() ||
-      schema.enum() ||
-      schema.default() !== undefined ||
-      schema.const() !== undefined
+      (
+        schema.format() ||
+        schema.pattern() ||
+        constraints.length > 0 ||
+        schema.contentEncoding() ||
+        schema.enum() ||
+        schema.default() !== undefined ||
+        schema.const() !== undefined
+      )
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
     );
   }
@@ -616,16 +621,18 @@ export class SchemaHelpers {
     const dependentSchemas = this.getDependentSchemas(schema);
     return !!(
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-      schema.oneOf()?.length ||
-      schema.anyOf()?.length ||
-      schema.allOf()?.length ||
-      schema.not() ||
-      schema.propertyNames() ||
-      schema.contains() ||
-      schema.if() ||
-      schema.then() ||
-      schema.else() ||
-      dependentSchemas
+      (
+        schema.oneOf()?.length ||
+        schema.anyOf()?.length ||
+        schema.allOf()?.length ||
+        schema.not() ||
+        schema.propertyNames() ||
+        schema.contains() ||
+        schema.if() ||
+        schema.then() ||
+        schema.else() ||
+        dependentSchemas
+      )
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
     );
   }

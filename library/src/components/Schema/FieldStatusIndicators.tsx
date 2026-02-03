@@ -1,17 +1,17 @@
 import React from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
 
-interface FeildStatusIndicatorProps {
+interface FieldStatusIndicatorProps {
   schema: SchemaInterface;
   required?: boolean;
   isPatternProperty?: boolean;
 }
 
-export const FeildStatusIndicator = ({
+export const FieldStatusIndicator = ({
   schema,
   required = false,
   isPatternProperty,
-}: FeildStatusIndicatorProps) => {
+}: FieldStatusIndicatorProps) => {
   const isRequired = required ?? false;
   const isDeprecated = schema.deprecated() ?? false;
   const isWriteOnly = schema.writeOnly() ?? false;
