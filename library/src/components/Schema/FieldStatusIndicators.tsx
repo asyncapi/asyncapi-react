@@ -26,7 +26,7 @@ export const FieldStatusIndicator = ({
         isReadOnly ||
         isPattern) && (
         <div className="flex items-center space-x-2">
-          {required && (
+          {isRequired && (
             <span className="text-red-600 text-xs rounded">required</span>
           )}
           {dependentRequired && (
@@ -39,7 +39,7 @@ export const FieldStatusIndicator = ({
                 </div>
               </>
             )}
-          {schema.deprecated() && (
+          {isDeprecated && (
             <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
               deprecated
             </span>
@@ -49,10 +49,10 @@ export const FieldStatusIndicator = ({
               (pattern property)
             </div>
           )}
-          {schema.writeOnly() && (
+          {isWriteOnly && (
             <span className="text-gray-600 text-xs rounded">write-only</span>
           )}
-          {schema.readOnly() && (
+          {isReadOnly && (
             <span className="text-gray-500 text-xs rounded">read-only</span>
           )}
         </div>
