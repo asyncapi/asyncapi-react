@@ -1,14 +1,13 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
-import { Schema } from './Schema';
+import { Props, Schema } from './Schema';
 
-interface SchemaItemsProps {
-  schema: SchemaInterface;
-}
-
-export const SchemaItems: React.FunctionComponent<SchemaItemsProps> = ({
+export const SchemaItems = ({
   schema,
-}) => {
+}: Pick<Props, 'schema'>) => {
+  if (!schema) {
+    return null;
+  }
+
   const type = schema.type();
   if (!type?.includes('array')) {
     return null;

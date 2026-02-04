@@ -1,15 +1,12 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
 import { SchemaHelpers } from '../../helpers';
-import { Schema } from './Schema';
+import { Props, Schema } from './Schema';
 
-interface AdditionalItemsProps {
-  schema: SchemaInterface;
-}
+export const AdditionalItems = ({ schema }: Pick<Props, 'schema'>) => {
+  if (!schema) {
+    return null;
+  }
 
-export const AdditionalItems: React.FunctionComponent<AdditionalItemsProps> = ({
-  schema,
-}) => {
   if (
     schema.extensions().get(SchemaHelpers.extRenderAdditionalInfo)?.value() ===
     false

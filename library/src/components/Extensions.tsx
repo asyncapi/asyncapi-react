@@ -32,7 +32,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
     return (
       schema && (
         <div className="mt-2">
-          <Schema schemaName={name} schema={schema} onlyTitle={true} />
+          <Schema schemaName={name} schema={schema} />
         </div>
       )
     );

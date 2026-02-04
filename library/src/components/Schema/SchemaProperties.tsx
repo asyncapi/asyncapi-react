@@ -1,15 +1,12 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
 import { SchemaHelpers } from '../../helpers';
-import { Schema } from './Schema';
+import { Props, Schema } from './Schema';
 
-interface SchemaPropertiesProps {
-  schema: SchemaInterface;
-}
+export const SchemaProperties = ({ schema }: Pick<Props, 'schema'>) => {
+  if (!schema) {
+    return null;
+  }
 
-export const SchemaProperties: React.FunctionComponent<
-  SchemaPropertiesProps
-> = ({ schema }) => {
   const properties = schema.properties();
   if (properties === undefined || !Object.keys(properties)) {
     return null;

@@ -14,14 +14,12 @@ import { FieldStatusIndicator } from './FieldStatusIndicators';
 export interface Props {
   schemaName?: React.ReactNode;
   schema?: SchemaInterface;
-  showSchemaType?: boolean;
   required?: boolean;
   isPatternProperty?: boolean;
   isProperty?: boolean;
   isCircular?: boolean;
   dependentRequired?: string[];
   expanded?: boolean;
-  onlyTitle?: boolean;
   isArray?: boolean;
   showConditionSidebar?: boolean;
 }
@@ -34,14 +32,12 @@ const SchemaContext = React.createContext({
 export const Schema: React.FunctionComponent<Props> = ({
   schemaName,
   schema,
-  // showSchemaType = true,
   required = false,
   isPatternProperty = false,
   isProperty = false,
   isCircular = false,
-  // dependentRequired,
+  dependentRequired,
   expanded: propExpanded = false,
-  // onlyTitle = false,
   isArray = false,
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
@@ -168,6 +164,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   schema={schema}
                   isPatternProperty={isPatternProperty}
                   required={required}
+                  dependentRequired={dependentRequired}
                 />
 
                 <div className="ml-auto flex gap-4">

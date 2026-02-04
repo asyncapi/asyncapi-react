@@ -36,7 +36,6 @@ export const Bindings: React.FunctionComponent<Props> = ({
           schemaName={schemaName}
           schema={schema}
           key={protocol}
-          onlyTitle
         />
       )
     );
