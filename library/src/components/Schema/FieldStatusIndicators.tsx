@@ -6,8 +6,10 @@ export const FieldStatusIndicator = ({
   required = false,
   isPatternProperty,
   dependentRequired,
-}: Pick<SchemaProps,'schema' | 'required' | 'isPatternProperty' | 'dependentRequired'> ) => {
-
+}: Pick<
+  SchemaProps,
+  'schema' | 'required' | 'isPatternProperty' | 'dependentRequired'
+>) => {
   if (!schema) {
     return null;
   }
@@ -30,15 +32,15 @@ export const FieldStatusIndicator = ({
             <span className="text-red-600 text-xs rounded">required</span>
           )}
           {dependentRequired && (
-              <>
-                <div className="text-gray-500 text-xs">
-                  required when defined:
-                </div>
-                <div className="text-red-600 text-xs">
-                  {dependentRequired.join(', ')}
-                </div>
-              </>
-            )}
+            <>
+              <div className="text-gray-500 text-xs">
+                required when defined:
+              </div>
+              <div className="text-red-600 text-xs">
+                {dependentRequired.join(', ')}
+              </div>
+            </>
+          )}
           {isDeprecated && (
             <span className="text-red-700 text-xs px-2 py-1 bg-red-200 border border-red-700 rounded">
               deprecated

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Props, Schema } from './Schema';
 
-export const SchemaItems = ({
-  schema,
-}: Pick<Props, 'schema'>) => {
+export const SchemaItems = ({ schema }: Pick<Props, 'schema'>) => {
   if (!schema) {
     return null;
   }

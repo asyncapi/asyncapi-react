@@ -32,11 +32,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
     );
     return (
       schema !== undefined && (
-        <Schema
-          schemaName={schemaName}
-          schema={schema}
-          key={protocol}
-        />
+        <Schema schemaName={schemaName} schema={schema} key={protocol} />
       )
     );
   });
