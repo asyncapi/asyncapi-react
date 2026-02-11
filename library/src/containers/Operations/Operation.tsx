@@ -14,7 +14,11 @@ import { Href } from '../../components/Href';
 import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
-import { PayloadType } from '../../types';
+import { PayloadType, PluginSlot } from '../../types';
+import { PluginManager } from '../../helpers/pluginManager';
+import { ServersList } from './ServersList';
+import { SlotRenderer } from '../../components/PluginSlotRenderer';
+import { usePlugin } from '../../contexts/usePlugin';
 
 interface Props {
   type: PayloadType;
@@ -22,6 +26,13 @@ interface Props {
   channelName: string;
   channel: ChannelInterface;
 }
+
+// Construct the full relative URL, including path, query parameters to avoid path overwrite when
+// location.hash is included
+const location = globalThis.location;
+const relativePathname = location
+  ? `${location.pathname}${location.search}`
+  : '';
 
 export const Operation: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
@@ -40,32 +51,16 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
     channel.parameters() !== undefined
       ? SchemaHelpers.parametersToSchema(channel.parameters())
       : undefined;
-
   return (
     <div>
       <div className="panel-item--center px-8">
         <OperationInfo {...props} />
 
-        {servers && servers.length > 0 ? (
-          <div className="mt-2 text-sm">
-            <p>Available only on servers:</p>
-            <ul className="flex flex-wrap leading-normal">
-              {servers.map((server) => (
-                <li className="inline-block mt-2 mr-2" key={server.id()}>
-                  <a
-                    href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
-                      'server-' + server.id(),
-                      config,
-                    )}`}
-                    className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
-                  >
-                    <span className="underline">{server.id()}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+        <ServersList
+          servers={servers || []}
+          config={config}
+          relativePathname={relativePathname}
+        />
 
         {parameters && (
           <div
@@ -164,6 +159,7 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
 export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const { type = PayloadType.SEND, operation, channelName, channel } = props;
   const config = useConfig();
+  const pluginManager = usePlugin();
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
@@ -228,6 +224,15 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
             </span>
           </div>
         </div>
+      )}
+      {PluginManager && (
+        <SlotRenderer
+          slot={PluginSlot.OPERATION}
+          context={{
+            schema: props,
+          }}
+          pluginManager={pluginManager}
+        />
       )}
     </>
   );
@@ -399,26 +404,11 @@ export const OperationReplyChannelInfo: React.FunctionComponent<Props> = ({
           <Markdown>{channel.description()}</Markdown>
         </div>
       )}
-      {servers && servers.length > 0 ? (
-        <div className="mt-2 text-sm">
-          <p>Available only on servers:</p>
-          <ul className="flex flex-wrap leading-normal">
-            {servers.map((server) => (
-              <li className="inline-block mt-2 mr-2" key={server.id()}>
-                <a
-                  href={`${window.location.pathname}#${CommonHelpers.getIdentifier(
-                    'server-' + server.id(),
-                    config,
-                  )}`}
-                  className="border border-solid border-blue-300 hover:bg-blue-300 hover:text-blue-600 text-blue-500 font-bold no-underline text-xs rounded px-3 py-1 cursor-pointer"
-                >
-                  <span className="underline">{server.id()}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <ServersList
+        servers={servers || []}
+        config={config}
+        relativePathname={relativePathname}
+      />
       {channel.messages().all().length > 1 ? (
         <div className="mt-2">
           <span className="text-xs text-gray-700">Messages:</span>

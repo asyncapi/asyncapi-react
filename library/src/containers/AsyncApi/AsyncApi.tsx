@@ -7,13 +7,18 @@ import {
   isFetchingSchemaInterface,
   ErrorObject,
   PropsSchema,
+  AsyncApiPlugin,
 } from '../../types';
 import { ConfigInterface } from '../../config';
 import { SpecificationHelpers, Parser } from '../../helpers';
+import { PluginManager } from '../../helpers/pluginManager';
 
 export interface AsyncApiProps {
   schema: PropsSchema;
   config?: Partial<ConfigInterface>;
+  plugins?: AsyncApiPlugin[];
+  onPluginEvent?: (eventName: string, data: unknown) => void;
+  onPluginManagerReady?: (pluginManager: PluginManager) => void;
 }
 
 interface AsyncAPIState {
@@ -45,7 +50,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { schema, config } = this.props;
+    const { schema, config, plugins, onPluginEvent, onPluginManagerReady } =
+      this.props;
     const { asyncapi, error } = this.state;
 
     return (
@@ -53,6 +59,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         schema={asyncapi ?? schema}
         config={config}
         error={error}
+        plugins={plugins}
+        onPluginEvent={onPluginEvent}
+        onPluginManagerReady={onPluginManagerReady}
       />
     );
   }
