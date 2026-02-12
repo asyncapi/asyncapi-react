@@ -2,8 +2,10 @@
   "name": "playground",
   "private": true,
   "scripts": {
-    "build": "next build && touch out/.nojekyll",
-    "start": "next dev"
+    "dev": "next dev --webpack",
+    "dev:turbo": "next dev",
+    "build": "next build --webpack && touch out/.nojekyll",
+    "start": "next dev --webpack"
   },
   "dependencies": {
     "@asyncapi/react-component": "file:../library",
