@@ -25,7 +25,16 @@ const nextConfig = {
         fs: false,
         path: false,
         util: false,
-        buffer: false,        
+        buffer: false,
+        stream: false,
+        crypto: false,
+        net: false,
+        tls: false,
+        zlib: false,
+        http: false,
+        https: false,
+        os: false,
+        constants: false
       };
     }
     return config;
