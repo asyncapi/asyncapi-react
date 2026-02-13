@@ -84,3 +84,5 @@ export const COLLAPSE_ERROR_BUTTON_TEXT = 'Collapse';
 export const SECURITY_TEXT = 'Security';
 
 export const URL_VARIABLES_TEXT = 'URL Variables';
+
+export const PLUGINEVENTS = ['plugin:ready', 'plugin:error'];

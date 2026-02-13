@@ -3,7 +3,14 @@ import AsyncApiComponentWP from './containers/AsyncApi/Standalone';
 
 export { AsyncApiProps } from './containers/AsyncApi/AsyncApi';
 export { ConfigInterface } from './config/config';
-export { FetchingSchemaInterface, ExtensionComponentProps } from './types';
+export {
+  FetchingSchemaInterface,
+  ExtensionComponentProps,
+  AsyncApiPlugin,
+  PluginAPI,
+  PluginSlot,
+  PluginContext,
+} from './types';
 
 import { hljs } from './helpers';
 
