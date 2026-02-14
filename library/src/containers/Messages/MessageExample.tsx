@@ -10,6 +10,23 @@ interface Props {
   message: MessageInterface;
 }
 
+interface SchemaWithFormat {
+  schemaFormat: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: any;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isMultiFormatSchema(schema: any): schema is SchemaWithFormat {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return (
+    schema &&
+    typeof schema === 'object' &&
+    'schemaFormat' in schema &&
+    'schema' in schema
+  );
+}
+
 export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
   if (!message) {
     return null;
@@ -54,9 +71,15 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   const [expanded, setExpanded] = useState(
     config?.expand?.messageExamples ?? false,
   );
-
   useEffect(() => {
     setExpanded(config?.expand?.messageExamples ?? false);
+    // Detect multi-format schema and restructure the schema property
+    // to ensure compatibility with the sample generator
+    const schemaData = schema.json();
+    if (isMultiFormatSchema(schemaData)) {
+      Object.assign(schemaData, schemaData.schema);
+      delete schemaData.schema;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.expand]);
 
