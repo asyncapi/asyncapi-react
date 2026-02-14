@@ -114,7 +114,7 @@ The list of props for the AsyncAPI React component includes:
 
 - **schema: string | AsyncAPIDocument | object | FetchingSchemaInterface**
 
-  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncAPIDocument`](https://github.com/asyncapi/parser-js/blob/master/lib/models/asyncapi.js) type, parsed specification as JS object from [AsyncAPI Parser](https://github.com/asyncapi/parser-js) or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
+  The `schema` property is required and contains AsyncAPI specification. Use the `string` type, the [`AsyncAPIDocument`](https://github.com/asyncapi/parser-js/blob/master/packages/parser/src/models/asyncapi.ts) type, parsed specification as JS object from [AsyncAPI Parser](https://github.com/asyncapi/parser-js) or the [`FetchingSchemaInterface`](./library/src/types.ts#L393) object to fetch the schema from an external resource. For more information on what it contains and what it should look like, read [AsyncAPI Specification](https://github.com/asyncapi/asyncapi#asyncapi-specification).
 
 - **config?: Partial<ConfigInterface\>**
 
