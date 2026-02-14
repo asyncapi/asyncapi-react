@@ -22,9 +22,9 @@
   ],
   "scripts": {
     "clean": "lerna clean",
-    "start": "lerna exec --parallel -- npm run start",
+    "start": "lerna run dev --scope=playground --stream",
     "test": "cd library && npm test",
-    "build": "npm run build:library && npm run build:webcomponent && npm run build:playground",
+    "build": "npm run build:watch & lerna run dev --scope=playground --stream",
     "build:library": "cd library && npm run prepare",
     "build:webcomponent": "cd web-component && npm run bundle",
     "build:playground": "cd playground && npm run build",
