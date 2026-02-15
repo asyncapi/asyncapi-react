@@ -2,6 +2,8 @@ export const streetlights = `asyncapi: '2.6.0'
 id: 'urn:com:smartylighting:streetlights:server'
 info:
   x-x: AsyncAPISpec
+  x-linkedin: https://www.linkedin.com/company/asyncapi
+
   title: Streetlights API
   version: '1.0.0'
   description: |
