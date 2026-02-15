@@ -68,7 +68,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     if (!isArray) {
       setExpanded(deepExpand);
     }
-  }, [isArray, deepExpand, setExpanded]);
+  }, [isArray, deepExpand]);
 
   if (
     !schema ||
@@ -171,10 +171,17 @@ export const Schema: React.FunctionComponent<Props> = ({
                   {isExpandable && !isCircular && !isArray && (
                     <button
                       type="button"
-                      onClick={() => setDeepExpand((prev) => !prev)}
+                      onClick={() => {
+                        const newExpandedState = !expanded;
+                        setDeepExpand(newExpandedState);
+                        // set the expanded state immediately
+                        if (!isArray) {
+                          setExpanded(newExpandedState);
+                        }
+                      }}
                       className="text-sm text-gray-500 hover:text-gray-700"
                     >
-                      {deepExpand ? 'Collapse all' : 'Expand all'}
+                      {expanded ? 'Collapse all' : 'Expand all'}
                     </button>
                   )}
                 </div>
