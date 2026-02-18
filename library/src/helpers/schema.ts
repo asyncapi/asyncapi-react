@@ -517,8 +517,12 @@ export class SchemaHelpers {
     return stringRange;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any, visitedInPath = new Set<object>()): any {
+  private static jsonFieldToSchema(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    visitedInPath = new Set<object>(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): any {
     // visitedInPath should never be passed as parameter.
     // it is meant for internal recursion limit tracking (tracks objects visited in current path only)
     if (value === undefined || value === null) {
