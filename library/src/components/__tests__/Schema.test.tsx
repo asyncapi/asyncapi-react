@@ -3,10 +3,13 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
+import { Schema } from '../Schema/Schema';
 
-import { Schema } from '../Schema';
+const expandAll = () => {
+  fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+};
 
 describe('Schema component', () => {
   // eslint-disable-next-line jest/expect-expect
@@ -41,6 +44,8 @@ describe('Schema component', () => {
 
     render(<Schema schema={schemaModel} />);
 
+    expandAll();
+
     // properties
     expect(screen.getByText('nonCircular')).toBeDefined();
     expect(screen.getByText('circular')).toBeDefined();
@@ -69,6 +74,8 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
+      expandAll();
+
       expect(screen.getByText('true')).toBeDefined();
       expect(screen.getByText('false')).toBeDefined();
     });
@@ -90,6 +97,12 @@ describe('Schema component', () => {
       const schemaModel = new SchemaModel(schema as never);
 
       render(<Schema schema={schemaModel} />);
+
+      expandAll();
+
+      const constantValueElements = screen.getAllByText('Constant value:');
+      expect(constantValueElements).toBeDefined();
+      expect(constantValueElements).toHaveLength(2);
 
       expect(screen.getByText('true')).toBeDefined();
       expect(screen.getByText('false')).toBeDefined();
@@ -147,8 +160,18 @@ describe('Schema component', () => {
 
       render(<Schema schema={schemaModel} />);
 
-      expect(screen.getByText('Adheres to Cat:')).toBeDefined();
-      expect(screen.getByText('Or to Dog:')).toBeDefined();
+      expandAll();
+
+      expandAll();
+
+      expect(
+        screen.getAllByRole('heading', {
+          name: /can be one of the following/i,
+        }),
+      ).toBeDefined();
+
+      expect(screen.getByText('Cat:')).toBeDefined();
+      expect(screen.getByText('Dog:')).toBeDefined();
     });
   });
 });

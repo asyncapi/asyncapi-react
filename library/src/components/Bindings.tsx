@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
-import { Schema } from './Schema';
+import { Schema } from './Schema/Schema';
 import { SchemaHelpers } from '../helpers';
 import { BindingsInterface } from '@asyncapi/parser';
 
@@ -32,12 +32,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
     );
     return (
       schema !== undefined && (
-        <Schema
-          schemaName={schemaName}
-          schema={schema}
-          key={protocol}
-          onlyTitle
-        />
+        <Schema schemaName={schemaName} schema={schema} key={protocol} />
       )
     );
   });
