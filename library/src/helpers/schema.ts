@@ -517,10 +517,14 @@ export class SchemaHelpers {
     return stringRange;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static jsonFieldToSchema(value: any, visited = new WeakSet()): any {
-    // visited should never be passed as parameter.
-    // it is meant for internal recursion limit tracking
+  private static jsonFieldToSchema(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    visitedInPath = new Set<object>(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): any {
+    // visitedInPath should never be passed as parameter.
+    // it is meant for internal recursion limit tracking (tracks objects visited in current path only)
     if (value === undefined || value === null) {
       return {
         type: 'string',
@@ -541,12 +545,17 @@ export class SchemaHelpers {
       };
     }
 
-    if (visited.has(value as object)) {
+    // Check if this object is already in the current path (circular reference)
+    if (visitedInPath.has(value as object)) {
       throw new Error(
         'too much recursion. Please check document for recursion.',
       );
     }
-    visited.add(value as object);
+
+    // Create a new path that includes the current object
+    // This allows the same object to appear in different branches without being flagged
+    const newVisitedInPath = new Set(visitedInPath);
+    newVisitedInPath.add(value as object);
 
     if (this.isJSONSchema(value)) {
       return value;
@@ -555,7 +564,7 @@ export class SchemaHelpers {
       return {
         type: 'array',
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        items: value.map((v) => this.jsonFieldToSchema(v, visited)),
+        items: value.map((v) => this.jsonFieldToSchema(v, newVisitedInPath)),
         [this.extRenderAdditionalInfo]: false,
       };
     }
@@ -564,7 +573,7 @@ export class SchemaHelpers {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       properties: Object.entries(value).reduce(
         (obj, [k, v]) => {
-          obj[k] = this.jsonFieldToSchema(v, visited);
+          obj[k] = this.jsonFieldToSchema(v, newVisitedInPath);
           return obj;
         },
         {} as Record<string, unknown>,
