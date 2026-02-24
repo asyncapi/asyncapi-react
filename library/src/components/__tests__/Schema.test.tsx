@@ -6,7 +6,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 
-import { Schema } from '../Schema';
+import { Schema } from '../Schema/index';
 
 describe('Schema component', () => {
   // eslint-disable-next-line jest/expect-expect
