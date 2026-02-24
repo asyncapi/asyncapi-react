@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { Schema } from './Schema';
+import { Schema } from './Schema/index';
 
 import { SchemaHelpers } from '../helpers';
 import { useConfig, useSpec } from '../contexts';
