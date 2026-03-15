@@ -7,18 +7,20 @@ export const SchemaProperties = ({ schema }: Pick<Props, 'schema'>) => {
     return null;
   }
 
-  const properties = schema.properties();
-  if (properties === undefined || !Object.keys(properties)) {
+  const properties = Object.entries(schema.properties() ?? {});
+  const patternProperties = Object.entries(schema.patternProperties() ?? {});
+
+  if (!properties.length && !patternProperties.length) {
     return null;
   }
 
   const required = schema.required() ?? [];
-  const patternProperties = schema.patternProperties();
 
   return (
     <>
-      {Object.entries(properties).map(([propertyName, property]) => (
+      {properties.map(([propertyName, property]) => (
         <Schema
+          key={propertyName}
           schema={property}
           schemaName={propertyName}
           required={required.includes(propertyName)}
@@ -28,21 +30,18 @@ export const SchemaProperties = ({ schema }: Pick<Props, 'schema'>) => {
             propertyName,
             schema,
           )}
-          key={propertyName}
         />
       ))}
-      {Object.entries(patternProperties ?? {}).map(
-        ([propertyName, property]) => (
-          <Schema
-            schema={property}
-            schemaName={propertyName}
-            isPatternProperty
-            isProperty
-            isCircular={property.isCircular()}
-            key={propertyName}
-          />
-        ),
-      )}
+      {patternProperties.map(([propertyName, property]) => (
+        <Schema
+          key={propertyName}
+          schema={property}
+          schemaName={propertyName}
+          isPatternProperty
+          isProperty
+          isCircular={property.isCircular()}
+        />
+      ))}
     </>
   );
 };

@@ -16,20 +16,18 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           <h5 className="text-sm font-semibold text-gray-700 mb-2">
             Can be <strong>One Of</strong> the following:
           </h5>
-          {schema
-            .oneOf()
-            ?.map((s, idx) => (
-              <Schema
-                key={idx} // NOSONAR S6479
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  '',
-                  '',
-                  s.title() ?? s.id(),
-                )}
-              />
-            ))}
+          {schema.oneOf()?.map((s, idx) => (
+            <Schema
+              key={idx} // NOSONAR S6479
+              schema={s}
+              schemaName={SchemaHelpers.applicatorSchemaName(
+                idx,
+                '',
+                '',
+                s.title() ?? s.id(),
+              )}
+            />
+          ))}
         </div>
       )}
 
@@ -38,20 +36,18 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           <h5 className="text-sm font-semibold text-gray-700 mb-2">
             Can be <strong>Any Of</strong> the following:
           </h5>
-          {schema
-            .anyOf()
-            ?.map((s, idx) => (
-              <Schema
-                key={idx} // NOSONAR S6479
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  '',
-                  '',
-                  s.title() ?? s.id(),
-                )}
-              />
-            ))}
+          {schema.anyOf()?.map((s, idx) => (
+            <Schema
+              key={idx} // NOSONAR S6479
+              schema={s}
+              schemaName={SchemaHelpers.applicatorSchemaName(
+                idx,
+                '',
+                '',
+                s.title() ?? s.id(),
+              )}
+            />
+          ))}
         </div>
       )}
 
@@ -60,20 +56,18 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
           <h5 className="text-sm font-semibold text-gray-700 mb-2">
             Must consist <strong>All Of</strong> the following:
           </h5>
-          {schema
-            .allOf()
-            ?.map((s, idx) => (
-              <Schema
-                key={idx} // NOSONAR S6479
-                schema={s}
-                schemaName={SchemaHelpers.applicatorSchemaName(
-                  idx,
-                  '',
-                  '',
-                  s.title() ?? s.id(),
-                )}
-              />
-            ))}
+          {schema.allOf()?.map((s, idx) => (
+            <Schema
+              key={idx} // NOSONAR S6479
+              schema={s}
+              schemaName={SchemaHelpers.applicatorSchemaName(
+                idx,
+                '',
+                '',
+                s.title() ?? s.id(),
+              )}
+            />
+          ))}
         </div>
       )}
 
