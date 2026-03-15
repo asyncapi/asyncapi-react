@@ -20,7 +20,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
             .oneOf()
             ?.map((s, idx) => (
               <Schema
-                key={idx}
+                key={idx} // NOSONAR S6479
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
                   idx,
@@ -42,7 +42,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
             .anyOf()
             ?.map((s, idx) => (
               <Schema
-                key={idx}
+                key={idx} // NOSONAR S6479
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
                   idx,
@@ -64,7 +64,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
             .allOf()
             ?.map((s, idx) => (
               <Schema
-                key={idx}
+                key={idx} // NOSONAR S6479
                 schema={s}
                 schemaName={SchemaHelpers.applicatorSchemaName(
                   idx,

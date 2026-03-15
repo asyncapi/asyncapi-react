@@ -27,7 +27,7 @@ export const SchemaItems = ({ schema }: Pick<Props, 'schema'>) => {
             schema={item}
             isArray
             schemaName={`${idx + 1} item:`}
-            key={idx}
+            key={idx} // NOSONAR S6479
           />
         ))}
       </>

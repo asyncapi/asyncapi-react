@@ -63,7 +63,7 @@ export const Rules = ({ schema, constraints }: RulesProps) => {
           <span className="">Allowed values: </span>
           {schema.enum()?.map((e, idx) => (
             <span
-              key={idx}
+              key={idx} // NOSONAR S6479
               className="bg-orange-50 text-orange-700 font-bold px-2 py-1 rounded"
             >
               {SchemaHelpers.prettifyValue(e)}

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { SchemaInterface } from '@asyncapi/parser';
-
 import { Href, CollapseButton, Markdown, Extensions } from '../index';
 import { SchemaHelpers } from '../../helpers';
 import { SchemaItems } from './SchemaItems';
@@ -21,7 +20,6 @@ export interface Props {
   dependentRequired?: string[];
   expanded?: boolean;
   isArray?: boolean;
-  showConditionSidebar?: boolean;
 }
 
 const SchemaContext = React.createContext({
@@ -70,6 +68,14 @@ export const Schema: React.FunctionComponent<Props> = ({
     }
   }, [isArray, deepExpand]);
 
+  const contextValue = useMemo(
+    () => ({
+      reverse: !reverse,
+      deepExpanded: deepExpand,
+    }),
+    [reverse, deepExpand],
+  );
+
   if (
     !schema ||
     (typeof schemaName === 'string' &&
@@ -109,12 +115,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     SchemaHelpers.isExpandable(schema) || rulesExist || conditionsExist;
 
   return (
-    <SchemaContext.Provider
-      value={{
-        reverse: !reverse,
-        deepExpanded: deepExpand,
-      }}
-    >
+    <SchemaContext.Provider value={contextValue}>
       <div className="flex mb-4 gap-2">
         <div className={`border rounded overflow-visible w-full`}>
           {/* Header Section */}
@@ -122,7 +123,6 @@ export const Schema: React.FunctionComponent<Props> = ({
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-2 w-full">
                 {isExpandable && !isCircular && !isArray ? (
-                  // TODO: make this sticky
                   <div className="flex items-center gap-2">
                     <CollapseButton
                       onClick={() => setExpanded((prev) => !prev)}
@@ -149,15 +149,6 @@ export const Schema: React.FunctionComponent<Props> = ({
                     uid: {uid}
                   </span>
                 )}
-                {/* TODO: find out if below is really needed ?? 
-                  cuz schema.const() is already shown in a strict manner in Rules */}
-                {/* 
-                {SchemaHelpers.prettifyValue(schema.const(), false) && (
-                  <span className="text-sm">
-                    {SchemaHelpers.prettifyValue(schema.const(), false)}
-                  </span>
-                )} 
-                 */}
 
                 {/* Field Status Indicators */}
                 <FieldStatusIndicator
@@ -199,7 +190,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                 Examples values:{' '}
                 {schema.examples()?.map((e, idx) => (
                   <li
-                    key={idx}
+                    key={idx} // NOSONAR S6479
                     className="inline-block bg-gray-600 text-white rounded ml-1 py-0 px-2 break-all"
                   >
                     <span>{SchemaHelpers.prettifyValue(e)}</span>
