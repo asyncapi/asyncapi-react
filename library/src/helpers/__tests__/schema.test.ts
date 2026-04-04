@@ -671,6 +671,106 @@ describe('SchemaHelpers', () => {
       });
       expect(SchemaHelpers.jsonToSchema(undefined)).toEqual(schema);
     });
+
+    test('should throw on true circular reference (self-referencing object)', () => {
+      const circular: Record<string, unknown> = { name: 'root' };
+      circular.self = circular;
+      expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow(
+        'too much recursion',
+      );
+    });
+
+    test('should throw on indirect circular reference (A -> B -> A)', () => {
+      const a: Record<string, unknown> = { id: 'a' };
+      const b: Record<string, unknown> = { id: 'b' };
+      a.child = b;
+      b.child = a;
+      expect(() => SchemaHelpers.jsonToSchema(a)).toThrow(
+        'too much recursion',
+      );
+    });
+
+    test('should throw on circular reference in array', () => {
+      const arr: unknown[] = [1, 2];
+      const obj: Record<string, unknown> = { items: arr };
+      arr.push(obj);
+      expect(() => SchemaHelpers.jsonToSchema(obj)).toThrow(
+        'too much recursion',
+      );
+    });
+
+    test('should handle deep nesting without circularity', () => {
+      const json = {
+        level1: {
+          level2: {
+            level3: {
+              level4: {
+                value: 'deep',
+              },
+            },
+          },
+        },
+      };
+      const result = SchemaHelpers.jsonToSchema(json);
+      expect(result).toBeDefined();
+      const raw = result.json();
+      expect(raw.type).toEqual('object');
+      expect(
+        raw.properties.level1.properties.level2.properties.level3.properties
+          .level4.properties.value.const,
+      ).toEqual('deep');
+    });
+
+    test('should handle same primitive value in different branches', () => {
+      const json = {
+        branch1: { value: 'shared' },
+        branch2: { value: 'shared' },
+      };
+      const result = SchemaHelpers.jsonToSchema(json);
+      expect(result).toBeDefined();
+      const raw = result.json();
+      expect(raw.properties.branch1.properties.value.const).toEqual('shared');
+      expect(raw.properties.branch2.properties.value.const).toEqual('shared');
+    });
+
+    test('should throw on deeply nested circular reference', () => {
+      const root: Record<string, unknown> = { id: 'root' };
+      const child: Record<string, unknown> = { id: 'child' };
+      const grandchild: Record<string, unknown> = { id: 'grandchild' };
+      root.child = child;
+      child.grandchild = grandchild;
+      grandchild.backToRoot = root;
+      expect(() => SchemaHelpers.jsonToSchema(root)).toThrow(
+        'too much recursion',
+      );
+    });
+
+    test('should handle object with JSON Schema-like type field', () => {
+      const json = {
+        type: 'string',
+        const: 'already-a-schema',
+      };
+      const result = SchemaHelpers.jsonToSchema(json);
+      expect(result).toBeDefined();
+      const raw = result.json();
+      expect(raw.type).toEqual('string');
+    });
+
+    test('should handle empty object', () => {
+      const result = SchemaHelpers.jsonToSchema({});
+      expect(result).toBeDefined();
+      const raw = result.json();
+      expect(raw.type).toEqual('object');
+      expect(raw.properties).toEqual({});
+    });
+
+    test('should handle empty array', () => {
+      const result = SchemaHelpers.jsonToSchema([]);
+      expect(result).toBeDefined();
+      const raw = result.json();
+      expect(raw.type).toEqual('array');
+      expect(raw.items).toEqual([]);
+    });
   });
 
   describe('.getCustomExtensions', () => {
