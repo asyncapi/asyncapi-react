@@ -2,7 +2,7 @@
   "name": "playground",
   "private": true,
   "scripts": {
-    "build": "next build && touch out/.nojekyll",
+    "build": "next build --webpack && touch out/.nojekyll",
     "start": "next dev --webpack"
   },
   "dependencies": {
