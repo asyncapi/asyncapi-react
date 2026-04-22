@@ -28,6 +28,7 @@ interface AsyncAPIState {
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
+  private readonly eventHandlers = new Map<string, (data: unknown) => void>();
 
   state: AsyncAPIState = {
     asyncapi: undefined,
@@ -125,11 +126,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private handler(eventName: string) {
-    return (data: unknown) => {
-      this.props.onPluginEvent!(eventName, data);
-    };
+  private getEventHandler(eventName: string): (data: unknown) => void {
+    if (!this.eventHandlers.has(eventName)) {
+      this.eventHandlers.set(eventName, (data: unknown) => {
+        this.props.onPluginEvent!(eventName, data);
+      });
+    }
+    return this.eventHandlers.get(eventName)!;
   }
+
   private setupEventListeners() {
     const { onPluginEvent } = this.props;
     const { pm } = this.state;
@@ -137,14 +142,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!onPluginEvent) return;
 
     PLUGINEVENTS.forEach((event) => {
-      pm?.on(event, this.handler(event));
+      pm?.on(event, this.getEventHandler(event));
     });
   }
 
   private cleanupEventListeners() {
     const { pm } = this.state;
     PLUGINEVENTS.forEach((event) => {
-      pm?.off(event, this.handler(event));
+      pm?.off(event, this.getEventHandler(event));
     });
   }
 
