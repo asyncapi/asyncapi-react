@@ -671,6 +671,88 @@ describe('SchemaHelpers', () => {
       });
       expect(SchemaHelpers.jsonToSchema(undefined)).toEqual(schema);
     });
+    describe('recursion detection in jsonFieldToSchema', () => {
+      test('should throw on a direct circular reference (object references itself)', () => {
+        const circular: any = { key: 'value' };
+        circular.self = circular;
+ 
+        expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
+      
+      test('should throw on a circular reference through an array', () => {
+        const circularArray: any[] = ['a', 'b'];
+        circularArray.push(circularArray); 
+ 
+        expect(() => SchemaHelpers.jsonToSchema(circularArray)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
+ 
+      test('should throw on an indirect circular reference (A references B which references A)', () => {
+        const a: any = { name: 'a' };
+        const b: any = { name: 'b', ref: a };
+        a.ref = b; 
+ 
+        expect(() => SchemaHelpers.jsonToSchema(a)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
+ 
+      test('should NOT throw when the same object is referenced in two sibling branches', () => {
+        const shared = { type: 'string', minLength: 1 };
+        const value = {
+          branch1: { c1: shared },
+          branch2: { c2: shared },
+        };
+ 
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
+ 
+      test('should NOT throw when the same object appears in multiple array positions', () => {
+        const shared = { label: 'reused' };
+        const value = [shared, shared, shared];
+ 
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
+ 
+      test('should handle deep nesting without circularity', () => {
+        const deep = {
+          level1: {
+            level2: {
+              level3: {
+                level4: {
+                  value: 'leaf',
+                },
+              },
+            },
+          },
+        };
+ 
+        expect(() => SchemaHelpers.jsonToSchema(deep)).not.toThrow();
+ 
+        const result = SchemaHelpers.jsonToSchema(deep);
+        expect(result.json().type).toBe('object');
+      });
+ 
+      test('should handle an object containing null values without throwing', () => {
+        const value = { a: null, b: 'hello' };
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
+ 
+      test('should handle an object containing undefined values without throwing', () => {
+        const value = { a: undefined, b: 42 };
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
+ 
+      test('should remain usable after a recursion error is thrown', () => {
+        const circular: any = {};
+        circular.self = circular;
+        expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow();
+        expect(() => SchemaHelpers.jsonToSchema({ ok: true })).not.toThrow();
+      });
+    });
   });
 
   describe('.getCustomExtensions', () => {
