@@ -26,6 +26,10 @@ interface AsyncAPIState {
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+    componentWillUnmount() {
+      this.cleanupEventListeners();
+      this.eventHandlers.clear();
+    }
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
 
@@ -125,26 +129,27 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private handler(eventName: string) {
-    return (data: unknown) => {
-      this.props.onPluginEvent!(eventName, data);
-    };
-  }
+  private eventHandlers = new Map<string, (data: unknown) => void>();
+
   private setupEventListeners() {
     const { onPluginEvent } = this.props;
     const { pm } = this.state;
-
     if (!onPluginEvent) return;
 
     PLUGINEVENTS.forEach((event) => {
-      pm?.on(event, this.handler(event));
+      const handler = (data: unknown) => {
+        this.props.onPluginEvent?.(event, data);
+      };
+      this.eventHandlers.set(event, handler);
+      pm?.on(event, handler);
     });
   }
 
   private cleanupEventListeners() {
     const { pm } = this.state;
     PLUGINEVENTS.forEach((event) => {
-      pm?.off(event, this.handler(event));
+      const handler = this.eventHandlers.get(event);
+      if (handler) pm?.off(event, handler);
     });
   }
 
@@ -156,7 +161,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       try {
         pm?.register(plugin);
         this.registeredPlugins.add(plugin.name);
-        this.propsPlugins.add(plugin.name); // Track as props-managed
+        this.propsPlugins.add(plugin.name); 
       } catch (error) {
         console.error(`Failed to register plugin ${plugin.name}:`, error);
         pm?.emit(PLUGINEVENTS[1], {
