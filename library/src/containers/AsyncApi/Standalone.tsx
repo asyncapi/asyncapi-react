@@ -26,10 +26,10 @@ interface AsyncAPIState {
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
-    componentWillUnmount() {
-      this.cleanupEventListeners();
-      this.eventHandlers.clear();
-    }
+  componentWillUnmount() {
+    this.cleanupEventListeners();
+    this.eventHandlers.clear();
+  }
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
 
@@ -161,7 +161,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       try {
         pm?.register(plugin);
         this.registeredPlugins.add(plugin.name);
-        this.propsPlugins.add(plugin.name); 
+        this.propsPlugins.add(plugin.name);
       } catch (error) {
         console.error(`Failed to register plugin ${plugin.name}:`, error);
         pm?.emit(PLUGINEVENTS[1], {
