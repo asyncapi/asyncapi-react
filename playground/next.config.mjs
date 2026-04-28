@@ -1,4 +1,4 @@
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
+const isGithubActions = process.env.GITHUB_ACTIONS ?? false;
 
 let assetPrefix;
 let basePath;
@@ -16,18 +16,16 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  webpack: config => {
+  webpack: (config) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     config.resolve.fallback = {
       fs: false,
     };
-
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config;
   },
   assetPrefix,
   basePath,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 };
 
 export default nextConfig;

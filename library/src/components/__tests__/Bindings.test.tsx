@@ -5,7 +5,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import {
   BindingV2 as BindingSchema,
   BindingsV2 as BindingsSchema,
@@ -41,14 +41,19 @@ describe('Bindings component', () => {
     };
     render(<Bindings bindings={createBinding(bindings)} />);
 
+    const expandAllButtons = screen.getAllByRole('button', {
+      name: 'Expand all',
+    });
+    expandAllButtons.forEach((button) => fireEvent.click(button));
+
     expect(screen.getAllByText('Binding specific information')).toBeDefined();
     expect(screen.getAllByText('Binding specific information')).toHaveLength(2);
     expect(screen.getByText('mqtt')).toBeDefined();
     expect(screen.getByText('fooMqtt')).toBeDefined();
-    expect(screen.getByText('barMqtt')).toBeDefined();
+    expect(screen.getByText('"barMqtt"')).toBeDefined();
     expect(screen.getByText('kafka')).toBeDefined();
     expect(screen.getByText('fooKafka')).toBeDefined();
-    expect(screen.getByText('barKafka')).toBeDefined();
+    expect(screen.getByText('"barKafka"')).toBeDefined();
   });
 
   test('should render empty binding as string', () => {
@@ -61,11 +66,16 @@ describe('Bindings component', () => {
     };
     render(<Bindings bindings={createBinding(bindings)} />);
 
+    const expandAllButtons = screen.getAllByRole('button', {
+      name: 'Expand all',
+    });
+    expandAllButtons.forEach((button) => fireEvent.click(button));
+
     expect(screen.getAllByText('Binding specific information')).toBeDefined();
     expect(screen.getAllByText('Binding specific information')).toHaveLength(3);
     expect(screen.getByText('mqtt')).toBeDefined();
     expect(screen.getByText('foo')).toBeDefined();
-    expect(screen.getByText('bar')).toBeDefined();
+    expect(screen.getByText('"bar"')).toBeDefined();
     expect(screen.getByText('kafka')).toBeDefined();
     expect(screen.getByText('http')).toBeDefined();
     expect(screen.queryByText('undefined')).toEqual(null);
