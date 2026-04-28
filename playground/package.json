@@ -2,15 +2,15 @@
   "name": "playground",
   "private": true,
   "scripts": {
-    "build": "next build && touch out/.nojekyll",
-    "start": "next dev"
+    "build": "next build --webpack && touch out/.nojekyll",
+    "start": "next dev --webpack"
   },
   "dependencies": {
     "@asyncapi/react-component": "file:../library",
     "@codemirror/lang-yaml": "^6.0.0",
     "@uiw/codemirror-theme-material": "^4.21.24",
     "@uiw/react-codemirror": "^4.21.24",
-    "next": "16.1.5",
+    "next": "16.1.7",
     "react": "^18",
     "react-dom": "^18",
     "react-split": "^2.0.14",
@@ -21,7 +21,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
+    "postcss": "^8.5.10",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
