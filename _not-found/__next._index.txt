@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[91133,[],""]
+3:I[4297,[],""]
+:HL["/asyncapi-react/_next/static/css/a2f83d178ed86480.css","style"]
+0:{"buildId":"0rRQig0LWLF3V_sQ3_OOB","rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/asyncapi-react/_next/static/css/a2f83d178ed86480.css","precedence":"next"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__className_acde6f","children":["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]}]}]]}],"loading":null,"isPartial":false}
