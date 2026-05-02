@@ -12,7 +12,7 @@ npm install --save @asyncapi/react-component
 
 ## Usage
 
-To use component in Angular, follow these steps:
+To use component in Vue, follow these steps:
 
 1. Import `@asyncapi/react-component/browser/standalone` bundle and create similar component as below:
 
