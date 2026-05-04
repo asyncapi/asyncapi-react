@@ -12,8 +12,8 @@
     "url": "https://github.com/asyncapi/asyncapi-react/issues"
   },
   "engines": {
-    "npm": ">=9.0.0",
-    "node": ">=18.0.0"
+    "npm": ">=10.0.0",
+    "node": ">=22.14"
   },
   "workspaces": [
     "library",
