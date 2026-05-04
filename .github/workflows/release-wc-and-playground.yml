@@ -63,7 +63,6 @@ jobs:
           access: public
           provenance: true
           tag: ${{ github.event.release.target_commitish }}
-          token: ${{ secrets.NPM_TOKEN }}
       - if: failure() # Only, on failure, send a message on the 94_bot-failing-ci slack channel
         name: Report workflow run status to Slack
         uses: 8398a7/action-slack@v3
