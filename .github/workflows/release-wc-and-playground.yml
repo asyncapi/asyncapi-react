@@ -54,6 +54,7 @@ jobs:
           package: ./web-component/package.json
           access: public
           provenance: true
+          token: ${{ secrets.NPM_TOKEN }}
       - name: Release web-component to NPM (feature branch tag)
         if: github.event.release.target_commitish != 'master'
         uses: JS-DevTools/npm-publish@1fe17a093199d8fabed85cbcc6f0f79eb06470da # using 4.1.0 version https://github.com/JS-DevTools/npm-publish/releases/tag/v4.1.0
