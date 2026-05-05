@@ -959,6 +959,7 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual(expected);
     });
   });
+});
 
   describe('.applicatorSchemaName', () => {
     const FIRST_CASE = 'first case';
