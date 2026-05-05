@@ -677,51 +677,51 @@ describe('SchemaHelpers', () => {
         const circular: any = { key: 'value' };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         circular.self = circular;
-    
+
         expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow(
           'too much recursion. Please check document for recursion.',
         );
       });
-    
+
       test('should throw on a circular reference through an array', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const circularArray: any[] = ['a', 'b'];
         circularArray.push(circularArray);
-    
+
         expect(() => SchemaHelpers.jsonToSchema(circularArray)).toThrow(
           'too much recursion. Please check document for recursion.',
         );
       });
-    
+
       test('should throw on an indirect circular reference (A references B which references A)', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const a: any = { name: 'a' };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const b: any = { name: 'b', ref: a };
         a.ref = b;
-    
+
         expect(() => SchemaHelpers.jsonToSchema(a)).toThrow(
           'too much recursion. Please check document for recursion.',
         );
       });
-    
+
       test('should NOT throw when the same object is referenced in two sibling branches', () => {
         const shared = { type: 'string', minLength: 1 };
         const value = {
           branch1: { c1: shared },
           branch2: { c2: shared },
         };
-    
+
         expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
       });
-    
+
       test('should NOT throw when the same object appears in multiple array positions', () => {
         const shared = { label: 'reused' };
         const value = [shared, shared, shared];
-    
+
         expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
       });
-    
+
       test('should handle deep nesting without circularity', () => {
         const deep = {
           level1: {
@@ -734,232 +734,232 @@ describe('SchemaHelpers', () => {
             },
           },
         };
-    
+
         expect(() => SchemaHelpers.jsonToSchema(deep)).not.toThrow();
-    
+
         const result = SchemaHelpers.jsonToSchema(deep);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         expect(result.json().type).toBe('object');
       });
-    
+
       test('should handle an object containing null values without throwing', () => {
         const value = { a: null, b: 'hello' };
         expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
       });
-    
+
       test('should handle an object containing undefined values without throwing', () => {
         const value = { a: undefined, b: 42 };
         expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
       });
-    
+
       test('should remain usable after a recursion error is thrown', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const circular: any = {};
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         circular.self = circular;
-    
+
         expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow();
         expect(() => SchemaHelpers.jsonToSchema({ ok: true })).not.toThrow();
       });
     });
 
-  describe('.getCustomExtensions', () => {
-    test('should return extensions', () => {
-      const schema = new Schema({
-        type: 'string',
-        minLength: 1,
-        'x-foo': true,
-        'x-bar': false,
+    describe('.getCustomExtensions', () => {
+      test('should return extensions', () => {
+        const schema = new Schema({
+          type: 'string',
+          minLength: 1,
+          'x-foo': true,
+          'x-bar': false,
+        });
+        const result = SchemaHelpers.getCustomExtensions(schema);
+        expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
       });
-      const result = SchemaHelpers.getCustomExtensions(schema);
-      expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
+
+      test('should skip private extensions', () => {
+        const schema = new Schema({
+          type: 'object',
+          additionalProperties: false,
+          'x-foo': true,
+          'x-bar': false,
+          'x-parser-foo': true,
+          'x-schema-private-bar': false,
+        });
+        const result = SchemaHelpers.getCustomExtensions(schema);
+        expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
+      });
     });
 
-    test('should skip private extensions', () => {
-      const schema = new Schema({
-        type: 'object',
-        additionalProperties: false,
-        'x-foo': true,
-        'x-bar': false,
-        'x-parser-foo': true,
-        'x-schema-private-bar': false,
+    describe('.getDependentRequired', () => {
+      test('should return undefined when dependencies is not defined', () => {
+        const schema = new Schema({
+          properties: {
+            foo: { type: 'string' },
+            bar: { type: 'string' },
+            zor: { type: 'string' },
+          },
+        });
+
+        const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
+        expect(fooResult).toEqual(undefined);
+        const barResult = SchemaHelpers.getDependentRequired('bar', schema);
+        expect(barResult).toEqual(undefined);
+        const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
+        expect(zorResult).toEqual(undefined);
       });
-      const result = SchemaHelpers.getCustomExtensions(schema);
-      expect(result).toEqual({ 'x-foo': true, 'x-bar': false });
+
+      test('should return dependent required (simple case)', () => {
+        const schema = new Schema({
+          properties: {
+            foo: { type: 'string' },
+            bar: { type: 'string' },
+            zor: { type: 'string' },
+          },
+          dependencies: {
+            foo: ['bar'],
+          },
+        });
+
+        const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
+        expect(fooResult).toEqual(undefined);
+        const barResult = SchemaHelpers.getDependentRequired('bar', schema);
+        expect(barResult).toEqual(['foo']);
+        const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
+        expect(zorResult).toEqual(undefined);
+      });
+
+      test('should return dependent required (complex case)', () => {
+        const schema = new Schema({
+          properties: {
+            foo: { type: 'string' },
+            bar: { type: 'string' },
+            zor: { type: 'string' },
+          },
+          dependencies: {
+            foo: ['bar'],
+            bar: ['foo', 'zor'],
+            zor: ['foo', 'bar'],
+          },
+        });
+
+        const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
+        expect(fooResult).toEqual(['bar', 'zor']);
+        const barResult = SchemaHelpers.getDependentRequired('bar', schema);
+        expect(barResult).toEqual(['foo', 'zor']);
+        const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
+        expect(zorResult).toEqual(['bar']);
+      });
+    });
+
+    describe('.getDependentSchemas', () => {
+      test('should return undefined when dependencies is not defined', () => {
+        const schema = new Schema({
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            credit_card: {
+              type: 'string',
+            },
+          },
+          required: ['name'],
+        });
+
+        const result = SchemaHelpers.getDependentSchemas(schema);
+        expect(result).toEqual(undefined);
+      });
+
+      test('should return dependent schemas (simple case)', () => {
+        const jsonSchema = {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            credit_card: {
+              type: 'string',
+            },
+          },
+          required: ['name'],
+          dependencies: {
+            credit_card: {
+              properties: {
+                billing_address: { type: 'string' },
+              },
+              required: ['billing_address'],
+            },
+          },
+        };
+        const schema = new Schema(jsonSchema as never);
+        const expected = new Schema({
+          type: 'object',
+          properties: {
+            credit_card: {
+              properties: {
+                billing_address: { type: 'string' },
+              },
+              required: ['billing_address'],
+            },
+          },
+          'x-schema-private-render-additional-info': false,
+        });
+
+        const result = SchemaHelpers.getDependentSchemas(schema);
+        expect(result).toEqual(expected);
+      });
+
+      test('should return dependent schemas (complex case)', () => {
+        const jsonSchema = {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            credit_card: {
+              type: 'string',
+            },
+          },
+          required: ['name'],
+          dependencies: {
+            credit_card: {
+              properties: {
+                billing_address: { type: 'string' },
+              },
+              required: ['billing_address'],
+            },
+            billing_address: {
+              properties: {
+                account: { type: 'string' },
+              },
+              required: ['account'],
+            },
+          },
+        };
+        const schema = new Schema(jsonSchema as never);
+        const expected = new Schema({
+          type: 'object',
+          properties: {
+            credit_card: {
+              properties: {
+                billing_address: { type: 'string' },
+              },
+              required: ['billing_address'],
+            },
+            billing_address: {
+              properties: {
+                account: { type: 'string' },
+              },
+              required: ['account'],
+            },
+          },
+          'x-schema-private-render-additional-info': false,
+        });
+
+        const result = SchemaHelpers.getDependentSchemas(schema);
+        expect(result).toEqual(expected);
+      });
     });
   });
-
-  describe('.getDependentRequired', () => {
-    test('should return undefined when dependencies is not defined', () => {
-      const schema = new Schema({
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'string' },
-          zor: { type: 'string' },
-        },
-      });
-
-      const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
-      expect(fooResult).toEqual(undefined);
-      const barResult = SchemaHelpers.getDependentRequired('bar', schema);
-      expect(barResult).toEqual(undefined);
-      const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
-      expect(zorResult).toEqual(undefined);
-    });
-
-    test('should return dependent required (simple case)', () => {
-      const schema = new Schema({
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'string' },
-          zor: { type: 'string' },
-        },
-        dependencies: {
-          foo: ['bar'],
-        },
-      });
-
-      const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
-      expect(fooResult).toEqual(undefined);
-      const barResult = SchemaHelpers.getDependentRequired('bar', schema);
-      expect(barResult).toEqual(['foo']);
-      const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
-      expect(zorResult).toEqual(undefined);
-    });
-
-    test('should return dependent required (complex case)', () => {
-      const schema = new Schema({
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'string' },
-          zor: { type: 'string' },
-        },
-        dependencies: {
-          foo: ['bar'],
-          bar: ['foo', 'zor'],
-          zor: ['foo', 'bar'],
-        },
-      });
-
-      const fooResult = SchemaHelpers.getDependentRequired('foo', schema);
-      expect(fooResult).toEqual(['bar', 'zor']);
-      const barResult = SchemaHelpers.getDependentRequired('bar', schema);
-      expect(barResult).toEqual(['foo', 'zor']);
-      const zorResult = SchemaHelpers.getDependentRequired('zor', schema);
-      expect(zorResult).toEqual(['bar']);
-    });
-  });
-
-  describe('.getDependentSchemas', () => {
-    test('should return undefined when dependencies is not defined', () => {
-      const schema = new Schema({
-        type: 'object',
-        properties: {
-          name: {
-            type: 'string',
-          },
-          credit_card: {
-            type: 'string',
-          },
-        },
-        required: ['name'],
-      });
-
-      const result = SchemaHelpers.getDependentSchemas(schema);
-      expect(result).toEqual(undefined);
-    });
-
-    test('should return dependent schemas (simple case)', () => {
-      const jsonSchema = {
-        type: 'object',
-        properties: {
-          name: {
-            type: 'string',
-          },
-          credit_card: {
-            type: 'string',
-          },
-        },
-        required: ['name'],
-        dependencies: {
-          credit_card: {
-            properties: {
-              billing_address: { type: 'string' },
-            },
-            required: ['billing_address'],
-          },
-        },
-      };
-      const schema = new Schema(jsonSchema as never);
-      const expected = new Schema({
-        type: 'object',
-        properties: {
-          credit_card: {
-            properties: {
-              billing_address: { type: 'string' },
-            },
-            required: ['billing_address'],
-          },
-        },
-        'x-schema-private-render-additional-info': false,
-      });
-
-      const result = SchemaHelpers.getDependentSchemas(schema);
-      expect(result).toEqual(expected);
-    });
-
-    test('should return dependent schemas (complex case)', () => {
-      const jsonSchema = {
-        type: 'object',
-        properties: {
-          name: {
-            type: 'string',
-          },
-          credit_card: {
-            type: 'string',
-          },
-        },
-        required: ['name'],
-        dependencies: {
-          credit_card: {
-            properties: {
-              billing_address: { type: 'string' },
-            },
-            required: ['billing_address'],
-          },
-          billing_address: {
-            properties: {
-              account: { type: 'string' },
-            },
-            required: ['account'],
-          },
-        },
-      };
-      const schema = new Schema(jsonSchema as never);
-      const expected = new Schema({
-        type: 'object',
-        properties: {
-          credit_card: {
-            properties: {
-              billing_address: { type: 'string' },
-            },
-            required: ['billing_address'],
-          },
-          billing_address: {
-            properties: {
-              account: { type: 'string' },
-            },
-            required: ['account'],
-          },
-        },
-        'x-schema-private-render-additional-info': false,
-      });
-
-      const result = SchemaHelpers.getDependentSchemas(schema);
-      expect(result).toEqual(expected);
-    });
-  });
-});
 
   describe('.applicatorSchemaName', () => {
     const FIRST_CASE = 'first case';
