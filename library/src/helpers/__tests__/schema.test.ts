@@ -671,101 +671,100 @@ describe('SchemaHelpers', () => {
       });
       expect(SchemaHelpers.jsonToSchema(undefined)).toEqual(schema);
     });
-  });
+    describe('recursion detection in jsonFieldToSchema', () => {
+      test('should throw on a direct circular reference (object references itself)', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const circular: any = { key: 'value' };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        circular.self = circular;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
 
-  describe('recursion detection in jsonFieldToSchema', () => {
-    test('should throw on a direct circular reference (object references itself)', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const circular: any = { key: 'value' };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-      circular.self = circular;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow(
-        'too much recursion. Please check document for recursion.',
-      );
-    });
+      test('should throw on a circular reference through an array', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const circularArray: any[] = ['a', 'b'];
+        circularArray.push(circularArray);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(circularArray)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
 
-    test('should throw on a circular reference through an array', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const circularArray: any[] = ['a', 'b'];
-      circularArray.push(circularArray);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(circularArray)).toThrow(
-        'too much recursion. Please check document for recursion.',
-      );
-    });
+      test('should throw on an indirect circular reference (A references B which references A)', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const a: any = { name: 'a' };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+        const b: any = { name: 'b', ref: a };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        a.ref = b;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(a)).toThrow(
+          'too much recursion. Please check document for recursion.',
+        );
+      });
 
-    test('should throw on an indirect circular reference (A references B which references A)', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const a: any = { name: 'a' };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-      const b: any = { name: 'b', ref: a };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-      a.ref = b;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(a)).toThrow(
-        'too much recursion. Please check document for recursion.',
-      );
-    });
+      test('should NOT throw when the same object is referenced in two sibling branches', () => {
+        const shared = { type: 'string', minLength: 1 };
+        const value = {
+          branch1: { c1: shared },
+          branch2: { c2: shared },
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
 
-    test('should NOT throw when the same object is referenced in two sibling branches', () => {
-      const shared = { type: 'string', minLength: 1 };
-      const value = {
-        branch1: { c1: shared },
-        branch2: { c2: shared },
-      };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
-    });
+      test('should NOT throw when the same object appears in multiple array positions', () => {
+        const shared = { label: 'reused' };
+        const value = [shared, shared, shared];
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
 
-    test('should NOT throw when the same object appears in multiple array positions', () => {
-      const shared = { label: 'reused' };
-      const value = [shared, shared, shared];
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
-    });
-
-    test('should handle deep nesting without circularity', () => {
-      const deep = {
-        level1: {
-          level2: {
-            level3: {
-              level4: {
-                value: 'leaf',
+      test('should handle deep nesting without circularity', () => {
+        const deep = {
+          level1: {
+            level2: {
+              level3: {
+                level4: {
+                  value: 'leaf',
+                },
               },
             },
           },
-        },
-      };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(deep)).not.toThrow();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result = SchemaHelpers.jsonToSchema(deep);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      expect(result.json().type).toBe('object');
-    });
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(deep)).not.toThrow();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const result = SchemaHelpers.jsonToSchema(deep);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        expect(result.json().type).toBe('object');
+      });
 
-    test('should handle an object containing null values without throwing', () => {
-      const value = { a: null, b: 'hello' };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
-    });
+      test('should handle an object containing null values without throwing', () => {
+        const value = { a: null, b: 'hello' };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
 
-    test('should handle an object containing undefined values without throwing', () => {
-      const value = { a: undefined, b: 42 };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
-    });
+      test('should handle an object containing undefined values without throwing', () => {
+        const value = { a: undefined, b: 42 };
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(value)).not.toThrow();
+      });
 
-    test('should remain usable after a recursion error is thrown', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const circular: any = {};
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-      circular.self = circular;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      expect(() => SchemaHelpers.jsonToSchema({ ok: true })).not.toThrow();
+      test('should remain usable after a recursion error is thrown', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const circular: any = {};
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        circular.self = circular;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema(circular)).toThrow();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        expect(() => SchemaHelpers.jsonToSchema({ ok: true })).not.toThrow();
+      });
     });
   });
 
