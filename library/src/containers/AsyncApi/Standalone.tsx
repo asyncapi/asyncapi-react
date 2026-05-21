@@ -26,10 +26,6 @@ interface AsyncAPIState {
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
-  componentWillUnmount() {
-    this.cleanupEventListeners();
-    this.eventHandlers.clear();
-  }
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
 
@@ -81,6 +77,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
   }
 
+  componentWillUnmount() {
+    this.cleanupEventListeners();
+    this.eventHandlers.clear();
+  }
+
   render() {
     const { config, error: propError } = this.props;
     const { asyncapi, error: stateError, pm } = this.state;
@@ -129,7 +130,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private eventHandlers = new Map<string, (data: unknown) => void>();
+  private readonly eventHandlers = new Map<string, (data: unknown) => void>();
 
   private setupEventListeners() {
     const { onPluginEvent } = this.props;
