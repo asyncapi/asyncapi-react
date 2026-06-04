@@ -1,5 +1,10 @@
 import { PluginManager } from '../pluginManager';
-import { AsyncApiPlugin, PluginSlot, PluginAPI } from '../../types';
+import {
+  AsyncApiPlugin,
+  PluginSlot,
+  PluginAPI,
+  PluginErrorPayload,
+} from '../../types';
 import { PLUGIN_EVENT_ERROR } from '../../constants';
 
 const TEST_PLUGIN_NAME = 'test-plugin';
@@ -389,13 +394,14 @@ describe('PluginManager', () => {
   describe('Plugin Error handling tests', () => {
     const BAD_PLUGIN_NAME = 'bad-plugin';
     const GOOD_PLUGIN_NAME = 'good-plugin';
+    const INSTALL_FAILED_MESSAGE = 'install failed';
 
     it('should continue working when install() throws', () => {
       const badPlugin: AsyncApiPlugin = {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
         install: () => {
-          throw new Error('install failed');
+          throw new Error(INSTALL_FAILED_MESSAGE);
         },
       };
 
@@ -414,7 +420,7 @@ describe('PluginManager', () => {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
         install: () => {
-          throw new Error('install failed');
+          throw new Error(INSTALL_FAILED_MESSAGE);
         },
       };
 
@@ -428,7 +434,7 @@ describe('PluginManager', () => {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
         install: () => {
-          throw new Error('install failed');
+          throw new Error(INSTALL_FAILED_MESSAGE);
         },
       };
 
@@ -448,7 +454,7 @@ describe('PluginManager', () => {
 
     it('should emit plugin:error with expected fields on install failure', () => {
       const errorCallback = jest.fn();
-      const installError = new Error('install failed');
+      const installError = new Error(INSTALL_FAILED_MESSAGE);
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
       pluginManager.on(PLUGIN_EVENT_ERROR, errorCallback);
@@ -468,12 +474,15 @@ describe('PluginManager', () => {
         installError,
       );
       expect(errorCallback).toHaveBeenCalledTimes(1);
-      expect(errorCallback).toHaveBeenCalledWith({
-        phase: 'install',
-        pluginName: BAD_PLUGIN_NAME,
-        message: 'install failed',
-        timestamp: expect.any(Number),
-      });
+      expect(errorCallback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          phase: 'install',
+          pluginName: BAD_PLUGIN_NAME,
+          message: INSTALL_FAILED_MESSAGE,
+        }),
+      );
+      const [[payload]] = errorCallback.mock.calls as [PluginErrorPayload][];
+      expect(typeof payload.timestamp).toBe('number');
     });
 
     it('should continue dispatching when one listener throws', () => {
