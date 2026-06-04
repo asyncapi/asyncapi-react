@@ -1,5 +1,6 @@
 import { PluginManager } from '../pluginManager';
 import { AsyncApiPlugin, PluginSlot, PluginAPI } from '../../types';
+import { PLUGIN_EVENT_ERROR } from '../../constants';
 
 const TEST_PLUGIN_NAME = 'test-plugin';
 const TEST_EVENT = 'test-event';
@@ -382,6 +383,113 @@ describe('PluginManager', () => {
       pluginManager.emit(TEST_EVENT, { data: 'test' });
 
       expect(callback).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Plugin Error handling tests', () => {
+    const BAD_PLUGIN_NAME = 'bad-plugin';
+    const GOOD_PLUGIN_NAME = 'good-plugin';
+
+    it('should continue working when install() throws', () => {
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () => {
+          throw new Error('install failed');
+        },
+      };
+
+      const goodPlugin: AsyncApiPlugin = {
+        name: GOOD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+      };
+
+      expect(pluginManager.register(badPlugin)).toBe(false);
+      expect(pluginManager.register(goodPlugin)).toBe(true);
+    });
+
+    it('should not store a plugin when install() throws', () => {
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () => {
+          throw new Error('install failed');
+        },
+      };
+
+      pluginManager.register(badPlugin);
+
+      expect(pluginManager.getPlugin(BAD_PLUGIN_NAME)).toBeUndefined();
+    });
+
+    it('should register a healthy plugin after a failed one', () => {
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () => {
+          throw new Error('install failed');
+        },
+      };
+
+      const goodPlugin: AsyncApiPlugin = {
+        name: GOOD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+      };
+
+      pluginManager.register(badPlugin);
+      pluginManager.register(goodPlugin);
+
+      expect(pluginManager.listPlugins()).toEqual([
+        { name: GOOD_PLUGIN_NAME, version: '1.0.0' },
+      ]);
+    });
+
+    it('should emit plugin:error with expected fields on install failure', () => {
+      const errorCallback = jest.fn();
+      const installError = new Error('install failed');
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      pluginManager.on(PLUGIN_EVENT_ERROR, errorCallback);
+
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () => {
+          throw installError;
+        },
+      };
+
+      pluginManager.register(badPlugin);
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        `Failed to register plugin ${BAD_PLUGIN_NAME}:`,
+        installError,
+      );
+      expect(errorCallback).toHaveBeenCalledTimes(1);
+      expect(errorCallback).toHaveBeenCalledWith({
+        phase: 'install',
+        pluginName: BAD_PLUGIN_NAME,
+        message: 'install failed',
+        timestamp: expect.any(Number),
+      });
+    });
+
+    it('should continue dispatching when one listener throws', () => {
+      const throwingCallback = jest.fn(() => {
+        throw new Error('listener failed');
+      });
+      const healthyCallback = jest.fn();
+
+      jest.spyOn(console, 'error').mockImplementation();
+
+      pluginManager.on(TEST_EVENT, throwingCallback);
+      pluginManager.on(TEST_EVENT, healthyCallback);
+      pluginManager.emit(TEST_EVENT, { message: 'test' });
+
+      expect(throwingCallback).toHaveBeenCalled();
+      expect(healthyCallback).toHaveBeenCalledWith({ message: 'test' });
     });
   });
 });

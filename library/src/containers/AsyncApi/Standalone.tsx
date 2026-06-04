@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import { SpecificationHelpers } from '../../helpers';
-import { AsyncApiPlugin, ErrorObject, PropsSchema } from '../../types';
+import {
+  AsyncApiPlugin,
+  ErrorObject,
+  EventListener,
+  PropsSchema,
+} from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 
 import AsyncApiLayout from './Layout';
@@ -28,6 +33,8 @@ interface AsyncAPIState {
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
+  /** Stable handler refs so `off()` removes the same listeners registered by `on()`. */
+  private readonly pluginEventHandlers = new Map<string, EventListener>();
 
   state: AsyncAPIState = {
     asyncapi: undefined,
@@ -125,11 +132,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private handler(eventName: string) {
-    return (data: unknown) => {
-      this.props.onPluginEvent!(eventName, data);
-    };
+  private getOrCreateHandler(eventName: string): EventListener {
+    if (!this.pluginEventHandlers.has(eventName)) {
+      this.pluginEventHandlers.set(eventName, (data: unknown) => {
+        this.props.onPluginEvent?.(eventName, data);
+      });
+    }
+    return this.pluginEventHandlers.get(eventName)!;
   }
+
   private setupEventListeners() {
     const { onPluginEvent } = this.props;
     const { pm } = this.state;
@@ -137,14 +148,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!onPluginEvent) return;
 
     PLUGINEVENTS.forEach((event) => {
-      pm?.on(event, this.handler(event));
+      pm?.on(event, this.getOrCreateHandler(event));
     });
   }
 
   private cleanupEventListeners() {
     const { pm } = this.state;
     PLUGINEVENTS.forEach((event) => {
-      pm?.off(event, this.handler(event));
+      pm?.off(event, this.getOrCreateHandler(event));
     });
   }
 
@@ -153,15 +164,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const { pm } = this.state;
 
     plugins?.forEach((plugin) => {
-      try {
-        pm?.register(plugin);
+      const registered = pm?.register(plugin);
+      if (registered) {
         this.registeredPlugins.add(plugin.name);
-        this.propsPlugins.add(plugin.name); // Track as props-managed
-      } catch (error) {
-        console.error(`Failed to register plugin ${plugin.name}:`, error);
-        pm?.emit(PLUGINEVENTS[1], {
-          pluginName: plugin.name,
-        });
+        this.propsPlugins.add(plugin.name);
       }
     });
   }
@@ -189,15 +195,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     newPluginMap.forEach((plugin, name) => {
       if (!prevPluginMap.has(name)) {
-        try {
-          pm?.register(plugin);
+        const registered = pm?.register(plugin);
+        if (registered) {
           this.registeredPlugins.add(name);
           this.propsPlugins.add(name);
-        } catch (error) {
-          console.error(`Failed to register plugin ${name}:`, error);
-          pm?.emit(PLUGINEVENTS[1], {
-            pluginName: name,
-          });
         }
       }
     });

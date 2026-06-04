@@ -85,4 +85,7 @@ export const SECURITY_TEXT = 'Security';
 
 export const URL_VARIABLES_TEXT = 'URL Variables';
 
-export const PLUGINEVENTS = ['plugin:ready', 'plugin:error'];
+/** Plugin lifecycle events forwarded to the `onPluginEvent` prop. */
+export const PLUGIN_EVENT_READY = 'plugin:ready';
+export const PLUGIN_EVENT_ERROR = 'plugin:error';
+export const PLUGINEVENTS = [PLUGIN_EVENT_READY, PLUGIN_EVENT_ERROR] as const;

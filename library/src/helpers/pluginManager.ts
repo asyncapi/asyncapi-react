@@ -7,6 +7,7 @@ import {
   PluginContext,
   PluginSlot,
 } from '../types';
+import { PLUGIN_EVENT_ERROR } from '../constants';
 
 class PluginManager implements MessageBus {
   private readonly plugins = new Map<string, AsyncApiPlugin>();
@@ -26,15 +27,35 @@ class PluginManager implements MessageBus {
     this.context = initialContext;
   }
 
-  register(plugin: AsyncApiPlugin): void {
+  /**
+   * Registers a plugin. Returns `true` on success, `false` if the plugin is
+   * already registered or `install()` throws error. Install failures are logged to
+   * the console and emitted as `PLUGIN_EVENT_ERROR` so callers never need
+   * their own try/catch.
+   */
+  register(plugin: AsyncApiPlugin): boolean {
     if (this.plugins.has(plugin.name)) {
       console.warn(`Plugin ${plugin.name} is already registered`);
-      return;
+      return false;
     }
 
     const api = this.createPluginAPI(plugin);
-    plugin.install(api);
+    try {
+      plugin.install(api);
+    } catch (error) {
+      // Always log so failures are visible even without an `onPluginEvent` handler.
+      console.error(`Failed to register plugin ${plugin.name}:`, error);
+      this.emit(PLUGIN_EVENT_ERROR, {
+        phase: 'install',
+        pluginName: plugin.name,
+        message: error instanceof Error ? error.message : String(error),
+        timestamp: Date.now(),
+      });
+      return false;
+    }
+
     this.plugins.set(plugin.name, plugin);
+    return true;
   }
 
   unregister(pluginName: string): void {
@@ -114,7 +135,17 @@ class PluginManager implements MessageBus {
   public emit(eventName: string, data: unknown): void {
     const eventListeners = this.eventListeners.get(eventName);
     if (eventListeners) {
-      eventListeners.forEach((callback) => callback(data));
+      // Isolate listener failures so one throwing callback does not abort dispatch.
+      Array.from(eventListeners).forEach((callback) => {
+        try {
+          callback(data);
+        } catch (error) {
+          console.error(
+            `Plugin event listener failed for "${eventName}":`,
+            error,
+          );
+        }
+      });
     }
   }
 
