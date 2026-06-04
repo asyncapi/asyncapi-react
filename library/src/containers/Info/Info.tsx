@@ -140,7 +140,7 @@ export const Info: React.FunctionComponent = () => {
             <Extensions name="Info Extensions" item={info} />
           </div>
         )}
-        {PluginManager && (
+        {(pluginManager?.getComponentsForSlot(PluginSlot.INFO)?.length ?? 0) > 0 && (
           <SlotRenderer
             slot={PluginSlot.INFO}
             context={{

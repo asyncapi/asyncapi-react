@@ -225,7 +225,7 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
           </div>
         </div>
       )}
-      {PluginManager && (
+      {(pluginManager?.getComponentsForSlot(PluginSlot.OPERATION)?.length ?? 0) > 0 && (
         <SlotRenderer
           slot={PluginSlot.OPERATION}
           context={{
