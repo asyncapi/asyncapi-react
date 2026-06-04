@@ -46,7 +46,6 @@ class PluginManager implements MessageBus {
       // Always log so failures are visible even without an `onPluginEvent` handler.
       console.error(`Failed to register plugin ${plugin.name}:`, error);
       this.emit(PLUGIN_EVENT_ERROR, {
-        phase: 'install',
         pluginName: plugin.name,
         message: error instanceof Error ? error.message : String(error),
         timestamp: Date.now(),

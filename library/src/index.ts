@@ -16,7 +16,6 @@ export {
   PluginSlot,
   PluginContext,
   PluginErrorPayload,
-  PluginErrorPhase,
 } from './types';
 
 import { hljs } from './helpers';

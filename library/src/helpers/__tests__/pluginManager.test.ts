@@ -476,7 +476,6 @@ describe('PluginManager', () => {
       expect(errorCallback).toHaveBeenCalledTimes(1);
       expect(errorCallback).toHaveBeenCalledWith(
         expect.objectContaining({
-          phase: 'install',
           pluginName: BAD_PLUGIN_NAME,
           message: INSTALL_FAILED_MESSAGE,
         }),

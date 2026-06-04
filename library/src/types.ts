@@ -110,11 +110,7 @@ export interface AsyncApiPlugin {
   install(api: PluginAPI): void;
 }
 
-export type PluginErrorPhase = 'install' | 'emit';
-
 export interface PluginErrorPayload {
-  /** Currently only emits for `install` failures; `emit`-phase listener errors are logged only. */
-  phase: PluginErrorPhase;
   pluginName: string;
   message: string;
   timestamp: number;
