@@ -7,10 +7,15 @@ import {
   PluginContext,
   PluginSlot,
 } from '../types';
-import { PLUGIN_EVENT_ERROR } from '../constants';
+import { PLUGIN_EVENT_ERROR, PLUGIN_EVENT_READY, PLUGIN_EVENT_SPEC_LOADED } from '../constants';
 
 class PluginManager implements MessageBus {
+  /** Installed plugins keyed by `plugin.name`. */
   private readonly plugins = new Map<string, AsyncApiPlugin>();
+  /**
+   * UI components registered per render slot (e.g. `operation`, `info`).
+   * Entries are sorted by descending priority when a plugin calls `registerComponent`.
+   */
   private readonly slotComponents = new Map<
     PluginSlot,
     {
@@ -20,7 +25,9 @@ class PluginManager implements MessageBus {
       pluginName: string;
     }[]
   >();
+  /** Pub/sub listeners keyed by event name (e.g. `specLoaded`, `plugin:error`). */
   private readonly eventListeners = new Map<string, Set<EventListener>>();
+  /** Shared read-only context exposed to plugins via `getContext()`. */
   private context: PluginContext;
 
   constructor(initialContext: PluginContext) {
@@ -54,9 +61,18 @@ class PluginManager implements MessageBus {
     }
 
     this.plugins.set(plugin.name, plugin);
+    this.emit(PLUGIN_EVENT_READY, {
+      pluginName: plugin.name,
+      message: 'Plugin registered successfully',
+      timestamp: Date.now(),
+    });
     return true;
   }
 
+  /**
+   * Removes a plugin and any UI components it registered.
+   * No-op if the plugin name is not found.
+   */
   unregister(pluginName: string): void {
     const plugin = this.plugins.get(pluginName);
     if (!plugin) {
@@ -76,6 +92,10 @@ class PluginManager implements MessageBus {
     });
   }
 
+  /**
+   * Builds the API surface passed to a plugin's `install()` method.
+   * Wires plugin calls (registerComponent, on, emit, etc.) back into this manager.
+   */
   private createPluginAPI(plugin: AsyncApiPlugin): PluginAPI {
     return {
       registerComponent: (slot, component, options = {}) => {
@@ -95,7 +115,10 @@ class PluginManager implements MessageBus {
       },
 
       onSpecLoaded: (callback) => {
-        this.on('specLoaded', callback);
+        this.on(PLUGIN_EVENT_SPEC_LOADED, callback);
+        if (this.context.schema !== undefined) {
+          callback(this.context.schema);
+        }
       },
 
       getContext: () => this.context,
@@ -114,6 +137,7 @@ class PluginManager implements MessageBus {
     };
   }
 
+  /** Subscribes a callback to the named event. */
   on(eventName: string, callback: (data: unknown) => void): void {
     if (!this.eventListeners.has(eventName)) {
       this.eventListeners.set(eventName, new Set());
@@ -121,6 +145,7 @@ class PluginManager implements MessageBus {
     this.eventListeners.get(eventName)!.add(callback);
   }
 
+  /** Unsubscribes a callback from the named event. */
   off(eventName: string, callback: (data: unknown) => void): void {
     const listeners = this.eventListeners.get(eventName);
     if (listeners) {
@@ -131,6 +156,10 @@ class PluginManager implements MessageBus {
     }
   }
 
+  /**
+   * Dispatches an event to all listeners for `eventName`.
+   * Listener errors are caught and logged so one failure does not block others.
+   */
   public emit(eventName: string, data: unknown): void {
     const eventListeners = this.eventListeners.get(eventName);
     if (eventListeners) {
@@ -148,29 +177,43 @@ class PluginManager implements MessageBus {
     }
   }
 
+  /** Returns a snapshot of all callbacks registered for `eventName`. */
   listeners(eventName: string): EventListener[] {
     const listeners = this.eventListeners.get(eventName);
     return listeners ? Array.from(listeners) : [];
   }
 
+  /** Returns every event name that currently has at least one listener. */
   eventNames(): string[] {
     return Array.from(this.eventListeners.keys());
   }
 
+  /**
+   * Returns React components registered for a UI slot, ordered by descending priority.
+   */
   getComponentsForSlot(
     slot: PluginSlot,
   ): React.ComponentType<ComponentSlotProps>[] {
     return (this.slotComponents.get(slot) ?? []).map((c) => c.component);
   }
 
+  /**
+   * Replaces the shared context returned by plugin `getContext()` calls.
+   * Emits `specLoaded` when a schema is included in the update.
+   */
   updateContext(updates: PluginContext): void {
     this.context = updates;
+    if (updates.schema !== undefined) {
+      this.emit(PLUGIN_EVENT_SPEC_LOADED, updates.schema);
+    }
   }
 
+  /** Looks up a registered plugin by name. */
   getPlugin(name: string): AsyncApiPlugin | undefined {
     return this.plugins.get(name);
   }
 
+  /** Returns `name` and `version` metadata for every registered plugin. */
   listPlugins(): { name: string; version: string }[] {
     return Array.from(this.plugins.values()).map((p) => ({
       name: p.name,

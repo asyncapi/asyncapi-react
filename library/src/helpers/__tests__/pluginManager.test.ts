@@ -5,7 +5,7 @@ import {
   PluginAPI,
   PluginErrorPayload,
 } from '../../types';
-import { PLUGIN_EVENT_ERROR } from '../../constants';
+import { PLUGIN_EVENT_ERROR, PLUGIN_EVENT_SPEC_LOADED } from '../../constants';
 
 const TEST_PLUGIN_NAME = 'test-plugin';
 const TEST_EVENT = 'test-event';
@@ -316,6 +316,65 @@ describe('PluginManager', () => {
       };
 
       pluginManager.register(plugin);
+    });
+
+    it('should emit specLoaded when context includes a schema', () => {
+      const callback = jest.fn();
+      const newSchema = { title: 'Updated API' };
+
+      pluginManager.on(PLUGIN_EVENT_SPEC_LOADED, callback);
+      pluginManager.updateContext({ schema: newSchema });
+
+      expect(callback).toHaveBeenCalledWith(newSchema);
+    });
+
+    it('should not call onSpecLoaded immediately when no schema is loaded', () => {
+      const freshManager = new PluginManager({});
+      const specLoadedCallback = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.onSpecLoaded(specLoadedCallback);
+        },
+      };
+
+      freshManager.register(plugin);
+
+      expect(specLoadedCallback).not.toHaveBeenCalled();
+    });
+
+    it('should call onSpecLoaded immediately when a schema is already loaded', () => {
+      const specLoadedCallback = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.onSpecLoaded(specLoadedCallback);
+        },
+      };
+
+      pluginManager.register(plugin);
+
+      expect(specLoadedCallback).toHaveBeenCalledWith(mockContext.schema);
+    });
+
+    it('should call onSpecLoaded when the spec loads after registration', () => {
+      const specLoadedCallback = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.onSpecLoaded(specLoadedCallback);
+        },
+      };
+      const newSchema = { title: 'Updated API' };
+
+      pluginManager.register(plugin);
+      specLoadedCallback.mockClear();
+      pluginManager.updateContext({ schema: newSchema });
+
+      expect(specLoadedCallback).toHaveBeenCalledWith(newSchema);
     });
   });
 

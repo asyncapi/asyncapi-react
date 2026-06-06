@@ -39,9 +39,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
-    pm: new PluginManager({
-      schema: {},
-    }),
+    pm: new PluginManager({}),
   };
 
   constructor(props: AsyncApiProps) {
@@ -56,12 +54,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   componentDidMount() {
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
+    } else {
+      this.state.pm?.updateContext({ schema: this.state.asyncapi });
     }
+
     if (this.props.onPluginManagerReady) {
       this.props.onPluginManagerReady(this.state.pm!);
     }
     this.setupEventListeners();
-
     this.registerPlugins();
   }
 

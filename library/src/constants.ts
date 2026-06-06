@@ -88,4 +88,5 @@ export const URL_VARIABLES_TEXT = 'URL Variables';
 /** Plugin lifecycle events forwarded to the `onPluginEvent` prop. */
 export const PLUGIN_EVENT_READY = 'plugin:ready';
 export const PLUGIN_EVENT_ERROR = 'plugin:error';
+export const PLUGIN_EVENT_SPEC_LOADED = 'specLoaded';
 export const PLUGINEVENTS = [PLUGIN_EVENT_READY, PLUGIN_EVENT_ERROR] as const;
