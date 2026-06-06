@@ -7,7 +7,11 @@ import {
   PluginContext,
   PluginSlot,
 } from '../types';
-import { PLUGIN_EVENT_ERROR, PLUGIN_EVENT_READY, PLUGIN_EVENT_SPEC_LOADED } from '../constants';
+import {
+  PLUGIN_EVENT_ERROR,
+  PLUGIN_EVENT_READY,
+  PLUGIN_EVENT_SPEC_LOADED,
+} from '../constants';
 
 class PluginManager implements MessageBus {
   /** Installed plugins keyed by `plugin.name`. */

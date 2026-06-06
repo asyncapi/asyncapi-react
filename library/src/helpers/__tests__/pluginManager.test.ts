@@ -9,6 +9,7 @@ import { PLUGIN_EVENT_ERROR, PLUGIN_EVENT_SPEC_LOADED } from '../../constants';
 
 const TEST_PLUGIN_NAME = 'test-plugin';
 const TEST_EVENT = 'test-event';
+const UPDATED_API_TITLE = 'Updated API';
 
 describe('PluginManager', () => {
   let pluginManager: PluginManager;
@@ -303,7 +304,7 @@ describe('PluginManager', () => {
     });
 
     it('should update context', () => {
-      const newContext = { schema: { title: 'Updated API' } };
+      const newContext = { schema: { title: UPDATED_API_TITLE } };
 
       pluginManager.updateContext(newContext);
 
@@ -320,7 +321,7 @@ describe('PluginManager', () => {
 
     it('should emit specLoaded when context includes a schema', () => {
       const callback = jest.fn();
-      const newSchema = { title: 'Updated API' };
+      const newSchema = { title: UPDATED_API_TITLE };
 
       pluginManager.on(PLUGIN_EVENT_SPEC_LOADED, callback);
       pluginManager.updateContext({ schema: newSchema });
@@ -368,7 +369,7 @@ describe('PluginManager', () => {
           api.onSpecLoaded(specLoadedCallback);
         },
       };
-      const newSchema = { title: 'Updated API' };
+      const newSchema = { title: UPDATED_API_TITLE };
 
       pluginManager.register(plugin);
       specLoadedCallback.mockClear();

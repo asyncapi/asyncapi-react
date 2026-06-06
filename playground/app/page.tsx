@@ -5,7 +5,6 @@ import AsyncApi, {
   AsyncApiPlugin,
   ConfigInterface,
   PLUGIN_EVENT_ERROR,
-  PLUGIN_EVENT_READY,
   PluginAPI,
   PluginErrorPayload,
   PluginSlot,
