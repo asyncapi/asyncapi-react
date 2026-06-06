@@ -455,6 +455,19 @@ describe('PluginManager', () => {
     const BAD_PLUGIN_NAME = 'bad-plugin';
     const GOOD_PLUGIN_NAME = 'good-plugin';
     const INSTALL_FAILED_MESSAGE = 'install failed';
+    let consoleErrorSpy: jest.SpyInstance;
+
+    // PluginManager.register() logs install failures via console.error by design.
+    // These tests intentionally trigger that path, which would otherwise print
+    // red "● Console" noise in Jest output even though the assertions pass.
+    // The spy still records calls so we can assert logging in the dedicated test.
+    beforeEach(() => {
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
 
     it('should continue working when install() throws', () => {
       const badPlugin: AsyncApiPlugin = {
@@ -515,7 +528,6 @@ describe('PluginManager', () => {
     it('should emit plugin:error with expected fields on install failure', () => {
       const errorCallback = jest.fn();
       const installError = new Error(INSTALL_FAILED_MESSAGE);
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
 
       pluginManager.on(PLUGIN_EVENT_ERROR, errorCallback);
 
@@ -549,8 +561,6 @@ describe('PluginManager', () => {
         throw new Error('listener failed');
       });
       const healthyCallback = jest.fn();
-
-      jest.spyOn(console, 'error').mockImplementation();
 
       pluginManager.on(TEST_EVENT, throwingCallback);
       pluginManager.on(TEST_EVENT, healthyCallback);
