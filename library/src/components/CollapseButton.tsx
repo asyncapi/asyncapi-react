@@ -31,7 +31,7 @@ export const CollapseButton: React.FunctionComponent<Props> = ({
   children,
   ...rest
 }) => (
-  <button
+  <div
     {...rest}
     className={`focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${rest.className ?? ''}`}
     type="button"
@@ -43,5 +43,5 @@ export const CollapseButton: React.FunctionComponent<Props> = ({
         expanded ? '-rotate-90' : ''
       } ${chevronProps?.className ?? ''}`}
     />
-  </button>
+  </div>
 );
