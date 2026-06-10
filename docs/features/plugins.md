@@ -4,21 +4,16 @@ The AsyncAPI React component supports a flexible plugin system to extend and cus
 
 ## Usage
 
-### Static Registration (via props)
-
-Use this when you know all plugins upfront:
+Define your plugin in a module (for example, `myPlugin.ts`):
 
 ```typescript
 import {
   AsyncApiPlugin,
   PluginAPI,
   PluginSlot,
-  PLUGIN_EVENT_ERROR,
-  PLUGIN_EVENT_READY,
-  PluginErrorPayload,
 } from '@asyncapi/react-component';
 
-const myPlugin: AsyncApiPlugin = {
+export const myPlugin: AsyncApiPlugin = {
   name: 'my-plugin',
   version: '1.0.0',
   install(api: PluginAPI) {
@@ -26,6 +21,19 @@ const myPlugin: AsyncApiPlugin = {
     api.onSpecLoaded((spec) => console.log('Spec loaded:', spec));
   }
 };
+```
+
+### Static Registration (via props)
+
+Use this when you know all plugins upfront:
+
+```typescript
+import {
+  PLUGIN_EVENT_ERROR,
+  PLUGIN_EVENT_READY,
+  PluginErrorPayload,
+} from '@asyncapi/react-component';
+import { myPlugin } from './myPlugin';
 
 <AsyncApi
   schema={mySchema}
@@ -47,6 +55,7 @@ Use this when you need to add/remove plugins at runtime:
 
 ```typescript
 import { useState } from 'react';
+import { myPlugin } from './myPlugin';
 
 function MyApp() {
   const [pluginManager, setPluginManager] = useState(null);
