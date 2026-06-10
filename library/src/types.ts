@@ -113,7 +113,7 @@ export interface AsyncApiPlugin {
 export interface PluginErrorPayload {
   pluginName: string;
   message: string;
-  timestamp: number;
+  timestamp: Date;
 }
 
 export type PluginInstance =

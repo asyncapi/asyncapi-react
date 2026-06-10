@@ -59,7 +59,7 @@ class PluginManager implements MessageBus {
       this.emit(PLUGIN_EVENT_ERROR, {
         pluginName: plugin.name,
         message: error instanceof Error ? error.message : String(error),
-        timestamp: Date.now(),
+        timestamp: new Date(),
       });
       return false;
     }
@@ -68,7 +68,7 @@ class PluginManager implements MessageBus {
     this.emit(PLUGIN_EVENT_READY, {
       pluginName: plugin.name,
       message: 'Plugin registered successfully',
-      timestamp: Date.now(),
+      timestamp: new Date(),
     });
     return true;
   }

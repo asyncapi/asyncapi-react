@@ -553,7 +553,7 @@ describe('PluginManager', () => {
         }),
       );
       const [[payload]] = errorCallback.mock.calls as [PluginErrorPayload][];
-      expect(typeof payload.timestamp).toBe('number');
+      expect(payload.timestamp).toBeInstanceOf(Date);
     });
 
     it('should continue dispatching when one listener throws', () => {
