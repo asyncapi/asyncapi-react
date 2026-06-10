@@ -3,7 +3,6 @@ import React from 'react';
 interface ExecutionResultProps {
   error: string | null;
   response: any;
-  title?: string;
   errorMessage?: string;
 }
 
@@ -59,4 +58,44 @@ export const ExecutionResult: React.FC<ExecutionResultProps> = ({ error, respons
       )}
     </>
   );
+};
+
+export const useExecution = () => {
+  const [response, setResponse] = React.useState<any>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
+
+  const parseAndSetResponse = async (res: Response) => {
+    const data = await res.text();
+    let parsedData: any = data;
+    try {
+      parsedData = JSON.parse(data);
+    } catch (e) {
+      console.debug('Failed to parse response as JSON', e);
+    }
+
+    setResponse({
+      status: res.status,
+      statusText: res.statusText,
+      headers: Object.fromEntries(res.headers.entries()),
+      data: parsedData,
+    });
+  };
+
+  const executeRequest = async (fetchPromise: Promise<Response>, defaultErrorMsg: string) => {
+    setLoading(true);
+    setError(null);
+    setResponse(null);
+
+    try {
+      const res = await fetchPromise;
+      await parseAndSetResponse(res);
+    } catch (err: any) {
+      setError(err.message || defaultErrorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { response, error, loading, executeRequest, setError };
 };

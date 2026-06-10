@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/react-component';
-import { ExecutionResult } from './ExecutionResult';
+import { ExecutionResult, useExecution } from './ExecutionResult';
 
 const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
@@ -8,9 +8,7 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
   const operation = schemaObj?.operation;
 
   const [endpoint, setEndpoint] = useState('');
-  const [response, setResponse] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { response, error, loading, executeRequest, setError } = useExecution();
 
   const isWebhook = typeof operation?.isWebhook === 'function' ? operation.isWebhook() : false;
 
@@ -55,39 +53,17 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
        setError("Please provide an endpoint URL to simulate delivery.");
        return;
     }
-    setLoading(true);
-    setError(null);
-    setResponse(null);
-
-    try {
-      const res = await fetch(endpoint, {
+    await executeRequest(
+      fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json, text/plain, */*',
         },
         body: payloadString,
-      });
-
-      const data = await res.text();
-      let parsedData: any = data;
-      try {
-        parsedData = JSON.parse(data);
-      } catch (e) {
-        console.debug('Failed to parse webhook response as JSON', e);
-      }
-
-      setResponse({
-        status: res.status,
-        statusText: res.statusText,
-        headers: Object.fromEntries(res.headers.entries()),
-        data: parsedData,
-      });
-    } catch (err: any) {
-      setError(err.message || 'Simulation failed. Ensure the endpoint is reachable and configured for CORS.');
-    } finally {
-      setLoading(false);
-    }
+      }),
+      'Simulation failed. Ensure the endpoint is reachable and configured for CORS.'
+    );
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/react-component';
-import { ExecutionResult } from './ExecutionResult';
+import { ExecutionResult, useExecution } from './ExecutionResult';
 
 const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
@@ -8,9 +8,7 @@ const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context 
   const operation = schemaObj?.operation;
   const channel = schemaObj?.channel;
 
-  const [response, setResponse] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { response, error, loading, executeRequest } = useExecution();
 
   const hasHttpBinding = channel?.bindings()?.has('http') || operation?.bindings()?.has('http');
   const isWebhook = typeof operation?.isWebhook === 'function' ? operation.isWebhook() : false;
@@ -20,49 +18,27 @@ const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context 
   }
 
   const handleExecute = async () => {
-    setLoading(true);
-    setError(null);
-    setResponse(null);
+    const servers = typeof channel?.servers === 'function' && channel.servers() ? channel.servers().all() : [];
+    const serverUrl = servers.length > 0 ? servers[0].url() : globalThis.location.origin;
+    const address = channel?.address() || '';
+    
+    const baseUrl = serverUrl.replace(/\/$/, '');
+    const path = address.startsWith('/') ? address : `/${address}`;
+    const fullUrl = `${baseUrl}${path}`;
 
-    try {
-      const servers = typeof channel?.servers === 'function' && channel.servers() ? channel.servers().all() : [];
-      const serverUrl = servers.length > 0 ? servers[0].url() : globalThis.location.origin;
-      const address = channel?.address() || '';
-      
-      const baseUrl = serverUrl.replace(/\/$/, '');
-      const path = address.startsWith('/') ? address : `/${address}`;
-      const fullUrl = `${baseUrl}${path}`;
+    const operationBinding = operation?.bindings()?.get('http');
+    const channelBinding = channel?.bindings()?.get('http');
+    const method = operationBinding?.method || channelBinding?.method || 'GET';
 
-      const operationBinding = operation?.bindings()?.get('http');
-      const channelBinding = channel?.bindings()?.get('http');
-      const method = operationBinding?.method || channelBinding?.method || 'GET';
-
-      const res = await fetch(fullUrl, {
+    await executeRequest(
+      fetch(fullUrl, {
         method: method.toUpperCase(),
         headers: {
           'Accept': 'application/json, text/plain, */*',
         },
-      });
-
-      const data = await res.text();
-      let parsedData: any = data;
-      try {
-        parsedData = JSON.parse(data);
-      } catch (e) {
-        console.debug('Response is not valid JSON, keeping as string', e);
-      }
-
-      setResponse({
-        status: res.status,
-        statusText: res.statusText,
-        headers: Object.fromEntries(res.headers.entries()),
-        data: parsedData,
-      });
-    } catch (err: any) {
-      setError(err.message || 'Network failure. Ensure CORS is configured correctly and the server is reachable.');
-    } finally {
-      setLoading(false);
-    }
+      }),
+      'Network failure. Ensure CORS is configured correctly and the server is reachable.'
+    );
   };
 
   return (
