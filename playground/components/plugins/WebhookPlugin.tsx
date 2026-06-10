@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/react-component';
+import { ExecutionResult } from './ExecutionResult';
 
 const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
-  const operation = (schema as any)?.operation;
+  const schemaObj = schema as Record<string, any>;
+  const operation = schemaObj?.operation;
 
   const [endpoint, setEndpoint] = useState('');
   const [response, setResponse] = useState<any>(null);
@@ -131,37 +133,7 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
         </div>
       </div>
 
-      {error && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <h5 className="text-sm font-medium text-red-800">Simulation Failed</h5>
-          <p className="mt-1 text-sm text-red-700">{error}</p>
-        </div>
-      )}
-
-      {response && (
-        <div className="mt-6 space-y-4">
-          <div className="flex items-center space-x-2">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              response.status >= 200 && response.status < 300 
-                ? 'bg-green-100 text-green-800' 
-                : 'bg-red-100 text-red-800'
-            }`}>
-              {response.status} {response.statusText}
-            </span>
-          </div>
-          
-          <div className="border rounded-md overflow-hidden">
-            <div className="bg-gray-50 px-4 py-2 border-b">
-              <h5 className="text-sm font-medium text-gray-700">Response Body</h5>
-            </div>
-            <div className="p-4 bg-gray-900 overflow-x-auto">
-              <pre className="text-sm text-gray-100 font-mono">
-                {typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2)}
-              </pre>
-            </div>
-          </div>
-        </div>
-      )}
+      <ExecutionResult error={error} response={response} errorMessage="Simulation Failed" />
     </div>
   );
 };
