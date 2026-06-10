@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { AsyncApiPlugin, PluginAPI, PluginSlot, ComponentSlotProps } from '@asyncapi/react-component';
+import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/react-component';
 
-const HttpExecutionComponent: React.FC<ComponentSlotProps> = ({ context }) => {
+const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
   const { operation, channel } = schema as any;
 
