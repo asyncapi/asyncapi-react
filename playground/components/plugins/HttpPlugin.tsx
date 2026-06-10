@@ -3,7 +3,12 @@ import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/
 
 const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
-  const { operation, channel } = schema as any;
+  const operation = (schema as any)?.operation;
+  const channel = (schema as any)?.channel;
+
+  const [response, setResponse] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const hasHttpBinding = channel?.bindings()?.has('http') || operation?.bindings()?.has('http');
   const isWebhook = typeof operation?.isWebhook === 'function' ? operation.isWebhook() : false;
@@ -12,10 +17,6 @@ const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context 
     return null;
   }
 
-  const [response, setResponse] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
   const handleExecute = async () => {
     setLoading(true);
     setError(null);
@@ -23,7 +24,7 @@ const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context 
 
     try {
       const servers = typeof channel?.servers === 'function' && channel.servers() ? channel.servers().all() : [];
-      const serverUrl = servers.length > 0 ? servers[0].url() : window.location.origin;
+      const serverUrl = servers.length > 0 ? servers[0].url() : globalThis.location.origin;
       const address = channel?.address() || '';
       
       const baseUrl = serverUrl.replace(/\/$/, '');
@@ -46,7 +47,7 @@ const HttpExecutionComponent: React.FC<{ context: PluginContext }> = ({ context 
       try {
         parsedData = JSON.parse(data);
       } catch (e) {
-        // Leave as string if not JSON
+        console.debug('Response is not valid JSON, keeping as string', e);
       }
 
       setResponse({

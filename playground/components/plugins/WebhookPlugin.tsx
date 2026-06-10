@@ -3,18 +3,18 @@ import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/
 
 const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ context }) => {
   const { schema } = context;
-  const { operation } = schema as any;
+  const operation = (schema as any)?.operation;
+
+  const [endpoint, setEndpoint] = useState('');
+  const [response, setResponse] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const isWebhook = typeof operation?.isWebhook === 'function' ? operation.isWebhook() : false;
 
   if (!isWebhook) {
     return null;
   }
-
-  const [endpoint, setEndpoint] = useState('');
-  const [response, setResponse] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   // Extract expected payload from the first message
   const messages = operation.messages ? operation.messages().all() : [];
@@ -29,9 +29,16 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
     if (schema.type === 'object' && schema.properties) {
       const obj: any = {};
       Object.keys(schema.properties).forEach(k => {
-        obj[k] = schema.properties[k].type === 'string' ? 'string' : 
-                 schema.properties[k].type === 'integer' ? 1 :
-                 schema.properties[k].type === 'boolean' ? true : null;
+        const propType = schema.properties[k].type;
+        if (propType === 'string') {
+          obj[k] = 'string';
+        } else if (propType === 'integer') {
+          obj[k] = 1;
+        } else if (propType === 'boolean') {
+          obj[k] = true;
+        } else {
+          obj[k] = null;
+        }
       });
       return obj;
     }
@@ -65,6 +72,7 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
       try {
         parsedData = JSON.parse(data);
       } catch (e) {
+        console.debug('Failed to parse webhook response as JSON', e);
       }
 
       setResponse({
@@ -94,8 +102,9 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Target Endpoint</label>
+          <label htmlFor="webhook-endpoint" className="block text-sm font-medium text-gray-700 mb-1">Target Endpoint</label>
           <input 
+            id="webhook-endpoint"
             type="url" 
             value={endpoint}
             onChange={(e) => setEndpoint(e.target.value)}
@@ -105,8 +114,8 @@ const WebhookExecutionComponent: React.FC<{ context: PluginContext }> = ({ conte
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Expected Payload</label>
-          <pre className="p-3 bg-gray-50 border rounded-md text-xs font-mono text-gray-800 overflow-x-auto">
+          <label htmlFor="expected-payload" className="block text-sm font-medium text-gray-700 mb-1">Expected Payload</label>
+          <pre id="expected-payload" className="p-3 bg-gray-50 border rounded-md text-xs font-mono text-gray-800 overflow-x-auto">
             {payloadString}
           </pre>
         </div>
