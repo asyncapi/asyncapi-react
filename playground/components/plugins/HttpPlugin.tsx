@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AsyncApiPlugin, PluginAPI, PluginSlot, PluginContext } from '@asyncapi/react-component';
 import { ExecutionResult, useExecution } from './ExecutionResult';
 
