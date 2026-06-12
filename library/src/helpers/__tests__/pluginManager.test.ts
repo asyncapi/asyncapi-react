@@ -623,9 +623,7 @@ describe('PluginManager', () => {
       const badPlugin: AsyncApiPlugin = {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
-        install: async () => {
-          throw new Error(INSTALL_FAILED_MESSAGE);
-        },
+        install: () => Promise.reject(new Error(INSTALL_FAILED_MESSAGE)),
       };
 
       expect(await pluginManager.register(badPlugin)).toBe(false);
