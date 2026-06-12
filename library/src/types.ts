@@ -107,7 +107,7 @@ export interface AsyncApiPlugin {
   version: string;
   description?: string;
 
-  install(api: PluginAPI): void;
+  install(api: PluginAPI): void | Promise<void>;
 }
 
 export interface PluginErrorPayload {

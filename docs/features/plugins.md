@@ -23,6 +23,26 @@ export const myPlugin: AsyncApiPlugin = {
 };
 ```
 
+### Async install
+
+`install()` may be synchronous or async. Use an async `install` when you need to fetch configuration or perform other asynchronous setup before registering components:
+
+```typescript
+export const asyncPlugin: AsyncApiPlugin = {
+  name: 'async-plugin',
+  version: '1.0.0',
+  async install(api: PluginAPI) {
+    const result = await fetch('/plugin-data').then((res) => res.json());
+    if (!result.ok) {
+      throw new Error('plugin configuration failed');
+    }
+    api.registerComponent(PluginSlot.INFO, MyInfoComponent);
+  },
+};
+```
+
+If `install()` throws or rejects, the plugin is not registered and a `plugin:error` event is emitted.
+
 ### Static Registration (via props)
 
 Use this when you know all plugins upfront:
@@ -60,8 +80,8 @@ import { myPlugin } from './myPlugin';
 function MyApp() {
   const [pluginManager, setPluginManager] = useState(null);
 
-  const handleEnablePlugin = () => {
-    const registered = pluginManager?.register(myPlugin);
+  const handleEnablePlugin = async () => {
+    const registered = await pluginManager?.register(myPlugin);
     if (!registered) {
       console.warn('Plugin was not registered');
     }
@@ -84,7 +104,7 @@ function MyApp() {
 }
 ```
 
-`PluginManager.register()` returns `true` when a plugin installs successfully and `false` when the plugin is already registered or `install()` throws.
+`PluginManager.register()` returns a `Promise<boolean>` that resolves to `true` when a plugin installs successfully and `false` when the plugin is already registered or `install()` throws or rejects.
 
 ## Plugin Structure
 
@@ -93,7 +113,7 @@ interface AsyncApiPlugin {
   name: string;              // Unique identifier
   version: string;           // Semantic version
   description?: string;      // Optional description
-  install(api: PluginAPI): void;
+  install(api: PluginAPI): void | Promise<void>;
 }
 ```
 
@@ -115,7 +135,7 @@ The library exports named constants for plugin lifecycle events:
 | Constant | Event name | Description |
 |----------|------------|-------------|
 | `PLUGIN_EVENT_READY` | `plugin:ready` | Emitted after a plugin registers successfully |
-| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` throws |
+| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` throws or rejects |
 | `PLUGIN_EVENT_SPEC_LOADED` | `specLoaded` | Emitted when the spec loads or updates (plugin API only) |
 
 `PLUGIN_EVENT_READY` and `PLUGIN_EVENT_ERROR` are forwarded to the `onPluginEvent` prop on `<AsyncApi>`. `PLUGIN_EVENT_SPEC_LOADED` is used internally by `api.onSpecLoaded()` and is not forwarded to `onPluginEvent`.
@@ -142,7 +162,7 @@ interface PluginErrorPayload {
 }
 ```
 
-If `install()` throws an error, the failing plugin is not stored and other plugins continue to register normally. 
+If `install()` throws or rejects, the failing plugin is not stored and other plugins continue to register normally. 
 
 > **Important:**  
 > If an event listener throws during dispatch, including `onPluginEvent`, the error is logged to the console and dispatch continues for the remaining listeners.

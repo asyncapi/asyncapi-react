@@ -35,6 +35,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly propsPlugins = new Set<string>();
   /** Stable handler refs so `off()` removes the same listeners registered by `on()`. */
   private readonly pluginEventHandlers = new Map<string, EventListener>();
+  private hasMounted = false;
 
   state: AsyncAPIState = {
     asyncapi: undefined,
@@ -47,11 +48,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
     if (parsedSpec) {
-      this.state = { asyncapi: parsedSpec };
+      this.state = { ...this.state, asyncapi: parsedSpec };
     }
   }
 
   componentDidMount() {
+    this.hasMounted = true;
+
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
     } else {
@@ -62,7 +65,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       this.props.onPluginManagerReady(this.state.pm!);
     }
     this.setupEventListeners();
-    this.registerPlugins();
+    void this.registerPlugins();
   }
 
   componentDidUpdate(prevProps: AsyncApiProps) {
@@ -80,8 +83,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     if (plugins !== prevProps.plugins) {
-      this.updatePlugins(prevProps.plugins, plugins);
+      void this.updatePlugins(prevProps.plugins, plugins);
     }
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false;
+    this.cleanupEventListeners();
   }
 
   render() {
@@ -159,20 +167,25 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     });
   }
 
-  private registerPlugins() {
+  private async registerPlugins() {
     const { plugins } = this.props;
     const { pm } = this.state;
 
-    plugins?.forEach((plugin) => {
-      const registered = pm?.register(plugin);
+    for (const plugin of plugins ?? []) {
+      const registered = await pm?.register(plugin);
       if (registered) {
         this.registeredPlugins.add(plugin.name);
         this.propsPlugins.add(plugin.name);
       }
-    });
+    }
+
+    // register() mutates PluginManager in place; re-render so slot components pick up new entries.
+    if (this.hasMounted) {
+      this.setState({});
+    }
   }
 
-  private updatePlugins(
+  private async updatePlugins(
     prevPlugins: AsyncApiPlugin[] | undefined,
     newPlugins: AsyncApiPlugin[] | undefined,
   ) {
@@ -193,15 +206,25 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       }
     });
 
-    newPluginMap.forEach((plugin, name) => {
-      if (!prevPluginMap.has(name)) {
-        const registered = pm?.register(plugin);
-        if (registered) {
-          this.registeredPlugins.add(name);
-          this.propsPlugins.add(name);
-        }
+    const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
+      ([name]) => !prevPluginMap.has(name),
+    );
+
+    for (const [name, plugin] of pluginsToAdd) {
+      const registered = await pm?.register(plugin);
+      const stillRequested = (this.props.plugins ?? []).some(
+        (p) => p.name === name,
+      );
+      if (registered && stillRequested) {
+        this.registeredPlugins.add(name);
+        this.propsPlugins.add(name);
       }
-    });
+    }
+
+    // Same as registerPlugins: pm was mutated in place, not via setState.
+    if (this.hasMounted) {
+      this.setState({});
+    }
   }
 
   private updateState(schema: PropsSchema) {

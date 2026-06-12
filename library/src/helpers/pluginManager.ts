@@ -16,6 +16,10 @@ import {
 class PluginManager implements MessageBus {
   /** Installed plugins keyed by `plugin.name`. */
   private readonly plugins = new Map<string, AsyncApiPlugin>();
+  /** Plugin names with an in-flight `install()` call. */
+  private readonly pendingInstalls = new Set<string>();
+  /** Plugin names cancelled via `unregister()` while install was pending. */
+  private readonly cancelledInstalls = new Set<string>();
   /**
    * UI components registered per render slot (e.g. `operation`, `info`).
    * Entries are sorted by descending priority when a plugin calls `registerComponent`.
@@ -40,27 +44,40 @@ class PluginManager implements MessageBus {
 
   /**
    * Registers a plugin. Returns `true` on success, `false` if the plugin is
-   * already registered or `install()` throws error. Install failures are logged to
-   * the console and emitted as `PLUGIN_EVENT_ERROR` so callers never need
-   * their own try/catch.
+   * already registered or `install()` throws or rejects. Install failures are
+   * logged to the console and emitted as `PLUGIN_EVENT_ERROR` so callers never
+   * need their own try/catch.
    */
-  register(plugin: AsyncApiPlugin): boolean {
-    if (this.plugins.has(plugin.name)) {
+  async register(plugin: AsyncApiPlugin): Promise<boolean> {
+    if (
+      this.plugins.has(plugin.name) ||
+      this.pendingInstalls.has(plugin.name)
+    ) {
       console.warn(`Plugin ${plugin.name} is already registered`);
       return false;
     }
 
+    this.pendingInstalls.add(plugin.name);
     const api = this.createPluginAPI(plugin);
     try {
-      plugin.install(api);
+      await plugin.install(api);
     } catch (error) {
       // Always log so failures are visible even without an `onPluginEvent` handler.
       console.error(`Failed to register plugin ${plugin.name}:`, error);
+      this.removePluginComponents(plugin.name);
       this.emit(PLUGIN_EVENT_ERROR, {
         pluginName: plugin.name,
         message: error instanceof Error ? error.message : String(error),
         timestamp: new Date(),
       });
+      return false;
+    } finally {
+      this.pendingInstalls.delete(plugin.name);
+    }
+
+    if (this.cancelledInstalls.has(plugin.name)) {
+      this.cancelledInstalls.delete(plugin.name);
+      this.removePluginComponents(plugin.name);
       return false;
     }
 
@@ -79,19 +96,26 @@ class PluginManager implements MessageBus {
    */
   unregister(pluginName: string): void {
     const plugin = this.plugins.get(pluginName);
-    if (!plugin) {
+    if (!plugin && !this.pendingInstalls.has(pluginName)) {
       console.warn(`Plugin "${pluginName}" not found`);
       return;
     }
 
-    this.plugins.delete(pluginName);
+    if (this.pendingInstalls.has(pluginName)) {
+      this.cancelledInstalls.add(pluginName);
+    }
 
+    this.plugins.delete(pluginName);
+    this.removePluginComponents(pluginName);
+  }
+
+  private removePluginComponents(pluginName: string): void {
     this.slotComponents.forEach((components) => {
-      const index = components.findIndex((c) => {
-        return c.pluginName === pluginName;
-      });
-      if (index > -1) {
-        components.splice(index, 1);
+      let i = components.length;
+      while (i--) {
+        if (components[i].pluginName === pluginName) {
+          components.splice(i, 1);
+        }
       }
     });
   }

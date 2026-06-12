@@ -27,7 +27,7 @@ describe('PluginManager', () => {
   });
 
   describe('Plugin Registration', () => {
-    it('should register a plugin', () => {
+    it('should register a plugin', async () => {
       const installMock = jest.fn();
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -35,13 +35,13 @@ describe('PluginManager', () => {
         install: installMock,
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(installMock).toHaveBeenCalled();
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBe(plugin);
     });
 
-    it('should call plugin install with correct API', () => {
+    it('should call plugin install with correct API', async () => {
       let capturedAPI: PluginAPI | null = null;
       const plugin: AsyncApiPlugin = {
         name: 'test-plugin',
@@ -51,7 +51,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(capturedAPI).toBeDefined();
       expect(capturedAPI).toHaveProperty('registerComponent');
@@ -62,7 +62,7 @@ describe('PluginManager', () => {
       expect(capturedAPI).toHaveProperty('onSpecLoaded');
     });
 
-    it('should not call install twice for duplicate plugin', () => {
+    it('should not call install twice for duplicate plugin', async () => {
       const installMock = jest.fn();
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -70,15 +70,15 @@ describe('PluginManager', () => {
         install: installMock,
       };
 
-      pluginManager.register(plugin);
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(installMock).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Plugin Unregistration', () => {
-    it('should unregister a plugin', () => {
+    it('should unregister a plugin', async () => {
       const installMock = jest.fn();
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -86,13 +86,13 @@ describe('PluginManager', () => {
         install: installMock,
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
       pluginManager.unregister(TEST_PLUGIN_NAME);
 
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
     });
 
-    it('should remove plugin components when unregistering', () => {
+    it('should remove plugin components when unregistering', async () => {
       const TestComponent = () => null;
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -102,7 +102,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(1);
@@ -113,7 +113,7 @@ describe('PluginManager', () => {
       ).toHaveLength(0);
     });
 
-    it('should only remove components from the unregistered plugin', () => {
+    it('should only remove components from the unregistered plugin', async () => {
       const Component1 = () => null;
       const Component2 = () => null;
 
@@ -133,8 +133,8 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin1);
-      pluginManager.register(plugin2);
+      await pluginManager.register(plugin1);
+      await pluginManager.register(plugin2);
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(2);
@@ -147,10 +147,33 @@ describe('PluginManager', () => {
         Component2,
       );
     });
+
+    it('should remove all components from a plugin in the same slot', async () => {
+      const Component1 = () => null;
+      const Component2 = () => null;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.registerComponent(PluginSlot.OPERATION, Component1);
+          api.registerComponent(PluginSlot.OPERATION, Component2);
+        },
+      };
+
+      await pluginManager.register(plugin);
+      expect(
+        pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
+      ).toHaveLength(2);
+
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      expect(
+        pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
+      ).toHaveLength(0);
+    });
   });
 
   describe('Component Registration', () => {
-    it('should register component in a slot', () => {
+    it('should register component in a slot', async () => {
       const TestComponent = () => null;
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -160,7 +183,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       const components = pluginManager.getComponentsForSlot(
         PluginSlot.OPERATION,
@@ -169,7 +192,7 @@ describe('PluginManager', () => {
       expect(components[0]).toBe(TestComponent);
     });
 
-    it('should register multiple components in the same slot', () => {
+    it('should register multiple components in the same slot', async () => {
       const Component1 = () => null;
       const Component2 = () => null;
 
@@ -182,7 +205,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       const components = pluginManager.getComponentsForSlot(
         PluginSlot.OPERATION,
@@ -190,7 +213,7 @@ describe('PluginManager', () => {
       expect(components).toHaveLength(2);
     });
 
-    it('should use default priority of 100for components without priority', () => {
+    it('should use default priority of 100for components without priority', async () => {
       const DefaultComponent = () => null;
       const HighComponent = () => null;
       const LowComponent = () => null;
@@ -209,7 +232,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       const components = pluginManager.getComponentsForSlot(
         PluginSlot.OPERATION,
@@ -291,7 +314,7 @@ describe('PluginManager', () => {
   });
 
   describe('Context Management', () => {
-    it('should return initial context', () => {
+    it('should return initial context', async () => {
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
         version: '1.0.0',
@@ -300,10 +323,10 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
     });
 
-    it('should update context', () => {
+    it('should update context', async () => {
       const newContext = { schema: { title: UPDATED_API_TITLE } };
 
       pluginManager.updateContext(newContext);
@@ -316,7 +339,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
     });
 
     it('should emit specLoaded when context includes a schema', () => {
@@ -329,7 +352,7 @@ describe('PluginManager', () => {
       expect(callback).toHaveBeenCalledWith(newSchema);
     });
 
-    it('should not call onSpecLoaded immediately when no schema is loaded', () => {
+    it('should not call onSpecLoaded immediately when no schema is loaded', async () => {
       const freshManager = new PluginManager({});
       const specLoadedCallback = jest.fn();
       const plugin: AsyncApiPlugin = {
@@ -340,12 +363,12 @@ describe('PluginManager', () => {
         },
       };
 
-      freshManager.register(plugin);
+      await freshManager.register(plugin);
 
       expect(specLoadedCallback).not.toHaveBeenCalled();
     });
 
-    it('should call onSpecLoaded immediately when a schema is already loaded', () => {
+    it('should call onSpecLoaded immediately when a schema is already loaded', async () => {
       const specLoadedCallback = jest.fn();
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -355,12 +378,12 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(specLoadedCallback).toHaveBeenCalledWith(mockContext.schema);
     });
 
-    it('should call onSpecLoaded when the spec loads after registration', () => {
+    it('should call onSpecLoaded when the spec loads after registration', async () => {
       const specLoadedCallback = jest.fn();
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
@@ -371,7 +394,7 @@ describe('PluginManager', () => {
       };
       const newSchema = { title: UPDATED_API_TITLE };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
       specLoadedCallback.mockClear();
       pluginManager.updateContext({ schema: newSchema });
 
@@ -380,14 +403,14 @@ describe('PluginManager', () => {
   });
 
   describe('Plugin Retrieval', () => {
-    it('should get plugin by name', () => {
+    it('should get plugin by name', async () => {
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,
         version: '1.0.0',
         install: jest.fn(),
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBe(plugin);
     });
@@ -398,7 +421,7 @@ describe('PluginManager', () => {
   });
 
   describe('Plugin API Integration', () => {
-    it('should allow plugins to emit events', () => {
+    it('should allow plugins to emit events', async () => {
       const callback = jest.fn();
       pluginManager.on('custom-event', callback);
 
@@ -410,12 +433,12 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       expect(callback).toHaveBeenCalledWith({ data: 'test' });
     });
 
-    it('should allow plugins to listen to events', () => {
+    it('should allow plugins to listen to events', async () => {
       const callback = jest.fn();
 
       const plugin: AsyncApiPlugin = {
@@ -426,13 +449,13 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
       pluginManager.emit('external-event', { message: 'hello' });
 
       expect(callback).toHaveBeenCalledWith({ message: 'hello' });
     });
 
-    it('should allow plugins to unsubscribe from events', () => {
+    it('should allow plugins to unsubscribe from events', async () => {
       const callback = jest.fn();
 
       const plugin: AsyncApiPlugin = {
@@ -444,7 +467,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
       pluginManager.emit(TEST_EVENT, { data: 'test' });
 
       expect(callback).not.toHaveBeenCalled();
@@ -469,7 +492,7 @@ describe('PluginManager', () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it('should continue working when install() throws', () => {
+    it('should continue working when install() throws', async () => {
       const badPlugin: AsyncApiPlugin = {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
@@ -484,11 +507,11 @@ describe('PluginManager', () => {
         install: jest.fn(),
       };
 
-      expect(pluginManager.register(badPlugin)).toBe(false);
-      expect(pluginManager.register(goodPlugin)).toBe(true);
+      expect(await pluginManager.register(badPlugin)).toBe(false);
+      expect(await pluginManager.register(goodPlugin)).toBe(true);
     });
 
-    it('should not store a plugin when install() throws', () => {
+    it('should not store a plugin when install() throws', async () => {
       const badPlugin: AsyncApiPlugin = {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
@@ -497,12 +520,12 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(badPlugin);
+      await pluginManager.register(badPlugin);
 
       expect(pluginManager.getPlugin(BAD_PLUGIN_NAME)).toBeUndefined();
     });
 
-    it('should register a healthy plugin after a failed one', () => {
+    it('should register a healthy plugin after a failed one', async () => {
       const badPlugin: AsyncApiPlugin = {
         name: BAD_PLUGIN_NAME,
         version: '1.0.0',
@@ -517,15 +540,15 @@ describe('PluginManager', () => {
         install: jest.fn(),
       };
 
-      pluginManager.register(badPlugin);
-      pluginManager.register(goodPlugin);
+      await pluginManager.register(badPlugin);
+      await pluginManager.register(goodPlugin);
 
       expect(pluginManager.listPlugins()).toEqual([
         { name: GOOD_PLUGIN_NAME, version: '1.0.0' },
       ]);
     });
 
-    it('should emit plugin:error with expected fields on install failure', () => {
+    it('should emit plugin:error with expected fields on install failure', async () => {
       const errorCallback = jest.fn();
       const installError = new Error(INSTALL_FAILED_MESSAGE);
 
@@ -539,7 +562,7 @@ describe('PluginManager', () => {
         },
       };
 
-      pluginManager.register(badPlugin);
+      await pluginManager.register(badPlugin);
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         `Failed to register plugin ${BAD_PLUGIN_NAME}:`,
@@ -554,6 +577,113 @@ describe('PluginManager', () => {
       );
       const [[payload]] = errorCallback.mock.calls as [PluginErrorPayload][];
       expect(payload.timestamp).toBeInstanceOf(Date);
+    });
+
+    it('should register components when async install resolves', async () => {
+      const TestComponent = () => null;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: async (api) => {
+          await Promise.resolve();
+          api.registerComponent(PluginSlot.OPERATION, TestComponent);
+        },
+      };
+
+      await pluginManager.register(plugin);
+
+      expect(
+        pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
+      ).toHaveLength(1);
+      expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBe(plugin);
+    });
+
+    it('should remove components registered before install() throws', async () => {
+      const TestComponent = () => null;
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.registerComponent(PluginSlot.OPERATION, TestComponent);
+          throw new Error(INSTALL_FAILED_MESSAGE);
+        },
+      };
+
+      expect(await pluginManager.register(badPlugin)).toBe(false);
+      expect(pluginManager.getPlugin(BAD_PLUGIN_NAME)).toBeUndefined();
+      expect(
+        pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
+      ).toHaveLength(0);
+    });
+
+    it('should handle rejected async install()', async () => {
+      const errorCallback = jest.fn();
+      pluginManager.on(PLUGIN_EVENT_ERROR, errorCallback);
+
+      const badPlugin: AsyncApiPlugin = {
+        name: BAD_PLUGIN_NAME,
+        version: '1.0.0',
+        install: async () => {
+          throw new Error(INSTALL_FAILED_MESSAGE);
+        },
+      };
+
+      expect(await pluginManager.register(badPlugin)).toBe(false);
+      expect(pluginManager.getPlugin(BAD_PLUGIN_NAME)).toBeUndefined();
+      expect(errorCallback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          pluginName: BAD_PLUGIN_NAME,
+          message: INSTALL_FAILED_MESSAGE,
+        }),
+      );
+    });
+
+    it('should not call install twice while first install is pending', async () => {
+      let resolveInstall!: () => void;
+      const installPromise = new Promise<void>((resolve) => {
+        resolveInstall = resolve;
+      });
+      const installMock = jest.fn(() => installPromise);
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: installMock,
+      };
+
+      const firstRegister = pluginManager.register(plugin);
+      const secondResult = await pluginManager.register(plugin);
+
+      expect(installMock).toHaveBeenCalledTimes(1);
+      expect(secondResult).toBe(false);
+
+      resolveInstall();
+      expect(await firstRegister).toBe(true);
+    });
+
+    it('should not store a plugin when unregistered during async install', async () => {
+      const TestComponent = () => null;
+      let resolveInstall!: () => void;
+      const installPromise = new Promise<void>((resolve) => {
+        resolveInstall = resolve;
+      });
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: async (api) => {
+          api.registerComponent(PluginSlot.OPERATION, TestComponent);
+          await installPromise;
+        },
+      };
+
+      const registerPromise = pluginManager.register(plugin);
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      resolveInstall();
+
+      expect(await registerPromise).toBe(false);
+      expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
+      expect(
+        pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
+      ).toHaveLength(0);
     });
 
     it('should continue dispatching when one listener throws', () => {
