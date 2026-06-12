@@ -107,7 +107,13 @@ export interface AsyncApiPlugin {
   version: string;
   description?: string;
 
-  install(api: PluginAPI): void;
+  install(api: PluginAPI): void | Promise<void>;
+}
+
+export interface PluginErrorPayload {
+  pluginName: string;
+  message: string;
+  timestamp: Date;
 }
 
 export type PluginInstance =
