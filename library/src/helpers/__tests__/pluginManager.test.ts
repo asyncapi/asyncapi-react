@@ -576,7 +576,9 @@ describe('PluginManager', () => {
         }),
       );
       const [[payload]] = errorCallback.mock.calls as [PluginErrorPayload][];
-      expect(payload.timestamp).toEqual(expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/));
+      expect(payload.timestamp).toEqual(
+        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/),
+      );
     });
 
     it('should register components when async install resolves', async () => {
