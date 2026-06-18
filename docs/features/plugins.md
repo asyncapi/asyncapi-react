@@ -148,7 +148,7 @@ The library exports named constants for plugin lifecycle events:
 {
   pluginName: string;
   message: string;
-  timestamp: Date;
+  timestamp: string;
 }
 ```
 
@@ -158,7 +158,7 @@ The library exports named constants for plugin lifecycle events:
 interface PluginErrorPayload {
   pluginName: string;
   message: string;
-  timestamp: Date;
+  timestamp: string;
 }
 ```
 
