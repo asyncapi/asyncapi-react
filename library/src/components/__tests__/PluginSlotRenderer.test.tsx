@@ -44,7 +44,7 @@ describe('PluginSlotRenderer', () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it('should render the slot container with correct class and data attribute', () => {
+    it('should render the slot container with correct class and data attribute', async () => {
       // Register a simple component
       const TestComponent: React.FC<ComponentSlotProps> = () => (
         <div>Test Plugin</div>
@@ -58,7 +58,7 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       const { container } = render(
         <SlotRenderer
@@ -75,7 +75,7 @@ describe('PluginSlotRenderer', () => {
       expect(slotContainer).toHaveAttribute('data-slot', 'operation');
     });
 
-    it('should render a single plugin component', () => {
+    it('should render a single plugin component', async () => {
       const TestComponent: React.FC<ComponentSlotProps> = () => (
         <div>Test Plugin Content</div>
       );
@@ -88,7 +88,7 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       render(
         <SlotRenderer
@@ -101,7 +101,7 @@ describe('PluginSlotRenderer', () => {
       expect(screen.getByText('Test Plugin Content')).toBeInTheDocument();
     });
 
-    it('should render multiple plugin components in the same slot', () => {
+    it('should render multiple plugin components in the same slot', async () => {
       const TestComponent1: React.FC<ComponentSlotProps> = () => (
         <div>Plugin 1</div>
       );
@@ -125,8 +125,8 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(plugin1);
-      pluginManager.register(plugin2);
+      await pluginManager.register(plugin1);
+      await pluginManager.register(plugin2);
 
       render(
         <SlotRenderer
@@ -142,7 +142,7 @@ describe('PluginSlotRenderer', () => {
   });
 
   describe('Context Passing', () => {
-    it('should pass context to plugin components', () => {
+    it('should pass context to plugin components', async () => {
       const contextData = { schema: { title: 'Test API' } };
       const TestComponent: React.FC<ComponentSlotProps> = ({ context }) => (
         <div>{JSON.stringify(context)}</div>
@@ -156,7 +156,7 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       render(
         <SlotRenderer
@@ -171,7 +171,7 @@ describe('PluginSlotRenderer', () => {
   });
 
   describe('Component Priority', () => {
-    it('should render components in priority order (highest first)', () => {
+    it('should render components in priority order (highest first)', async () => {
       const LowPriorityComponent: React.FC<ComponentSlotProps> = () => (
         <div data-testid="low">Low Priority</div>
       );
@@ -199,8 +199,8 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(lowPlugin);
-      pluginManager.register(highPlugin);
+      await pluginManager.register(lowPlugin);
+      await pluginManager.register(highPlugin);
 
       const { container } = render(
         <SlotRenderer
@@ -217,7 +217,7 @@ describe('PluginSlotRenderer', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should re-render when pluginManager changes', () => {
+    it('should re-render when pluginManager changes', async () => {
       const TestComponent: React.FC<ComponentSlotProps> = () => (
         <div>Initial Component</div>
       );
@@ -230,7 +230,7 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      pluginManager.register(plugin);
+      await pluginManager.register(plugin);
 
       const { rerender } = render(
         <SlotRenderer
@@ -256,7 +256,7 @@ describe('PluginSlotRenderer', () => {
         },
       };
 
-      newPluginManager.register(newPlugin);
+      await newPluginManager.register(newPlugin);
 
       rerender(
         <SlotRenderer
