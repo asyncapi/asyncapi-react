@@ -8,7 +8,6 @@ import {
   URL_SUPPORT_TEXT,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
-import { PluginManager } from '../../helpers/pluginManager';
 import { SlotRenderer } from '../../components/PluginSlotRenderer';
 import { usePlugin } from '../../contexts/usePlugin';
 import { PluginSlot } from '../../types';
@@ -140,7 +139,8 @@ export const Info: React.FunctionComponent = () => {
             <Extensions name="Info Extensions" item={info} />
           </div>
         )}
-        {PluginManager && (
+        {(pluginManager?.getComponentsForSlot(PluginSlot.INFO)?.length ?? 0) >
+          0 && (
           <SlotRenderer
             slot={PluginSlot.INFO}
             context={{
