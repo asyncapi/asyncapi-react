@@ -8,8 +8,16 @@ export class MessageHelpers {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static generateExample(schema: any, options: any = {}) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const resolvedSchema =
+        schema &&
+        typeof schema === 'object' &&
+        'schemaFormat' in schema &&
+        'schema' in schema
+          ? (schema as { schema: unknown }).schema
+          : schema;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-      return this.sanitizeExample(sample(schema, options)) || '';
+      return this.sanitizeExample(sample(resolvedSchema, options)) || '';
     } catch (e) {
       return '';
     }
