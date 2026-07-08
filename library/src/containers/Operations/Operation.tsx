@@ -15,7 +15,6 @@ import { useConfig, useSpec } from '../../contexts';
 import { CommonHelpers, SchemaHelpers } from '../../helpers';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType, PluginSlot } from '../../types';
-import { PluginManager } from '../../helpers/pluginManager';
 import { ServersList } from './ServersList';
 import { SlotRenderer } from '../../components/PluginSlotRenderer';
 import { usePlugin } from '../../contexts/usePlugin';
@@ -225,7 +224,8 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
           </div>
         </div>
       )}
-      {PluginManager && (
+      {(pluginManager?.getComponentsForSlot(PluginSlot.OPERATION)?.length ??
+        0) > 0 && (
         <SlotRenderer
           slot={PluginSlot.OPERATION}
           context={{
