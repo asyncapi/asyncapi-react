@@ -99,7 +99,7 @@
     "autoprefixer": "^10.2.5",
     "cross-env": "^7.0.3",
     "cssnano": "^8.0.2",
-    "cypress": "^13.17.0",
+    "cypress": "^15.19.0",
     "jest": "^26.0.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "postcss": "^8.5.10",
