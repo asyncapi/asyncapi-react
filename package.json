@@ -57,7 +57,7 @@
     "eslint-plugin-sonarjs": "^0.25.1",
     "lerna": "^9.0.6",
     "markdown-toc": "^1.2.0",
-    "markdownlint-cli": "^0.17.0",
+    "markdownlint-cli": "^0.49.0",
     "prettier": "^3.2.5",
     "tslib": "^1.10.0",
     "typescript": "^5.3.3"
