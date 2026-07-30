@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Check if Node.js project and has package.json
@@ -34,7 +34,7 @@ jobs:
         run: corepack enable
       - if: steps.packagejson.outputs.exists == 'true'
         name: Bumping latest version of this package in other repositories
-        uses: derberg/npm-dependency-manager-for-your-github-org@f95b99236e8382a210042d8cfb84f42584e29c24 # using v6.2.0.-.- https://github.com/derberg/npm-dependency-manager-for-your-github-org/releases/tag/v6.2.0
+        uses: derberg/npm-dependency-manager-for-your-github-org@f95b99236e8382a210042d8cfb84f42584e29c24 # v6.2.0
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           committer_username: asyncapi-bot
