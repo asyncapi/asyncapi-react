@@ -20,7 +20,7 @@ jobs:
       pull-requests: write            # required to create PR with bumped version in package.json
     steps:
       - name: Checkout repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # target branch of release. More info https://docs.github.com/en/rest/reference/repos#releases
           # in case release is created from release branch then we need to checkout from given branch
@@ -39,7 +39,7 @@ jobs:
         id: lockversion
       - if: steps.packagejson.outputs.exists == 'true'
         name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "${{ steps.lockversion.outputs.version }}"
           cache: 'npm'
@@ -60,7 +60,7 @@ jobs:
         run: npm run bump:version
       - if: steps.packagejson.outputs.exists == 'true'
         name: Create Pull Request with updated asset files including package.json
-        uses: peter-evans/create-pull-request@38e0b6e68b4c852a5500a94740f0e535e0d7ba54 # use 4.2.4 https://github.com/peter-evans/create-pull-request/releases/tag/v4.2.4
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         env:
           RELEASE_TAG: ${{github.event.release.tag_name}}
           RELEASE_URL: ${{github.event.release.html_url}}
@@ -74,7 +74,7 @@ jobs:
           branch: version-bump/${{ env.RELEASE_TAG }}
       - if: failure() # Only, on failure, send a message on the 94_bot-failing-ci slack channel
         name: Report workflow run status to Slack
-        uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486 #using https://github.com/8398a7/action-slack/releases/tag/v3.16.2
+        uses: 8398a7/action-slack@77eaa4f1c608a7d68b38af4e3f739dcd8cba273e # v3.19.0
         with:
           status: ${{ job.status }}
           fields: repo,action,workflow
