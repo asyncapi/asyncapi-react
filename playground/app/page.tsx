@@ -13,6 +13,8 @@ import {
   CodeEditorsWrapper,
   AsyncApiWrapper,
   SplitWrapper,
+  httpPlugin,
+  webhookPlugin,
 } from '@/components';
 import { defaultConfig, parse, debounce } from '@/utils';
 import * as specs from '@/specs';
@@ -93,7 +95,7 @@ class Playground extends Component<unknown, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi schema={schema} config={parsedConfig} />
+            <AsyncApi schema={schema} config={parsedConfig} plugins={[httpPlugin, webhookPlugin]} />
           </AsyncApiWrapper>
         </SplitWrapper>
       </PlaygroundWrapper>
