@@ -53,6 +53,7 @@
     "library/e2e/plugins/index.js",
     "library/loaders/remove-hashbag-loader.js",
     "library/jest.config.js",
+    "library/jest.setup.js",
     "library/postcss.config.js",
     "library/webpack.config.js",
     "library/tailwind.config.js",
