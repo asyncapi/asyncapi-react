@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import { SpecificationHelpers } from '../../helpers';
-import { AsyncApiPlugin, ErrorObject, PropsSchema } from '../../types';
+import {
+  AsyncApiPlugin,
+  ErrorObject,
+  EventListener,
+  PropsSchema,
+} from '../../types';
 import { ConfigInterface, defaultConfig } from '../../config';
 
 import AsyncApiLayout from './Layout';
@@ -28,13 +33,14 @@ interface AsyncAPIState {
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
+  /** Stable handler refs so `off()` removes the same listeners registered by `on()`. */
+  private readonly pluginEventHandlers = new Map<string, EventListener>();
+  private hasMounted = false;
 
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
-    pm: new PluginManager({
-      schema: {},
-    }),
+    pm: new PluginManager({}),
   };
 
   constructor(props: AsyncApiProps) {
@@ -42,20 +48,24 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
     if (parsedSpec) {
-      this.state = { asyncapi: parsedSpec };
+      this.state = { ...this.state, asyncapi: parsedSpec };
     }
   }
 
   componentDidMount() {
+    this.hasMounted = true;
+
     if (!this.state.asyncapi) {
       this.updateState(this.props.schema);
+    } else {
+      this.state.pm?.updateContext({ schema: this.state.asyncapi });
     }
+
     if (this.props.onPluginManagerReady) {
       this.props.onPluginManagerReady(this.state.pm!);
     }
     this.setupEventListeners();
-
-    this.registerPlugins();
+    void this.registerPlugins();
   }
 
   componentDidUpdate(prevProps: AsyncApiProps) {
@@ -73,8 +83,13 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     if (plugins !== prevProps.plugins) {
-      this.updatePlugins(prevProps.plugins, plugins);
+      void this.updatePlugins(prevProps.plugins, plugins);
     }
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false;
+    this.cleanupEventListeners();
   }
 
   render() {
@@ -125,11 +140,15 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     );
   }
 
-  private handler(eventName: string) {
-    return (data: unknown) => {
-      this.props.onPluginEvent!(eventName, data);
-    };
+  private getOrCreateHandler(eventName: string): EventListener {
+    if (!this.pluginEventHandlers.has(eventName)) {
+      this.pluginEventHandlers.set(eventName, (data: unknown) => {
+        this.props.onPluginEvent?.(eventName, data);
+      });
+    }
+    return this.pluginEventHandlers.get(eventName)!;
   }
+
   private setupEventListeners() {
     const { onPluginEvent } = this.props;
     const { pm } = this.state;
@@ -137,36 +156,36 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!onPluginEvent) return;
 
     PLUGINEVENTS.forEach((event) => {
-      pm?.on(event, this.handler(event));
+      pm?.on(event, this.getOrCreateHandler(event));
     });
   }
 
   private cleanupEventListeners() {
     const { pm } = this.state;
     PLUGINEVENTS.forEach((event) => {
-      pm?.off(event, this.handler(event));
+      pm?.off(event, this.getOrCreateHandler(event));
     });
   }
 
-  private registerPlugins() {
+  private async registerPlugins() {
     const { plugins } = this.props;
     const { pm } = this.state;
 
-    plugins?.forEach((plugin) => {
-      try {
-        pm?.register(plugin);
+    for (const plugin of plugins ?? []) {
+      const registered = await pm?.register(plugin);
+      if (registered) {
         this.registeredPlugins.add(plugin.name);
-        this.propsPlugins.add(plugin.name); // Track as props-managed
-      } catch (error) {
-        console.error(`Failed to register plugin ${plugin.name}:`, error);
-        pm?.emit(PLUGINEVENTS[1], {
-          pluginName: plugin.name,
-        });
+        this.propsPlugins.add(plugin.name);
       }
-    });
+    }
+
+    // register() mutates PluginManager in place; re-render so slot components pick up new entries.
+    if (this.hasMounted) {
+      this.setState({});
+    }
   }
 
-  private updatePlugins(
+  private async updatePlugins(
     prevPlugins: AsyncApiPlugin[] | undefined,
     newPlugins: AsyncApiPlugin[] | undefined,
   ) {
@@ -187,20 +206,25 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       }
     });
 
-    newPluginMap.forEach((plugin, name) => {
-      if (!prevPluginMap.has(name)) {
-        try {
-          pm?.register(plugin);
-          this.registeredPlugins.add(name);
-          this.propsPlugins.add(name);
-        } catch (error) {
-          console.error(`Failed to register plugin ${name}:`, error);
-          pm?.emit(PLUGINEVENTS[1], {
-            pluginName: name,
-          });
-        }
+    const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
+      ([name]) => !prevPluginMap.has(name),
+    );
+
+    for (const [name, plugin] of pluginsToAdd) {
+      const registered = await pm?.register(plugin);
+      const stillRequested = (this.props.plugins ?? []).some(
+        (p) => p.name === name,
+      );
+      if (registered && stillRequested) {
+        this.registeredPlugins.add(name);
+        this.propsPlugins.add(name);
       }
-    });
+    }
+
+    // Same as registerPlugins: pm was mutated in place, not via setState.
+    if (this.hasMounted) {
+      this.setState({});
+    }
   }
 
   private updateState(schema: PropsSchema) {

@@ -82,7 +82,7 @@ export class AsyncApiWebComponent extends React.Component<AsyncApiWebComponentPr
 
     return (
       <>
-        <style>@import '{finalCssImportPath}';</style>
+        <style>{`@import '${finalCssImportPath}';`}</style>
         <AsyncApiComponent {...this.props} schema={schema} />
       </>
     );

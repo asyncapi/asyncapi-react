@@ -58,6 +58,7 @@
     "library/tailwind.config.js",
     "library/cypress.config.js",
     "playground/out",
+    "playground/next-env.d.ts",
     "playground/postcss.config.js",
     "web-component/lib",
     "web-component/webpack.config.js"

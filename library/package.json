@@ -1,6 +1,6 @@
 {
   "name": "@asyncapi/react-component",
-  "version": "3.1.0",
+  "version": "3.1.3",
   "private": false,
   "description": "A React component for AsyncAPI specification.",
   "repository": {
@@ -59,7 +59,7 @@
     "test:unit": "jest --detectOpenHandles",
     "test:unit:watch": "jest --detectOpenHandles --watch",
     "test:e2e:dev": "cypress run",
-    "test:e2e": "npm run build:standalone && cypress run",
+    "test:e2e": "npm run build:standalone && cypress install && cypress run",
     "prepare": "npm run build:dev",
     "prepublishOnly": "npm run prepack",
     "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
@@ -98,8 +98,8 @@
     "@types/testing-library__jest-dom": "^5.14.9",
     "autoprefixer": "^10.2.5",
     "cross-env": "^7.0.3",
-    "cssnano": "^4.1.11",
-    "cypress": "^13.17.0",
+    "cssnano": "^8.0.2",
+    "cypress": "^15.19.0",
     "jest": "^26.0.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "postcss": "^8.5.10",
