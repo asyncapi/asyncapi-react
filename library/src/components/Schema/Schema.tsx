@@ -232,6 +232,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                   <div className="flex gap-1">
                     {rulesExist && (
                       <button
+                        type="button"
                         className={`text-sm font-semibold text-gray-900 ${tabOpen == 'RULES' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
                         onClick={() => setTabOpen('RULES')}
                         role="tab"
@@ -243,6 +244,7 @@ export const Schema: React.FunctionComponent<Props> = ({
                     )}
                     {conditionsExist && (
                       <button
+                        type="button"
                         className={`text-sm font-semibold text-gray-900 ${tabOpen == 'CONDITIONS' ? 'bg-gray-400' : 'bg-gray-200'} p-2 rounded-t cursor-pointer`}
                         onClick={() => setTabOpen('CONDITIONS')}
                         role="tab"
