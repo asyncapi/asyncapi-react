@@ -22,12 +22,6 @@
     @apply lg:w-56;
   }
 
-  /*.container\:xl .sidebar--content {
-    @apply absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-  }*/
-
   .container\:base .panel-item {
     @apply 2xl:flex;
   }

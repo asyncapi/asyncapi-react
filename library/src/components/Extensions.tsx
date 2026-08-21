@@ -42,14 +42,12 @@ export const Extensions: React.FunctionComponent<Props> = ({
     <div>
       <div className="flex py-2">
         <div className="min-w-1/4">
-          <>
-            <CollapseButton
-              onClick={() => setExpanded((prev) => !prev)}
-              expanded={expanded}
-            >
-              <span className={`break-anywhere text-sm ${name}`}>{name}</span>
-            </CollapseButton>
-          </>
+          <CollapseButton
+            onClick={() => setExpanded((prev) => !prev)}
+            expanded={expanded}
+          >
+            <span className={`break-anywhere text-sm ${name}`}>{name}</span>
+          </CollapseButton>
         </div>
       </div>
       <div
