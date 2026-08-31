@@ -77,7 +77,7 @@
     "marked": "^4.0.14",
     "openapi-sampler": "^1.2.1",
     "react-error-boundary": "^4.1.2",
-    "use-resize-observer": "^9.1.0"
+    "use-resize-observer": "^10.0.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
