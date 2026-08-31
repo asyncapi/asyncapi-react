@@ -26,6 +26,9 @@
   "settings": {
     "next": {
       "rootDir": "playground/"
+    },
+    "jest": {
+      "version": 30
     }
   },
   "parser": "@typescript-eslint/parser",
