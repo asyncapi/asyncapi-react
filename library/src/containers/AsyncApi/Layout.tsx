@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
-import useResizeObserver from 'use-resize-observer';
+import { useResizeObserver } from 'use-resize-observer';
 
 import { Sidebar } from '../Sidebar/Sidebar';
 import { Info } from '../Info/Info';
