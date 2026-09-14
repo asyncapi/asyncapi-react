@@ -1,0 +1,239 @@
+language: "en-US"
+
+tone_instructions: >
+  Be professional, concise, constructive, and technically precise.
+  Prioritize correctness, maintainability, security and backward compatibility.
+
+reviews:
+  profile: "chill"
+
+  high_level_summary: true
+  review_status: true
+  review_details: false
+
+  poem: false
+  in_progress_fortune: false
+
+  request_changes_workflow: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+
+  path_filters:
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!build/**"
+    - "!coverage/**"
+    - "!lib/**"
+    - "!browser/**"
+    - "!.next/**"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+    - "!**/*.LICENSE.txt"
+    - "!.git/**"
+    - "!.gitignore"
+    - "!CHANGELOG.md"
+    - "!**/*.lock"
+
+  path_instructions:
+    - path: "**/package.json"
+      instructions: |
+        Check for dependency conflicts and unnecessary duplication.
+        Verify version consistency across workspaces.
+        Ensure workspace references are correct.
+        Validate scripts and build commands.
+        Flag breaking dependency upgrades.
+
+    - path: "lerna.json"
+      instructions: |
+        Verify workspace configuration and package relationships.
+        Check that build and publishing behavior remains correct.
+
+    - path: "**/tsconfig*.json"
+      instructions: |
+        Verify TypeScript configuration remains consistent across packages.
+        Check project references, output paths, module settings,
+        and strictness settings.
+        Flag configuration changes that could break another workspace.
+
+    - path: "**/*config.js"
+      instructions: |
+        Verify configuration changes are necessary.
+        Check consistency across packages.
+        Ensure there are no unintended breaking changes to build output.
+        Validate output paths and module formats.
+
+    - path: "jest.setup.js"
+      instructions: |
+        Review test environment setup carefully.
+        Check compatibility with Jest versions and runtime environments.
+        Avoid unnecessary global modifications.
+
+    - path: "library/src/**"
+      instructions: |
+        Review TypeScript for type safety and correctness.
+        Respect the repository's strict TypeScript configuration.
+        Flag unjustified any types and unsafe type assertions.
+        Validate plugin interfaces and public exports.
+        Check backward compatibility of public APIs.
+        Prefer simple and maintainable implementations.
+
+    - path: "web-component/src/**"
+      instructions: |
+        Review TypeScript for type safety and correctness.
+        Check backward compatibility of exported APIs.
+        Verify React/web-component integration remains correct.
+        Flag unsafe type assertions or unnecessarily broad types.
+
+    - path: "library/src/components/**"
+      instructions: |
+        Verify component props and interfaces.
+        Check React hook usage and dependency arrays.
+        Look for unnecessary re-renders.
+        Recommend memoization only where it provides a meaningful benefit.
+        Review accessibility and ARIA usage.
+        Check error handling.
+
+    - path: "library/src/containers/**"
+      instructions: |
+        Review state management and component composition.
+        Check hook dependencies and side effects.
+        Look for unnecessary re-renders and unsafe state updates.
+
+    - path: "playground/components/**"
+      instructions: |
+        Review React best practices.
+        Check accessibility and responsive behavior.
+        Ensure examples demonstrate intended component usage.
+
+    - path: "**/*.css"
+      instructions: |
+        Check CSS consistency and maintainability.
+        Verify styles that must be scoped remain under .aui-root.
+        Review responsive behavior.
+        Check accessibility concerns such as contrast where relevant.
+        Avoid unnecessary specificity.
+
+    - path: "library/src/types.ts"
+      instructions: |
+        Treat changes here as potentially public API changes.
+        Verify plugin interface stability.
+        Check backward compatibility.
+        Flag breaking type or interface changes.
+
+    - path: "library/src/contexts/**"
+      instructions: |
+        Verify plugin event handling and context behavior.
+        Check lifecycle correctness and backward compatibility.
+
+    - path: "library/src/helpers/**"
+      instructions: |
+        Check plugin-related helper behavior.
+        Verify edge cases and avoid unnecessary API changes.
+
+    - path: "**/__tests__/**"
+      instructions: |
+        Verify meaningful coverage for changed behavior.
+        Check that assertions test externally visible behavior.
+        Review test clarity and maintainability.
+        Look for missing edge cases.
+        Avoid tests tied unnecessarily to implementation details.
+
+    - path: "**/*.test.tsx"
+      instructions: |
+        Verify meaningful assertions and appropriate React test behavior.
+        Check important edge cases and regressions.
+
+    - path: "e2e/integration/**"
+      instructions: |
+        Review end-to-end test reliability.
+        Validate selectors are stable.
+        Avoid timing-dependent or flaky assertions.
+
+    - path: "playground/**"
+      instructions: |
+        Ensure examples follow recommended component usage.
+        Check examples for clarity and correctness.
+        Validate responsive behavior where applicable.
+        Ensure specification examples remain valid.
+
+    - path: "**/*.md"
+      instructions: |
+        Verify technical accuracy.
+        Check clarity and completeness.
+        Check links where possible.
+        Ensure code examples match the current API.
+
+    - path: "web-component/src/AsyncApiWebComponent.tsx"
+      instructions: |
+        Verify web component lifecycle behavior.
+        Check Shadow DOM implementation.
+        Validate attribute-to-prop mapping.
+        Verify slot usage and event handling.
+        Ensure props are passed correctly to the React component.
+
+    - path: "web-component/webpack.config.js"
+      instructions: |
+        Verify web component build output.
+        Check module and bundle configuration.
+        Ensure changes do not break consuming applications.
+
+    - path: "**/*"
+      instructions: |
+        This is the AsyncAPI React monorepo.
+
+        Monorepo:
+        - Verify changes work across affected packages.
+        - Check package dependency relationships.
+        - Avoid breaking public APIs.
+        - Avoid hardcoded environment-specific paths or values.
+
+        Library (@asyncapi/react-component):
+        - Preserve documented public exports.
+        - Respect TypeScript strictness.
+        - Ensure relevant CSS remains scoped to .aui-root.
+        - Preserve plugin interface compatibility.
+        - Consider impact on ESM, CJS, UMD and browser builds.
+
+        Web component (@asyncapi/web-component):
+        - Check React-to-web-component prop handling.
+        - Validate attribute mapping and events.
+        - Review Shadow DOM behavior where affected.
+
+        Performance:
+        - Flag meaningful bundle-size regressions.
+        - Look for unnecessary React re-renders.
+        - Review expensive synchronous work.
+        - Review async error handling.
+
+        Security:
+        - Check for XSS risks in HTML or Markdown rendering.
+        - Verify sanitization remains in place where untrusted HTML is used.
+        - Carefully review dependency upgrades for security impact.
+
+  tools:
+    eslint:
+      enabled: true
+
+    markdownlint:
+      enabled: true
+
+    stylelint:
+      enabled: true
+
+    reactDoctor:
+      enabled: true
+
+    gitleaks:
+      enabled: true
+
+    trufflehog:
+      enabled: true
+
+    semgrep:
+      enabled: true
+
+chat:
+  auto_reply: true
