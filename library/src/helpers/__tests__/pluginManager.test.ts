@@ -221,6 +221,35 @@ describe('PluginManager', () => {
       await expect(pluginManager.register(plugin)).resolves.toBe(false);
     });
 
+    it('should ignore component and listener registrations from async uninstall', async () => {
+      let continueUninstall!: () => void;
+      const handler = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: async (api) => {
+          await new Promise<void>((resolve) => {
+            continueUninstall = resolve;
+          });
+          api.registerComponent(PluginSlot.INFO, () => null);
+          api.on(TEST_EVENT, handler);
+        },
+      };
+
+      await pluginManager.register(plugin);
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      continueUninstall();
+      await flush();
+
+      expect(pluginManager.getComponentsForSlot(PluginSlot.INFO)).toHaveLength(
+        0,
+      );
+      expect(pluginManager.listeners(TEST_EVENT)).toHaveLength(0);
+      pluginManager.emit(TEST_EVENT, {});
+      expect(handler).not.toHaveBeenCalled();
+    });
+
     it('should unregister a plugin', async () => {
       const installMock = jest.fn();
       const plugin: AsyncApiPlugin = {

@@ -166,7 +166,7 @@ The library exports named constants for plugin lifecycle events:
 | Constant | Event name | Description |
 |----------|------------|-------------|
 | `PLUGIN_EVENT_READY` | `plugin:ready` | Emitted after a plugin registers successfully |
-| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` throws or rejects |
+| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` or `uninstall()` throws or rejects |
 | `PLUGIN_EVENT_SPEC_LOADED` | `specLoaded` | Emitted when the spec loads or updates (plugin API only) |
 
 `PLUGIN_EVENT_READY` and `PLUGIN_EVENT_ERROR` are forwarded to the `onPluginEvent` prop on `<AsyncApi>`. `PLUGIN_EVENT_SPEC_LOADED` is used internally by `api.onSpecLoaded()` and is not forwarded to `onPluginEvent`.

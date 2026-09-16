@@ -16,6 +16,7 @@ export type {
   PluginAPI,
   PluginContext,
   PluginErrorPayload,
+  PluginInstance,
   ComponentSlotProps,
   SlotContext,
   SlotContextMap,

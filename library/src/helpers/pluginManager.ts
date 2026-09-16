@@ -19,13 +19,15 @@ interface InstalledPlugin {
   api: PluginAPI;
   /** Listeners added through the plugin's API, removed for it on unregister. */
   listeners: { eventName: string; callback: (data: unknown) => void }[];
+  /** Whether this installation may still mutate manager-owned state through its API. */
+  state: { active: boolean };
 }
 
 class PluginManager implements MessageBus {
   /** Installed plugins keyed by `plugin.name`. */
   private readonly plugins = new Map<string, InstalledPlugin>();
   /** Plugin names with an in-flight `install()` call. */
-  private readonly pendingInstalls = new Set<string>();
+  private readonly pendingInstalls = new Map<string, InstalledPlugin>();
   /** Plugin names cancelled via `unregister()` while install was pending. */
   private readonly cancelledInstalls = new Set<string>();
   /** Prevents pending installs or retained manager references from reviving a torn-down manager. */
@@ -72,15 +74,17 @@ class PluginManager implements MessageBus {
       return false;
     }
 
-    this.pendingInstalls.add(plugin.name);
     const listeners: InstalledPlugin['listeners'] = [];
-    const api = this.createPluginAPI(plugin, listeners);
-    const entry: InstalledPlugin = { plugin, api, listeners };
+    const state = { active: true };
+    const api = this.createPluginAPI(plugin, listeners, () => state.active);
+    const entry: InstalledPlugin = { plugin, api, listeners, state };
+    this.pendingInstalls.set(plugin.name, entry);
     try {
       await plugin.install(api);
     } catch (error) {
       // Always log so failures are visible even without an `onPluginEvent` handler.
       console.error(`Failed to register plugin ${plugin.name}:`, error);
+      entry.state.active = false;
       this.removePluginComponents(plugin.name);
       this.removePluginListeners(entry);
       this.cancelledInstalls.delete(plugin.name);
@@ -124,9 +128,13 @@ class PluginManager implements MessageBus {
     }
 
     if (this.pendingInstalls.has(pluginName)) {
+      this.pendingInstalls.get(pluginName)!.state.active = false;
       this.cancelledInstalls.add(pluginName);
     }
 
+    if (entry) {
+      entry.state.active = false;
+    }
     this.plugins.delete(pluginName);
     // Stop rendering the plugin before it releases state its components may read.
     this.removePluginComponents(pluginName);
@@ -142,7 +150,10 @@ class PluginManager implements MessageBus {
    */
   destroy(): void {
     this.destroyed = true;
-    this.pendingInstalls.forEach((name) => this.cancelledInstalls.add(name));
+    this.pendingInstalls.forEach((entry, name) => {
+      entry.state.active = false;
+      this.cancelledInstalls.add(name);
+    });
     Array.from(this.plugins.keys()).forEach((name) => this.unregister(name));
     this.slotComponents.clear();
     this.eventListeners.clear();
@@ -154,6 +165,7 @@ class PluginManager implements MessageBus {
    */
   private async runUninstall(entry: InstalledPlugin): Promise<void> {
     const { plugin, api } = entry;
+    entry.state.active = false;
     if (!plugin.uninstall) {
       return;
     }
@@ -195,9 +207,12 @@ class PluginManager implements MessageBus {
   private createPluginAPI(
     plugin: AsyncApiPlugin,
     listeners: InstalledPlugin['listeners'],
+    isActive: () => boolean,
   ): PluginAPI {
     return {
       registerComponent: (slot, component, options = {}) => {
+        if (!isActive()) return;
+
         if (!this.slotComponents.has(slot)) {
           this.slotComponents.set(slot, []);
         }
@@ -215,6 +230,8 @@ class PluginManager implements MessageBus {
       },
 
       onSpecLoaded: (callback) => {
+        if (!isActive()) return;
+
         this.on(PLUGIN_EVENT_SPEC_LOADED, callback);
         listeners.push({ eventName: PLUGIN_EVENT_SPEC_LOADED, callback });
         if (this.context.schema !== undefined) {
@@ -225,6 +242,8 @@ class PluginManager implements MessageBus {
       getContext: () => this.context,
 
       on: (eventName, callback) => {
+        if (!isActive()) return;
+
         this.on(eventName, callback);
         listeners.push({ eventName, callback });
       },
