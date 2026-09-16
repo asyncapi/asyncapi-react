@@ -13,7 +13,7 @@ import krakenMultipleChannels from './docs/v3/kraken-websocket-request-reply-mul
 import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
-import { PluginAPI, PluginSlot } from '../types';
+import { ComponentSlotProps, PluginAPI, PluginSlot } from '../types';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -312,6 +312,148 @@ describe('AsyncAPI component', () => {
       const pluginComponent = result.getByTestId('plugin-component');
       expect(pluginComponent).toBeDefined();
       expect(pluginComponent.textContent).toContain('Test Plugin Rendered');
+    });
+  });
+
+  test('should uninstall plugins when the component unmounts', async () => {
+    const uninstall = jest.fn();
+    const TeardownComponent = () => <div data-testid="teardown-slot" />;
+    const teardownPlugin = {
+      name: 'teardown-plugin',
+      version: '1.0.0',
+      install: (api: PluginAPI) => {
+        api.registerComponent(PluginSlot.OPERATION, TeardownComponent);
+      },
+      uninstall,
+    };
+
+    const schema = {
+      asyncapi: '3.0.0',
+      info: { title: 'Teardown API', version: '1.0.0' },
+      channels: {
+        userSignedUp: {
+          address: 'user/signedup',
+          messages: { UserSignedUp: { payload: { type: 'string' } } },
+        },
+      },
+      operations: {
+        onUserSignedUp: {
+          action: 'receive',
+          channel: { $ref: '#/channels/userSignedUp' },
+        },
+      },
+    };
+
+    const result = render(
+      <AsyncApiComponent schema={schema} plugins={[teardownPlugin]} />,
+    );
+
+    await waitFor(() => {
+      expect(result.getByTestId('teardown-slot')).toBeDefined();
+    });
+
+    result.unmount();
+
+    await waitFor(() => {
+      expect(uninstall).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('should uninstall a pending plugin removed from the plugins prop', async () => {
+    let finishInstall!: () => void;
+    const install = jest.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          finishInstall = resolve;
+        }),
+    );
+    const uninstall = jest.fn();
+    const pendingPlugin = {
+      name: 'pending-plugin',
+      version: '1.0.0',
+      install,
+      uninstall,
+    };
+    const schema = {
+      asyncapi: '3.0.0',
+      info: { title: 'Pending Plugin API', version: '1.0.0' },
+    };
+
+    const result = render(
+      <AsyncApiComponent schema={schema} plugins={[pendingPlugin]} />,
+    );
+    await waitFor(() => expect(install).toHaveBeenCalledTimes(1));
+
+    result.rerender(<AsyncApiComponent schema={schema} plugins={[]} />);
+    finishInstall();
+
+    await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(1));
+  });
+
+  test('should pass typed slot context to plugin components', async () => {
+    const OperationComponent: React.FC<
+      ComponentSlotProps<PluginSlot.OPERATION>
+    > = ({ context }) => (
+      <div data-testid="operation-slot">
+        {[
+          context.slot,
+          context.document.info().title(),
+          context.channelName,
+          context.channel.address(),
+          context.operation.action(),
+          context.type,
+        ].join('|')}
+      </div>
+    );
+    const InfoComponent: React.FC<ComponentSlotProps<PluginSlot.INFO>> = ({
+      context,
+    }) => (
+      <div data-testid="info-slot">
+        {[context.slot, context.info.title(), context.document.version()].join(
+          '|',
+        )}
+      </div>
+    );
+
+    const testPlugin = {
+      name: 'context-plugin',
+      version: '1.0.0',
+      install: (api: PluginAPI) => {
+        api.registerComponent(PluginSlot.OPERATION, OperationComponent);
+        api.registerComponent(PluginSlot.INFO, InfoComponent);
+      },
+    };
+
+    const schema = {
+      asyncapi: '3.0.0',
+      info: { title: 'Context API', version: '1.0.0' },
+      channels: {
+        userSignedUp: {
+          address: 'user/signedup',
+          messages: {
+            UserSignedUp: { payload: { type: 'string' } },
+          },
+        },
+      },
+      operations: {
+        onUserSignedUp: {
+          action: 'receive',
+          channel: { $ref: '#/channels/userSignedUp' },
+        },
+      },
+    };
+
+    const result = render(
+      <AsyncApiComponent schema={schema} plugins={[testPlugin]} />,
+    );
+
+    await waitFor(() => {
+      expect(result.getByTestId('operation-slot').textContent).toBe(
+        'operation|Context API|user/signedup|user/signedup|receive|receive',
+      );
+      expect(result.getByTestId('info-slot').textContent).toBe(
+        'info|Context API|3.0.0',
+      );
     });
   });
 });

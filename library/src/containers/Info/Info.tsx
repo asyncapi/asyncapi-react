@@ -142,8 +142,10 @@ export const Info: React.FunctionComponent = () => {
         {(pluginManager?.getComponentsForSlot(PluginSlot.INFO)?.length ?? 0) >
           0 && (
           <SlotRenderer
-            slot={PluginSlot.INFO}
             context={{
+              slot: PluginSlot.INFO,
+              document: asyncapi,
+              info,
               schema: info,
             }}
             pluginManager={pluginManager}

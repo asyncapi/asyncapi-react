@@ -162,7 +162,8 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
   const operationSummary = operation.summary();
   const externalDocs = operation.externalDocs();
   const operationId = operation.id();
-  const specV = useSpec().version();
+  const asyncapi = useSpec();
+  const specV = asyncapi.version();
   const version = specV.localeCompare('2.6.0', undefined, { numeric: true });
   const isAsyncAPIv2 = version === 0;
   const { backgroundColor, typeLabel } =
@@ -227,8 +228,13 @@ export const OperationInfo: React.FunctionComponent<Props> = (props) => {
       {(pluginManager?.getComponentsForSlot(PluginSlot.OPERATION)?.length ??
         0) > 0 && (
         <SlotRenderer
-          slot={PluginSlot.OPERATION}
           context={{
+            slot: PluginSlot.OPERATION,
+            document: asyncapi,
+            operation,
+            channel,
+            channelName,
+            type,
             schema: props,
           }}
           pluginManager={pluginManager}

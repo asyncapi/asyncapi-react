@@ -90,6 +90,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   componentWillUnmount() {
     this.hasMounted = false;
     this.cleanupEventListeners();
+    // Let plugins release what they hold (open connections, timers) instead of orphaning it.
+    this.state.pm?.destroy();
   }
 
   render() {
@@ -173,9 +175,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     for (const plugin of plugins ?? []) {
       const registered = await pm?.register(plugin);
-      if (registered) {
+      const stillRequested = (this.props.plugins ?? []).some(
+        (candidate) => candidate.name === plugin.name,
+      );
+      if (registered && stillRequested && this.hasMounted) {
         this.registeredPlugins.add(plugin.name);
         this.propsPlugins.add(plugin.name);
+      } else if (registered) {
+        pm?.unregister(plugin.name);
       }
     }
 
@@ -218,6 +225,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       if (registered && stillRequested) {
         this.registeredPlugins.add(name);
         this.propsPlugins.add(name);
+      } else if (registered) {
+        pm?.unregister(name);
       }
     }
 

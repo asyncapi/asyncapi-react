@@ -1,4 +1,10 @@
-import { AsyncAPIDocumentInterface, BaseModel } from '@asyncapi/parser';
+import {
+  AsyncAPIDocumentInterface,
+  BaseModel,
+  ChannelInterface,
+  InfoInterface,
+  OperationInterface,
+} from '@asyncapi/parser';
 
 export type PropsSchema =
   | string
@@ -97,8 +103,38 @@ export interface PluginContext {
   schema?: PropsSchema;
 }
 
-export interface ComponentSlotProps {
-  context: PluginContext;
+interface BaseSlotContext {
+  /** The parsed AsyncAPI document being rendered. */
+  document: AsyncAPIDocumentInterface;
+  /**
+   * @deprecated Use the typed fields on the slot context instead. Holds the
+   * operation props in the `operation` slot and the info model in the `info` slot.
+   */
+  schema?: PropsSchema;
+}
+
+export interface OperationSlotContext extends BaseSlotContext {
+  slot: PluginSlot.OPERATION;
+  operation: OperationInterface;
+  channel: ChannelInterface;
+  channelName: string;
+  type: PayloadType;
+}
+
+export interface InfoSlotContext extends BaseSlotContext {
+  slot: PluginSlot.INFO;
+  info: InfoInterface;
+}
+
+export interface SlotContextMap {
+  [PluginSlot.OPERATION]: OperationSlotContext;
+  [PluginSlot.INFO]: InfoSlotContext;
+}
+
+export type SlotContext = SlotContextMap[PluginSlot];
+
+export interface ComponentSlotProps<S extends PluginSlot = PluginSlot> {
+  context: SlotContextMap[S];
   onClose?: () => void;
 }
 
@@ -108,6 +144,12 @@ export interface AsyncApiPlugin {
   description?: string;
 
   install(api: PluginAPI): void | Promise<void>;
+  /**
+   * Releases whatever `install()` acquired (connections, timers, DOM listeners). Called on
+   * `unregister()` and when the component unmounts, with the same `PluginAPI` instance
+   * `install()` received.
+   */
+  uninstall?(api: PluginAPI): void | Promise<void>;
 }
 
 export interface PluginErrorPayload {
@@ -131,9 +173,9 @@ export interface MessageBus {
 }
 
 export interface PluginAPI {
-  registerComponent(
-    slot: PluginSlot,
-    component: React.ComponentType<ComponentSlotProps>,
+  registerComponent<S extends PluginSlot>(
+    slot: S,
+    component: React.ComponentType<ComponentSlotProps<S>>,
     options?: { priority?: number; label?: string },
   ): void;
 

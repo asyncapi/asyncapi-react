@@ -1,15 +1,13 @@
 import React from 'react';
 import { PluginManager } from '../helpers/pluginManager';
-import { PluginContext, PluginSlot } from '../types';
+import { SlotContext } from '../types';
 
 interface SlotRendererProps {
-  slot: PluginSlot;
-  context: PluginContext;
+  context: SlotContext;
   pluginManager?: PluginManager;
 }
 
 const SlotRenderer: React.FC<SlotRendererProps> = ({
-  slot,
   context,
   pluginManager,
 }) => {
@@ -17,6 +15,7 @@ const SlotRenderer: React.FC<SlotRendererProps> = ({
     return null;
   }
 
+  const { slot } = context;
   const components = pluginManager.getComponentsForSlot(slot);
 
   if (!components || components.length === 0) {

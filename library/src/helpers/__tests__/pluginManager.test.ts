@@ -78,6 +78,149 @@ describe('PluginManager', () => {
   });
 
   describe('Plugin Unregistration', () => {
+    const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    it('should call uninstall with the API given to install', async () => {
+      const uninstallMock = jest.fn();
+      let installApi: PluginAPI | null = null;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          installApi = api;
+        },
+        uninstall: uninstallMock,
+      };
+
+      await pluginManager.register(plugin);
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await flush();
+
+      expect(uninstallMock).toHaveBeenCalledWith(installApi);
+    });
+
+    it('should unregister a plugin without an uninstall hook', async () => {
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+      };
+
+      await pluginManager.register(plugin);
+
+      expect(() => pluginManager.unregister(TEST_PLUGIN_NAME)).not.toThrow();
+      expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
+    });
+
+    it('should catch and emit uninstall failures', async () => {
+      jest.spyOn(console, 'error').mockImplementation();
+      const errors: PluginErrorPayload[] = [];
+      pluginManager.on(PLUGIN_EVENT_ERROR, (data) => {
+        errors.push(data as PluginErrorPayload);
+      });
+
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: () => {
+          throw new Error('teardown failed');
+        },
+      };
+
+      await pluginManager.register(plugin);
+      expect(() => pluginManager.unregister(TEST_PLUGIN_NAME)).not.toThrow();
+      await flush();
+
+      expect(errors[0]).toMatchObject({
+        pluginName: TEST_PLUGIN_NAME,
+        message: 'teardown failed',
+      });
+    });
+
+    it('should uninstall a plugin cancelled while installing', async () => {
+      const uninstallMock = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () => new Promise<void>((resolve) => setTimeout(resolve, 0)),
+        uninstall: uninstallMock,
+      };
+
+      const registering = pluginManager.register(plugin);
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await registering;
+      await flush();
+
+      expect(uninstallMock).toHaveBeenCalled();
+      expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
+    });
+
+    it('should remove listeners the plugin added', async () => {
+      const handler = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          api.on(TEST_EVENT, handler);
+        },
+      };
+
+      await pluginManager.register(plugin);
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      pluginManager.emit(TEST_EVENT, { some: 'data' });
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('should uninstall every plugin on destroy', async () => {
+      const firstUninstall = jest.fn();
+      const secondUninstall = jest.fn();
+
+      await pluginManager.register({
+        name: 'first-plugin',
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: firstUninstall,
+      });
+      await pluginManager.register({
+        name: 'second-plugin',
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: secondUninstall,
+      });
+
+      pluginManager.destroy();
+      await flush();
+
+      expect(firstUninstall).toHaveBeenCalled();
+      expect(secondUninstall).toHaveBeenCalled();
+      expect(pluginManager.listPlugins()).toHaveLength(0);
+    });
+
+    it('should cancel and uninstall plugins that are still installing on destroy', async () => {
+      let finishInstall!: () => void;
+      const uninstall = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: () =>
+          new Promise<void>((resolve) => {
+            finishInstall = resolve;
+          }),
+        uninstall,
+      };
+
+      const registration = pluginManager.register(plugin);
+      pluginManager.destroy();
+      finishInstall();
+
+      await expect(registration).resolves.toBe(false);
+      expect(uninstall).toHaveBeenCalledTimes(1);
+      expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
+      await expect(pluginManager.register(plugin)).resolves.toBe(false);
+    });
+
     it('should unregister a plugin', async () => {
       const installMock = jest.fn();
       const plugin: AsyncApiPlugin = {
