@@ -8,38 +8,45 @@ import { SlotRenderer } from '../PluginSlotRenderer';
 import '@testing-library/jest-dom';
 import { PluginManager } from '../../helpers/pluginManager';
 import {
+  AsyncAPIDocumentInterface,
+  ChannelInterface,
+  OperationInterface,
+} from '@asyncapi/parser';
+import {
   PluginSlot,
-  PluginContext,
+  OperationSlotContext,
   ComponentSlotProps,
   PluginAPI,
+  PayloadType,
 } from '../../types';
 
 const pluginName = 'test-plugin';
 
 describe('PluginSlotRenderer', () => {
   let pluginManager: PluginManager;
-  let context: PluginContext;
+  let context: OperationSlotContext;
 
   beforeEach(() => {
     pluginManager = new PluginManager({ schema: {} });
-    context = { schema: {} };
+    context = {
+      slot: PluginSlot.OPERATION,
+      document: {} as AsyncAPIDocumentInterface,
+      operation: {} as OperationInterface,
+      channel: {} as ChannelInterface,
+      channelName: 'test/channel',
+      type: PayloadType.SEND,
+    };
   });
 
   describe('Rendering', () => {
     it('should render nothing when no plugin manager is provided', () => {
-      const { container } = render(
-        <SlotRenderer slot={PluginSlot.OPERATION} context={context} />,
-      );
+      const { container } = render(<SlotRenderer context={context} />);
       expect(container.firstChild).toBeNull();
     });
 
     it('should render nothing when no components are registered for the slot', () => {
       const { container } = render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
+        <SlotRenderer context={context} pluginManager={pluginManager} />,
       );
       expect(container.firstChild).toBeNull();
     });
@@ -61,11 +68,7 @@ describe('PluginSlotRenderer', () => {
       await pluginManager.register(plugin);
 
       const { container } = render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
+        <SlotRenderer context={context} pluginManager={pluginManager} />,
       );
 
       const slotContainer = container.querySelector(
@@ -90,13 +93,7 @@ describe('PluginSlotRenderer', () => {
 
       await pluginManager.register(plugin);
 
-      render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
-      );
+      render(<SlotRenderer context={context} pluginManager={pluginManager} />);
 
       expect(screen.getByText('Test Plugin Content')).toBeInTheDocument();
     });
@@ -128,13 +125,7 @@ describe('PluginSlotRenderer', () => {
       await pluginManager.register(plugin1);
       await pluginManager.register(plugin2);
 
-      render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
-      );
+      render(<SlotRenderer context={context} pluginManager={pluginManager} />);
 
       expect(screen.getByText('Plugin 1')).toBeInTheDocument();
       expect(screen.getByText('Plugin 2')).toBeInTheDocument();
@@ -143,10 +134,10 @@ describe('PluginSlotRenderer', () => {
 
   describe('Context Passing', () => {
     it('should pass context to plugin components', async () => {
-      const contextData = { schema: { title: 'Test API' } };
-      const TestComponent: React.FC<ComponentSlotProps> = ({ context }) => (
-        <div>{JSON.stringify(context)}</div>
-      );
+      const contextData = { ...context, schema: { title: 'Test API' } };
+      const TestComponent: React.FC<
+        ComponentSlotProps<PluginSlot.OPERATION>
+      > = ({ context }) => <div>{JSON.stringify(context)}</div>;
 
       const plugin = {
         name: pluginName,
@@ -159,11 +150,7 @@ describe('PluginSlotRenderer', () => {
       await pluginManager.register(plugin);
 
       render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={contextData}
-          pluginManager={pluginManager}
-        />,
+        <SlotRenderer context={contextData} pluginManager={pluginManager} />,
       );
 
       expect(screen.getByText(JSON.stringify(contextData))).toBeInTheDocument();
@@ -203,11 +190,7 @@ describe('PluginSlotRenderer', () => {
       await pluginManager.register(highPlugin);
 
       const { container } = render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
+        <SlotRenderer context={context} pluginManager={pluginManager} />,
       );
 
       const children = container.querySelectorAll('[data-testid]');
@@ -233,11 +216,7 @@ describe('PluginSlotRenderer', () => {
       await pluginManager.register(plugin);
 
       const { rerender } = render(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={pluginManager}
-        />,
+        <SlotRenderer context={context} pluginManager={pluginManager} />,
       );
 
       expect(screen.getByText('Initial Component')).toBeInTheDocument();
@@ -259,11 +238,7 @@ describe('PluginSlotRenderer', () => {
       await newPluginManager.register(newPlugin);
 
       rerender(
-        <SlotRenderer
-          slot={PluginSlot.OPERATION}
-          context={context}
-          pluginManager={newPluginManager}
-        />,
+        <SlotRenderer context={context} pluginManager={newPluginManager} />,
       );
 
       expect(screen.getByText('New Component')).toBeInTheDocument();

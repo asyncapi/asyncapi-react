@@ -106,6 +106,8 @@ function MyApp() {
 
 `PluginManager.register()` returns a `Promise<boolean>` that resolves to `true` when a plugin installs successfully and `false` when the plugin is already registered or `install()` throws or rejects.
 
+`unregister()` removes the plugin's components, drops the listeners it added through `api.on()`, and calls its `uninstall()`. Errors thrown by `uninstall()` are logged and emitted as `PLUGIN_EVENT_ERROR` rather than propagating, since teardown often runs while the component is unmounting.
+
 ## Plugin Structure
 
 ```typescript
@@ -114,7 +116,36 @@ interface AsyncApiPlugin {
   version: string;           // Semantic version
   description?: string;      // Optional description
   install(api: PluginAPI): void | Promise<void>;
+  uninstall?(api: PluginAPI): void | Promise<void>;  // Optional teardown
 }
+```
+
+### Teardown
+
+`uninstall()` receives the same `PluginAPI` object passed to `install()`, and runs when:
+
+- the plugin is removed with `pluginManager.unregister(name)`,
+- the plugin disappears from the `plugins` prop,
+- `<AsyncApi>` unmounts.
+
+Use it to release anything `install()` acquired: open connections, timers, DOM listeners. Components the plugin registered are removed first, and listeners added through `api.on()` are removed for it.
+
+```typescript
+const createMyPlugin = (): AsyncApiPlugin => {
+  let socket: WebSocket | undefined;
+
+  return {
+    name: 'my-plugin',
+    version: '1.0.0',
+    install(api) {
+      socket = new WebSocket('wss://example.com');
+      api.registerComponent(PluginSlot.OPERATION, MyComponent);
+    },
+    uninstall() {
+      socket?.close();
+    },
+  };
+};
 ```
 
 ## PluginAPI Methods
@@ -135,7 +166,7 @@ The library exports named constants for plugin lifecycle events:
 | Constant | Event name | Description |
 |----------|------------|-------------|
 | `PLUGIN_EVENT_READY` | `plugin:ready` | Emitted after a plugin registers successfully |
-| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` throws or rejects |
+| `PLUGIN_EVENT_ERROR` | `plugin:error` | Emitted when `install()` or `uninstall()` throws or rejects |
 | `PLUGIN_EVENT_SPEC_LOADED` | `specLoaded` | Emitted when the spec loads or updates (plugin API only) |
 
 `PLUGIN_EVENT_READY` and `PLUGIN_EVENT_ERROR` are forwarded to the `onPluginEvent` prop on `<AsyncApi>`. `PLUGIN_EVENT_SPEC_LOADED` is used internally by `api.onSpecLoaded()` and is not forwarded to `onPluginEvent`.
@@ -179,20 +210,40 @@ If `install()` throws or rejects, the failing plugin is not stored and other plu
 
 ## Component Props
 
-```typescript
-interface ComponentSlotProps {
-  context: PluginContext;
-  onClose?: () => void;
-}
+Slot components receive a `context` typed for the slot they are registered in. Pass the slot to `ComponentSlotProps` to get full typing without casts:
 
-const MyComponent: React.FC<ComponentSlotProps> = ({ context, onClose }) => (
-  <div>Custom content here</div>
-);
+```typescript
+import { ComponentSlotProps, PluginSlot } from '@asyncapi/react-component';
+
+const MyOperationComponent: React.FC<ComponentSlotProps<PluginSlot.OPERATION>> = ({
+  context,
+}) => {
+  const servers = context.channel.servers().all();
+  return (
+    <div>
+      {context.type} {context.channelName} on {servers.map((s) => s.url()).join(', ')}
+    </div>
+  );
+};
+
+api.registerComponent(PluginSlot.OPERATION, MyOperationComponent);
 ```
+
+`registerComponent` infers the slot, so registering a component in the wrong slot is a type error.
+
+Every slot context includes:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `slot` | `PluginSlot` | The slot being rendered; use it to narrow a `SlotContext` union |
+| `document` | `AsyncAPIDocumentInterface` | The full parsed AsyncAPI document |
+| `schema` | `PropsSchema` | **Deprecated.** Use the typed fields below |
 
 ## Available Slots
 
-- `PluginSlot.OPERATION` - Renders within operation sections
-- `PluginSlot.INFO` - Renders within info section
+| Slot | Renders | Context type | Extra context fields |
+|------|---------|--------------|----------------------|
+| `PluginSlot.OPERATION` | Within each operation section | `OperationSlotContext` | `operation: OperationInterface`, `channel: ChannelInterface`, `channelName: string`, `type: PayloadType` |
+| `PluginSlot.INFO` | Within the info section | `InfoSlotContext` | `info: InfoInterface` |
 
 Slots render only when at least one plugin has registered a component for that slot.
