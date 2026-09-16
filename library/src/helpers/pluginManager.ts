@@ -30,6 +30,8 @@ class PluginManager implements MessageBus {
   private readonly pendingInstalls = new Map<string, InstalledPlugin>();
   /** Plugin names cancelled via `unregister()` while install was pending. */
   private readonly cancelledInstalls = new Set<string>();
+  /** In-flight teardown keyed by plugin name, so a replacement waits for its predecessor. */
+  private readonly pendingUninstalls = new Map<string, Promise<void>>();
   /** Prevents pending installs or retained manager references from reviving a torn-down manager. */
   private destroyed = false;
   /**
@@ -61,6 +63,11 @@ class PluginManager implements MessageBus {
    * need their own try/catch.
    */
   async register(plugin: AsyncApiPlugin): Promise<boolean> {
+    const pendingUninstall = this.pendingUninstalls.get(plugin.name);
+    if (pendingUninstall) {
+      await pendingUninstall;
+    }
+
     if (this.destroyed) {
       console.warn(`Plugin manager has been destroyed`);
       return false;
@@ -103,7 +110,7 @@ class PluginManager implements MessageBus {
       this.removePluginComponents(plugin.name);
       this.removePluginListeners(entry);
       // install() ran to completion before the cancellation, so it may hold resources.
-      await this.runUninstall(entry);
+      await this.trackUninstall(entry);
       return false;
     }
 
@@ -122,13 +129,15 @@ class PluginManager implements MessageBus {
    */
   unregister(pluginName: string): void {
     const entry = this.plugins.get(pluginName);
-    if (!entry && !this.pendingInstalls.has(pluginName)) {
+    const pendingEntry = this.pendingInstalls.get(pluginName);
+    if (!entry && !pendingEntry) {
       console.warn(`Plugin "${pluginName}" not found`);
       return;
     }
 
-    if (this.pendingInstalls.has(pluginName)) {
-      this.pendingInstalls.get(pluginName)!.state.active = false;
+    if (pendingEntry) {
+      pendingEntry.state.active = false;
+      this.removePluginListeners(pendingEntry);
       this.cancelledInstalls.add(pluginName);
     }
 
@@ -140,7 +149,7 @@ class PluginManager implements MessageBus {
     this.removePluginComponents(pluginName);
     if (entry) {
       this.removePluginListeners(entry);
-      void this.runUninstall(entry);
+      void this.trackUninstall(entry);
     }
   }
 
@@ -180,6 +189,18 @@ class PluginManager implements MessageBus {
         timestamp: new Date().toISOString(),
       });
     }
+  }
+
+  private trackUninstall(entry: InstalledPlugin): Promise<void> {
+    const { name } = entry.plugin;
+    const uninstall = this.runUninstall(entry);
+    this.pendingUninstalls.set(name, uninstall);
+    void uninstall.finally(() => {
+      if (this.pendingUninstalls.get(name) === uninstall) {
+        this.pendingUninstalls.delete(name);
+      }
+    });
+    return uninstall;
   }
 
   private removePluginListeners(entry: InstalledPlugin): void {

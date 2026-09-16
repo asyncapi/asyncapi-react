@@ -156,6 +156,33 @@ describe('PluginManager', () => {
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
     });
 
+    it('should immediately remove listeners from a cancelled pending install', async () => {
+      let finishInstall!: () => void;
+      const handler = jest.fn();
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: async (api) => {
+          api.on(TEST_EVENT, handler);
+          await new Promise<void>((resolve) => {
+            finishInstall = resolve;
+          });
+        },
+      };
+
+      const registration = pluginManager.register(plugin);
+      expect(pluginManager.listeners(TEST_EVENT)).toContain(handler);
+
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+      pluginManager.emit(TEST_EVENT, { some: 'data' });
+
+      expect(pluginManager.listeners(TEST_EVENT)).toHaveLength(0);
+      expect(handler).not.toHaveBeenCalled();
+
+      finishInstall();
+      await expect(registration).resolves.toBe(false);
+    });
+
     it('should remove listeners the plugin added', async () => {
       const handler = jest.fn();
       const plugin: AsyncApiPlugin = {
@@ -248,6 +275,42 @@ describe('PluginManager', () => {
       expect(pluginManager.listeners(TEST_EVENT)).toHaveLength(0);
       pluginManager.emit(TEST_EVENT, {});
       expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('should wait for same-name teardown without blocking other plugins', async () => {
+      let finishUninstall!: () => void;
+      await pluginManager.register({
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: () =>
+          new Promise<void>((resolve) => {
+            finishUninstall = resolve;
+          }),
+      });
+
+      pluginManager.unregister(TEST_PLUGIN_NAME);
+
+      const replacementInstall = jest.fn();
+      const replacementRegistration = pluginManager.register({
+        name: TEST_PLUGIN_NAME,
+        version: '2.0.0',
+        install: replacementInstall,
+      });
+      const unrelatedInstall = jest.fn();
+      const unrelatedRegistration = pluginManager.register({
+        name: 'unrelated-plugin',
+        version: '1.0.0',
+        install: unrelatedInstall,
+      });
+
+      await expect(unrelatedRegistration).resolves.toBe(true);
+      expect(unrelatedInstall).toHaveBeenCalledTimes(1);
+      expect(replacementInstall).not.toHaveBeenCalled();
+
+      finishUninstall();
+      await expect(replacementRegistration).resolves.toBe(true);
+      expect(replacementInstall).toHaveBeenCalledTimes(1);
     });
 
     it('should unregister a plugin', async () => {
