@@ -14,10 +14,16 @@ import {
   AsyncApiWrapper,
   SplitWrapper,
 } from '@/components';
-import { defaultConfig, parse, debounce } from '@/utils';
+import { createWsPlugin } from '@asyncapi/ws-plugin';
+import { defaultConfig, parse, debounce, isWebSocketSchema } from '@/utils';
 import * as specs from '@/specs';
 
 const defaultSchema = specs.streetlights;
+
+// Created once: the plugin keeps its connections in the install() closure, so a fresh instance
+// per render would drop them. It is only registered while a WebSocket spec is rendered, and
+// removing it from the prop unregisters it, which closes any open sockets.
+const websocketPlugins = [createWsPlugin()];
 
 interface State {
   schema: string;
@@ -54,9 +60,19 @@ class Playground extends Component<unknown, State> {
     );
   }
 
+  componentDidMount() {
+    // `?spec=websocket` seeds the editor with a WebSocket API, so the plugin has a real server
+    // to attach to. Read here rather than at module scope: this page is prerendered at build time.
+    const requested = new URLSearchParams(window.location.search).get('spec');
+    if (requested === 'websocket') {
+      this.setState({ schema: specs.websocketGemini });
+    }
+  }
+
   render() {
     const { schema, config, schemaFromExternalResource } = this.state;
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
+    const isWebSocket = isWebSocketSchema(schema);
 
     return (
       <PlaygroundWrapper>
@@ -93,7 +109,16 @@ class Playground extends Component<unknown, State> {
             </Tabs>
           </CodeEditorsWrapper>
           <AsyncApiWrapper>
-            <AsyncApi schema={schema} config={parsedConfig} />
+            <AsyncApi
+              schema={schema}
+              config={parsedConfig}
+              plugins={isWebSocket ? websocketPlugins : undefined}
+              // Without this, a plugin that fails to install does so silently.
+              onPluginEvent={(eventName, data) =>
+                // eslint-disable-next-line no-console
+                console.info('[plugin]', eventName, data)
+              }
+            />
           </AsyncApiWrapper>
         </SplitWrapper>
       </PlaygroundWrapper>

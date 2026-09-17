@@ -24,6 +24,33 @@ export const stringify = <T extends {}>(content?: T): string => {
   }
 };
 
+const isWebSocketProtocol = (protocol?: string): boolean =>
+  protocol === 'ws' || protocol === 'wss';
+
+/**
+ * Whether the schema in the editor describes a WebSocket API, i.e. declares a server using the
+ * ws or wss protocol. The editor holds raw text, so this reads it as JSON when it can and falls
+ * back to scanning YAML. It only decides whether to register the WebSocket plugin, so a wrong
+ * guess costs a panel rather than correctness.
+ */
+export const isWebSocketSchema = (schema?: string): boolean => {
+  if (!schema) {
+    return false;
+  }
+
+  try {
+    const parsed = JSON.parse(schema) as {
+      servers?: Record<string, { protocol?: string } | undefined>;
+    };
+    return Object.values(parsed.servers ?? {}).some((server) =>
+      isWebSocketProtocol(server?.protocol),
+    );
+  } catch {
+    // YAML, e.g. `protocol: wss` or `protocol: 'ws'`.
+    return /^\s*protocol:\s*['"]?wss?['"]?\s*$/m.test(schema);
+  }
+};
+
 export const fetchSchema = async (link: string): Promise<unknown> => {
   const requestOptions = {
     method: 'GET',
