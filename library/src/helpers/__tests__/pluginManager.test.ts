@@ -153,6 +153,45 @@ describe('PluginManager', () => {
       await expect(teardown).resolves.toBeUndefined();
     });
 
+    it('should uninstall acquired resources when an aborted install rejects', async () => {
+      const consoleError = jest.spyOn(console, 'error').mockImplementation();
+      let finishUninstall!: () => void;
+      let resourceAcquired = false;
+      const uninstall = jest.fn(async () => {
+        await new Promise<void>((resolve) => {
+          finishUninstall = resolve;
+        });
+        resourceAcquired = false;
+      });
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          resourceAcquired = true;
+          return new Promise<void>((_resolve, reject) => {
+            api.signal.addEventListener('abort', () => {
+              reject(new DOMException('Aborted', 'AbortError'));
+            });
+          });
+        },
+        uninstall,
+      };
+
+      const registration = pluginManager.register(plugin);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
+      await flush();
+
+      expect(uninstall).toHaveBeenCalledTimes(1);
+      expect(resourceAcquired).toBe(true);
+
+      finishUninstall();
+      await expect(registration).resolves.toBe(false);
+      await teardown;
+
+      expect(resourceAcquired).toBe(false);
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
     it('should unregister a plugin without an uninstall hook', async () => {
       const plugin: AsyncApiPlugin = {
         name: TEST_PLUGIN_NAME,

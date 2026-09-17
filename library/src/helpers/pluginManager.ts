@@ -110,13 +110,19 @@ class PluginManager implements MessageBus {
     try {
       await plugin.install(api);
     } catch (error) {
-      // Always log so failures are visible even without an `onPluginEvent` handler.
-      console.error(`Failed to register plugin ${plugin.name}:`, error);
+      const wasCancelled = this.cancelledInstalls.delete(plugin.name);
       entry.state.active = false;
       entry.controller.abort();
       this.removePluginComponents(plugin.name);
       this.removePluginListeners(entry);
-      this.cancelledInstalls.delete(plugin.name);
+      if (wasCancelled) {
+        await this.trackUninstall(entry);
+        entry.resolveCompletion();
+        return false;
+      }
+
+      // Always log so failures are visible even without an `onPluginEvent` handler.
+      console.error(`Failed to register plugin ${plugin.name}:`, error);
       this.emit(PLUGIN_EVENT_ERROR, {
         pluginName: plugin.name,
         message: error instanceof Error ? error.message : String(error),

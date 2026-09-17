@@ -32,7 +32,9 @@ export const asyncPlugin: AsyncApiPlugin = {
   name: 'async-plugin',
   version: '1.0.0',
   async install(api: PluginAPI) {
-    const result = await fetch('/plugin-data').then((res) => res.json());
+    const result = await fetch('/plugin-data', { signal: api.signal }).then(
+      (res) => res.json(),
+    );
     if (!result.ok) {
       throw new Error('plugin configuration failed');
     }
