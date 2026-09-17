@@ -33,9 +33,18 @@ interface AsyncAPIState {
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
+  private readonly pendingPropsPlugins = new Set<string>();
   /** Stable handler refs so `off()` removes the same listeners registered by `on()`. */
   private readonly pluginEventHandlers = new Map<string, EventListener>();
   private hasMounted = false;
+  /** `destroy()` is terminal, so a remount has to build a new manager rather than reuse it. */
+  private pluginManagerDestroyed = false;
+  /** Teardown from earlier manager generations that must finish before activating a replacement. */
+  private pluginManagerTeardown?: Promise<void>;
+  /** Invalidates deferred mount work when StrictMode unmounts and remounts this instance. */
+  private mountGeneration = 0;
+  /** Keeps prop-driven plugin replacements ordered across rapid updates. */
+  private pluginUpdates = Promise.resolve();
 
   state: AsyncAPIState = {
     asyncapi: undefined,
@@ -54,18 +63,40 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   componentDidMount() {
     this.hasMounted = true;
+    const mountGeneration = ++this.mountGeneration;
+
+    // React StrictMode can remount this component instance in development, so the manager
+    // destroyed during its simulated unmount must be replaced before registering again.
+    let pm = this.state.pm;
+    if (!pm || this.pluginManagerDestroyed) {
+      pm = new PluginManager({});
+      this.pluginManagerDestroyed = false;
+      this.registeredPlugins.clear();
+      this.propsPlugins.clear();
+      this.pendingPropsPlugins.clear();
+      this.setState({ pm });
+    }
 
     if (!this.state.asyncapi) {
-      this.updateState(this.props.schema);
+      this.updateState(this.props.schema, pm);
     } else {
-      this.state.pm?.updateContext({ schema: this.state.asyncapi });
+      pm.updateContext({ schema: this.state.asyncapi });
     }
 
-    if (this.props.onPluginManagerReady) {
-      this.props.onPluginManagerReady(this.state.pm!);
+    const activatePluginManager = () => {
+      if (!this.hasMounted || mountGeneration !== this.mountGeneration) return;
+
+      this.props.onPluginManagerReady?.(pm);
+      // setState above may not have applied yet, so pass the manager these need explicitly.
+      this.setupEventListeners(pm);
+      void this.registerPlugins(pm);
+    };
+
+    if (this.pluginManagerTeardown) {
+      void this.pluginManagerTeardown.then(activatePluginManager);
+    } else {
+      activatePluginManager();
     }
-    this.setupEventListeners();
-    void this.registerPlugins();
   }
 
   componentDidUpdate(prevProps: AsyncApiProps) {
@@ -83,15 +114,24 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     if (plugins !== prevProps.plugins) {
-      void this.updatePlugins(prevProps.plugins, plugins);
+      this.pluginUpdates = this.pluginUpdates.then(() =>
+        this.updatePlugins(prevProps.plugins, plugins),
+      );
     }
   }
 
   componentWillUnmount() {
     this.hasMounted = false;
+    this.mountGeneration += 1;
     this.cleanupEventListeners();
     // Let plugins release what they hold (open connections, timers) instead of orphaning it.
-    void this.state.pm?.destroy();
+    // Flag it first: destroy() is terminal, so a remount must start from a new manager.
+    this.pluginManagerDestroyed = true;
+    const teardown = this.state.pm?.destroy() ?? Promise.resolve();
+    const previousTeardown = this.pluginManagerTeardown;
+    this.pluginManagerTeardown = previousTeardown
+      ? Promise.all([previousTeardown, teardown]).then(() => undefined)
+      : teardown;
   }
 
   render() {
@@ -151,9 +191,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     return this.pluginEventHandlers.get(eventName)!;
   }
 
-  private setupEventListeners() {
+  private setupEventListeners(pm: PluginManager | undefined = this.state.pm) {
     const { onPluginEvent } = this.props;
-    const { pm } = this.state;
 
     if (!onPluginEvent) return;
 
@@ -162,21 +201,21 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     });
   }
 
-  private cleanupEventListeners() {
-    const { pm } = this.state;
+  private cleanupEventListeners(pm: PluginManager | undefined = this.state.pm) {
     PLUGINEVENTS.forEach((event) => {
       pm?.off(event, this.getOrCreateHandler(event));
     });
   }
 
-  private async registerPlugins() {
+  private async registerPlugins(pm: PluginManager | undefined = this.state.pm) {
     const { plugins } = this.props;
-    const { pm } = this.state;
 
     for (const plugin of plugins ?? []) {
+      this.pendingPropsPlugins.add(plugin.name);
       const registered = await pm?.register(plugin);
+      this.pendingPropsPlugins.delete(plugin.name);
       const stillRequested = (this.props.plugins ?? []).some(
-        (candidate) => candidate.name === plugin.name,
+        (candidate) => candidate === plugin,
       );
       if (registered && stillRequested && this.hasMounted) {
         this.registeredPlugins.add(plugin.name);
@@ -197,33 +236,43 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     newPlugins: AsyncApiPlugin[] | undefined,
   ) {
     const { pm } = this.state;
+    const mountGeneration = this.mountGeneration;
 
     const prevPluginMap = new Map((prevPlugins ?? []).map((p) => [p.name, p]));
     const newPluginMap = new Map((newPlugins ?? []).map((p) => [p.name, p]));
 
-    const pluginsToRemove = Array.from(prevPluginMap.keys()).filter(
-      (name) => !newPluginMap.has(name) && this.propsPlugins.has(name),
+    const pluginsToRemove = Array.from(prevPluginMap.entries()).filter(
+      ([name, plugin]) =>
+        newPluginMap.get(name) !== plugin &&
+        (this.propsPlugins.has(name) || this.pendingPropsPlugins.has(name)),
     );
-    for (const name of pluginsToRemove) {
-      try {
-        await pm?.unregister(name);
-        this.registeredPlugins.delete(name);
-        this.propsPlugins.delete(name);
-      } catch (error) {
-        console.error(`Failed to unregister plugin ${name}:`, error);
-      }
-    }
+    await this.unregisterPlugins(
+      pm,
+      pluginsToRemove.map(([name]) => name),
+    );
 
     const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
-      ([name]) => !prevPluginMap.has(name),
+      ([name, plugin]) => prevPluginMap.get(name) !== plugin,
     );
 
+    if (this.pluginManagerTeardown) {
+      await this.pluginManagerTeardown;
+    }
+    if (!this.hasMounted || mountGeneration !== this.mountGeneration) return;
+
     for (const [name, plugin] of pluginsToAdd) {
-      const registered = await pm?.register(plugin);
       const stillRequested = (this.props.plugins ?? []).some(
-        (p) => p.name === name,
+        (candidate) => candidate === plugin,
       );
-      if (registered && stillRequested) {
+      if (!stillRequested) continue;
+
+      this.pendingPropsPlugins.add(name);
+      const registered = await pm?.register(plugin);
+      this.pendingPropsPlugins.delete(name);
+      const remainsRequested = (this.props.plugins ?? []).some(
+        (candidate) => candidate === plugin,
+      );
+      if (registered && remainsRequested) {
         this.registeredPlugins.add(name);
         this.propsPlugins.add(name);
       } else if (registered) {
@@ -237,14 +286,33 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
   }
 
-  private updateState(schema: PropsSchema) {
+  private async unregisterPlugins(
+    pm: PluginManager | undefined,
+    pluginNames: string[],
+  ) {
+    for (const name of pluginNames) {
+      try {
+        await pm?.unregister(name);
+        this.registeredPlugins.delete(name);
+        this.propsPlugins.delete(name);
+        this.pendingPropsPlugins.delete(name);
+      } catch (error) {
+        console.error(`Failed to unregister plugin ${name}:`, error);
+      }
+    }
+  }
+
+  private updateState(
+    schema: PropsSchema,
+    pm: PluginManager | undefined = this.state.pm,
+  ) {
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
     if (!parsedSpec) {
       this.setState({ asyncapi: undefined });
       return;
     }
     this.setState({ asyncapi: parsedSpec });
-    this.state.pm?.updateContext({ schema: parsedSpec });
+    pm?.updateContext({ schema: parsedSpec });
   }
 }
 
