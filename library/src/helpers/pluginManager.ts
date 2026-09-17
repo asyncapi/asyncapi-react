@@ -205,8 +205,8 @@ class PluginManager implements MessageBus {
       ...Array.from(this.plugins.keys(), (name) => this.unregister(name)),
     ];
     this.slotComponents.clear();
-    this.eventListeners.clear();
     await Promise.all(teardowns);
+    this.eventListeners.clear();
   }
 
   /**
