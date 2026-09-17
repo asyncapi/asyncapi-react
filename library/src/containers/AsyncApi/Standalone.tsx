@@ -228,6 +228,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     newPlugins: AsyncApiPlugin[] | undefined,
   ) {
     const { pm } = this.state;
+    const mountGeneration = this.mountGeneration;
 
     const prevPluginMap = new Map((prevPlugins ?? []).map((p) => [p.name, p]));
     const newPluginMap = new Map((newPlugins ?? []).map((p) => [p.name, p]));
@@ -248,6 +249,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
       ([name]) => !prevPluginMap.has(name),
     );
+
+    if (this.pluginManagerTeardown) {
+      await this.pluginManagerTeardown;
+    }
+    if (!this.hasMounted || mountGeneration !== this.mountGeneration) return;
 
     for (const [name, plugin] of pluginsToAdd) {
       const registered = await pm?.register(plugin);

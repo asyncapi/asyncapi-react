@@ -243,13 +243,11 @@ export const websocketGemini = `{
                 "$ref": "#/components/schemas/events"
               },
               "timestamp": {
-                "type": "string",
-                "format": "date-time",
+                "type": "integer",
                 "description": "The timestamp in seconds for this group of events (included for compatibility reasons). We recommend using the timestampms field instead."
               },
               "timestampms": {
-                "type": "string",
-                "format": "time",
+                "type": "integer",
                 "description": "The timestamp in milliseconds for this group of events."
               }
             },
@@ -296,8 +294,7 @@ export const websocketGemini = `{
               ]
             },
             "price": {
-              "type": "number",
-              "multipleOf": 1,
+              "type": "string",
               "description": "The price of this order book entry."
             },
             "side": {
@@ -318,13 +315,11 @@ export const websocketGemini = `{
               "description": "Indicates why the change has occurred. initial is for the initial response message, which will show the entire existing state of the order book."
             },
             "remaining": {
-              "type": "number",
-              "multipleOf": 1,
+              "type": "string",
               "description": "The quantity remaining at that price level after this change occurred. May be zero if all orders at this price level have been filled or canceled."
             },
             "delta": {
-              "type": "number",
-              "multipleOf": 1,
+              "type": "string",
               "description": "The quantity changed. May be negative, if an order is filled or canceled. For initial messages, delta will equal remaining."
             }
           }

@@ -1,3 +1,5 @@
+import { parse as parseYaml } from 'yaml';
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const parse = <T extends {}>(str?: string): T => {
   if (!str) {
@@ -29,9 +31,8 @@ const isWebSocketProtocol = (protocol?: string): boolean =>
 
 /**
  * Whether the schema in the editor describes a WebSocket API, i.e. declares a server using the
- * ws or wss protocol. The editor holds raw text, so this reads it as JSON when it can and falls
- * back to scanning YAML. It only decides whether to register the WebSocket plugin, so a wrong
- * guess costs a panel rather than correctness.
+ * ws or wss protocol. The editor holds JSON or YAML text, so parse it before inspecting only the
+ * top-level servers collection.
  */
 export const isWebSocketSchema = (schema?: string): boolean => {
   if (!schema) {
@@ -39,15 +40,14 @@ export const isWebSocketSchema = (schema?: string): boolean => {
   }
 
   try {
-    const parsed = JSON.parse(schema) as {
+    const parsed = parseYaml(schema) as {
       servers?: Record<string, { protocol?: string } | undefined>;
-    };
-    return Object.values(parsed.servers ?? {}).some((server) =>
+    } | null;
+    return Object.values(parsed?.servers ?? {}).some((server) =>
       isWebSocketProtocol(server?.protocol),
     );
   } catch {
-    // YAML, e.g. `protocol: wss` or `protocol: 'ws'`.
-    return /^\s*protocol:\s*['"]?wss?['"]?\s*$/m.test(schema);
+    return false;
   }
 };
 

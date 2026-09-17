@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "next build --webpack && touch out/.nojekyll",
-    "start": "next dev --webpack"
+    "start": "next dev --webpack",
+    "test:unit": "node --experimental-strip-types --test utils/helpers.test.ts"
   },
   "dependencies": {
     "@asyncapi/react-component": "file:../library",
@@ -15,7 +16,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-split": "^2.0.14",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "yaml": "^1.10.3"
   },
   "devDependencies": {
     "@types/node": "^20",

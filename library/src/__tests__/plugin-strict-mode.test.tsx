@@ -37,7 +37,7 @@ const schema = {
 const PluginPanel = () => <div data-testid="plugin-panel">panel</div>;
 
 test('keeps plugins registered when StrictMode remounts the component', async () => {
-  let finishFirstUninstall!: () => void;
+  const finishUninstalls: (() => void)[] = [];
   let resourceActive = false;
   let lifecycleOverlapped = false;
   const install = jest.fn((api: PluginAPI) => {
@@ -45,18 +45,15 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
     resourceActive = true;
     api.registerComponent(PluginSlot.OPERATION, PluginPanel);
   });
-  const uninstall = jest.fn(() => {
-    if (uninstall.mock.calls.length > 1) {
-      resourceActive = false;
-      return;
-    }
-    return new Promise<void>((resolve) => {
-      finishFirstUninstall = () => {
-        resourceActive = false;
-        resolve();
-      };
-    });
-  });
+  const uninstall = jest.fn(
+    () =>
+      new Promise<void>((resolve) => {
+        finishUninstalls.push(() => {
+          resourceActive = false;
+          resolve();
+        });
+      }),
+  );
   const plugin: AsyncApiPlugin = {
     name: 'strict-mode-plugin',
     version: '1.0.0',
@@ -73,7 +70,7 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
   await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(1));
   expect(install).toHaveBeenCalledTimes(1);
 
-  finishFirstUninstall();
+  finishUninstalls[0]();
 
   await waitFor(
     () => {
@@ -86,5 +83,25 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
   expect(install).toHaveBeenCalledTimes(2);
   expect(lifecycleOverlapped).toBe(false);
 
+  result.rerender(
+    <StrictMode>
+      <AsyncApiComponent schema={schema} plugins={[]} />
+    </StrictMode>,
+  );
+  await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(2));
+
+  result.rerender(
+    <StrictMode>
+      <AsyncApiComponent schema={schema} plugins={[plugin]} />
+    </StrictMode>,
+  );
+  expect(install).toHaveBeenCalledTimes(2);
+
+  finishUninstalls[1]();
+  await waitFor(() => expect(install).toHaveBeenCalledTimes(3));
+  expect(lifecycleOverlapped).toBe(false);
+
   result.unmount();
+  await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(3));
+  finishUninstalls[2]();
 });
