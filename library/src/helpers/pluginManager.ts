@@ -200,12 +200,15 @@ class PluginManager implements MessageBus {
       entry.controller.abort();
       this.cancelledInstalls.add(name);
     });
-    const teardowns = [
-      ...Array.from(this.pendingInstalls.values(), (entry) => entry.completion),
-      ...Array.from(this.plugins.keys(), (name) => this.unregister(name)),
-    ];
+    const teardowns = new Set(
+      Array.from(this.pendingInstalls.values(), (entry) => entry.completion),
+    );
+    Array.from(this.plugins.keys()).forEach((name) => {
+      teardowns.add(this.unregister(name));
+    });
+    this.pendingUninstalls.forEach((uninstall) => teardowns.add(uninstall));
     this.slotComponents.clear();
-    await Promise.all(teardowns);
+    await Promise.all(Array.from(teardowns));
     this.eventListeners.clear();
   }
 

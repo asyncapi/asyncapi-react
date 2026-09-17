@@ -342,6 +342,34 @@ describe('PluginManager', () => {
       await expect(pluginManager.register(plugin)).resolves.toBe(false);
     });
 
+    it('should wait for an uninstall already in progress when destroyed', async () => {
+      let finishUninstall!: () => void;
+      await pluginManager.register({
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: jest.fn(),
+        uninstall: () =>
+          new Promise<void>((resolve) => {
+            finishUninstall = resolve;
+          }),
+      });
+
+      const unregistering = pluginManager.unregister(TEST_PLUGIN_NAME);
+      const destroying = pluginManager.destroy();
+      let destroyFinished = false;
+      void destroying.then(() => {
+        destroyFinished = true;
+      });
+      await Promise.resolve();
+
+      expect(destroyFinished).toBe(false);
+
+      finishUninstall();
+      await unregistering;
+      await destroying;
+      expect(destroyFinished).toBe(true);
+    });
+
     it('should ignore component and listener registrations from async uninstall', async () => {
       let continueUninstall!: () => void;
       const handler = jest.fn();
