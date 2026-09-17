@@ -50,3 +50,45 @@ servers:
   assert.ok(second);
   assert.notEqual(first, second);
 });
+
+void test('keeps the WebSocket lifecycle key when server fields are reordered', () => {
+  const first = getWebSocketServerFingerprint(`
+servers:
+  production:
+    host: example.com
+    protocol: wss
+    description: Production
+`);
+  const reordered = getWebSocketServerFingerprint(`
+servers:
+  production:
+    description: Production
+    protocol: wss
+    host: example.com
+`);
+
+  assert.equal(first, reordered);
+});
+
+void test('changes the WebSocket lifecycle key when server entries are reordered', () => {
+  const first = getWebSocketServerFingerprint(`
+servers:
+  production:
+    host: production.example.com
+    protocol: wss
+  staging:
+    host: staging.example.com
+    protocol: wss
+`);
+  const reordered = getWebSocketServerFingerprint(`
+servers:
+  staging:
+    host: staging.example.com
+    protocol: wss
+  production:
+    host: production.example.com
+    protocol: wss
+`);
+
+  assert.notEqual(first, reordered);
+});
