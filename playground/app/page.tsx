@@ -14,7 +14,7 @@ import {
   AsyncApiWrapper,
   SplitWrapper,
 } from '@/components';
-import { createWsPlugin } from '@asyncapi/ws-plugin';
+import { createWsPlugin } from 'asyncapi-ws-plugin';
 import { defaultConfig, parse, debounce, isWebSocketSchema } from '@/utils';
 import * as specs from '@/specs';
 
