@@ -32,7 +32,9 @@ export const asyncPlugin: AsyncApiPlugin = {
   name: 'async-plugin',
   version: '1.0.0',
   async install(api: PluginAPI) {
-    const result = await fetch('/plugin-data').then((res) => res.json());
+    const result = await fetch('/plugin-data', { signal: api.signal }).then(
+      (res) => res.json(),
+    );
     if (!result.ok) {
       throw new Error('plugin configuration failed');
     }
@@ -87,8 +89,8 @@ function MyApp() {
     }
   };
 
-  const handleDisablePlugin = () => {
-    pluginManager?.unregister('my-plugin');
+  const handleDisablePlugin = async () => {
+    await pluginManager?.unregister('my-plugin');
   };
 
   return (
@@ -106,7 +108,7 @@ function MyApp() {
 
 `PluginManager.register()` returns a `Promise<boolean>` that resolves to `true` when a plugin installs successfully and `false` when the plugin is already registered or `install()` throws or rejects.
 
-`unregister()` removes the plugin's components, drops the listeners it added through `api.on()`, and calls its `uninstall()`. Errors thrown by `uninstall()` are logged and emitted as `PLUGIN_EVENT_ERROR` rather than propagating, since teardown often runs while the component is unmounting.
+`unregister()` returns a promise that resolves after the plugin's components and listeners are removed and its `uninstall()` hook finishes. `destroy()` returns a promise that resolves after every plugin finishes teardown. Errors thrown by `uninstall()` are logged and emitted as `PLUGIN_EVENT_ERROR` rather than propagating.
 
 ## Plugin Structure
 
@@ -130,6 +132,8 @@ interface AsyncApiPlugin {
 
 Use it to release anything `install()` acquired: open connections, timers, DOM listeners. Components the plugin registered are removed first, and listeners added through `api.on()` are removed for it.
 
+`api.signal` is aborted as soon as installation is cancelled or teardown begins. Pass it to APIs such as `fetch()` or subscribe to its `abort` event to stop pending work promptly.
+
 ```typescript
 const createMyPlugin = (): AsyncApiPlugin => {
   let socket: WebSocket | undefined;
@@ -152,6 +156,7 @@ const createMyPlugin = (): AsyncApiPlugin => {
 
 | Method | Purpose |
 |--------|---------|
+| `signal` | An `AbortSignal` that fires when installation is cancelled or teardown begins |
 | `registerComponent(slot, component, options?)` | Register a React component in a slot. `options`: `{ priority?: number; label?: string }` |
 | `onSpecLoaded(callback)` | Called when the AsyncAPI spec loads or changes. If a spec is already loaded when the plugin registers, the callback runs immediately with the current schema. |
 | `getContext()` | Get current plugin context with schema |

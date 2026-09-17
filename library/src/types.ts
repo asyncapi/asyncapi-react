@@ -173,6 +173,9 @@ export interface MessageBus {
 }
 
 export interface PluginAPI {
+  /** Aborted when this plugin installation is cancelled or begins teardown. */
+  readonly signal: AbortSignal;
+
   registerComponent<S extends PluginSlot>(
     slot: S,
     component: React.ComponentType<ComponentSlotProps<S>>,

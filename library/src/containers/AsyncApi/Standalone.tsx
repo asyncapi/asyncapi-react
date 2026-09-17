@@ -91,7 +91,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     this.hasMounted = false;
     this.cleanupEventListeners();
     // Let plugins release what they hold (open connections, timers) instead of orphaning it.
-    this.state.pm?.destroy();
+    void this.state.pm?.destroy();
   }
 
   render() {
@@ -182,7 +182,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         this.registeredPlugins.add(plugin.name);
         this.propsPlugins.add(plugin.name);
       } else if (registered) {
-        pm?.unregister(plugin.name);
+        await pm?.unregister(plugin.name);
       }
     }
 
@@ -201,17 +201,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const prevPluginMap = new Map((prevPlugins ?? []).map((p) => [p.name, p]));
     const newPluginMap = new Map((newPlugins ?? []).map((p) => [p.name, p]));
 
-    prevPluginMap.forEach((_plugin, name) => {
-      if (!newPluginMap.has(name) && this.propsPlugins.has(name)) {
-        try {
-          pm?.unregister(name);
-          this.registeredPlugins.delete(name);
-          this.propsPlugins.delete(name);
-        } catch (error) {
-          console.error(`Failed to unregister plugin ${name}:`, error);
-        }
+    const pluginsToRemove = Array.from(prevPluginMap.keys()).filter(
+      (name) => !newPluginMap.has(name) && this.propsPlugins.has(name),
+    );
+    for (const name of pluginsToRemove) {
+      try {
+        await pm?.unregister(name);
+        this.registeredPlugins.delete(name);
+        this.propsPlugins.delete(name);
+      } catch (error) {
+        console.error(`Failed to unregister plugin ${name}:`, error);
       }
-    });
+    }
 
     const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
       ([name]) => !prevPluginMap.has(name),
@@ -226,7 +227,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         this.registeredPlugins.add(name);
         this.propsPlugins.add(name);
       } else if (registered) {
-        pm?.unregister(name);
+        await pm?.unregister(name);
       }
     }
 
