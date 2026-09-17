@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isWebSocketSchema } from './helpers.ts';
+import { getWebSocketServerFingerprint, isWebSocketSchema } from './helpers.ts';
 
 void test('detects WebSocket protocols on top-level YAML servers', () => {
   assert.equal(
@@ -30,4 +30,23 @@ components:
 `),
     false,
   );
+});
+
+void test('changes the WebSocket lifecycle key when server configuration changes', () => {
+  const first = getWebSocketServerFingerprint(`
+servers:
+  production:
+    host: first.example.com
+    protocol: wss
+`);
+  const second = getWebSocketServerFingerprint(`
+servers:
+  production:
+    host: second.example.com
+    protocol: wss
+`);
+
+  assert.ok(first);
+  assert.ok(second);
+  assert.notEqual(first, second);
 });

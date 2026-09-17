@@ -33,6 +33,7 @@ interface AsyncAPIState {
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private readonly registeredPlugins = new Set<string>();
   private readonly propsPlugins = new Set<string>();
+  private readonly pendingPropsPlugins = new Set<string>();
   /** Stable handler refs so `off()` removes the same listeners registered by `on()`. */
   private readonly pluginEventHandlers = new Map<string, EventListener>();
   private hasMounted = false;
@@ -42,6 +43,8 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   private pluginManagerTeardown?: Promise<void>;
   /** Invalidates deferred mount work when StrictMode unmounts and remounts this instance. */
   private mountGeneration = 0;
+  /** Keeps prop-driven plugin replacements ordered across rapid updates. */
+  private pluginUpdates = Promise.resolve();
 
   state: AsyncAPIState = {
     asyncapi: undefined,
@@ -70,6 +73,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
       this.pluginManagerDestroyed = false;
       this.registeredPlugins.clear();
       this.propsPlugins.clear();
+      this.pendingPropsPlugins.clear();
       this.setState({ pm });
     }
 
@@ -110,7 +114,9 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     if (plugins !== prevProps.plugins) {
-      void this.updatePlugins(prevProps.plugins, plugins);
+      this.pluginUpdates = this.pluginUpdates.then(() =>
+        this.updatePlugins(prevProps.plugins, plugins),
+      );
     }
   }
 
@@ -205,9 +211,11 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const { plugins } = this.props;
 
     for (const plugin of plugins ?? []) {
+      this.pendingPropsPlugins.add(plugin.name);
       const registered = await pm?.register(plugin);
+      this.pendingPropsPlugins.delete(plugin.name);
       const stillRequested = (this.props.plugins ?? []).some(
-        (candidate) => candidate.name === plugin.name,
+        (candidate) => candidate === plugin,
       );
       if (registered && stillRequested && this.hasMounted) {
         this.registeredPlugins.add(plugin.name);
@@ -233,21 +241,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const prevPluginMap = new Map((prevPlugins ?? []).map((p) => [p.name, p]));
     const newPluginMap = new Map((newPlugins ?? []).map((p) => [p.name, p]));
 
-    const pluginsToRemove = Array.from(prevPluginMap.keys()).filter(
-      (name) => !newPluginMap.has(name) && this.propsPlugins.has(name),
+    const pluginsToRemove = Array.from(prevPluginMap.entries()).filter(
+      ([name, plugin]) =>
+        newPluginMap.get(name) !== plugin &&
+        (this.propsPlugins.has(name) || this.pendingPropsPlugins.has(name)),
     );
-    for (const name of pluginsToRemove) {
-      try {
-        await pm?.unregister(name);
-        this.registeredPlugins.delete(name);
-        this.propsPlugins.delete(name);
-      } catch (error) {
-        console.error(`Failed to unregister plugin ${name}:`, error);
-      }
-    }
+    await this.unregisterPlugins(
+      pm,
+      pluginsToRemove.map(([name]) => name),
+    );
 
     const pluginsToAdd = Array.from(newPluginMap.entries()).filter(
-      ([name]) => !prevPluginMap.has(name),
+      ([name, plugin]) => prevPluginMap.get(name) !== plugin,
     );
 
     if (this.pluginManagerTeardown) {
@@ -256,11 +261,18 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     if (!this.hasMounted || mountGeneration !== this.mountGeneration) return;
 
     for (const [name, plugin] of pluginsToAdd) {
-      const registered = await pm?.register(plugin);
       const stillRequested = (this.props.plugins ?? []).some(
-        (p) => p.name === name,
+        (candidate) => candidate === plugin,
       );
-      if (registered && stillRequested) {
+      if (!stillRequested) continue;
+
+      this.pendingPropsPlugins.add(name);
+      const registered = await pm?.register(plugin);
+      this.pendingPropsPlugins.delete(name);
+      const remainsRequested = (this.props.plugins ?? []).some(
+        (candidate) => candidate === plugin,
+      );
+      if (registered && remainsRequested) {
         this.registeredPlugins.add(name);
         this.propsPlugins.add(name);
       } else if (registered) {
@@ -271,6 +283,22 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     // Same as registerPlugins: pm was mutated in place, not via setState.
     if (this.hasMounted) {
       this.setState({});
+    }
+  }
+
+  private async unregisterPlugins(
+    pm: PluginManager | undefined,
+    pluginNames: string[],
+  ) {
+    for (const name of pluginNames) {
+      try {
+        await pm?.unregister(name);
+        this.registeredPlugins.delete(name);
+        this.propsPlugins.delete(name);
+        this.pendingPropsPlugins.delete(name);
+      } catch (error) {
+        console.error(`Failed to unregister plugin ${name}:`, error);
+      }
     }
   }
 

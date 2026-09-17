@@ -35,19 +35,28 @@ const isWebSocketProtocol = (protocol?: string): boolean =>
  * top-level servers collection.
  */
 export const isWebSocketSchema = (schema?: string): boolean => {
+  return getWebSocketServerFingerprint(schema) !== undefined;
+};
+
+/** A stable lifecycle key for the WebSocket servers declared by the active schema. */
+export const getWebSocketServerFingerprint = (
+  schema?: string,
+): string | undefined => {
   if (!schema) {
-    return false;
+    return undefined;
   }
 
   try {
     const parsed = parseYaml(schema) as {
       servers?: Record<string, { protocol?: string } | undefined>;
     } | null;
-    return Object.values(parsed?.servers ?? {}).some((server) =>
+    const servers = parsed?.servers ?? {};
+    const hasWebSocketServer = Object.values(servers).some((server) =>
       isWebSocketProtocol(server?.protocol),
     );
+    return hasWebSocketServer ? JSON.stringify(servers) : undefined;
   } catch {
-    return false;
+    return undefined;
   }
 };
 

@@ -15,15 +15,15 @@ import {
   SplitWrapper,
 } from '@/components';
 import { createWsPlugin } from 'asyncapi-ws-plugin';
-import { defaultConfig, parse, debounce, isWebSocketSchema } from '@/utils';
+import {
+  defaultConfig,
+  parse,
+  debounce,
+  getWebSocketServerFingerprint,
+} from '@/utils';
 import * as specs from '@/specs';
 
 const defaultSchema = specs.streetlights;
-
-// Created once: the plugin keeps its connections in the install() closure, so a fresh instance
-// per render would drop them. It is only registered while a WebSocket spec is rendered, and
-// removing it from the prop unregisters it, which closes any open sockets.
-const websocketPlugins = [createWsPlugin()];
 
 interface State {
   schema: string;
@@ -35,6 +35,8 @@ interface State {
 class Playground extends Component<unknown, State> {
   updateSchemaFn: (value: string) => void;
   updateConfigFn: (value: string) => void;
+  private websocketServerFingerprint?: string;
+  private websocketPlugins?: ReturnType<typeof createWsPlugin>[];
 
   state = {
     schema: defaultSchema,
@@ -72,7 +74,7 @@ class Playground extends Component<unknown, State> {
   render() {
     const { schema, config, schemaFromExternalResource } = this.state;
     const parsedConfig = parse<ConfigInterface>(config || defaultConfig);
-    const isWebSocket = isWebSocketSchema(schema);
+    const websocketPlugins = this.getWebSocketPlugins(schema);
 
     return (
       <PlaygroundWrapper>
@@ -112,7 +114,7 @@ class Playground extends Component<unknown, State> {
             <AsyncApi
               schema={schema}
               config={parsedConfig}
-              plugins={isWebSocket ? websocketPlugins : undefined}
+              plugins={websocketPlugins}
               // Without this, a plugin that fails to install does so silently.
               onPluginEvent={(eventName, data) =>
                 // eslint-disable-next-line no-console
@@ -136,6 +138,22 @@ class Playground extends Component<unknown, State> {
   private updateConfig = (config: string) => {
     this.setState({ config });
   };
+
+  private getWebSocketPlugins(schema: string) {
+    const fingerprint = getWebSocketServerFingerprint(schema);
+    if (!fingerprint) {
+      this.websocketServerFingerprint = undefined;
+      this.websocketPlugins = undefined;
+      return undefined;
+    }
+
+    if (fingerprint !== this.websocketServerFingerprint) {
+      this.websocketServerFingerprint = fingerprint;
+      this.websocketPlugins = [createWsPlugin()];
+    }
+
+    return this.websocketPlugins;
+  }
 
   private startRefreshing = (): void => {
     setTimeout(() => {

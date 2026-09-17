@@ -105,3 +105,42 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
   await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(3));
   finishUninstalls[2]();
 });
+
+test('waits for a same-name plugin to uninstall before installing its replacement', async () => {
+  let finishUninstall: (() => void) | undefined;
+  const firstInstall = jest.fn();
+  const firstUninstall = jest.fn(
+    () =>
+      new Promise<void>((resolve) => {
+        finishUninstall = resolve;
+      }),
+  );
+  const replacementInstall = jest.fn();
+  const firstPlugin: AsyncApiPlugin = {
+    name: 'replaceable-plugin',
+    version: '1.0.0',
+    install: firstInstall,
+    uninstall: firstUninstall,
+  };
+  const replacementPlugin: AsyncApiPlugin = {
+    name: 'replaceable-plugin',
+    version: '2.0.0',
+    install: replacementInstall,
+  };
+
+  const result = render(
+    <AsyncApiComponent schema={schema} plugins={[firstPlugin]} />,
+  );
+  await waitFor(() => expect(firstInstall).toHaveBeenCalledTimes(1));
+
+  result.rerender(
+    <AsyncApiComponent schema={schema} plugins={[replacementPlugin]} />,
+  );
+  await waitFor(() => expect(firstUninstall).toHaveBeenCalledTimes(1));
+  expect(replacementInstall).not.toHaveBeenCalled();
+
+  finishUninstall?.();
+  await waitFor(() => expect(replacementInstall).toHaveBeenCalledTimes(1));
+
+  result.unmount();
+});
