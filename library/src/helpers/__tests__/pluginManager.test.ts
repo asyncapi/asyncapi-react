@@ -55,6 +55,7 @@ describe('PluginManager', () => {
 
       expect(capturedAPI).toBeDefined();
       expect(capturedAPI).toHaveProperty('registerComponent');
+      expect(capturedAPI).toHaveProperty('signal');
       expect(capturedAPI).toHaveProperty('on');
       expect(capturedAPI).toHaveProperty('off');
       expect(capturedAPI).toHaveProperty('emit');
@@ -93,10 +94,63 @@ describe('PluginManager', () => {
       };
 
       await pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
-      await flush();
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
 
       expect(uninstallMock).toHaveBeenCalledWith(installApi);
+    });
+
+    it('should abort the plugin signal and wait for async teardown', async () => {
+      let signal: AbortSignal | undefined;
+      let finishUninstall!: () => void;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          signal = api.signal;
+        },
+        uninstall: () =>
+          new Promise<void>((resolve) => {
+            finishUninstall = resolve;
+          }),
+      };
+
+      await pluginManager.register(plugin);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
+
+      expect(signal?.aborted).toBe(true);
+      let finished = false;
+      void teardown.then(() => {
+        finished = true;
+      });
+      await Promise.resolve();
+      expect(finished).toBe(false);
+
+      finishUninstall();
+      await teardown;
+      expect(finished).toBe(true);
+    });
+
+    it('should abort a pending installation when unregistered', async () => {
+      let signal: AbortSignal | undefined;
+      let finishInstall!: () => void;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          signal = api.signal;
+          return new Promise<void>((resolve) => {
+            finishInstall = resolve;
+          });
+        },
+      };
+
+      const registration = pluginManager.register(plugin);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
+      expect(signal?.aborted).toBe(true);
+
+      finishInstall();
+      await expect(registration).resolves.toBe(false);
+      await expect(teardown).resolves.toBeUndefined();
     });
 
     it('should unregister a plugin without an uninstall hook', async () => {
@@ -148,9 +202,9 @@ describe('PluginManager', () => {
       };
 
       const registering = pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
       await registering;
-      await flush();
+      await teardown;
 
       expect(uninstallMock).toHaveBeenCalled();
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
@@ -173,7 +227,7 @@ describe('PluginManager', () => {
       const registration = pluginManager.register(plugin);
       expect(pluginManager.listeners(TEST_EVENT)).toContain(handler);
 
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
       pluginManager.emit(TEST_EVENT, { some: 'data' });
 
       expect(pluginManager.listeners(TEST_EVENT)).toHaveLength(0);
@@ -181,6 +235,7 @@ describe('PluginManager', () => {
 
       finishInstall();
       await expect(registration).resolves.toBe(false);
+      await teardown;
     });
 
     it('should remove listeners the plugin added', async () => {
@@ -194,7 +249,7 @@ describe('PluginManager', () => {
       };
 
       await pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
       pluginManager.emit(TEST_EVENT, { some: 'data' });
 
       expect(handler).not.toHaveBeenCalled();
@@ -217,8 +272,7 @@ describe('PluginManager', () => {
         uninstall: secondUninstall,
       });
 
-      pluginManager.destroy();
-      await flush();
+      await pluginManager.destroy();
 
       expect(firstUninstall).toHaveBeenCalled();
       expect(secondUninstall).toHaveBeenCalled();
@@ -239,10 +293,11 @@ describe('PluginManager', () => {
       };
 
       const registration = pluginManager.register(plugin);
-      pluginManager.destroy();
+      const teardown = pluginManager.destroy();
       finishInstall();
 
       await expect(registration).resolves.toBe(false);
+      await teardown;
       expect(uninstall).toHaveBeenCalledTimes(1);
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
       await expect(pluginManager.register(plugin)).resolves.toBe(false);
@@ -265,9 +320,9 @@ describe('PluginManager', () => {
       };
 
       await pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
       continueUninstall();
-      await flush();
+      await teardown;
 
       expect(pluginManager.getComponentsForSlot(PluginSlot.INFO)).toHaveLength(
         0,
@@ -289,7 +344,7 @@ describe('PluginManager', () => {
           }),
       });
 
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
 
       const replacementInstall = jest.fn();
       const replacementRegistration = pluginManager.register({
@@ -309,6 +364,7 @@ describe('PluginManager', () => {
       expect(replacementInstall).not.toHaveBeenCalled();
 
       finishUninstall();
+      await teardown;
       await expect(replacementRegistration).resolves.toBe(true);
       expect(replacementInstall).toHaveBeenCalledTimes(1);
     });
@@ -322,7 +378,7 @@ describe('PluginManager', () => {
       };
 
       await pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
 
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
     });
@@ -342,7 +398,7 @@ describe('PluginManager', () => {
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(1);
 
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(0);
@@ -374,7 +430,7 @@ describe('PluginManager', () => {
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(2);
 
-      pluginManager.unregister('plugin-1');
+      await pluginManager.unregister('plugin-1');
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(1);
@@ -400,7 +456,7 @@ describe('PluginManager', () => {
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(2);
 
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),
       ).toHaveLength(0);
@@ -911,10 +967,11 @@ describe('PluginManager', () => {
       };
 
       const registerPromise = pluginManager.register(plugin);
-      pluginManager.unregister(TEST_PLUGIN_NAME);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
       resolveInstall();
 
       expect(await registerPromise).toBe(false);
+      await teardown;
       expect(pluginManager.getPlugin(TEST_PLUGIN_NAME)).toBeUndefined();
       expect(
         pluginManager.getComponentsForSlot(PluginSlot.OPERATION),

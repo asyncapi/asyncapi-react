@@ -21,6 +21,9 @@ interface InstalledPlugin {
   listeners: { eventName: string; callback: (data: unknown) => void }[];
   /** Whether this installation may still mutate manager-owned state through its API. */
   state: { active: boolean };
+  controller: AbortController;
+  completion: Promise<void>;
+  resolveCompletion: () => void;
 }
 
 class PluginManager implements MessageBus {
@@ -83,8 +86,26 @@ class PluginManager implements MessageBus {
 
     const listeners: InstalledPlugin['listeners'] = [];
     const state = { active: true };
-    const api = this.createPluginAPI(plugin, listeners, () => state.active);
-    const entry: InstalledPlugin = { plugin, api, listeners, state };
+    const controller = new AbortController();
+    let resolveCompletion!: () => void;
+    const completion = new Promise<void>((resolve) => {
+      resolveCompletion = resolve;
+    });
+    const api = this.createPluginAPI(
+      plugin,
+      listeners,
+      () => state.active,
+      controller.signal,
+    );
+    const entry: InstalledPlugin = {
+      plugin,
+      api,
+      listeners,
+      state,
+      controller,
+      completion,
+      resolveCompletion,
+    };
     this.pendingInstalls.set(plugin.name, entry);
     try {
       await plugin.install(api);
@@ -92,6 +113,7 @@ class PluginManager implements MessageBus {
       // Always log so failures are visible even without an `onPluginEvent` handler.
       console.error(`Failed to register plugin ${plugin.name}:`, error);
       entry.state.active = false;
+      entry.controller.abort();
       this.removePluginComponents(plugin.name);
       this.removePluginListeners(entry);
       this.cancelledInstalls.delete(plugin.name);
@@ -100,6 +122,7 @@ class PluginManager implements MessageBus {
         message: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString(),
       });
+      entry.resolveCompletion();
       return false;
     } finally {
       this.pendingInstalls.delete(plugin.name);
@@ -111,6 +134,7 @@ class PluginManager implements MessageBus {
       this.removePluginListeners(entry);
       // install() ran to completion before the cancellation, so it may hold resources.
       await this.trackUninstall(entry);
+      entry.resolveCompletion();
       return false;
     }
 
@@ -120,6 +144,7 @@ class PluginManager implements MessageBus {
       message: 'Plugin registered successfully',
       timestamp: new Date().toISOString(),
     });
+    entry.resolveCompletion();
     return true;
   }
 
@@ -127,45 +152,55 @@ class PluginManager implements MessageBus {
    * Removes a plugin, the UI components it registered and the listeners it added, then calls
    * its `uninstall()`. No-op if the plugin name is not found.
    */
-  unregister(pluginName: string): void {
+  unregister(pluginName: string): Promise<void> {
     const entry = this.plugins.get(pluginName);
     const pendingEntry = this.pendingInstalls.get(pluginName);
     if (!entry && !pendingEntry) {
+      const pendingUninstall = this.pendingUninstalls.get(pluginName);
+      if (pendingUninstall) return pendingUninstall;
       console.warn(`Plugin "${pluginName}" not found`);
-      return;
+      return Promise.resolve();
     }
 
     if (pendingEntry) {
       pendingEntry.state.active = false;
+      pendingEntry.controller.abort();
       this.removePluginListeners(pendingEntry);
       this.cancelledInstalls.add(pluginName);
     }
 
     if (entry) {
       entry.state.active = false;
+      entry.controller.abort();
     }
     this.plugins.delete(pluginName);
     // Stop rendering the plugin before it releases state its components may read.
     this.removePluginComponents(pluginName);
     if (entry) {
       this.removePluginListeners(entry);
-      void this.trackUninstall(entry);
+      return this.trackUninstall(entry);
     }
+    return pendingEntry!.completion;
   }
 
   /**
    * Tears down every plugin and drops all state. Call this when the host component unmounts,
    * so plugins can close connections instead of leaving them orphaned.
    */
-  destroy(): void {
+  async destroy(): Promise<void> {
     this.destroyed = true;
     this.pendingInstalls.forEach((entry, name) => {
       entry.state.active = false;
+      entry.controller.abort();
       this.cancelledInstalls.add(name);
     });
-    Array.from(this.plugins.keys()).forEach((name) => this.unregister(name));
+    const teardowns = [
+      ...Array.from(this.pendingInstalls.values(), (entry) => entry.completion),
+      ...Array.from(this.plugins.keys(), (name) => this.unregister(name)),
+    ];
     this.slotComponents.clear();
     this.eventListeners.clear();
+    await Promise.all(teardowns);
   }
 
   /**
@@ -175,6 +210,7 @@ class PluginManager implements MessageBus {
   private async runUninstall(entry: InstalledPlugin): Promise<void> {
     const { plugin, api } = entry;
     entry.state.active = false;
+    entry.controller.abort();
     if (!plugin.uninstall) {
       return;
     }
@@ -229,8 +265,10 @@ class PluginManager implements MessageBus {
     plugin: AsyncApiPlugin,
     listeners: InstalledPlugin['listeners'],
     isActive: () => boolean,
+    signal: AbortSignal,
   ): PluginAPI {
     return {
+      signal,
       registerComponent: (slot, component, options = {}) => {
         if (!isActive()) return;
 
