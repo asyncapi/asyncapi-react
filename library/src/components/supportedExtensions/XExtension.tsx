@@ -17,7 +17,6 @@ export default function XExtension({
       target="_blank"
     >
       <svg
-        // onClick={onClickHandler}
         style={{ cursor: 'pointer' }}
         width="15px"
         height="15px"
