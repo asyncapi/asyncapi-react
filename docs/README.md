@@ -15,3 +15,4 @@ This directory contains the following documents that relate to the project:
   - [Using in NextJS](./usage/nextjs.md) describes how to use the AsyncAPI component in NextJS project.
   - [Standalone bundle usage](./usage/standalone-bundle.md) describes how to use the Standalone Bundle of AsyncAPI component with [ReactDOM](https://reactjs.org/docs/react-dom.html) package onboard.
   - [Web Component usage](./usage/web-component.md) describes how to use the `web-component`.
+  - [Using without Parser](./usage/no-parser-usage.md) describes how to use the component without bundling the parser and how to import Parser types for TypeScript projects.
