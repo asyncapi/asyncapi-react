@@ -176,6 +176,37 @@ describe('SchemaHelpers', () => {
       const result = SchemaHelpers.toSchemaType(schema);
       expect(result).toEqual('object [SampleType]');
     });
+
+    test('should handle append title to non-object schema', () => {
+      const schema = new Schema({
+        type: 'string',
+        title: 'OrderStatus',
+        enum: ['OPEN', 'IN_PROGRESS', 'CLOSED'],
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('string [OrderStatus]');
+    });
+
+    test('should handle append title to integer schema', () => {
+      const schema = new Schema({ type: 'integer', title: 'PortNumber' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('integer [PortNumber]');
+    });
+
+    test('should handle append title to union schema', () => {
+      const schema = new Schema({
+        type: ['string', 'null'],
+        title: 'NullableString',
+      });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('string | null [NullableString]');
+    });
+
+    test('should not append title when title is identical to type', () => {
+      const schema = new Schema({ type: 'string', title: 'string' });
+      const result = SchemaHelpers.toSchemaType(schema);
+      expect(result).toEqual('string');
+    });
   });
 
   describe('.prettifyValue', () => {
