@@ -54,7 +54,6 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
   const [expanded, setExpanded] = useState(
     config?.expand?.messageExamples ?? false,
   );
-
   useEffect(() => {
     setExpanded(config?.expand?.messageExamples ?? false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
