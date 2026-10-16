@@ -18,6 +18,7 @@ The official [React](https://reactjs.org/) component for AsyncAPI specification.
 - [Using in other technologies](#using-in-other-technologies)
 - [Props](#props)
 - [Features](#features)
+- [Default plugins](#default-plugins)
 - [Styles](#styles)
   * [Default styles](#default-styles)
   * [Custom styles](#custom-styles)
@@ -126,6 +127,32 @@ The list of props for the AsyncAPI React component includes:
 ## Features
 
 For a list and description of features offered by the AsyncAPI React component, see [this](./docs/features) directory.
+
+## Default plugins
+
+The [plugin system](./docs/features/plugins.md) lets you extend the component with interactive features. The following plugins are integrated into the playground and can be installed separately in your own application:
+
+- **WebSocket ([asyncapi-ws-plugin](https://www.npmjs.com/package/asyncapi-ws-plugin))**: Connect to WebSocket servers, send messages, and inspect incoming frames against your AsyncAPI specification. The playground enables this plugin automatically for specifications with `ws` or `wss` servers.
+
+To use the WebSocket plugin in your application, install it:
+
+```sh
+npm install asyncapi-ws-plugin
+```
+
+Then register it through the `plugins` prop:
+
+```tsx
+import AsyncApiComponent from '@asyncapi/react-component';
+import { createWsPlugin } from 'asyncapi-ws-plugin';
+
+// Create the plugin once so connections persist across re-renders.
+const plugins = [createWsPlugin()];
+
+const App = () => <AsyncApiComponent schema={schema} plugins={plugins} />;
+```
+
+Here, `schema` is your AsyncAPI specification containing a WebSocket server.
 
 ## Styles
 
