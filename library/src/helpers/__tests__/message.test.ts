@@ -21,6 +21,24 @@ describe('MessageHelpers', () => {
         b: 0,
       });
     });
+
+    test('should generate example from multi-format schema', () => {
+      expect(
+        MessageHelpers.generateExample({
+          schemaFormat: 'application/vnd.aai.asyncapi+json;version=3.0.0',
+          schema: {
+            type: 'object',
+            properties: {
+              userId: { type: 'string' },
+              age: { type: 'integer' },
+            },
+          },
+        }),
+      ).toEqual({
+        userId: 'string',
+        age: 0,
+      });
+    });
   });
 
   describe('.sanitizeExample', () => {
