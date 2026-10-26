@@ -25,13 +25,13 @@ Check how to use the Web Component in:
 ```html
 <!-- Remove 'webcomponentsjs' if no support for older browsers is required -->
 <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.5.0/webcomponents-bundle.js"></script>
-<script src="https://unpkg.com/@asyncapi/web-component@0.24.0/lib/asyncapi-web-component.js" defer></script>
+<script src="https://unpkg.com/@asyncapi/web-component@latest/lib/asyncapi-web-component.js" defer></script>
 
 <asyncapi-component
   schemaUrl="https://raw.githubusercontent.com/asyncapi/asyncapi/master/examples/2.0.0/streetlights.yml"
   config='{"show": {"info": false}}'
   schemaFetchOptions='{"method":"GET","mode":"cors"}' <!-- Remove if it is only a plain browser request -->
-  cssImportPath="https://unpkg.com/@asyncapi/react-component@0.24.0/styles/default.min.css">
+  cssImportPath="https://unpkg.com/@asyncapi/react-component@latest/styles/default.min.css">
 </asyncapi-component>
 ```
 
