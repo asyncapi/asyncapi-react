@@ -259,10 +259,20 @@
     },
     {
       "login": "AceTheCreator",
-      "name": "Ace ",
+      "name": "Azeez Elegbede",
       "avatar_url": "https://avatars.githubusercontent.com/u/40604284?v=4",
       "profile": "https://github.com/AceTheCreator",
-      "contributions": ["code"]
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "maintenance",
+        "review",
+        "test",
+        "infra",
+        "bug",
+        "example"
+      ]
     },
     {
       "login": "jonaslagoni",
@@ -270,6 +280,45 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/13396189?v=4",
       "profile": "https://github.com/jonaslagoni",
       "contributions": ["code"]
+    },
+    {
+      "login": "catosaurusrex2003",
+      "name": "Mohammed Mehdi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96487647?v=4",
+      "profile": "https://github.com/catosaurusrex2003",
+      "contributions": [
+        "code",
+        "doc",
+        "bug",
+        "review",
+        "maintenance",
+        "test",
+        "ideas",
+        "infra"
+      ]
+    },
+    {
+      "login": "Ishita-190",
+      "name": "Ishita Sati",
+      "avatar_url": "https://avatars.githubusercontent.com/u/181350135?v=4",
+      "profile": "https://github.com/Ishita-190",
+      "contributions": [
+        "code",
+        "bug",
+        "test",
+        "infra"
+      ]
+    },
+    {
+      "login": "kennethaasan",
+      "name": "Kenneth Aasan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1437394?v=4",
+      "profile": "https://github.com/kennethaasan",
+      "contributions": [
+        "code",
+        "infra",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
