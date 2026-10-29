@@ -174,4 +174,17 @@ describe('Schema component', () => {
       expect(screen.getByText('Dog:')).toBeDefined();
     });
   });
+
+  test('should render type badge with title for non-object schema', () => {
+    const schema = {
+      type: 'string',
+      title: 'OrderStatus',
+      enum: ['OPEN', 'IN_PROGRESS', 'CLOSED'],
+    };
+    const schemaModel = new SchemaModel(schema as never);
+
+    render(<Schema schema={schemaModel} />);
+
+    expect(screen.getByText('string [OrderStatus]')).toBeDefined();
+  });
 });

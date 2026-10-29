@@ -87,10 +87,9 @@ export class SchemaHelpers {
     }
 
     let type = this.inferType(schema);
-    if (Array.isArray(type)) {
-      return type.map((t) => this.toType(t, schema)).join(' | ');
-    }
-    type = this.toType(type, schema);
+    type = Array.isArray(type)
+      ? type.map((t) => this.toType(t, schema)).join(' | ')
+      : this.toType(type, schema);
     const combinedType = this.toCombinedType(schema);
 
     if (type && combinedType) {
@@ -100,7 +99,7 @@ export class SchemaHelpers {
       return combinedType;
     }
 
-    if (type === 'object' && schema.title()) {
+    if (schema.title() && type !== schema.title()) {
       type += ' [' + schema.title() + ']';
     }
     return type;
