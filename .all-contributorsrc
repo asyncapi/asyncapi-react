@@ -308,17 +308,6 @@
         "test",
         "infra"
       ]
-    },
-    {
-      "login": "kennethaasan",
-      "name": "Kenneth Aasan",
-      "avatar_url": "https://avatars.githubusercontent.com/u/1437394?v=4",
-      "profile": "https://github.com/kennethaasan",
-      "contributions": [
-        "code",
-        "infra",
-        "bug"
-      ]
     }
   ],
   "contributorsPerLine": 7,
