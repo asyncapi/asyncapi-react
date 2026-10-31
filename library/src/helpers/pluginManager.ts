@@ -328,6 +328,8 @@ class PluginManager implements MessageBus {
       },
 
       emit: (eventName, data) => {
+        if (!isActive()) return;
+
         this.emit(eventName, data);
       },
     };

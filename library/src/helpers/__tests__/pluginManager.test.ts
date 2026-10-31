@@ -830,6 +830,53 @@ describe('PluginManager', () => {
 
       expect(callback).not.toHaveBeenCalled();
     });
+
+    it('should ignore events emitted after a pending installation is cancelled', async () => {
+      const callback = jest.fn();
+      pluginManager.on(TEST_EVENT, callback);
+
+      let finishInstall!: () => void;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: async (api) => {
+          await new Promise<void>((resolve) => {
+            finishInstall = resolve;
+          });
+          api.emit(TEST_EVENT, { data: 'late-event' });
+        },
+      };
+
+      const registration = pluginManager.register(plugin);
+      const teardown = pluginManager.unregister(TEST_PLUGIN_NAME);
+      finishInstall();
+
+      await expect(registration).resolves.toBe(false);
+      await teardown;
+
+      expect(callback).not.toHaveBeenCalled();
+    });
+
+    it('should ignore events emitted from a retained API after unregistration', async () => {
+      const callback = jest.fn();
+      pluginManager.on(TEST_EVENT, callback);
+
+      let retainedApi!: PluginAPI;
+      const plugin: AsyncApiPlugin = {
+        name: TEST_PLUGIN_NAME,
+        version: '1.0.0',
+        install: (api) => {
+          retainedApi = api;
+        },
+      };
+
+      await pluginManager.register(plugin);
+      await pluginManager.unregister(TEST_PLUGIN_NAME);
+
+      retainedApi.emit(TEST_EVENT, { data: 'after-unregister' });
+
+      expect(callback).not.toHaveBeenCalled();
+    });
   });
 
   describe('Plugin Error handling tests', () => {
