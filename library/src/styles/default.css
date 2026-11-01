@@ -5,20 +5,24 @@
 @tailwind utilities;
 
 @layer components {
-  .container\:base .burger-menu {
+  .container\:base .burger-menu,
+  .container\:xl .burger-menu {
     @apply lg:hidden;
   }
 
-  .container\:base .sidebar {
+  .container\:base .sidebar,
+  .container\:xl .sidebar {
     @apply lg:relative lg:block lg:w-64 lg:h-auto;
   }
 
+  .container\:lg .sidebar--wrapper,
   .container\:xl .sidebar--wrapper {
     @apply xl:w-full;
     @apply sm:w-full;
   }
 
-  .container\:base .sidebar--content {
+  .container\:base .sidebar--content,
+  .container\:xl .sidebar--content {
     @apply lg:w-56;
   }
 
@@ -26,6 +30,7 @@
     @apply 2xl:flex;
   }
 
+  .container\:lg .panel-item,
   .container\:xl .panel-item {
     @apply block;
   }
@@ -38,10 +43,12 @@
     @apply 2xl:w-5/12;
   }
 
+  .container\:lg .panel--center .panel-item--center,
   .container\:xl .panel--center .panel-item--center {
     @apply w-full;
   }
 
+  .container\:lg .panel--center .panel-item--right,
   .container\:xl .panel--center .panel-item--right {
     @apply w-full;
   }
@@ -54,6 +61,7 @@
     @apply hidden 2xl:block 2xl:w-5/12;
   }
 
+  .container\:lg .panel--right,
   .container\:xl .panel--right {
     @apply hidden;
   }
