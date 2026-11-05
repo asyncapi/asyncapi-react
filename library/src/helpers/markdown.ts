@@ -24,7 +24,7 @@ export function asyncApiToMarkdown(
   }
   if (info.description()) {
     lines.push('');
-    lines.push(info.description() as string);
+    lines.push(info.description()!);
   }
 
   const servers = document.servers().all();
@@ -38,7 +38,7 @@ export function asyncApiToMarkdown(
       lines.push(`- Protocol: \`${server.protocol()}\``);
       if (server.hasDescription()) {
         lines.push('');
-        lines.push(server.description() as string);
+        lines.push(server.description()!);
       }
     });
   }
@@ -50,7 +50,7 @@ export function asyncApiToMarkdown(
     operations.forEach((operation) => {
       const channel = operation.channels().all()[0];
       lines.push('');
-      lines.push(`### ${operation.id() || operation.action()}`);
+      lines.push(`### ${operation.id() ?? operation.action()}`);
       lines.push(`- Action: \`${operation.action()}\``);
       if (channel?.address()) {
         lines.push(`- Channel: \`${channel.address()}\``);
@@ -60,7 +60,7 @@ export function asyncApiToMarkdown(
       }
       if (operation.hasDescription()) {
         lines.push('');
-        lines.push(operation.description() as string);
+        lines.push(operation.description()!);
       }
       const messages = operation.messages().all();
       if (messages.length) {
@@ -69,7 +69,7 @@ export function asyncApiToMarkdown(
         messages.forEach((message) => {
           lines.push(`- \`${message.id()}\``);
           if (message.hasDescription()) {
-            lines.push(`  ${message.description()}`);
+            lines.push(`  ${message.description()!}`);
           }
           if (includeExamples) {
             const payload = message.payload();
@@ -91,12 +91,12 @@ export function asyncApiToMarkdown(
       lines.push('');
       lines.push(`### ${message.id()}`);
       if (message.hasDescription()) {
-        lines.push(message.description() as string);
+        lines.push(message.description()!);
       }
       const payload = message.payload();
       if (payload) {
         lines.push('');
-        lines.push(`Payload type: \`${payload.type() ?? 'object'}\``);
+        lines.push(`Payload type: \`${String(payload.type() ?? 'object')}\``);
       }
     });
   }
@@ -110,15 +110,17 @@ export function asyncApiToMarkdown(
         lines.push('');
         lines.push(`### ${schema.id()}`);
         if (schema.description()) {
-          lines.push(schema.description() as string);
+          lines.push(schema.description()!);
         }
-        lines.push(`- Type: \`${schema.type() ?? 'object'}\``);
+        lines.push(`- Type: \`${String(schema.type() ?? 'object')}\``);
         const properties = schema.properties();
         if (properties) {
           lines.push('- Properties:');
           Object.keys(properties).forEach((name) => {
             const property = properties[name];
-            lines.push(`  - \`${name}\`: \`${property?.type() ?? 'any'}\``);
+            lines.push(
+              `  - \`${name}\`: \`${String(property?.type() ?? 'any')}\``,
+            );
           });
         }
       });
@@ -137,12 +139,14 @@ export function generateLlmsTxt(
   lines.push(`# ${info.title()}`);
   lines.push('');
   if (info.description()) {
-    lines.push(`> ${(info.description() as string).split('\n')[0]}`);
+    lines.push(`> ${info.description()!.split('\n')[0]}`);
     lines.push('');
   }
   lines.push('## Docs');
   lines.push('');
-  lines.push(`- [AsyncAPI Documentation](${markdownUrl}): Full specification in Markdown`);
+  lines.push(
+    `- [AsyncAPI Documentation](${markdownUrl}): Full specification in Markdown`,
+  );
   lines.push('');
   const operations = document.operations().all();
   if (operations.length) {
@@ -150,9 +154,11 @@ export function generateLlmsTxt(
     lines.push('');
     operations.forEach((operation) => {
       const channel = operation.channels().all()[0];
-      const label = operation.id() || operation.action();
+      const label = operation.id() ?? operation.action();
       const anchor = label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      lines.push(`- [${label}](#${anchor}): ${operation.action()} ${channel?.address() ?? ''}`.trim());
+      lines.push(
+        `- [${label}](#${anchor}): ${operation.action()} ${channel?.address() ?? ''}`.trim(),
+      );
     });
     lines.push('');
   }

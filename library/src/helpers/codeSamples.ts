@@ -1,4 +1,8 @@
-import { ChannelInterface, OperationInterface, ServerInterface } from '@asyncapi/parser';
+import {
+  ChannelInterface,
+  OperationInterface,
+  ServerInterface,
+} from '@asyncapi/parser';
 import { MessageHelpers } from './message';
 
 export interface CodeSample {
@@ -13,11 +17,12 @@ export interface OperationExamples {
   markdown: string;
 }
 
-function firstServer(operation: OperationInterface, channel?: ChannelInterface): ServerInterface | undefined {
+function firstServer(
+  operation: OperationInterface,
+  channel?: ChannelInterface,
+): ServerInterface | undefined {
   const servers =
-    channel?.servers?.().all?.() ||
-    operation.servers?.().all?.() ||
-    [];
+    channel?.servers?.().all?.() ?? operation.servers?.().all?.() ?? [];
   return servers[0];
 }
 
@@ -25,12 +30,13 @@ function firstPayloadExample(operation: OperationInterface): unknown {
   const message = operation.messages().all()[0];
   if (!message) return {};
   const examples = MessageHelpers.getPayloadExamples(message);
-  if (examples && examples.length) {
+  if (examples?.length) {
     return examples[0].example;
   }
   try {
     const payload = message.payload();
     if (payload) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       return MessageHelpers.generateExample(payload, {}) || {};
     }
   } catch (e) {
@@ -39,6 +45,7 @@ function firstPayloadExample(operation: OperationInterface): unknown {
   return {};
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function generateOperationExamples(
   operation: OperationInterface,
   channel?: ChannelInterface,
@@ -47,10 +54,11 @@ export function generateOperationExamples(
   const server = firstServer(operation, channel);
   const protocol = server?.protocol() ?? 'unknown';
   const url = server?.url() ?? 'https://example.com';
-  const address = channel?.address() ?? operation.channels().all()[0]?.address() ?? '';
+  const address =
+    channel?.address() ?? operation.channels().all()[0]?.address() ?? '';
   const payload = firstPayloadExample(operation) ?? {};
   const payloadJson = JSON.stringify(payload, null, 2) ?? '{}';
-  const operationId = operation.id() || operation.action();
+  const operationId = operation.id() ?? operation.action();
   const reply = operation.reply?.();
 
   const prompt = [
@@ -114,7 +122,9 @@ export function generateOperationExamples(
     prompt,
     '```',
     '',
-    ...samples.map((sample) => [`### ${sample.label}`, '```', sample.code, '```', '']).flat(),
+    ...samples
+      .map((sample) => [`### ${sample.label}`, '```', sample.code, '```', ''])
+      .flat(),
   ].join('\n');
 
   return { prompt, samples, markdown };

@@ -9,7 +9,10 @@ interface Props {
   channel?: ChannelInterface;
 }
 
-export const ExampleRequestPanel: React.FC<Props> = ({ operation, channel }) => {
+export const ExampleRequestPanel: React.FC<Props> = ({
+  operation,
+  channel,
+}) => {
   const config = useConfig();
   const languages = config.llm?.languages ?? ['curl', 'javascript', 'python'];
   const examples = generateOperationExamples(operation, channel, languages);
@@ -20,7 +23,7 @@ export const ExampleRequestPanel: React.FC<Props> = ({ operation, channel }) => 
 
   const handleDownload = () => {
     downloadText(
-      `${operation.id() || 'operation'}-example.md`,
+      `${operation.id() ?? 'operation'}-example.md`,
       examples.markdown,
     );
   };
@@ -49,7 +52,7 @@ export const ExampleRequestPanel: React.FC<Props> = ({ operation, channel }) => 
         <button
           type="button"
           data-testid="operation-copy-markdown"
-          onClick={handleCopy}
+          onClick={() => void handleCopy()}
           className="border border-gray-300 rounded px-3 py-1 text-xs uppercase font-bold hover:bg-gray-100"
         >
           Copy as Markdown
