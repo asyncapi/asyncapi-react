@@ -1,5 +1,12 @@
 import { ExtensionComponentProps } from '../types';
 
+export interface LlmNativeConfig {
+  markdownExport?: boolean;
+  exampleRequests?: boolean;
+  languages?: string[];
+  llmsTxt?: boolean;
+}
+
 export interface ConfigInterface {
   schemaID?: string;
   show?: ShowConfig;
@@ -14,6 +21,7 @@ export interface ConfigInterface {
   requestLabel?: string;
   replyLabel?: string;
   extensions?: Record<string, React.ComponentType<ExtensionComponentProps>>;
+  llm?: LlmNativeConfig;
 }
 
 export interface ShowConfig {

@@ -27,4 +27,12 @@ export type {
 import { hljs } from './helpers';
 
 export { AsyncApiComponentWP, hljs };
+export { asyncApiToMarkdown, generateLlmsTxt } from './helpers/markdown';
+export { generateOperationExamples } from './helpers/codeSamples';
+export { copyToClipboard, downloadText } from './helpers/export';
+export {
+  MarkdownExportBar,
+  MarkdownExportButton,
+} from './components/MarkdownExport';
+export { ExampleRequestPanel } from './containers/Operations/ExampleRequest';
 export default AsyncApiComponent;
