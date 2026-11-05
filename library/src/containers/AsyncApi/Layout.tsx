@@ -8,6 +8,7 @@ import { Servers } from '../Servers/Servers';
 import { Operations } from '../Operations/Operations';
 import { Messages } from '../Messages/Messages';
 import { Schemas } from '../Schemas/Schemas';
+import { MarkdownExportBar } from '../../components/MarkdownExport';
 
 import { ConfigInterface } from '../../config';
 import { SpecificationContext, ConfigContext } from '../../contexts';
@@ -60,6 +61,7 @@ const AsyncApiLayout: React.FunctionComponent<Props> = ({
                 <div className="panel--center relative py-8 flex-1">
                   <div className="relative z-10">
                     {configShow.info && <Info />}
+                    <MarkdownExportBar />
                     {configShow.servers && <Servers />}
                     {configShow.operations && <Operations />}
                     {configShow.messages && <Messages />}

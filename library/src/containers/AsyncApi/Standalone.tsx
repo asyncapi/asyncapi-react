@@ -158,6 +158,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
         ...defaultConfig.extensions,
         ...(!!config && config.extensions),
       },
+      llm: {
+        ...defaultConfig.llm,
+        ...(!!config && config.llm),
+      },
     };
 
     if (!asyncapi) {

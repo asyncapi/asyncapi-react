@@ -17,6 +17,7 @@ import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType, PluginSlot } from '../../types';
 import { ServersList } from './ServersList';
 import { SlotRenderer } from '../../components/PluginSlotRenderer';
+import { ExampleRequestPanel } from './ExampleRequest';
 import { usePlugin } from '../../contexts/usePlugin';
 
 interface Props {
@@ -149,6 +150,12 @@ export const Operation: React.FunctionComponent<Props> = (props) => {
           </div>
         )}
       </div>
+
+      {config.llm?.exampleRequests !== false && (
+        <div className="panel-item--center px-8 mt-4">
+          <ExampleRequestPanel operation={operation} channel={channel} />
+        </div>
+      )}
 
       <OperationReplyInfo {...props} />
     </div>

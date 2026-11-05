@@ -37,4 +37,10 @@ export const defaultConfig: ConfigInterface = {
   extensions: {
     'x-x': XExtension,
   },
+  llm: {
+    markdownExport: true,
+    exampleRequests: true,
+    languages: ['curl', 'javascript', 'python'],
+    llmsTxt: false,
+  },
 };
