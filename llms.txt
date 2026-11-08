@@ -1,0 +1,13 @@
+# asyncapi-react
+
+> React component for rendering documentation from your specification in real-time in the browser. It also provides a WebComponent and bundle for Angular and Vue
+
+## Core Resources
+
+- [GitHub Repository](https://github.com/asyncapi/asyncapi-react): Source code, documentation, and issue tracker.
+- [Website](https://asyncapi.github.io/asyncapi-react/): Official website and documentation.
+
+## AI Agent & LLM Indexing
+
+- Structured following the standard /llms.txt specification for AI search engines and coding assistants.
+- Validated via [AccessGuard AI-Readiness Suite](https://ronanchnlps-bit.github.io/).
