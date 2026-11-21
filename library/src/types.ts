@@ -1,23 +1,4 @@
-import {
-  AsyncAPIDocumentInterface,
-  BaseModel,
-  ChannelInterface,
-  InfoInterface,
-  OperationInterface,
-} from '@asyncapi/parser';
-
-export type PropsSchema =
-  | string
-  | FetchingSchemaInterface
-  | AsyncAPIDocumentInterface
-  | object;
-
-export type NullableAsyncApi = AsyncAPIDocumentInterface | null;
-
-export interface AsyncApiState {
-  validatedSchema: NullableAsyncApi;
-  error?: ErrorObject;
-}
+export type PropsSchema = string | FetchingSchemaInterface | object;
 
 export function isFetchingSchemaInterface(
   schema: PropsSchema,
@@ -28,11 +9,6 @@ export function isFetchingSchemaInterface(
 export interface FetchingSchemaInterface {
   url: string;
   requestOptions?: RequestInit;
-}
-
-export interface ParserReturn {
-  asyncapi?: AsyncAPIDocumentInterface;
-  error?: ErrorObject;
 }
 
 export enum PayloadType {
@@ -84,14 +60,6 @@ export interface ErrorObject {
   }[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ExtensionComponentProps<V = any> {
-  propertyName: string;
-  propertyValue: V;
-  document: AsyncAPIDocumentInterface;
-  parent: BaseModel;
-}
-
 // Plugin interface
 
 export enum PluginSlot {
@@ -103,39 +71,16 @@ export interface PluginContext {
   schema?: PropsSchema;
 }
 
-interface BaseSlotContext {
-  /** The parsed AsyncAPI document being rendered. */
-  document: AsyncAPIDocumentInterface;
-  /**
-   * @deprecated Use the typed fields on the slot context instead. Holds the
-   * operation props in the `operation` slot and the info model in the `info` slot.
-   */
-  schema?: PropsSchema;
-}
-
-export interface OperationSlotContext extends BaseSlotContext {
-  slot: PluginSlot.OPERATION;
-  operation: OperationInterface;
-  channel: ChannelInterface;
-  channelName: string;
-  type: PayloadType;
-}
-
-export interface InfoSlotContext extends BaseSlotContext {
-  slot: PluginSlot.INFO;
-  info: InfoInterface;
-}
-
-export interface SlotContextMap {
-  [PluginSlot.OPERATION]: OperationSlotContext;
-  [PluginSlot.INFO]: InfoSlotContext;
-}
-
-export type SlotContext = SlotContextMap[PluginSlot];
-
-export interface ComponentSlotProps<S extends PluginSlot = PluginSlot> {
-  context: SlotContextMap[S];
+export interface ComponentSlotProps<C = unknown> {
+  context: C;
   onClose?: () => void;
+}
+
+export interface ExtensionComponentProps<V = unknown> {
+  propertyName: string;
+  propertyValue: V;
+  document: unknown;
+  parent: unknown;
 }
 
 export interface AsyncApiPlugin {
@@ -178,7 +123,7 @@ export interface PluginAPI {
 
   registerComponent<S extends PluginSlot>(
     slot: S,
-    component: React.ComponentType<ComponentSlotProps<S>>,
+    component: React.ComponentType<ComponentSlotProps>,
     options?: { priority?: number; label?: string },
   ): void;
 
