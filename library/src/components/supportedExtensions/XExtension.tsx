@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ExtensionComponentProps } from '../../types';
+import { ExtensionComponentProps } from '../../types-parser';
 
 /**
  * See <https://github.com/asyncapi/extensions-catalog/blob/master/extensions/x.md>.

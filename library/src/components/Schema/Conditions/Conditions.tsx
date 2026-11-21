@@ -1,11 +1,10 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
 import { Schema } from '../Schema';
-import { SchemaHelpers } from '../../../helpers';
+import { SchemaHelpers, SchemaLike } from '../../../helpers/no-parser';
 
 interface ConditionsProps {
-  schema: SchemaInterface;
-  dependentSchemas?: SchemaInterface;
+  schema: SchemaLike;
+  dependentSchemas?: Record<string, SchemaLike>;
 }
 
 export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
@@ -24,7 +23,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
                 idx,
                 '',
                 '',
-                s.title() ?? s.id(),
+                s.title() ?? s.id?.(),
               )}
             />
           ))}
@@ -44,7 +43,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
                 idx,
                 '',
                 '',
-                s.title() ?? s.id(),
+                s.title() ?? s.id?.(),
               )}
             />
           ))}
@@ -64,7 +63,7 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
                 idx,
                 '',
                 '',
-                s.title() ?? s.id(),
+                s.title() ?? s.id?.(),
               )}
             />
           ))}
@@ -101,9 +100,16 @@ export const Conditions = ({ schema, dependentSchemas }: ConditionsProps) => {
         </div>
       )}
 
-      {dependentSchemas && (
-        <Schema schema={dependentSchemas} schemaName="Dependent schemas:" />
-      )}
+      {dependentSchemas &&
+        Object.entries(dependentSchemas).map(
+          ([propertyName, dependentSchema]) => (
+            <Schema
+              key={propertyName}
+              schema={dependentSchema}
+              schemaName={`Dependent schema: ${propertyName}`}
+            />
+          ),
+        )}
     </div>
   );
 };

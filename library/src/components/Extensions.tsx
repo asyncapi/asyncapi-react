@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Schema } from './Schema/Schema';
-import { SchemaHelpers } from '../helpers';
+import { SchemaHelpers } from '../helpers/no-parser';
 import { useConfig, useSpec } from '../contexts';
 import { CollapseButton } from './CollapseButton';
 

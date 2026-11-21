@@ -1,6 +1,6 @@
 import React from 'react';
 import { PluginManager } from '../helpers/pluginManager';
-import { SlotContext } from '../types';
+import type { SlotContext } from '../types-parser';
 
 interface SlotRendererProps {
   context: SlotContext;
@@ -29,7 +29,7 @@ const SlotRenderer: React.FC<SlotRendererProps> = ({
           key={`${slot}-${index}`}
           fallback={<div>Loading plugin...</div>}
         >
-          <Component context={context} />
+          <Component context={context as never} />
         </React.Suspense>
       ))}
     </div>

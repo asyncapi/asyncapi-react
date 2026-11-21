@@ -1,10 +1,14 @@
 import React from 'react';
-import { TagsInterface } from '@asyncapi/parser';
 
 import { Tag } from './Tag';
 
+interface TagsLike {
+  length: number;
+  all(): Array<{ name(): string; description(): string | undefined; externalDocs(): { url(): string } | undefined }>;
+}
+
 interface Props {
-  tags?: TagsInterface;
+  tags?: TagsLike;
 }
 
 export const Tags: React.FunctionComponent<Props> = ({ tags }) => {

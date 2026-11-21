@@ -1,7 +1,7 @@
 import React from 'react';
 import { sanitize } from 'isomorphic-dompurify';
 
-import { renderMarkdown } from '../helpers';
+import { renderMarkdown } from '../helpers/no-parser';
 
 export const Markdown: React.FunctionComponent<{
   children: React.ReactNode;

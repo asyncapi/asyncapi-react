@@ -30,6 +30,24 @@ function createBinding(bindingObj: Record<string, any>) {
   return new BindingsSchema(bindings);
 }
 describe('Bindings component', () => {
+  test('should render a plain object binding without the parser', () => {
+    render(
+      <Bindings
+        bindings={{
+          mqtt: {
+            fooMqtt: 'barMqtt',
+          },
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
+
+    expect(screen.getByText('mqtt')).toBeDefined();
+    expect(screen.getByText('fooMqtt')).toBeDefined();
+    expect(screen.getByText('"barMqtt"')).toBeDefined();
+  });
+
   test('should work with simple data', () => {
     const bindings = {
       mqtt: {

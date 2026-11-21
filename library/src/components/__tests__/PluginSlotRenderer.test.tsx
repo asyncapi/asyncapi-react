@@ -14,11 +14,11 @@ import {
 } from '@asyncapi/parser';
 import {
   PluginSlot,
-  OperationSlotContext,
   ComponentSlotProps,
   PluginAPI,
   PayloadType,
 } from '../../types';
+import type { OperationSlotContext } from '../../types-parser';
 
 const pluginName = 'test-plugin';
 
@@ -136,7 +136,7 @@ describe('PluginSlotRenderer', () => {
     it('should pass context to plugin components', async () => {
       const contextData = { ...context, schema: { title: 'Test API' } };
       const TestComponent: React.FC<
-        ComponentSlotProps<PluginSlot.OPERATION>
+        ComponentSlotProps<OperationSlotContext>
       > = ({ context }) => <div>{JSON.stringify(context)}</div>;
 
       const plugin = {

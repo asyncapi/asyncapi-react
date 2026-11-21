@@ -1,9 +1,8 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
-import { SchemaHelpers } from '../../../helpers';
+import { SchemaHelpers, SchemaLike } from '../../../helpers/no-parser';
 
 interface RulesProps {
-  schema: SchemaInterface;
+  schema: SchemaLike;
   constraints: string[];
 }
 
