@@ -240,6 +240,16 @@ describe('SchemaHelpers', () => {
       expect(result).toEqual('[foobar,2137,false]');
     });
 
+    test('should handle array of objects', () => {
+      const result = SchemaHelpers.prettifyValue([{ str: 'foobar' }, null]);
+      expect(result).toEqual(`[{"str":"foobar"},null]`);
+    });
+
+    test('should handle nested arrays', () => {
+      const result = SchemaHelpers.prettifyValue([['foobar', 2137], [false]]);
+      expect(result).toEqual('[[foobar,2137],[false]]');
+    });
+
     test('should handle object', () => {
       const result = SchemaHelpers.prettifyValue({ str: 'foobar' });
       expect(result).toEqual(`{"str":"foobar"}`);

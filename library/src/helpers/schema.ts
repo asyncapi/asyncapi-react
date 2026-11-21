@@ -131,7 +131,7 @@ export class SchemaHelpers {
       return `${value}`;
     }
     if (Array.isArray(value)) {
-      return `[${value.toString()}]`;
+      return `[${value.map((v) => this.prettifyValue(v, false)).join(',')}]`;
     }
     return JSON.stringify(value);
   }
