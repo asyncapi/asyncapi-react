@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MessageInterface, SchemaInterface } from '@asyncapi/parser';
+import { SchemaLike } from '../../helpers/no-parser';
+import { MessageLike } from '../../helpers/message';
 
 import { CollapseButton, JSONSnippet } from '../../components';
 import { MessageHelpers } from '../../helpers/message';
@@ -7,7 +8,7 @@ import { MessageExample as MessageExampleType } from '../../types';
 import { useConfig } from '../../contexts';
 
 interface Props {
-  message: MessageInterface;
+  message: MessageLike;
 }
 
 export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
@@ -41,7 +42,7 @@ export const MessageExample: React.FunctionComponent<Props> = ({ message }) => {
 
 interface ExampleProps {
   type: 'Payload' | 'Headers';
-  schema: SchemaInterface;
+  schema: SchemaLike;
   examples?: MessageExampleType[];
 }
 

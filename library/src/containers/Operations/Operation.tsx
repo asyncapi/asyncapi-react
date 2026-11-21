@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChannelInterface, OperationInterface } from '@asyncapi/parser';
+import type { ChannelInterface, OperationInterface } from '@asyncapi/parser';
 import { Message } from '../Messages/Message';
 import { Security } from '../Servers/Security';
 import {
@@ -12,7 +12,8 @@ import {
 } from '../../components';
 import { Href } from '../../components/Href';
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers, SchemaHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
+import { SchemaHelpers } from '../../helpers/no-parser';
 import { EXTERAL_DOCUMENTATION_TEXT } from '../../constants';
 import { PayloadType, PluginSlot } from '../../types';
 import { ServersList } from './ServersList';

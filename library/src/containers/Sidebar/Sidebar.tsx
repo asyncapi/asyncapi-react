@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { CollapseButton } from '../../components';
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { PayloadType } from '../../types';
 import { TagObject, filterObjectsByTags } from '../../helpers/sidebar';
 

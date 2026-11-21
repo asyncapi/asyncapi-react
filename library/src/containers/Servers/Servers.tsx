@@ -3,7 +3,7 @@ import React from 'react';
 import { Server } from './Server';
 
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { SERVERS_TEXT } from '../../constants';
 
 export const Servers: React.FunctionComponent = () => {

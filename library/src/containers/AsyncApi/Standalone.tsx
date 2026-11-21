@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
-import { SpecificationHelpers } from '../../helpers';
+import { getParsedDocument, ParsedDocument } from '../../helpers/parsed-document';
 import {
   AsyncApiPlugin,
   ErrorObject,
@@ -25,7 +25,7 @@ export interface AsyncApiProps {
 }
 
 interface AsyncAPIState {
-  asyncapi?: AsyncAPIDocumentInterface;
+  asyncapi?: ParsedDocument;
   error?: ErrorObject;
   pm?: PluginManager;
 }
@@ -55,7 +55,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   constructor(props: AsyncApiProps) {
     super(props);
 
-    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(props.schema);
+    const parsedSpec = getParsedDocument(props.schema);
     if (parsedSpec) {
       this.state = { ...this.state, asyncapi: parsedSpec };
     }
@@ -175,7 +175,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
     return (
       <AsyncApiLayout
-        asyncapi={asyncapi}
+        asyncapi={asyncapi as unknown as AsyncAPIDocumentInterface}
         config={concatenatedConfig}
         pluginManager={pm}
       />
@@ -306,7 +306,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     schema: PropsSchema,
     pm: PluginManager | undefined = this.state.pm,
   ) {
-    const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
+    const parsedSpec = getParsedDocument(schema);
     if (!parsedSpec) {
       this.setState({ asyncapi: undefined });
       return;

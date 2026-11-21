@@ -3,7 +3,7 @@ import React from 'react';
 import { Schema } from './Schema';
 
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { SCHEMAS_TEXT } from '../../constants';
 
 export const Schemas: React.FunctionComponent = () => {

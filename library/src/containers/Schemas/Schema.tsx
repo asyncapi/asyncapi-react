@@ -1,11 +1,11 @@
 import React from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
+import { SchemaLike } from '../../helpers/no-parser';
 
 import { Schema as SchemaComponent } from '../../components';
 
 interface Props {
   schemaName: string;
-  schema: SchemaInterface;
+  schema: SchemaLike;
 }
 
 export const Schema: React.FunctionComponent<Props> = ({

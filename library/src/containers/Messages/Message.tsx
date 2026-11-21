@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageInterface } from '@asyncapi/parser';
+import { MessageLike } from '../../helpers/message';
 
 import { MessageExample } from './MessageExample';
 import {
@@ -12,14 +12,14 @@ import {
 } from '../../components';
 
 import { useConfig } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import {
   CONTENT_TYPES_SITE,
   EXTERAL_DOCUMENTATION_TEXT,
 } from '../../constants';
 
 interface Props {
-  message: MessageInterface;
+  message: MessageLike;
   messageName?: string;
   index?: number | string;
   showExamples?: boolean;
@@ -38,15 +38,15 @@ export const Message: React.FunctionComponent<Props> = ({
   }
 
   // check typeof as fallback for older version than `2.4.0`
-  const messageId = typeof message.id === 'function' && message.id();
-  const title = message.title();
-  const summary = message.summary();
+  const messageId = typeof message.id === 'function' && message.id?.();
+  const title = message.title?.();
+  const summary = message.summary?.();
   const payload = message.payload();
   const headers = message.headers();
-  const correlationId = message.correlationId();
+  const correlationId = message.correlationId?.();
 
-  const contentType = message.contentType();
-  const externalDocs = message.externalDocs();
+  const contentType = message.contentType?.();
+  const externalDocs = message.externalDocs?.();
   const showInfoList = contentType ?? externalDocs;
 
   return (
@@ -115,9 +115,9 @@ export const Message: React.FunctionComponent<Props> = ({
             </div>
           )}
 
-          {message.hasDescription() && (
+          {message.hasDescription?.() && (
             <div className="mt-2">
-              <Markdown>{message.description()}</Markdown>
+              <Markdown>{message.description?.()}</Markdown>
             </div>
           )}
 
@@ -152,20 +152,20 @@ export const Message: React.FunctionComponent<Props> = ({
             </div>
           )}
 
-          {message.bindings().length > 0 && (
+          {(message.bindings?.()?.length ?? 0) > 0 && (
             <div className="mt-2">
               <Bindings
                 name="Message specific information"
-                bindings={message.bindings()}
+                bindings={message.bindings!()}
               />
             </div>
           )}
 
           <Extensions item={message} />
 
-          {message.tags().length > 0 && (
+          {(message.tags?.()?.length ?? 0) > 0 && (
             <div className="mt-2">
-              <Tags tags={message.tags()} />
+              <Tags tags={message.tags!()} />
             </div>
           )}
         </div>

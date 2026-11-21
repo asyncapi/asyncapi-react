@@ -1,7 +1,7 @@
 import React from 'react';
 import { Operation } from './Operation';
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { OPERATIONS_TEXT } from '../../constants';
 
 export const Operations: React.FunctionComponent = () => {

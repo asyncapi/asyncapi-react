@@ -1,11 +1,12 @@
 import React from 'react';
-import { ServerInterface } from '@asyncapi/parser';
+import type { ServerInterface } from '@asyncapi/parser';
 
 import { Security } from './Security';
 import { Markdown, Schema, Bindings, Tags, Extensions } from '../../components';
 
 import { useConfig } from '../../contexts';
-import { CommonHelpers, SchemaHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
+import { SchemaHelpers } from '../../helpers/no-parser';
 
 interface Props {
   serverName: string;
