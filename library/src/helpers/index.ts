@@ -1,6 +1,7 @@
 export * from './common';
 export * from './marked';
 export * from './parser';
+export * from './parsed-document';
 export * from './specification';
 export * from './server';
 export * from './message';

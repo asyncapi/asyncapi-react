@@ -1,9 +1,11 @@
-import { TagsInterface } from '@asyncapi/parser';
+export interface TagsLike {
+  all(): Array<{ name(): string }>;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface TagObject<T = any> {
   name: string;
-  tags: TagsInterface;
+  tags: TagsLike;
   data: T;
 }
 export interface SortedReturnType {

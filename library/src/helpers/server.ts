@@ -1,4 +1,6 @@
-import { SecuritySchemeInterface } from '@asyncapi/parser';
+export interface SecuritySchemeLike {
+  type(): string;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class ServerHelpers {
@@ -50,7 +52,7 @@ export class ServerHelpers {
 
   static getKafkaSecurity(
     protocol: string,
-    securitySchema: SecuritySchemeInterface | null,
+    securitySchema: SecuritySchemeLike | null,
   ) {
     let securityProtocol;
     let saslMechanism;

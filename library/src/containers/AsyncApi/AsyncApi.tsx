@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import AsyncApiStandalone from './Standalone';
 

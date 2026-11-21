@@ -1,7 +1,37 @@
-import { MessageInterface } from '@asyncapi/parser';
 import { sample } from 'openapi-sampler';
 
 import { MessageExample } from '../types';
+import type { SchemaLike } from './schema-no-parser';
+
+// Structural interface covering all message methods used by Message.tsx and MessageHelpers
+export interface MessageLike {
+  id?(): string | undefined;
+  title?(): string | undefined;
+  summary?(): string | undefined;
+  description?(): string | undefined;
+  hasDescription?(): boolean;
+  contentType?(): string | undefined;
+  correlationId?(): {
+    location(): string | undefined;
+    hasDescription(): boolean;
+    description(): string | undefined;
+  } | undefined;
+  externalDocs?(): { url(): string } | undefined;
+  payload(): SchemaLike | undefined;
+  headers(): SchemaLike | undefined;
+  bindings?(): { length: number; all(): unknown[] };
+  tags?(): { length: number; all(): Array<{ name(): string; description(): string | undefined; externalDocs(): { url(): string } | undefined }> };
+  examples(): {
+    all(): Array<{
+      hasPayload?(): boolean;
+      payload?(): unknown;
+      hasHeaders?(): boolean;
+      headers?(): unknown;
+      name(): string | undefined;
+      summary(): string | undefined;
+    }>;
+  };
+}
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class MessageHelpers {
@@ -36,20 +66,20 @@ export class MessageHelpers {
   }
 
   static getPayloadExamples(
-    msg: MessageInterface,
+    msg: MessageLike,
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
 
-    if (examples.some((e) => e.hasPayload())) {
+    if (examples.some((e) => e.hasPayload?.() ?? false)) {
       const messageExamples = examples
         .flatMap((e) => {
-          if (!e.payload()) {
+          if (!e.payload?.()) {
             return;
           }
           return {
             name: e.name(),
             summary: e.summary(),
-            example: e.payload(),
+            example: e.payload?.(),
           };
         })
         .filter(Boolean) as MessageExample[];
@@ -69,19 +99,19 @@ export class MessageHelpers {
   }
 
   static getHeadersExamples(
-    msg: MessageInterface,
+    msg: MessageLike,
   ): MessageExample[] | undefined {
     const examples = msg.examples().all();
-    if (examples.some((e) => e.hasHeaders())) {
+    if (examples.some((e) => e.hasHeaders?.() ?? false)) {
       const messageExamples = examples
         .flatMap((e) => {
-          if (!e.hasHeaders()) {
+          if (!e.hasHeaders?.()) {
             return;
           }
           return {
             name: e.name(),
             summary: e.summary(),
-            example: e.headers(),
+            example: e.headers?.(),
           };
         })
         .filter(Boolean) as MessageExample[];
