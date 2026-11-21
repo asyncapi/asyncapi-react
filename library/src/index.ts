@@ -11,18 +11,20 @@ export {
 export { PluginSlot, PayloadType } from './types';
 export type {
   FetchingSchemaInterface,
-  ExtensionComponentProps,
   AsyncApiPlugin,
   PluginAPI,
   PluginContext,
   PluginErrorPayload,
   PluginInstance,
   ComponentSlotProps,
+} from './types';
+export type {
+  ExtensionComponentProps,
   SlotContext,
   SlotContextMap,
   OperationSlotContext,
   InfoSlotContext,
-} from './types';
+} from './types-parser';
 
 import { hljs } from './helpers';
 
