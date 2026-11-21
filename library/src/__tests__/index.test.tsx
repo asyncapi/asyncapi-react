@@ -14,6 +14,7 @@ import streetlightsKafka from './docs/v3/streetlights-kafka.json';
 import streetlightsMqtt from './docs/v3/streetlights-mqtt.json';
 import websocketGemini from './docs/v3/websocket-gemini.json';
 import { ComponentSlotProps, PluginAPI, PluginSlot } from '../types';
+import type { InfoSlotContext, OperationSlotContext } from '../types-parser';
 
 jest.mock('use-resize-observer', () => ({
   __esModule: true,
@@ -392,7 +393,7 @@ describe('AsyncAPI component', () => {
 
   test('should pass typed slot context to plugin components', async () => {
     const OperationComponent: React.FC<
-      ComponentSlotProps<PluginSlot.OPERATION>
+      ComponentSlotProps<OperationSlotContext>
     > = ({ context }) => (
       <div data-testid="operation-slot">
         {[
@@ -405,7 +406,7 @@ describe('AsyncAPI component', () => {
         ].join('|')}
       </div>
     );
-    const InfoComponent: React.FC<ComponentSlotProps<PluginSlot.INFO>> = ({
+    const InfoComponent: React.FC<ComponentSlotProps<InfoSlotContext>> = ({
       context,
     }) => (
       <div data-testid="info-slot">
