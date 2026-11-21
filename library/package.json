@@ -32,6 +32,23 @@
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    },
+    "./without-parser": {
+      "types": "./lib/types/without-parser.d.ts",
+      "import": "./lib/esm/without-parser.js",
+      "require": "./lib/cjs/without-parser.js"
+    },
+    "./styles/default.css": "./styles/default.css",
+    "./styles/default.min.css": "./styles/default.min.css",
+    "./browser/*": "./browser/*",
+    "./lib/*": "./lib/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "/lib",
     "/browser",
@@ -62,8 +79,8 @@
     "test:e2e": "npm run build:standalone && cypress install && cypress run",
     "prepare": "npm run build:dev",
     "prepublishOnly": "npm run prepack",
-    "prepack": "npm run build:prod && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
-    "postpack": "rm -rf ./README.md && rm -rf ./LICENSE",
+    "prepack": "npm run build:prod && node -e \"require('fs').copyFileSync('../README.md', './README.md')\" && node -e \"require('fs').copyFileSync('../LICENSE', './LICENSE')\"",
+    "postpack": "node -e \"require('fs').rmSync('./README.md', { force: true }); require('fs').rmSync('./LICENSE', { force: true })\"",
     "get:name": "echo $npm_package_name",
     "get:version": "echo $npm_package_version"
   },
