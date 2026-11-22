@@ -330,6 +330,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     const parsedSpec = resolveDocument(schema);
     if (!parsedSpec) {
       this.setState({ asyncapi: undefined });
+      pm?.updateContext({ schema: undefined });
       return;
     }
     this.setState({ asyncapi: parsedSpec });

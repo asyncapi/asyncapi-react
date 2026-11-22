@@ -91,7 +91,10 @@ export class MessageHelpers {
       const messageExamples = examples
         .flatMap((e) => {
           const payload = e.payload?.();
-          if (!declaresPart(e.hasPayload?.(), payload) || !payload) {
+          if (
+            !declaresPart(e.hasPayload?.(), payload) ||
+            payload === undefined
+          ) {
             return;
           }
           return {
@@ -122,7 +125,10 @@ export class MessageHelpers {
       const messageExamples = examples
         .flatMap((e) => {
           const headers = e.headers?.();
-          if (!declaresPart(e.hasHeaders?.(), headers)) {
+          if (
+            !declaresPart(e.hasHeaders?.(), headers) ||
+            headers === undefined
+          ) {
             return;
           }
           return {

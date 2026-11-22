@@ -703,6 +703,13 @@ export class SchemaHelpers {
     return new JsonSchemaModel(this.jsonFieldToSchema(value));
   }
 
+  // Converts extension data as values, without interpreting objects as schemas.
+  static jsonToRawValueSchema(value: unknown): JsonSchemaModel {
+    return new JsonSchemaModel(
+      this.jsonFieldToSchema(value, new Set<object>(), false),
+    );
+  }
+
   /**
    * Retrieves from given value all custom extensions (value with key started by `x-`).
    * However, it skips those private extensions that begin with `x-parser-` and `x-schema-private-`.
@@ -786,6 +793,7 @@ export class SchemaHelpers {
   private static jsonFieldToSchema(
     value: unknown,
     visitedInPath = new Set<object>(),
+    interpretSchemas = true,
   ): unknown {
     if (value === undefined || value === null) {
       return {
@@ -815,14 +823,14 @@ export class SchemaHelpers {
 
     visitedInPath.add(valueObject);
     try {
-      if (this.isJSONSchema(value)) {
+      if (interpretSchemas && this.isJSONSchema(value)) {
         return value;
       }
       if (Array.isArray(value)) {
         return {
           type: 'array',
           items: value.map((item) =>
-            this.jsonFieldToSchema(item, visitedInPath),
+            this.jsonFieldToSchema(item, visitedInPath, interpretSchemas),
           ),
           [this.extRenderAdditionalInfo]: false,
         };
@@ -831,7 +839,11 @@ export class SchemaHelpers {
         type: 'object',
         properties: Object.entries(value).reduce(
           (properties, [key, item]) => {
-            properties[key] = this.jsonFieldToSchema(item, visitedInPath);
+            properties[key] = this.jsonFieldToSchema(
+              item,
+              visitedInPath,
+              interpretSchemas,
+            );
             return properties;
           },
           {} as Record<string, unknown>,

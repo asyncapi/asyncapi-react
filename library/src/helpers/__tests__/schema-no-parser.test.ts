@@ -293,6 +293,9 @@ describe('SchemaHelpers no-parser utilities', () => {
       expect(
         SchemaHelpers.jsonToSchema({ type: ['string', 'number'] }).type(),
       ).toEqual(['string', 'number']);
+      expect(
+        SchemaHelpers.jsonToSchema({ type: ['string', 'null'] }).type(),
+      ).toEqual(['string', 'null']);
     });
 
     test('does not treat invalid type values as schemas', () => {
@@ -307,6 +310,17 @@ describe('SchemaHelpers no-parser utilities', () => {
       expect(invalidArray.properties()?.type).toBeDefined();
     });
 
+    test('keeps extension objects with schema-like data as raw values', () => {
+      const model = SchemaHelpers.jsonToRawValueSchema({
+        minLength: 3,
+        owner: 'billing',
+      });
+
+      expect(model.type()).toBe('object');
+      expect(model.properties()?.minLength?.const()).toBe('3');
+      expect(model.properties()?.owner?.const()).toBe('billing');
+      expect(SchemaHelpers.humanizeConstraints(model)).toEqual([]);
+    });
     test('does not treat arbitrary JSON objects as schemas', () => {
       const model = SchemaHelpers.jsonToSchema({ name: 'John', age: 30 });
       expect(model.type()).toBe('object');

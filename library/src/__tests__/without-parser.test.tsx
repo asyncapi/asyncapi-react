@@ -5,6 +5,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Standalone from '../containers/AsyncApi/Standalone';
+import type { PluginManager } from '../helpers/pluginManager';
 
 jest.mock('@asyncapi/parser', () => {
   throw new Error('@asyncapi/parser must not load in the no-parser entry');
@@ -40,6 +41,48 @@ describe('without-parser entry', () => {
     expect(entry.hljs).toBeDefined();
   });
 
+  test('clears plugin context when the document is removed', async () => {
+    global.ResizeObserver = class ResizeObserver {
+      observe = jest.fn();
+      unobserve = jest.fn();
+      disconnect = jest.fn();
+    } as unknown as typeof ResizeObserver;
+
+    let pluginManager: PluginManager | undefined;
+    const schema = {
+      asyncapi: '2.0.0',
+      info: { title: 'Active document', version: '1.0.0' },
+      channels: {},
+    };
+    const result = render(
+      <Standalone
+        schema={schema}
+        onPluginManagerReady={(manager) => {
+          pluginManager = manager;
+        }}
+      />,
+    );
+
+    expect(pluginManager).toBeDefined();
+    result.rerender(
+      <Standalone
+        schema={undefined}
+        onPluginManagerReady={(manager) => {
+          pluginManager = manager;
+        }}
+      />,
+    );
+
+    if (!pluginManager) throw new Error('PluginManager was not initialized');
+    const onSpecLoaded = jest.fn();
+    await pluginManager.register({
+      name: 'late-plugin',
+      version: '1.0.0',
+      install: (api) => api.onSpecLoaded(onSpecLoaded),
+    });
+
+    expect(onSpecLoaded).not.toHaveBeenCalled();
+  });
   test('renders a plain parsed object fixture', async () => {
     global.ResizeObserver = class ResizeObserver {
       observe = jest.fn();

@@ -670,6 +670,22 @@ class ExampleModel extends GenericModel {
   }
 }
 
+function unwrapPayloadSchema(payload: unknown): unknown {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    return payload;
+  }
+  const envelope = payload as RawObject;
+  const format = envelope.schemaFormat;
+  const supportedFormat =
+    typeof format === 'string' &&
+    (/^application\/vnd\.aai\.asyncapi(?:\+json)?;version=3\.0\.0$/.test(
+      format,
+    ) ||
+      /^application\/schema\+json;version=(?:draft-07|draft-2019-09|draft-2020-12)$/.test(
+        format,
+      ));
+  return supportedFormat && 'schema' in envelope ? envelope.schema : payload;
+}
 class MessageModel extends GenericModel {
   constructor(
     private readonly messageName: string,
@@ -683,7 +699,7 @@ class MessageModel extends GenericModel {
   }
 
   payload(): JsonSchemaModel | undefined {
-    const payload = this.rawObject().payload;
+    const payload = unwrapPayloadSchema(this.rawObject().payload);
     // `false` is a valid boolean schema, so only an absent payload is dropped.
     return payload === undefined
       ? undefined
@@ -1057,6 +1073,21 @@ class AsyncApiDocumentModel extends GenericModel {
     const securitySchemes = this.securitySchemes();
     const rawOperations = this.rawObject().operations;
     if (rawOperations && typeof rawOperations === 'object') {
+      const channels = this.rawObject().channels as RawObject | undefined;
+      let channelIdentityIndex: Map<unknown, string> | undefined;
+      const findChannelName = (channel: unknown): string | undefined => {
+        if (!channel || typeof channel !== 'object' || !channels) {
+          return undefined;
+        }
+        if (!channelIdentityIndex) {
+          const identityIndex = new Map<unknown, string>();
+          Object.entries(channels).forEach(([id, raw]) =>
+            identityIndex.set(raw, id),
+          );
+          channelIdentityIndex = identityIndex;
+        }
+        return channelIdentityIndex.get(channel);
+      };
       return new ModelCollection(
         Object.entries(rawOperations as RawObject).map(([name, raw]) => {
           const operationRaw =
@@ -1066,20 +1097,25 @@ class AsyncApiDocumentModel extends GenericModel {
             operationRaw.channel !== null
               ? ((operationRaw.channel as RawObject).$ref as string | undefined)
               : undefined;
-          const channels = this.rawObject().channels as RawObject | undefined;
-          const resolvedChannel = resolveDocumentRef(
-            operationRaw.channel,
-            documentRaw,
-          );
-          const matchedChannel = channels
-            ? Object.entries(channels).find(
-                ([, candidate]) => candidate === resolvedChannel,
-              )
-            : undefined;
+          const channelPointerName =
+            typeof channelRef === 'string' &&
+            channelRef.startsWith('#/channels/')
+              ? pointerName(channelRef)
+              : undefined;
+          const pointedChannel =
+            channelPointerName !== undefined &&
+            channels !== undefined &&
+            Object.prototype.hasOwnProperty.call(channels, channelPointerName)
+              ? { id: channelPointerName, raw: channels[channelPointerName] }
+              : undefined;
+
+          const resolvedChannel = pointedChannel
+            ? pointedChannel.raw
+            : resolveDocumentRef(operationRaw.channel, documentRaw);
           const channelName =
-            pointerName(channelRef) ?? matchedChannel?.[0] ?? name;
+            pointedChannel?.id ?? findChannelName(resolvedChannel) ?? name;
           const channelRaw =
-            matchedChannel?.[1] ?? channels?.[channelName] ?? resolvedChannel;
+            pointedChannel?.raw ?? channels?.[channelName] ?? resolvedChannel;
           return new OperationModel(
             name,
             operationRaw,
@@ -1165,23 +1201,55 @@ class AsyncApiDocumentModel extends GenericModel {
  * `servers`, `channels`, `operations` and `version`. Older parser models predate some
  * of these (or return Maps without `all()`), so they must be normalized first.
  */
-function meetsRendererContract(schema: object): boolean {
-  const document = schema as {
-    info?: unknown;
-    servers?: unknown;
-    channels?: unknown;
-    operations?: unknown;
-    version?: unknown;
-  };
-  return (
-    typeof document.info === 'function' &&
-    typeof document.servers === 'function' &&
-    typeof document.channels === 'function' &&
-    typeof document.operations === 'function' &&
-    typeof document.version === 'function'
-  );
+interface RendererDocumentShape {
+  info(): unknown;
+  servers(): unknown;
+  channels(): unknown;
+  operations(): unknown;
+  components(): unknown;
+  version(): unknown;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function hasArrayCollection(value: unknown): boolean {
+  if (!isRecord(value) || typeof value.all !== 'function') return false;
+  try {
+    return Array.isArray(value.all());
+  } catch {
+    return false;
+  }
+}
+
+function meetsRendererContract(schema: object): schema is ParsedDocument {
+  const candidate = schema as Partial<RendererDocumentShape>;
+  if (
+    typeof candidate.info !== 'function' ||
+    typeof candidate.servers !== 'function' ||
+    typeof candidate.channels !== 'function' ||
+    typeof candidate.operations !== 'function' ||
+    typeof candidate.components !== 'function' ||
+    typeof candidate.version !== 'function'
+  ) {
+    return false;
+  }
+
+  try {
+    const info = candidate.info();
+    return (
+      (info === undefined || isRecord(info)) &&
+      hasArrayCollection(candidate.servers()) &&
+      hasArrayCollection(candidate.channels()) &&
+      hasArrayCollection(candidate.operations()) &&
+      isRecord(candidate.components()) &&
+      typeof candidate.version() === 'string'
+    );
+  } catch {
+    return false;
+  }
+}
 export function isParsedDocument(schema: unknown): schema is ParsedDocument {
   return (
     typeof schema === 'object' &&
@@ -1194,7 +1262,7 @@ export function getParsedDocument(schema: unknown): ParsedDocument | undefined {
   if (typeof schema !== 'object' || schema === null) return undefined;
 
   // Preserve identity only when the object implements the complete renderer contract.
-  if (meetsRendererContract(schema)) return schema as ParsedDocument;
+  if (meetsRendererContract(schema)) return schema;
 
   const document = schema as {
     asyncapi?: unknown;
