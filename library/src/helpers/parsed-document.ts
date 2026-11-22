@@ -626,7 +626,8 @@ function decodePointerSegment(segment: string): string {
 }
 
 function pointerName(pointer: unknown): string | undefined {
-  if (typeof pointer !== 'string' || !pointer.startsWith('#/')) return undefined;
+  if (typeof pointer !== 'string' || !pointer.startsWith('#/'))
+    return undefined;
   const segments = pointer.substring(2).split('/');
   return decodePointerSegment(segments[segments.length - 1] ?? '');
 }
@@ -637,7 +638,10 @@ function resolveDocumentRef(ref: unknown, document: RawObject): unknown {
   const pointer = (ref as RawObject).$ref;
   if (typeof pointer !== 'string' || !pointer.startsWith('#/')) return ref;
   let current: unknown = document;
-  for (const segment of pointer.substring(2).split('/').map(decodePointerSegment)) {
+  for (const segment of pointer
+    .substring(2)
+    .split('/')
+    .map(decodePointerSegment)) {
     if (!current || typeof current !== 'object') return ref;
     current = (current as RawObject)[segment];
   }
@@ -1063,12 +1067,19 @@ class AsyncApiDocumentModel extends GenericModel {
               ? ((operationRaw.channel as RawObject).$ref as string | undefined)
               : undefined;
           const channels = this.rawObject().channels as RawObject | undefined;
-          const resolvedChannel = resolveDocumentRef(operationRaw.channel, documentRaw);
+          const resolvedChannel = resolveDocumentRef(
+            operationRaw.channel,
+            documentRaw,
+          );
           const matchedChannel = channels
-            ? Object.entries(channels).find(([, candidate]) => candidate === resolvedChannel)
+            ? Object.entries(channels).find(
+                ([, candidate]) => candidate === resolvedChannel,
+              )
             : undefined;
-          const channelName = pointerName(channelRef) ?? matchedChannel?.[0] ?? name;
-          const channelRaw = matchedChannel?.[1] ?? channels?.[channelName] ?? resolvedChannel;
+          const channelName =
+            pointerName(channelRef) ?? matchedChannel?.[0] ?? name;
+          const channelRaw =
+            matchedChannel?.[1] ?? channels?.[channelName] ?? resolvedChannel;
           return new OperationModel(
             name,
             operationRaw,
@@ -1173,7 +1184,7 @@ function meetsRendererContract(schema: object): boolean {
 
 export function isParsedDocument(schema: unknown): schema is ParsedDocument {
   return (
-typeof schema === 'object' &&
+    typeof schema === 'object' &&
     schema !== null &&
     meetsRendererContract(schema)
   );
@@ -1185,10 +1196,17 @@ export function getParsedDocument(schema: unknown): ParsedDocument | undefined {
   // Preserve identity only when the object implements the complete renderer contract.
   if (meetsRendererContract(schema)) return schema as ParsedDocument;
 
-  const document = schema as { asyncapi?: unknown; info?: unknown; json?: unknown };
+  const document = schema as {
+    asyncapi?: unknown;
+    info?: unknown;
+    json?: unknown;
+  };
 
   // Raw AsyncAPI JSON is wrapped in the parser independent adapter.
-  if (typeof document.asyncapi === 'string' && typeof document.info === 'object') {
+  if (
+    typeof document.asyncapi === 'string' &&
+    typeof document.info === 'object'
+  ) {
     return new AsyncApiDocumentModel(schema) as unknown as ParsedDocument;
   }
 
