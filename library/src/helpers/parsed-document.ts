@@ -1215,7 +1215,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function hasArrayCollection(value: unknown): boolean {
-  if (!isRecord(value) || typeof value.all !== 'function') return false;
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    !('all' in value) ||
+    typeof value.all !== 'function'
+  ) {
+    return false;
+  }
   try {
     return Array.isArray(value.all());
   } catch {

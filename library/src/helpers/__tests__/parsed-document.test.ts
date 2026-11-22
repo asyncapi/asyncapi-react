@@ -4,6 +4,7 @@ import {
   operationsTags,
 } from '../parsed-document';
 import type { DocumentLike } from '../parsed-document';
+import { AsyncAPIDocumentV3 } from '@asyncapi/parser';
 
 describe('parsed document helpers', () => {
   test('recognizes and passes through a complete parsed document', () => {
@@ -20,6 +21,33 @@ describe('parsed document helpers', () => {
     expect(getParsedDocument(document)).toBe(document);
   });
 
+  test('preserves identity for a real parser v3 document', () => {
+    const parserDocument = new AsyncAPIDocumentV3({
+      asyncapi: '3.0.0',
+      info: { title: 'Parser API', version: '1.0.0' },
+      channels: {
+        orders: {
+          address: 'orders',
+          messages: {
+            created: { payload: { type: 'string' } },
+          },
+        },
+      },
+      operations: {
+        receiveOrders: {
+          action: 'receive',
+          channel: { $ref: '#/channels/orders' },
+          messages: [{ $ref: '#/channels/orders/messages/created' }],
+        },
+      },
+    });
+
+    const parsedDocument = getParsedDocument(parserDocument);
+
+    expect(isParsedDocument(parserDocument)).toBe(true);
+    expect(parsedDocument).toBe(parserDocument);
+    expect(parserDocument.messages().all()).toHaveLength(1);
+  });
   test('normalizes legacy models whose operations return a Map', () => {
     const rawDocument = {
       asyncapi: '2.6.0',
