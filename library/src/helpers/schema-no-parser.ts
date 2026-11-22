@@ -51,31 +51,41 @@ const jsonSchemaKeywordTypes: Record<string, string> = {
 };
 const jsonSchemaKeywords = Object.keys(jsonSchemaKeywordTypes);
 
-const jsonSchemaDetectionKeywords = Array.from(
-  new Set([
-    // structural / reference keywords
-    '$ref',
-    '$schema',
-    '$id',
-    '$defs',
-    'definitions',
-    // composition / conditional keywords
-    'oneOf',
-    'anyOf',
-    'allOf',
-    'not',
-    'if',
-    'then',
-    'else',
-    // value keywords
-    'enum',
-    'const',
-    // annotation keyword that is commonly used to mark a schema
-    'format',
-    // validation keywords (minimum, maximum, maxLength, pattern, items, properties, ...)
-    ...jsonSchemaKeywords,
-  ]),
-);
+// keywords that unambiguously mark an object as a JSON Schema rather than arbitrary data.
+// Validation-only keywords (e.g. `minLength`, `maximum`, `pattern`) are intentionally
+// excluded because they also appear in plain data / extension objects, which would
+// otherwise be rendered as schemas with their remaining fields dropped.
+const jsonSchemaDetectionKeywords = [
+  // structural / reference keywords
+  '$ref',
+  '$schema',
+  '$id',
+  '$defs',
+  'definitions',
+  // composition / conditional keywords
+  'oneOf',
+  'anyOf',
+  'allOf',
+  'not',
+  'if',
+  'then',
+  'else',
+  // value keywords
+  'enum',
+  'const',
+  // shape keywords that describe an object or array schema
+  'properties',
+  'patternProperties',
+  'propertyNames',
+  'required',
+  'items',
+  'additionalItems',
+  'additionalProperties',
+  'contains',
+  'dependencies',
+  // annotation keyword that is commonly used to mark a schema
+  'format',
+];
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -142,12 +152,26 @@ export interface SchemaLike {
   then(): SchemaLike | undefined;
   else(): SchemaLike | undefined;
   dependencies(): Record<string, unknown> | undefined;
-  externalDocs(): { url(): string; description(): string | undefined } | undefined;
+  externalDocs():
+    | { url(): string; description(): string | undefined }
+    | undefined;
   extensions(): ExtensionsModel;
 }
 
+// a value that already exposes the SchemaLike accessors (e.g. a parser Schema model)
+function isSchemaModel(value: unknown): value is SchemaLike {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { json?: unknown }).json === 'function'
+  );
+}
+
 export class JsonSchemaModel implements SchemaLike {
-  constructor(private readonly rawValue: unknown) {}
+  constructor(
+    private readonly rawValue: unknown,
+    private readonly ancestors: ReadonlySet<object> = new Set(),
+  ) {}
 
   static fromJSON(value: unknown): JsonSchemaModel {
     return new JsonSchemaModel(value);
@@ -161,19 +185,35 @@ export class JsonSchemaModel implements SchemaLike {
     return typeof this.rawValue === 'boolean';
   }
 
+  // A schema is circular when the same raw object already appears higher up in the
+  // current ancestry chain (mirrors the parser's parent-chain check). Sibling branches
+  // that reuse the same object are not circular because ancestry is copied per branch.
   isCircular(): boolean {
-    return false;
+    return isPlainObject(this.rawValue) && this.ancestors.has(this.rawValue);
   }
 
   private rawSchema(): Record<string, unknown> {
     return isPlainObject(this.rawValue) ? this.rawValue : {};
   }
 
+  // ancestry to propagate to child schemas: everything above plus this raw value
+  private childAncestors(): ReadonlySet<object> {
+    const ancestors = new Set(this.ancestors);
+    if (isPlainObject(this.rawValue)) {
+      ancestors.add(this.rawValue);
+    }
+    return ancestors;
+  }
+
+  private childSchema(value: unknown): JsonSchemaModel {
+    return new JsonSchemaModel(value, this.childAncestors());
+  }
+
   private arrayModels(key: string): JsonSchemaModel[] | undefined {
     const value = this.rawSchema()[key];
-    return Array.isArray(value)
-      ? value.map((item) => new JsonSchemaModel(item))
-      : undefined;
+    if (!Array.isArray(value)) return undefined;
+    const ancestors = this.childAncestors();
+    return value.map((item) => new JsonSchemaModel(item, ancestors));
   }
 
   type(): string | string[] | undefined {
@@ -295,10 +335,7 @@ export class JsonSchemaModel implements SchemaLike {
       return undefined;
     }
     return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [
-        key,
-        new JsonSchemaModel(item),
-      ]),
+      Object.entries(value).map(([key, item]) => [key, this.childSchema(item)]),
     );
   }
 
@@ -308,10 +345,7 @@ export class JsonSchemaModel implements SchemaLike {
       return undefined;
     }
     return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [
-        key,
-        new JsonSchemaModel(item),
-      ]),
+      Object.entries(value).map(([key, item]) => [key, this.childSchema(item)]),
     );
   }
 
@@ -323,23 +357,23 @@ export class JsonSchemaModel implements SchemaLike {
   items(): JsonSchemaModel | JsonSchemaModel[] | undefined {
     const value = this.rawSchema().items;
     if (Array.isArray(value)) {
-      return value.map((item) => new JsonSchemaModel(item));
+      return value.map((item) => this.childSchema(item));
     }
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   additionalItems(): JsonSchemaModel | boolean | undefined {
     const value = this.rawSchema().additionalItems;
     if (value === undefined) return undefined;
     if (typeof value === 'boolean') return value;
-    return new JsonSchemaModel(value);
+    return this.childSchema(value);
   }
 
   additionalProperties(): JsonSchemaModel | boolean | undefined {
     const value = this.rawSchema().additionalProperties;
     if (value === undefined) return undefined;
     if (typeof value === 'boolean') return value;
-    return new JsonSchemaModel(value);
+    return this.childSchema(value);
   }
 
   oneOf(): JsonSchemaModel[] | undefined {
@@ -356,32 +390,32 @@ export class JsonSchemaModel implements SchemaLike {
 
   not(): JsonSchemaModel | undefined {
     const value = this.rawSchema().not;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   propertyNames(): JsonSchemaModel | undefined {
     const value = this.rawSchema().propertyNames;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   contains(): JsonSchemaModel | undefined {
     const value = this.rawSchema().contains;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   if(): JsonSchemaModel | undefined {
     const value = this.rawSchema().if;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   then(): JsonSchemaModel | undefined {
     const value = this.rawSchema().then;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   else(): JsonSchemaModel | undefined {
     const value = this.rawSchema().else;
-    return value === undefined ? undefined : new JsonSchemaModel(value);
+    return value === undefined ? undefined : this.childSchema(value);
   }
 
   dependencies(): Record<string, unknown> | undefined {
@@ -451,8 +485,7 @@ export class SchemaHelpers {
       return SchemaCustomTypes.ANY;
     }
     // handle case with `{ not: {}, ... }` schemas
-    const not = schema.not();
-    if (not && this.inferType(not) === SchemaCustomTypes.ANY) {
+    if (this.isNeverSchema(schema)) {
       return SchemaCustomTypes.NEVER;
     }
 
@@ -501,7 +534,9 @@ export class SchemaHelpers {
       return `${value}`;
     }
     if (Array.isArray(value)) {
-      return `[${value.toString()}]`;
+      return `[${value
+        .map((item) => this.prettifyValue(item, strict))
+        .join(',')}]`;
     }
     return JSON.stringify(value);
   }
@@ -576,20 +611,22 @@ export class SchemaHelpers {
       (items) => (items?.length ?? 0) > 0,
     );
 
-    const hasNestedSchema = Boolean(
-      schema.not() ||
-        schema.if() ||
-        schema.then() ||
-        schema.else() ||
-        schema.items() ||
-        schema.additionalItems() ||
-        schema.additionalProperties() ||
-        schema.contains() ||
-        schema.propertyNames() ||
-        schema.dependencies() ||
-        Object.keys(schema.properties() ?? {}).length ||
-        Object.keys(schema.patternProperties() ?? {}).length,
-    );
+    const nestedSchemas = [
+      schema.not(),
+      schema.if(),
+      schema.then(),
+      schema.else(),
+      schema.items(),
+      schema.additionalItems(),
+      schema.additionalProperties(),
+      schema.contains(),
+      schema.propertyNames(),
+      schema.dependencies(),
+    ];
+    const hasNestedSchema =
+      nestedSchemas.some((value) => value !== undefined && value !== false) ||
+      Object.keys(schema.properties() ?? {}).length > 0 ||
+      Object.keys(schema.patternProperties() ?? {}).length > 0;
 
     if (hasComposition || hasNestedSchema) {
       return true;
@@ -602,7 +639,7 @@ export class SchemaHelpers {
 
   static serverVariablesToSchema(urlVariables?: {
     length: number;
-    all(): Array<{ id(): string; json(): Record<string, unknown> }>;
+    all(): { id(): string; json(): Record<string, unknown> }[];
   }): JsonSchemaModel | undefined {
     if (!urlVariables || urlVariables.length === 0) {
       return undefined;
@@ -625,14 +662,14 @@ export class SchemaHelpers {
 
   static parametersToSchema(parameters?: {
     isEmpty(): boolean;
-    all(): Array<{
+    all(): {
       id(): string;
       schema(): { json(): Record<string, unknown> } | undefined;
       hasDescription(): boolean;
       description(): string | undefined;
       hasLocation(): boolean;
       location(): string | undefined;
-    }>;
+    }[];
   }): JsonSchemaModel | undefined {
     if (!parameters || parameters.isEmpty()) {
       return undefined;
@@ -731,8 +768,15 @@ export class SchemaHelpers {
 
     const records: Record<string, SchemaLike> = {};
     for (const [propertyName, propertySchema] of Object.entries(dependencies)) {
-      // dependencies may hold either a subschema (object or boolean schema) or an array of required property names
-      if (typeof propertySchema === 'boolean' || isPlainObject(propertySchema)) {
+      // dependencies may hold either a subschema (object or boolean schema) or an
+      // array of required property names. The parser exposes schema-valued entries
+      // as schema models, so pass those through and only wrap raw schema values.
+      if (isSchemaModel(propertySchema)) {
+        records[propertyName] = propertySchema;
+      } else if (
+        typeof propertySchema === 'boolean' ||
+        isPlainObject(propertySchema)
+      ) {
         records[propertyName] = new JsonSchemaModel(propertySchema);
       }
     }
@@ -762,7 +806,7 @@ export class SchemaHelpers {
       };
     }
 
-    const valueObject = value as object;
+    const valueObject = value;
     if (visitedInPath.has(valueObject)) {
       throw new Error(
         'too much recursion. Please check document for recursion.',
@@ -823,6 +867,12 @@ export class SchemaHelpers {
     );
   }
 
+  // `{ not: {}, ... }` schemas accept nothing
+  private static isNeverSchema(schema: SchemaLike): boolean {
+    const not = schema.not();
+    return Boolean(not && this.inferType(not) === SchemaCustomTypes.ANY);
+  }
+
   private static toType(type: string, schema: SchemaLike): string {
     if (schema.isCircular()) {
       return type;
@@ -840,10 +890,7 @@ export class SchemaHelpers {
     return type;
   }
 
-  private static toItemsType(
-    items: SchemaLike[],
-    schema: SchemaLike,
-  ): string {
+  private static toItemsType(items: SchemaLike[], schema: SchemaLike): string {
     const types = items.map((item) => this.toSchemaType(item)).join(', ');
     const additionalItems = schema.additionalItems();
     if (additionalItems !== undefined && additionalItems !== false) {
@@ -877,17 +924,12 @@ export class SchemaHelpers {
     if (types !== undefined) {
       if (Array.isArray(types)) {
         // if types have `integer` and `number` types, `integer` is unnecessary
-        if (
-          (types as string[]).includes('integer') &&
-          (types as string[]).includes('number')
-        ) {
-          types = (types as string[]).filter((t) => t !== 'integer');
+        if (types.includes('integer') && types.includes('number')) {
+          types = types.filter((t) => t !== 'integer');
         }
-        return (types as string[]).length === 1
-          ? (types as string[])[0]
-          : (types as string[]);
+        return types.length === 1 ? types[0] : types;
       }
-      return types as string;
+      return types;
     }
 
     const constValue = schema.const();
@@ -994,10 +1036,7 @@ export class SchemaHelpers {
     return stringRange;
   }
 
-  public static hasRules(
-    schema: SchemaLike,
-    constraints: string[],
-  ): boolean {
+  public static hasRules(schema: SchemaLike, constraints: string[]): boolean {
     return !!(
       /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
       (

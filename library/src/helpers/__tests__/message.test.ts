@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { MessageHelpers } from '../message';
+import { MessageHelpers, MessageLike, MessageExampleLike } from '../message';
 import { MessageV2 as Message } from '@asyncapi/parser';
 
 describe('MessageHelpers', () => {
@@ -299,6 +299,81 @@ describe('MessageHelpers', () => {
           example: { bar: 'foo' },
         },
       ]);
+    });
+  });
+
+  describe('example presence inference', () => {
+    const messageWith = (examples: MessageExampleLike[]): MessageLike =>
+      ({
+        payload: () => undefined,
+        headers: () => undefined,
+        examples: () => ({ all: () => examples }),
+      }) as unknown as MessageLike;
+
+    test('infers payload examples when the model omits hasPayload', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            payload: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+      ]);
+    });
+
+    test('honors an explicit hasPayload() === false', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            hasPayload: () => false,
+            payload: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toBeUndefined();
+    });
+
+    test('infers headers examples when the model omits hasHeaders', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            headers: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+      ]);
+    });
+
+    test('honors an explicit hasHeaders() === false', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            hasHeaders: () => false,
+            headers: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toBeUndefined();
     });
   });
 });

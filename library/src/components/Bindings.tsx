@@ -19,6 +19,42 @@ interface Props {
   bindings: BindingsValue | Record<string, unknown> | unknown[];
 }
 
+function isBindingValue(value: unknown): value is BindingValue {
+  return typeof value === 'object' && value !== null;
+}
+
+function bindingEntries(
+  bindings: unknown[],
+): { protocol: string; value: unknown }[] {
+  return bindings.map((binding) => {
+    const value = isBindingValue(binding) ? binding : undefined;
+    return {
+      protocol: value?.protocol?.() ?? '',
+      value: value?.value?.(),
+    };
+  });
+}
+
+function collectBindings(
+  bindings: Props['bindings'],
+): { protocol: string; value: unknown }[] {
+  if (Array.isArray(bindings)) {
+    return bindingEntries(bindings);
+  }
+
+  const bindingCollection = bindings as BindingsValue;
+  if (typeof bindingCollection.all === 'function') {
+    return bindingCollection.all().map((binding) => ({
+      protocol: binding.protocol?.() ?? '',
+      value: binding.value?.(),
+    }));
+  }
+
+  return Object.entries(bindings as Record<string, unknown>)
+    .filter(([, value]) => typeof value !== 'function')
+    .map(([protocol, value]) => ({ protocol, value }));
+}
+
 export const Bindings: React.FunctionComponent<Props> = ({
   name = 'Binding specific information',
   bindings,
@@ -27,37 +63,7 @@ export const Bindings: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const entries: Array<{ protocol: string; value: unknown }> = [];
-  if (Array.isArray(bindings)) {
-    entries.push(
-      ...bindings.map((binding) => {
-        const value = binding as BindingValue;
-        return {
-          protocol: value.protocol?.() ?? '',
-          value: value.value?.(),
-        };
-      }),
-    );
-  } else {
-    const bindingCollection = bindings as BindingsValue;
-    if (typeof bindingCollection.all === 'function') {
-      for (const binding of bindingCollection.all()) {
-        entries.push({
-          protocol: binding.protocol?.() ?? '',
-          value: binding.value?.(),
-        });
-      }
-    } else {
-      for (const [protocol, value] of Object.entries(
-        bindings as Record<string, unknown>,
-      )) {
-      if (typeof value !== 'function') {
-        entries.push({ protocol, value });
-      }
-      }
-    }
-  }
-
+  const entries = collectBindings(bindings);
   if (entries.length === 0) {
     return null;
   }

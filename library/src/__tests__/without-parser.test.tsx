@@ -42,10 +42,10 @@ describe('without-parser entry', () => {
 
   test('renders a plain parsed object fixture', async () => {
     global.ResizeObserver = class ResizeObserver {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    } as typeof ResizeObserver;
+      observe = jest.fn();
+      unobserve = jest.fn();
+      disconnect = jest.fn();
+    } as unknown as typeof ResizeObserver;
 
     const result = render(
       <Standalone

@@ -4,7 +4,11 @@ import { Tag } from './Tag';
 
 interface TagsLike {
   length: number;
-  all(): Array<{ name(): string; description(): string | undefined; externalDocs(): { url(): string } | undefined }>;
+  all(): {
+    name(): string;
+    description(): string | undefined;
+    externalDocs(): { url(): string } | undefined;
+  }[];
 }
 
 interface Props {

@@ -1,14 +1,27 @@
 import { getParsedDocument, isParsedDocument } from '../parsed-document';
 
 describe('parsed document helpers', () => {
-  test('recognizes an already parsed document', () => {
+  test('recognizes and passes through a complete parsed document', () => {
+    const document = {
+      info: () => undefined,
+      version: () => '3.0.0',
+      servers: () => ({ all: () => [] }),
+      channels: () => ({ all: () => [] }),
+      operations: () => ({ all: () => [] }),
+    };
+
+    expect(isParsedDocument(document)).toBe(true);
+    expect(getParsedDocument(document)).toBe(document);
+  });
+
+  test('rejects an incomplete document model', () => {
     const document = {
       info: () => undefined,
       channels: () => undefined,
     };
 
-    expect(isParsedDocument(document)).toBe(true);
-    expect(getParsedDocument(document)).toBe(document);
+    expect(isParsedDocument(document)).toBe(false);
+    expect(getParsedDocument(document)).toBeUndefined();
   });
 
   test('wraps a plain parsed AsyncAPI object', () => {

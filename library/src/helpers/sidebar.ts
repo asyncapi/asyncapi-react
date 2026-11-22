@@ -1,5 +1,5 @@
 export interface TagsLike {
-  all(): Array<{ name(): string }>;
+  all(): { name(): string }[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

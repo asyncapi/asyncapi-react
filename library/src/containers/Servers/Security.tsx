@@ -1,5 +1,9 @@
 import React from 'react';
-import type { OAuthFlowInterface, SecurityRequirementsInterface, SecuritySchemeInterface} from '@asyncapi/parser';
+import type {
+  OAuthFlowInterface,
+  SecurityRequirementsInterface,
+  SecuritySchemeInterface,
+} from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
 import { ServerHelpers } from '../../helpers/no-parser';

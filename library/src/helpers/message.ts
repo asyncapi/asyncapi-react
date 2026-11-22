@@ -3,6 +3,17 @@ import { sample } from 'openapi-sampler';
 import { MessageExample } from '../types';
 import type { SchemaLike } from './schema-no-parser';
 
+// Structural interface for a single message example. The `has*` predicates are optional
+// because older message models only expose the value accessors.
+export interface MessageExampleLike {
+  hasPayload?(): boolean;
+  payload?(): unknown;
+  hasHeaders?(): boolean;
+  headers?(): unknown;
+  name(): string | undefined;
+  summary(): string | undefined;
+}
+
 // Structural interface covering all message methods used by Message.tsx and MessageHelpers
 export interface MessageLike {
   id?(): string | undefined;
@@ -11,26 +22,34 @@ export interface MessageLike {
   description?(): string | undefined;
   hasDescription?(): boolean;
   contentType?(): string | undefined;
-  correlationId?(): {
-    location(): string | undefined;
-    hasDescription(): boolean;
-    description(): string | undefined;
-  } | undefined;
+  correlationId?():
+    | {
+        location(): string | undefined;
+        hasDescription(): boolean;
+        description(): string | undefined;
+      }
+    | undefined;
   externalDocs?(): { url(): string } | undefined;
   payload(): SchemaLike | undefined;
   headers(): SchemaLike | undefined;
   bindings?(): { length: number; all(): unknown[] };
-  tags?(): { length: number; all(): Array<{ name(): string; description(): string | undefined; externalDocs(): { url(): string } | undefined }> };
-  examples(): {
-    all(): Array<{
-      hasPayload?(): boolean;
-      payload?(): unknown;
-      hasHeaders?(): boolean;
-      headers?(): unknown;
-      name(): string | undefined;
-      summary(): string | undefined;
-    }>;
+  tags?(): {
+    length: number;
+    all(): {
+      name(): string;
+      description(): string | undefined;
+      externalDocs(): { url(): string } | undefined;
+    }[];
   };
+  examples(): {
+    all(): MessageExampleLike[];
+  };
+}
+
+// `hasPayload`/`hasHeaders` are optional. When a model omits the predicate, presence is
+// inferred from the value accessor; an explicit `true`/`false` always wins.
+function declaresPart(declared: boolean | undefined, value: unknown): boolean {
+  return declared ?? value !== undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -65,21 +84,20 @@ export class MessageHelpers {
     return schema;
   }
 
-  static getPayloadExamples(
-    msg: MessageLike,
-  ): MessageExample[] | undefined {
+  static getPayloadExamples(msg: MessageLike): MessageExample[] | undefined {
     const examples = msg.examples().all();
 
-    if (examples.some((e) => e.hasPayload?.() ?? false)) {
+    if (examples.some((e) => declaresPart(e.hasPayload?.(), e.payload?.()))) {
       const messageExamples = examples
         .flatMap((e) => {
-          if (!e.payload?.()) {
+          const payload = e.payload?.();
+          if (!declaresPart(e.hasPayload?.(), payload) || !payload) {
             return;
           }
           return {
             name: e.name(),
             summary: e.summary(),
-            example: e.payload?.(),
+            example: payload,
           };
         })
         .filter(Boolean) as MessageExample[];
@@ -98,20 +116,19 @@ export class MessageHelpers {
     return undefined;
   }
 
-  static getHeadersExamples(
-    msg: MessageLike,
-  ): MessageExample[] | undefined {
+  static getHeadersExamples(msg: MessageLike): MessageExample[] | undefined {
     const examples = msg.examples().all();
-    if (examples.some((e) => e.hasHeaders?.() ?? false)) {
+    if (examples.some((e) => declaresPart(e.hasHeaders?.(), e.headers?.()))) {
       const messageExamples = examples
         .flatMap((e) => {
-          if (!e.hasHeaders?.()) {
+          const headers = e.headers?.();
+          if (!declaresPart(e.hasHeaders?.(), headers)) {
             return;
           }
           return {
             name: e.name(),
             summary: e.summary(),
-            example: e.headers?.(),
+            example: headers,
           };
         })
         .filter(Boolean) as MessageExample[];

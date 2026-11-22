@@ -2,36 +2,46 @@ import { JsonSchemaModel } from './schema-no-parser';
 
 // interface for a security requirement used by ParsedDocument servers
 export interface SecurityRequirementsLike {
-  all(): Array<{
-    scheme(): {
-      type(): string;
-      flows(): { password(): { tokenUrl(): string | undefined } | undefined } | undefined;
-      hasDescription(): boolean;
-    } | undefined;
+  all(): {
+    scheme():
+      | {
+          type(): string;
+          flows():
+            | { password(): { tokenUrl(): string | undefined } | undefined }
+            | undefined;
+          hasDescription(): boolean;
+        }
+      | undefined;
     scopes(): string[];
-  }>;
+  }[];
 }
 
 // interface for a parsed AsyncAPI document, avoiding parser dependency in public declarations
 export interface ParsedDocument {
-  info(): { title(): string; version(): string; [key: string]: unknown } | undefined;
-  servers(): { all(): Array<{ id(): string; security(): SecurityRequirementsLike[]; [key: string]: unknown }> };
-  channels(): { all(): Array<{ id(): string; [key: string]: unknown }> };
-  operations(): { all(): Array<{ [key: string]: unknown }> };
-  components(): { [key: string]: unknown };
+  info():
+    | { title(): string; version(): string; [key: string]: unknown }
+    | undefined;
+  servers(): {
+    all(): {
+      id(): string;
+      security(): SecurityRequirementsLike[];
+      [key: string]: unknown;
+    }[];
+  };
+  channels(): { all(): { id(): string; [key: string]: unknown }[] };
+  operations(): { all(): Record<string, unknown>[] };
+  components(): Record<string, unknown>;
   version(): string;
   [key: string]: unknown;
 }
 
-// interface for a tag model used by containTags/operationsTags/serversTags. 
+// interface for a tag model used by containTags/operationsTags/serversTags.
 export interface TagLike {
   name(): string;
   json(): unknown;
 }
 
-interface RawObject {
-  [key: string]: unknown;
-}
+type RawObject = Record<string, unknown>;
 
 class ModelCollection<T> {
   private readonly items: T[];
@@ -183,7 +193,7 @@ class GenericModel {
   }
 
   extensions(): {
-    all(): Array<{ id(): string; value(): unknown }>;
+    all(): { id(): string; value(): unknown }[];
     get(id: string): { id(): string; value(): unknown } | undefined;
   } {
     const extensions = Object.entries(this.rawObject())
@@ -212,6 +222,7 @@ class ChannelModel extends GenericModel {
   constructor(
     private readonly channelName: string,
     raw: unknown,
+    private readonly serverIds: RawObject = {},
   ) {
     super(raw);
   }
@@ -226,11 +237,36 @@ class ChannelModel extends GenericModel {
       : this.channelName;
   }
 
+  /**
+   * A channel lists the servers it is available on with different shapes: AsyncAPI v2
+   * uses plain server names, while v3 uses `$ref` pointers or the already dereferenced
+   * server objects. Every shape has to map back to the id used by the servers section.
+   */
+  private resolveServerId(server: unknown): string {
+    if (typeof server === 'string') {
+      return server.split('/').pop() ?? server;
+    }
+    if (server && typeof server === 'object') {
+      const ref = (server as RawObject).$ref;
+      if (typeof ref === 'string') {
+        return pointerName(ref) ?? ref;
+      }
+      // A dereferenced server object is the same reference as the one in `servers`.
+      const match = Object.entries(this.serverIds).find(
+        ([, raw]) => raw === server,
+      );
+      if (match) return match[0];
+    }
+    return String(server);
+  }
+
   servers(): ModelCollection<ServerModel> {
     const servers = this.rawObject().servers;
     if (!Array.isArray(servers)) return new ModelCollection([]);
     return new ModelCollection(
-      servers.map((server) => new ServerModel(String(server), {})),
+      servers.map(
+        (server) => new ServerModel(this.resolveServerId(server), {}),
+      ),
     );
   }
 
@@ -303,13 +339,31 @@ class ParameterModel extends GenericModel {
   }
 }
 
-class ServerModel extends GenericModel {
+// Base for models that expose security requirements resolved against the document's
+// `securitySchemes` map.
+abstract class SecurableModel extends GenericModel {
+  constructor(
+    raw: unknown,
+    protected readonly securitySchemes: RawObject = {},
+  ) {
+    super(raw);
+  }
+
+  security(): SecurityRequirementsModel[] {
+    return normalizeSecurityRequirements(
+      this.rawObject().security,
+      this.securitySchemes,
+    );
+  }
+}
+
+class ServerModel extends SecurableModel {
   constructor(
     private readonly serverName: string,
     raw: unknown,
-    private readonly securitySchemes: RawObject = {},
+    securitySchemes: RawObject = {},
   ) {
-    super(raw);
+    super(raw, securitySchemes);
   }
 
   id(): string {
@@ -317,7 +371,19 @@ class ServerModel extends GenericModel {
   }
 
   url(): string {
-    return String(this.rawObject().url ?? '');
+    const raw = this.rawObject();
+    if (typeof raw.url === 'string') {
+      return raw.url;
+    }
+    // AsyncAPI v3 servers have no `url`; it is composed from protocol, host and pathname.
+    const host = typeof raw.host === 'string' ? raw.host : '';
+    if (!host) return '';
+    const normalizedHost = host.endsWith('/') ? host : `${host}/`;
+    const rawPathname = typeof raw.pathname === 'string' ? raw.pathname : '';
+    const pathname = rawPathname.startsWith('/')
+      ? rawPathname.substring(1)
+      : rawPathname;
+    return `${String(raw.protocol ?? '')}://${normalizedHost}${pathname}`;
   }
 
   protocol(): string {
@@ -344,60 +410,6 @@ class ServerModel extends GenericModel {
         ([name, raw]) => new ServerVariableModel(name, raw),
       ),
     );
-  }
-
-  security(): SecurityRequirementsModel[] {
-    const security = this.rawObject().security;
-    if (!Array.isArray(security)) return [];
-
-    return security.map((entry) => {
-      if (!entry || typeof entry !== 'object') {
-        return new SecurityRequirementsModel([]);
-      }
-
-      const rawEntry = entry as RawObject;
-      const requirements: SecurityRequirementModel[] = [];
-
-      const ref = typeof rawEntry.$ref === 'string' ? rawEntry.$ref : undefined;
-      if (ref) {
-        const schemeName = ref.split('/').pop();
-        const schemeRaw = schemeName
-          ? this.securitySchemes[schemeName]
-          : undefined;
-        requirements.push(
-          new SecurityRequirementModel(
-            schemeRaw && typeof schemeRaw === 'object'
-              ? new SecuritySchemeModel(schemeRaw)
-              : undefined,
-            [],
-          ),
-        );
-        return new SecurityRequirementsModel(requirements);
-      }
-
-      if (typeof rawEntry.type === 'string') {
-        requirements.push(
-          new SecurityRequirementModel(
-            new SecuritySchemeModel(rawEntry),
-            Array.isArray(rawEntry.scopes) ? rawEntry.scopes.map(String) : [],
-          ),
-        );
-        return new SecurityRequirementsModel(requirements);
-      }
-
-      Object.entries(rawEntry).forEach(([schemeName, scopes]) => {
-        const schemeRaw = this.securitySchemes[schemeName];
-        requirements.push(
-          new SecurityRequirementModel(
-            schemeRaw && typeof schemeRaw === 'object'
-              ? new SecuritySchemeModel(schemeRaw)
-              : undefined,
-            Array.isArray(scopes) ? scopes.map(String) : [],
-          ),
-        );
-      });
-      return new SecurityRequirementsModel(requirements);
-    });
   }
 
   bindings(): BindingsModel | undefined {
@@ -550,6 +562,110 @@ class SecurityRequirementsModel {
   }
 }
 
+/**
+ * Normalizes the security requirement shapes used by v2 and v3 into the model the
+ * renderer consumes: a list of requirement sets whose schemes are resolved through
+ * the document's `securitySchemes` map.
+ */
+function normalizeSecurityRequirements(
+  security: unknown,
+  securitySchemes: RawObject,
+): SecurityRequirementsModel[] {
+  if (!Array.isArray(security)) return [];
+
+  return security.map((entry) => {
+    if (!entry || typeof entry !== 'object') {
+      return new SecurityRequirementsModel([]);
+    }
+
+    const rawEntry = entry as RawObject;
+    const requirements: SecurityRequirementModel[] = [];
+
+    const ref = typeof rawEntry.$ref === 'string' ? rawEntry.$ref : undefined;
+    if (ref) {
+      const schemeName = pointerName(ref);
+      const schemeRaw = schemeName ? securitySchemes[schemeName] : undefined;
+      requirements.push(
+        new SecurityRequirementModel(
+          schemeRaw && typeof schemeRaw === 'object'
+            ? new SecuritySchemeModel(schemeRaw)
+            : undefined,
+          [],
+        ),
+      );
+      return new SecurityRequirementsModel(requirements);
+    }
+
+    if (typeof rawEntry.type === 'string') {
+      requirements.push(
+        new SecurityRequirementModel(
+          new SecuritySchemeModel(rawEntry),
+          Array.isArray(rawEntry.scopes) ? rawEntry.scopes.map(String) : [],
+        ),
+      );
+      return new SecurityRequirementsModel(requirements);
+    }
+
+    Object.entries(rawEntry).forEach(([schemeName, scopes]) => {
+      const schemeRaw = securitySchemes[schemeName];
+      requirements.push(
+        new SecurityRequirementModel(
+          schemeRaw && typeof schemeRaw === 'object'
+            ? new SecuritySchemeModel(schemeRaw)
+            : undefined,
+          Array.isArray(scopes) ? scopes.map(String) : [],
+        ),
+      );
+    });
+    return new SecurityRequirementsModel(requirements);
+  });
+}
+
+function decodePointerSegment(segment: string): string {
+  return segment.replace(/~1/g, '/').replace(/~0/g, '~');
+}
+
+function pointerName(pointer: unknown): string | undefined {
+  if (typeof pointer !== 'string' || !pointer.startsWith('#/')) return undefined;
+  const segments = pointer.substring(2).split('/');
+  return decodePointerSegment(segments[segments.length - 1] ?? '');
+}
+
+/** Resolves a local `#/...` JSON pointer against the document, returning the input untouched otherwise. */
+function resolveDocumentRef(ref: unknown, document: RawObject): unknown {
+  if (!ref || typeof ref !== 'object') return ref;
+  const pointer = (ref as RawObject).$ref;
+  if (typeof pointer !== 'string' || !pointer.startsWith('#/')) return ref;
+  let current: unknown = document;
+  for (const segment of pointer.substring(2).split('/').map(decodePointerSegment)) {
+    if (!current || typeof current !== 'object') return ref;
+    current = (current as RawObject)[segment];
+  }
+  return current ?? ref;
+}
+
+class ExampleModel extends GenericModel {
+  summary(): string | undefined {
+    return this.rawObject().summary as string | undefined;
+  }
+
+  hasPayload(): boolean {
+    return this.rawObject().payload !== undefined;
+  }
+
+  payload(): unknown {
+    return this.rawObject().payload;
+  }
+
+  hasHeaders(): boolean {
+    return this.rawObject().headers !== undefined;
+  }
+
+  headers(): unknown {
+    return this.rawObject().headers;
+  }
+}
+
 class MessageModel extends GenericModel {
   constructor(
     private readonly messageName: string,
@@ -564,19 +680,29 @@ class MessageModel extends GenericModel {
 
   payload(): JsonSchemaModel | undefined {
     const payload = this.rawObject().payload;
-    return payload ? JsonSchemaModel.fromJSON(payload) : undefined;
+    // `false` is a valid boolean schema, so only an absent payload is dropped.
+    return payload === undefined
+      ? undefined
+      : JsonSchemaModel.fromJSON(payload);
   }
 
   headers(): JsonSchemaModel | undefined {
     const headers = this.rawObject().headers;
-    return headers ? JsonSchemaModel.fromJSON(headers) : undefined;
+    return headers === undefined
+      ? undefined
+      : JsonSchemaModel.fromJSON(headers);
   }
 
-  examples(): ModelCollection<GenericModel> {
+  examples(): ModelCollection<ExampleModel> {
     const examples = this.rawObject().examples;
     return new ModelCollection(
       Array.isArray(examples)
-        ? examples.map((example) => new GenericModel(example))
+        ? examples.map(
+            (example) =>
+              new ExampleModel(
+                example && typeof example === 'object' ? example : {},
+              ),
+          )
         : [],
     );
   }
@@ -632,10 +758,6 @@ class MessageModel extends GenericModel {
 }
 
 class ComponentsModel extends GenericModel {
-  constructor(raw: unknown) {
-    super(raw);
-  }
-
   messages(): ModelCollection<MessageModel> {
     const messages = (this.rawObject().messages as RawObject | undefined) ?? {};
     return new ModelCollection(
@@ -659,7 +781,64 @@ class ComponentsModel extends GenericModel {
   }
 }
 
-class OperationModel extends GenericModel {
+class OperationReplyModel extends GenericModel {
+  private readonly channelModel?: ChannelModel;
+  private readonly messageModels: MessageModel[];
+
+  constructor(
+    raw: unknown,
+    documentRaw: RawObject = {},
+    serverIds: RawObject = {},
+  ) {
+    super(raw);
+    const replyRaw = this.rawObject();
+
+    const channelRef = replyRaw.channel;
+    const channelRaw = resolveDocumentRef(channelRef, documentRaw);
+    if (channelRaw && typeof channelRaw === 'object') {
+      const ref =
+        channelRef && typeof channelRef === 'object'
+          ? ((channelRef as RawObject).$ref as string | undefined)
+          : undefined;
+      const channelName =
+        pointerName(ref) ??
+        (typeof (channelRaw as RawObject).address === 'string'
+          ? ((channelRaw as RawObject).address as string)
+          : 'reply');
+      this.channelModel = new ChannelModel(channelName, channelRaw, serverIds);
+    }
+
+    const messages = Array.isArray(replyRaw.messages) ? replyRaw.messages : [];
+    this.messageModels = messages.map(
+      (message, index) =>
+        new MessageModel(
+          `reply-${index}`,
+          resolveDocumentRef(message, documentRaw),
+        ),
+    );
+  }
+
+  channel(): ChannelModel | undefined {
+    return this.channelModel;
+  }
+
+  messages(): ModelCollection<MessageModel> {
+    return new ModelCollection(this.messageModels);
+  }
+
+  address(): (GenericModel & { location(): string | undefined }) | undefined {
+    const address = this.rawObject().address;
+    if (!address || typeof address !== 'object') return undefined;
+    const model = new GenericModel(address) as GenericModel & {
+      location(): string | undefined;
+    };
+    model.location = () =>
+      (address as RawObject).location as string | undefined;
+    return model;
+  }
+}
+
+class OperationModel extends SecurableModel {
   private readonly channel: ChannelModel;
   private readonly payloadDirection: 'send' | 'receive';
 
@@ -669,9 +848,12 @@ class OperationModel extends GenericModel {
     channelName: string,
     channelRaw: unknown = {},
     payloadDirection: 'send' | 'receive' = 'receive',
+    private readonly serverIds: RawObject = {},
+    securitySchemes: RawObject = {},
+    private readonly documentRaw: RawObject = {},
   ) {
-    super(raw);
-    this.channel = new ChannelModel(channelName, channelRaw);
+    super(raw, securitySchemes);
+    this.channel = new ChannelModel(channelName, channelRaw, serverIds);
     this.payloadDirection = payloadDirection;
   }
 
@@ -686,12 +868,6 @@ class OperationModel extends GenericModel {
 
   channels(): ModelCollection<ChannelModel> {
     return new ModelCollection([this.channel]);
-  }
-
-  security(): unknown[] {
-    return Array.isArray(this.rawObject().security)
-      ? (this.rawObject().security as unknown[])
-      : [];
   }
 
   summary(): string | undefined {
@@ -714,8 +890,10 @@ class OperationModel extends GenericModel {
     return this.payloadDirection === 'receive';
   }
 
-  reply(): undefined {
-    return undefined;
+  reply(): OperationReplyModel | undefined {
+    const reply = this.rawObject().reply;
+    if (!reply || typeof reply !== 'object') return undefined;
+    return new OperationReplyModel(reply, this.documentRaw, this.serverIds);
   }
 
   bindings(): BindingsModel | undefined {
@@ -733,11 +911,46 @@ class OperationModel extends GenericModel {
   }
 
   messages(): ModelCollection<MessageModel> {
-    const message = this.rawObject().message;
-    if (!message || typeof message !== 'object') {
-      return new ModelCollection([]);
+    const raw = this.rawObject();
+
+    // AsyncAPI v3 operations list their messages by reference.
+    if (Array.isArray(raw.messages)) {
+      return new ModelCollection(
+        raw.messages.map(
+          (message, index) =>
+            new MessageModel(
+              `${this.operationName}-${index}`,
+              resolveDocumentRef(message, this.documentRaw),
+            ),
+        ),
+      );
     }
-    return new ModelCollection([new MessageModel(this.operationName, message)]);
+
+    // AsyncAPI v2 operations carry the message inline, optionally as `oneOf`.
+    const message = raw.message;
+    if (message && typeof message === 'object') {
+      const oneOf = (message as RawObject).oneOf;
+      if (Array.isArray(oneOf)) {
+        return new ModelCollection(
+          oneOf.map(
+            (entry, index) =>
+              new MessageModel(
+                `${this.operationName}-${index}`,
+                resolveDocumentRef(entry, this.documentRaw),
+              ),
+          ),
+        );
+      }
+      return new ModelCollection([
+        new MessageModel(
+          this.operationName,
+          resolveDocumentRef(message, this.documentRaw),
+        ),
+      ]);
+    }
+
+    // v3 operations can inherit their messages from the referenced channel.
+    return this.channel.messages();
   }
 }
 
@@ -783,10 +996,6 @@ class InfoModel extends GenericModel {
 }
 
 class AsyncApiDocumentModel extends GenericModel {
-  constructor(raw: unknown) {
-    super(raw);
-  }
-
   version(): string {
     return String(this.rawObject().asyncapi ?? '');
   }
@@ -800,20 +1009,26 @@ class AsyncApiDocumentModel extends GenericModel {
     return info ? new InfoModel(info) : undefined;
   }
 
-  servers(): ModelCollection<ServerModel> {
-    const servers = this.rawObject().servers;
-    if (!servers || typeof servers !== 'object') {
-      return new ModelCollection([]);
-    }
+  /** Security scheme definitions shared by servers and operations. */
+  private securitySchemes(): RawObject {
     const components = this.rawObject().components;
-    const securitySchemes =
-      components &&
+    return components &&
       typeof components === 'object' &&
       typeof (components as RawObject).securitySchemes === 'object'
-        ? ((components as RawObject).securitySchemes as RawObject)
-        : {};
+      ? ((components as RawObject).securitySchemes as RawObject)
+      : {};
+  }
+
+  /** Raw servers keyed by name, used to resolve channel server references. */
+  private serverDefinitions(): RawObject {
+    const servers = this.rawObject().servers;
+    return servers && typeof servers === 'object' ? (servers as RawObject) : {};
+  }
+
+  servers(): ModelCollection<ServerModel> {
+    const securitySchemes = this.securitySchemes();
     return new ModelCollection(
-      Object.entries(servers as RawObject).map(
+      Object.entries(this.serverDefinitions()).map(
         ([name, raw]) => new ServerModel(name, raw, securitySchemes),
       ),
     );
@@ -824,14 +1039,18 @@ class AsyncApiDocumentModel extends GenericModel {
     if (!channels || typeof channels !== 'object') {
       return new ModelCollection([]);
     }
+    const serverIds = this.serverDefinitions();
     return new ModelCollection(
       Object.entries(channels as RawObject).map(
-        ([name, raw]) => new ChannelModel(name, raw),
+        ([name, raw]) => new ChannelModel(name, raw, serverIds),
       ),
     );
   }
 
   operations(): ModelCollection<OperationModel> {
+    const documentRaw = this.rawObject();
+    const serverIds = this.serverDefinitions();
+    const securitySchemes = this.securitySchemes();
     const rawOperations = this.rawObject().operations;
     if (rawOperations && typeof rawOperations === 'object') {
       return new ModelCollection(
@@ -843,17 +1062,22 @@ class AsyncApiDocumentModel extends GenericModel {
             operationRaw.channel !== null
               ? ((operationRaw.channel as RawObject).$ref as string | undefined)
               : undefined;
-          const channelName = channelRef?.split('/').pop() ?? name;
           const channels = this.rawObject().channels as RawObject | undefined;
-          const channelRaw =
-            channels?.[channelName] ??
-            channels?.[channelName.replace(/.*[/]/, '')];
+          const resolvedChannel = resolveDocumentRef(operationRaw.channel, documentRaw);
+          const matchedChannel = channels
+            ? Object.entries(channels).find(([, candidate]) => candidate === resolvedChannel)
+            : undefined;
+          const channelName = pointerName(channelRef) ?? matchedChannel?.[0] ?? name;
+          const channelRaw = matchedChannel?.[1] ?? channels?.[channelName] ?? resolvedChannel;
           return new OperationModel(
             name,
             operationRaw,
             channelName,
             channelRaw,
             operationRaw.action === 'send' ? 'send' : 'receive',
+            serverIds,
+            securitySchemes,
+            documentRaw,
           );
         }),
       );
@@ -869,6 +1093,7 @@ class AsyncApiDocumentModel extends GenericModel {
               ? (channelValue as RawObject)
               : {};
 
+          // In AsyncAPI v2 a `subscribe` operation sends messages and `publish` receives them.
           const subscribe = channelRaw.subscribe;
           if (subscribe && typeof subscribe === 'object') {
             const raw = subscribe as RawObject;
@@ -877,7 +1102,16 @@ class AsyncApiDocumentModel extends GenericModel {
                 ? raw.operationId
                 : `subscribe-${channelName}`;
             operations.push(
-              new OperationModel(name, raw, channelName, channelRaw, 'receive'),
+              new OperationModel(
+                name,
+                raw,
+                channelName,
+                channelRaw,
+                'send',
+                serverIds,
+                securitySchemes,
+                documentRaw,
+              ),
             );
           }
 
@@ -889,7 +1123,16 @@ class AsyncApiDocumentModel extends GenericModel {
                 ? raw.operationId
                 : `publish-${channelName}`;
             operations.push(
-              new OperationModel(name, raw, channelName, channelRaw, 'send'),
+              new OperationModel(
+                name,
+                raw,
+                channelName,
+                channelRaw,
+                'receive',
+                serverIds,
+                securitySchemes,
+                documentRaw,
+              ),
             );
           }
         },
@@ -906,50 +1149,59 @@ class AsyncApiDocumentModel extends GenericModel {
   }
 }
 
-export function isParsedDocument(
-  schema: unknown,
-): schema is ParsedDocument {
-  if (typeof schema !== 'object' || schema === null) {
-    return false;
-  }
-
+/**
+ * The containers only render documents exposing the full accessor contract: `info`,
+ * `servers`, `channels`, `operations` and `version`. Older parser models predate some
+ * of these (or return Maps without `all()`), so they must be normalized first.
+ */
+function meetsRendererContract(schema: object): boolean {
   const document = schema as {
-    asyncapi?: unknown;
     info?: unknown;
+    servers?: unknown;
     channels?: unknown;
-    json?: unknown;
+    operations?: unknown;
+    version?: unknown;
   };
-
-  if (
-    typeof document.asyncapi === 'string' &&
-    typeof document.info === 'object'
-  ) {
-    return true;
-  }
-
-  if (
-    typeof document.json === 'function' &&
-    typeof document.info !== 'undefined'
-  ) {
-    return true;
-  }
-
   return (
     typeof document.info === 'function' &&
-    typeof document.channels === 'function'
+    typeof document.servers === 'function' &&
+    typeof document.channels === 'function' &&
+    typeof document.operations === 'function' &&
+    typeof document.version === 'function'
   );
 }
 
-export function getParsedDocument(
-  schema: unknown,
-): ParsedDocument | undefined {
-  if (!isParsedDocument(schema)) return undefined;
-  if (typeof (schema as { info?: unknown }).info !== 'function') {
-    return new AsyncApiDocumentModel(schema) as unknown as ParsedDocument;
-  }
-  return schema as ParsedDocument;
+export function isParsedDocument(schema: unknown): schema is ParsedDocument {
+  return (
+typeof schema === 'object' &&
+    schema !== null &&
+    meetsRendererContract(schema)
+  );
 }
 
+export function getParsedDocument(schema: unknown): ParsedDocument | undefined {
+  if (typeof schema !== 'object' || schema === null) return undefined;
+
+  // Preserve identity only when the object implements the complete renderer contract.
+  if (meetsRendererContract(schema)) return schema as ParsedDocument;
+
+  const document = schema as { asyncapi?: unknown; info?: unknown; json?: unknown };
+
+  // Raw AsyncAPI JSON is wrapped in the parser independent adapter.
+  if (typeof document.asyncapi === 'string' && typeof document.info === 'object') {
+    return new AsyncApiDocumentModel(schema) as unknown as ParsedDocument;
+  }
+
+  // Legacy parser models are normalized from their JSON representation.
+  if (typeof document.json === 'function') {
+    const raw = (document.json as () => unknown)();
+    if (raw && typeof raw === 'object') {
+      return new AsyncApiDocumentModel(raw) as unknown as ParsedDocument;
+    }
+  }
+
+  return undefined;
+}
 export function containTags(
   schema: { tags?: () => { length: number; all: () => TagLike[] } },
   tags: TagLike | TagLike[],
@@ -969,39 +1221,53 @@ export function containTags(
 
 /** Structural interface for a document model used by operationsTags/serversTags. */
 export interface DocumentLike {
-  operations(): { all(): Array<{ tags(): { length: number; all(): TagLike[] } }> };
-  servers(): { all(): Array<{ id(): string; tags(): { length: number; all(): TagLike[] } }> };
+  operations(): {
+    all(): { tags(): { length: number; all(): TagLike[] } }[];
+  };
+  servers(): {
+    all(): {
+      id(): string;
+      tags(): { length: number; all(): TagLike[] };
+    }[];
+  };
 }
 
 export function operationsTags(spec: DocumentLike): TagLike[] {
   const tags = new Map<string, TagLike>();
-  spec.operations().all().forEach((operation) => {
-    if (operation?.tags().length > 0) {
-      operation
-        .tags()
-        .all()
-        .forEach((tag) => tags.set(tag.name(), tag));
-    }
-  });
+  spec
+    .operations()
+    .all()
+    .forEach((operation) => {
+      if (operation?.tags().length > 0) {
+        operation
+          .tags()
+          .all()
+          .forEach((tag) => tags.set(tag.name(), tag));
+      }
+    });
   return Array.from(tags.values());
 }
 
 export function serversTags(spec: DocumentLike): Record<string, string[]> {
-  const tags: Record<string, string[]> = {};
-  spec.servers().all().forEach((server) => {
-    const serverName = server.id();
-    if (server.tags().length > 0) {
-      server
-        .tags()
-        .all()
-        .forEach((tag) => {
-          if (tags[tag.name()]) {
-            tags[tag.name()].push(serverName);
-          } else {
-            tags[tag.name()] = [serverName];
-          }
-        });
-    }
-  });
+  // Null prototype avoids collisions with names such as `constructor` or `toString`.
+  const tags = Object.create(null) as Record<string, string[]>;
+  spec
+    .servers()
+    .all()
+    .forEach((server) => {
+      const serverName = server.id();
+      if (server.tags().length > 0) {
+        server
+          .tags()
+          .all()
+          .forEach((tag) => {
+            if (tags[tag.name()]) {
+              tags[tag.name()].push(serverName);
+            } else {
+              tags[tag.name()] = [serverName];
+            }
+          });
+      }
+    });
   return tags;
 }

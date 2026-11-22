@@ -35,6 +35,11 @@ describe('SchemaHelpers no-parser utilities', () => {
     const dependentSchemas = SchemaHelpers.getDependentSchemaModels(schema);
 
     expect(dependentSchemas?.credit_card).toBeDefined();
+    // the parser exposes schema-valued dependencies as models; they must be passed
+    // through so their properties stay reachable
+    expect(
+      dependentSchemas?.credit_card?.properties()?.billing_address?.type(),
+    ).toBe('string');
     expect(SchemaHelpers.hasConditions(schema)).toBe(true);
     expect(SchemaCustomTypes.ANY).toBe('any');
   });
@@ -64,7 +69,9 @@ describe('SchemaHelpers no-parser utilities', () => {
 
     test('handles schemas with multiple types', () => {
       expect(
-        SchemaHelpers.toSchemaType(new JsonSchemaModel({ type: ['string', 'null'] })),
+        SchemaHelpers.toSchemaType(
+          new JsonSchemaModel({ type: ['string', 'null'] }),
+        ),
       ).toBe('string | null');
     });
 
@@ -164,6 +171,28 @@ describe('SchemaHelpers no-parser utilities', () => {
     });
   });
 
+  describe('circular references', () => {
+    test('stops type formatting at a self-referential edge', () => {
+      const circular: Record<string, unknown> = { type: 'array' };
+      circular.items = circular;
+
+      const model = new JsonSchemaModel(circular);
+      expect(model.isCircular()).toBe(false);
+      expect(SchemaHelpers.toSchemaType(model)).toBe('array<array>');
+    });
+
+    test('does not treat a schema reused in sibling branches as circular', () => {
+      const shared = { type: 'string' };
+      const model = new JsonSchemaModel({
+        type: 'object',
+        properties: { first: shared, second: shared },
+      });
+
+      expect(model.properties()?.first?.isCircular()).toBe(false);
+      expect(model.properties()?.second?.isCircular()).toBe(false);
+    });
+  });
+
   describe('applicators', () => {
     test('reports combined types for oneOf, anyOf and allOf', () => {
       const nested = [{ type: 'string' }];
@@ -179,33 +208,33 @@ describe('SchemaHelpers no-parser utilities', () => {
     });
 
     test('reports never for `not: {}` schemas', () => {
-      expect(
-        SchemaHelpers.toSchemaType(new JsonSchemaModel({ not: {} })),
-      ).toBe(SchemaCustomTypes.NEVER);
+      expect(SchemaHelpers.toSchemaType(new JsonSchemaModel({ not: {} }))).toBe(
+        SchemaCustomTypes.NEVER,
+      );
     });
   });
 
   describe('isExpandable', () => {
     test('is expandable for object and array types', () => {
-      expect(SchemaHelpers.isExpandable(new JsonSchemaModel({ type: 'object' }))).toBe(
-        true,
-      );
-      expect(SchemaHelpers.isExpandable(new JsonSchemaModel({ type: 'array' }))).toBe(
-        true,
-      );
+      expect(
+        SchemaHelpers.isExpandable(new JsonSchemaModel({ type: 'object' })),
+      ).toBe(true);
+      expect(
+        SchemaHelpers.isExpandable(new JsonSchemaModel({ type: 'array' })),
+      ).toBe(true);
     });
 
     test('is expandable for applicators and nested schemas', () => {
       const nested = [{ type: 'string' }];
-      expect(SchemaHelpers.isExpandable(new JsonSchemaModel({ oneOf: nested }))).toBe(
-        true,
-      );
-      expect(SchemaHelpers.isExpandable(new JsonSchemaModel({ anyOf: nested }))).toBe(
-        true,
-      );
-      expect(SchemaHelpers.isExpandable(new JsonSchemaModel({ allOf: nested }))).toBe(
-        true,
-      );
+      expect(
+        SchemaHelpers.isExpandable(new JsonSchemaModel({ oneOf: nested })),
+      ).toBe(true);
+      expect(
+        SchemaHelpers.isExpandable(new JsonSchemaModel({ anyOf: nested })),
+      ).toBe(true);
+      expect(
+        SchemaHelpers.isExpandable(new JsonSchemaModel({ allOf: nested })),
+      ).toBe(true);
       expect(
         SchemaHelpers.isExpandable(
           new JsonSchemaModel({ not: { type: 'string' } }),
@@ -283,6 +312,16 @@ describe('SchemaHelpers no-parser utilities', () => {
       expect(model.type()).toBe('object');
       expect(model.properties()?.name?.const()).toBe('John');
     });
+
+    test('does not treat extension objects with validation keywords as schemas', () => {
+      const model = SchemaHelpers.jsonToSchema({
+        minLength: 3,
+        owner: 'billing',
+      });
+      expect(model.type()).toBe('object');
+      expect(model.properties()?.minLength).toBeDefined();
+      expect(model.properties()?.owner?.const()).toBe('billing');
+    });
   });
 
   describe('jsonToSchema runtime safety', () => {
@@ -313,7 +352,9 @@ describe('SchemaHelpers no-parser utilities', () => {
     });
 
     test('handles null and undefined entries without throwing', () => {
-      expect(() => SchemaHelpers.jsonToSchema({ a: null, b: 'x' })).not.toThrow();
+      expect(() =>
+        SchemaHelpers.jsonToSchema({ a: null, b: 'x' }),
+      ).not.toThrow();
       expect(() =>
         SchemaHelpers.jsonToSchema({ a: undefined, b: 42 }),
       ).not.toThrow();

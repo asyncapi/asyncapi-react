@@ -1,7 +1,24 @@
 import AsyncApiComponent from './containers/AsyncApi/AsyncApi';
-import AsyncApiComponentWP from './containers/AsyncApi/Standalone';
+import React from 'react';
+import AsyncApiComponentWPBase from './containers/AsyncApi/Standalone';
+import { SpecificationHelpers } from './helpers';
 
 export type { AsyncApiProps } from './containers/AsyncApi/AsyncApi';
+
+type AsyncApiComponentWPProps = React.ComponentProps<typeof AsyncApiComponentWPBase>;
+
+// Compatibility export for parser serialized documents used by older consumers.
+function AsyncApiComponentWP(props: AsyncApiComponentWPProps) {
+  const input = props.schema;
+  const canNormalize =
+    typeof input === 'string' ||
+    (typeof input === 'object' && input !== null &&
+      ('asyncapi' in input || ('json' in input && typeof input.json === 'function')));
+  const schema = canNormalize
+    ? SpecificationHelpers.retrieveParsedSpec(input) ?? input
+    : input;
+  return React.createElement(AsyncApiComponentWPBase, { ...props, schema });
+}
 export type { ConfigInterface } from './config/config';
 export {
   PLUGIN_EVENT_READY,
@@ -17,14 +34,14 @@ export type {
   PluginErrorPayload,
   PluginInstance,
   ComponentSlotProps,
-} from './types';
-export type {
-  ExtensionComponentProps,
+  TypedComponentSlotProps,
+  SlotComponentProps,
   SlotContext,
   SlotContextMap,
   OperationSlotContext,
   InfoSlotContext,
-} from './types-parser';
+} from './types';
+export type { ExtensionComponentProps } from './types-parser';
 
 import { hljs } from './helpers';
 

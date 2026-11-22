@@ -41,6 +41,7 @@ export const Message: React.FunctionComponent<Props> = ({
   const messageId = typeof message.id === 'function' && message.id?.();
   const title = message.title?.();
   const summary = message.summary?.();
+  const description = message.description?.();
   const payload = message.payload();
   const headers = message.headers();
   const correlationId = message.correlationId?.();
@@ -117,7 +118,7 @@ export const Message: React.FunctionComponent<Props> = ({
 
           {message.hasDescription?.() && (
             <div className="mt-2">
-              <Markdown>{message.description?.()}</Markdown>
+              <Markdown>{description}</Markdown>
             </div>
           )}
 

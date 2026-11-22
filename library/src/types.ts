@@ -1,3 +1,10 @@
+import type {
+  AsyncAPIDocumentInterface,
+  ChannelInterface,
+  InfoInterface,
+  OperationInterface,
+} from '@asyncapi/parser';
+
 export type PropsSchema = string | FetchingSchemaInterface | object;
 
 export function isFetchingSchemaInterface(
@@ -71,10 +78,55 @@ export interface PluginContext {
   schema?: PropsSchema;
 }
 
-export interface ComponentSlotProps<C = unknown> {
-  context: C;
+interface BaseSlotContext {
+  /** The parsed AsyncAPI document being rendered. */
+  document: AsyncAPIDocumentInterface;
+  /**
+   * @deprecated Use the typed fields on the slot context instead. Holds the
+   * operation props in the `operation` slot and the info model in the `info` slot.
+   */
+  schema?: PropsSchema;
+}
+
+export interface OperationSlotContext extends BaseSlotContext {
+  slot: PluginSlot.OPERATION;
+  operation: OperationInterface;
+  channel: ChannelInterface;
+  channelName: string;
+  type: PayloadType;
+}
+
+export interface InfoSlotContext extends BaseSlotContext {
+  slot: PluginSlot.INFO;
+  info: InfoInterface;
+}
+
+export interface SlotContextMap {
+  [PluginSlot.OPERATION]: OperationSlotContext;
+  [PluginSlot.INFO]: InfoSlotContext;
+}
+
+export type SlotContext = SlotContextMap[PluginSlot];
+
+interface BaseSlotProps {
   onClose?: () => void;
 }
+
+/**
+ * Parser-independent props contract: a component that only needs an arbitrary context value.
+ */
+export interface SlotComponentProps<C = unknown> extends BaseSlotProps {
+  context: C;
+}
+
+export interface ComponentSlotProps<S extends PluginSlot = PluginSlot>
+  extends BaseSlotProps {
+  context: SlotContextMap[S];
+}
+
+/** Backward-compatible name for parser-backed, slot-keyed component props. */
+export type TypedComponentSlotProps<S extends PluginSlot = PluginSlot> =
+  ComponentSlotProps<S>;
 
 export interface ExtensionComponentProps<V = unknown> {
   propertyName: string;
@@ -123,7 +175,7 @@ export interface PluginAPI {
 
   registerComponent<S extends PluginSlot>(
     slot: S,
-    component: React.ComponentType<ComponentSlotProps>,
+    component: React.ComponentType<ComponentSlotProps<S>>,
     options?: { priority?: number; label?: string },
   ): void;
 

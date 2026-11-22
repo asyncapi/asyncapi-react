@@ -136,7 +136,7 @@ describe('PluginSlotRenderer', () => {
     it('should pass context to plugin components', async () => {
       const contextData = { ...context, schema: { title: 'Test API' } };
       const TestComponent: React.FC<
-        ComponentSlotProps<OperationSlotContext>
+        ComponentSlotProps<PluginSlot.OPERATION>
       > = ({ context }) => <div>{JSON.stringify(context)}</div>;
 
       const plugin = {

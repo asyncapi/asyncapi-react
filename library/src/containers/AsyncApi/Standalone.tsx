@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
-import { getParsedDocument, ParsedDocument } from '../../helpers/parsed-document';
+import {
+  getParsedDocument,
+  ParsedDocument,
+} from '../../helpers/parsed-document';
 import {
   AsyncApiPlugin,
   ErrorObject,
@@ -15,8 +18,26 @@ import { Error } from '../Error/Error';
 import { PluginManager } from '../../helpers/pluginManager';
 import { PLUGINEVENTS } from '../../constants';
 
+/**
+ * Normalizes the incoming schema into a renderable document. Serialized specs are
+ * accepted as JSON strings so the pre-parsed `AsyncApiComponentWP` usage keeps working
+ * without pulling the parser into this entry point.
+ */
+function resolveDocument(
+  schema: PropsSchema | undefined,
+): ParsedDocument | undefined {
+  if (typeof schema === 'string') {
+    try {
+      return getParsedDocument(JSON.parse(schema));
+    } catch {
+      return undefined;
+    }
+  }
+  return getParsedDocument(schema);
+}
+
 export interface AsyncApiProps {
-  schema: PropsSchema;
+  schema?: PropsSchema;
   config?: Partial<ConfigInterface>;
   plugins?: AsyncApiPlugin[];
   onPluginEvent?: (eventName: string, data: unknown) => void;
@@ -55,7 +76,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   constructor(props: AsyncApiProps) {
     super(props);
 
-    const parsedSpec = getParsedDocument(props.schema);
+    const parsedSpec = resolveDocument(props.schema);
     if (parsedSpec) {
       this.state = { ...this.state, asyncapi: parsedSpec };
     }
@@ -303,10 +324,10 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   private updateState(
-    schema: PropsSchema,
+    schema: PropsSchema | undefined,
     pm: PluginManager | undefined = this.state.pm,
   ) {
-    const parsedSpec = getParsedDocument(schema);
+    const parsedSpec = resolveDocument(schema);
     if (!parsedSpec) {
       this.setState({ asyncapi: undefined });
       return;

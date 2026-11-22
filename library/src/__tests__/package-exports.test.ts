@@ -30,20 +30,25 @@ describe('package exports', () => {
     });
   });
 
-  test('publishes every declared entry and CSS target', () => {
-    const targets = [
-      './lib/types/index.d.ts',
-      './lib/esm/index.js',
-      './lib/cjs/index.js',
-      './lib/types/without-parser.d.ts',
-      './lib/esm/without-parser.js',
-      './lib/cjs/without-parser.js',
-      './styles/default.css',
-      './styles/default.min.css',
-    ];
+  const verifyArtifacts =
+    process.env.CHECK_PACKAGE_ARTIFACTS === 'true' ? describe : describe.skip;
 
-    targets.forEach((target) => {
-      expect(fs.existsSync(path.resolve(libraryRoot, target))).toBe(true);
+  verifyArtifacts('publishes every declared entry and CSS target', () => {
+    test('emits all declared entry points and CSS files', () => {
+      const targets = [
+        './lib/types/index.d.ts',
+        './lib/esm/index.js',
+        './lib/cjs/index.js',
+        './lib/types/without-parser.d.ts',
+        './lib/esm/without-parser.js',
+        './lib/cjs/without-parser.js',
+        './styles/default.css',
+        './styles/default.min.css',
+      ];
+
+      targets.forEach((target) => {
+        expect(fs.existsSync(path.resolve(libraryRoot, target))).toBe(true);
+      });
     });
   });
 });

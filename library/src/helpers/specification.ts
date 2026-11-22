@@ -6,7 +6,7 @@ import {
 } from '@asyncapi/parser';
 import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 import { isStringifiedDocument } from '@asyncapi/parser/cjs/document';
-import { containTags,operationsTags,serversTags} from './parsed-document';
+import { containTags, operationsTags, serversTags } from './parsed-document';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class SpecificationHelpers {
