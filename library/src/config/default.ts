@@ -8,6 +8,7 @@ import {
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../constants';
 import XExtension from '../components/supportedExtensions/XExtension';
+import LinkedinExtension from '../components/supportedExtensions/LinkedinExtension';
 
 export const defaultConfig: ConfigInterface = {
   schemaID: '',
@@ -36,5 +37,6 @@ export const defaultConfig: ConfigInterface = {
   replyLabel: REPLIER_LABEL_DEFAULT_TEXT,
   extensions: {
     'x-x': XExtension,
+    'x-linkedin': LinkedinExtension,
   },
 };
