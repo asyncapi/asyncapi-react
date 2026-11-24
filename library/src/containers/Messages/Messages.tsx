@@ -3,7 +3,7 @@ import React from 'react';
 import { Message } from './Message';
 
 import { useConfig, useSpec } from '../../contexts';
-import { CommonHelpers } from '../../helpers';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { MESSAGES_TEXT } from '../../constants';
 
 export const Messages: React.FunctionComponent = () => {

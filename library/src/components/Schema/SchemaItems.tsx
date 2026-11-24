@@ -7,7 +7,9 @@ export const SchemaItems = ({ schema }: Pick<Props, 'schema'>) => {
   }
 
   const type = schema.type();
-  if (!type?.includes('array')) {
+  const typeIncludes = (t: string) =>
+    Array.isArray(type) ? type.includes(t) : type === t;
+  if (!typeIncludes('array')) {
     return null;
   }
   const items = schema.items();

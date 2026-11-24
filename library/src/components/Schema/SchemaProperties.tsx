@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchemaHelpers } from '../../helpers';
+import { SchemaHelpers } from '../../helpers/no-parser';
 import { Props, Schema } from './Schema';
 
 export const SchemaProperties = ({ schema }: Pick<Props, 'schema'>) => {

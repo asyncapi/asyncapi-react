@@ -6,6 +6,7 @@ import {
   PluginAPI,
   PluginContext,
   PluginSlot,
+  SlotComponentProps,
 } from '../types';
 import {
   PLUGIN_EVENT_ERROR,
@@ -44,7 +45,7 @@ class PluginManager implements MessageBus {
   private readonly slotComponents = new Map<
     PluginSlot,
     {
-      component: React.ComponentType<ComponentSlotProps>;
+      component: React.ComponentType<SlotComponentProps>;
       priority: number;
       label?: string;
       pluginName: string;
@@ -288,7 +289,7 @@ class PluginManager implements MessageBus {
         const priority = options.priority ?? 100;
         this.slotComponents.get(slot)!.push({
           // Safe: components are only ever rendered with the context of their own slot.
-          component: component as React.ComponentType<ComponentSlotProps>,
+          component: component as React.ComponentType<SlotComponentProps>,
           priority,
           label: options.label,
           pluginName: plugin?.name,

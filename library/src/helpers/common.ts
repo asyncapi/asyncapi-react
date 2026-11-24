@@ -1,5 +1,4 @@
 import { ConfigInterface } from '../config';
-import { OperationInterface } from '@asyncapi/parser';
 import { PayloadType } from '../types';
 import {
   PUBLISH_LABEL_DEFAULT_TEXT,
@@ -9,6 +8,14 @@ import {
   SEND_LABEL_DEFAULT_TEXT,
   SUBSCRIBE_LABEL_DEFAULT_TEXT,
 } from '../constants';
+
+// Structural interface covering the operation methods used by CommonHelpers
+export interface OperationLike {
+  isSend(): boolean;
+  isReceive(): boolean;
+  reply(): unknown;
+  id(): string | undefined;
+}
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class CommonHelpers {
   static getIdentifier(id: string, config?: ConfigInterface) {
@@ -18,7 +25,7 @@ export class CommonHelpers {
     }
     return id;
   }
-  static getOperationType(operation: OperationInterface) {
+  static getOperationType(operation: OperationLike) {
     if (operation.isSend()) {
       if (operation.reply() !== undefined) {
         return PayloadType.REQUEST;
@@ -35,7 +42,7 @@ export class CommonHelpers {
     operation,
     config,
   }: {
-    operation: OperationInterface;
+    operation: OperationLike;
     config: ConfigInterface;
   }) {
     if (operation.isSend()) {

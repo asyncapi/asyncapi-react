@@ -67,7 +67,12 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
     </StrictMode>,
   );
 
-  await waitFor(() => expect(uninstall).toHaveBeenCalledTimes(1));
+  await waitFor(
+    () => {
+      expect(uninstall).toHaveBeenCalledTimes(1);
+    },
+    { timeout: 5000 },
+  );
   expect(install).toHaveBeenCalledTimes(1);
 
   finishUninstalls[0]();
@@ -78,7 +83,7 @@ test('keeps plugins registered when StrictMode remounts the component', async ()
         result.container.querySelector('[data-testid="plugin-panel"]'),
       ).toBeTruthy();
     },
-    { timeout: 15000 },
+    { timeout: 5000 },
   );
   expect(install).toHaveBeenCalledTimes(2);
   expect(lifecycleOverlapped).toBe(false);

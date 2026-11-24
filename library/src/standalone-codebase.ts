@@ -13,9 +13,7 @@ function querySelector(selector: string): Element | null {
  *
  * @param {Any} component of any kind
  */
-export function createRender<
-  Props extends Parameters<typeof React.createElement>[1],
->(component: Parameters<typeof React.createElement>[0]) {
+export function createRender<Props>(component: React.ComponentType<Props>) {
   return (props: Props, container?: Element | DocumentFragment | null) => {
     container = container ?? querySelector('asyncapi');
 
@@ -25,7 +23,12 @@ export function createRender<
 
     const root = createRoot(container);
 
-    root.render(React.createElement(component, props));
+    root.render(
+      React.createElement(
+        component as React.ElementType,
+        props as React.Attributes & Props,
+      ),
+    );
   };
 }
 
@@ -34,9 +37,7 @@ export function createRender<
  *
  * @param {Any} component of any kind
  */
-export function createHydrate<
-  Props extends Parameters<typeof React.createElement>[1],
->(component: Parameters<typeof React.createElement>[0]) {
+export function createHydrate<Props>(component: React.ComponentType<Props>) {
   return (props: Props, container?: Element | Document | null) => {
     container = container ?? querySelector('asyncapi');
 
@@ -44,6 +45,12 @@ export function createHydrate<
       return;
     }
 
-    hydrateRoot(container, React.createElement(component, props));
+    hydrateRoot(
+      container,
+      React.createElement(
+        component as React.ElementType,
+        props as React.Attributes & Props,
+      ),
+    );
   };
 }

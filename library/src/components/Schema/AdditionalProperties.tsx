@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchemaHelpers } from '../../helpers';
+import { SchemaHelpers } from '../../helpers/no-parser';
 import { Props, Schema } from './Schema';
 
 export const AdditionalProperties = ({ schema }: Pick<Props, 'schema'>) => {
@@ -15,7 +15,9 @@ export const AdditionalProperties = ({ schema }: Pick<Props, 'schema'>) => {
   }
 
   const type = schema.type();
-  if (!type?.includes('object')) {
+  const typeIncludes = (t: string) =>
+    Array.isArray(type) ? type.includes(t) : type === t;
+  if (!typeIncludes('object')) {
     return null;
   }
 

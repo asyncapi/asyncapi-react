@@ -3,7 +3,7 @@ import AsyncApiComponent, {
 } from './containers/AsyncApi/Standalone';
 
 import { createRender, createHydrate } from './standalone-codebase';
-import { hljs } from './helpers';
+import { hljs } from './helpers/no-parser';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

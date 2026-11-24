@@ -1,12 +1,12 @@
 import React from 'react';
-import {
+import type {
   OAuthFlowInterface,
   SecurityRequirementsInterface,
   SecuritySchemeInterface,
 } from '@asyncapi/parser';
 
 import { Href, Markdown } from '../../components';
-import { ServerHelpers } from '../../helpers';
+import { ServerHelpers } from '../../helpers/no-parser';
 
 interface Props {
   security: SecurityRequirementsInterface[];

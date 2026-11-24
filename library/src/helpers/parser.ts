@@ -10,10 +10,10 @@ import { AvroSchemaParser } from '@asyncapi/avro-schema-parser';
 
 import {
   ErrorObject,
-  ParserReturn,
   FetchingSchemaInterface,
   ValidationError,
 } from '../types';
+import { ParserReturn } from '../types-parser';
 
 import { VALIDATION_ERRORS_TYPE } from '../constants';
 

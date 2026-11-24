@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { Schema } from './Schema/Schema';
-import { SchemaHelpers } from '../helpers';
+import { SchemaHelpers } from '../helpers/no-parser';
 import { useConfig, useSpec } from '../contexts';
 import { CollapseButton } from './CollapseButton';
 
@@ -28,7 +28,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
   }
 
   if (!config.extensions || !Object.keys(config.extensions).length) {
-    const schema = SchemaHelpers.jsonToSchema(extensions);
+    const schema = SchemaHelpers.jsonToRawValueSchema(extensions);
     return (
       schema && (
         <div className="mt-2">
@@ -70,7 +70,7 @@ export const Extensions: React.FunctionComponent<Props> = ({
                 />
               );
             } else {
-              const extensionSchema = SchemaHelpers.jsonToSchema(
+              const extensionSchema = SchemaHelpers.jsonToRawValueSchema(
                 extensions[extensionKey],
               );
               return (

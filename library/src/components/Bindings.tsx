@@ -1,27 +1,76 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from 'react';
 import { Schema } from './Schema/Schema';
-import { SchemaHelpers } from '../helpers';
-import { BindingsInterface } from '@asyncapi/parser';
+import { SchemaHelpers } from '../helpers/no-parser';
+
+interface BindingValue {
+  protocol?: () => string;
+  value?: () => unknown;
+}
+
+interface BindingsValue {
+  isEmpty?: () => boolean;
+  all?: () => BindingValue[];
+  length?: number;
+}
 
 interface Props {
   name?: string;
-  bindings: BindingsInterface;
+  bindings: BindingsValue | Record<string, unknown> | unknown[];
+}
+
+function isBindingValue(value: unknown): value is BindingValue {
+  return typeof value === 'object' && value !== null;
+}
+
+function bindingEntries(
+  bindings: unknown[],
+): { protocol: string; value: unknown }[] {
+  return bindings.map((binding) => {
+    const value = isBindingValue(binding) ? binding : undefined;
+    return {
+      protocol: value?.protocol?.() ?? '',
+      value: value?.value?.(),
+    };
+  });
+}
+
+function collectBindings(
+  bindings: Props['bindings'],
+): { protocol: string; value: unknown }[] {
+  if (Array.isArray(bindings)) {
+    return bindingEntries(bindings);
+  }
+
+  const bindingCollection = bindings as BindingsValue;
+  if (typeof bindingCollection.all === 'function') {
+    return bindingCollection.all().map((binding) => ({
+      protocol: binding.protocol?.() ?? '',
+      value: binding.value?.(),
+    }));
+  }
+
+  return Object.entries(bindings as Record<string, unknown>)
+    .filter(([, value]) => typeof value !== 'function')
+    .map(([protocol, value]) => ({ protocol, value }));
 }
 
 export const Bindings: React.FunctionComponent<Props> = ({
   name = 'Binding specific information',
   bindings,
 }) => {
-  if (!bindings || bindings.isEmpty()) {
+  if (!bindings) {
     return null;
   }
 
-  const renderedBindings = bindings.all().map((binding) => {
-    const bindingValue = binding.value();
+  const entries = collectBindings(bindings);
+  if (entries.length === 0) {
+    return null;
+  }
+
+  const renderedBindings = entries.map(({ protocol, value: bindingValue }) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const schema = SchemaHelpers.jsonToSchema(bindingValue);
-    const protocol = binding.protocol();
     const schemaName = (
       <div className="inline-block text-sm">
         <span>{name}</span>

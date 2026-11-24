@@ -1,23 +1,11 @@
-import {
+import type {
   AsyncAPIDocumentInterface,
-  BaseModel,
   ChannelInterface,
   InfoInterface,
   OperationInterface,
 } from '@asyncapi/parser';
 
-export type PropsSchema =
-  | string
-  | FetchingSchemaInterface
-  | AsyncAPIDocumentInterface
-  | object;
-
-export type NullableAsyncApi = AsyncAPIDocumentInterface | null;
-
-export interface AsyncApiState {
-  validatedSchema: NullableAsyncApi;
-  error?: ErrorObject;
-}
+export type PropsSchema = string | FetchingSchemaInterface | object;
 
 export function isFetchingSchemaInterface(
   schema: PropsSchema,
@@ -28,11 +16,6 @@ export function isFetchingSchemaInterface(
 export interface FetchingSchemaInterface {
   url: string;
   requestOptions?: RequestInit;
-}
-
-export interface ParserReturn {
-  asyncapi?: AsyncAPIDocumentInterface;
-  error?: ErrorObject;
 }
 
 export enum PayloadType {
@@ -84,14 +67,6 @@ export interface ErrorObject {
   }[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ExtensionComponentProps<V = any> {
-  propertyName: string;
-  propertyValue: V;
-  document: AsyncAPIDocumentInterface;
-  parent: BaseModel;
-}
-
 // Plugin interface
 
 export enum PluginSlot {
@@ -133,9 +108,31 @@ export interface SlotContextMap {
 
 export type SlotContext = SlotContextMap[PluginSlot];
 
-export interface ComponentSlotProps<S extends PluginSlot = PluginSlot> {
-  context: SlotContextMap[S];
+interface BaseSlotProps {
   onClose?: () => void;
+}
+
+/**
+ * Parser-independent props contract: a component that only needs an arbitrary context value.
+ */
+export interface SlotComponentProps<C = unknown> extends BaseSlotProps {
+  context: C;
+}
+
+export interface ComponentSlotProps<S extends PluginSlot = PluginSlot>
+  extends BaseSlotProps {
+  context: SlotContextMap[S];
+}
+
+/** Backward-compatible name for parser-backed, slot-keyed component props. */
+export type TypedComponentSlotProps<S extends PluginSlot = PluginSlot> =
+  ComponentSlotProps<S>;
+
+export interface ExtensionComponentProps<V = unknown> {
+  propertyName: string;
+  propertyValue: V;
+  document: unknown;
+  parent: unknown;
 }
 
 export interface AsyncApiPlugin {

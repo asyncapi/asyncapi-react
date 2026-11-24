@@ -6,12 +6,37 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { SchemaV2 as SchemaModel } from '@asyncapi/parser';
 import { Schema } from '../Schema/Schema';
+import { JsonSchemaModel, SchemaHelpers } from '../../helpers/schema-no-parser';
+import { Conditions } from '../Schema/Conditions/Conditions';
 
 const expandAll = () => {
   fireEvent.click(screen.getByRole('button', { name: 'Expand all' }));
 };
 
 describe('Schema component', () => {
+  test('renders properties from parser-backed dependent schemas', async () => {
+    const dependentSchema = new SchemaModel({
+      type: 'object',
+      properties: {
+        billing_address: { type: 'string' },
+      },
+    });
+    const schemaModel = new JsonSchemaModel({
+      type: 'object',
+      dependencies: { credit_card: dependentSchema },
+    });
+
+    const dependentSchemas =
+      SchemaHelpers.getDependentSchemaModels(schemaModel);
+    render(
+      <Conditions schema={schemaModel} dependentSchemas={dependentSchemas} />,
+    );
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Dependent schema: credit_card' }),
+    );
+
+    expect(await screen.findByText('billing_address')).toBeDefined();
+  });
   // eslint-disable-next-line jest/expect-expect
   test('should work with true schema', () => {
     const schema = true;

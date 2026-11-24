@@ -14,11 +14,11 @@ import {
 } from '@asyncapi/parser';
 import {
   PluginSlot,
-  OperationSlotContext,
   ComponentSlotProps,
   PluginAPI,
   PayloadType,
 } from '../../types';
+import type { OperationSlotContext } from '../../types-parser';
 
 const pluginName = 'test-plugin';
 

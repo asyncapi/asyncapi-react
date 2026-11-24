@@ -1,12 +1,12 @@
 import {
-  AsyncAPIDocumentInterface,
-  TagInterface,
   isAsyncAPIDocument,
   isOldAsyncAPIDocument,
   toAsyncAPIDocument,
   unstringify,
 } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 import { isStringifiedDocument } from '@asyncapi/parser/cjs/document';
+import { containTags, operationsTags, serversTags } from './parsed-document';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class SpecificationHelpers {
@@ -50,59 +50,15 @@ export class SpecificationHelpers {
   /**
    * Check if given schema have one of the specified tags.
    */
-  static containTags(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    schema: any,
-    tags: TagInterface | TagInterface[],
-  ): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const tagsToCheck =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      typeof schema.tags === 'function' ? schema.tags() : undefined;
-    if (tagsToCheck === undefined || !Array.isArray(tagsToCheck)) {
-      return false;
-    }
-    const tagsArr = Array.isArray(tags) ? tags : [tags];
-    return tagsToCheck.some((tag: TagInterface) =>
-      tagsArr.some((t) => t.name() === tag.name()),
-    );
-  }
+  static containTags = containTags;
 
   /**
    * Return all tags from operations
    */
-  static operationsTags(spec: AsyncAPIDocumentInterface) {
-    const tags = new Map<string, TagInterface>();
-    Object.entries(spec.operations().all()).forEach(([, operation]) => {
-      if (operation?.tags().length > 0) {
-        operation
-          .tags()
-          .all()
-          .forEach((tag) => tags.set(tag.name(), tag));
-      }
-    });
-    return Array.from(tags.values());
-  }
+  static operationsTags = operationsTags;
 
   /**
    * Return all tags from servers
    */
-  static serversTags(spec: AsyncAPIDocumentInterface) {
-    const tags: Record<string, string[]> = {};
-    Object.entries(spec.servers()).forEach(([_, server]) => {
-      if (server.tags().length > 0) {
-        server
-          .tags()
-          .all()
-          .forEach((tag) => {
-            if (tags[tag.name()]) {
-              tags[tag.name()].push(_);
-            } else {
-              tags[tag.name()] = [_];
-            }
-          });
-      }
-    });
-    return tags;
-  }
+  static serversTags = serversTags;
 }

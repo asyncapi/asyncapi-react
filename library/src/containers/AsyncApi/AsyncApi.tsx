@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncAPIDocumentInterface } from '@asyncapi/parser';
+import type { AsyncAPIDocumentInterface } from '@asyncapi/parser';
 
 import AsyncApiStandalone from './Standalone';
 
@@ -50,13 +50,14 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
   }
 
   render() {
-    const { schema, config, plugins, onPluginEvent, onPluginManagerReady } =
-      this.props;
+    const { config, plugins, onPluginEvent, onPluginManagerReady } = this.props;
     const { asyncapi, error } = this.state;
 
+    // Only the parser output is forwarded: falling back to the raw input would let the
+    // standalone renderer show a rejected spec instead of the parser diagnostics.
     return (
       <AsyncApiStandalone
-        schema={asyncapi ?? schema}
+        schema={asyncapi}
         config={config}
         error={error}
         plugins={plugins}

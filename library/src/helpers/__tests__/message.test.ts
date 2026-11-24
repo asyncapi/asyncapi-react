@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { MessageHelpers } from '../message';
-import { MessageV2 as Message } from '@asyncapi/parser';
+import { MessageHelpers, MessageLike, MessageExampleLike } from '../message';
+import { MessageV2 as Message, SchemaV2 as Schema } from '@asyncapi/parser';
 
 describe('MessageHelpers', () => {
   describe('.generateExample', () => {
@@ -299,6 +299,133 @@ describe('MessageHelpers', () => {
           example: { bar: 'foo' },
         },
       ]);
+    });
+  });
+
+  describe('example presence inference', () => {
+    const messageWith = (
+      examples: MessageExampleLike[],
+      payload: MessageLike['payload'] = () => undefined,
+      headers: MessageLike['headers'] = () => undefined,
+    ): MessageLike =>
+      ({
+        payload,
+        headers,
+        examples: () => ({ all: () => examples }),
+      }) as unknown as MessageLike;
+
+    test('preserves falsy payload examples and skips only missing values', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        messageWith(
+          [
+            {
+              name: () => 'false',
+              summary: () => undefined,
+              hasPayload: () => true,
+              payload: () => false,
+            },
+            {
+              name: () => 'zero',
+              summary: () => undefined,
+              hasPayload: () => true,
+              payload: () => 0,
+            },
+            {
+              name: () => 'empty',
+              summary: () => undefined,
+              hasPayload: () => true,
+              payload: () => '',
+            },
+          ],
+          () => new Schema({ type: 'boolean', examples: [true] }),
+        ),
+      );
+
+      expect(result?.map((example) => example.example)).toEqual([false, 0, '']);
+    });
+
+    test('falls back to schema header examples when a declared header value is missing', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        messageWith(
+          [
+            {
+              name: () => 'missing headers',
+              summary: () => undefined,
+              hasHeaders: () => true,
+              headers: () => undefined,
+            },
+          ],
+          () => undefined,
+          () => new Schema({ examples: [{ source: 'schema' }] }),
+        ),
+      );
+
+      expect(result).toEqual([{ example: { source: 'schema' } }]);
+    });
+    test('infers payload examples when the model omits hasPayload', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            payload: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+      ]);
+    });
+
+    test('honors an explicit hasPayload() === false', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            hasPayload: () => false,
+            payload: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toBeUndefined();
+    });
+
+    test('infers headers examples when the model omits hasHeaders', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            headers: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toEqual([
+        {
+          name: 'example name',
+          summary: 'example summary',
+          example: { foo: 'bar' },
+        },
+      ]);
+    });
+
+    test('honors an explicit hasHeaders() === false', () => {
+      const result = MessageHelpers.getHeadersExamples(
+        messageWith([
+          {
+            name: () => 'example name',
+            summary: () => 'example summary',
+            hasHeaders: () => false,
+            headers: () => ({ foo: 'bar' }),
+          },
+        ]),
+      );
+      expect(result).toBeUndefined();
     });
   });
 });

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { SchemaInterface } from '@asyncapi/parser';
 import { Href, CollapseButton, Markdown, Extensions } from '../index';
-import { SchemaHelpers } from '../../helpers';
+import { SchemaHelpers, SchemaLike } from '../../helpers/no-parser';
 import { SchemaItems } from './SchemaItems';
 import { AdditionalItems } from './AdditionalItems';
 import { SchemaProperties } from './SchemaProperties';
@@ -12,7 +11,7 @@ import { FieldStatusIndicator } from './FieldStatusIndicators';
 
 export interface Props {
   schemaName?: React.ReactNode;
-  schema?: SchemaInterface;
+  schema?: SchemaLike;
   required?: boolean;
   isPatternProperty?: boolean;
   isProperty?: boolean;
@@ -85,7 +84,7 @@ export const Schema: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const dependentSchemas = SchemaHelpers.getDependentSchemas(schema);
+  const dependentSchemas = SchemaHelpers.getDependentSchemaModels(schema);
 
   const externalDocs = schema.externalDocs();
 

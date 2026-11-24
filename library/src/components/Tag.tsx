@@ -1,10 +1,15 @@
 import React from 'react';
-import { TagInterface } from '@asyncapi/parser';
 
 import { Href } from './Href';
 
+interface TagLike {
+  name(): string;
+  description(): string | undefined;
+  externalDocs(): { url(): string } | undefined;
+}
+
 interface Props {
-  tag: TagInterface;
+  tag: TagLike;
 }
 
 export const Tag: React.FunctionComponent<Props> = ({ tag }) => {

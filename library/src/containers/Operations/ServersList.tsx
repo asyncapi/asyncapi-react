@@ -1,6 +1,6 @@
 import React from 'react';
-import { ServerInterface } from '@asyncapi/parser';
-import { CommonHelpers } from '../../helpers';
+import type { ServerInterface } from '@asyncapi/parser';
+import { CommonHelpers } from '../../helpers/no-parser';
 import { ConfigInterface } from '../../config';
 
 interface ServersListProps {
