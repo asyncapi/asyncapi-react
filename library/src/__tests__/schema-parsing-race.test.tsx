@@ -16,7 +16,7 @@ function deferred() {
   return { promise, resolve };
 }
 
-afterEach(() => jest.restoreAllMocks());
+afterEach(() => { jest.restoreAllMocks(); });
 
 test('ignores an older remote parsing result after the latest result commits', async () => {
   jest.spyOn(SpecificationHelpers, 'retrieveParsedSpec').mockReturnValue(undefined);
@@ -28,9 +28,9 @@ test('ignores an older remote parsing result after the latest result commits', a
   const ref = React.createRef<AsyncApiComponent>();
   const view = render(<AsyncApiComponent ref={ref} schema={{ url: 'https://example.com/a' }} />);
   view.rerender(<AsyncApiComponent ref={ref} schema={{ url: 'https://example.com/b' }} />);
-  const latest = { error: { title: 'latest error' } };
+  const latest: ParserReturn = { error: { type: 'test', title: 'latest error' } };
   await act(async () => { newer.resolve(latest); });
   expect(ref.current?.state.error).toEqual(latest.error);
-  await act(async () => { older.resolve({ error: { title: 'outdated error' } }); });
+  await act(async () => { older.resolve({ error: { type: 'test', title: 'outdated error' } }); });
   expect(ref.current?.state.error).toEqual(latest.error);
 });
