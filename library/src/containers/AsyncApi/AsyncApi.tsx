@@ -27,6 +27,12 @@ interface AsyncAPIState {
 }
 
 class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
+  private parseGeneration = 0;
+
+  componentWillUnmount() {
+    this.parseGeneration += 1;
+  }
+
   state: AsyncAPIState = {
     asyncapi: undefined,
     error: undefined,
@@ -68,16 +74,19 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async parseSchema(schema: PropsSchema, parserOptions?: any) {
+    const generation = ++this.parseGeneration;
     const parsedSpec = SpecificationHelpers.retrieveParsedSpec(schema);
     if (parsedSpec) {
       this.setState({
         asyncapi: parsedSpec,
+        error: undefined,
       });
       return;
     }
 
     if (isFetchingSchemaInterface(schema)) {
       const parsedFromUrl = await Parser.parseFromUrl(schema, parserOptions);
+      if (generation !== this.parseGeneration) return;
       this.setState({
         asyncapi: parsedFromUrl.asyncapi,
         error: parsedFromUrl.error,
@@ -86,6 +95,7 @@ class AsyncApiComponent extends Component<AsyncApiProps, AsyncAPIState> {
     }
 
     const parsed = await Parser.parse(schema, parserOptions);
+    if (generation !== this.parseGeneration) return;
     this.setState({
       asyncapi: parsed.asyncapi,
       error: parsed.error,
