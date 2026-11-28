@@ -60,6 +60,11 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.expand]);
 
+  const generatedExample =
+    examples && examples.length > 0
+      ? undefined
+      : MessageHelpers.generateExampleValue(schema.json());
+
   return (
     <div className="mt-4">
       <div>
@@ -94,6 +99,7 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
                   <JSONSnippet
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     snippet={MessageHelpers.sanitizeExample(example.example)}
+                    formatStringAsJson
                   />
                 </div>
               </li>
@@ -101,10 +107,12 @@ export const Example: React.FunctionComponent<ExampleProps> = ({
           </ul>
         ) : (
           <div className="mt-4">
-            <JSONSnippet
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              snippet={MessageHelpers.generateExample(schema.json())}
-            />
+            {generatedExample?.hasExample && (
+              <JSONSnippet
+                snippet={generatedExample.value}
+                formatStringAsJson
+              />
+            )}
             <h6 className="text-xs font-bold text-gray-600 italic mt-2">
               This example has been generated automatically.
             </h6>

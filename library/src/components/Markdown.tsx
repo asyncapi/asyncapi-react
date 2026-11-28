@@ -6,7 +6,7 @@ import { renderMarkdown } from '../helpers';
 export const Markdown: React.FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  if (!children) {
+  if (children === null || children === undefined || children === '') {
     return null;
   }
   if (typeof children !== 'string') {

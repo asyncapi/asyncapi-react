@@ -21,6 +21,67 @@ describe('MessageHelpers', () => {
         b: 0,
       });
     });
+
+    test('should preserve falsy and primitive generated examples', () => {
+      expect(
+        MessageHelpers.generateExample({
+          type: 'integer',
+          enum: [0],
+        }),
+      ).toBe(0);
+
+      expect(
+        MessageHelpers.generateExample({
+          type: 'boolean',
+          enum: [false],
+        }),
+      ).toBe(false);
+
+      expect(
+        MessageHelpers.generateExample({
+          type: 'string',
+          enum: [''],
+        }),
+      ).toBe('');
+
+      expect(
+        MessageHelpers.generateExample({
+          type: 'null',
+        }),
+      ).toBeNull();
+
+      expect(
+        MessageHelpers.generateExample({
+          type: 'integer',
+          enum: [42],
+        }),
+      ).toBe(42);
+    });
+
+    test('should distinguish empty string example from missing example', () => {
+      expect(MessageHelpers.generateExampleValue({})).toEqual({
+        hasExample: false,
+      });
+
+      expect(
+        MessageHelpers.generateExampleValue({
+          type: 'string',
+          enum: [''],
+        }),
+      ).toEqual({
+        hasExample: true,
+        value: '',
+      });
+
+      expect(
+        MessageHelpers.generateExampleValue({
+          type: 'null',
+        }),
+      ).toEqual({
+        hasExample: true,
+        value: null,
+      });
+    });
   });
 
   describe('.sanitizeExample', () => {
@@ -168,6 +229,26 @@ describe('MessageHelpers', () => {
           summary: 'example summary',
           example: { bar: 'foo' },
         },
+      ]);
+    });
+
+    test('should preserve falsy primitive payload examples', () => {
+      const result = MessageHelpers.getPayloadExamples(
+        new Message({
+          examples: [
+            { name: 'zero', payload: 0 },
+            { name: 'falseVal', payload: false },
+            { name: 'emptyString', payload: '' },
+            { name: 'nullVal', payload: null },
+            { name: 'headersOnly', headers: { foo: 'bar' } },
+          ],
+        }),
+      );
+      expect(result).toEqual([
+        { name: 'zero', summary: undefined, example: 0 },
+        { name: 'falseVal', summary: undefined, example: false },
+        { name: 'emptyString', summary: undefined, example: '' },
+        { name: 'nullVal', summary: undefined, example: null },
       ]);
     });
   });
